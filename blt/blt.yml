@@ -12,18 +12,18 @@
 project:
   machine_name: acquia-cms
   # Used for enforcing correct git commit msg syntax.
-  prefix: BLT
-  human_name: 'BLTed 10'
+  prefix: ONE
+  human_name: "BLTed 10"
   profile:
     name: lightning
   # This will be used as the local uri for all developers.
   local:
     protocol: http
-    hostname: 'local.${project.machine_name}.com'
+    hostname: "${env.VIRTUAL_HOST}"
 # Configuration settings for new git repository.
 git:
   default_branch: master
-  remotes: {  }
+  remotes: {}
 deploy:
   # When manually deploying a tag, also tag the source repository.
   tag_source: true
@@ -31,13 +31,13 @@ drush:
   # You can set custom project aliases in drush/sites/*.site.yml.
   aliases:
     # The remote environment from which the database will be pulled.
-    remote: '${project.machine_name}.test'
+    remote: "${project.machine_name}.test"
     # The local environment against which all local drush commands are run.
     local: self
     # The drush alias against which all ci commands are run.
     ci: self
     # The default drush alias to be used when no environment is specified.
-  default_alias: '${drush.aliases.local}'
+  default_alias: "${drush.aliases.local}"
 # An array of modules to be enabled or uninstalled automatically in local, ci,
 # and deploy contexts.
 modules:
@@ -51,7 +51,7 @@ modules:
       - acquia_connector
       - shield
   ci:
-    enable: {  }
+    enable: {}
     uninstall:
       - acquia_connector
       - shield
@@ -59,7 +59,7 @@ modules:
     enable:
       - acquia_connector
       - shield
-    uninstall: {  }
+    uninstall: {}
   test:
     enable:
       - acquia_connector

@@ -1,13 +1,26 @@
-# Override any settings as necessary by copying to local.blt.yml.
-# Do not commit local.blt.yml to Git. It is specific to the machine it was created on.
-
-#project:
-#  local:
-#    protocol: http
-#    hostname: mysite.dev
+# Override any settings as necessary by copying to local.yml
+project:
+  local:
+    protocol: http
+    hostname: '${env.VIRTUAL_HOST}'
 
 # You can set custom project aliases in drush/sites/*.site.yml.
 # All local:* targets are run against drush.aliases.local.
 #drush:
 #  aliases:
 #    local: local.mysite.dev
+
+drupal:
+  db:
+    username: user
+    password: user
+    database: default
+    host: db
+
+behat:
+  # The URL for Chrome debug endpoint.
+  chrome:
+    api_url: http://chrome:9222
+
+docksal:
+  enable: true
