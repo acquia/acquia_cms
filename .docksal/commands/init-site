@@ -60,6 +60,9 @@ fin blt setup -n
 # Install additional Acquia CMS modules.
 fin acms
 
+# Clone upstream dependencies that need their own working directory.
+fin clone-repos
+
 echo -e "Open ${yellow}http://${VIRTUAL_HOST}${NC} in your browser to verify the setup."
 
 #-------------------------- END: Execution --------------------------------
