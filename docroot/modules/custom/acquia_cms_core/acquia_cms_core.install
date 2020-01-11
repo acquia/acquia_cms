@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Install and uninstall functions for the Acquia CMS Core module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_core_install() {
+
+  // Set the system info.
+  \Drupal::configFactory()
+    ->getEditable('system.site')
+    ->set('name', 'Acquia CMS')
+    ->set('mail', 'no-reply@acquia.com')
+    ->set('page.front', '/node')
+    ->save(TRUE);
+
+  // Set the default and admin theme.
+  \Drupal::configFactory()
+    ->getEditable('system.theme')
+    ->set('default', 'dx8-theme')
+    ->set('admin', 'claro')
+    ->save(TRUE);
+
+  // Enable modules.
+  \Drupal::service('module_installer')->install(['admin_toolbar','adminimal_admin_toolbar','responsive_preview']);
+}
