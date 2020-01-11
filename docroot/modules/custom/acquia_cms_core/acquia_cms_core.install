@@ -26,5 +26,9 @@ function acquia_cms_core_install() {
     ->save(TRUE);
 
   // Enable modules.
-  \Drupal::service('module_installer')->install(['admin_toolbar','adminimal_admin_toolbar','responsive_preview']);
+  \Drupal::service('module_installer')->install([
+    'admin_toolbar',
+    'adminimal_admin_toolbar',
+    'responsive_preview',
+  ]);
 }
