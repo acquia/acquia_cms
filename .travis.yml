@@ -1,0 +1,117 @@
+---
+language: php
+
+# The lowest version of PHP supported by all of Drupal, Acquia, and ORCA itself.
+# @see https://www.drupal.org/docs/8/system-requirements/php-requirements
+# @see https://docs.acquia.com/acquia-cloud/arch/tech-platform/
+php: "7.2"
+
+addons:
+  # ChromeDriver is used by PHPUnit and Behat.
+  chrome: stable
+
+cache:
+  directories:
+    - "$HOME/.composer/cache"
+    - "$HOME/.drush/cache"
+    - "$TMPDIR/phpstan/cache"
+
+env:
+  # Change the following values for your implementation.
+  global:
+    # Provide your package's name.
+    - ORCA_SUT_NAME=acquia/acquia-cms
+    # Specify the name of the nearest Git version branch, e.g., 1.x or 8.x-1.x.
+    # This may be the destination branch of a pull request or the nearest
+    # ancestor of a topic branch.
+    - ORCA_SUT_BRANCH=master
+    # Specify the version of ORCA to use. Use the master branch for the latest
+    # release, develop for Dev/HEAD, or a tag name (e.g., v1.0.0) for a specific
+    # release.
+    - ORCA_VERSION=master
+    # If your package isn't in in ORCA's packages.yml or conflicts with details
+    # that are, you can modify the active packages configuration at runtime by
+    # uncommenting the following line and specifying your own alter file.
+    # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_PACKAGES_CONFIG_ALTER
+    - ORCA_PACKAGES_CONFIG_ALTER=../acqiua-cms/tests/packages_alter.yml
+    # If your package is a Drupal installation profile, uncomment the following
+    # line and specify its machine name.
+    # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_FIXTURE_PROFILE
+    - ORCA_FIXTURE_PROFILE=acquia-cms
+
+# Execution time is drastically reduced by splitting the build into multiple
+# concurrent jobs.
+matrix:
+  # Mark the build as finished once the only remaining jobs are allowed to fail.
+  fast_finish: true
+  include:
+    # The standard ORCA jobs provide broad out-of-the-box coverage.
+    # @see https://github.com/acquia/orca/blob/master/docs/understanding-orca.md#continuous-integration
+    - { name: "Static code analysis", env: ORCA_JOB=STATIC_CODE_ANALYSIS }
+    - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_SUT }
+    - {
+        name: "Isolated test w/ recommended package versions",
+        env: ORCA_JOB=ISOLATED_RECOMMENDED,
+      }
+    - {
+        name: "Integrated test w/ recommended package versions",
+        env: ORCA_JOB=INTEGRATED_RECOMMENDED,
+      }
+    - {
+        name: "Integrated test w/ recommended package versions & previous minor release of Drupal core",
+        env: ORCA_JOB=CORE_PREVIOUS,
+      }
+    - {
+        name: "Isolated test w/ dev package versions",
+        env: ORCA_JOB=ISOLATED_DEV,
+      }
+    - {
+        name: "Integrated test w/ dev package versions",
+        env: ORCA_JOB=INTEGRATED_DEV,
+      }
+    - {
+        name: "Integrated test w/ dev package versions & next minor dev version of Drupal core",
+        env: ORCA_JOB=CORE_NEXT,
+      }
+  # Custom testing needs involving only minor variations on the standard setup
+  # can be achieved without custom scripting using the "CUSTOM" ORCA_JOB.
+  # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#travis-ci-scripts
+  # - { name: "Custom job", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--profile=lightning" ORCA_CUSTOM_TESTS_RUN_ARGS="--sut-only" }
+  # For various reasons, some jobs are allowed to fail without failing the whole
+  # build. They should still be watched for advance notice of future problems.
+  # @see https://docs.travis-ci.com/user/customizing-the-build#rows-that-are-allowed-to-fail
+  allow_failures:
+    # Dev jobs are allowed to fail due to their inherent instability.
+    - env: ORCA_JOB=ISOLATED_DEV
+    - env: ORCA_JOB=INTEGRATED_DEV
+    - env: ORCA_JOB=CORE_NEXT
+    - env: ORCA_JOB=CORE_PREVIOUS
+
+# Install ORCA and prepare the environment.
+before_install:
+  - composer config --global repositories.dx8 vcs https://bitbucket.org/cohesion_dev/dx8-module.git
+  - composer config --global repositories.dx8-theme vcs https://bitbucket.org/cohesion_dev/dx8-theme.git
+  - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
+  - bash .docksal/addons/clone-repos/clone-repos
+  - ../orca/bin/travis/before_install.sh
+
+# Create the test fixture and place the SUT.
+install: ../orca/bin/travis/install.sh
+
+# Display details about the fixture.
+before_script: ../orca/bin/travis/before_script.sh
+
+# Run the test script.
+script: ../orca/bin/travis/script.sh
+
+# Reserved for future use.
+before_cache: ../orca/bin/travis/before_cache.sh
+
+# Reserved for future use.
+after_success: ../orca/bin/travis/after_success.sh
+
+# Display debugging information in case of failure.
+after_failure: ../orca/bin/travis/after_failure.sh
+
+# Reserved for future use.
+after_script: ../orca/bin/travis/after_script.sh
