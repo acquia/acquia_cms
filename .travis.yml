@@ -1,0 +1,78 @@
+language: php
+dist: xenial
+
+# Adjust the version of PHP to match your production environment.
+# Making this version number greater than the production environment can have unintended consequences
+# including a non-functional prod environment.
+php: "7.2"
+
+env:
+  global:
+    - COMPOSER_BIN=$TRAVIS_BUILD_DIR/vendor/bin
+    - BLT_DIR=$TRAVIS_BUILD_DIR/vendor/acquia/blt
+
+cache:
+  directories:
+    - "$HOME/.composer/cache"
+    - "$HOME/.drush/cache"
+  # Cache front end dependencies to dramatically improve build time.
+  # - "docroot/themes/custom/mytheme/node_modules"
+  # - "docroot/themes/custom/mytheme/bower_components"
+
+services:
+  - mysql
+
+addons:
+  # ssh_known_hosts:
+  #   - svn-4786.devcloud.hosting.acquia.com
+  chrome: stable
+
+# @see https://docs.travis-ci.com/user/notifications
+# notifications:
+#   - hipchat: [api token]@[room id or name]
+#   - slack: '<account>:<token>#[channel]'
+
+before_install:
+  # Add Cohesion repos. Remove once these are published on Packagist.
+  - composer config --global repositories.dx8 vcs https://bitbucket.org/cohesion_dev/dx8-module.git
+  - composer config --global repositories.dx8-theme vcs https://bitbucket.org/cohesion_dev/dx8-theme.git
+  # Clone any upstream repos that ACMS is dependant on and need their own working dir.
+  - bash .docksal/addons/clone-repos/clone-repos
+  # Add local working dirs for upstream repos to global composer config.
+  - composer config --global repositories.acquia_cohesion "{\"type\":\"path\",\"url\":\"$TRAVIS_BUILD_DIR/upstreams/acquia_cohesion\",\"symlink\":\"true\"}"
+  # Disable xdebug.
+  - phpenv config-rm xdebug.ini
+  - composer self-update
+  - composer install
+  # Exit build early if only documentation was changed in a Pull Request.
+  - source ${BLT_DIR}/scripts/travis/exit_early
+
+install:
+  - source ${BLT_DIR}/scripts/travis/setup_environment
+  - source ${BLT_DIR}/scripts/travis/setup_project
+
+script:
+  # Uncomment these lines to test database updates using live content.
+  # - blt drupal:sync:default:site
+  - source ${BLT_DIR}/scripts/travis/run_tests
+  - source ${BLT_DIR}/scripts/travis/simulate_deploy
+
+deploy:
+  - provider: script
+    script: "${BLT_DIR}/scripts/travis/deploy_branch"
+    skip_cleanup: true
+    on:
+      branch: develop
+      php: 7.2
+  - provider: script
+    script: "${BLT_DIR}/scripts/travis/deploy_branch"
+    skip_cleanup: true
+    on:
+      branch: master
+      php: 7.2
+  - provider: script
+    script: "${BLT_DIR}/scripts/travis/deploy_tag"
+    skip_cleanup: true
+    on:
+      tags: true
+      php: 7.2
