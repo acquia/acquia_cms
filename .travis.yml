@@ -93,7 +93,7 @@ before_install:
   - composer config --global repositories.dx8 vcs https://bitbucket.org/cohesion_dev/dx8-module.git
   - composer config --global repositories.dx8-theme vcs https://bitbucket.org/cohesion_dev/dx8-theme.git
   # Install ORCA.
-  - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
+  - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
 
   # Clone any upstream repos that ACMS is dependant on and need their own working dir.
   - bash .docksal/addons/clone-repos/clone-repos
