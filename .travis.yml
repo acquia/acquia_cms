@@ -92,6 +92,9 @@ before_install:
   # Add Cohesion repos. Remove once these are published on Packagist.
   - composer config --global repositories.dx8 vcs https://bitbucket.org/cohesion_dev/dx8-module.git
   - composer config --global repositories.dx8-theme vcs https://bitbucket.org/cohesion_dev/dx8-theme.git
+  # Install ORCA.
+  - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
+
   # Clone any upstream repos that ACMS is dependant on and need their own working dir.
   - bash .docksal/addons/clone-repos/clone-repos
   # Add local working dirs for upstream repos to global composer config.
