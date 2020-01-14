@@ -33,7 +33,7 @@ env:
     # that are, you can modify the active packages configuration at runtime by
     # uncommenting the following line and specifying your own alter file.
     # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_PACKAGES_CONFIG_ALTER
-    - ORCA_PACKAGES_CONFIG_ALTER=../acqiua-cms/tests/packages_alter.yml
+    - ORCA_PACKAGES_CONFIG_ALTER=./tests/packages_alter.yml
     # If your package is a Drupal installation profile, uncomment the following
     # line and specify its machine name.
     # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_FIXTURE_PROFILE
@@ -89,9 +89,12 @@ matrix:
 
 # Install ORCA and prepare the environment.
 before_install:
+  # Add Cohesion repos. Remove once these are published on Packagist.
   - composer config --global repositories.dx8 vcs https://bitbucket.org/cohesion_dev/dx8-module.git
   - composer config --global repositories.dx8-theme vcs https://bitbucket.org/cohesion_dev/dx8-theme.git
+  # Clone ORCA repo.
   - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
+  # Clone any upstream repos that ACMS is dependant on and need their own working dir.
   - bash .docksal/addons/clone-repos/clone-repos
   - ../orca/bin/travis/before_install.sh
 
