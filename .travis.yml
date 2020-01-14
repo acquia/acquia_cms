@@ -92,6 +92,7 @@ before_install:
   # Add Cohesion repos. Remove once these are published on Packagist.
   - composer config --global repositories.dx8 vcs https://bitbucket.org/cohesion_dev/dx8-module.git
   - composer config --global repositories.dx8-theme vcs https://bitbucket.org/cohesion_dev/dx8-theme.git
+  - composer config --global repositories.acquia_cohesion '{"type": "path", "url": "upstreams/acquia_cohesion", "symlink": "true"}' 
   # Clone ORCA repo.
   - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
 
