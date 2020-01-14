@@ -98,7 +98,7 @@ before_install:
   # Clone any upstream repos that ACMS is dependant on and need their own working dir.
   - bash .docksal/addons/clone-repos/clone-repos
   # Add local working dirs for upstream repos to global composer config.
-  - composer config --global repositories.acquia_cohesion "{\"type\":\"path\",\"url\":\"{$TRAVIS_BUILD_DIR}/upstreams/acquia_cohesion\",\"symlink\":\"true\"}"
+  - composer config --global repositories.acquia_cohesion "{\"type\":\"path\",\"url\":\"$TRAVIS_BUILD_DIR/upstreams/acquia_cohesion\",\"symlink\":\"true\"}"
 
   - ../orca/bin/travis/before_install.sh
 
