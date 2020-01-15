@@ -40,8 +40,7 @@ before_install:
   - bash .docksal/addons/clone-repos/clone-repos
   # Add local working dirs for upstream repos to global composer config.
   - composer config --global repositories.acquia_cohesion "{\"type\":\"path\",\"url\":\"$TRAVIS_BUILD_DIR/upstreams/acquia_cohesion\",\"symlink\":\"true\"}"
-  # Disable xdebug.
-  - phpenv config-rm xdebug.ini
+  - bash .docksal/addons/travis-optimize/travis-optimize
   - composer self-update
   - composer install
   # Exit build early if only documentation was changed in a Pull Request.

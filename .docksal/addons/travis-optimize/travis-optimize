@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# NAME
+#     travis-optimize - some performance optimizations we're
+#     stealing from ORCA temporarily.
+#
+# SYNOPSIS
+#     fin travis-optimize
+#
+# DESCRIPTION
+#     Configures the Travis CI environment.
+
+# Disable Xdebug.
+phpenv config-rm xdebug.ini
+
+{
+  # Remove PHP memory limit.
+  echo 'memory_limit = -1'
+  # Prevent email errors.
+  echo 'sendmail_path = /bin/true'
+  # Prevent PHPStan warnings about APCu constants.
+  echo 'extension = apcu.so'
+} >> "$HOME/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini"
+
+# Install Composer optimizations for faster builds.
+composer global require \
+  hirak/prestissimo \
+  zaporylie/composer-drupal-optimizations
