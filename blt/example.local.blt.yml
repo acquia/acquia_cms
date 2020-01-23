@@ -2,7 +2,7 @@
 project:
   local:
     protocol: http
-    hostname: '${env.VIRTUAL_HOST}'
+    hostname: "${env.VIRTUAL_HOST}"
 
 # You can set custom project aliases in drush/sites/*.site.yml.
 # All local:* targets are run against drush.aliases.local.
@@ -16,11 +16,6 @@ drupal:
     password: user
     database: default
     host: db
-
-behat:
-  # The URL for Chrome debug endpoint.
-  chrome:
-    api_url: http://chrome:9222
 
 docksal:
   enable: true
