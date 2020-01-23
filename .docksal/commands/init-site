@@ -34,35 +34,13 @@ echo-yellow () { echo -e "${yellow}$1${NC}"; }
 
 #-------------------------- Functions --------------------------------
 
-# Make sure BLT is installed
-ensure_blt_installed ()
-{
-  # TODO: Check for vendor/bin/blt and skip composer install if exists.
-  echo "Make sure BLT is installed"
-  fin exec composer install
-}
-
-init_config ()
-{
-  echo "Init BLT and Drupal configs to work with Docksal"
-  fin blt recipes:docksal:config:init -v
-}
-
-#-------------------------- END: Functions --------------------------------
-
-#-------------------------- Execution --------------------------------
-
-# Project initialization steps
-ensure_blt_installed
-init_config
+# Clone upstream dependencies that need their own working directory.
+fin clone-repos
+echo "Make sure BLT is installed"
+fin exec composer install
 fin blt setup -n
 
 # Install additional Acquia CMS modules.
 fin acms
 
-# Clone upstream dependencies that need their own working directory.
-fin clone-repos
-
 echo -e "Open ${yellow}http://${VIRTUAL_HOST}${NC} in your browser to verify the setup."
-
-#-------------------------- END: Execution --------------------------------
