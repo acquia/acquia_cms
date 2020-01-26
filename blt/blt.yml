@@ -20,6 +20,13 @@ project:
   local:
     protocol: http
     hostname: "${env.VIRTUAL_HOST}"
+drupal:
+  db:
+    database: default
+    username: user
+    password: user
+    host: db
+    port: 3306
 # Configuration settings for new git repository.
 git:
   default_branch: master
