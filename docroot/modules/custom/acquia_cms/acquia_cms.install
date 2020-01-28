@@ -8,7 +8,7 @@
 /**
  * Implements hook_install().
  */
-function acquia_cms_core_install() {
+function acquia_cms_install() {
 
   // Set the system info.
   \Drupal::configFactory()
@@ -16,13 +16,6 @@ function acquia_cms_core_install() {
     ->set('name', 'Acquia CMS')
     ->set('mail', 'no-reply@acquia.com')
     ->set('page.front', '/node')
-    ->save(TRUE);
-
-  // Set the default and admin theme.
-  \Drupal::configFactory()
-    ->getEditable('system.theme')
-    ->set('default', 'dx8-theme')
-    ->set('admin', 'claro')
     ->save(TRUE);
 
   // Enable modules.
