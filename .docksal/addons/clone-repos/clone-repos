@@ -21,4 +21,3 @@ echo-yellow () { echo -e "${yellow}$1${NC}"; }
 #-------------------------- END: Helper functions ------------------------
 
 echo -e "${green}Cloning upstream repos..."
-if [ ! -d "upstreams/acquia_cohesion" ] ; then git clone git@github.com:msherron/acquia_cohesion.git upstreams/acquia_cohesion ; fi
