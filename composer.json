@@ -10,7 +10,6 @@
         "acquia/drupal-spec-tool": "*",
         "acquia/lightning": "dev-8.x-4.x",
         "acquia/memcache-settings": "*",
-        "drupal/acquia_cohesion": "dev-master",
         "drupal/acquia_connector": "^1.5.0",
         "drupal/acquia_purge": "^1.0-beta3",
         "drupal/acsf": "^2.63",
@@ -18,6 +17,7 @@
         "drupal/adminimal_admin_toolbar": "^1.10",
         "drupal/cog": "^1.0.0",
         "drupal/config_split": "^1.0.0",
+        "drupal/core": "8.8.1",
         "drupal/core-recommended": "^8.8.0",
         "drupal/devel": "^2.0.0",
         "drupal/environment_indicator": "^3.7",
@@ -125,15 +125,10 @@
         "dx8-theme": {
             "type": "vcs",
             "url": "https://bitbucket.org/cohesion_dev/dx8-theme.git"
-        },
-        "acquia_cohesion": {
-            "type": "path",
-            "url": "upstreams/acquia_cohesion",
-            "symlink": "true"
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
+    "prefer-stable": false,
     "scripts": {
         "post-create-project-cmd": [
             "blt internal:create-project:init-repo"

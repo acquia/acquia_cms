@@ -1,0 +1,28 @@
+{
+    "name": "drupal/acquia_cms_cohesion",
+    "type": "drupal-module",
+    "description": "Automatic Drupal configuration for Cohesion modules and Acquia CMS.",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "cohesion/dx8": "^5.7",
+        "cohesion/dx8-theme": "^5.7"
+    },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "asset-packagist": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        "dx8": {
+            "type": "vcs",
+            "url": "https://bitbucket.org/cohesion_dev/dx8-module.git"
+        },
+        "dx8-theme": {
+            "type": "vcs",
+            "url": "https://bitbucket.org/cohesion_dev/dx8-theme.git"
+        }
+    }
+}

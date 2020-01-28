@@ -21,4 +21,4 @@ echo-yellow () { echo -e "${yellow}$1${NC}"; }
 #-------------------------- END: Helper functions ------------------------
 
 echo -e "${green}Enabling Acquia CMS modules..."
-fin exec drush en acquia_cms_core acquia_cohesion -y
+fin exec drush en acquia_cms acquia_cms_cohesion -y
