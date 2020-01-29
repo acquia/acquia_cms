@@ -40,7 +40,4 @@ echo "Make sure BLT is installed"
 fin exec composer install
 fin blt setup -n
 
-# Install additional Acquia CMS modules.
-fin acms
-
 echo -e "Open ${yellow}http://${VIRTUAL_HOST}${NC} in your browser to verify the setup."
