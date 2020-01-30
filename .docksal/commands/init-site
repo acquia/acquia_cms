@@ -36,8 +36,12 @@ echo-yellow () { echo -e "${yellow}$1${NC}"; }
 
 # Clone upstream dependencies that need their own working directory.
 fin clone-repos
+
+# Install Composer dependencies, install Drupal
 echo "Make sure BLT is installed"
 fin exec composer install
 fin blt setup -n
+# Fetch Cohesion starter assets.
+fin init-cohesion
 
 echo -e "Open ${yellow}http://${VIRTUAL_HOST}${NC} in your browser to verify the setup."
