@@ -58,8 +58,9 @@ function acquia_cms_initialize_cohesion() {
 }
 
 /**
- * This function should return customer API and organization keys, which
- * are environment variables set by the Site Manager.
+ * Fetches Cohesion API keys.
+ *
+ * These are environment variables set by the Site Manager (or CI config).
  */
 function acquia_cms_fetch_cohesion_api_data() {
   return [

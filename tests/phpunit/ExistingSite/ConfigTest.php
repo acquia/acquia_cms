@@ -20,8 +20,8 @@ class ConfigTest extends ExistingSiteBase {
     // Assert that all install tasks have done what they should do.
     // @see acquia_cms_install_tasks()
     $account = \Drupal::entityTypeManager()
-       ->getStorage('user')
-       ->load(1);
+      ->getStorage('user')
+      ->load(1);
     $this->assertInstanceOf(UserInterface::class, $account);
     /** @var \Drupal\user\UserInterface $account */
     $this->assertTrue($account->hasRole('administrator'));
