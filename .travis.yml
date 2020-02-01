@@ -92,6 +92,8 @@ before_install:
   - composer config --global repositories.cohesion vcs https://github.com/acquia/cohesion-dev.git
   - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
   - ../orca/bin/travis/before_install.sh
+  # Temp fix until we can rename the repository.
+  - ln -s ~/build/acquia/acquia-cms ~/build/acquia/acquia_cms
 
 # Create the test fixture and place the SUT.
 install: ../orca/bin/travis/install.sh
