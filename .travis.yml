@@ -89,8 +89,8 @@ matrix:
 
 # Install ORCA and prepare the environment.
 before_install:
-  - composer config --global repositories.cohesion vcs https://github.com/acquia/cohesion-dev.git
-  - composer config --global repositories.acquia_cms vcs https://github.com/acquia/acquia_cms.git
+  - composer config --global repositories.dx8 vcs https://bitbucket.org/cohesion_dev/dx8-module.git
+  - composer config --global repositories.dx8-theme vcs https://bitbucket.org/cohesion_dev/dx8-theme.git
   - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
   - ../orca/bin/travis/before_install.sh
 

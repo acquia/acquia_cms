@@ -4,7 +4,8 @@
     "description": "An implementation of Lightning for running low code websites in the Acquia platform.",
     "license": "GPL-2.0-or-later",
     "require": {
-        "acquia/cohesion": "dev-develop as 6.0.0",
+        "cohesion/dx8": "5.7.10",
+        "cohesion/dx8-theme": "5.7.10",
         "cweagans/composer-patches": "^1.6",
         "drupal/core": "~8.8.1 || 8.9.* || 9.0.*",
         "drupal/lightning_api": "^4.4",
@@ -69,6 +70,14 @@
         "assets": {
             "type": "composer",
             "url": "https://asset-packagist.org"
+        },
+        "dx8": {
+            "type": "vcs",
+            "url": "https://bitbucket.org/cohesion_dev/dx8-module.git"
+        },
+        "dx8-theme": {
+            "type": "vcs",
+            "url": "https://bitbucket.org/cohesion_dev/dx8-theme.git"
         }
     },
     "minimum-stability": "dev",
