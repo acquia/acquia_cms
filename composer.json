@@ -4,7 +4,6 @@
     "description": "An implementation of Lightning for running low code websites in the Acquia platform.",
     "license": "GPL-2.0-or-later",
     "require": {
-        "acquia/cohesion": "^6.0",
         "cweagans/composer-patches": "^1.6",
         "drupal/core": "~8.8.1 || 8.9.* || 9.0.*",
         "drupal/lightning_api": "^4.4",
@@ -13,6 +12,7 @@
         "drupal/lightning_workflow": "^3.14"
     },
     "require-dev": {
+        "acquia/cohesion": "dev-develop",
         "drupal-composer/drupal-scaffold": "^2.0.0",
         "drupal/drupal-extension": "^3.4",
         "drupal/facets": "^1.2",
@@ -58,11 +58,7 @@
         "patchLevel": {
             "drupal/core": "-p2"
         },
-        "patches": {
-            "drupal/core": {
-                "3096566 - Copy media library styles from Seven to Claro & 3096241 - Refactor image and file field widgets to improve contrib compatibility and to make their templates and preprocess functions DRY": "https://www.drupal.org/files/issues/2019-12-16/3096566-23-combined-3096241-3.patch"
-            }
-        }
+        "patches": {}
     },
     "autoload": {},
     "repositories": {
