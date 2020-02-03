@@ -33,7 +33,7 @@ env:
     # that are, you can modify the active packages configuration at runtime by
     # uncommenting the following line and specifying your own alter file.
     # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_PACKAGES_CONFIG_ALTER
-    - ORCA_PACKAGES_CONFIG_ALTER=../acquia-cms/tests/packages_alter.yml
+    - ORCA_PACKAGES_CONFIG_ALTER=../acquia_cms/tests/packages_alter.yml
     # If your package is a Drupal installation profile, uncomment the following
     # line and specify its machine name.
     # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_FIXTURE_PROFILE
@@ -92,8 +92,6 @@ before_install:
   - composer config --global repositories.cohesion vcs https://github.com/acquia/cohesion-dev.git
   - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
   - ../orca/bin/travis/before_install.sh
-  # Temp fix until we can rename the repository.
-  - ln -s ~/build/acquia/acquia-cms ~/build/acquia/acquia_cms
 
 # Create the test fixture and place the SUT.
 install: ../orca/bin/travis/install.sh
