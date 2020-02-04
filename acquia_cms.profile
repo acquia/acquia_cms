@@ -54,7 +54,7 @@ function acquia_cms_initialize_cohesion() {
 
   $config = \Drupal::configFactory()->getEditable('cohesion.settings');
 
-  foreach($cohesion_api_data AS $key => $value) {
+  foreach ($cohesion_api_data as $key => $value) {
     $config->set($key, $value);
   }
   $config->save();
