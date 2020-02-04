@@ -31,8 +31,8 @@ class ConfigTest extends ExistingSiteBase {
     $this->assertSame('claro', $theme_config->get('admin'));
 
     $cohesion_config = $this->config('cohesion.settings');
-    $this->assertSame($_ENV['COHESION_API_KEY'], $cohesion_config->get('api_key'));
-    $this->assertSame($_ENV['COHESION_ORG_KEY'], $cohesion_config->get('organization_key'));
+    $this->assertSame(getenv('COHESION_API_KEY'), $cohesion_config->get('api_key'));
+    $this->assertSame(getenv('COHESION_ORG_KEY'), $cohesion_config->get('organization_key'));
   }
 
   /**
