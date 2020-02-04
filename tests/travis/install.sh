@@ -15,8 +15,7 @@ assert_env_vars
 
 # Install drupal-test-traits and copy custom phpunit.xml to core dir.
 _init_phpunit() {
-  composer -d"$TRAVIS_BUILD_DIR/tests/phpunit" require --dev weitzman/drupal-test-traits
-  cp phpunit.xml $TRAVIS_BUILD_DIR/../orca-build/docroot/core
+  cp $TRAVIS_BUILD_DIR/phpunit.xml $TRAVIS_BUILD_DIR/../orca-build/docroot/core
 }
 
 case "$ORCA_JOB" in
