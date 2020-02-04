@@ -9,13 +9,13 @@
 # DESCRIPTION
 #     Creates the test fixture and places the SUT.
 
-cd "$(dirname "$0")" || exit; source _includes.sh
+cd "$(dirname "$0")" || exit; source $TRAVIS_BUILD_DIR/../orca/bin/travis/_includes.sh
 
 assert_env_vars
 
 # Install drupal-test-traits and copy custom phpunit.xml to core dir.
 _init_phpunit() {
-  composer -d"/home/travis/build/acquia/acquia_cms” require --dev weitzman/drupal-test-traits
+  composer -d"$TRAVIS_BUILD_DIR/tests/phpunit" require --dev weitzman/drupal-test-traits
   cp phpunit.xml $TRAVIS_BUILD_DIR/../orca-build/docroot/core
 }
 
