@@ -101,10 +101,7 @@ install: ../orca/bin/travis/install.sh
 before_script: ../orca/bin/travis/before_script.sh
 
 # Run the test script.
-script:
-  # Manually install drupal-test-traits into the correct dir.
-  - composer -d"$ORCA_FIXTURE_DIR" require --dev weitzman/drupal-test-traits
-  - ../orca/bin/travis/script.sh
+script: ../orca/bin/travis/script.sh
 
 # Reserved for future use.
 before_cache: ../orca/bin/travis/before_cache.sh
