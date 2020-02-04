@@ -38,6 +38,8 @@ env:
     # line and specify its machine name.
     # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_FIXTURE_PROFILE
     - ORCA_FIXTURE_PROFILE=acquia_cms
+    # Build Dir.
+    - ORCA_BUILD_DIR=$HOME/build/acquia/orca-build
 
 # Execution time is drastically reduced by splitting the build into multiple
 # concurrent jobs.
@@ -95,7 +97,10 @@ before_install:
   - ../orca/bin/travis/before_install.sh
 
 # Create the test fixture and place the SUT.
-install: ../orca/bin/travis/install.sh
+install:
+  # Manually install drupal-test-traits into the correct dir.
+  - composer -d"$ORCA_BUILD_DIR" require --dev weitzman/drupal-test-traits
+  - ../orca/bin/travis/install.sh
 
 # Display details about the fixture.
 before_script: ../orca/bin/travis/before_script.sh
