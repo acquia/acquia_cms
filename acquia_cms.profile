@@ -64,7 +64,7 @@ function acquia_cms_initialize_cohesion() {
  */
 function acquia_cms_fetch_cohesion_api_data() {
   return [
-    'api_key' => $_ENV['COHESION_API_KEY'],
-    'organization_key' => $_ENV['COHESION_ORG_KEY'],
+    'api_key' => getenv('COHESION_API_KEY'),
+    'organization_key' => getenv('COHESION_ORG_KEY'),
   ];
 }
