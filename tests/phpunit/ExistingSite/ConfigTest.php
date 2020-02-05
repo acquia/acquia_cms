@@ -13,12 +13,11 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
 class ConfigTest extends ExistingSiteBase {
 
   /**
-   * Tests config set during install.
+   * Assert that all install tasks have done what they should do.
+   *
+   * See acquia_cms_install_tasks().
    */
   public function testConfig() {
-
-    // Assert that all install tasks have done what they should do.
-    // @see acquia_cms_install_tasks()
 
     // Check that the admin role has been created, and that user 1
     // is set as an admin.
