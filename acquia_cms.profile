@@ -29,6 +29,14 @@ function acquia_cms_set_default_theme() {
     ->set('default', 'cohesion_theme')
     ->set('admin', 'claro')
     ->save(TRUE);
+
+  // Use the admin theme for creating content.
+  if (Drupal::moduleHandler()->moduleExists('node')) {
+    Drupal::configFactory()
+      ->getEditable('node.settings')
+      ->set('use_admin_theme', TRUE)
+      ->save(TRUE);
+  }
 }
 
 /**
