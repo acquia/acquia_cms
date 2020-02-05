@@ -13,12 +13,14 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
 class ConfigTest extends ExistingSiteBase {
 
   /**
-   * Tests config set during install.
+   * Assert that all install tasks have done what they should do.
+   *
+   * See acquia_cms_install_tasks().
    */
   public function testConfig() {
 
-    // Assert that all install tasks have done what they should do.
-    // @see acquia_cms_install_tasks()
+    // Check that the admin role has been created, and that user 1
+    // is set as an admin.
     $account = \Drupal::entityTypeManager()
       ->getStorage('user')
       ->load(1);
@@ -26,10 +28,16 @@ class ConfigTest extends ExistingSiteBase {
     /** @var \Drupal\user\UserInterface $account */
     $this->assertTrue($account->hasRole('administrator'));
 
+    // Check that the default and admin themes are set as expected.
     $theme_config = $this->config('system.theme');
     $this->assertSame('cohesion_theme', $theme_config->get('default'));
     $this->assertSame('claro', $theme_config->get('admin'));
 
+    // Check that the node create form is using the admin theme.
+    $node_form_config = $this->config('node.settings');
+    $this->assertSame(TRUE, $node_form_config->get('use_admin_theme'));
+
+    // Check that the Cohesion API keys are set.
     $cohesion_config = $this->config('cohesion.settings');
     $this->assertSame(getenv('COHESION_API_KEY'), $cohesion_config->get('api_key'));
     $this->assertSame(getenv('COHESION_ORG_KEY'), $cohesion_config->get('organization_key'));
