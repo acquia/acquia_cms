@@ -3,6 +3,8 @@ core: 8.x
 type: profile
 description: "An implementation of Lightning for running low code websites in the Acquia platform."
 install:
+  - acquia_cms_article
+  - acquia_cms_person
   - admin_toolbar
   - adminimal_admin_toolbar
   - cohesion
@@ -15,6 +17,9 @@ install:
   - cohesion_templates
   - cohesion_website_settings
   - config
+  - datetime
+  - datetime_range
+  - history
   - lightning_core
   - lightning_api
   - lightning_media
@@ -30,6 +35,17 @@ install:
   - lightning_media_twitter
   - lightning_media_video
   - lightning_scheduler
+  - menu_ui
+  - options
+  - pathauto
+  - page_cache
+  - redirect
+  - taxonomy
+  - field_ui
+  - views_ui
+  - metatag
+  - moderation_dashboard
+  - moderation_sidebar
   - responsive_preview
 themes:
   - cohesion_theme

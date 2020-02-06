@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Contains installation and update routines for Acquia CMS Article.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_article_install() {
+  $modules = [
+    'lightning_search',
+    'lightning_workflow',
+    'menu_ui',
+  ];
+
+  $modules = array_filter($modules, [Drupal::moduleHandler(), 'moduleExists']);
+  if ($modules) {
+    acquia_cms_article_modules_installed($modules);
+  }
+}
