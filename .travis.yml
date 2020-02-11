@@ -38,6 +38,8 @@ env:
     # line and specify its machine name.
     # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_FIXTURE_PROFILE
     - ORCA_FIXTURE_PROFILE=acquia_cms
+    # Enable Coveralls
+    - ORCA_COVERALLS_ENABLE=TRUE
 
 # Execution time is drastically reduced by splitting the build into multiple
 # concurrent jobs.
