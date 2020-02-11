@@ -58,6 +58,8 @@ function acquia_cms_prepare_administrator() {
  */
 function acquia_cms_initialize_cohesion() {
 
+  $ui_kit_path = 'profiles/contrib/acquia_cms/misc/ui-kit.package.yml';
+
   $cohesion_api_data = acquia_cms_fetch_cohesion_api_data();
 
   $config = \Drupal::configFactory()->getEditable('cohesion.settings');
@@ -96,6 +98,9 @@ function acquia_cms_initialize_cohesion() {
   else {
     return ['error' => t('Your Cohesion API KEY has not been set.') . $config->get('site_id')];
   }
+
+  // Import UI kit.
+  \Drupal::service('cohesion_sync.drush_helpers')->import(0, 1, $ui_kit_path, 0);
 }
 
 /**
