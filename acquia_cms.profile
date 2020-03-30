@@ -100,7 +100,7 @@ function acquia_cms_initialize_cohesion() {
   }
 
   // Import UI kit.
-  \Drupal::service('cohesion_sync.drush_helpers')->import(0, 1, $ui_kit_path, 0);
+  \Drupal::service('cohesion_sync.drush_helpers')->import(1, 0, $ui_kit_path, 0);
 }
 
 /**

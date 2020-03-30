@@ -16,6 +16,10 @@ cache:
     - "$HOME/.drush/cache"
     - "$TMPDIR/phpstan/cache"
 
+branches:
+  only:
+    - master
+
 env:
   # Change the following values for your implementation.
   global:
