@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for Acquia CMS Core.
+ */
+
+use Drupal\workflows\Entity\Workflow;
+
+/**
+ * Helper function to add a content type to a workflow.
+ *
+ * Should be used by all modules which add a content type and need
+ * to use an existing workflow.
+ *
+ * @param string $node_type_name
+ *   Node type name (eg, page).
+ * @param string $workflow_id
+ *   Workflow id (eg, editorial). Defaults to 'editorial'.
+ */
+function acquia_cms_core_workflow_node_type_add($node_type_name, $workflow_id = 'editorial') {
+  $workflow_config_name = "workflows.workflow.$workflow_id";
+  $type_settings = \Drupal::configFactory()->get($workflow_config_name)->get('type_settings');
+  $type_settings['entity_types']['node'][] = $node_type_name;
+
+  \Drupal::configFactory()
+    ->getEditable($workflow_config_name)
+    ->set('type_settings', $type_settings)
+    ->save();
+
+  $workflow = Workflow::load($workflow_id);
+  $workflow->save();
+}
