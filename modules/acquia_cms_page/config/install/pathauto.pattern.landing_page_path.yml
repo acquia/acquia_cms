@@ -3,19 +3,19 @@ status: true
 dependencies:
   module:
     - node
-id: article_path
-label: "Article path"
+id: landing_page_path
+label: "Landing page path"
 type: "canonical_entities:node"
-pattern: "[node:content-type]/[node:title]"
+pattern: "[node:title]"
 selection_criteria:
-  fe55ce73-c07d-4afc-b812-ceeab2f8d633:
+  f857cec1-a605-4339-ade9-00dc7145597c:
     id: node_type
     bundles:
-      article: article
+      page: page
     negate: false
     context_mapping:
       node: node
-    uuid: fe55ce73-c07d-4afc-b812-ceeab2f8d633
+    uuid: f857cec1-a605-4339-ade9-00dc7145597c
 selection_logic: and
 weight: -5
 relationships: {}

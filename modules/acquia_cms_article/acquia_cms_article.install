@@ -19,4 +19,7 @@ function acquia_cms_article_install() {
   if ($modules) {
     acquia_cms_article_modules_installed($modules);
   }
+
+  // Add article content type to default Lightning workflow.
+  acquia_cms_core_workflow_node_type_add('article');
 }
