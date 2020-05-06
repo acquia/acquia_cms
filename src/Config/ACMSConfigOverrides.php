@@ -2,7 +2,7 @@
 
 namespace Drupal\acquia_cms\Config;
 
-use Acquia\EnvironmentDetector\AcquiaEnvironmentDetector as EnvironmentDetector;
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as EnvironmentDetector;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryOverrideInterface;
 use Drupal\Core\Config\StorageInterface;
