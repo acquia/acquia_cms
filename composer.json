@@ -17,7 +17,8 @@
         "drupal/lightning_media": "^3.14",
         "drupal/lightning_workflow": "^3.14",
         "drupal/responsive_preview": "^1.0@beta",
-        "drupal/schema_metatag": "^1.4"
+        "drupal/schema_metatag": "^1.4",
+        "acquia/drupal-environment-detector": "dev-master"
     },
     "require-dev": {
         "drupal/core-composer-scaffold": "*",
@@ -97,6 +98,11 @@
         "dx8-theme": {
             "type": "vcs",
             "url": "https://bitbucket.org/cohesion_dev/dx8-theme.git"
+        },
+        "environment-detector": {
+            "type": "vcs",
+            "url": "https://github.com/acquia/drupal-environment-detector.git",
+            "no-api": true
         }
     },
     "minimum-stability": "dev",
