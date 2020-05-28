@@ -18,7 +18,7 @@ use Drupal\workflows\Entity\Workflow;
  * @param string $workflow_id
  *   Workflow id (eg, editorial). Defaults to 'editorial'.
  */
-function acquia_cms_core_workflow_node_type_add($node_type_name, $workflow_id = 'editorial') {
+function acquia_cms_common_workflow_node_type_add($node_type_name, $workflow_id = 'editorial') {
   $workflow_config_name = "workflows.workflow.$workflow_id";
   $type_settings = \Drupal::configFactory()->get($workflow_config_name)->get('type_settings');
   $type_settings['entity_types']['node'][] = $node_type_name;
