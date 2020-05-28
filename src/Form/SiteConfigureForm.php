@@ -56,17 +56,22 @@ final class SiteConfigureForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = $this->decorated->buildForm($form, $form_state);
 
-    $form['api_key'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('API key'),
-      '#default_value' => getenv('COHESION_API_KEY'),
+    $form['cohesion'] = [
+      'api_key' => [
+        '#type' => 'textfield',
+        '#title' => $this->t('API key'),
+        '#default_value' => getenv('COHESION_API_KEY'),
+      ],
+      'organization_key' => [
+        '#type' => 'textfield',
+        '#title' => $this->t('Organization key'),
+        '#default_value' => getenv('COHESION_ORG_KEY'),
+      ],
+      '#type' => 'details',
+      '#title' => $this->t('Acquia Cohesion'),
+      '#description' => $this->t('Enter your API key and organization key to automatically set up Acquia Cohesion (note that this process can take a while). If you do not want to use Cohesion right now, leave these fields blank -- you can always set it up later.'),
+      '#tree' => TRUE,
     ];
-    $form['organization_key'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Organization key'),
-      '#default_value' => getenv('COHESION_ORG_KEY'),
-    ];
-
     return $form;
   }
 
@@ -83,17 +88,16 @@ final class SiteConfigureForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->decorated->submitForm($form, $form_state);
 
-    $api_key = $form_state->getValue('api_key');
-    $org_key = $form_state->getValue('organization_key');
+    $api_key = $form_state->getValue(['cohesion', 'api_key']);
+    $org_key = $form_state->getValue(['cohesion', 'organization_key']);
 
-    if (empty($api_key) || empty($org_key)) {
-      return;
+    if ($api_key && $org_key) {
+      $this->config('cohesion.settings')
+        ->set('api_url', 'https://api.cohesiondx.com')
+        ->set('api_key', $api_key)
+        ->set('organization_key', $org_key)
+        ->save();
     }
-    $this->config('cohesion.settings')
-      ->set('api_url', 'https://api.cohesiondx.com')
-      ->set('api_key', $api_key)
-      ->set('organization_key', $org_key)
-      ->save();
   }
 
 }
