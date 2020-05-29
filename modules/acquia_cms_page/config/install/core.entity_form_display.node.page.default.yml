@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.page.field_keywords
+    - field.field.node.page.field_tags
     - field.field.node.page.field_layout_canvas
     - node.type.page
     - workflows.workflow.editorial
@@ -21,7 +21,7 @@ content:
     region: content
     settings: {}
     third_party_settings: {}
-  field_keywords:
+  field_tags:
     weight: 123
     settings:
       match_operator: CONTAINS
