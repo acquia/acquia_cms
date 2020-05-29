@@ -65,10 +65,13 @@ function acquia_cms_initialize_cohesion() {
 /**
  * Imports the Cohesion UI kit that ships with this profile.
  *
+ * @param array $install_state
+ *   The current state of the installation.
+ *
  * @return array
  *   The batch job definition.
  */
-function acquia_cms_install_ui_kit() {
+function acquia_cms_install_ui_kit(array &$install_state) {
   $ui_kit = __DIR__ . '/misc/ui-kit.package.yml';
   assert(file_exists($ui_kit), "The UI kit package ($ui_kit) does not exist.");
 
@@ -88,22 +91,29 @@ function acquia_cms_install_ui_kit() {
     foreach ($action_data as &$action) {
       $action['entry_action_state'] = ENTRY_EXISTING_OVERWRITTEN;
     }
-    $packager->applyBatchYamlPackageStream($ui_kit, $action_data);
   }
   catch (\Throwable $e) {
     Drupal::messenger()->addError($e->getMessage());
     return [];
   }
 
-  // We want to return the batch jobs by value, because the installer will call
-  // batch_set() on them. However, because the packager has already done that,
-  // we also need to clear the static variables maintained by batch_get() so
-  // that the installer doesn't add more jobs than we actually want to run.
-  // @see \Drupal\cohesion_sync\PackagerManager::validateYamlPackageStream()
-  // @see install_run_task()
-  $batch = batch_get();
-  $batch_static = &batch_get();
-  $batch_static['sets'] = [];
+  if ($install_state['interactive']) {
+    $packager->applyBatchYamlPackageStream($ui_kit, $action_data);
 
-  return $batch['sets'];
+    // We want to return the batch jobs by value, because the installer will
+    // call batch_set() on them. However, because the packager has already done
+    // that, we also need to clear the static variables maintained by
+    // batch_get() so that the installer doesn't add more jobs than we actually
+    // want to run.
+    // @see \Drupal\cohesion_sync\PackagerManager::validateYamlPackageStream()
+    // @see install_run_task()
+    $batch = batch_get();
+    $batch_static = &batch_get();
+    $batch_static['sets'] = [];
+
+    return $batch['sets'];
+  }
+  else {
+    $packager->applyYamlPackageStream($ui_kit, $action_data);
+  }
 }
