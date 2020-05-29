@@ -2,32 +2,54 @@
 
 /**
  * @file
- * Contains hook implementations for Acquia CMS Core.
+ * Contains hook implementations for common, shared Acquia CMS functionality.
  */
 
+use Drupal\content_moderation\Plugin\WorkflowType\ContentModerationInterface;
+use Drupal\node\NodeTypeInterface;
 use Drupal\workflows\Entity\Workflow;
 
 /**
- * Helper function to add a content type to a workflow.
+ * Implements hook_ENTITY_TYPE_insert() for node types.
  *
- * Should be used by all modules which add a content type and need
- * to use an existing workflow.
+ * Tries to add the new node type to a Content Moderation workflow specified
+ * by the acquia_cms.workflow_id third-party setting. If the specified workflow
+ * doesn't exist, or does exist but doesn't use Content Moderation, a warning
+ * is logged.
  *
- * @param string $node_type_name
- *   Node type name (eg, page).
- * @param string $workflow_id
- *   Workflow id (eg, editorial). Defaults to 'editorial'.
+ * @param \Drupal\node\NodeTypeInterface $node_type
+ *   The new node type.
  */
-function acquia_cms_common_workflow_node_type_add($node_type_name, $workflow_id = 'editorial') {
-  $workflow_config_name = "workflows.workflow.$workflow_id";
-  $type_settings = \Drupal::configFactory()->get($workflow_config_name)->get('type_settings');
-  $type_settings['entity_types']['node'][] = $node_type_name;
+function acquia_cms_common_node_type_insert(NodeTypeInterface $node_type) {
+  // If the node type does not specify a workflow, there's nothing to do.
+  $workflow_id = $node_type->getThirdPartySetting('acquia_cms', 'workflow_id');
+  if (empty($workflow_id)) {
+    return;
+  }
 
-  \Drupal::configFactory()
-    ->getEditable($workflow_config_name)
-    ->set('type_settings', $type_settings)
-    ->save();
+  $variables = [
+    '%node_type' => $node_type->label(),
+    '%workflow' => $workflow_id,
+  ];
+  $logger = Drupal::logger('acquia_cms');
 
+  // Ensure the workflow exists, and log a warning if it doesn't.
+  /** @var \Drupal\workflows\WorkflowInterface $workflow */
   $workflow = Workflow::load($workflow_id);
-  $workflow->save();
+  if (empty($workflow)) {
+    $logger->warning('Could not add the %node_type content type to the %workflow workflow because the workflow does not exist.', $variables);
+  }
+  else {
+    $variables['%workflow'] = $workflow->label();
+  }
+
+  $type_plugin = $workflow->getTypePlugin();
+  if ($type_plugin instanceof ContentModerationInterface) {
+    $type_plugin->addEntityTypeAndBundle('node', $node_type->id());
+    $workflow->save();
+    $logger->info('Added the %node_type content type to the %workflow workflow.', $variables);
+  }
+  else {
+    $logger->warning('Could not add the %node_type content type to the %workflow workflow because the workflow does not use Content Moderation.', $variables);
+  }
 }
