@@ -2,10 +2,20 @@
 
 /**
  * @file
- * Acquia CMS standard profile.
+ * Contains install-time code for the Acquia CMS profile.
  */
 
+use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
+
+/**
+ * Implements hook_install_tasks_alter().
+ */
+function acquia_cms_install_tasks_alter(array &$tasks) {
+  // Decorate the site configuration form to allow the user to configure their
+  // Cohesion keys at install time.
+  $tasks['install_configure_form']['function'] = SiteConfigureForm::class;
+}
 
 /**
  * Implements hook_install_tasks().
@@ -13,105 +23,97 @@ use Drupal\cohesion\Controller\AdministrationController;
 function acquia_cms_install_tasks() {
   $tasks = [];
 
-  $tasks['acquia_cms_set_default_theme'] = [];
-  $tasks['acquia_cms_prepare_administrator'] = [];
-  $tasks['acquia_cms_initialize_cohesion'] = [];
+  $config = Drupal::config('cohesion.settings');
+  $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
 
+  // If the user has configured their Cohesion keys, import all elements.
+  $tasks['acquia_cms_initialize_cohesion'] = [
+    'display_name' => t('Import Cohesion elements'),
+    'display' => $cohesion_configured,
+    'type' => 'batch',
+    'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+  ];
+  $tasks['acquia_cms_install_ui_kit'] = [
+    'display_name' => t('Import Cohesion components'),
+    'display' => $cohesion_configured,
+    'type' => 'batch',
+    'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+  ];
   return $tasks;
 }
 
 /**
- * Sets the default and administration themes.
- */
-function acquia_cms_set_default_theme() {
-  Drupal::configFactory()
-    ->getEditable('system.theme')
-    ->set('default', 'cohesion_theme')
-    ->set('admin', 'claro')
-    ->save(TRUE);
-
-  // Use the admin theme for creating content.
-  if (Drupal::moduleHandler()->moduleExists('node')) {
-    Drupal::configFactory()
-      ->getEditable('node.settings')
-      ->set('use_admin_theme', TRUE)
-      ->save(TRUE);
-  }
-}
-
-/**
- * Assigns the 'administrator' role to user 1.
- */
-function acquia_cms_prepare_administrator() {
-  /** @var \Drupal\user\UserInterface $account */
-  $account = \Drupal::entityTypeManager()
-    ->getStorage('user')
-    ->load(1);
-  if ($account) {
-    $account->addRole('administrator');
-    $account->save();
-  }
-}
-
-/**
- * Initializes the Cohesion module with default configuration.
+ * Imports all Cohesion elements.
+ *
+ * @return array
+ *   The batch job definition.
  */
 function acquia_cms_initialize_cohesion() {
-
-  $ui_kit_path = 'profiles/contrib/acquia_cms/misc/ui-kit.package.yml';
-
-  $cohesion_api_data = acquia_cms_fetch_cohesion_api_data();
-
-  $config = \Drupal::configFactory()->getEditable('cohesion.settings');
-
-  foreach ($cohesion_api_data as $key => $value) {
-    $config->set($key, $value);
+  // Build and run the batch job for the initial import of Cohesion elements and
+  // assets.
+  // @todo When Cohesion provides a service to generate this batch job, use
+  // that instead of calling an internal method of an internal controller, since
+  // this may break at any time due to internal refactoring done by Cohesion.
+  $batch = AdministrationController::batchAction(TRUE);
+  if (isset($batch['error'])) {
+    Drupal::messenger()->addError($batch['error']);
+    return [];
   }
-  $config->save();
-
-  if ($config->get('api_key') !== '') {
-    // Get a list of the batch items.
-    $batch = AdministrationController::batchAction(TRUE);
-
-    if (isset($batch['error'])) {
-      return $batch;
-    }
-
-    foreach ($batch['operations'] as $operation) {
-      $context = ['results' => []];
-      $function = $operation[0];
-      $args = $operation[1];
-
-      if (function_exists($function)) {
-        call_user_func_array($function, array_merge($args, [&$context]));
-      }
-    }
-
-    // Give access to all routes.
-    // Enable the routes.
-    cohesion_website_settings_batch_import_finished(TRUE, $context['results'], '');
-
-    if (isset($context['results']['error'])) {
-      return ['error' => $context['results']['error']];
-    }
-  }
-  else {
-    return ['error' => t('Your Cohesion API KEY has not been set.') . $config->get('site_id')];
-  }
-
-  // Import UI kit.
-  \Drupal::service('cohesion_sync.drush_helpers')->import(1, 0, $ui_kit_path, 0);
+  return $batch;
 }
 
 /**
- * Fetches Cohesion API keys.
+ * Imports the Cohesion UI kit that ships with this profile.
  *
- * These are environment variables set by the Site Manager (or CI config).
+ * @param array $install_state
+ *   The current state of the installation.
+ *
+ * @return array
+ *   The batch job definition.
  */
-function acquia_cms_fetch_cohesion_api_data() {
-  return [
-    'api_url' => 'https://api.cohesiondx.com',
-    'api_key' => getenv('COHESION_API_KEY'),
-    'organization_key' => getenv('COHESION_ORG_KEY'),
-  ];
+function acquia_cms_install_ui_kit(array &$install_state) {
+  $ui_kit = __DIR__ . '/misc/ui-kit.package.yml';
+  assert(file_exists($ui_kit), "The UI kit package ($ui_kit) does not exist.");
+
+  // Import the UI kit from the YAML file we ship with this profile. This code
+  // is delicate because it was basically written by rooting around in
+  // Cohesion's internals. So be extremely careful when changing it.
+  // @see \Drupal\cohesion_sync\Form\ImportFileForm::submitForm()
+  // @see \Drupal\cohesion_sync\Drush\CommandHelpers::import()
+  /** @var \Drupal\cohesion_sync\PackagerManager $packager */
+  $packager = Drupal::service('cohesion_sync.packager');
+  try {
+    $action_data = $packager->validateYamlPackageStream($ui_kit);
+
+    // Basically, overwrite everything without validating. This is equivalent
+    // to passing the --overwrite-all and --force options to the 'sync:import'
+    // Drush command.
+    foreach ($action_data as &$action) {
+      $action['entry_action_state'] = ENTRY_EXISTING_OVERWRITTEN;
+    }
+  }
+  catch (\Throwable $e) {
+    Drupal::messenger()->addError($e->getMessage());
+    return [];
+  }
+
+  if ($install_state['interactive']) {
+    $packager->applyBatchYamlPackageStream($ui_kit, $action_data);
+
+    // We want to return the batch jobs by value, because the installer will
+    // call batch_set() on them. However, because the packager has already done
+    // that, we also need to clear the static variables maintained by
+    // batch_get() so that the installer doesn't add more jobs than we actually
+    // want to run.
+    // @see \Drupal\cohesion_sync\PackagerManager::validateYamlPackageStream()
+    // @see install_run_task()
+    $batch = batch_get();
+    $batch_static = &batch_get();
+    $batch_static['sets'] = [];
+
+    return $batch['sets'];
+  }
+  else {
+    $packager->applyYamlPackageStream($ui_kit, $action_data);
+  }
 }
