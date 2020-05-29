@@ -1,10 +1,10 @@
 langcode: en
 status: true
 dependencies:
-  module:
-    - node
-id: landing_page_path
-label: "Landing page path"
+  config:
+    - node.type.page
+id: page
+label: "Page path"
 type: "canonical_entities:node"
 pattern: "[node:title]"
 selection_criteria:

@@ -1,17 +1,8 @@
-name: "Landing Page"
-description: "Provides Landing Page content type and related configuration. An unstructured content type that provides unique landing pages - i.e., a homepage, or marketing event landing page."
+name: "Page"
+package: "Acquia CMS"
+description: "Provides an unstructured Page content type and related configuration."
 type: module
 core_version_requirement: ^8.9
 dependencies:
   - acquia_cms_common
-  - cohesion_elements
-  - cohesion_templates
-  - content_moderation
-  - entity_reference_revisions
-  - field
-  - node
-  - path
-  - taxonomy
-  - text
-  - user
-core_incompatible: false
+  - drupal:path
