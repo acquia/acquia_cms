@@ -14,6 +14,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 final class SiteConfigureForm extends ConfigFormBase {
 
   /**
+   * The Cohesion API URL.
+   *
+   * @var string
+   */
+  private $apiUrl;
+
+  /**
    * The decorated form object.
    *
    * @var \Drupal\Core\Installer\Form\SiteConfigureForm
@@ -25,11 +32,14 @@ final class SiteConfigureForm extends ConfigFormBase {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory service.
+   * @param string $api_url
+   *   The Cohesion API URL.
    * @param \Drupal\Core\Installer\Form\SiteConfigureForm $decorated
    *   The decorated form object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, CoreSiteConfigureForm $decorated) {
+  public function __construct(ConfigFactoryInterface $config_factory, string $api_url, CoreSiteConfigureForm $decorated) {
     parent::__construct($config_factory);
+    $this->apiUrl = $api_url;
     $this->decorated = $decorated;
   }
 
@@ -39,6 +49,7 @@ final class SiteConfigureForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
+      $container->get('cohesion.api.utils')->getAPIServerURL(),
       CoreSiteConfigureForm::create($container)
     );
   }
@@ -56,6 +67,8 @@ final class SiteConfigureForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = $this->decorated->buildForm($form, $form_state);
 
+    // @todo When relying on Cohesion 6.2.0 or later, change "Acquia Cohesion"
+    // to "Acquia Site Studio".
     $form['cohesion'] = [
       'api_key' => [
         '#type' => 'textfield',
@@ -93,7 +106,7 @@ final class SiteConfigureForm extends ConfigFormBase {
 
     if ($api_key && $org_key) {
       $this->config('cohesion.settings')
-        ->set('api_url', 'https://api.cohesiondx.com')
+        ->set('api_url', $this->apiUrl)
         ->set('api_key', $api_key)
         ->set('organization_key', $org_key)
         ->save();

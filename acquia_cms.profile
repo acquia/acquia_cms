@@ -51,6 +51,9 @@ function acquia_cms_install_tasks() {
 function acquia_cms_initialize_cohesion() {
   // Build and run the batch job for the initial import of Cohesion elements and
   // assets.
+  // @todo When Cohesion provides a service to generate this batch job, use
+  // that instead of calling an internal method of an internal controller, since
+  // this may break at any time due to internal refactoring done by Cohesion.
   $batch = AdministrationController::batchAction(TRUE);
   if (isset($batch['error'])) {
     Drupal::messenger()->addError($batch['error']);
