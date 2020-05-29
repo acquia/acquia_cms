@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.page.field_keywords
+    - field.field.node.page.field_tags
     - field.field.node.page.field_layout_canvas
     - node.type.page
   module:
@@ -13,7 +13,7 @@ targetEntityType: node
 bundle: page
 mode: default
 content:
-  field_keywords:
+  field_tags:
     type: entity_reference_label
     weight: 2
     region: content

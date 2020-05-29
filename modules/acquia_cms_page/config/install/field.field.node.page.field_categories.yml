@@ -2,13 +2,13 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_keywords
+    - field.storage.node.field_categories
     - node.type.page
-id: node.page.field_keywords
-field_name: field_keywords
+id: node.page.field_categories
+field_name: field_categories
 entity_type: node
 bundle: page
-label: Keywords
+label: Categories
 description: ''
 required: false
 translatable: true
@@ -16,5 +16,7 @@ default_value: {  }
 default_value_callback: ''
 settings:
   handler: 'default:taxonomy_term'
-  handler_settings: {  }
+  handler_settings:
+    target_bundles:
+      categories: categories
 field_type: entity_reference
