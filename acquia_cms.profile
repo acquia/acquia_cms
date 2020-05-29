@@ -92,6 +92,15 @@ function acquia_cms_install_ui_kit() {
     return [];
   }
 
-  $batch = &batch_get();
+  // We want to return the batch jobs by value, because the installer will call
+  // batch_set() on them. However, because the packager has already done that,
+  // we also need to clear the static variables maintained by batch_get() so
+  // that the installer doesn't add more jobs than we actually want to run.
+  // @see \Drupal\cohesion_sync\PackagerManager::validateYamlPackageStream()
+  // @see install_run_task()
+  $batch = batch_get();
+  $batch_static = &batch_get();
+  $batch_static['sets'] = [];
+
   return $batch['sets'];
 }
