@@ -107,6 +107,12 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "nuke": "rm -r -f docroot vendor"
+        "nuke": "rm -r -f docroot vendor",
+        "post-install-cmd": [
+            "mkdir -p ./docroot/profiles/acquia_cms",
+            "@composer archive --file acquia_cms",
+            "tar -x -f acquia_cms.tar -C ./docroot/profiles/acquia_cms",
+            "rm acquia_cms.tar"
+        ]
     }
 }
