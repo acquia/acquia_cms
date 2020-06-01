@@ -4,6 +4,7 @@
     "description": "An implementation of Lightning for running low code websites in the Acquia platform.",
     "license": "GPL-2.0-or-later",
     "require": {
+        "acquia/drupal-environment-detector": "dev-master",
         "cohesion/dx8": "6.0.0",
         "cohesion/dx8-theme": "6.0.0",
         "cweagans/composer-patches": "^1.6",
@@ -13,11 +14,10 @@
         "drupal/default_content": "^1.0@alpha",
         "drupal/environment_indicator": "^3.7",
         "drupal/lightning_media": "^3.14",
-        "drupal/responsive_preview": "^1.0@beta",
-        "drupal/schema_metatag": "^1.4",
-        "acquia/drupal-environment-detector": "dev-master",
+        "drupal/moderation_dashboard": "^1.0@beta",
         "drupal/moderation_sidebar": "^1.4",
-        "drupal/moderation_dashboard": "^1.0@beta"
+        "drupal/responsive_preview": "^1.0@beta",
+        "drupal/schema_metatag": "^1.4"
     },
     "require-dev": {
         "drupal/core-composer-scaffold": "*",
@@ -107,12 +107,12 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "nuke": "rm -r -f docroot vendor",
         "post-install-cmd": [
             "mkdir -p ./docroot/profiles/acquia_cms",
             "@composer archive --file acquia_cms",
             "tar -x -f acquia_cms.tar -C ./docroot/profiles/acquia_cms",
             "rm acquia_cms.tar"
-        ]
+        ],
+        "nuke": "rm -r -f docroot vendor"
     }
 }
