@@ -108,10 +108,13 @@
     "prefer-stable": true,
     "scripts": {
         "post-install-cmd": [
-            "mkdir -p ./docroot/profiles/acquia_cms",
-            "@composer archive --file acquia_cms",
-            "tar -x -f acquia_cms.tar -C ./docroot/profiles/acquia_cms",
-            "rm acquia_cms.tar"
+            "@putenv PROFILE_DIR=./docroot/profiles/acquia_cms",
+            "@putenv MODULES_DIR=./docroot/sites/all/modules",
+            "mkdir -p $PROFILE_DIR $MODULE_DIR",
+            "@composer archive --format tar --file acms",
+            "tar -x -f acms.tar -C $PROFILE_DIR",
+            "rm acms.tar",
+            "cd $MODULES_DIR && find ../../../profiles/acquia_cms/modules -type d -depth 1 -maxdepth 1 -exec ln -s -f '{}' ';'"
         ],
         "nuke": "rm -r -f docroot vendor"
     }
