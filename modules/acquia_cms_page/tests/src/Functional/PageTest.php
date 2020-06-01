@@ -26,6 +26,8 @@ class PageTest extends BrowserTestBase {
    * altogether. Since strict config schema isn't critically important in
    * testing this functionality, it's okay to disable it for now, but it should
    * be re-enabled (i.e., this property should be removed) as soon as possible.
+   *
+   * @var bool
    */
   protected $strictConfigSchema = FALSE;
 
