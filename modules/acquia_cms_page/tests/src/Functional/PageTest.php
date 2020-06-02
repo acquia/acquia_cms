@@ -5,7 +5,7 @@ namespace Drupal\Tests\acquia_cms_page\Functional;
 use Drupal\Component\Utility\SortArray;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
-use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\acquia_cms_common\Functional\ContentTypeRolesTest;
 use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 
 /**
@@ -13,9 +13,14 @@ use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
  *
  * @group acquia_cms_page
  */
-class PageTest extends BrowserTestBase {
+class PageTest extends ContentTypeRolesTest {
 
   use TaxonomyTestTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $nodeType = 'page';
 
   /**
    * {@inheritdoc}
@@ -53,18 +58,15 @@ class PageTest extends BrowserTestBase {
 
   /**
    * Tests the bundled functionality of the Page content type.
+   *
+   * @depends testContentTypeAsAuthor
    */
   public function testPageContentType() {
     $page = $this->getSession()->getPage();
     $assert_session = $this->assertSession();
 
-    // @todo: Once user roles are defined, either by acquia_cms_common or
-    // another module, use the appropriate role(s) here, instead of permissions.
-    $account = $this->drupalCreateUser([
-      'create page content',
-      'use editorial transition create_new_draft',
-      'view own unpublished content',
-    ]);
+    $account = $this->drupalCreateUser();
+    $account->addRole('content_author');
     $this->drupalLogin($account);
 
     $this->drupalGet('/node/add/page');

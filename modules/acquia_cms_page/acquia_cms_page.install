@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_page_install() {
+  user_role_grant_permissions('content_author', [
+    'create page content',
+    'edit own page content',
+    'delete own page content',
+  ]);
+  user_role_grant_permissions('content_editor', [
+    'edit any page content',
+    'delete any page content',
+  ]);
+  user_role_grant_permissions('content_administrator', [
+    'create page content',
+    'edit any page content',
+    'delete any page content',
+  ]);
+}
