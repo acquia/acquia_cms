@@ -13,9 +13,26 @@ dependencies:
   module:
     - cohesion_elements
     - content_moderation
+    - field_group
     - media_library
     - path
     - text
+third_party_settings:
+  field_group:
+    group_taxonomy:
+      children:
+        - field_categories
+        - field_tags
+      parent_name: ''
+      weight: 4
+      format_type: fieldset
+      region: content
+      format_settings:
+        id: ''
+        classes: ''
+        description: ''
+        required_fields: true
+      label: Taxonomy
 id: node.page.default
 targetEntityType: node
 bundle: page
@@ -33,7 +50,7 @@ content:
     region: content
   created:
     type: datetime_timestamp
-    weight: 8
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -51,7 +68,7 @@ content:
     region: content
   field_page_image:
     type: media_library_widget
-    weight: 5
+    weight: 3
     settings:
       media_types: {  }
     region: content
@@ -68,36 +85,15 @@ content:
     region: content
   moderation_state:
     type: moderation_state_default
-    weight: 6
+    weight: 5
     settings: {  }
     region: content
     third_party_settings: {  }
   path:
     type: path
-    weight: 11
+    weight: 8
     region: content
     settings: {  }
-    third_party_settings: {  }
-  promote:
-    type: boolean_checkbox
-    settings:
-      display_label: true
-    weight: 9
-    region: content
-    third_party_settings: {  }
-  status:
-    type: boolean_checkbox
-    settings:
-      display_label: true
-    weight: 13
-    region: content
-    third_party_settings: {  }
-  sticky:
-    type: boolean_checkbox
-    settings:
-      display_label: true
-    weight: 10
-    region: content
     third_party_settings: {  }
   title:
     type: string_textfield
@@ -109,7 +105,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 7
+    weight: 6
     settings:
       match_operator: CONTAINS
       size: 60
@@ -118,8 +114,11 @@ content:
     region: content
     third_party_settings: {  }
   url_redirects:
-    weight: 12
+    weight: 9
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  promote: true
+  status: true
+  sticky: true
