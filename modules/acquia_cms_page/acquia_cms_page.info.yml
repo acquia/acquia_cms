@@ -6,3 +6,6 @@ core_version_requirement: ^8.9
 dependencies:
   - acquia_cms_common
   - drupal:path
+  # @todo Replace with whichever module defines the Image media type, once
+  # Acquia CMS drops the dependency on Lightning Media.
+  - lightning_media_image
