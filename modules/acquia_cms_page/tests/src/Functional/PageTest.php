@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_page\Functional;
 
+use Drupal\Component\Utility\SortArray;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -51,18 +52,52 @@ class PageTest extends BrowserTestBase {
     $assert_session->statusCodeEquals(200);
     // Assert that the expected fields show up.
     $assert_session->fieldExists('Title');
+    $assert_session->fieldExists('Search Description');
+    // The search description should not have a summary.
+    $assert_session->fieldNotExists('Summary');
+    // There should be an auto-completing text field to store tags, and a select
+    // list for choosing categories.
+    $assert_session->elementAttributeExists('named', ['field', 'Tags'], 'data-autocomplete-path');
+    $assert_session->selectExists('Categories');
+    // There should be a field to add an image, and it should be using the
+    // media library.
+    $assert_session->elementExists('css', '#field_page_image-media-library-wrapper');
     // Although Cohesion is not installed in this test, we do want to be sure
     // that a hidden field exists to store Cohesion's JSON-encoded layout canvas
     // data. For our purposes, checking for the existence of the hidden field
     // should be sufficient.
     $assert_session->hiddenFieldExists('field_layout_canvas[0][target_id][json_values]');
-    // There should be a multi-value field to store tags. The label is visually
-    // hidden, but it's there for accessibility purposes.
-    $assert_session->fieldExists('Tags (value 1)');
     // There should be a select list to choose the moderation state, and it
     // should default to Draft. Note that which moderation states are available
     // depends on the current user's permissions.
     $assert_session->optionExists('Save as', 'Draft');
+    // Assert that the fields are in the correct order.
+    $this->assertFieldsOrder([
+      'title',
+      'body',
+      'field_layout_canvas',
+      'field_categories',
+      'field_tags',
+      'field_page_image',
+      'moderation_state',
+    ]);
+  }
+
+  /**
+   * Asserts that the fields of the Page node form are in the correct order.
+   *
+   * @param string[] $expected_order
+   *   The machine names of the fields we expect to be in the Page node type's
+   *   form display, in the order we expect them to have.
+   */
+  private function assertFieldsOrder(array $expected_order) {
+    $fields = $this->container->get('entity_display.repository')
+      ->getFormDisplay('node', 'page')
+      ->getComponents();
+
+    uasort($fields, SortArray::class . '::sortByWeightElement');
+    $fields = array_intersect(array_keys($fields), $expected_order);
+    $this->assertSame($expected_order, array_values($fields));
   }
 
 }
