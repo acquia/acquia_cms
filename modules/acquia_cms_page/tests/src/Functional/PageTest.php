@@ -3,7 +3,10 @@
 namespace Drupal\Tests\acquia_cms_page\Functional;
 
 use Drupal\Component\Utility\SortArray;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 
 /**
  * Tests the Page content type that ships with Acquia CMS.
@@ -11,6 +14,8 @@ use Drupal\Tests\BrowserTestBase;
  * @group acquia_cms_page
  */
 class PageTest extends BrowserTestBase {
+
+  use TaxonomyTestTrait;
 
   /**
    * {@inheritdoc}
@@ -33,9 +38,23 @@ class PageTest extends BrowserTestBase {
   protected $strictConfigSchema = FALSE;
 
   /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setUp();
+
+    /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
+    $vocabulary = Vocabulary::load('categories');
+    $this->createTerm($vocabulary, [
+      'name' => 'Rock',
+    ]);
+  }
+
+  /**
    * Tests the bundled functionality of the Page content type.
    */
   public function testPageContentType() {
+    $page = $this->getSession()->getPage();
     $assert_session = $this->assertSession();
 
     // @todo: Once user roles are defined, either by acquia_cms_common or
@@ -58,7 +77,7 @@ class PageTest extends BrowserTestBase {
     // There should be an auto-completing text field to store tags, and a select
     // list for choosing categories.
     $assert_session->elementAttributeExists('named', ['field', 'Tags'], 'data-autocomplete-path');
-    $assert_session->selectExists('Categories');
+    $assert_session->optionExists('Categories', 'Rock');
     // There should be a field to add an image, and it should be using the
     // media library.
     $assert_session->elementExists('css', '#field_page_image-media-library-wrapper');
@@ -81,6 +100,23 @@ class PageTest extends BrowserTestBase {
       'field_page_image',
       'moderation_state',
     ]);
+
+    // Submit the form and ensure that we see the expected error message(s).
+    $page->pressButton('Save');
+    $assert_session->pageTextContains('Title field is required.');
+
+    // Fill in the required fields and assert that things went as expected.
+    $page->fillField('Title', 'Living with video');
+    $page->fillField('Tags', 'techno');
+    $page->pressButton('Save');
+    $assert_session->pageTextContains('Living with video has been created.');
+    // Assert that the techno tag was created dynamically in the correct
+    // vocabulary.
+    /** @var \Drupal\taxonomy\TermInterface $tag */
+    $tag = Term::load(2);
+    $this->assertInstanceOf(Term::class, $tag);
+    $this->assertSame('tags', $tag->bundle());
+    $this->assertSame('techno', $tag->getName());
   }
 
   /**
