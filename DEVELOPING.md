@@ -5,13 +5,15 @@ These instructions assume that you have an Acquia Cloud account, and that you ar
 
 You should also have:
 * PHP 7.3 or later installed. (`php --version`)
-* An Acquia Cloud IDE entitlement. Check with your manager or technical architect to ensure that this is available to you.
+* An invitation to the Acquia Engineering subscription in Acquia Cloud. Your manager or technical architect should be able to get you an invitation to this subscription if you need one.
 * A GitHub account which is authorized within the Acquia organization and can access https://github.com/acquia/acquia_cms.
 
 ### Background
 To provide a consistent environment for our development team, Acquia CMS is developed using Acquia's Cloud IDE service, which provides a VSCode-like developer experience. It is possible to work on Acquia CMS on your own machine, using your IDE of choice, but this file doesn't cover that.
 
-### Instructions
+### Setting up Cloud IDE
+Because there is a limited number of Cloud IDEs available to the Acquia CMS team, each active developer should only need (and have) one. Therefore, you should only do this once.
+
 1. Visit https://github.com/acquia/cli#installation and follow the instructions to get the Acquia CLI tool installed. For example:
 ```
 curl -OL https://github.com/acquia/cli/releases/download/v1.0.0-beta1/acli.phar
