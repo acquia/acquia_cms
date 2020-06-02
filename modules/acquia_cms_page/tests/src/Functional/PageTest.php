@@ -22,6 +22,7 @@ class PageTest extends BrowserTestBase {
    */
   protected static $modules = [
     'acquia_cms_page',
+    'pathauto',
   ];
 
   /**
@@ -62,6 +63,7 @@ class PageTest extends BrowserTestBase {
     $account = $this->drupalCreateUser([
       'create page content',
       'use editorial transition create_new_draft',
+      'view own unpublished content',
     ]);
     $this->drupalLogin($account);
 
@@ -110,6 +112,8 @@ class PageTest extends BrowserTestBase {
     $page->fillField('Tags', 'techno');
     $page->pressButton('Save');
     $assert_session->pageTextContains('Living with video has been created.');
+    // Assert that the Pathauto pattern was used to create the URL alias.
+    $assert_session->addressEquals('/living-video');
     // Assert that the techno tag was created dynamically in the correct
     // vocabulary.
     /** @var \Drupal\taxonomy\TermInterface $tag */
