@@ -4,7 +4,7 @@ it.
 
 ### Assumptions
 These instructions assume that you have an Acquia Cloud account, and that you
-are using a *nix-type command line environment (e.g. Linux, macOS, or the
+are using a nix-type command line environment (e.g. Linux, macOS, or the
 Windows 10 subsystem for Linux).
 
 You should also have:
