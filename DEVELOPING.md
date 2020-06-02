@@ -67,4 +67,7 @@ cd project
 composer install
 composer run post-install-cmd
 ```
-10. Install Drupal: `drush site:install acquia_cms --yes`
+10. Install Drupal: `drush site:install acquia_cms --yes --account-pass admin`
+11. In the "Open Drupal Site" menu, choose "Open site in a new tab" and ensure
+you can see the Drupal site, and log in with the username "admin" and password
+"admin".
