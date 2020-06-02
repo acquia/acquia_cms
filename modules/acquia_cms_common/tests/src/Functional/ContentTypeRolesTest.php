@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\acquia_cms_common\Functional;
 
-use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\Tests\BrowserTestBase;
 
