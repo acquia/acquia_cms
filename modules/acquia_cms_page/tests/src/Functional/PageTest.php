@@ -5,7 +5,7 @@ namespace Drupal\Tests\acquia_cms_page\Functional;
 use Drupal\Component\Utility\SortArray;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
-use Drupal\Tests\acquia_cms_common\Functional\ContentTypeRolesTest;
+use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
 use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 
 /**
@@ -13,7 +13,7 @@ use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
  *
  * @group acquia_cms_page
  */
-class PageTest extends ContentTypeRolesTest {
+class PageTest extends ContentTypeTestBase {
 
   use TaxonomyTestTrait;
 
