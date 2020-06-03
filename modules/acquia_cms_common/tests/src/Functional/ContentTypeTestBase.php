@@ -53,6 +53,7 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
     /** @var \Drupal\Core\Field\FieldDefinitionInterface $field_definition */
     foreach ($field_definitions as $id => $field_definition) {
       $this->assertTrue($field_definition->isTranslatable(), "$id is not translatable, but it should be.");
+      $this->assertTrue($field_definition->getFieldStorageDefinition()->isTranslatable(), "$id storage is not translatable, but it should be.");
     }
   }
 
