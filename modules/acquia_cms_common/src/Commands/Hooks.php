@@ -17,7 +17,7 @@ final class Hooks extends DrushCommands {
    * @option $generic Automatically strip the UUID and site hash.
    * @usage config:get --generic system.site
    */
-  public function preConfigGet($result, CommandData $command_data) {
+  public function processConfig($result, CommandData $command_data) {
     if ($command_data->input()->getOption('generic')) {
       unset($result['uuid'], $result['_core']);
     }
