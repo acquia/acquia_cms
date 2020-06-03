@@ -6,9 +6,9 @@ use Drupal\node\Entity\NodeType;
 use Drupal\Tests\BrowserTestBase;
 
 /**
- * Base class for testing content roles for a specific content type.
+ * Base class for testing generic functionality of a specific content type.
  */
-abstract class ContentTypeRolesTest extends BrowserTestBase {
+abstract class ContentTypeTestBase extends BrowserTestBase {
 
   /**
    * The machine name of the content type under test.
@@ -37,6 +37,24 @@ abstract class ContentTypeRolesTest extends BrowserTestBase {
       'type' => $this->nodeType,
       'uid' => $this->rootUser->id(),
     ]);
+  }
+
+  /**
+   * Asserts that all configurable fields for the content type are translatable.
+   */
+  public function testAllFieldsAreTranslatable() {
+    $field_definitions = $this->container->get('entity_type.manager')
+      ->getStorage('field_config')
+      ->loadByProperties([
+        'entity_type' => 'node',
+        'bundle' => $this->nodeType,
+      ]);
+
+    /** @var \Drupal\Core\Field\FieldDefinitionInterface $field_definition */
+    foreach ($field_definitions as $id => $field_definition) {
+      $this->assertTrue($field_definition->isTranslatable(), "$id is not translatable, but it should be.");
+      $this->assertTrue($field_definition->getFieldStorageDefinition()->isTranslatable(), "$id storage is not translatable, but it should be.");
+    }
   }
 
   /**
