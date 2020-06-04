@@ -81,17 +81,22 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
     $this->drupalGet("/node/add/$this->nodeType");
     $assert_session->statusCodeEquals(200);
     $page->fillField('Title', 'Pastafazoul!');
+    // We should be able to explicitly save this node as a draft.
+    $page->selectFieldOption('Save as', 'Draft');
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
 
     $this->doMultipleModerationStateChanges(2, ['In review']);
 
+    // Test that we cannot edit others' content.
     $this->drupalGet('/node/1/edit');
     $assert_session->statusCodeEquals(403);
 
+    // Test we can delete our own content.
     $this->drupalGet('/node/2/delete');
     $assert_session->statusCodeEquals(200);
 
+    // Test that we cannot delete others' content.
     $this->drupalGet('/node/1/delete');
     $assert_session->statusCodeEquals(403);
   }
@@ -121,13 +126,16 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
 
     $assert_session = $this->assertSession();
 
+    // Test that we cannot create new content.
     $this->drupalGet("/node/add/$this->nodeType");
     $assert_session->statusCodeEquals(403);
 
+    // Test that we can edit our own content.
     $this->drupalGet($node->toUrl('edit-form'));
     $assert_session->statusCodeEquals(200);
 
-    // Mark the node for review, then test various transitions from there.
+    // Test that we can edit others' content. Mark the node for review, then
+    // transition between various workflow states.
     Node::load(1)->set('moderation_state', 'review')->save();
     $this->doMultipleModerationStateChanges(1, [
       'In review',
@@ -139,9 +147,11 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
       'Archived',
     ]);
 
+    // Test that we can delete our own content.
     $this->drupalGet($node->toUrl('delete-form'));
     $assert_session->statusCodeEquals(200);
 
+    // Test that we can delete others' content.
     $this->drupalGet('/node/1/delete');
     $assert_session->statusCodeEquals(200);
   }
@@ -166,15 +176,19 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
     $assert_session = $this->assertSession();
     $page = $this->getSession()->getPage();
 
+    // Test that we can create content.
     $this->drupalGet("/node/add/$this->nodeType");
     $assert_session->statusCodeEquals(200);
     $page->fillField('Title', 'Pastafazoul!');
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
 
+    // Test that we can edit our own content.
     $this->drupalGet('/node/2/edit');
     $assert_session->statusCodeEquals(200);
 
+    // Test that we can edit others' content and send it through various
+    // workflow states.
     $this->doMultipleModerationStateChanges(1, [
       'In review',
       'Published',
@@ -184,9 +198,11 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
       'Draft',
     ]);
 
+    // Test that we can delete our own content.
     $this->drupalGet('/node/2/delete');
     $assert_session->statusCodeEquals(200);
 
+    // Test that we can delete others' content.
     $this->drupalGet('/node/1/delete');
     $assert_session->statusCodeEquals(200);
   }
