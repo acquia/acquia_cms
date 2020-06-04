@@ -1,4 +1,4 @@
-This file explains how to get set up as an Acquia developer, working on Acquia CMS itself. It does not cover how to install Acquia CMS and build a site with it.
+This file explains how to get set up as an Acquia developer, working on Acquia CMS itself. It does not explain how to get set up to build a "real" project with Acquia CMS.
 
 ### Assumptions
 These instructions assume that you have an Acquia Cloud account, and that you are using a nix-type command line environment (e.g. Linux, macOS, or the Windows 10 subsystem for Linux).
@@ -9,7 +9,7 @@ You should also have:
 * A GitHub account which is authorized within the Acquia organization and can access https://github.com/acquia/acquia_cms.
 
 ### Background
-To provide a consistent environment for our development team, Acquia CMS is developed using Acquia's Cloud IDE service, which provides a VSCode-like developer experience. It is possible to work on Acquia CMS on your own machine, using your IDE of choice, but this file doesn't cover that.
+To provide a consistent environment for our development team, Acquia CMS is developed using Acquia's Cloud IDE service, which provides a VSCode-like developer experience. It is possible to work on Acquia CMS on your own machine, using your IDE of choice, but that is not the recommended set-up in most circumstances.
 
 ### Setting up a Cloud IDE
 Because there is a limited number of Cloud IDEs available to the Acquia CMS team, each active developer should only need (and have) one. Therefore, you should only do this once.
@@ -90,11 +90,9 @@ cd docroot
 ### Setting up a local environment (optional)
 In certain situations, it may be helpful to set up a local development environment. However, you should only do this if you really need to.
 
-You'll need:
-* PHP 7.3 (`php --version`), ideally with SQLite
+In addition to the prequisites listed at the top of this file, you'll need:
 * Composer (`composer --version`)
 * Git (`git --version`)
-* Access to the Acquia CMS GitHub repository
 
 Clone the repository and install all dependencies:
 ```
@@ -105,6 +103,6 @@ composer run post-install-cmd
 ```
 Then, install Acquia CMS as detailed in the "Installing Acquia CMS" section above.
 
-Note that, in a local environment, it can be more convenient to use a SQLite database over MySQL, since SQLite doesn't require any additional servers to be running. If you want to use SQLite, pass the `--db-url sqlite://drupal.sqlite` option to `drush site:install`.
+Note that, in a local environment, it can be more convenient to use a SQLite database instead of MySQL, since SQLite doesn't require any additional servers to be running. Use `php -i | grep sqlite` to see if your copy of PHP supports SQLite. If so, and you want to use it, pass the `--db-url sqlite://drupal.sqlite` option to `drush site:install`.
 
 Once you've installed Acquia CMS, how you serve it is up to you. For local development, the most convenient option is PHP's built-in web server: `drush runserver 8080`.
