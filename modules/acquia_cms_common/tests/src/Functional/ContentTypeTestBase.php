@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_common\Functional;
 
+use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\Tests\BrowserTestBase;
 
@@ -66,6 +67,7 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
    * - Cannot edit others' content.
    * - Can delete their own content.
    * - Cannot delete others' content.
+   * - Can transition their own content from draft to review.
    */
   public function testContentTypeAsAuthor() {
     $account = $this->drupalCreateUser();
@@ -76,26 +78,25 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
     $assert_session = $this->assertSession();
     $page = $this->getSession()->getPage();
 
-    // Tests content creation.
     $this->drupalGet("/node/add/$this->nodeType");
     $assert_session->statusCodeEquals(200);
     $page->fillField('Title', 'Pastafazoul!');
+    // We should be able to explicitly save this node as a draft.
+    $page->selectFieldOption('Save as', 'Draft');
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
 
-    // Tests editing of own content.
-    $this->drupalGet('/node/2/edit');
-    $assert_session->statusCodeEquals(200);
+    $this->doMultipleModerationStateChanges(2, ['In review']);
 
-    // Tests editing of any content.
+    // Test that we cannot edit others' content.
     $this->drupalGet('/node/1/edit');
     $assert_session->statusCodeEquals(403);
 
-    // Tests deletion of own content.
+    // Test we can delete our own content.
     $this->drupalGet('/node/2/delete');
     $assert_session->statusCodeEquals(200);
 
-    // Tests deletion of any content.
+    // Test that we cannot delete others' content.
     $this->drupalGet('/node/1/delete');
     $assert_session->statusCodeEquals(403);
   }
@@ -109,6 +110,8 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
    * - Can edit others' content.
    * - Can delete their own content.
    * - Can delete others' content.
+   * - Can transition others' content between all states, except for restoring
+   *   archived content.
    */
   public function testContentTypeAsEditor() {
     $account = $this->drupalCreateUser();
@@ -123,27 +126,33 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
 
     $assert_session = $this->assertSession();
 
-    // Tests content creation.
+    // Test that we cannot create new content.
     $this->drupalGet("/node/add/$this->nodeType");
     $assert_session->statusCodeEquals(403);
 
-    // Tests editing of own content.
+    // Test that we can edit our own content.
     $this->drupalGet($node->toUrl('edit-form'));
     $assert_session->statusCodeEquals(200);
 
-    // Tests editing of any content.
-    $this->drupalGet('/node/1/edit');
-    $assert_session->statusCodeEquals(200);
+    // Test that we can edit others' content. Mark the node for review, then
+    // transition between various workflow states.
+    Node::load(1)->set('moderation_state', 'review')->save();
+    $this->doMultipleModerationStateChanges(1, [
+      'In review',
+      'Published',
+      'Draft',
+      'In review',
+      'Draft',
+      'Published',
+      'Archived',
+    ]);
 
-    // Tests deletion of own content.
+    // Test that we can delete our own content.
     $this->drupalGet($node->toUrl('delete-form'));
     $assert_session->statusCodeEquals(200);
 
-    // Tests deletion of any content.
+    // Test that we can delete others' content.
     $this->drupalGet('/node/1/delete');
-    $assert_session->statusCodeEquals(200);
-
-    $this->drupalGet('/admin/content');
     $assert_session->statusCodeEquals(200);
   }
 
@@ -156,7 +165,7 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
    * - Can edit others' content.
    * - Can delete their own content.
    * - Can delete others' content.
-   * - Can access content overview.
+   * - Can transition others' content between all states.
    */
   public function testContentTypeAsAdministrator() {
     $account = $this->drupalCreateUser();
@@ -167,28 +176,62 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
     $assert_session = $this->assertSession();
     $page = $this->getSession()->getPage();
 
-    // Tests content creation.
+    // Test that we can create content.
     $this->drupalGet("/node/add/$this->nodeType");
     $assert_session->statusCodeEquals(200);
     $page->fillField('Title', 'Pastafazoul!');
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
 
-    // Tests editing of own content.
+    // Test that we can edit our own content.
     $this->drupalGet('/node/2/edit');
     $assert_session->statusCodeEquals(200);
 
-    // Tests editing of any content.
-    $this->drupalGet('/node/1/edit');
-    $assert_session->statusCodeEquals(200);
+    // Test that we can edit others' content and send it through various
+    // workflow states.
+    $this->doMultipleModerationStateChanges(1, [
+      'In review',
+      'Published',
+      'Draft',
+      'Published',
+      'Archived',
+      'Draft',
+    ]);
 
-    // Tests deletion of own content.
+    // Test that we can delete our own content.
     $this->drupalGet('/node/2/delete');
     $assert_session->statusCodeEquals(200);
 
-    // Tests deletion of any content.
+    // Test that we can delete others' content.
     $this->drupalGet('/node/1/delete');
     $assert_session->statusCodeEquals(200);
+  }
+
+  /**
+   * Applies multiple moderation state changes to a node.
+   *
+   * @param int $nid
+   *   The ID of the node.
+   * @param string[] $to_states
+   *   The human readable labels of the moderation states to apply to the node,
+   *   in the order that they should be applied. After each state is applied,
+   *   this method will assert that the node is still visible to the current
+   *   user.
+   */
+  protected function doMultipleModerationStateChanges(int $nid, array $to_states) {
+    $assert_session = $this->assertSession();
+    $session = $this->getSession();
+    $page = $session->getPage();
+
+    while ($to_states) {
+      $to_state = array_shift($to_states);
+
+      $this->drupalGet("/node/$nid/edit");
+      $assert_session->statusCodeEquals(200);
+      $page->selectFieldOption('Change to', $to_state);
+      $page->pressButton('Save');
+      $this->assertSame(200, $session->getStatusCode(), "Expected the node to be accessible after transitioning to $to_state.");
+    }
   }
 
 }
