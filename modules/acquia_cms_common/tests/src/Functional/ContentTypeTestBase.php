@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_common\Functional;
 
+use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\Tests\BrowserTestBase;
 
@@ -66,6 +67,7 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
    * - Cannot edit others' content.
    * - Can delete their own content.
    * - Cannot delete others' content.
+   * - Can transition their own content from draft to review.
    */
   public function testContentTypeAsAuthor() {
     $account = $this->drupalCreateUser();
@@ -82,8 +84,7 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
 
-    $this->drupalGet('/node/2/edit');
-    $assert_session->statusCodeEquals(200);
+    $this->doMultipleModerationStateChanges(2, ['In review']);
 
     $this->drupalGet('/node/1/edit');
     $assert_session->statusCodeEquals(403);
@@ -104,6 +105,8 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
    * - Can edit others' content.
    * - Can delete their own content.
    * - Can delete others' content.
+   * - Can transition others' content between all states, except for restoring
+   *   archived content.
    */
   public function testContentTypeAsEditor() {
     $account = $this->drupalCreateUser();
@@ -124,8 +127,17 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
     $this->drupalGet($node->toUrl('edit-form'));
     $assert_session->statusCodeEquals(200);
 
-    $this->drupalGet('/node/1/edit');
-    $assert_session->statusCodeEquals(200);
+    // Mark the node for review, then test various transitions from there.
+    Node::load(1)->set('moderation_state', 'review')->save();
+    $this->doMultipleModerationStateChanges(1, [
+      'In review',
+      'Published',
+      'Draft',
+      'In review',
+      'Draft',
+      'Published',
+      'Archived',
+    ]);
 
     $this->drupalGet($node->toUrl('delete-form'));
     $assert_session->statusCodeEquals(200);
@@ -143,6 +155,7 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
    * - Can edit others' content.
    * - Can delete their own content.
    * - Can delete others' content.
+   * - Can transition others' content between all states.
    */
   public function testContentTypeAsAdministrator() {
     $account = $this->drupalCreateUser();
@@ -162,14 +175,47 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
     $this->drupalGet('/node/2/edit');
     $assert_session->statusCodeEquals(200);
 
-    $this->drupalGet('/node/1/edit');
-    $assert_session->statusCodeEquals(200);
+    $this->doMultipleModerationStateChanges(1, [
+      'In review',
+      'Published',
+      'Draft',
+      'Published',
+      'Archived',
+      'Draft',
+    ]);
 
     $this->drupalGet('/node/2/delete');
     $assert_session->statusCodeEquals(200);
 
     $this->drupalGet('/node/1/delete');
     $assert_session->statusCodeEquals(200);
+  }
+
+  /**
+   * Applies multiple moderation state changes to a node.
+   *
+   * @param int $nid
+   *   The ID of the node.
+   * @param string[] $to_states
+   *   The human readable labels of the moderation states to apply to the node,
+   *   in the order that they should be applied. After each state is applied,
+   *   this method will assert that the node is still visible to the current
+   *   user.
+   */
+  protected function doMultipleModerationStateChanges(int $nid, array $to_states) {
+    $assert_session = $this->assertSession();
+    $session = $this->getSession();
+    $page = $session->getPage();
+
+    while ($to_states) {
+      $to_state = array_shift($to_states);
+
+      $this->drupalGet("/node/$nid/edit");
+      $assert_session->statusCodeEquals(200);
+      $page->selectFieldOption('Change to', $to_state);
+      $page->pressButton('Save');
+      $this->assertSame(200, $session->getStatusCode(), "Expected the node to be accessible after transitioning to $to_state.");
+    }
   }
 
 }
