@@ -66,6 +66,8 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
    * - Cannot edit others' content.
    * - Can delete their own content.
    * - Cannot delete others' content.
+   * - Can access content overview.
+   * - Can utilize the admin toolbar.
    */
   public function testContentTypeAsAuthor() {
     $account = $this->drupalCreateUser();
@@ -76,23 +78,35 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
     $assert_session = $this->assertSession();
     $page = $this->getSession()->getPage();
 
+    // Tests content creation.
     $this->drupalGet("/node/add/$this->nodeType");
     $assert_session->statusCodeEquals(200);
     $page->fillField('Title', 'Pastafazoul!');
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
 
+    // Tests editing of own content.
     $this->drupalGet('/node/2/edit');
     $assert_session->statusCodeEquals(200);
 
+    // Tests editing of any content.
     $this->drupalGet('/node/1/edit');
     $assert_session->statusCodeEquals(403);
 
+    // Tests deletion of own content.
     $this->drupalGet('/node/2/delete');
     $assert_session->statusCodeEquals(200);
 
+    // Tests deletion of any content.
     $this->drupalGet('/node/1/delete');
     $assert_session->statusCodeEquals(403);
+
+    // Tests content overview access.
+    $this->drupalGet('/admin/content');
+    $assert_session->statusCodeEquals(200);
+
+    // Tests admin toolbar access.
+    $assert_session->elementExists('css', '#toolbar-administration');
   }
 
   /**
@@ -104,6 +118,8 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
    * - Can edit others' content.
    * - Can delete their own content.
    * - Can delete others' content.
+   * - Can access content overview.
+   * - Can utilize the admin toolbar.
    */
   public function testContentTypeAsEditor() {
     $account = $this->drupalCreateUser();
@@ -118,20 +134,35 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
 
     $assert_session = $this->assertSession();
 
+    // Tests content creation.
     $this->drupalGet("/node/add/$this->nodeType");
     $assert_session->statusCodeEquals(403);
 
+    // Tests editing of own content.
     $this->drupalGet($node->toUrl('edit-form'));
     $assert_session->statusCodeEquals(200);
 
+    // Tests editing of any content.
     $this->drupalGet('/node/1/edit');
     $assert_session->statusCodeEquals(200);
 
+    // Tests deletion of own content.
     $this->drupalGet($node->toUrl('delete-form'));
     $assert_session->statusCodeEquals(200);
 
+    // Tests deletion of any content.
     $this->drupalGet('/node/1/delete');
     $assert_session->statusCodeEquals(200);
+
+    $this->drupalGet('/admin/content');
+    $assert_session->statusCodeEquals(200);
+
+    // Tests content overview access.
+    $this->drupalGet('/admin/content');
+    $assert_session->statusCodeEquals(200);
+
+    // Tests admin toolbar access.
+    $assert_session->elementExists('css', '#toolbar-administration');
   }
 
   /**
@@ -143,6 +174,9 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
    * - Can edit others' content.
    * - Can delete their own content.
    * - Can delete others' content.
+   * - Can access content overview.
+   * - Can utilize the admin toolbar.
+   * - Administer content.
    */
   public function testContentTypeAsAdministrator() {
     $account = $this->drupalCreateUser();
@@ -153,23 +187,60 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
     $assert_session = $this->assertSession();
     $page = $this->getSession()->getPage();
 
+    // Tests content creation.
     $this->drupalGet("/node/add/$this->nodeType");
     $assert_session->statusCodeEquals(200);
     $page->fillField('Title', 'Pastafazoul!');
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
 
+    // Tests editing of own content.
     $this->drupalGet('/node/2/edit');
     $assert_session->statusCodeEquals(200);
 
+    // Tests editing of any content.
     $this->drupalGet('/node/1/edit');
     $assert_session->statusCodeEquals(200);
 
+    // Tests deletion of own content.
     $this->drupalGet('/node/2/delete');
     $assert_session->statusCodeEquals(200);
 
+    // Tests deletion of any content.
     $this->drupalGet('/node/1/delete');
     $assert_session->statusCodeEquals(200);
+
+    // Tests content overview access.
+    $this->drupalGet('/admin/content');
+    $assert_session->statusCodeEquals(200);
+
+    // Tests admin toolbar access.
+    $assert_session->elementExists('css', '#toolbar-administration');
+
+    // Tests admin content.
+    $this->assertTrue($account->hasPermission('administer nodes'));
+  }
+
+  /**
+   * Tests the content type as a user administrator.
+   *
+   * Asserts that content authors:
+   * - Administer users.
+   * - Can utilize the admin toolbar.
+   */
+  public function testUserAdministrator() {
+    $account = $this->drupalCreateUser();
+    $account->addRole('user_administrator');
+    $account->save();
+    $this->drupalLogin($account);
+
+    $assert_session = $this->assertSession();
+
+    // Tests admin users.
+    $this->assertTrue($account->hasPermission('administer users'));
+
+    // Tests admin toolbar access.
+    $assert_session->elementExists('css', '#toolbar-administration');
   }
 
 }
