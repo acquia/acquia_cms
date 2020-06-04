@@ -11,7 +11,7 @@ You should also have:
 ### Background
 To provide a consistent environment for our development team, Acquia CMS is developed using Acquia's Cloud IDE service, which provides a VSCode-like developer experience. It is possible to work on Acquia CMS on your own machine, using your IDE of choice, but this file doesn't cover that.
 
-### Setting up Cloud IDE
+### Setting up a Cloud IDE
 Because there is a limited number of Cloud IDEs available to the Acquia CMS team, each active developer should only need (and have) one. Therefore, you should only do this once.
 
 1. Visit https://github.com/acquia/cli#installation and follow the instructions to get the Acquia CLI tool installed. For example:
@@ -36,5 +36,43 @@ cd project
 composer install
 composer run post-install-cmd
 ```
-10. Install Drupal: `drush site:install acquia_cms --yes --account-pass admin`
+10. Install Acquia CMS, as detailed in the "Installing Acquia CMS" section below.
 11. In the "Open Drupal Site" menu, choose "Open site in a new tab" and ensure you can see the Drupal site, and log in with the username "admin" and password "admin".
+
+### Installing Acquia CMS
+For development purposes, it's easiest to install Acquia CMS at the command line using Drush. We assume that you have the [Drush launcher](https://github.com/drush-ops/drush-launcher) installed globally in your PATH (`drush --version`).
+
+Note that, by default, Acquia CMS will not import any templates from Cohesion during installation. This is done in order to save time and sources. If you want to automatically import Cohesion templates during installation, you'll need to provide the Cohesion API key and organization key, which you can get from your manager or technical architect, as environment variables:
+```
+export COHESION_API_KEY=foo
+export COHESION_ORG_KEY=bar
+```
+Cloud IDEs come with a preconfigured MySQL database. To install Drupal on a Cloud IDE, run `drush site:install acquia_cms --yes --account-pass admin`.
+
+It can take a lot of memory to install Acquia CMS. If you run into memory errors, try increasing the memory limit when installing Acquia CMS:
+```
+php -d memory_limit=2G vendor/bin/drush site:install acquia_cms --yes --account-pass admin
+```
+If 2 GB *still* isn't enough memory, try raising the limit even more.
+
+### Setting up a local environment (optional)
+In certain cases, it may be helpful to set up a development environment locally. Generally speaking, you should only do this if you _need_ to.
+
+You'll need:
+* PHP 7.3 (`php --version`), ideally with SQLite
+* Composer (`composer --version`)
+* Git (`git --version`)
+* Access to the Acquia CMS GitHub repository
+
+Clone the repository and install all dependencies:
+```
+git clone git@github.com:acquia/acquia_cms.git --branch develop
+cd acquia_cms
+composer install
+composer run post-install-cmd
+```
+Then, install Acquia CMS as detailed in the "Installing Acquia CMS" section above.
+
+Note that, in a local environment, it can be more convenient to use a SQLite database over MySQL, since SQLite doesn't require any additional servers to be running. If you want to use SQLite, pass the `--db-url sqlite://drupal.sqlite` option to `drush site:install`.
+
+Once you've installed Acquia CMS, how you serve it is up to you. For local development, the most convenient way is to use PHP's built-in web server: `drush runserver 8080`.
