@@ -27,6 +27,7 @@ class PageTest extends ContentTypeTestBase {
    */
   protected static $modules = [
     'acquia_cms_page',
+    'menu_ui',
     'pathauto',
   ];
 
@@ -58,8 +59,6 @@ class PageTest extends ContentTypeTestBase {
 
   /**
    * Tests the bundled functionality of the Page content type.
-   *
-   * @depends testContentTypeAsAuthor
    */
   public function testPageContentType() {
     $page = $this->getSession()->getPage();
@@ -67,6 +66,7 @@ class PageTest extends ContentTypeTestBase {
 
     $account = $this->drupalCreateUser();
     $account->addRole('content_author');
+    $account->save();
     $this->drupalLogin($account);
 
     $this->drupalGet('/node/add/page');
@@ -78,10 +78,13 @@ class PageTest extends ContentTypeTestBase {
     $assert_session->fieldExists('Search Description');
     // The search description should not have a summary.
     $assert_session->fieldNotExists('Summary');
-    // There should be an auto-completing text field to store tags, and a select
-    // list for choosing categories.
-    $assert_session->elementAttributeExists('named', ['field', 'Tags'], 'data-autocomplete-path');
-    $assert_session->optionExists('Categories', 'Rock');
+    // There should be a group for the categories and tags fields, and it should
+    // contain an auto-completing text field to store tags, and a select list
+    // for choosing categories.
+    $taxonomy = $assert_session->elementExists('css', '#edit-group-taxonomy');
+    $tags_field = $assert_session->fieldExists('Tags', $taxonomy);
+    $this->assertTrue($tags_field->hasAttribute('data-autocomplete-path'));
+    $assert_session->optionExists('Categories', 'Rock', $taxonomy);
     // There should be a field to add an image, and it should be using the
     // media library.
     $assert_session->elementExists('css', '#field_page_image-media-library-wrapper');
@@ -94,14 +97,28 @@ class PageTest extends ContentTypeTestBase {
     // should default to Draft. Note that which moderation states are available
     // depends on the current user's permissions.
     $assert_session->optionExists('Save as', 'Draft');
+    // The "Published", "Promoted to front page", and "Sticky at top of lists"
+    // checkboxes should not be anywhere on this form. We want to assert the
+    // absence of these fields by their form element name, since it's possible
+    // to change the labels using base field overrides.
+    $assert_session->fieldNotExists('status[value]');
+    $assert_session->fieldNotExists('promote[value]');
+    $assert_session->fieldNotExists('sticky[value]');
+    // Preview should be disabled for this content type.
+    $assert_session->buttonNotExists('Preview');
+    // Ensure it's possible to add a menu link, but only to the main menu, which
+    // should be selected by default.
+    $menu = $assert_session->selectExists('menu[menu_parent]');
+    $this->assertSame('main:', $menu->getValue());
+    $this->assertCount(1, $menu->findAll('css', 'option'));
     // Assert that the fields are in the correct order.
     $this->assertFieldsOrder([
       'title',
       'body',
       'field_layout_canvas',
       'field_categories',
-      'field_tags',
       'field_page_image',
+      'field_tags',
       'moderation_state',
     ]);
 
@@ -139,7 +156,7 @@ class PageTest extends ContentTypeTestBase {
 
     uasort($fields, SortArray::class . '::sortByWeightElement');
     $fields = array_intersect(array_keys($fields), $expected_order);
-    $this->assertSame($expected_order, array_values($fields));
+    $this->assertSame($expected_order, array_values($fields), 'The fields of the Page edit form were not in the expected order.');
   }
 
 }
