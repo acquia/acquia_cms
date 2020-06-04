@@ -40,7 +40,7 @@ composer run post-install-cmd
 11. In the "Open Drupal Site" menu, choose "Open site in a new tab" and ensure you can see the Drupal site, and log in with the username "admin" and password "admin".
 
 ### Installing Acquia CMS
-For development purposes, it's easiest to install Acquia CMS at the command line using Drush. We assume that you have the [Drush launcher](https://github.com/drush-ops/drush-launcher) installed globally in your PATH (`drush --version`).
+For development purposes, it's easiest to install Acquia CMS at the command line using Drush. In these instructions, I assume that you have the [Drush launcher](https://github.com/drush-ops/drush-launcher) installed globally in your PATH (`drush --version`).
 
 Note that, by default, Acquia CMS will not import any templates from Cohesion during installation. This is done in order to save time and sources. If you want to automatically import Cohesion templates during installation, you'll need to provide the Cohesion API key and organization key, which you can get from your manager or technical architect, as environment variables:
 ```
@@ -55,8 +55,40 @@ php -d memory_limit=2G vendor/bin/drush site:install acquia_cms --yes --account-
 ```
 If 2 GB *still* isn't enough memory, try raising the limit even more.
 
+### Running tests
+Acquia CMS's tests are written using the PHPUnit-based framework provided by Drupal core. To run tests, you need to do a bit of set-up:
+
+1. From the repository root, use PHP's built-in web server to serve the Drupal site: `drush runserver 8080`. You can use a different server if you want to; just be sure to adjust the `SIMPLETEST_BASE_URL` environment variable (described below) as needed.
+2. In a new terminal window, define a few environment variables:
+```
+# The URL of the database you're using. This is the URL for the database in your cloud IDE, but if you are using a local environment, it may differ. For example, if you are running SQLite, this will be 'sqlite://localhost/drupal.sqlite' or similar.
+export SIMPLETEST_DB=mysql://drupal:drupal@127.0.0.1/drupal
+
+# The URL where you can access the Drupal site.
+export SIMPLETEST_BASE_URL=http://127.0.0.1:8080
+
+# Optional: silence deprecation errors, which can be very distracting when debugging test failures.
+export SYMFONY_DEPRECATIONS_HELPER=weak
+```
+
+To run all Acquia CMS tests (which may take a while), use this command:
+```
+cd docroot
+../vendor/bin/phpunit -c core --group acquia_cms --debug
+```
+To run all tests for a particular module:
+```
+cd docroot
+../vendor/bin/phpunit -c core --group MODULE --debug
+```
+To run a particular test:
+```
+cd docroot
+../vendor/bin/phpunit -c core --debug profiles/acquia_cms/modules/acquia_cms_page/tests/src/Functional/PageTest.php
+```
+
 ### Setting up a local environment (optional)
-In certain cases, it may be helpful to set up a development environment locally. Generally speaking, you should only do this if you _need_ to.
+In certain situations, it may be helpful to set up a local development environment. However, you should only do this if you really need to.
 
 You'll need:
 * PHP 7.3 (`php --version`), ideally with SQLite

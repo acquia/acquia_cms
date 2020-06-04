@@ -12,6 +12,7 @@ use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
  * Tests the Page content type that ships with Acquia CMS.
  *
  * @group acquia_cms_page
+ * @group acquia_cms
  */
 class PageTest extends ContentTypeTestBase {
 
@@ -58,8 +59,6 @@ class PageTest extends ContentTypeTestBase {
 
   /**
    * Tests the bundled functionality of the Page content type.
-   *
-   * @depends testContentTypeAsAuthor
    */
   public function testPageContentType() {
     $page = $this->getSession()->getPage();
