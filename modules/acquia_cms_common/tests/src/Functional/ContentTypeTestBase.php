@@ -4,12 +4,15 @@ namespace Drupal\Tests\acquia_cms_common\Functional;
 
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
+use Drupal\Tests\acquia_cms_common\Traits\ContentModelTestTrait;
 use Drupal\Tests\BrowserTestBase;
 
 /**
  * Base class for testing generic functionality of a specific content type.
  */
 abstract class ContentTypeTestBase extends BrowserTestBase {
+
+  use ContentModelTestTrait;
 
   /**
    * The machine name of the content type under test.
