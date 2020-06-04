@@ -42,12 +42,12 @@ composer run post-install-cmd
 ### Installing Acquia CMS
 For development purposes, it's easiest to install Acquia CMS at the command line using Drush. In these instructions, I assume that you have the [Drush launcher](https://github.com/drush-ops/drush-launcher) installed globally in your PATH (`drush --version`).
 
-Note that, by default, Acquia CMS will not import any templates from Cohesion during installation. This is done in order to save time and sources. If you want to automatically import Cohesion templates during installation, you'll need to provide the Cohesion API key and organization key, which you can get from your manager or technical architect, as environment variables:
+To save time and resources, Acquia CMS will not by default import any templates from Cohesion during installation. If you want to automatically import Cohesion templates during installation, you'll need to provide the Cohesion API key and organization key, which you can get from your manager or technical architect, as environment variables:
 ```
 export COHESION_API_KEY=foo
 export COHESION_ORG_KEY=bar
 ```
-Cloud IDEs come with a preconfigured MySQL database. To install Drupal on a Cloud IDE, run `drush site:install acquia_cms --yes --account-pass admin`.
+Cloud IDEs come with a preconfigured MySQL database, so to install Acquia CMS on a Cloud IDE, simply run `drush site:install acquia_cms --yes --account-pass admin`.
 
 It can take a lot of memory to install Acquia CMS. If you run into memory errors, try increasing the memory limit when installing Acquia CMS:
 ```
@@ -61,7 +61,7 @@ Acquia CMS's tests are written using the PHPUnit-based framework provided by Dru
 1. From the repository root, use PHP's built-in web server to serve the Drupal site: `drush runserver 8080`. You can use a different server if you want to; just be sure to adjust the `SIMPLETEST_BASE_URL` environment variable (described below) as needed.
 2. In a new terminal window, define a few environment variables:
 ```
-# The URL of the database you're using. This is the URL for the database in your cloud IDE, but if you are using a local environment, it may differ. For example, if you are running SQLite, this will be 'sqlite://localhost/drupal.sqlite' or similar.
+# The URL of the database you're using. This is the URL for the database in your cloud IDE, so it may differ in a local environment. For example, if you are running SQLite, this will be 'sqlite://localhost/drupal.sqlite' or similar.
 export SIMPLETEST_DB=mysql://drupal:drupal@127.0.0.1/drupal
 
 # The URL where you can access the Drupal site.
@@ -107,4 +107,4 @@ Then, install Acquia CMS as detailed in the "Installing Acquia CMS" section abov
 
 Note that, in a local environment, it can be more convenient to use a SQLite database over MySQL, since SQLite doesn't require any additional servers to be running. If you want to use SQLite, pass the `--db-url sqlite://drupal.sqlite` option to `drush site:install`.
 
-Once you've installed Acquia CMS, how you serve it is up to you. For local development, the most convenient way is to use PHP's built-in web server: `drush runserver 8080`.
+Once you've installed Acquia CMS, how you serve it is up to you. For local development, the most convenient option is PHP's built-in web server: `drush runserver 8080`.
