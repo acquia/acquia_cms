@@ -78,13 +78,8 @@ class PageTest extends ContentTypeTestBase {
     $assert_session->fieldExists('Search Description');
     // The search description should not have a summary.
     $assert_session->fieldNotExists('Summary');
-    // There should be a group for the categories and tags fields, and it should
-    // contain an auto-completing text field to store tags, and a select list
-    // for choosing categories.
-    $taxonomy = $assert_session->elementExists('css', '#edit-group-taxonomy');
-    $tags_field = $assert_session->fieldExists('Tags', $taxonomy);
-    $this->assertTrue($tags_field->hasAttribute('data-autocomplete-path'));
-    $assert_session->optionExists('Categories', 'Rock', $taxonomy);
+    // The standard Categories and Tags fields should be present.
+    $this->assertCategoriesAndTagsFieldsExist();
     // There should be a field to add an image, and it should be using the
     // media library.
     $assert_session->elementExists('css', '#field_page_image-media-library-wrapper');
