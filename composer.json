@@ -43,15 +43,14 @@
     },
     "require-dev": {
         "drupal/core-composer-scaffold": "*",
-        "drupal/core-dev": "*",
+        "drupal/core-dev": "^8.9",
         "drush/drush": "^10",
         "oomphinc/composer-installers-extender": "^1.1",
         "vijaycs85/drupal-quality-checker": "^1.2"
     },
     "config": {
         "preferred-install": {
-            "drupal/core": "dist",
-            "drupal/lightning_*": "source"
+            "drupal/core": "dist"
         }
     },
     "extra": {
@@ -138,7 +137,8 @@
             "ln -s -f $PWD/misc $PROFILE_DIR",
             "ln -s -f $PWD/modules $MODULES_DIR",
             "ln -s -f $PWD/src $PROFILE_DIR",
-            "ln -s -f $PWD/tests $PROFILE_DIR"
+            "ln -s -f $PWD/tests $PROFILE_DIR",
+            "find ./docroot/modules -type d -name tests -prune -exec rm -r -f '{}' ';'"
         ],
         "nuke": "rm -r -f docroot vendor"
     }
