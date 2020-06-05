@@ -33,7 +33,9 @@ class InstallStateTest extends BrowserTestBase {
    *
    * @var bool
    */
+  // @codingStandardsIgnoreStart
   protected $strictConfigSchema = FALSE;
+  // @codingStandardsIgnoreEnd
 
   /**
    * {@inheritdoc}
