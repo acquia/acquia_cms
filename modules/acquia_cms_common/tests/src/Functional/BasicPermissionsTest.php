@@ -17,7 +17,9 @@ class BasicPermissionsTest extends BrowserTestBase {
    */
   protected static $modules = [
     'acquia_cms_common',
+    'media',
     'toolbar',
+    'views',
   ];
 
   /**
@@ -57,12 +59,22 @@ class BasicPermissionsTest extends BrowserTestBase {
       $account = $this->drupalCreateUser();
       $account->addRole($role);
       $account->save();
-      // Only content administrators should be able to administer nodes.
-      $this->assertSame($role === 'content_administrator', $account->hasPermission('administer nodes'));
+
+      // Only content administrators should be able to administer nodes, media,
+      // or taxonomy.
+      $is_administrator = $role === 'content_administrator';
+      $this->assertSame($is_administrator, $account->hasPermission('administer nodes'));
+      $this->assertSame($is_administrator, $account->hasPermission('administer media'));
+      $this->assertSame($is_administrator, $account->hasPermission('administer taxonomy'));
+      $this->assertSame($is_administrator, $account->hasPermission('bypass node access'));
 
       $this->drupalLogin($account);
+      // All roles should be able to access the toolbar.
       $assert_toolbar();
+      // All roles should be able to access the content and media overviews.
       $this->drupalGet('/admin/content');
+      $assert_session->statusCodeEquals(200);
+      $this->drupalGet('/admin/content/media');
       $assert_session->statusCodeEquals(200);
       $this->drupalLogout();
     }

@@ -4,15 +4,11 @@ namespace Drupal\Tests\acquia_cms_common\Functional;
 
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
-use Drupal\Tests\acquia_cms_common\Traits\ContentModelTestTrait;
-use Drupal\Tests\BrowserTestBase;
 
 /**
  * Base class for testing generic functionality of a specific content type.
  */
-abstract class ContentTypeTestBase extends BrowserTestBase {
-
-  use ContentModelTestTrait;
+abstract class ContentTypeTestBase extends ContentModelTestBase {
 
   /**
    * The machine name of the content type under test.
@@ -44,21 +40,10 @@ abstract class ContentTypeTestBase extends BrowserTestBase {
   }
 
   /**
-   * Asserts that all configurable fields for the content type are translatable.
+   * Tests that all configurable fields for the content type are translatable.
    */
   public function testAllFieldsAreTranslatable() {
-    $field_definitions = $this->container->get('entity_type.manager')
-      ->getStorage('field_config')
-      ->loadByProperties([
-        'entity_type' => 'node',
-        'bundle' => $this->nodeType,
-      ]);
-
-    /** @var \Drupal\Core\Field\FieldDefinitionInterface $field_definition */
-    foreach ($field_definitions as $id => $field_definition) {
-      $this->assertTrue($field_definition->isTranslatable(), "$id is not translatable, but it should be.");
-      $this->assertTrue($field_definition->getFieldStorageDefinition()->isTranslatable(), "$id storage is not translatable, but it should be.");
-    }
+    $this->assertConfigurableFieldsAreTranslatable('node', $this->nodeType);
   }
 
   /**
