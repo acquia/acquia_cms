@@ -66,9 +66,12 @@ class BasicPermissionsTest extends BrowserTestBase {
       $this->assertSame($is_administrator, $account->hasPermission('administer nodes'));
       $this->assertSame($is_administrator, $account->hasPermission('administer media'));
       $this->assertSame($is_administrator, $account->hasPermission('administer taxonomy'));
+      $this->assertSame($is_administrator, $account->hasPermission('bypass node access'));
 
       $this->drupalLogin($account);
+      // All roles should be able to access the toolbar.
       $assert_toolbar();
+      // All roles should be able to access the content and media overviews.
       $this->drupalGet('/admin/content');
       $assert_session->statusCodeEquals(200);
       $this->drupalGet('/admin/content/media');

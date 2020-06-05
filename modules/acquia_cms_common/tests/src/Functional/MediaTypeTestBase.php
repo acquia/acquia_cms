@@ -18,6 +18,13 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
   use TestFileCreationTrait;
 
   /**
+   * {@inheritdoc}
+   */
+  protected static $modules = [
+    'views',
+  ];
+
+  /**
    * The machine name of the media type under test.
    *
    * This should be overridden by subclasses.
