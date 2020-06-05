@@ -51,6 +51,9 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
 
     // If the media type is file-based, prepare a few files to test with. The
     // source field item type determines what type of test files to prepare.
+    // Tests for media types which are NOT file-based are expected to provide
+    // a source value in $this->sourceValue.
+    // @see ::createMedia()
     $source_field_type = $media_type->getSource()
       ->getSourceFieldDefinition($media_type)
       ->getItemDefinition()
@@ -68,9 +71,6 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
       $file->save();
       $this->sourceValue = $file;
     }
-    // Tests for media types which are NOT file-based are expected to provide
-    // a source value.
-    $this->assertNotEmpty($this->sourceValue, 'A source value is needed in order to create a test media item.');
 
     // Create a media item of the type under test, belonging to user 1. This is
     // to test the capabilities of content editors and content administrators.
