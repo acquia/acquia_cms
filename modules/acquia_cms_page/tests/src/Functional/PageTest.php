@@ -43,7 +43,9 @@ class PageTest extends ContentTypeTestBase {
    *
    * @var bool
    */
+  // @codingStandardsIgnoreStart
   protected $strictConfigSchema = FALSE;
+  // @codingStandardsIgnoreEnd
 
   /**
    * {@inheritdoc}
