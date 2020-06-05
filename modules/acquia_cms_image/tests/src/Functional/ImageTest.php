@@ -28,7 +28,9 @@ class ImageTest extends MediaTypeTestBase {
    *
    * @var bool
    */
+  // @codingStandardsIgnoreStart
   protected $strictConfigSchema = FALSE;
+  // @codingStandardsIgnoreEnd
 
   /**
    * {@inheritdoc}

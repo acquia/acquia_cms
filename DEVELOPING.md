@@ -87,6 +87,9 @@ cd docroot
 ../vendor/bin/phpunit -c core --debug profiles/acquia_cms/modules/acquia_cms_page/tests/src/Functional/PageTest.php
 ```
 
+### Coding standards
+Compliance with Acquia's coding standards is automatically checked on commit; however, only changed files are analyzed. Our CI process does a thorough scan of the entire code base, and will fail if any problems are found. If you want to check coding standards compliance across the entire code base before submitting a pull request, run `vendor/bin/grumphp run`.
+
 ### Setting up a local environment (optional)
 In certain situations, it may be helpful to set up a local development environment. However, you should only do this if you really need to.
 

@@ -33,7 +33,9 @@ class BasicPermissionsTest extends BrowserTestBase {
    *
    * @var bool
    */
+  // @codingStandardsIgnoreStart
   protected $strictConfigSchema = FALSE;
+  // @codingStandardsIgnoreEnd
 
   /**
    * Tests basic capabilities of our user roles.
