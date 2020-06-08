@@ -3,12 +3,29 @@
 namespace Drupal\Tests\acquia_cms_common\Functional;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 
 /**
  * Base class for testing Acquia CMS content models.
  */
 abstract class ContentModelTestBase extends BrowserTestBase {
+
+  use TaxonomyTestTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setUp();
+
+    /** @var \Drupal\taxonomy\VocabularyInterface $categories */
+    $categories = Vocabulary::load('categories');
+    $this->createTerm($categories, ['name' => 'Music']);
+    $this->createTerm($categories, ['name' => 'Food']);
+    $this->createTerm($categories, ['name' => 'Technology']);
+  }
 
   /**
    * Asserts that configurable fields are translatable.

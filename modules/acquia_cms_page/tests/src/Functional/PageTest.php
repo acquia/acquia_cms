@@ -5,9 +5,7 @@ namespace Drupal\Tests\acquia_cms_page\Functional;
 use Drupal\Component\Utility\SortArray;
 use Drupal\file\Entity\File;
 use Drupal\taxonomy\Entity\Term;
-use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
-use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 
 /**
  * Tests the Page content type that ships with Acquia CMS.
@@ -16,8 +14,6 @@ use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
  * @group acquia_cms
  */
 class PageTest extends ContentTypeTestBase {
-
-  use TaxonomyTestTrait;
 
   /**
    * {@inheritdoc}
@@ -50,19 +46,6 @@ class PageTest extends ContentTypeTestBase {
   // @codingStandardsIgnoreStart
   protected $strictConfigSchema = FALSE;
   // @codingStandardsIgnoreEnd
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setUp();
-
-    /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
-    $vocabulary = Vocabulary::load('categories');
-    $this->createTerm($vocabulary, [
-      'name' => 'Rock',
-    ]);
-  }
 
   /**
    * Tests the bundled functionality of the Page content type.
@@ -133,7 +116,9 @@ class PageTest extends ContentTypeTestBase {
 
     // Fill in the required fields and assert that things went as expected.
     $page->fillField('Title', 'Living with video');
-    $page->selectFieldOption('Categories', 'Rock');
+    // For convenience, the parent class creates a few categories during set-up.
+    // @see \Drupal\Tests\acquia_cms_common\Functional\ContentModelTestBase::setUp()
+    $page->selectFieldOption('Categories', 'Music');
     $page->fillField('Tags', 'techno');
     $page->pressButton('Save');
     $assert_session->pageTextContains('Living with video has been created.');
@@ -153,7 +138,7 @@ class PageTest extends ContentTypeTestBase {
         ],
       ],
     ]);
-    $this->assertMetaTag('keywords', 'Rock, techno');
+    $this->assertMetaTag('keywords', 'Music, techno');
     $this->assertMetaTag('description', 'This is an awesome remix!');
     $this->assertMetaTag('og:type', 'page');
     $this->assertMetaTag('og:url', $session->getCurrentUrl());
@@ -168,7 +153,7 @@ class PageTest extends ContentTypeTestBase {
     // Assert that the techno tag was created dynamically in the correct
     // vocabulary.
     /** @var \Drupal\taxonomy\TermInterface $tag */
-    $tag = Term::load(2);
+    $tag = Term::load(4);
     $this->assertInstanceOf(Term::class, $tag);
     $this->assertSame('tags', $tag->bundle());
     $this->assertSame('techno', $tag->getName());
