@@ -30,6 +30,7 @@ class PageTest extends ContentTypeTestBase {
     'acquia_cms_page',
     'menu_ui',
     'metatag_open_graph',
+    'metatag_twitter_cards',
     'pathauto',
     'schema_article',
   ];
@@ -149,6 +150,10 @@ class PageTest extends ContentTypeTestBase {
     $this->assertMetaTag('og:url', $session->getCurrentUrl());
     $this->assertMetaTag('og:title', 'Living with video');
     $this->assertMetaTag('og:description', 'This is an awesome remix!');
+    $this->assertMetaTag('twitter:card', 'summary_large_image');
+    $this->assertMetaTag('twitter:title', 'Living with video');
+    $this->assertMetaTag('twitter:description', 'This is an awesome remix!');
+    $this->assertMetaTag('twitter:url', $session->getCurrentUrl());
     // Assert that the techno tag was created dynamically in the correct
     // vocabulary.
     /** @var \Drupal\taxonomy\TermInterface $tag */
