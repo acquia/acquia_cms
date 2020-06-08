@@ -67,6 +67,22 @@ abstract class ContentModelTestBase extends BrowserTestBase {
   }
 
   /**
+   * Asserts that a meta tag with a specific name and value exists.
+   *
+   * @param string $name
+   *   The meta tag's expected 'name' property.
+   * @param string $value
+   *   The meta tag's expected value (i.e., 'content' property).
+   */
+  protected function assertMetaTag(string $name, string $value) {
+    $content = $this->assertSession()
+      ->elementExists('css', "meta[name='$name']")
+      ->getAttribute('content');
+
+    $this->assertSame($value, $content);
+  }
+
+  /**
    * Asserts that certain schema.org data is present on the current page.
    *
    * @param array $expected_data
