@@ -50,19 +50,23 @@ abstract class ContentModelTestBase extends BrowserTestBase {
     $assert_session = $this->assertSession();
 
     $group = $assert_session->elementExists('css', '#edit-group-taxonomy');
-    $tags_field = $assert_session->fieldExists('Tags', $group);
-    $this->assertTrue($tags_field->hasAttribute('data-autocomplete-path'));
-    $assert_session->selectExists('Categories', $group);
 
-    $categories = $this->container->get('entity_type.manager')
+    $tags = $assert_session->fieldExists('Tags', $group);
+    $this->assertTrue($tags->hasAttribute('data-autocomplete-path'));
+
+    $categories = $assert_session->selectExists('Categories', $group);
+    $this->assertTrue($categories->hasAttribute('multiple'));
+
+    // Ensure that the select list has every term in the Categories vocabulary.
+    $terms = $this->container->get('entity_type.manager')
       ->getStorage('taxonomy_term')
       ->loadByProperties([
         'vid' => 'categories',
       ]);
 
-    /** @var \Drupal\taxonomy\TermInterface $category */
-    foreach ($categories as $category) {
-      $assert_session->optionExists('Categories', $category->label(), $group);
+    /** @var \Drupal\taxonomy\TermInterface $term */
+    foreach ($terms as $term) {
+      $assert_session->optionExists('Categories', $term->label(), $group);
     }
   }
 

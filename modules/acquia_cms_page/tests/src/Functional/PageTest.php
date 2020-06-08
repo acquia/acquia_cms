@@ -133,6 +133,7 @@ class PageTest extends ContentTypeTestBase {
 
     // Fill in the required fields and assert that things went as expected.
     $page->fillField('Title', 'Living with video');
+    $page->selectFieldOption('Categories', 'Rock');
     $page->fillField('Tags', 'techno');
     $page->pressButton('Save');
     $assert_session->pageTextContains('Living with video has been created.');
@@ -152,6 +153,7 @@ class PageTest extends ContentTypeTestBase {
         ],
       ],
     ]);
+    $this->assertMetaTag('keywords', 'Rock, techno');
     $this->assertMetaTag('description', 'This is an awesome remix!');
     $this->assertMetaTag('og:type', 'page');
     $this->assertMetaTag('og:url', $session->getCurrentUrl());
