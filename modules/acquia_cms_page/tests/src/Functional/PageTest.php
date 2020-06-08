@@ -4,9 +4,7 @@ namespace Drupal\Tests\acquia_cms_page\Functional;
 
 use Drupal\Component\Utility\SortArray;
 use Drupal\taxonomy\Entity\Term;
-use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
-use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 
 /**
  * Tests the Page content type that ships with Acquia CMS.
@@ -15,8 +13,6 @@ use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
  * @group acquia_cms
  */
 class PageTest extends ContentTypeTestBase {
-
-  use TaxonomyTestTrait;
 
   /**
    * {@inheritdoc}
@@ -29,7 +25,10 @@ class PageTest extends ContentTypeTestBase {
   protected static $modules = [
     'acquia_cms_page',
     'menu_ui',
+    'metatag_open_graph',
+    'metatag_twitter_cards',
     'pathauto',
+    'schema_article',
   ];
 
   /**
@@ -48,23 +47,11 @@ class PageTest extends ContentTypeTestBase {
   // @codingStandardsIgnoreEnd
 
   /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setUp();
-
-    /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
-    $vocabulary = Vocabulary::load('categories');
-    $this->createTerm($vocabulary, [
-      'name' => 'Rock',
-    ]);
-  }
-
-  /**
    * Tests the bundled functionality of the Page content type.
    */
   public function testPageContentType() {
-    $page = $this->getSession()->getPage();
+    $session = $this->getSession();
+    $page = $session->getPage();
     $assert_session = $this->assertSession();
 
     $account = $this->drupalCreateUser();
@@ -72,13 +59,15 @@ class PageTest extends ContentTypeTestBase {
     $account->save();
     $this->drupalLogin($account);
 
+    $image_url = $this->getImageUrl();
+
     $this->drupalGet('/node/add/page');
     // Assert that the current user can access the form to create a page. Note
     // that status codes cannot be asserted in functional JavaScript tests.
     $assert_session->statusCodeEquals(200);
     // Assert that the expected fields show up.
     $assert_session->fieldExists('Title');
-    $assert_session->fieldExists('Search Description');
+    $page->fillField('Search Description', 'This is an awesome remix!');
     // The search description should not have a summary.
     $assert_session->fieldNotExists('Summary');
     // The standard Categories and Tags fields should be present.
@@ -126,15 +115,44 @@ class PageTest extends ContentTypeTestBase {
 
     // Fill in the required fields and assert that things went as expected.
     $page->fillField('Title', 'Living with video');
+    // For convenience, the parent class creates a few categories during set-up.
+    // @see \Drupal\Tests\acquia_cms_common\Functional\ContentModelTestBase::setUp()
+    $page->selectFieldOption('Categories', 'Music');
     $page->fillField('Tags', 'techno');
     $page->pressButton('Save');
     $assert_session->pageTextContains('Living with video has been created.');
     // Assert that the Pathauto pattern was used to create the URL alias.
     $assert_session->addressEquals('/living-video');
+    // Assert that the expected schema.org data and meta tags are present.
+    $this->assertSchemaData([
+      '@graph' => [
+        [
+          '@type' => 'Article',
+          'name' => 'Living with video',
+          'description' => 'This is an awesome remix!',
+          'image' => [
+            '@type' => 'ImageObject',
+            'url' => $image_url,
+          ],
+        ],
+      ],
+    ]);
+    $this->assertMetaTag('keywords', 'Music, techno');
+    $this->assertMetaTag('description', 'This is an awesome remix!');
+    $this->assertMetaTag('og:type', 'page');
+    $this->assertMetaTag('og:url', $session->getCurrentUrl());
+    $this->assertMetaTag('og:title', 'Living with video');
+    $this->assertMetaTag('og:description', 'This is an awesome remix!');
+    $this->assertMetaTag('og:image', $image_url);
+    $this->assertMetaTag('twitter:card', 'summary_large_image');
+    $this->assertMetaTag('twitter:title', 'Living with video');
+    $this->assertMetaTag('twitter:description', 'This is an awesome remix!');
+    $this->assertMetaTag('twitter:url', $session->getCurrentUrl());
+    $this->assertMetaTag('twitter:image', $image_url);
     // Assert that the techno tag was created dynamically in the correct
     // vocabulary.
     /** @var \Drupal\taxonomy\TermInterface $tag */
-    $tag = Term::load(2);
+    $tag = Term::load(4);
     $this->assertInstanceOf(Term::class, $tag);
     $this->assertSame('tags', $tag->bundle());
     $this->assertSame('techno', $tag->getName());
