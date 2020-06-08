@@ -14,7 +14,12 @@ description: 'An image which will be displayed in search results.'
 required: false
 translatable: true
 default_value: {  }
-default_value_callback: ''
+# If a file entity with a magic UUID exists, a media entity will be
+# automatically created for it and used as the default value for this
+# field. This is to facilitate automated testing without JavaScript.
+# See \Drupal\Tests\acquia_cms_page\Functional\PageTest::createTestImage()
+# and _acquia_cms_image_default_value().
+default_value_callback: '_acquia_cms_image_default_value'
 settings:
   handler: 'default:media'
   handler_settings:

@@ -3,6 +3,7 @@
 namespace Drupal\Tests\acquia_cms_page\Functional;
 
 use Drupal\Component\Utility\SortArray;
+use Drupal\file\Entity\File;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
@@ -76,6 +77,8 @@ class PageTest extends ContentTypeTestBase {
     $account->save();
     $this->drupalLogin($account);
 
+    $image_url = file_create_url($this->createTestImage()->getFileUri());
+
     $this->drupalGet('/node/add/page');
     // Assert that the current user can access the form to create a page. Note
     // that status codes cannot be asserted in functional JavaScript tests.
@@ -142,6 +145,10 @@ class PageTest extends ContentTypeTestBase {
           '@type' => 'Article',
           'name' => 'Living with video',
           'description' => 'This is an awesome remix!',
+          'image' => [
+            '@type' => 'ImageObject',
+            'url' => $image_url,
+          ],
         ],
       ],
     ]);
@@ -150,10 +157,12 @@ class PageTest extends ContentTypeTestBase {
     $this->assertMetaTag('og:url', $session->getCurrentUrl());
     $this->assertMetaTag('og:title', 'Living with video');
     $this->assertMetaTag('og:description', 'This is an awesome remix!');
+    $this->assertMetaTag('og:image', $image_url);
     $this->assertMetaTag('twitter:card', 'summary_large_image');
     $this->assertMetaTag('twitter:title', 'Living with video');
     $this->assertMetaTag('twitter:description', 'This is an awesome remix!');
     $this->assertMetaTag('twitter:url', $session->getCurrentUrl());
+    $this->assertMetaTag('twitter:image', $image_url);
     // Assert that the techno tag was created dynamically in the correct
     // vocabulary.
     /** @var \Drupal\taxonomy\TermInterface $tag */
@@ -178,6 +187,35 @@ class PageTest extends ContentTypeTestBase {
     uasort($fields, SortArray::class . '::sortByWeightElement');
     $fields = array_intersect(array_keys($fields), $expected_order);
     $this->assertSame($expected_order, array_values($fields), 'The fields of the Page edit form were not in the expected order.');
+  }
+
+  /**
+   * Creates a test image and a file entity to wrap it.
+   *
+   * Because this test does not use JavaScript, it's not possible for us to
+   * attach images to our content using the core media library. To avoid this
+   * being a JavaScript test, we use a clever hack -- creating a file entity
+   * with a special, magic UUID will cause acquia_cms_image to automatically
+   * create a media entity for it, which will in turn be used as the default
+   * value for field_page_image.
+   *
+   * @see _acquia_cms_image_default_value()
+   * @see field.field.node.page.field_page_image.yml
+   *
+   * @return \Drupal\file\FileInterface
+   *   The new, saved file entity.
+   */
+  private function createTestImage() {
+    $uri = $this->getRandomGenerator()
+      ->image(uniqid('public://') . '.png', '16x16', '16x16');
+
+    $file = File::create([
+      'uuid' => ACQUIA_CMS_TEST_IMAGE_UUID,
+      'uri' => $uri,
+    ]);
+    $file->save();
+
+    return $file;
   }
 
 }
