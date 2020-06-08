@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\acquia_cms_common\Functional;
 
+use Drupal\field\Entity\FieldConfig;
+use Drupal\file\Entity\File;
+use Drupal\media\Entity\Media;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 
@@ -220,6 +223,46 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
       $page->pressButton('Save');
       $this->assertSame(200, $session->getStatusCode(), "Expected the node to be accessible after transitioning to $to_state.");
     }
+  }
+
+  /**
+   * Sets the default value of the content type's image field.
+   *
+   * Because this test class does not support JavaScript, it's not possible for
+   * us to attach images to our content using the core media library. To get
+   * around that, this method creates a media item for a randomly generated
+   * image and sets it as the default value for the image field of the content
+   * type under test (e.g., field_page_image).
+   *
+   * @return string
+   *   The absolute URL of the randomly generated default image.
+   */
+  protected function getImageUrl() : string {
+    $field = FieldConfig::loadByName('node', $this->nodeType, 'field_' . $this->nodeType . '_image');
+    $this->assertInstanceOf(FieldConfig::class, $field);
+
+    $uri = uniqid('public://') . '.png';
+    $uri = $this->getRandomGenerator()->image($uri, '16x16', '16x16');
+
+    /** @var \Drupal\file\FileInterface $file */
+    $file = File::create([
+      'uri' => $uri,
+    ]);
+    $file->save();
+
+    $media = Media::create([
+      'bundle' => 'image',
+      'image' => $file->id(),
+    ]);
+    $media->save();
+
+    $field->setDefaultValue([
+      [
+        'target_id' => $media->id(),
+      ],
+    ])->save();
+
+    return file_create_url($file->getFileUri());
   }
 
 }

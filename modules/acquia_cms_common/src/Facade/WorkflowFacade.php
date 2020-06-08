@@ -11,6 +11,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a facade for integration with Workflows and Content Moderation.
+ *
+ * @internal
+ *   This is a totally internal part of Acquia CMS and may be changed in any
+ *   way, or removed outright, at any time without warning. External code should
+ *   not use this class!
  */
 final class WorkflowFacade implements ContainerInjectionInterface {
 
