@@ -79,7 +79,7 @@ class PageTest extends ContentTypeTestBase {
     $assert_session->statusCodeEquals(200);
     // Assert that the expected fields show up.
     $assert_session->fieldExists('Title');
-    $assert_session->fieldExists('Search Description');
+    $page->fillField('Search Description', 'This is an awesome remix!');
     // The search description should not have a summary.
     $assert_session->fieldNotExists('Summary');
     // The standard Categories and Tags fields should be present.
@@ -138,6 +138,7 @@ class PageTest extends ContentTypeTestBase {
         [
           '@type' => 'Article',
           'name' => 'Living with video',
+          'description' => 'This is an awesome remix!',
         ],
       ],
     ]);
