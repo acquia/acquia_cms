@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_common\Functional;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -63,6 +64,25 @@ abstract class ContentModelTestBase extends BrowserTestBase {
     foreach ($categories as $category) {
       $assert_session->optionExists('Categories', $category->label(), $group);
     }
+  }
+
+  /**
+   * Asserts that certain schema.org data is present on the current page.
+   *
+   * @param array $expected_data
+   *   (optional) Additional schema.org data we expect to see on the page (in a
+   *   JSON-encoded script tag). This parameter can simply be a subset of all
+   *   the schema.org data on the page.
+   */
+  protected function assertSchemaData(array $expected_data = []) {
+    $expected_data += [
+      '@context' => 'https://schema.org',
+    ];
+
+    $element = $this->assertSession()->elementExists('css', 'script[type="application/ld+json"]');
+    $actual_data = Json::decode($element->getText());
+    $this->assertInternalType('array', $actual_data);
+    $this->assertArraySubset($expected_data, $actual_data);
   }
 
 }

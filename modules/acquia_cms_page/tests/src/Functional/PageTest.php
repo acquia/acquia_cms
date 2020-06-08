@@ -30,6 +30,7 @@ class PageTest extends ContentTypeTestBase {
     'acquia_cms_page',
     'menu_ui',
     'pathauto',
+    'schema_article',
   ];
 
   /**
@@ -131,6 +132,15 @@ class PageTest extends ContentTypeTestBase {
     $assert_session->pageTextContains('Living with video has been created.');
     // Assert that the Pathauto pattern was used to create the URL alias.
     $assert_session->addressEquals('/living-video');
+    // Assert that the expected schema.org data is present.
+    $this->assertSchemaData([
+      '@graph' => [
+        [
+          '@type' => 'Article',
+          'name' => 'Living with video',
+        ],
+      ],
+    ]);
     // Assert that the techno tag was created dynamically in the correct
     // vocabulary.
     /** @var \Drupal\taxonomy\TermInterface $tag */
