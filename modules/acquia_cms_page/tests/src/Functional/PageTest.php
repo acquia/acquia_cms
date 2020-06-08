@@ -29,6 +29,7 @@ class PageTest extends ContentTypeTestBase {
   protected static $modules = [
     'acquia_cms_page',
     'menu_ui',
+    'metatag_open_graph',
     'pathauto',
     'schema_article',
   ];
@@ -65,7 +66,8 @@ class PageTest extends ContentTypeTestBase {
    * Tests the bundled functionality of the Page content type.
    */
   public function testPageContentType() {
-    $page = $this->getSession()->getPage();
+    $session = $this->getSession();
+    $page = $session->getPage();
     $assert_session = $this->assertSession();
 
     $account = $this->drupalCreateUser();
@@ -143,6 +145,10 @@ class PageTest extends ContentTypeTestBase {
       ],
     ]);
     $this->assertMetaTag('description', 'This is an awesome remix!');
+    $this->assertMetaTag('og:type', 'page');
+    $this->assertMetaTag('og:url', $session->getCurrentUrl());
+    $this->assertMetaTag('og:title', 'Living with video');
+    $this->assertMetaTag('og:description', 'This is an awesome remix!');
     // Assert that the techno tag was created dynamically in the correct
     // vocabulary.
     /** @var \Drupal\taxonomy\TermInterface $tag */

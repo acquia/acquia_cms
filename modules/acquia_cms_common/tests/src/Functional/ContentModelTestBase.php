@@ -67,16 +67,16 @@ abstract class ContentModelTestBase extends BrowserTestBase {
   }
 
   /**
-   * Asserts that a meta tag with a specific name and value exists.
+   * Asserts that a meta tag with a specific name/property and value exists.
    *
-   * @param string $name
-   *   The meta tag's expected 'name' property.
+   * @param string $name_or_property
+   *   The meta tag's expected 'name' or 'property' attribute.
    * @param string $value
    *   The meta tag's expected value (i.e., 'content' property).
    */
-  protected function assertMetaTag(string $name, string $value) {
+  protected function assertMetaTag(string $name_or_property, string $value) {
     $content = $this->assertSession()
-      ->elementExists('css', "meta[name='$name']")
+      ->elementExists('css', "meta[name='$name_or_property'], meta[property='$name_or_property']")
       ->getAttribute('content');
 
     $this->assertSame($value, $content);
