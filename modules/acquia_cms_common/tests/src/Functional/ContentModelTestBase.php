@@ -2,12 +2,30 @@
 
 namespace Drupal\Tests\acquia_cms_common\Functional;
 
+use Drupal\Component\Serialization\Json;
+use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 
 /**
  * Base class for testing Acquia CMS content models.
  */
 abstract class ContentModelTestBase extends BrowserTestBase {
+
+  use TaxonomyTestTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setUp();
+
+    /** @var \Drupal\taxonomy\VocabularyInterface $categories */
+    $categories = Vocabulary::load('categories');
+    $this->createTerm($categories, ['name' => 'Music']);
+    $this->createTerm($categories, ['name' => 'Food']);
+    $this->createTerm($categories, ['name' => 'Technology']);
+  }
 
   /**
    * Asserts that configurable fields are translatable.
@@ -49,20 +67,59 @@ abstract class ContentModelTestBase extends BrowserTestBase {
     $assert_session = $this->assertSession();
 
     $group = $assert_session->elementExists('css', '#edit-group-taxonomy');
-    $tags_field = $assert_session->fieldExists('Tags', $group);
-    $this->assertTrue($tags_field->hasAttribute('data-autocomplete-path'));
-    $assert_session->selectExists('Categories', $group);
 
-    $categories = $this->container->get('entity_type.manager')
+    $tags = $assert_session->fieldExists('Tags', $group);
+    $this->assertTrue($tags->hasAttribute('data-autocomplete-path'));
+
+    $categories = $assert_session->selectExists('Categories', $group);
+    $this->assertTrue($categories->hasAttribute('multiple'));
+
+    // Ensure that the select list has every term in the Categories vocabulary.
+    $terms = $this->container->get('entity_type.manager')
       ->getStorage('taxonomy_term')
       ->loadByProperties([
         'vid' => 'categories',
       ]);
 
-    /** @var \Drupal\taxonomy\TermInterface $category */
-    foreach ($categories as $category) {
-      $assert_session->optionExists('Categories', $category->label(), $group);
+    /** @var \Drupal\taxonomy\TermInterface $term */
+    foreach ($terms as $term) {
+      $assert_session->optionExists('Categories', $term->label(), $group);
     }
+  }
+
+  /**
+   * Asserts that a meta tag with a specific name/property and value exists.
+   *
+   * @param string $name_or_property
+   *   The meta tag's expected 'name' or 'property' attribute.
+   * @param string $value
+   *   The meta tag's expected value (i.e., 'content' property).
+   */
+  protected function assertMetaTag(string $name_or_property, string $value) {
+    $content = $this->assertSession()
+      ->elementExists('css', "meta[name='$name_or_property'], meta[property='$name_or_property']")
+      ->getAttribute('content');
+
+    $this->assertSame($value, $content);
+  }
+
+  /**
+   * Asserts that certain schema.org data is present on the current page.
+   *
+   * @param array $expected_data
+   *   (optional) Additional schema.org data we expect to see on the page (in a
+   *   JSON-encoded script tag). This parameter can simply be a subset of all
+   *   the schema.org data on the page.
+   */
+  protected function assertSchemaData(array $expected_data = []) {
+    $expected_data += [
+      '@context' => 'https://schema.org',
+    ];
+
+    $element = $this->assertSession()->elementExists('css', 'script[type="application/ld+json"]');
+    $actual_data = Json::decode($element->getText());
+    $this->assertInternalType('array', $actual_data);
+    $this->assertArraySubset($expected_data, $actual_data);
   }
 
 }
