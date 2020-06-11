@@ -1,0 +1,34 @@
+# This file is used by Acquia Pipelines continuous integration. Upon success, an
+# artifact is deployed to the orionacms (f63c4427-2738-4e14-a756-5f7b80b74062)
+# subscription on Acquia Cloud.
+version: 1.1.0
+services:
+  - php:
+      version: 7.3
+
+events:
+  build:
+    steps:
+      - setup:
+          type: script
+          script:
+            - composer validate --no-check-all --ansi --no-interaction
+            - composer install
+            - mkdir -p docroot/profiles/acquia_cms
+            - composer archive --format tar --file acquia_cms
+            - tar -x -f acquia_cms.tar -C docroot/profiles/acquia_cms
+      - cleanup:
+          type: script
+          script:
+            - rm acquia_cms.tar
+            # Prepare settings.php with the minimum required for Cloud.
+            - chmod -R +w docroot/sites/default
+            - cp docroot/sites/default/default.settings.php docroot/sites/default/settings.php
+            - echo "if (file_exists('/var/www/site-php')) { require '/var/www/site-php/orionacms/orionacms-settings.inc';}" >> docroot/sites/default/settings.php
+            # Clear any config directories that Cloud tries to set in the include file.
+            - echo "\$config_directories = [];" >> docroot/sites/default/settings.php
+            # Use the existing `config` directory we already have. Cloud gets confused
+            # because we already have a config directory above docroot and manipulating it
+            # in Pipelines doesn't seem to work. This deployment is ephemeral, so using
+            # the existing config directory isn't a problem.
+            - echo "\$config_directories['sync'] = '../config';" >> docroot/sites/default/settings.php
