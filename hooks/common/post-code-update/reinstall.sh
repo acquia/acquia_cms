@@ -1,10 +1,14 @@
-#!/usr/bin/env sh
+#!/bin/sh
 #
-# Acquia Cloud hook to reinstall Acquia CMS.
+# Cloud Hook: Reinstall Acquia CMS
 #
-# Run `drush site:install acquia_cms` in the target environment.
-# To import Cohesion templates at install time, ensure that the
-# COHESION_API_KEY and COHESION_ORG_KEY environment variables
-# are defined.
+# Run `drush site-install acquia_cms` in the target environment.
 
-drush9 @$1.$2 site:install acquia_cms --account-pass drupalwizard --yes
+which drush
+drush --version
+
+site="$1"
+target_env="$2"
+
+# Fresh install of Acquia CMS.
+/usr/local/bin/drush9 @$site.$target_env site-install acquia_cms --account-pass=admin --yes
