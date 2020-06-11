@@ -36,7 +36,7 @@ git checkout -b develop master
 
 # The BLT template project used by ORCA ignores many files that we need
 # to include in our build artifact.
-git rm .gitignore
+git rm .gitignore docroot/.gitignore
 # We don't want any tests or git repositories in the artifact.
 find . -type d -name 'tests' -prune -exec rm -r -f '{}' ';'
 find . -mindepth 2 -type d -name '.git' -prune -exec rm -r -f '{}' ';'
@@ -51,7 +51,7 @@ chmod +w $SITE_DIR
 git clean -d -f $SITE_DIR
 
 # Replace the Cloud hooks from the BLT template project with our own.
-rm -rf hooks
+rm -r -f hooks
 cp -R $TRAVIS_BUILD_DIR/hooks .
 
 # Replace the symlinked SUT with a physical copy.
