@@ -47,7 +47,7 @@ git rm db.sqlite
 # don't need or want these in the artifact.
 rm -r -f docroot/sites/all
 # Ensure the site directory is writable so we can clean it.
-chmod +w $SITE_DIR
+chmod -R +w $SITE_DIR
 git clean -d -f $SITE_DIR
 
 # Replace the Cloud hooks from the BLT template project with our own.
@@ -65,7 +65,6 @@ fi
 
 # Replace settings.php with a clean, Cloud-ready version.
 SETTINGS_PHP="$SITE_DIR/settings.php"
-chmod +w $SETTINGS_PHP
 cat $SITE_DIR/default.settings.php | sed '$ a require_once "/var/www/site-php/orionacms/orionacms-settings.inc";' > $SETTINGS_PHP
 echo '$config_directories = ["sync" => "../config"];' >> $SETTINGS_PHP
 
