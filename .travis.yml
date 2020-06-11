@@ -57,7 +57,6 @@ matrix:
 
 # Install ORCA and prepare the environment.
 before_install:
-  - openssl aes-256-cbc -K $encrypted_f2ca38f17e7e_key -iv $encrypted_f2ca38f17e7e_iv -in deploy.pem.enc -out tests/travis/deploy.pem -d
   - composer config --global repositories.dx8 vcs https://bitbucket.org/cohesion_dev/dx8-module.git
   - composer config --global repositories.dx8-theme vcs https://bitbucket.org/cohesion_dev/dx8-theme.git
   - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
