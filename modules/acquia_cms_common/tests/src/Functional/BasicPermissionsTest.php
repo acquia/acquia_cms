@@ -79,9 +79,6 @@ class BasicPermissionsTest extends BrowserTestBase {
       $this->drupalGet('/admin/content/media');
       $assert_session->statusCodeEquals(200);
       $this->drupalLogout();
-
-      // All roles should be able to use the filtered html format.
-      $this->assertTrue($account->hasPermission('use text format filtered_html'));
     }
 
     $account = $this->drupalCreateUser();

@@ -71,8 +71,6 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
 
     $this->drupalGet("/node/add/$this->nodeType");
     $assert_session->statusCodeEquals(200);
-    // Assert that the current user can access the Filtered HTML text format.
-    $assert_session->optionExists('Text format', 'Filtered HTML');
     $page->fillField('Title', 'Pastafazoul!');
     // We should be able to explicitly save this node as a draft.
     $page->selectFieldOption('Save as', 'Draft');
@@ -126,8 +124,6 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // Test that we can edit our own content.
     $this->drupalGet($node->toUrl('edit-form'));
     $assert_session->statusCodeEquals(200);
-    // Assert that the current user can access the Filtered HTML text format.
-    $assert_session->optionExists('Text format', 'Filtered HTML');
 
     // Test that we can edit others' content. Mark the node for review, then
     // transition between various workflow states.
@@ -174,8 +170,6 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // Test that we can create content.
     $this->drupalGet("/node/add/$this->nodeType");
     $assert_session->statusCodeEquals(200);
-    // Assert that the current user can access the Filtered HTML text format.
-    $assert_session->optionExists('Text format', 'Filtered HTML');
     $page->fillField('Title', 'Pastafazoul!');
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
