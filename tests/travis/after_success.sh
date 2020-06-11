@@ -64,8 +64,10 @@ if [ -L $PROFILE_DIR ]; then
 fi
 
 # Replace settings.php with a clean, Cloud-ready version.
-chmod +w $SITE_DIR/settings.php
-cat $SITE_DIR/default.settings.php | sed '$ a require_once "/var/www/site-php/orionacms/orionacms-settings.inc";' > $SITE_DIR/settings.php
+SETTINGS_PHP="$SITE_DIR/settings.php"
+chmod +w $SETTINGS_PHP
+cat $SITE_DIR/default.settings.php | sed '$ a require_once "/var/www/site-php/orionacms/orionacms-settings.inc";' > $SETTINGS_PHP
+echo '$config_directories = ["sync" => "../config"];' >> $SETTINGS_PHP
 
 # We have our build artifact; commit all the things!
 git add .
