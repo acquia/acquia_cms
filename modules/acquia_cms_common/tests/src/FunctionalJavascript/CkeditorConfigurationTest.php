@@ -3,16 +3,18 @@
 namespace Drupal\Tests\acquia_cms_common\FunctionalJavascript;
 
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
+use Drupal\Tests\ckeditor\Traits\CKEditorTestTrait;
 use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
 
 /**
  * Tests the CKEditor configuration shipped with Acquia CMS.
  *
- * @todo Add this to the acquia_cms group when Acquia Cloud IDEs support running
- *   functional JavaScript tests.
+ * @todo Add this to the acquia_cms and acquia_cms_common groups when Acquia
+ *   Cloud IDEs support running functional JavaScript tests.
  */
 class CkeditorConfigurationTest extends WebDriverTestBase {
 
+  use CKEditorTestTrait;
   use MediaTypeCreationTrait;
 
   /**
@@ -79,16 +81,12 @@ class CkeditorConfigurationTest extends WebDriverTestBase {
     $formats = $session->evaluateScript('Object.keys(drupalSettings.editor.formats)');
     $this->assertSame(['filtered_html'], $formats);
 
-    // Wait for CKEditor to initialize so we can inspect its commands.
-    $commands = 'CKEDITOR.instances["edit-body-0-value"].commands';
-    $this->assertJsCondition("typeof $commands === 'object'");
-
-    // Ensure that all the expected commands are loaded.
-    $this->assertJsCondition("'drupalmedialibrary' in $commands");
-    $this->assertJsCondition("'justifyleft' in $commands");
-    $this->assertJsCondition("'justifycenter' in $commands");
-    $this->assertJsCondition("'justifyright' in $commands");
-    $this->assertJsCondition("'justifyblock' in $commands");
+    $this->waitForEditor();
+    $this->getEditorButton('justifyleft');
+    $this->getEditorButton('justifycenter');
+    $this->getEditorButton('justifyright');
+    $this->getEditorButton('justifyblock');
+    $this->getEditorButton('drupalmedialibrary');
   }
 
 }
