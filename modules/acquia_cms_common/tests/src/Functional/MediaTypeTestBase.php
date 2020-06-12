@@ -2,20 +2,18 @@
 
 namespace Drupal\Tests\acquia_cms_common\Functional;
 
-use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
-use Drupal\file\Plugin\Field\FieldType\FileItem;
-use Drupal\image\Plugin\Field\FieldType\ImageItem;
-use Drupal\media\Entity\Media;
 use Drupal\media\Entity\MediaType;
-use Drupal\Tests\TestFileCreationTrait;
+use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
 
 /**
  * Base class for testing generic functionality of a specific media type.
  */
 abstract class MediaTypeTestBase extends ContentModelTestBase {
 
-  use TestFileCreationTrait;
+  use MediaTestTrait {
+    createMedia as traitCreateMedia;
+  }
 
   /**
    * {@inheritdoc}
@@ -34,17 +32,6 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
   protected $mediaType;
 
   /**
-   * The source field value to use when creating a test media item.
-   *
-   * This should be overridden by subclasses if the media type under test is not
-   * file-based. For example, if testing a media type that handles YouTube
-   * videos, this should be the URL of a video to test with.
-   *
-   * @var mixed
-   */
-  protected $sourceValue;
-
-  /**
    * {@inheritdoc}
    */
   protected function setUp() {
@@ -55,29 +42,6 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
     parent::setUp();
     $media_type = MediaType::load($this->mediaType);
     $this->assertInstanceOf(MediaType::class, $media_type);
-
-    // If the media type is file-based, prepare a few files to test with. The
-    // source field item type determines what type of test files to prepare.
-    // Tests for media types which are NOT file-based are expected to provide
-    // a source value in $this->sourceValue.
-    // @see ::createMedia()
-    $source_field_type = $media_type->getSource()
-      ->getSourceFieldDefinition($media_type)
-      ->getItemDefinition()
-      ->getClass();
-
-    if (is_a($source_field_type, FileItem::class, TRUE)) {
-      $files = is_a($source_field_type, ImageItem::class, TRUE)
-        ? $this->getTestFiles('image')
-        : $this->getTestFiles('text');
-      $this->assertNotEmpty($files, 'Test files were not generated.');
-
-      $file = File::create([
-        'uri' => reset($files)->uri,
-      ]);
-      $file->save();
-      $this->sourceValue = $file;
-    }
 
     // Create a media item of the type under test, belonging to user 1. This is
     // to test the capabilities of content editors and content administrators.
@@ -115,9 +79,7 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
     $this->drupalGet("/media/add/$this->mediaType");
     $assert_session->statusCodeEquals(200);
     $page->fillField('Name', 'Pastafazoul!');
-    // We have already ensured that $this->sourceValue is not empty.
-    // @see ::setUp()
-    $this->fillSourceField($this->sourceValue);
+    $this->fillSourceField();
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
 
@@ -196,9 +158,7 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
     $this->drupalGet("/media/add/$this->mediaType");
     $assert_session->statusCodeEquals(200);
     $page->fillField('Name', 'Pastafazoul!');
-    // We have already ensured that $this->sourceValue is not empty.
-    // @see ::setUp()
-    $this->fillSourceField($this->sourceValue);
+    $this->fillSourceField();
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
 
@@ -216,30 +176,13 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
   }
 
   /**
-   * Creates a media item.
-   *
-   * @param array $values
-   *   (optional) Field values with which to create the media item. By default,
-   *   the media will be of the type under test, and $this->sourceValue will be
-   *   the value of the source field.
-   *
-   * @return \Drupal\media\MediaInterface
-   *   The new, saved media item.
+   * {@inheritdoc}
    */
   protected function createMedia(array $values = []) {
-    $this->assertNotEmpty($this->sourceValue, 'Cannot create a media item without a source field value.');
-
     $values += [
       'bundle' => $this->mediaType,
     ];
-    /** @var \Drupal\media\MediaInterface $media */
-    $media = Media::create($values);
-
-    $source_field = $media->getSource()
-      ->getSourceFieldDefinition($media->bundle->entity)
-      ->getName();
-    $media->set($source_field, $this->sourceValue)->save();
-    return $media;
+    return $this->traitCreateMedia($values);
   }
 
   /**
@@ -249,8 +192,12 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
    *   The value to fill in the source field. If the media type under test is
    *   file-based, this should be an instance of \Drupal\file\FileInterface.
    */
-  protected function fillSourceField($value) {
+  protected function fillSourceField($value = NULL) {
     $media_type = MediaType::load($this->mediaType);
+
+    if ($value === NULL) {
+      $value = $this->generateSourceFieldValue($media_type);
+    }
 
     $field = $media_type->getSource()
       ->getSourceFieldDefinition($media_type)
