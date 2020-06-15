@@ -14,6 +14,11 @@ use Drupal\node\Entity\NodeType;
 abstract class ContentTypeTestBase extends ContentModelTestBase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected static $modules = ['content_translation'];
+
+  /**
    * The machine name of the content type under test.
    *
    * This should be overridden by subclasses.
@@ -71,6 +76,8 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
 
     $this->drupalGet("/node/add/$this->nodeType");
     $assert_session->statusCodeEquals(200);
+    // We should be able to select the language of the node.
+    $assert_session->selectExists('Language');
     $page->fillField('Title', 'Pastafazoul!');
     // We should be able to explicitly save this node as a draft.
     $page->selectFieldOption('Save as', 'Draft');
@@ -170,6 +177,8 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // Test that we can create content.
     $this->drupalGet("/node/add/$this->nodeType");
     $assert_session->statusCodeEquals(200);
+    // We should be able to select the language of the node.
+    $assert_session->selectExists('Language');
     $page->fillField('Title', 'Pastafazoul!');
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
