@@ -19,6 +19,7 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
+    'content_translation',
     'views',
   ];
 
@@ -78,6 +79,8 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
 
     $this->drupalGet("/media/add/$this->mediaType");
     $assert_session->statusCodeEquals(200);
+    // We should be able to select the language of the media item.
+    $assert_session->selectExists('Language');
     $page->fillField('Name', 'Pastafazoul!');
     $this->fillSourceField();
     $page->pressButton('Save');
@@ -157,6 +160,8 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
     // Test that we can create media.
     $this->drupalGet("/media/add/$this->mediaType");
     $assert_session->statusCodeEquals(200);
+    // We should be able to select the language of the media item.
+    $assert_session->selectExists('Language');
     $page->fillField('Name', 'Pastafazoul!');
     $this->fillSourceField();
     $page->pressButton('Save');
