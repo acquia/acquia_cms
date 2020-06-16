@@ -5,7 +5,7 @@ namespace Drupal\Tests\acquia_cms_page\FunctionalJavascript;
 use Drupal\Tests\acquia_cms_common\FunctionalJavascript\AutoSaveTestBase;
 
 /**
- * Tests the Autosave configuration shipped with Acquia CMS.
+ * Test the autosave integration for Page content type.
  *
  * @todo Add this to the acquia_cms and acquia_cms_common groups when Acquia
  *   Cloud IDEs support running functional JavaScript tests.
@@ -39,4 +39,5 @@ class AutoSubmitPageTest extends AutoSaveTestBase {
   // @codingStandardsIgnoreStart
   protected $strictConfigSchema = FALSE;
   // @codingStandardsIgnoreEnd
+
 }

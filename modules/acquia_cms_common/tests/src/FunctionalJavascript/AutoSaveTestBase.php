@@ -32,7 +32,6 @@ abstract class AutoSaveTestBase extends WebDriverTestBase {
     $node_type = NodeType::load($this->nodeType);
     $this->assertInstanceOf(NodeType::class, $node_type);
 
-    // Prepare autosave setup.
     // Adjust the autosave form submission interval.
     $this->config('autosave_form.settings')
       ->set('interval', 20000)
@@ -42,7 +41,7 @@ abstract class AutoSaveTestBase extends WebDriverTestBase {
   /**
    * Test autosave feature for an existing entity.
    */
-  public function testAutoSaveForExistingNodeTitle() {
+  public function testAutoSaveForExistingNode() {
     $account = $this->drupalCreateUser();
     $account->addRole('content_author');
     $account->save();
@@ -58,19 +57,19 @@ abstract class AutoSaveTestBase extends WebDriverTestBase {
 
     $this->drupalGet($node->toUrl('edit-form'));
     $this->waitForAutosave();
-    $assert_session->fieldExists('Title')->setValue('Test Autosubmit Data');
+    $assert_session->fieldExists('Title')->setValue('Test Autosave Data');
     $this->waitForAutosave();
 
     // Reload the page.
-    $this->drupalGet($node->toUrl('edit-form'));
-    $this->autoSaveElementCheck();
-    $assert_session->fieldValueEquals('Title', 'Test Autosubmit Data');
+    $this->getSession()->reload();
+    $this->restoreAutoSavedChanges();
+    $assert_session->fieldValueEquals('Title', 'Test Autosave Data');
 
-    // Test autosubmit if user is logged out.
+    // Test autosave if user is logged out.
     $this->drupalLogout();
     $this->drupalLogin($account);
     $this->drupalGet($node->toUrl('edit-form'));
-    $this->autoSaveElementCheck(FALSE);
+    $this->discardAutoSaveChanges();
     $assert_session->fieldValueEquals('Title', 'Test Default Data');
   }
 
@@ -93,29 +92,21 @@ abstract class AutoSaveTestBase extends WebDriverTestBase {
   }
 
   /**
-   * Check Autosave elements.
-   *
-   * @param bool $resume
-   *   Which button to click. Resume editing if true, otherwise discard.
+   * Check for Resume Editing button and click on it if found.
    */
-  protected function autoSaveElementCheck($resume = TRUE) {
-    $assert_session = $this->assertSession();
-
-    $resume_editing = $assert_session->waitForElementVisible('css', '.autosave-form-resume-button');
+  protected function restoreAutoSavedChanges() {
+    $resume_editing = $this->assertSession()->waitForElementVisible('named', ['button', 'Resume editing']);
     $this->assertNotEmpty($resume_editing);
-
-    $discard = $assert_session->waitForElementVisible('css', '.autosave-form-reject-button');
-    $this->assertNotEmpty($discard);
-
-    // Press resume editing button, or discard.
-    ($resume) ? $resume_editing->press() : $discard->press();
+    $resume_editing->press();
   }
 
   /**
-   * {@inheritdoc}
+   * Check for Discard button and click on it if found.
    */
-  protected function getEntityUrl() {
-    return "node/add/{$this->nodeType}";
+  protected function discardAutoSaveChanges() {
+    $discard = $this->assertSession()->waitForElementVisible('named', ['button', 'Discard']);
+    $this->assertNotEmpty($discard);
+    $discard->press();
   }
 
 }
