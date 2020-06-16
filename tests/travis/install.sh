@@ -20,13 +20,17 @@ source ../../../orca/bin/travis/_includes.sh
 # If there is no fixture, there's nothing else for us to do.
 [[ -d "$ORCA_FIXTURE_DIR" ]] || exit 0
 
+# Add our development dependencies needed for testing.
+cd $ORCA_FIXTURE_DIR
+composer require --dev weitzman/drupal-test-traits
+
 # In order for PHPUnit tests belonging to profile modules to even be
 # runnable, the profile's modules need to be symlinked into the
 # sites/all/modules directory. This is a long-standing limitation of
 # Drupal core (10 year old issue) that shows no signs of being fixed
 # any time soon. We do a similar workaround in our composer.json's
 # post-install-cmd script.
-cd "$ORCA_FIXTURE_DIR/docroot/sites"
+cd docroot/sites
 mkdir -p ./all/modules
 cd ./all/modules
 find ../../../profiles/contrib/acquia_cms/modules -maxdepth 1 -mindepth 1 -type d -exec ln -s -f '{}' ';'
