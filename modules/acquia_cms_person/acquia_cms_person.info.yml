@@ -1,13 +1,14 @@
-name: "Person"
-package: "Acquia CMS"
-description: "Provides a Person content type, a structured data representation of people associated with a website or organization."
+name: Person
+package: 'Acquia CMS'
+description: 'Provides a Person content type, a structured data representation of people associated with a website or organization.'
 type: module
 core_version_requirement: ^8.9
 dependencies:
-  - cohesion_templates
-  - field
-  - menu_ui
-  - node
-  - path
-  - text
-  - user
+  - acquia_cms_common
+  - acquia_cms_place
+  - acquia_cms_image
+  - 'drupal:media_library'
+  - 'drupal:path'
+  - 'drupal:telephone'
+  - 'field_group:field_group'
+  - schema_person
