@@ -110,6 +110,19 @@ Note that, in a local environment, it can be more convenient to use a SQLite dat
 
 Once you've installed Acquia CMS, how you serve it is up to you. For local development, the most convenient option is PHP's built-in web server: `drush runserver 8080`.
 
+### Contributing
+Contributing to Acquia CMS requires the ability to push branches to the repository, since we do not use forks. If you need access, ask your manager or technical architect.
+
+Before opening a new branch, note the JIRA ticket number that you're going to work on (there can be multiple branches associated with a single ticket). The ticket number will have the format ACMS-N, where N is a number. The branch name should be prefixed by the ticket number, followed by a short description, and it should be branched from the `develop` branch. For example:
+```
+git checkout develop
+git pull
+git checkout -b ACMS-35/event-content-type
+```
+Once the branch is open, you can make as many commits to it as you like. All commit messages must be prefixed by the ticket number. For example: `ACMS-35: Add the event content type` (note the lack of a period at the end of the commit message) is a good example of a commit message.
+
+When you're ready for your work to be reviewed, open a pull request to merge your branch into the `develop` branch. You should also periodically sync and rebase against `develop`.
+
 ### Best practices
 Here are a few things to keep in mind as you work to improve Acquia CMS's code and config:
 * When adding or updating config that ships with Acquia CMS (either in the profile or one of its component modules), the UUID and `_core` section should always be removed, because they are specific to a single Drupal installation, and Acquia CMS's configuration needs to be generic. If exporting a single piece of config at the command line, you can use the `--generic` option to do this automatically. For example: `drush config:get --generic node.type.article`.
