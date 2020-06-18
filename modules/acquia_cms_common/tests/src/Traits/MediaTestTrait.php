@@ -62,7 +62,7 @@ trait MediaTestTrait {
       'generateSampleValue',
     ];
     $value = $generator($field_definition);
-    $this->assertInternalType('array', $value);
+    $this->assertIsArray($value);
     $this->assertNotEmpty($value);
 
     if ($normalize) {

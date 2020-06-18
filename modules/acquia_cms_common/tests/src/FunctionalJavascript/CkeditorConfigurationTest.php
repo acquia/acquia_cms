@@ -21,7 +21,7 @@ class CkeditorConfigurationTest extends WebDriverTestBase {
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
-  
+
   /**
    * {@inheritdoc}
    */
