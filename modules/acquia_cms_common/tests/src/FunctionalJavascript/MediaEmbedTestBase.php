@@ -16,6 +16,11 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
   use MediaTestTrait;
 
   /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+  
+  /**
    * The machine name of the media type under test.
    *
    * This should be overridden by subclasses.

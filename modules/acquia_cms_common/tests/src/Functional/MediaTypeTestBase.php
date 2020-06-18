@@ -18,6 +18,11 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
   /**
    * {@inheritdoc}
    */
+  protected $defaultTheme = 'stark';
+  
+  /**
+   * {@inheritdoc}
+   */
   protected static $modules = [
     'content_translation',
     'views',
