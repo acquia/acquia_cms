@@ -126,7 +126,7 @@ abstract class ContentModelTestBase extends BrowserTestBase {
     $element = $this->assertSession()->elementExists('css', 'script[type="application/ld+json"]');
     $actual_data = Json::decode($element->getText());
     $this->assertIsArray($actual_data);
-    // We were using assertArraySubset(), but it's been deprecated in 
+    // We were using assertArraySubset(), but it's been deprecated in
     // PHPUnit 9. See: https://github.com/sebastianbergmann/phpunit/issues/3494
     foreach ($expected_data as $key => $value) {
       $this->assertArrayHasKey($key, $actual_data);
