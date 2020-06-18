@@ -4,10 +4,10 @@
     "description": "An implementation of Lightning for running low code websites in the Acquia platform.",
     "license": "GPL-2.0-or-later",
     "require": {
+        "acquia/cohesion": "6.1.2",
+        "acquia/cohesion-theme": "6.1.2",
         "acquia/drupal-environment-detector": "^1",
         "acquia/memcache-settings": "dev-master",
-        "cohesion/dx8": "6.0.0",
-        "cohesion/dx8-theme": "6.0.0",
         "cweagans/composer-patches": "^1.6",
         "drupal/acquia_connector": "^2",
         "drupal/acquia_purge": "^1",
@@ -19,8 +19,8 @@
         "drupal/default_content": "^1.0@alpha",
         "drupal/diff": "^1",
         "drupal/easy_breadcrumb": "^1",
-        "drupal/environment_indicator": "^3.7",
-        "drupal/facets": "^1",
+        "drupal/environment_indicator": "^3.0-dev",
+        "drupal/facets": "^1.0-dev",
         "drupal/field_group": "^3",
         "drupal/google_analytics": "^2",
         "drupal/google_tag": "^1",
@@ -29,13 +29,13 @@
         "drupal/moderation_sidebar": "^1.4",
         "drupal/password_policy": "^3.0-beta1",
         "drupal/pathauto": "^1",
-        "drupal/recaptcha": "^2",
+        "drupal/recaptcha": "^3",
         "drupal/redirect": "^1",
         "drupal/responsive_preview": "^1.0@beta",
         "drupal/schema_metatag": "^1.4",
-        "drupal/search_api_autocomplete": "^1",
-        "drupal/search_api_solr": "^1",
-        "drupal/seckit": "^1",
+        "drupal/search_api_autocomplete": "^1.0-dev",
+        "drupal/search_api_solr": "^4",
+        "drupal/seckit": "^2.0@rc",
         "drupal/shield": "^1",
         "drupal/simple_sitemap": "^3",
         "drupal/username_enumeration_prevention": "^1",
@@ -111,14 +111,6 @@
         "assets": {
             "type": "composer",
             "url": "https://asset-packagist.org"
-        },
-        "dx8": {
-            "type": "vcs",
-            "url": "https://bitbucket.org/cohesion_dev/dx8-module.git"
-        },
-        "dx8-theme": {
-            "type": "vcs",
-            "url": "https://bitbucket.org/cohesion_dev/dx8-theme.git"
         },
         "environment-detector": {
             "type": "vcs",
