@@ -15,11 +15,6 @@ cache:
     - "$HOME/.drush/cache"
     - "{$TMPDIR:-/tmp}/phpstan/cache"
 
-branches:
-  only:
-    - master
-    - develop
-
 env:
   # Change the following values for your implementation.
   global:
@@ -57,7 +52,7 @@ matrix:
     - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_SUT }
 #    - { name: "Isolated test w/ recommended package versions", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^8.9 --sut-only" }
 #    - { name: "Integrated test w/ recommended package versions", env: ORCA_JOB=INTEGRATED_RECOMMENDED }
-    - { name: "Isolated test w/ dev package versions", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only" }
+    - { name: "Isolated test w/ dev package versions", env: ORCA_JOB=ISOLATED_DEV }
 #    - { name: "Integrated test w/ dev package versions", env: ORCA_JOB=INTEGRATED_DEV }
 
 # Install ORCA and prepare the environment.

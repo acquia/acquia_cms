@@ -16,19 +16,18 @@
         "drupal/admin_toolbar": "^2.0",
         "drupal/adminimal_admin_toolbar": "^1.10",
         "drupal/core": "^9.0",
-        "drupal/core-composer-scaffold": "^9.0.0",
         "drupal/core-project-message": "^9.0.0",
         "drupal/core-recommended": "^9.0.0",
         "drupal/default_content": "^1.0@alpha",
         "drupal/diff": "^1",
-        "drupal/easy_breadcrumb": "^1",
-        "drupal/environment_indicator": "^3.0-dev",
-        "drupal/facets": "^1.0-dev",
+        "drupal/easy_breadcrumb": "1.x-dev",
+        "drupal/environment_indicator": "3.x-dev",
+        "drupal/facets": "1.x-dev",
         "drupal/field_group": "^3",
         "drupal/google_analytics": "^2",
         "drupal/google_tag": "^1",
         "drupal/honeypot": "2.0.x-dev",
-        "drupal/imce": "2.x-dev as 1.8.0",
+        "drupal/imce": "1.x-dev",
         "drupal/memcache": "2.x-dev",
         "drupal/moderation_dashboard": "^1.0@beta",
         "drupal/moderation_sidebar": "^1.4",
@@ -48,7 +47,7 @@
     },
     "require-dev": {
         "acquia/coding-standards": "^0.4.3",
-        "drupal/core-dev": "^9.0.0",
+        "drupal/core-dev": "^9",
         "drush/drush": "^10",
         "oomphinc/composer-installers-extender": "^1.1",
         "vijaycs85/drupal-quality-checker": "^1.2"
@@ -105,14 +104,14 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/environment_indicator": {
-                "Drupal 9 Compatibility": "https://www.drupal.org/files/issues/2020-04-29/3042790-18.patch"
-            },
             "drupal/easy_breadcrumb": {
                 "Drupal 9 Compatibility": "https://www.drupal.org/files/issues/2020-06-17/easy_breadcrumb-d9-failing-tests-3152763.patch"
             },
             "drupal/memcache": {
                 "PHPunit test failure due to memcache_test.info.yml": "https://www.drupal.org/files/issues/2020-06-17/3152678-2.patch"
+            },
+            "drupal/imce": {
+                "Remove theme declaration for imce_page": "https://www.drupal.org/files/issues/2020-06-05/3146463-2--remove_imce_page_theme_declaration.patch"
             }
         }
     },
