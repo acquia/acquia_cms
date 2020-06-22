@@ -3,9 +3,9 @@
 namespace Drupal\Tests\acquia_cms_place\Functional;
 
 use Drupal\Component\Utility\SortArray;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
-use Drupal\field\Entity\FieldConfig;
 
 /**
  * Tests the Place content type that ships with Acquia CMS.
@@ -47,7 +47,8 @@ class PlaceTest extends ContentTypeTestBase {
    */
   // @codingStandardsIgnoreStart
   protected $strictConfigSchema = FALSE;
-  // @codingStandardsIgnoreEnd
+ // @codingStandardsIgnoreEnd
+
   /**
    * Tests the bundled functionality of the Place content type.
    */
