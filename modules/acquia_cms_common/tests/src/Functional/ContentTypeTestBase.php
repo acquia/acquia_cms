@@ -285,23 +285,23 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
   /**
    * Remove require attribute from all FieldConfig field.
    */
-  protected function makeFieldsOptional() {
-      $entityManager = $this->container->get('entity.manager');
-      $fields = [];
-      if (!empty($this->nodeType)) {
-        $fields = array_filter(
-          $entityManager->getFieldDefinitions('node', $this->nodeType),
-          function ($field_definition) {
-            return $field_definition instanceof FieldConfig;
-          }
-        );
-      }
-      foreach ($fields as $field) {
-        if ($field->isRequired()) {
-          $field->setRequired(FALSE);
-          $field->save();
+  private function makeFieldsOptional() {
+    $entityManager = $this->container->get('entity.manager');
+    $fields = [];
+    if (!empty($this->nodeType)) {
+      $fields = array_filter(
+        $entityManager->getFieldDefinitions('node', $this->nodeType),
+        function ($field_definition) {
+          return $field_definition instanceof FieldConfig;
         }
+      );
+    }
+    foreach ($fields as $field) {
+      if ($field->isRequired()) {
+        $field->setRequired(FALSE);
+        $field->save();
       }
+    }
   }
 
 }
