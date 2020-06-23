@@ -29,7 +29,6 @@ class PlaceTest extends ContentTypeTestBase {
     'metatag_open_graph',
     'metatag_twitter_cards',
     'pathauto',
-    'schema_article',
     'telephone',
     'address',
   ];
@@ -77,7 +76,6 @@ class PlaceTest extends ContentTypeTestBase {
     $assert_session->fieldExists('Country');
     $assert_session->fieldExists('State');
     $assert_session->fieldExists('Zip code');
-    // $assert_session->fieldExists('Image');
     $page->fillField('Description', 'This is an awesome remix!');
     // The search description should not have a summary.
     $assert_session->fieldNotExists('Summary');
@@ -86,11 +84,6 @@ class PlaceTest extends ContentTypeTestBase {
     // There should be a field to add an image, and it should be using the
     // media library.
     $assert_session->elementExists('css', '#field_place_image-media-library-wrapper');
-    // Although Cohesion is not installed in this test, we do want to be sure
-    // that a hidden field exists to store Cohesion's JSON-encoded layout canvas
-    // data. For our purposes, checking for the existence of the hidden field
-    // should be sufficient.
-    $assert_session->hiddenFieldExists('field_layout_canvas[0][target_id][json_values]');
     // There should be a select list to choose the moderation state, and it
     // should default to Draft. Note that which moderation states are available
     // depends on the current user's permissions.
@@ -119,7 +112,6 @@ class PlaceTest extends ContentTypeTestBase {
       'field_categories',
       'field_tags',
       'field_place_type',
-      'field_layout_canvas',
       'moderation_state',
 
     ]);
@@ -127,39 +119,31 @@ class PlaceTest extends ContentTypeTestBase {
     // Submit the form and ensure that we see the expected error message(s).
     $page->pressButton('Save');
     $assert_session->pageTextContains('Title field is required.');
+    $assert_session->pageTextContains('First name field is required.');
+    $assert_session->pageTextContains('Last name field is required.');
+    $assert_session->pageTextContains('Street address field is required.');
+    $assert_session->pageTextContains('City field is required.');
+    $assert_session->pageTextContains('State field is required.');
+    $assert_session->pageTextContains('Zip code field is required.');
+
     // Fill in the required fields and assert that things went as expected.
     $page->fillField('Title', 'Living with video');
-    // $page->fillField('Country', 'US');
+
+    // For convenience, the parent class creates a few categories during set-up.
+    // @see \Drupal\Tests\acquia_cms_common\Functional\ContentModelTestBase::setUp()
+    $page->selectFieldOption('Categories', 'Music');
+    $page->fillField('Tags', 'techno');
     $page->fillField('First name', 'Anthony');
     $page->fillField('Last name', 'Disouza');
     $page->fillField('Street address', '12, block b');
     $page->fillField('City', 'Santa Clara');
     $page->fillField('Zip code', '95050');
     $page->selectFieldOption('State', 'CA');
-
-    // $page->attachFileToField('Media', $image_url);
-    // For convenience, the parent class creates a few categories during set-up.
-    // @see \Drupal\Tests\acquia_cms_common\Functional\ContentModelTestBase::setUp()
-    $page->selectFieldOption('Categories', 'Music');
-    $page->fillField('Tags', 'techno');
     $page->pressButton('Save');
     $assert_session->pageTextContains('Living with video has been created.');
     // Assert that the Pathauto pattern was used to create the URL alias.
     $assert_session->addressEquals('/places/living-video');
     // Assert that the expected schema.org data and meta tags are present.
-    $this->assertSchemaData([
-      '@graph' => [
-        [
-          '@type' => 'Article',
-          'name' => 'Living with video',
-          'description' => 'This is an awesome remix!',
-          'image' => [
-            '@type' => 'ImageObject',
-            'url' => $image_url,
-          ],
-        ],
-      ],
-    ]);
     $this->assertMetaTag('keywords', 'Music, techno');
     $this->assertMetaTag('description', 'This is an awesome remix!');
     $this->assertMetaTag('og:type', 'place');
@@ -206,7 +190,7 @@ class PlaceTest extends ContentTypeTestBase {
    * around that, this method sets the default value for the address field of
    * the content.
    */
-  protected function setAddressDefaultFields() {
+  private function setAddressDefaultFields() {
     $field = FieldConfig::loadByName('node', $this->nodeType, 'field_address');
     $this->assertInstanceOf(FieldConfig::class, $field);
     $field->setDefaultValue([
