@@ -5,7 +5,6 @@ dependencies:
     - field.field.node.place.body
     - field.field.node.place.field_address
     - field.field.node.place.field_categories
-    - field.field.node.place.field_layout_canvas
     - field.field.node.place.field_place_image
     - field.field.node.place.field_place_type
     - field.field.node.place.field_tags
@@ -14,7 +13,6 @@ dependencies:
     - workflows.workflow.editorial
   module:
     - address
-    - cohesion_elements
     - content_moderation
     - field_group
     - media_library
@@ -82,12 +80,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: options_select
-    region: content
-  field_layout_canvas:
-    weight: 11
-    settings: {  }
-    third_party_settings: {  }
-    type: cohesion_layout_builder_widget
     region: content
   field_place_image:
     type: media_library_widget
