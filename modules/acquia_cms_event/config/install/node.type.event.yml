@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies: {}
+third_party_settings:
+  acquia_cms:
+    workflow_id: editorial
+    metatag:
+      tag_types:
+        basic: basic
+        open_graph: open_graph
+        schema_event: schema_event
+        twitter_cards: twitter_cards
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+name: Event
+type: event
+description: 'An unstructured content type that provides events.'
+help: ''
+new_revision: true
+preview_mode: 0
+display_submitted: false
