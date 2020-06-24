@@ -5,7 +5,9 @@ namespace Drupal\Tests\acquia_cms_place\Functional;
 use Drupal\Component\Utility\SortArray;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
+use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 
 /**
  * Tests the Place content type that ships with Acquia CMS.
@@ -14,6 +16,8 @@ use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
  * @group acquia_cms
  */
 class PlaceTest extends ContentTypeTestBase {
+
+  use TaxonomyTestTrait;
 
   /**
    * {@inheritdoc}
@@ -29,8 +33,6 @@ class PlaceTest extends ContentTypeTestBase {
     'metatag_open_graph',
     'metatag_twitter_cards',
     'pathauto',
-    'telephone',
-    'address',
   ];
 
   /**
@@ -52,6 +54,11 @@ class PlaceTest extends ContentTypeTestBase {
    * Tests the bundled functionality of the Place content type.
    */
   public function testPlaceContentType() {
+
+    /** @var \Drupal\taxonomy\VocabularyInterface $place_type */
+    $place_type = Vocabulary::load('place_type');
+    $this->createTerm($place_type, ['name' => 'Residential']);
+
     $session = $this->getSession();
     $page = $session->getPage();
     $assert_session = $this->assertSession();
@@ -62,7 +69,7 @@ class PlaceTest extends ContentTypeTestBase {
     $this->drupalLogin($account);
 
     $image_url = $this->getImageUrl();
-    $this->setAddressDefaultFields();
+    $this->setAddressDefaultValue();
     $this->drupalGet('/node/add/place');
     // Assert that the current user can access the form to create a place. Note
     // that status codes cannot be asserted in functional JavaScript tests.
@@ -76,9 +83,11 @@ class PlaceTest extends ContentTypeTestBase {
     $assert_session->fieldExists('Country');
     $assert_session->fieldExists('State');
     $assert_session->fieldExists('Zip code');
+    $assert_session->fieldExists('Telephone');
+    $assert_session->fieldExists('Place Type');
     $page->fillField('Description', 'This is an awesome remix!');
     // The search description should not have a summary.
-    $assert_session->fieldNotExists('Summary');
+    $assert_session->fieldExists('Summary');
     // The standard Categories and Tags fields should be present.
     $this->assertCategoriesAndTagsFieldsExist();
     // There should be a field to add an image, and it should be using the
@@ -107,7 +116,7 @@ class PlaceTest extends ContentTypeTestBase {
       'title',
       'body',
       'field_address',
-      'field_telephone',
+      'field_place_telephone',
       'field_place_image',
       'field_categories',
       'field_tags',
@@ -138,6 +147,8 @@ class PlaceTest extends ContentTypeTestBase {
     $page->fillField('Street address', '12, block b');
     $page->fillField('City', 'Santa Clara');
     $page->fillField('Zip code', '95050');
+    $page->fillField('Telephone', '9829838487');
+    $page->selectFieldOption('Place Type', 'Residential');
     $page->selectFieldOption('State', 'CA');
     $page->pressButton('Save');
     $assert_session->pageTextContains('Living with video has been created.');
@@ -159,7 +170,7 @@ class PlaceTest extends ContentTypeTestBase {
     // Assert that the techno tag was created dynamically in the correct
     // vocabulary.
     /** @var \Drupal\taxonomy\TermInterface $tag */
-    $tag = Term::load(4);
+    $tag = Term::load(5);
     $this->assertInstanceOf(Term::class, $tag);
     $this->assertSame('tags', $tag->bundle());
     $this->assertSame('techno', $tag->getName());
@@ -190,7 +201,7 @@ class PlaceTest extends ContentTypeTestBase {
    * around that, this method sets the default value for the address field of
    * the content.
    */
-  private function setAddressDefaultFields() {
+  private function setAddressDefaultValue() {
     $field = FieldConfig::loadByName('node', $this->nodeType, 'field_address');
     $this->assertInstanceOf(FieldConfig::class, $field);
     $field->setDefaultValue([

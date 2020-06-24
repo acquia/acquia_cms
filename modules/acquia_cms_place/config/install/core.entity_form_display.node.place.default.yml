@@ -6,9 +6,9 @@ dependencies:
     - field.field.node.place.field_address
     - field.field.node.place.field_categories
     - field.field.node.place.field_place_image
+    - field.field.node.place.field_place_telephone
     - field.field.node.place.field_place_type
     - field.field.node.place.field_tags
-    - field.field.node.place.field_telephone
     - node.type.place
     - workflows.workflow.editorial
   module:
@@ -88,6 +88,13 @@ content:
       media_types: {  }
     third_party_settings: {  }
     region: content
+  field_place_telephone:
+    weight: 3
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: telephone_default
+    region: content
   field_place_type:
     weight: 9
     settings: {  }
@@ -103,13 +110,6 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: entity_reference_autocomplete
-    region: content
-  field_telephone:
-    weight: 3
-    settings:
-      placeholder: ''
-    third_party_settings: {  }
-    type: telephone_default
     region: content
   langcode:
     type: language_select
