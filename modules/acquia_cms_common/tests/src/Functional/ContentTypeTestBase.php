@@ -283,7 +283,11 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
   }
 
   /**
-   * Remove require attribute from all FieldConfig field.
+   * Remove require attribute from all FieldConfig field,
+   * since we only need to test permissions for different roles,
+   * and it will be an extra overhead to assert values for,
+   * required fields.(This assertion is to be taken care of in,
+   * content type's specific test, ex PlaceTest)
    */
   private function makeFieldsOptional() {
     $entityManager = $this->container->get('entity.manager');
