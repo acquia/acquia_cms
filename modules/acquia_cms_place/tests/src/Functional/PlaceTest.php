@@ -33,6 +33,7 @@ class PlaceTest extends ContentTypeTestBase {
     'metatag_open_graph',
     'metatag_twitter_cards',
     'pathauto',
+    'schema_article',
   ];
 
   /**
