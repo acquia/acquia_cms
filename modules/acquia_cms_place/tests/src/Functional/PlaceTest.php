@@ -86,10 +86,13 @@ class PlaceTest extends ContentTypeTestBase {
     $assert_session->fieldExists('Telephone');
     $assert_session->fieldExists('Place Type');
     $page->fillField('Description', 'This is an awesome remix!');
-    // The search description should not have a summary.
+    // The search description should have a summary.
     $assert_session->fieldExists('Summary');
     // The standard Categories and Tags fields should be present.
     $this->assertCategoriesAndTagsFieldsExist();
+    // Ensure Media field group is present and has image field.
+    $group = $assert_session->elementExists('css', '#edit-group-media');
+    $assert_session->buttonExists('Add media', $group);
     // There should be a field to add an image, and it should be using the
     // media library.
     $assert_session->elementExists('css', '#field_place_image-media-library-wrapper');
@@ -111,6 +114,18 @@ class PlaceTest extends ContentTypeTestBase {
     $menu = $assert_session->selectExists('menu[menu_parent]');
     $this->assertSame('main:', $menu->getValue());
     $this->assertCount(1, $menu->findAll('css', 'option'));
+
+    // Ensure Address field group is present and has address fields.
+    $group = $assert_session->elementExists('css', '#edit-field-address-wrapper');
+    $assert_session->fieldExists('Country', $group);
+    $assert_session->fieldExists('First name', $group);
+    $assert_session->fieldExists('Last name', $group);
+    $assert_session->fieldExists('Company', $group);
+    $assert_session->fieldExists('Street address', $group);
+    $assert_session->fieldExists('City', $group);
+    $assert_session->fieldExists('State', $group);
+    $assert_session->fieldExists('Zip code', $group);
+
     // Assert that the fields are in the correct order.
     $this->assertFieldsOrder([
       'title',
@@ -155,6 +170,19 @@ class PlaceTest extends ContentTypeTestBase {
     // Assert that the Pathauto pattern was used to create the URL alias.
     $assert_session->addressEquals('/places/living-video');
     // Assert that the expected schema.org data and meta tags are present.
+    $this->assertSchemaData([
+      '@graph' => [
+        [
+          '@type' => 'Article',
+          'name' => 'Living with video',
+          'description' => 'This is an awesome remix!',
+          'image' => [
+            '@type' => 'ImageObject',
+            'url' => $image_url,
+          ],
+        ],
+      ],
+    ]);
     $this->assertMetaTag('keywords', 'Music, techno');
     $this->assertMetaTag('description', 'This is an awesome remix!');
     $this->assertMetaTag('og:type', 'place');
