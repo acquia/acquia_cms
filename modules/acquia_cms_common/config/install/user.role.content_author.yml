@@ -1,16 +1,24 @@
 langcode: en
 status: true
 dependencies: {  }
-third_party_settings: {  }
 id: content_author
 label: 'Content Author'
 weight: 3
 is_admin: null
 permissions:
-  - 'administer menu'
   - 'access content overview'
   - 'access media overview'
   - 'access toolbar'
+  - 'administer menu'
+  - 'create image media'
+  - 'create page content'
+  - 'create place content'
+  - 'delete own image media'
+  - 'delete own page content'
+  - 'delete own place content'
+  - 'edit own image media'
+  - 'edit own page content'
+  - 'edit own place content'
   - 'use editorial transition create_new_draft'
   - 'use editorial transition review'
   - 'use text format filtered_html'

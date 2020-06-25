@@ -38,7 +38,6 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     parent::setUp();
     $node_type = NodeType::load($this->nodeType);
     $this->assertInstanceOf(NodeType::class, $node_type);
-
     // Create a node of the type under test, belonging to user 1. This is to
     // test the capabilities of content editors and content administrators.
     $this->drupalCreateNode([
@@ -71,6 +70,9 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     $account->save();
     $this->drupalLogin($account);
 
+    // Set form field optional.
+    $this->makeFieldsOptional();
+
     $assert_session = $this->assertSession();
     $page = $this->getSession()->getPage();
 
@@ -78,7 +80,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     $assert_session->statusCodeEquals(200);
     // We should be able to select the language of the node.
     $assert_session->selectExists('Language');
-    $page->fillField('Title', 'Pastafazoul!');
+    $page->fillField('title[0][value]', 'Pastafazoul!');
     // We should be able to explicitly save this node as a draft.
     $page->selectFieldOption('Save as', 'Draft');
     $page->pressButton('Save');
@@ -116,6 +118,9 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     $account->addRole('content_editor');
     $account->save();
     $this->drupalLogin($account);
+
+    // Set form field optional.
+    $this->makeFieldsOptional();
 
     $node = $this->drupalCreateNode([
       'type' => $this->nodeType,
@@ -171,6 +176,9 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     $account->save();
     $this->drupalLogin($account);
 
+    // Set form field optional.
+    $this->makeFieldsOptional();
+
     $assert_session = $this->assertSession();
     $page = $this->getSession()->getPage();
 
@@ -179,7 +187,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     $assert_session->statusCodeEquals(200);
     // We should be able to select the language of the node.
     $assert_session->selectExists('Language');
-    $page->fillField('Title', 'Pastafazoul!');
+    $page->fillField('title[0][value]', 'Pastafazoul!');
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
 
@@ -272,6 +280,33 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     ])->save();
 
     return file_create_url($file->getFileUri());
+  }
+
+  /**
+   * Remove require attribute from all FieldConfig field.
+   *
+   * Since we only need to test permissions for different roles,
+   * and it will be an extra overhead to assert values for,
+   * required fields.(This assertion is to be taken care of in,
+   * content type's specific test, ex PlaceTest)
+   */
+  private function makeFieldsOptional() {
+    $entityManager = $this->container->get('entity.manager');
+    $fields = [];
+    if (!empty($this->nodeType)) {
+      $fields = array_filter(
+        $entityManager->getFieldDefinitions('node', $this->nodeType),
+        function ($field_definition) {
+          return $field_definition instanceof FieldConfig;
+        }
+      );
+    }
+    foreach ($fields as $field) {
+      if ($field->isRequired()) {
+        $field->setRequired(FALSE);
+        $field->save();
+      }
+    }
   }
 
 }
