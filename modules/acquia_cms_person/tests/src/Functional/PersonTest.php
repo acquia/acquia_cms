@@ -75,6 +75,7 @@ class PersonTest extends ContentTypeTestBase {
     $account->save();
     $this->drupalLogin($account);
 
+    // Set field_person_image default value.
     $image_url = $this->getImageUrl();
 
     $this->drupalGet('/node/add/person');
@@ -84,19 +85,23 @@ class PersonTest extends ContentTypeTestBase {
 
     // Assert that the expected fields show up.
     $assert_session->fieldExists('Name');
+    $assert_session->fieldExists('Bio');
     $assert_session->fieldExists('Place');
     $assert_session->fieldExists('Email');
     $assert_session->fieldExists('Telephone');
-    $page->fillField('Bio', 'This is an example of bio');
 
     // The Bio should have a summary.
     $assert_session->fieldExists('Summary');
     // The standard Categories and Tags fields should be present.
     $this->assertCategoriesAndTagsFieldsExist();
 
-    // Ther Person Type field should be present.
+    // The Place field should be present with select widget.
+    $group = $assert_session->elementExists('css', '#edit-field-place-wrapper');
+    $assert_session->selectExists('Place', $group);
+
+    // The Person Type field should be present with select widget.
     $group = $assert_session->elementExists('css', '#edit-group-taxonomy');
-    $assert_session->fieldExists('Person Type', $group);
+    $assert_session->selectExists('Person Type', $group);
 
     // There should be a field to add an image, and it should be using the
     // media library.
@@ -106,6 +111,7 @@ class PersonTest extends ContentTypeTestBase {
     $group = $assert_session->elementExists('css', '#edit-group-media');
     $assert_session->buttonExists('Add media', $group);
 
+    // Select moderation state as draft.
     $assert_session->optionExists('Save as', 'Draft');
 
     // The "Published", "Promoted to front page", and "Sticky at top of lists"
@@ -124,6 +130,7 @@ class PersonTest extends ContentTypeTestBase {
     $menu = $assert_session->selectExists('menu[menu_parent]');
     $this->assertSame('main:', $menu->getValue());
     $this->assertCount(1, $menu->findAll('css', 'option'));
+
     // Assert that the fields are in the correct order.
     $this->assertFieldsOrder([
       'title',
@@ -141,12 +148,14 @@ class PersonTest extends ContentTypeTestBase {
     // Submit the form and ensure that we see the expected error message(s).
     $page->pressButton('Save');
     $assert_session->pageTextContains('Name field is required.');
+    $assert_session->pageTextContains('Bio field is required.');
 
     // Fill in the required fields and assert that things went as expected.
     $page->fillField('Name', 'Hank Aaron');
+    $page->fillField('Bio', 'This is an example of bio');
     $page->selectFieldOption('Place', 'Example place');
-    $page->fillField('Telephone', '1234567890');
     $page->fillField('Email', 'example@example.com');
+    $page->fillField('Telephone', '1234567890');
 
     // For convenience, the parent class creates a few categories during set-up.
     // @see \Drupal\Tests\acquia_cms_common\Functional\ContentModelTestBase::setUp()
@@ -155,9 +164,12 @@ class PersonTest extends ContentTypeTestBase {
     $page->fillField('Tags', 'Baseball');
     $page->pressButton('Save');
 
+    // Assert that the person created sucessfully.
     $assert_session->pageTextContains('Person Hank Aaron has been created.');
+
     // Assert that the Pathauto pattern was used to create the URL alias.
     $assert_session->addressEquals('people/hank-aaron');
+
     // Assert that the expected schema.org data and meta tags are present.
     $this->assertSchemaData([
       '@graph' => [
@@ -186,6 +198,7 @@ class PersonTest extends ContentTypeTestBase {
     $this->assertMetaTag('twitter:description', 'This is an example of bio');
     $this->assertMetaTag('twitter:url', $session->getCurrentUrl());
     $this->assertMetaTag('twitter:image', $image_url);
+
     // Assert that the Baseball tag was created dynamically in the correct
     // vocabulary.
     /** @var \Drupal\taxonomy\TermInterface $tag */
