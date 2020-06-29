@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_common\Functional;
 
+use Drupal\Component\Utility\SortArray;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\file\Entity\File;
 use Drupal\media\Entity\Media;
@@ -311,6 +312,23 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
       $field->setRequired(FALSE);
       $storage->save($field);
     }
+  }
+
+  /**
+   * Asserts that the fields of the node form are in the correct order.
+   *
+   * @param string[] $expected_order
+   *   The machine names of the fields we expect to be in the node type's form
+   *   display, in the order we expect them to have.
+   */
+  protected function assertFieldsOrder(array $expected_order) {
+    $fields = $this->container->get('entity_display.repository')
+      ->getFormDisplay('node', $this->nodeType)
+      ->getComponents();
+
+    uasort($fields, SortArray::class . '::sortByWeightElement');
+    $fields = array_intersect(array_keys($fields), $expected_order);
+    $this->assertSame($expected_order, array_values($fields), "The fields of the '$this->nodeType' content type's edit form were not in the expected order.");
   }
 
 }
