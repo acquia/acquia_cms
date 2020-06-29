@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_common\Functional;
 
+use Drupal\Component\Utility\SortArray;
 use Drupal\file\FileInterface;
 use Drupal\media\Entity\MediaType;
 use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
@@ -220,6 +221,23 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
     else {
       $page->fillField($field, $value);
     }
+  }
+
+  /**
+   * Asserts that the fields are in the correct order.
+   *
+   * @param string[] $expected_order
+   *   The machine names of the fields we expect in media type's
+   *   form display, in the order we expect them to have.
+   */
+  protected function assertFieldsOrder(array $expected_order) {
+    $fields = $this->container->get('entity_display.repository')
+      ->getFormDisplay('media', $this->mediaType)
+      ->getComponents();
+
+    uasort($fields, SortArray::class . '::sortByWeightElement');
+    $fields = array_intersect(array_keys($fields), $expected_order);
+    $this->assertSame($expected_order, array_values($fields), "The fields of the '$this->mediaType' media type's edit form were not in the expected order.");
   }
 
 }

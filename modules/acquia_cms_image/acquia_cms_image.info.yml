@@ -1,8 +1,10 @@
-name: "Image"
-package: "Acquia CMS"
-description: "Provides an Image media type and related configuration."
+name: Image
+package: Acquia CMS
+description: 'Provides an Image media type and related configuration.'
 type: module
 core_version_requirement: ^8.9
 dependencies:
   - acquia_cms_common
   - drupal:media
+  - drupal:path
+  - field_group:field_group

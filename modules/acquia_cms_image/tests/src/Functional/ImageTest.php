@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_image\Functional;
 
+use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
 
 /**
@@ -36,5 +37,70 @@ class ImageTest extends MediaTypeTestBase {
    * {@inheritdoc}
    */
   protected $mediaType = 'image';
+
+  /**
+   * Tests the bundled functionality of the Image media type.
+   */
+  public function testImageMediaType() {
+
+    $session = $this->getSession();
+    $page = $session->getPage();
+    $assert_session = $this->assertSession();
+
+    $account = $this->drupalCreateUser();
+    $account->addRole('content_author');
+    $account->save();
+    $this->drupalLogin($account);
+
+    $this->drupalGet('media/add/' . $this->mediaType);
+    // Assert that the current user can access the form to create a image media.
+    // Note that status codes cannot be asserted in functional JavaScript tests.
+    $assert_session->statusCodeEquals(200);
+
+    // Assert that the expected fields show up.
+    $assert_session->fieldExists('Name');
+    $assert_session->fieldExists('Image');
+    $assert_session->fieldExists('Categories');
+    $assert_session->fieldExists('Tags');
+    // The standard Categories and Tags fields should be present.
+    $this->assertCategoriesAndTagsFieldsExist();
+
+    // Assert that the fields are in the correct order.
+    $this->assertFieldsOrder([
+      'name',
+      'image',
+      'field_categories',
+      'field_tags',
+    ]);
+
+    // Submit the form and ensure that we see the expected error message(s).
+    $page->pressButton('Save');
+    $assert_session->pageTextContains('Name field is required.');
+    $assert_session->pageTextContains('Image field is required.');
+
+    // Fill in the required fields and assert that things went as expected.
+    $page->fillField('Name', 'Living with Image');
+    // For convenience, the parent class creates a few categories during set-up.
+    // @see \Drupal\Tests\acquia_cms_common\Functional\ContentModelTestBase::setUp()
+    $page->selectFieldOption('Categories', 'Music');
+    $page->fillField('Tags', 'techno');
+    $this->fillSourceField();
+    $page->pressButton('Save');
+    $assert_session->pageTextContains('Image Living with Image has been created.');
+
+    // Assert that the techno tag was created dynamically in the correct
+    // vocabulary.
+    /** @var \Drupal\taxonomy\TermInterface $tag */
+    $tag = Term::load(4);
+    $this->assertInstanceOf(Term::class, $tag);
+    $this->assertSame('tags', $tag->bundle());
+    $this->assertSame('techno', $tag->getName());
+
+    // Assert to check if URL path fieldset exists or not.
+    $assert_session->elementNotExists('css', '.form-type-vertical-tabs #edit-path-0');
+    // See if the URL alias field is not shown.
+    $assert_session->fieldNotExists('path[0][alias]');
+
+  }
 
 }
