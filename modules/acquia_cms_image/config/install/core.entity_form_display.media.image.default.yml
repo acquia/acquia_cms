@@ -2,16 +2,51 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.media.image.field_categories
+    - field.field.media.image.field_tags
     - field.field.media.image.image
     - image.style.thumbnail
     - media.type.image
   module:
+    - field_group
     - image
+third_party_settings:
+  field_group:
+    group_taxonomy:
+      children:
+        - field_categories
+        - field_tags
+      parent_name: ''
+      weight: 4
+      format_type: fieldset
+      region: content
+      format_settings:
+        id: ''
+        classes: ''
+        description: ''
+        required_fields: true
+      label: Taxonomy
 id: media.image.default
 targetEntityType: media
 bundle: image
 mode: default
 content:
+  field_categories:
+    weight: 5
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_tags:
+    weight: 6
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete_tags
+    region: content
   image:
     type: image_image
     weight: 1
@@ -20,6 +55,13 @@ content:
       preview_image_style: thumbnail
     third_party_settings: {  }
     region: content
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
   name:
     type: string_textfield
     weight: 0
@@ -28,6 +70,11 @@ content:
       placeholder: ''
     third_party_settings: {  }
     region: content
+  translation:
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden:
   created: true
   path: true
