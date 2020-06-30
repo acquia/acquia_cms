@@ -42,7 +42,6 @@ class ImageTest extends MediaTypeTestBase {
    * Tests the bundled functionality of the Image media type.
    */
   public function testImageMediaType() {
-
     $session = $this->getSession();
     $page = $session->getPage();
     $assert_session = $this->assertSession();
@@ -96,11 +95,9 @@ class ImageTest extends MediaTypeTestBase {
     $this->assertSame('tags', $tag->bundle());
     $this->assertSame('techno', $tag->getName());
 
-    // Assert to check if URL path fieldset exists or not.
-    $assert_session->elementNotExists('css', '.form-type-vertical-tabs #edit-path-0');
-    // See if the URL alias field is not shown.
+    // Media items are not normally exposed at standalone URLs, so assert that
+    // the URL alias field does not show up.
     $assert_session->fieldNotExists('path[0][alias]');
-
   }
 
 }
