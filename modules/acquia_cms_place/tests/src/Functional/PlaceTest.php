@@ -2,12 +2,10 @@
 
 namespace Drupal\Tests\acquia_cms_place\Functional;
 
-use Drupal\Component\Utility\SortArray;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
-use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 
 /**
  * Tests the Place content type that ships with Acquia CMS.
@@ -16,8 +14,6 @@ use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
  * @group acquia_cms
  */
 class PlaceTest extends ContentTypeTestBase {
-
-  use TaxonomyTestTrait;
 
   /**
    * {@inheritdoc}
@@ -49,16 +45,25 @@ class PlaceTest extends ContentTypeTestBase {
    */
   // @codingStandardsIgnoreStart
   protected $strictConfigSchema = FALSE;
- // @codingStandardsIgnoreEnd
+  // @codingStandardsIgnoreEnd
 
   /**
    * Tests the bundled functionality of the Place content type.
    */
   public function testPlaceContentType() {
-
     /** @var \Drupal\taxonomy\VocabularyInterface $place_type */
     $place_type = Vocabulary::load('place_type');
     $this->createTerm($place_type, ['name' => 'Residential']);
+
+    // Because this test class does not support JavaScript, it's not possible
+    // for us to set address values in the UI, because we'd need to select a
+    // country first, and that requires AJAX. To get around that, we set the
+    // default country of field_place_address.
+    FieldConfig::loadByName('node', 'place', 'field_place_address')
+      ->setDefaultValue([
+        'country_code' => 'US',
+      ])
+      ->save();
 
     $session = $this->getSession();
     $page = $session->getPage();
@@ -70,7 +75,6 @@ class PlaceTest extends ContentTypeTestBase {
     $this->drupalLogin($account);
 
     $image_url = $this->getImageUrl();
-    $this->setAddressDefaultValue();
     $this->drupalGet('/node/add/place');
     // Assert that the current user can access the form to create a place. Note
     // that status codes cannot be asserted in functional JavaScript tests.
@@ -117,7 +121,7 @@ class PlaceTest extends ContentTypeTestBase {
     $this->assertCount(1, $menu->findAll('css', 'option'));
 
     // Ensure Address field group is present and has address fields.
-    $group = $assert_session->elementExists('css', '#edit-field-address-wrapper');
+    $group = $assert_session->elementExists('css', '#edit-field-place-address-wrapper');
     $assert_session->fieldExists('Country', $group);
     $assert_session->fieldExists('First name', $group);
     $assert_session->fieldExists('Last name', $group);
@@ -131,14 +135,13 @@ class PlaceTest extends ContentTypeTestBase {
     $this->assertFieldsOrder([
       'title',
       'body',
-      'field_address',
+      'field_place_address',
       'field_place_telephone',
       'field_place_image',
       'field_categories',
       'field_tags',
       'field_place_type',
       'moderation_state',
-
     ]);
 
     // Submit the form and ensure that we see the expected error message(s).
@@ -203,41 +206,6 @@ class PlaceTest extends ContentTypeTestBase {
     $this->assertInstanceOf(Term::class, $tag);
     $this->assertSame('tags', $tag->bundle());
     $this->assertSame('techno', $tag->getName());
-  }
-
-  /**
-   * Asserts that the fields of the Place node form are in the correct order.
-   *
-   * @param string[] $expected_order
-   *   The machine names of the fields we expect to be in the Place node type's
-   *   form display, in the order we expect them to have.
-   */
-  private function assertFieldsOrder(array $expected_order) {
-    $fields = $this->container->get('entity_display.repository')
-      ->getFormDisplay('node', 'place')
-      ->getComponents();
-
-    uasort($fields, SortArray::class . '::sortByWeightElement');
-    $fields = array_intersect(array_keys($fields), $expected_order);
-    $this->assertSame($expected_order, array_values($fields), 'The fields of the Place edit form were not in the expected order.');
-  }
-
-  /**
-   * Sets the default value of the address field.
-   *
-   * Because this test class does not support JavaScript, it's not possible for
-   * us to attach address values to our content using the asserts. To get
-   * around that, this method sets the default value for the address field of
-   * the content.
-   */
-  private function setAddressDefaultValue() {
-    $field = FieldConfig::loadByName('node', $this->nodeType, 'field_address');
-    $this->assertInstanceOf(FieldConfig::class, $field);
-    $field->setDefaultValue([
-      [
-        'country_code' => 'US',
-      ],
-    ])->save();
   }
 
 }
