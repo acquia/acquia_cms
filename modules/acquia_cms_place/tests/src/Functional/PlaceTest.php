@@ -48,31 +48,22 @@ class PlaceTest extends ContentTypeTestBase {
   // @codingStandardsIgnoreEnd
 
   /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setUp();
-
-    // Because this test class does not support JavaScript, it's not possible
-    // for us to set address values in the UI, because we'd need to select a
-    // country first, and that requires AJAX. To get around that, we set the
-    // default country of field_place_address.
-    FieldConfig::loadByName('node', $this->nodeType, 'field_place_address')
-      ->setDefaultValue([
-        [
-          'country_code' => 'US',
-        ],
-      ])
-      ->save();
-  }
-
-  /**
    * Tests the bundled functionality of the Place content type.
    */
   public function testPlaceContentType() {
     /** @var \Drupal\taxonomy\VocabularyInterface $place_type */
     $place_type = Vocabulary::load('place_type');
     $this->createTerm($place_type, ['name' => 'Residential']);
+
+    // Because this test class does not support JavaScript, it's not possible
+    // for us to set address values in the UI, because we'd need to select a
+    // country first, and that requires AJAX. To get around that, we set the
+    // default country of field_place_address.
+    FieldConfig::loadByName('node', 'place', 'field_place_address')
+      ->setDefaultValue([
+        'country_code' => 'US',
+      ])
+      ->save();
 
     $session = $this->getSession();
     $page = $session->getPage();
@@ -130,7 +121,7 @@ class PlaceTest extends ContentTypeTestBase {
     $this->assertCount(1, $menu->findAll('css', 'option'));
 
     // Ensure Address field group is present and has address fields.
-    $group = $assert_session->elementExists('css', '#edit-field-address-wrapper');
+    $group = $assert_session->elementExists('css', '#edit-field-place-address-wrapper');
     $assert_session->fieldExists('Country', $group);
     $assert_session->fieldExists('First name', $group);
     $assert_session->fieldExists('Last name', $group);
@@ -144,7 +135,7 @@ class PlaceTest extends ContentTypeTestBase {
     $this->assertFieldsOrder([
       'title',
       'body',
-      'field_address',
+      'field_place_address',
       'field_place_telephone',
       'field_place_image',
       'field_categories',

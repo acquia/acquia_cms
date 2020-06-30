@@ -277,11 +277,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     ]);
     $media->save();
 
-    $field->setDefaultValue([
-      [
-        'target_id' => $media->id(),
-      ],
-    ])->save();
+    $field->setDefaultValue($media->id())->save();
 
     return file_create_url($file->getFileUri());
   }
