@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\acquia_cms_page\Functional;
 
-use Drupal\Component\Utility\SortArray;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
 
@@ -156,23 +155,6 @@ class PageTest extends ContentTypeTestBase {
     $this->assertInstanceOf(Term::class, $tag);
     $this->assertSame('tags', $tag->bundle());
     $this->assertSame('techno', $tag->getName());
-  }
-
-  /**
-   * Asserts that the fields of the Page node form are in the correct order.
-   *
-   * @param string[] $expected_order
-   *   The machine names of the fields we expect to be in the Page node type's
-   *   form display, in the order we expect them to have.
-   */
-  private function assertFieldsOrder(array $expected_order) {
-    $fields = $this->container->get('entity_display.repository')
-      ->getFormDisplay('node', 'page')
-      ->getComponents();
-
-    uasort($fields, SortArray::class . '::sortByWeightElement');
-    $fields = array_intersect(array_keys($fields), $expected_order);
-    $this->assertSame($expected_order, array_values($fields), 'The fields of the Page edit form were not in the expected order.');
   }
 
 }

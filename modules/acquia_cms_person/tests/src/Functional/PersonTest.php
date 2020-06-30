@@ -2,11 +2,9 @@
 
 namespace Drupal\Tests\acquia_cms_person\Functional;
 
-use Drupal\Component\Utility\SortArray;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
-use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 
 /**
  * Tests the Person content type that ships with Acquia CMS.
@@ -15,8 +13,6 @@ use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
  * @group acquia_cms
  */
 class PersonTest extends ContentTypeTestBase {
-
-  use TaxonomyTestTrait;
 
   /**
    * {@inheritdoc}
@@ -54,7 +50,6 @@ class PersonTest extends ContentTypeTestBase {
    * Tests the bundled functionality of the Person content type.
    */
   public function testPersonContentType() {
-
     /** @var \Drupal\taxonomy\VocabularyInterface $person_type */
     $person_type = Vocabulary::load('person_type');
     $this->createTerm($person_type, ['name' => 'Individual']);
@@ -206,23 +201,6 @@ class PersonTest extends ContentTypeTestBase {
     $this->assertInstanceOf(Term::class, $tag);
     $this->assertSame('tags', $tag->bundle());
     $this->assertSame('Baseball', $tag->getName());
-  }
-
-  /**
-   * Asserts that the fields of the Person node form are in the correct order.
-   *
-   * @param string[] $expected_order
-   *   The machine names of the fields we expect to be in the Person node type's
-   *   form display, in the order we expect them to have.
-   */
-  private function assertFieldsOrder(array $expected_order) {
-    $fields = $this->container->get('entity_display.repository')
-      ->getFormDisplay('node', 'person')
-      ->getComponents();
-
-    uasort($fields, SortArray::class . '::sortByWeightElement');
-    $fields = array_intersect(array_keys($fields), $expected_order);
-    $this->assertSame($expected_order, array_values($fields), 'The fields of the Person edit form were not in the expected order.');
   }
 
 }

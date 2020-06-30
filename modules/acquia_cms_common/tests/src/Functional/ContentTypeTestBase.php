@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_common\Functional;
 
+use Drupal\Component\Utility\SortArray;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\file\Entity\File;
 use Drupal\media\Entity\Media;
@@ -70,8 +71,9 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     $account->save();
     $this->drupalLogin($account);
 
-    // Set form field optional.
-    $this->makeFieldsOptional();
+    // Since we're just testing access, make configurable fields optional so
+    // we don't have to fill them out.
+    $this->makeRequiredFieldsOptional();
 
     $assert_session = $this->assertSession();
     $page = $this->getSession()->getPage();
@@ -119,8 +121,9 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     $account->save();
     $this->drupalLogin($account);
 
-    // Set form field optional.
-    $this->makeFieldsOptional();
+    // Since we're just testing access, make configurable fields optional so
+    // we don't have to fill them out.
+    $this->makeRequiredFieldsOptional();
 
     $node = $this->drupalCreateNode([
       'type' => $this->nodeType,
@@ -176,8 +179,9 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     $account->save();
     $this->drupalLogin($account);
 
-    // Set form field optional.
-    $this->makeFieldsOptional();
+    // Since we're just testing access, make configurable fields optional so
+    // we don't have to fill them out.
+    $this->makeRequiredFieldsOptional();
 
     $assert_session = $this->assertSession();
     $page = $this->getSession()->getPage();
@@ -273,40 +277,54 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     ]);
     $media->save();
 
-    $field->setDefaultValue([
-      [
-        'target_id' => $media->id(),
-      ],
-    ])->save();
+    $field->setDefaultValue($media->id())->save();
 
     return file_create_url($file->getFileUri());
   }
 
   /**
-   * Remove require attribute from all FieldConfig field.
+   * Makes all required fields of the content type under test optional.
    *
-   * Since we only need to test permissions for different roles,
-   * and it will be an extra overhead to assert values for,
-   * required fields.(This assertion is to be taken care of in,
-   * content type's specific test, ex PlaceTest)
+   * This is needed for testing access to the content type's add and edit forms.
+   * In those cases, we're just testing access; we don't actually care about
+   * data integrity, but we still need to interact with the forms and save
+   * entities via the UI.
+   *
+   * Subclasses should take implement their own methods for testing that the
+   * required fields actually behave the way we expect them to.
    */
-  private function makeFieldsOptional() {
-    $entityManager = $this->container->get('entity.manager');
-    $fields = [];
-    if (!empty($this->nodeType)) {
-      $fields = array_filter(
-        $entityManager->getFieldDefinitions('node', $this->nodeType),
-        function ($field_definition) {
-          return $field_definition instanceof FieldConfig;
-        }
-      );
-    }
+  private function makeRequiredFieldsOptional() {
+    /** @var \Drupal\Core\Entity\EntityStorageInterface $storage */
+    $storage = $this->container->get('entity_type.manager')
+      ->getStorage('field_config');
+
+    $fields = $storage->loadByProperties([
+      'entity_type' => 'node',
+      'bundle' => $this->nodeType,
+      'required' => TRUE,
+    ]);
+    /** @var \Drupal\field\Entity\FieldConfig $field */
     foreach ($fields as $field) {
-      if ($field->isRequired()) {
-        $field->setRequired(FALSE);
-        $field->save();
-      }
+      $field->setRequired(FALSE);
+      $storage->save($field);
     }
+  }
+
+  /**
+   * Asserts that the fields of the node form are in the correct order.
+   *
+   * @param string[] $expected_order
+   *   The machine names of the fields we expect to be in the node type's form
+   *   display, in the order we expect them to have.
+   */
+  protected function assertFieldsOrder(array $expected_order) {
+    $fields = $this->container->get('entity_display.repository')
+      ->getFormDisplay('node', $this->nodeType)
+      ->getComponents();
+
+    uasort($fields, SortArray::class . '::sortByWeightElement');
+    $fields = array_intersect(array_keys($fields), $expected_order);
+    $this->assertSame($expected_order, array_values($fields), "The fields of the '$this->nodeType' content type's edit form were not in the expected order.");
   }
 
 }
