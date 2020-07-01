@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms_common\Functional;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\SortArray;
+use Drupal\Core\Entity\Display\EntityDisplayInterface;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
@@ -120,6 +122,24 @@ abstract class ContentModelTestBase extends BrowserTestBase {
     $actual_data = Json::decode($element->getText());
     $this->assertInternalType('array', $actual_data);
     $this->assertArraySubset($expected_data, $actual_data);
+  }
+
+  /**
+   * Asserts that the components of an entity display are in a specific order.
+   *
+   * @param \Drupal\Core\Entity\Display\EntityDisplayInterface $display
+   *   The entity display.
+   * @param string[] $expected_order
+   *   The components' keys, in the expected order.
+   * @param string $message
+   *   (optional) A message if the assertion fails.
+   */
+  protected function assertDisplayComponentsOrder(EntityDisplayInterface $display, array $expected_order, string $message = '') {
+    $components = $display->getComponents();
+
+    uasort($components, SortArray::class . '::sortByWeightElement');
+    $components = array_intersect(array_keys($components), $expected_order);
+    $this->assertSame($expected_order, array_values($components), $message);
   }
 
 }

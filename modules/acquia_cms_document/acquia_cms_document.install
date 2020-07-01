@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_document_install() {
+  user_role_grant_permissions('content_author', [
+    'create document media',
+    'delete own document media',
+    'edit own document media',
+  ]);
+  user_role_grant_permissions('content_editor', [
+    'edit any document media',
+    'delete any document media',
+  ]);
+}
