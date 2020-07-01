@@ -131,6 +131,9 @@ class PlaceTest extends ContentTypeTestBase {
     $assert_session->fieldExists('State', $group);
     $assert_session->fieldExists('Zip code', $group);
 
+    // Assert that select fields are present with correct field type.
+    $assert_session->selectExists('Place Type');
+
     // Assert that the fields are in the correct order.
     $this->assertFieldsOrder([
       'title',
