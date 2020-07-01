@@ -44,17 +44,19 @@ class VideoTest extends MediaTypeTestBase {
    */
   protected function setUp() {
     parent::setUp();
-    // Set the defaut falue for field field_media_oembed_video.
-    $field = FieldConfig::loadByName('media', $this->mediaType, 'field_media_oembed_video');
-    $field->setDefaultValue('https://www.youtube.com/watch?v=6e8QyfvQMmU&list=PLpVC00PAQQxHzlDeQvCNDKkyKRV1G3_vT')->save();
+    // Set the a default value for field_media_oembed_video so that we can
+    // bypass the oEmbed system's URL validation. (It's not necessary for this
+    // test anyway).
+    FieldConfig::loadByName('media', $this->mediaType, 'field_media_oembed_video')
+      ->setDefaultValue('https://www.youtube.com/watch?v=6e8QyfvQMmU&list=PLpVC00PAQQxHzlDeQvCNDKkyKRV1G3_vT')
+      ->save();
   }
 
   /**
    * Tests the bundled functionality of the Video media type.
    */
   public function testVideoMediaType() {
-    $session = $this->getSession();
-    $page = $session->getPage();
+    $page = $this->getSession()->getPage();
     $assert_session = $this->assertSession();
 
     $account = $this->drupalCreateUser();
@@ -114,9 +116,10 @@ class VideoTest extends MediaTypeTestBase {
    * {@inheritdoc}
    */
   protected function fillSourceField($value = NULL) {
-    // Override this method so that it does not do anything with field
-    // field_media_oembed_video as we are setting default value already in
-    // setup function.
+    // Override this method so that it does not do anything with
+    // field_media_oembed_video. We are setting default value already in setUp()
+    // so that we can bypass the oEmbed system's URL validation, since it is not
+    // needed in this test and actively gets in the way.
   }
 
 }
