@@ -49,12 +49,8 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
     $this->createMedia([
       'uid' => $this->rootUser->id(),
     ]);
-  }
 
-  /**
-   * Tests that all configurable fields for the media type are translatable.
-   */
-  public function testAllFieldsAreTranslatable() {
+    // Assert that all configurable fields on this media type are translatable.
     $this->assertConfigurableFieldsAreTranslatable('media', $this->mediaType);
   }
 
