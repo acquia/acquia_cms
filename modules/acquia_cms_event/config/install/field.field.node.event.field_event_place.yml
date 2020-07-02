@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_event_place
+    - node.type.event
+    - node.type.place
+id: node.event.field_event_place
+field_name: field_event_place
+entity_type: node
+bundle: event
+label: Place
+description: 'If this event is not being held at one of the listed places, include the address/location in the Description.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      place: place
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
