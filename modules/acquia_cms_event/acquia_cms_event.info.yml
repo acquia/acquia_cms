@@ -1,5 +1,9 @@
-name: "Event"
-package: "Acquia CMS"
-description: "Provides an Event content type and related configuration."
+name: Event
+package: 'Acquia CMS'
+description: 'Provides an Event content type and related configuration.'
 type: module
 core_version_requirement: ^8.9
+dependencies:
+  - acquia_cms_place
+  - drupal:datetime
+  - schema_event

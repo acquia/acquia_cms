@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies: {  }
+id: node__event
+label: 'Content: Event'
+tags:
+  description: '[node:summary]'
+  keywords: '[node:field_categories], [node:field_tags]'
+  og_image: '[node:field_event_image:entity:image:entity:url]'
+  og_description: '[node:summary]'
+  og_type: event
+  og_url: '[node:url:absolute]'
+  og_title: '[node:title]'
+  twitter_cards_page_url: '[node:url:absolute]'
+  twitter_cards_description: '[node:summary]'
+  twitter_cards_title: '[node:title]'
+  twitter_cards_image: '[node:field_event_image:entity:image:entity:url]'
+  twitter_cards_type: summary_large_image
+  schema_event_end_date: '[node:field_event_end:date:custom:c]'
+  schema_event_name: '[node:title]'
+  schema_event_image: 'a:2:{s:5:"@type";s:11:"ImageObject";s:3:"url";s:48:"[node:field_event_image:entity:image:entity:url]";}'
+  schema_event_type: Event
+  schema_event_door_time: '[node:field_door_time:date:custom:c]'
+  schema_event_start_date: '[node:field_event_start:date:custom:c]'
+  schema_event_location: 'a:2:{s:5:"@type";s:5:"Place";s:4:"name";s:24:"[node:field_event_place]";}'
+  schema_event_description: '[node:summary]'

@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: event_path
+label: 'Event path'
+type: 'canonical_entities:node'
+pattern: 'events/[node:field_event_start:date:custom:Y]/[node:field_event_start:date:custom:m]/[node:title]'
+selection_criteria:
+  71bae8d0-3222-4f02-ab20-f88bddf6cd25:
+    id: node_type
+    bundles:
+      event: event
+    negate: false
+    context_mapping:
+      node: node
+    uuid: 71bae8d0-3222-4f02-ab20-f88bddf6cd25
+selection_logic: and
+weight: -5
+relationships: {  }

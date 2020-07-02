@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_event_install() {
+  user_role_grant_permissions('content_author', [
+    'create event content',
+    'edit own event content',
+    'delete own event content',
+  ]);
+  user_role_grant_permissions('content_editor', [
+    'edit any event content',
+    'delete any event content',
+  ]);
+}
