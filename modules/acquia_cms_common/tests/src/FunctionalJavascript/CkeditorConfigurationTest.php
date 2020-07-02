@@ -87,6 +87,11 @@ class CkeditorConfigurationTest extends WebDriverTestBase {
     $this->getEditorButton('justifyright');
     $this->getEditorButton('justifyblock');
     $this->getEditorButton('drupalmedialibrary');
+
+    // Assert that the Format dropdown is present.
+    $format = $this->assertSession()
+      ->waitForElementVisible('css', '#cke_edit-body-0-value span.cke_combo__format');
+    $this->assertNotEmpty($format);
   }
 
 }
