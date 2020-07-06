@@ -24,6 +24,10 @@ class ACMSConfigOverrides implements ConfigFactoryOverrideInterface {
     if (EnvironmentDetector::isAhEnv()) {
       $overrides['environment_indicator.indicator']['name'] = ucfirst($_ENV['AH_SITE_ENVIRONMENT']);
 
+      if (EnvironmentDetector::isAhIdeEnv()) {
+        $overrides['environment_indicator.indicator']['bg_color'] = '#3363aa';
+      }
+
       if (EnvironmentDetector::isAhDevEnv()) {
         $overrides['environment_indicator.indicator']['bg_color'] = '#33aa3c';
       }
