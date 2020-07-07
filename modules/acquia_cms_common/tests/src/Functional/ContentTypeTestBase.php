@@ -16,6 +16,11 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
   /**
    * {@inheritdoc}
    */
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
   protected static $modules = ['content_translation'];
 
   /**
