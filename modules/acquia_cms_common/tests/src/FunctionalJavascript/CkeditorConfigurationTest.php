@@ -20,6 +20,11 @@ class CkeditorConfigurationTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
   protected static $modules = [
     'acquia_cms_common',
     'media_library',
