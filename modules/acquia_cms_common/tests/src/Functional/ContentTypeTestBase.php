@@ -46,7 +46,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
       'uid' => $this->rootUser->id(),
     ]);
 
-    // Assert that all configurable fields on this node type are translatable.
+    // Ensure that all fields in this content type are translatable.
     $this->assertConfigurableFieldsAreTranslatable('node', $this->nodeType);
   }
 
