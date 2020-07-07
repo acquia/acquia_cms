@@ -71,6 +71,9 @@ class BasicPermissionsTest extends BrowserTestBase {
       $this->assertSame($is_administrator, $account->hasPermission('bypass node access'));
 
       $this->drupalLogin($account);
+      // All roles should have 'view the administration theme' permission.
+      $this->assertTrue($account->hasPermission('view the administration theme'), "$role has view the administration theme permission");
+
       // All roles should be able to access the toolbar.
       $assert_toolbar();
       // All roles should be able to access the content and media overviews.
