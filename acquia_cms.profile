@@ -72,6 +72,12 @@ function acquia_cms_initialize_cohesion() {
  *   The batch job definition.
  */
 function acquia_cms_install_ui_kit(array &$install_state) {
+  // During testing, we don't import the UI kit, because it takes forever.
+  // Instead, we swap in a pre-built directory of Cohesion templates and assets.
+  if (getenv('COHESION_ARTIFACT')) {
+    return [];
+  }
+
   $ui_kit = __DIR__ . '/misc/ui-kit.package.yml';
   assert(file_exists($ui_kit), "The UI kit package ($ui_kit) does not exist.");
 
