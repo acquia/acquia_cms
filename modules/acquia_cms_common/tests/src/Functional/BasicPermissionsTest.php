@@ -15,6 +15,11 @@ class BasicPermissionsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
   protected static $modules = [
     'acquia_cms_common',
     'media',
