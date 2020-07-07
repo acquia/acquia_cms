@@ -4,7 +4,7 @@
     "description": "An implementation of Lightning for running low code websites in the Acquia platform.",
     "license": "GPL-2.0-or-later",
     "require": {
-        "acquia/drupal-environment-detector": "dev-master",
+        "acquia/drupal-environment-detector": "^1",
         "acquia/memcache-settings": "dev-master",
         "cohesion/dx8": "6.0.0",
         "cohesion/dx8-theme": "6.0.0",
@@ -49,7 +49,7 @@
         "oomphinc/composer-installers-extender": "^1.1",
         "vaimo/binary-chromedriver": "^5.0",
         "vijaycs85/drupal-quality-checker": "^1.2",
-        "weitzman/drupal-test-traits": "^1.4"
+        "weitzman/drupal-test-traits": "^1.5"
     },
     "config": {
         "preferred-install": {
@@ -143,6 +143,14 @@
             "ln -s -f $PWD/tests $PROFILE_DIR",
             "find ./docroot/modules -type d -name tests -prune -exec rm -r -f '{}' ';'",
             "cp -f phpunit.xml ./docroot/core"
+        ],
+        "cohesion:fixture": [
+            "@putenv FILES_DIR=./docroot/sites/default/files",
+            "drush config:export --yes --quiet --destination $TMPDIR/cex",
+            "mkdir -p $FILES_DIR/cohesion/config",
+            "cp -f $TMPDIR/cex/cohesion_* $FILES_DIR/cohesion/config",
+            "tar -c -z -f ./tests/cohesion.tar.gz --directory $FILES_DIR cohesion",
+            "rm -rf $TMPDIR/cex"
         ],
         "nuke": "rm -r -f docroot vendor"
     }

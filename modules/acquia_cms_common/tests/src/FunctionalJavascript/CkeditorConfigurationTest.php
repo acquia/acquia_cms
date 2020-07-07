@@ -45,7 +45,6 @@ class CkeditorConfigurationTest extends WebDriverTestBase {
    */
   public function test() {
     $node_type = $this->drupalCreateContentType()->id();
-
     $this->createMediaType('image');
 
     $roles = [
@@ -53,11 +52,11 @@ class CkeditorConfigurationTest extends WebDriverTestBase {
       'content_editor',
       'content_administrator',
     ];
-    foreach ($roles as $role) {
+    foreach ($roles as $role_id) {
       $account = $this->drupalCreateUser([
         "create $node_type content",
       ]);
-      $account->addRole($role);
+      $account->addRole($role_id);
       $account->save();
       $this->drupalLogin($account);
 

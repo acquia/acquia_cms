@@ -55,6 +55,15 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
   }
 
   /**
+   * Tests access to the media type for various user roles.
+   */
+  public function testAccess() {
+    $this->doTestAuthorAccess();
+    $this->doTestEditorAccess();
+    $this->doTestAdministratorAccess();
+  }
+
+  /**
    * Tests the media type as a content author.
    *
    * Asserts that content authors:
@@ -64,7 +73,7 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
    * - Can delete their own media.
    * - Cannot delete others' media.
    */
-  public function testMediaTypeAsAuthor() {
+  protected function doTestAuthorAccess() {
     $account = $this->drupalCreateUser();
     $account->addRole('content_author');
     $account->save();
@@ -105,7 +114,7 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
    * - Can delete their own media.
    * - Can delete others' media.
    */
-  public function testMediaTypeAsEditor() {
+  protected function doTestEditorAccess() {
     $account = $this->drupalCreateUser();
     $account->addRole('content_editor');
     $account->save();
@@ -144,7 +153,7 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
    * - Can delete their own media.
    * - Can delete others' media.
    */
-  public function testMediaTypeAsAdministrator() {
+  protected function doTestAdministratorAccess() {
     $account = $this->drupalCreateUser();
     $account->addRole('content_administrator');
     $account->save();
@@ -163,15 +172,15 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
 
-    // Test that we can edit our own content.
-    $this->drupalGet('/media/2/edit');
+    // Test that we can edit our own media.
+    $this->drupalGet('/media/4/edit');
     $assert_session->statusCodeEquals(200);
 
-    // Test that we can delete our own content.
-    $this->drupalGet('/media/2/delete');
+    // Test that we can delete our own media.
+    $this->drupalGet('/media/4/delete');
     $assert_session->statusCodeEquals(200);
 
-    // Test that we can delete others' content.
+    // Test that we can delete others' media.
     $this->drupalGet('/media/1/delete');
     $assert_session->statusCodeEquals(200);
   }
