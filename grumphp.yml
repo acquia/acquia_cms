@@ -6,15 +6,18 @@ parameters:
   bin_dir: vendor/bin
   tasks:
     git_commit_message:
+      enforce_no_subject_trailing_period: false
       matchers:
         'Must begin with a JIRA issue number': '/^ACMS-[0-9]+: /'
+      max_body_width: 0
+      max_subject_width: 0
     phplint: ~
     yamllint: ~
     composer: ~
     composer_normalize: ~
     jsonlint: ~
     phpcpd:
-      directory: './src'
+      directory: ['./src']
     phpcs:
       standard: AcquiaDrupalStrict
       ignore_patterns:

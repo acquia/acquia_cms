@@ -72,34 +72,52 @@ function acquia_cms_initialize_cohesion() {
  *   The batch job definition.
  */
 function acquia_cms_install_ui_kit(array &$install_state) {
-  $ui_kit = __DIR__ . '/misc/ui-kit.package.yml';
-  assert(file_exists($ui_kit), "The UI kit package ($ui_kit) does not exist.");
-
-  // Import the UI kit from the YAML file we ship with this profile. This code
-  // is delicate because it was basically written by rooting around in
-  // Cohesion's internals. So be extremely careful when changing it.
-  // @see \Drupal\cohesion_sync\Form\ImportFileForm::submitForm()
-  // @see \Drupal\cohesion_sync\Drush\CommandHelpers::import()
-  /** @var \Drupal\cohesion_sync\PackagerManager $packager */
-  $packager = Drupal::service('cohesion_sync.packager');
-  try {
-    $action_data = $packager->validateYamlPackageStream($ui_kit);
-
-    // Basically, overwrite everything without validating. This is equivalent
-    // to passing the --overwrite-all and --force options to the 'sync:import'
-    // Drush command.
-    foreach ($action_data as &$action) {
-      $action['entry_action_state'] = ENTRY_EXISTING_OVERWRITTEN;
-    }
-  }
-  catch (\Throwable $e) {
-    Drupal::messenger()->addError($e->getMessage());
+  // During testing, we don't import the UI kit, because it takes forever.
+  // Instead, we swap in a pre-built directory of Cohesion templates and assets.
+  if (getenv('COHESION_ARTIFACT')) {
     return [];
   }
 
-  if ($install_state['interactive']) {
-    $packager->applyBatchYamlPackageStream($ui_kit, $action_data);
+  /** @var \Drupal\cohesion_sync\PackagerManager $packager */
+  $packager = Drupal::service('cohesion_sync.packager');
 
+  $packages = [
+    __DIR__ . '/misc/ui-kit.package.yml',
+  ];
+  foreach ($packages as $package) {
+    assert(file_exists($package), "The UI kit package ($package) does not exist.");
+
+    // Prepare to import the package. This code is delicate because it was
+    // basically written by rooting around in Cohesion's internals. So be
+    // extremely careful when changing it.
+    // @see \Drupal\cohesion_sync\Form\ImportFileForm::submitForm()
+    // @see \Drupal\cohesion_sync\Drush\CommandHelpers::import()
+    try {
+      $action_data = $packager->validateYamlPackageStream($package);
+
+      // Basically, overwrite everything without validating. This is equivalent
+      // to passing the --overwrite-all and --force options to the 'sync:import'
+      // Drush command.
+      foreach ($action_data as &$action) {
+        $action['entry_action_state'] = ENTRY_EXISTING_OVERWRITTEN;
+      }
+    }
+    catch (\Throwable $e) {
+      Drupal::messenger()->addError($e->getMessage());
+      continue;
+    }
+
+    // If we are installing in the UI, prepare a batch job to import the
+    // package. Otherwise, just execute the import right now.
+    if ($install_state['interactive']) {
+      $packager->applyBatchYamlPackageStream($package, $action_data);
+    }
+    else {
+      $packager->applyYamlPackageStream($package, $action_data);
+    }
+  }
+
+  if ($install_state['interactive']) {
     // We want to return the batch jobs by value, because the installer will
     // call batch_set() on them. However, because the packager has already done
     // that, we also need to clear the static variables maintained by
@@ -114,6 +132,7 @@ function acquia_cms_install_ui_kit(array &$install_state) {
     return $batch['sets'];
   }
   else {
-    $packager->applyYamlPackageStream($ui_kit, $action_data);
+    // We already imported the packages, so there's nothing else to do.
+    return [];
   }
 }

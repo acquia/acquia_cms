@@ -16,6 +16,11 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
   /**
    * {@inheritdoc}
    */
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
   protected static $modules = ['content_translation'];
 
   /**
@@ -45,13 +50,22 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
       'type' => $this->nodeType,
       'uid' => $this->rootUser->id(),
     ]);
+
+    // Ensure that all fields in this content type are translatable.
+    $this->assertConfigurableFieldsAreTranslatable('node', $this->nodeType);
   }
 
   /**
-   * Tests that all configurable fields for the content type are translatable.
+   * Tests access to the content type for various user roles.
    */
-  public function testAllFieldsAreTranslatable() {
-    $this->assertConfigurableFieldsAreTranslatable('node', $this->nodeType);
+  public function testAccess() {
+    // Since we're just testing access, make configurable fields optional so
+    // we don't have to fill them out.
+    $this->makeRequiredFieldsOptional();
+
+    $this->doTestAuthorAccess();
+    $this->doTestEditorAccess();
+    $this->doTestAdministratorAccess();
   }
 
   /**
@@ -65,15 +79,11 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
    * - Cannot delete others' content.
    * - Can transition their own content from draft to review.
    */
-  public function testContentTypeAsAuthor() {
+  protected function doTestAuthorAccess() {
     $account = $this->drupalCreateUser();
     $account->addRole('content_author');
     $account->save();
     $this->drupalLogin($account);
-
-    // Since we're just testing access, make configurable fields optional so
-    // we don't have to fill them out.
-    $this->makeRequiredFieldsOptional();
 
     $assert_session = $this->assertSession();
     $page = $this->getSession()->getPage();
@@ -115,15 +125,11 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
    * - Can transition others' content between all states, except for restoring
    *   archived content.
    */
-  public function testContentTypeAsEditor() {
+  protected function doTestEditorAccess() {
     $account = $this->drupalCreateUser();
     $account->addRole('content_editor');
     $account->save();
     $this->drupalLogin($account);
-
-    // Since we're just testing access, make configurable fields optional so
-    // we don't have to fill them out.
-    $this->makeRequiredFieldsOptional();
 
     $node = $this->drupalCreateNode([
       'type' => $this->nodeType,
@@ -173,15 +179,11 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
    * - Can delete others' content.
    * - Can transition others' content between all states.
    */
-  public function testContentTypeAsAdministrator() {
+  protected function doTestAdministratorAccess() {
     $account = $this->drupalCreateUser();
     $account->addRole('content_administrator');
     $account->save();
     $this->drupalLogin($account);
-
-    // Since we're just testing access, make configurable fields optional so
-    // we don't have to fill them out.
-    $this->makeRequiredFieldsOptional();
 
     $assert_session = $this->assertSession();
     $page = $this->getSession()->getPage();
@@ -196,11 +198,12 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     $assert_session->statusCodeEquals(200);
 
     // Test that we can edit our own content.
-    $this->drupalGet('/node/2/edit');
+    $this->drupalGet('/node/4/edit');
     $assert_session->statusCodeEquals(200);
 
     // Test that we can edit others' content and send it through various
     // workflow states.
+    Node::load(1)->set('moderation_state', 'draft')->save();
     $this->doMultipleModerationStateChanges(1, [
       'In review',
       'Published',
@@ -211,7 +214,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     ]);
 
     // Test that we can delete our own content.
-    $this->drupalGet('/node/2/delete');
+    $this->drupalGet('/node/4/delete');
     $assert_session->statusCodeEquals(200);
 
     // Test that we can delete others' content.
