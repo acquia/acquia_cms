@@ -21,8 +21,8 @@ class LayoutCanvasTest extends ExistingSiteSelenium2DriverTestBase {
     // permissions, only use a role here.
     $account = $this->createUser([
       'access cpt_cat_general_components cohesion_component_category group',
-    ]);
-    $account->addRole('content_author');
+    ], NULL, TRUE);
+//    $account->addRole('content_author');
     $account->save();
     $this->drupalLogin($account);
 

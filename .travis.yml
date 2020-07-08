@@ -48,8 +48,8 @@ matrix:
   include:
     # The standard ORCA jobs provide broad out-of-the-box coverage.
     # @see https://github.com/acquia/orca/blob/master/docs/understanding-orca.md#continuous-integration
-    - { name: "Static code analysis", env: ORCA_JOB=STATIC_CODE_ANALYSIS }
-    - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_SUT }
+#    - { name: "Static code analysis", env: ORCA_JOB=STATIC_CODE_ANALYSIS }
+#    - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_SUT }
 #    - { name: "Isolated test w/ recommended package versions", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^8.9 --sut-only" }
 #    - { name: "Integrated test w/ recommended package versions", env: ORCA_JOB=INTEGRATED_RECOMMENDED }
     - { name: "Isolated test w/ dev package versions", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only" }

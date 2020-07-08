@@ -21,14 +21,7 @@ class LayoutCanvas extends NodeElement {
    *   The component element.
    */
   public function assertComponent(string $label) {
-    $components = $this->waitForVisibleElements('css', '.coh-layout-canvas-list > li', $this);
-    Assert::assertNotEmpty($components);
-
-    $components = array_filter($components, function (NodeElement $component) use ($label) {
-      return $component->getText() === $label;
-    });
-    Assert::assertNotEmpty($components);
-    return reset($components);
+    return $this->assertVisibleElement('css', ".coh-layout-canvas-list-item[data-type='$label']", $this);
   }
 
   /**
@@ -73,7 +66,7 @@ class LayoutCanvas extends NodeElement {
    *   The components listed in the sidebar browser, keyed by label.
    */
   private function getComponentList() {
-    $elements = $this->waitForVisibleElements('css', '.coh-layout-canvas-list > li', $this->getPage());
+    $elements = $this->waitForVisibleElements('css', '.coh-element-browser-modal .coh-layout-canvas-list-item', $this->getPage());
     Assert::assertNotEmpty($elements);
 
     $component_list = [];
