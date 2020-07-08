@@ -3,8 +3,8 @@
 namespace Drupal\Tests\acquia_cms\ExistingSite;
 
 use Drupal\Core\Config\ImmutableConfig;
+use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
-use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -14,8 +14,9 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  */
 class InstallStateTest extends ExistingSiteBase {
 
-  use TaxonomyTestTrait;
-  use MediaTestTrait;
+  use MediaTestTrait {
+    createMedia as traitCreateMedia;
+  }
 
   /**
    * Assert that all install tasks have done what they should do.
@@ -47,115 +48,99 @@ class InstallStateTest extends ExistingSiteBase {
   }
 
   /**
-   * Tests categories and tags filter accessibility.
-   *
-   * - Content and Media view pages should have the categories and tags filter.
+   * Tests Categories and Tags filters in administrative content/media lists.
    */
-  public function testViewFilters() {
-    // Preparing session and required objects.
-    $session = $this->getSession();
-    $page = $session->getPage();
+  public function testAdminDashboardTagsCategories() {
+    $page = $this->getSession()->getPage();
     $assert_session = $this->assertSession();
-    $account = $this->drupalCreateUser();
+
+    $account = $this->createUser();
     $account->addRole('content_author');
     $account->save();
     $this->drupalLogin($account);
-    $page = $session->getPage();
 
-    /** @var \Drupal\taxonomy\VocabularyInterface $categories */
-    $categories = Vocabulary::load('categories');
-    $this->createTerm($categories, ['name' => 'Music']);
-    /** @var \Drupal\taxonomy\VocabularyInterface $tags */
-    $tags = Vocabulary::load('tags');
-    $this->createTerm($tags, ['name' => 'Rocks']);
-    // Node with category.
-    $this->drupalCreateNode([
+    /** @var \Drupal\taxonomy\VocabularyInterface $categories_vocab */
+    $categories_vocab = Vocabulary::load('categories');
+    $category = $this->createTerm($categories_vocab, ['name' => 'Music']);
+
+    /** @var \Drupal\taxonomy\VocabularyInterface $tags_vocab */
+    $tags_vocab = Vocabulary::load('tags');
+    $tag = $this->createTerm($tags_vocab, ['name' => 'Rocks']);
+
+    // Create a node tagged with our new category, and another one tagged with
+    // our new tag, so we can test that the filters do what we expect.
+    $this->createNode([
       'type' => 'page',
       'title' => 'Categories Page',
-      'field_categories' => [
-        '0' => [
-          'target_id' => 1,
-        ],
-      ],
+      'field_categories' => $category->id(),
       'uid' => $account->id(),
       'moderation_state' => 'published',
     ]);
-    // Node with tag.
-    $this->drupalCreateNode([
+    $this->createNode([
       'type' => 'page',
       'title' => 'Tags Page',
-      'field_tags' => [
-        '0' => [
-          'target_id' => 2,
-        ],
-      ],
+      'field_tags' => $tag->id(),
       'uid' => $account->id(),
       'moderation_state' => 'published',
     ]);
-    // Should be able to access the content and media overview page.
+
+    // Visit the content overview page.
     $this->drupalGet('/admin/content');
     $assert_session->statusCodeEquals(200);
-    // Assert to check if categories field exists.
-    $group = $assert_session->elementExists('css', '#views-exposed-form-content-page-1');
-    $assert_session->fieldExists('Categories', $group);
-    $assert_session->fieldExists('Tags', $group);
-    // Filtering on the basis of category.
-    $page->fillField('Categories', 'Music');
+
+    // Try filtering by category.
+    $page->selectFieldOption('Categories', $category->label());
     $page->pressButton('Filter');
-    // Check if the category node is filtered.
     $assert_session->linkExists('Categories Page');
     $assert_session->linkNotExists('Tags Page');
-    // Filtering on the basis of tag.
-    $page->fillField('Tags', 'Rocks');
-    $page->fillField('Categories', '');
+
+    // Now try filtering by tag.
+    $page->fillField('Tags', $tag->label());
+    $page->selectFieldOption('Categories', '');
     $page->pressButton('Filter');
-    // Check if the category node is filtered.
     $assert_session->linkExists('Tags Page');
     $assert_session->linkNotExists('Categories Page');
 
-    // Media type node with category.
+    // Create a media item tagged with our new category, and another one tagged
+    // with our new tag, so we can test that the filters do what we expect.
     $this->createMedia([
       'uid' => $account->id(),
       'bundle' => 'image',
       'name' => 'Categories Media',
-      'field_categories' => [
-        '0' => [
-          'target_id' => 1,
-        ],
-      ],
+      'field_categories' => $category->id(),
     ]);
-    // Media type node with tag.
     $this->createMedia([
       'uid' => $account->id(),
       'bundle' => 'image',
       'name' => 'Tags Media',
-      'field_tags' => [
-        '0' => [
-          'target_id' => 2,
-        ],
-      ],
+      'field_tags' => $tag->id(),
     ]);
+
+    // Visit the media overview page.
     $this->drupalGet('/admin/content/media');
     $assert_session->statusCodeEquals(200);
-    // Assert to check if tags field exists.
-    $group = $assert_session->elementExists('css', '#views-exposed-form-media-media-page-list');
-    $assert_session->fieldExists('Categories', $group);
-    $assert_session->fieldExists('Tags', $group);
-    // Filtering on the basis of category.
-    $page->fillField('Categories', 'Music');
+
+    // Try filtering by category.
+    $page->selectFieldOption('Categories', $category->label());
     $page->pressButton('Filter');
-    // Check if the category node is filtered.
     $assert_session->linkExists('Categories Media');
     $assert_session->linkNotExists('Tags Media');
-    // Filtering on the basis of tag.
-    $page->fillField('Tags', 'Rocks');
-    $page->fillField('Categories', '');
+
+    // Try filtering by tag.
+    $page->fillField('Tags', $tag->label());
+    $page->selectFieldOption('Categories', '');
     $page->pressButton('Filter');
-    // Check if the category node is filtered.
     $assert_session->linkExists('Tags Media');
     $assert_session->linkNotExists('Categories Media');
+  }
 
-    $this->drupalLogout();
+  /**
+   * {@inheritdoc}
+   */
+  private function createMedia(array $values = []) {
+    $media = $this->traitCreateMedia($values);
+    $this->markEntityForCleanup($media);
+    return $media;
   }
 
 }
