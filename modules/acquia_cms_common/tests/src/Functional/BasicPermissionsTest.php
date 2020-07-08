@@ -3,6 +3,7 @@
 namespace Drupal\Tests\acquia_cms_common\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use Drupal\user\Entity\Role;
 
 /**
  * Tests basic, broad permissions of the user roles included with Acquia CMS.
@@ -98,6 +99,19 @@ class BasicPermissionsTest extends BrowserTestBase {
     $assert_toolbar();
     $this->drupalGet('/admin/people');
     $assert_session->statusCodeEquals(200);
+    $this->drupalLogout();
+
+    // Test non-content / Cohesion roles.
+    $roles = Role::loadMultiple(['developer', 'site_builder']);
+    // Assert both roles were loaded.
+    $this->assertCount(2, $roles);
+    foreach ($roles as $role) {
+      // All roles should be able to access the toolbar.
+      // @TODO: refactor this to be aligned with other toolbar assertions.
+      $this->assertTrue($role->hasPermission('access toolbar'));
+      // @TODO: refactor this to actually "test" the proper cohesion permissions once ACMS-216 is done.
+      $this->assertTrue($role->hasPermission('use text format cohesion'));
+    }
   }
 
 }
