@@ -3,6 +3,7 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 use Behat\Mink\Element\ElementInterface;
+use PHPUnit\Framework\AssertionFailedError;
 use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
 
 /**
@@ -42,8 +43,16 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
     $this->assertNotEmpty($component_added);
 
     $component_added->doubleClick();
-    $edit_form = $assert_session->waitForElementVisible('css', '.coh-layout-canvas-settings coh-component-form');
-    $this->assertNotEmpty($edit_form);
+    $edit_form = $assert_session->waitForElementVisible('css', '.coh-layout-canvas-settings');
+    try {
+      $this->assertNotEmpty($edit_form);
+    }
+    catch (AssertionFailedError $e) {
+      $content = $this->getSession()->getPage()->getContent();
+      $content = strip_tags($content);
+      print_r($content);
+      throw new AssertionFailedError($e->getMessage(), $e->getCode(), $e);
+    }
   }
 
 }
