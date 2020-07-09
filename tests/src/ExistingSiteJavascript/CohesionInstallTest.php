@@ -42,7 +42,11 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
     });
     $this->assertNotEmpty($component_added);
 
-    $component_added->doubleClick();
+    $assert_session->elementExists('css', 'button[aria-label="More actions"]', $component_added)->press();
+    $edit_button = $assert_session->waitForElementVisible('css', '.coh-layout-canvas-utils-dropdown-menu .coh-edit-btn');
+    $this->assertNotEmpty($edit_button);
+    $edit_button->click();
+
     $edit_form = $assert_session->waitForElementVisible('css', '.coh-layout-canvas-settings');
     try {
       $this->assertNotEmpty($edit_form);
