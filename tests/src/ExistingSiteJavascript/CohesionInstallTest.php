@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
+use Behat\Mink\Element\ElementInterface;
 use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
 
 /**
@@ -32,6 +33,13 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
 
     $component = $assert_session->waitForElementVisible('css', '.coh-element-browser-modal .coh-layout-canvas-list-item[data-title="Text"]');
     $this->assertNotEmpty($component);
+    $component->doubleClick();
+
+    $component_added = $canvas->waitFor(10, function (ElementInterface $canvas) {
+      $component = $canvas->find('css', '.coh-layout-canvas-list-item[data-type="Text"]');
+      return $component && $component->isVisible();
+    });
+    $this->assertTrue($component_added);
   }
 
 }
