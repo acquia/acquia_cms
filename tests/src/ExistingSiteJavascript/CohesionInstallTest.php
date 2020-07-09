@@ -29,6 +29,9 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
     $add_component_button = $canvas->find('css', 'button[aria-label="Add content"]');
     $this->assertNotEmpty($add_component_button);
     $add_component_button->press();
+
+    $component = $assert_session->waitForElementVisible('css', '.coh-element-browser-modal .coh-layout-canvas-list-item[data-title="Text"]');
+    $this->assertNotEmpty($component);
   }
 
 }
