@@ -3,7 +3,6 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 use Behat\Mink\Element\ElementInterface;
-use PHPUnit\Framework\AssertionFailedError;
 use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
 
 /**
@@ -49,16 +48,18 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
     $this->assertNotEmpty($edit_button);
     $edit_button->click();
 
-    $edit_form = $assert_session->waitForElementVisible('css', '.coh-layout-canvas-settings');
-    try {
-      $this->assertNotEmpty($edit_form);
-    }
-    catch (AssertionFailedError $e) {
-      $content = $this->getSession()->getPage()->getContent();
-      $content = strip_tags($content);
-      print_r($content);
-      throw new AssertionFailedError($e->getMessage(), $e->getCode(), $e);
-    }
+    $edit_form = $assert_session->waitForElementVisible('css', '.coh-layout-canvas-settings coh-component-form');
+    $this->assertNotEmpty($edit_form);
+
+    $edit_form = $assert_session->elementExists('css', '.coh-layout-canvas-settings');
+    $edit_form->fillField('Component title', 'Example component');
+    $edit_form->pressButton('Apply');
+
+    $component_changed = $canvas->waitFor(10, function (ElementInterface $canvas) {
+      $component = $canvas->find('css', '.coh-layout-canvas-list-item[data-type="Example component"]');
+      return $component && $component->isVisible() ? $component : FALSE;
+    });
+    $this->assertNotEmpty($component_changed);
   }
 
 }
