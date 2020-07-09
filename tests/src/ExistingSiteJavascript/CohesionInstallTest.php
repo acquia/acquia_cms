@@ -37,9 +37,13 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
 
     $component_added = $canvas->waitFor(10, function (ElementInterface $canvas) {
       $component = $canvas->find('css', '.coh-layout-canvas-list-item[data-type="Text"]');
-      return $component && $component->isVisible();
+      return $component && $component->isVisible() ? $component : FALSE;
     });
-    $this->assertTrue($component_added);
+    $this->assertNotEmpty($component_added);
+
+    $component_added->doubleClick();
+    $edit_form = $assert_session->waitForElementVisible('css', '.coh-layout-canvas-settings coh-component-form');
+    $this->assertNotEmpty($edit_form);
   }
 
 }
