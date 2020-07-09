@@ -42,6 +42,8 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
     });
     $this->assertNotEmpty($component_added);
 
+    $assert_session->elementExists('css', '.coh-element-browser-modal button[aria-label="Close sidebar browser"]')->press();
+
     $assert_session->elementExists('css', 'button[aria-label="More actions"]', $component_added)->press();
     $edit_button = $assert_session->waitForElementVisible('css', '.coh-layout-canvas-utils-dropdown-menu .coh-edit-btn');
     $this->assertNotEmpty($edit_button);
