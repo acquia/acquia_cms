@@ -41,8 +41,7 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
 
     $this->pressAriaButton($element_browser, 'Close sidebar browser');
 
-    $this->pressAriaButton($component_added, 'More actions');
-    $this->waitForElementVisible('css', '.coh-layout-canvas-utils-dropdown-menu .coh-edit-btn')->press();
+    $component_added->doubleClick();
 
     $edit_form = $this->waitForElementVisible('css', '.coh-layout-canvas-settings');
     $loaded = $edit_form->waitFor(10, function (ElementInterface $edit_form) {
