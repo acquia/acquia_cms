@@ -33,11 +33,7 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
     $this->assertInstanceOf(ElementInterface::class, $component);
     $component->doubleClick();
 
-    $component_added = $canvas->waitFor(10, function (ElementInterface $canvas) {
-      $component = $canvas->find('css', '.coh-layout-canvas-list-item[data-type="Text"]');
-      return $component && $component->isVisible() ? $component : FALSE;
-    });
-    $this->assertNotEmpty($component_added);
+    $component_added = $this->assertComponent($canvas, 'Text');
 
     $this->pressAriaButton($element_browser, 'Close sidebar browser');
 
@@ -45,11 +41,30 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
     $edit_form->fillField('Component title', 'Example component');
     $edit_form->pressButton('Apply');
 
-    $component_changed = $canvas->waitFor(10, function (ElementInterface $canvas) {
-      $component = $canvas->find('css', '.coh-layout-canvas-list-item[data-type="Example component"]');
+    $this->assertComponent($canvas, 'Example component');
+  }
+
+  /**
+   * Asserts that a component appears in a layout canvas.
+   *
+   * @param \Behat\Mink\Element\ElementInterface $canvas
+   *   The layout canvas element.
+   * @param string $label
+   *   The component label.
+   *
+   * @return \Behat\Mink\Element\ElementInterface
+   *   The expected component.
+   */
+  protected function assertComponent(ElementInterface $canvas, string $label) : ElementInterface {
+    $selector = sprintf('.coh-layout-canvas-list-item[data-type="%s"]', $label);
+
+    $component = $canvas->waitFor(10, function (ElementInterface $canvas) use ($selector) {
+      $component = $canvas->find('css', $selector);
       return $component && $component->isVisible() ? $component : FALSE;
     });
-    $this->assertNotEmpty($component_changed);
+
+    $this->assertInstanceOf(ElementInterface::class, $component);
+    return $component;
   }
 
   /**
