@@ -7,15 +7,14 @@
 
 use Drupal\acquia_cms_common\Facade\MetatagFacade;
 use Drupal\acquia_cms_common\Facade\WorkflowFacade;
+use Drupal\acquia_cms_search\Facade\SearchFacade;
 use Drupal\node\NodeTypeInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_insert() for node types.
- *
- * @param \Drupal\node\NodeTypeInterface $node_type
- *   The new node type.
  */
 function acquia_cms_common_node_type_insert(NodeTypeInterface $node_type) {
   Drupal::classResolver(WorkflowFacade::class)->addNodeType($node_type);
   Drupal::classResolver(MetatagFacade::class)->addNodeType($node_type);
+  Drupal::classResolver(SearchFacade::class)->addNodeType($node_type);
 }

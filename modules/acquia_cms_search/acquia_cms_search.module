@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for Acquia CMS Search.
+ */
+
+use Drupal\Core\DestructableInterface;
+
+/**
+ * Implements hook_entity_insert().
+ */
+function acquia_cms_search_entity_insert() {
+  // Indexing items at the end of the page request.
+  $indexer = Drupal::service('search_api.post_request_indexing');
+  if ($indexer instanceof DestructableInterface) {
+    $indexer->destruct();
+  }
+}
