@@ -41,14 +41,7 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
 
     $this->pressAriaButton($element_browser, 'Close sidebar browser');
 
-    $this->pressAriaButton($component_added, 'More actions');
-    $this->waitForElementVisible('css', '.coh-layout-canvas-utils-dropdown-menu .coh-edit-btn')->press();
-
-    $edit_form = $this->waitForElementVisible('css', '.coh-layout-canvas-settings');
-    $loaded = $edit_form->waitFor(10, function (ElementInterface $edit_form) {
-      return $edit_form->find('css', 'coh-component-form');
-    });
-    $this->assertInstanceOf(ElementInterface::class, $loaded);
+    $edit_form = $this->editComponent($component_added);
     $edit_form->fillField('Component title', 'Example component');
     $edit_form->pressButton('Apply');
 
@@ -57,6 +50,31 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
       return $component && $component->isVisible() ? $component : FALSE;
     });
     $this->assertNotEmpty($component_changed);
+  }
+
+  /**
+   * Opens the modal edit form for a component.
+   *
+   * @param \Behat\Mink\Element\ElementInterface $component
+   *   The component element.
+   *
+   * @return \Behat\Mink\Element\ElementInterface
+   *   The modal edit form for the component.
+   */
+  protected function editComponent(ElementInterface $component) : ElementInterface {
+    $this->pressAriaButton($component, 'More actions');
+    $this->waitForElementVisible('css', '.coh-layout-canvas-utils-dropdown-menu .coh-edit-btn')->press();
+
+    // Wait for the form wrapper to appear...
+    $form = $this->waitForElementVisible('css', '.coh-layout-canvas-settings');
+
+    // ...then wait the form wrapper to load the actual settings form.
+    $settings = $form->waitFor(10, function (ElementInterface $form) {
+      return $form->find('css', 'coh-component-form');
+    });
+    $this->assertInstanceOf(ElementInterface::class, $settings);
+
+    return $form;
   }
 
   /**
