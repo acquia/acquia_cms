@@ -16,8 +16,6 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
    * Tests that Cohesion's layout canvas can be used.
    */
   public function testLayoutCanvas() {
-    $assert_session = $this->assertSession();
-
     $account = $this->createUser();
     $account->addRole('administrator');
     $account->save();
@@ -26,11 +24,14 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
     $this->drupalGet('/node/add/page');
     $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
 
-    $add_component_button = $canvas->find('css', 'button[aria-label="Add content"]');
-    $this->assertNotEmpty($add_component_button);
-    $add_component_button->press();
+    $this->pressAriaButton($canvas, 'Add content');
+    $element_browser = $this->waitForElementBrowser();
 
-    $this->waitForElementVisible('css', '.coh-element-browser-modal .coh-layout-canvas-list-item[data-title="Text"]')->doubleClick();
+    $component = $element_browser->waitFor(10, function (ElementInterface $element_browser) {
+      return $element_browser->find('css', '.coh-layout-canvas-list-item[data-title="Text"]') ?: FALSE;
+    });
+    $this->assertInstanceOf(ElementInterface::class, $component);
+    $component->doubleClick();
 
     $component_added = $canvas->waitFor(10, function (ElementInterface $canvas) {
       $component = $canvas->find('css', '.coh-layout-canvas-list-item[data-type="Text"]');
@@ -38,9 +39,9 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
     });
     $this->assertNotEmpty($component_added);
 
-    $assert_session->elementExists('css', '.coh-element-browser-modal button[aria-label="Close sidebar browser"]')->press();
+    $this->pressAriaButton($element_browser, 'Close sidebar browser');
 
-    $assert_session->elementExists('css', 'button[aria-label="More actions"]', $component_added)->press();
+    $this->pressAriaButton($component_added, 'More actions');
     $this->waitForElementVisible('css', '.coh-layout-canvas-utils-dropdown-menu .coh-edit-btn')->press();
 
     $edit_form = $this->waitForElementVisible('css', '.coh-layout-canvas-settings');
@@ -56,6 +57,31 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
       return $component && $component->isVisible() ? $component : FALSE;
     });
     $this->assertNotEmpty($component_changed);
+  }
+
+  /**
+   * Waits for the element browser sidebar to be visible.
+   *
+   * @return \Behat\Mink\Element\ElementInterface
+   *   The element browser sidebar.
+   */
+  protected function waitForElementBrowser() : ElementInterface {
+    return $this->waitForElementVisible('css', '.coh-element-browser-modal');
+  }
+
+  /**
+   * Locates a button by its ARIA label and presses it.
+   *
+   * @param \Behat\Mink\Element\ElementInterface $container
+   *   The element that contains the button.
+   * @param string $button_label
+   *   The button's ARIA label.
+   */
+  private function pressAriaButton(ElementInterface $container, string $button_label) : void {
+    $selector = sprintf('button[aria-label="%s"]', $button_label);
+    $button = $container->find('css', $selector);
+    $this->assertInstanceOf(ElementInterface::class, $button);
+    $button->press();
   }
 
   /**
