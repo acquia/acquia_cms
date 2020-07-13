@@ -50,30 +50,27 @@ class TourPermissionTest extends BrowserTestBase {
   public function testTourPermissions() {
     $assert_session = $this->assertSession();
 
-    $account = $this->drupalCreateUser(['access acquia_cms tour', 'access toolbar']);
+    $account = $this->drupalCreateUser([
+      'access acquia_cms tour',
+      'access toolbar',
+    ]);
     $this->drupalLogin($account);
-    // Administrators should have permission to access tour page.
-    $this->assertTrue($account->hasPermission('access acquia_cms tour'));
 
-    // User should be able to access the toolbar.
-    $assert_session->elementExists('css', '#toolbar-administration');
-    $assert_session->linkExists('Tour');
-
-    // User administrator should be able to access tour page.
-    $this->drupalGet('/admin/tour');
+    // User should be able to access the toolbar and see a Tour link.
+    $toolbar = $assert_session->elementExists('css', '#toolbar-administration');
+    $this->assertTrue($toolbar->hasLink('Tour'));
+    $toolbar->clickLink('Tour');
+    $assert_session->addressEquals('/admin/tour');
     $assert_session->statusCodeEquals(200);
     $this->drupalLogout();
 
     $account = $this->drupalCreateUser();
     $account->addRole('content_editor');
     $account->save();
-    // User should not have permission to access tour page.
-    $this->assertFalse($account->hasPermission('access acquia_cms tour'));
     $this->drupalLogin($account);
-    // User should not be able to access tour page.
+    // User should not have permission to access tour page.
     $this->drupalGet('/admin/tour');
     $assert_session->statusCodeEquals(403);
-    $this->drupalLogout();
   }
 
 }
