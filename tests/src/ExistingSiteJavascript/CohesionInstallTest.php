@@ -24,24 +24,38 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
     $this->drupalGet('/node/add/page');
     $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
 
-    $this->pressAriaButton($canvas, 'Add content');
-    $element_browser = $this->waitForElementBrowser();
-
-    $component = $element_browser->waitFor(10, function (ElementInterface $element_browser) {
-      return $element_browser->find('css', '.coh-layout-canvas-list-item[data-title="Text"]') ?: FALSE;
-    });
-    $this->assertInstanceOf(ElementInterface::class, $component);
-    $component->doubleClick();
-
-    $component_added = $this->assertComponent($canvas, 'Text');
-
-    $this->pressAriaButton($element_browser, 'Close sidebar browser');
-
+    $component_added = $this->addComponent($canvas, 'Text');
     $edit_form = $this->editComponent($component_added);
     $edit_form->fillField('Component title', 'Example component');
     $edit_form->pressButton('Apply');
 
     $this->assertComponent($canvas, 'Example component');
+  }
+
+  /**
+   * Adds a component to a layout canvas.
+   *
+   * @param \Behat\Mink\Element\ElementInterface $canvas
+   *   The layout canvas element.
+   * @param string $label
+   *   The component label.
+   *
+   * @return \Behat\Mink\Element\ElementInterface
+   *   The component that has been added to the layout canvas.
+   */
+  protected function addComponent(ElementInterface $canvas, string $label) : ElementInterface {
+    $this->pressAriaButton($canvas, 'Add content');
+    $element_browser = $this->waitForElementBrowser();
+
+    $selector = sprintf('.coh-layout-canvas-last-item[data-title="%s"]', $label);
+    $component = $element_browser->waitFor(10, function (ElementInterface $element_browser) use ($selector) {
+      return $element_browser->find('css', $selector);
+    });
+    $this->assertInstanceOf(ElementInterface::class, $component);
+    $component->doubleClick();
+    $this->pressAriaButton($element_browser, 'Close sidebar browser');
+
+    return $this->assertComponent($canvas, 'Text');
   }
 
   /**
