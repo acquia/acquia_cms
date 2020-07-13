@@ -47,7 +47,7 @@ class CohesionInstallTest extends ExistingSiteSelenium2DriverTestBase {
     $this->pressAriaButton($canvas, 'Add content');
     $element_browser = $this->waitForElementBrowser();
 
-    $selector = sprintf('.coh-layout-canvas-last-item[data-title="%s"]', $label);
+    $selector = sprintf('.coh-layout-canvas-list-item[data-title="%s"]', $label);
     $component = $element_browser->waitFor(10, function (ElementInterface $element_browser) use ($selector) {
       return $element_browser->find('css', $selector);
     });
