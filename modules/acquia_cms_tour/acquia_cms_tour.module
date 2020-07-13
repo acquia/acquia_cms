@@ -5,15 +5,13 @@
  * Contains hook implementations for the acquia_cms_tour module.
  */
 
-use Drupal\Core\Url;
-
 /**
  * Implements hook_menu_links_discovered_alter().
  */
 function acquia_cms_tour_menu_links_discovered_alter(array &$links) {
-  // Change the link of help with tour, so that main help available for people
-  // who know where it is.
+  // Direct the Help link to our tour, leaving the help available to people who
+  // know where it is.
   if (array_key_exists('help.main', $links)) {
-    $links['help.main']['url'] = Url::fromUserInput('/admin/tour')->toUriString();
+    $links['help.main']['route_name'] = 'acquia_cms_tour.tour';
   }
 }

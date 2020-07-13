@@ -13,10 +13,9 @@ final class TourController extends ControllerBase {
    * Returns a renderable array for a tour page.
    */
   public function tour() {
-    $build = [
+    return [
       '#markup' => $this->t('Hello World!'),
     ];
-    return $build;
   }
 
 }
