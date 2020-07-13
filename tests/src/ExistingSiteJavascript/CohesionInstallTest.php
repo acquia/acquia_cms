@@ -9,7 +9,7 @@ use Drupal\Tests\acquia_cms_common\ExistingSiteJavascript\CohesionTestBase;
  *
  * @group acquia_cms
  */
-abstract class CohesionInstallTest extends CohesionTestBase {
+class CohesionInstallTest extends CohesionTestBase {
 
   /**
    * Tests that Cohesion's layout canvas can be used.
