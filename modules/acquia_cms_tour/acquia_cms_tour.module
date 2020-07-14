@@ -14,5 +14,7 @@ function acquia_cms_tour_menu_links_discovered_alter(array &$links) {
   if (array_key_exists('help.main', $links)) {
     $links['help.main']['route_name'] = $links['acquia_cms_tour.tour']['route_name'];
     $links['help.main']['title'] = $links['acquia_cms_tour.tour']['title'];
+    // Don't show our Tour link twice.
+    unset($links['acquia_cms_tour.tour']);
   }
 }
