@@ -105,6 +105,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/default_content": {
+                "2933777 - REST/Serializer improvements in core/contrib make it less suitable for default_content use case": "https://www.drupal.org/files/issues/2020-07-14/default_content_yaml-2933777-33.patch"
+            },
             "drupal/memcache": {
                 "PHPunit test failure due to memcache_test.info.yml": "https://www.drupal.org/files/issues/2020-06-17/3152678-2.patch"
             },
@@ -138,6 +141,7 @@
             "mkdir -p $PROFILE_DIR $MODULES_DIR",
             "find $PWD -name 'acquia_cms.*' -type f -maxdepth 1 -exec ln -s -f '{}' $PROFILE_DIR ';'",
             "ln -s -f $PWD/config $PROFILE_DIR",
+            "ln -s -f $PWD/content $PROFILE_DIR",
             "ln -s -f $PWD/misc $PROFILE_DIR",
             "ln -s -f $PWD/modules $MODULES_DIR",
             "ln -s -f $PWD/src $PROFILE_DIR",
