@@ -167,8 +167,8 @@ class InstallStateTest extends ExistingSiteBase {
       $this->assertTrue($account->hasPermission('access acquia cms tour'));
 
       // User should be able to access the toolbar and see a Tour link.
-      $toolbar = $assert_session->elementExists('css', '#toolbar-administration');
-      $toolbar->clickLink('Tour');
+      $assert_session->elementExists('css', '#toolbar-administration')
+        ->clickLink('Tour');
       $assert_session->addressEquals('/admin/tour');
       $assert_session->statusCodeEquals(200);
     }
