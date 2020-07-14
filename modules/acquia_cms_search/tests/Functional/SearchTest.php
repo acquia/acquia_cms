@@ -2,11 +2,12 @@
 
 namespace Drupal\Tests\acquia_cms_search\Functional;
 
+use Drupal\node\Entity\NodeType;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\views\Entity\View;
 
 /**
- * Tests search ships with Acquia CMS.
+ * Tests the search functionality that ships with Acquia CMS.
  *
  * @group acquia_cms_search
  * @group acquia_cms
@@ -28,6 +29,7 @@ class SearchTest extends BrowserTestBase {
     'acquia_cms_page',
     'acquia_cms_person',
     'acquia_cms_place',
+    'search_api_db',
   ];
 
   /**
@@ -73,65 +75,22 @@ class SearchTest extends BrowserTestBase {
     $account->save();
     $this->drupalLogin($account);
 
-    // Create a node tagged with our new category, and another one tagged with
-    // our new tag, so we can test that the filters do what we expect.
-    $node = $this->drupalCreateNode([
-      'type' => 'page',
-      'title' => 'Test published Page',
-      'moderation_state' => 'published',
-    ]);
-    $node->setPublished()->save();
-    $this->drupalCreateNode([
-      'type' => 'page',
-      'title' => 'Test unpublished Page',
-    ]);
-    $node->setUnpublished()->save();
-    $this->drupalCreateNode([
-      'type' => 'article',
-      'title' => 'Test published Article',
-      'moderation_state' => 'published',
-    ]);
-    $node->setPublished()->save();
-    $node = $this->drupalCreateNode([
-      'type' => 'article',
-      'title' => 'Test unpublished Article',
-    ]);
-    $node->setUnpublished()->save();
-    $this->drupalCreateNode([
-      'type' => 'event',
-      'title' => 'Test published Event',
-      'moderation_state' => 'published',
-    ]);
-    $node->setPublished()->save();
-    $this->drupalCreateNode([
-      'type' => 'event',
-      'title' => 'Test unpublished Event',
-    ]);
-    $node->setUnpublished()->save();
-    $this->drupalCreateNode([
-      'type' => 'person',
-      'title' => 'Test published Person',
-      'moderation_state' => 'published',
-    ]);
-    $node->setPublished()->save();
-    $this->drupalCreateNode([
-      'type' => 'person',
-      'title' => 'Test unpublished Person',
-    ]);
-    $node->setUnpublished()->save();
-    $this->drupalCreateNode([
-      'type' => 'place',
-      'title' => 'Test published Place',
-      'moderation_state' => 'published',
-    ]);
-    $node->setPublished()->save();
-    $this->drupalCreateNode([
-      'type' => 'place',
-      'title' => 'Test unpublished Place',
-    ]);
-    $node->setUnpublished()->save();
-
-    $this->drupalLogout();
+    $node_types = NodeType::loadMultiple();
+    // Create some published and unpublished nodes to assert search
+    // functionality properly.
+    foreach ($node_types as $type) {
+      $published_node = $this->drupalCreateNode([
+        'type' => $type->id(),
+        'title' => 'Test published ' . $type->label(),
+        'moderation_state' => 'published',
+      ]);
+      $published_node->setPublished()->save();
+      $unpublished_node = $this->drupalCreateNode([
+        'type' => $type->id(),
+        'title' => 'Test unpublished ' . $type->label(),
+      ]);
+      $unpublished_node->setUnpublished()->save();
+    }
 
     // Visit the seach page.
     $this->drupalGet('/search');
@@ -139,20 +98,12 @@ class SearchTest extends BrowserTestBase {
     $page->fillField('Keywords', 'Test');
     $page->pressButton('Search');
 
-    // Check if only published nodes are visible.
-    $assert_session->linkExists('Test published Page');
-    $assert_session->linkExists('Test published Event');
-    $assert_session->linkExists('Test published Person');
-    $assert_session->linkExists('Test published Place');
-    $assert_session->linkExists('Test published Article');
-    $assert_session->linkExists('Test published Person');
-    // Check if unpublished nodes are not visible.
-    $assert_session->linkNotExists('Test unpublished Page');
-    $assert_session->linkNotExists('Test unpublished Event');
-    $assert_session->linkNotExists('Test unpublished Person');
-    $assert_session->linkNotExists('Test unpublished Place');
-    $assert_session->linkNotExists('Test unpublished Article');
-    $assert_session->linkNotExists('Test unpublished Person');
+    foreach ($node_types as $type) {
+      // Check if only published nodes are visible.
+      $assert_session->linkExists('Test published ' . $type->label());
+      // Check if unpublished nodes are not visible.
+      $assert_session->linkNotExists('Test unpublished ' . $type->label());
+    }
   }
 
 }

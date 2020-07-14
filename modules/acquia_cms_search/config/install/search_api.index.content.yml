@@ -1,11 +1,14 @@
 langcode: en
-status: true
+status: false
 dependencies:
   module:
     - node
     - search_api
   config:
-    - search_api.server.acms_database_search_server
+    - core.entity_view_mode.node.search_index
+third_party_settings:
+  acquia_cms:
+    server: database
 id: content
 name: Content
 description: 'An index of all content in your site.'
@@ -18,29 +21,19 @@ field_settings:
     indexed_locked: true
     type_locked: true
     hidden: true
-  status:
+  rendered_item:
+    label: 'Rendered HTML output'
+    property_path: rendered_item
+    type: text
+    configuration:
+      roles:
+        anonymous: anonymous
+      view_mode: {  }
+  published:
     label: Published
     datasource_id: 'entity:node'
     property_path: status
     type: boolean
-    indexed_locked: true
-    type_locked: true
-    dependencies:
-      module:
-        - node
-  title:
-    label: Title
-    datasource_id: 'entity:node'
-    property_path: title
-    type: text
-    dependencies:
-      module:
-        - node
-  uid:
-    label: uid
-    datasource_id: 'entity:node'
-    property_path: uid
-    type: integer
     indexed_locked: true
     type_locked: true
     dependencies:
@@ -62,8 +55,7 @@ processor_settings:
       preprocess_query: -10
   html_filter:
     all_fields: false
-    fields:
-      - title
+    fields: {  }
     title: true
     alt: true
     tags:
@@ -76,9 +68,9 @@ processor_settings:
       preprocess_index: -10
       preprocess_query: -9
   ignorecase:
-    all_fields: false
+    all_fields: true
     fields:
-      - title
+      - rendered_item
     weights:
       preprocess_index: -9
       preprocess_query: -8
@@ -87,7 +79,7 @@ processor_settings:
   stopwords:
     all_fields: false
     fields:
-      - title
+      - rendered_item
     stopwords:
       - a
       - an
@@ -130,7 +122,7 @@ processor_settings:
   tokenizer:
     all_fields: false
     fields:
-      - title
+      - rendered_item
     spaces: ''
     overlap_cjk: 1
     minimum_word_size: '3'
@@ -140,7 +132,7 @@ processor_settings:
   transliteration:
     all_fields: false
     fields:
-      - title
+      - rendered_item
     weights:
       preprocess_index: -4
       preprocess_query: -3
@@ -150,4 +142,4 @@ tracker_settings:
 options:
   index_directly: true
   cron_limit: 50
-server: acms_database_search_server
+server: ''

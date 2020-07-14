@@ -2,8 +2,8 @@
 
 namespace Drupal\acquia_cms_search\Facade;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeTypeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -18,20 +18,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 final class SearchFacade implements ContainerInjectionInterface {
 
   /**
-   * The config factory service.
+   * The entityTypeManger service.
    *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  private $configFactory;
+  private $entityTypeManager;
 
   /**
-   * MetatagFacade constructor.
+   * SearchFacade constructor.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The config factory service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory) {
-    $this->configFactory = $config_factory;
+  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -39,7 +39,7 @@ final class SearchFacade implements ContainerInjectionInterface {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('config.factory')
+      $container->get('entity_type.manager')
     );
   }
 
@@ -56,11 +56,35 @@ final class SearchFacade implements ContainerInjectionInterface {
     $search_index = $node_type->getThirdPartySetting('acquia_cms', 'search_index', []);
 
     if (!empty($search_index)) {
-      $config = $this->configFactory->getEditable('search_api.index.' . $search_index);
-      $data_sources = $config->get('datasource_settings');
-      $data_sources['entity:node']['bundles']['selected'][] = $node_type->id();
-      $config->set('datasource_settings', $data_sources);
-      $config->save();
+      $index_storage = $this->entityTypeManager->getStorage('search_api_index');
+      $index = $index_storage->load($search_index);
+      if (is_object($index)) {
+        // Updating bundles in the datasource.
+        $data_source = $index->getDatasource('entity:node');
+        if ($data_source) {
+          $configuration = $data_source->getConfiguration();
+          $configuration['bundles']['selected'][] = $node_type->id();
+          $data_source->setConfiguration($configuration);
+        }
+      }
+      // Adding view mode in renderer HTML field.
+      $field = $index->getField('rendered_item');
+      if ($field) {
+        $configuration = $field->getConfiguration();
+        $configuration['view_mode']['entity:node'][$node_type->id()] = 'search_index';
+        $field->setConfiguration($configuration);
+      }
+      $index_storage->save($index);
+      // Updating view modes in search view.
+      $view_storage = $this->entityTypeManager->getStorage('view');
+      $view = $view_storage->load('search');
+      if (!empty($view)) {
+        $display = &$view->getDisplay('default');
+        if ($display['display_options']['row']['type'] == 'search_api') {
+          $display['display_options']['row']['options']['view_modes']['entity:node'][$node_type->id()] = 'teaser';
+          $view_storage->save($view);
+        }
+      }
     }
   }
 
