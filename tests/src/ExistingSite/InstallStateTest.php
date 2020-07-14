@@ -143,4 +143,41 @@ class InstallStateTest extends ExistingSiteBase {
     return $media;
   }
 
+  /**
+   * Tests tour permission for user roles.
+   *
+   * - User roles with permission 'access acquia cms tour' should able to
+   *   access tour page.
+   * - User roles without permission 'access acquia cms tour'
+   *   should not be able to access tour page.
+   */
+  public function testTourPermissions() {
+    $assert_session = $this->assertSession();
+
+    $roles = [
+      'content_author',
+      'content_editor',
+      'content_administrator',
+    ];
+    foreach ($roles as $role) {
+      $account = $this->createUser();
+      $account->addRole($role);
+      $account->save();
+      $this->drupalLogin($account);
+      $this->assertTrue($account->hasPermission('access acquia cms tour'));
+
+      // User should be able to access the toolbar and see a Tour link.
+      $assert_session->elementExists('css', '#toolbar-administration')
+        ->clickLink('Tour');
+      $assert_session->addressEquals('/admin/tour');
+      $assert_session->statusCodeEquals(200);
+    }
+
+    // Regular authenticated users should not be able to access the tour.
+    $account = $this->createUser();
+    $this->drupalLogin($account);
+    $this->drupalGet('/admin/tour');
+    $assert_session->statusCodeEquals(403);
+  }
+
 }
