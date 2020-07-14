@@ -6,6 +6,9 @@ use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests the Acquia CMS Tour module's integration with the core Help module.
+ *
+ * @group acquia_cms
+ * @group acquia_cms_tour
  */
 class HelpIntegrationTest extends BrowserTestBase {
 
