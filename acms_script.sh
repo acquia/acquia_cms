@@ -1,70 +1,94 @@
 #!/usr/bin/env bash
 set -e
-echo Running on $OSTYPE
+
+RED="\033[1;31m"
+GREEN="\033[1;32m"
+YELLOW="\033[1;33m"
+NOCOLOR="\033[0m"
+
+echo -e "${GREEN}Running on ${OSTYPE}${NOCOLOR}"
+
 # This script gets executed on running ./acms-test.sh from project folder.
 # This is a single command to execute code validation and automated testing.
 
 # Starting drush server and chrome driver, if they are not already running.
 # This is required to run phpunit and javascript tests respectively.
 # Assuming mink driver port is set to 9515 in phpunit.xml.
+
+runwebserver() {
+  echo -e "${YELLOW}Starting PHP's built-in http server on 8080.${NOCOLOR}"
+  nohup drush runserver 8080 &
+  echo -e "${GREEN}Drush server started on port 8080.${NOCOLOR}"
+}
+
+runchromedriver() {
+  echo -e "${YELLOW}Starting Chromedriver on port 9515.${NOCOLOR}"
+  nohup chromedriver --url-base=/wd/hub &
+  echo -e "${GREEN}Started Chromedriver on port 9515.${NOCOLOR}"
+}
+
+killProcessLinuxOs() {
+  if command -v fuser &> /dev/null
+    then
+      fuser -k "$1/tcp"
+      echo -e "${YELLOW}Process killed on port $1 ${$NOCOLOR}"
+    else
+      echo 'Please install fuser';
+    fi
+}
+
+killProcessDarwinOs() {
+  nohup kill -9 $(lsof -t -i:${1})
+  echo -e "${YELLOW}Process killed on port $1 ${NOCOLOR}"
+}
+
 # Switch case to handle mac os and linux.
 case $OSTYPE in
   "linux-gnu"*)
     if declare -a array=($(tail -n +2 /proc/net/tcp | cut -d":" -f"3"|cut -d" " -f"1")) &&
-    for port in ${array[@]}; do echo $((0x$port)); done | grep 8080 ; then
-      echo "Drush server is already running."
-    else
-      drush runserver 8080 &
-      echo "Drush server started on port 8080."
+      for port in ${array[@]}; do echo $((0x$port)); done | grep 8080 ; then
+        echo -e "${RED}Port 8080 is already occupied. Webserver cannot start on port 8080.${NOCOLOR}"
+      else
+        runwebserver
     fi
     if declare -a array=($(tail -n +2 /proc/net/tcp | cut -d":" -f"3"|cut -d" " -f"1")) &&
-    for port in ${array[@]}; do echo $((0x$port)); done | grep 9515 ; then
-      echo "Chrome driver is already running."
+      for port in ${array[@]}; do echo $((0x$port)); done | grep 9515 ; then
+        echo -e "${RED}Port 9515 is already occupied. Chromedriver cannot run on port 9515. ${NOCOLOR}"
       else
-      chromedriver --url-base=/wd/hub &
-      echo "Chromedriver started on port 9515."
+        runchromedriver
     fi
       ;;
   "darwin"*)
       if [ -z "$(lsof -t -i:8080)" ] ; then
-       drush runserver 8080 &
-       echo "Drush server started on port 8080."
+        runwebserver
       else
-       echo "Drush server is already running."
+        echo -e "${RED}Port 8080 is already occupied. Webserver cannot start on port 8080. ${NOCOLOR}"
       fi
       if [ -z "$(lsof -t -i:9515)" ] ; then
-      chromedriver --url-base=/wd/hub &
-      echo "Chromedriver started on port 9515."
+        runchromedriver
       else
-       echo "Chrome driver already running."
+        echo -e "${RED}Port 9515 is already occupied. Chromedriver cannot run on port 9515. ${NOCOLOR}"
       fi
       ;;
 esac
 
 # Run code quality checks.
-vendor/bin/grumphp run &
-echo "Quality checks completed."
+vendor/bin/grumphp run
 
 # Set the URL of the database being used,
 # only if it is not set, and display it's value.
 if [ -z "$(printenv SIMPLETEST_DB)" ] ; then
-  export SIMPLETEST_DB=mysql://drupal:drupal@127.0.0.1/drupal
-  echo "If you are using sqlite, set environment variable accordingly, ex (sqlite://localhost/drupal.sqlite)"
-  echo "SIMPLETEST_DB environment variable is now set as:"
+  export SIMPLETEST_DB=sqlite://localhost/drupal.sqlite
+  echo -e "${GREEN}SIMPLETEST_DB environment variable is now set as: ${NOCOLOR}"
   printenv SIMPLETEST_DB
-else
-  echo "SIMPLETEST_DB environment variable is already set as:"
-  printenv SIMPLETEST_DB
+  echo -e "${YELLOW}If you are using SQL, set environment variable accordingly, ex (mysql://drupal:drupal@127.0.0.1/drupal) ${NOCOLOR}"
 fi
 
 # Set the URL where you can access the Drupal site,
 # only if it is not set, and display it's value.
 if [ -z "$(printenv SIMPLETEST_BASE_URL)" ] ; then
   export SIMPLETEST_BASE_URL=http://127.0.0.1:8080
-  echo "SIMPLETEST_BASE_URL environment variable is now set as:"
-  printenv SIMPLETEST_BASE_URL
-  else
-  echo "SIMPLETEST_BASE_URL environment variable is already set as:"
+  echo -e "${GREEN}SIMPLETEST_BASE_URL environment variable is now set as: ${NOCOLOR}"
   printenv SIMPLETEST_BASE_URL
 fi
 
@@ -72,17 +96,14 @@ fi
 # only if it is not set, and display it's value.
 if [ -z "$(printenv SYMFONY_DEPRECATIONS_HELPER)" ] ; then
   export SYMFONY_DEPRECATIONS_HELPER=weak
-  echo "SYMFONY_DEPRECATIONS_HELPER environment variable is now set as:"
-  printenv SYMFONY_DEPRECATIONS_HELPER
-  else
-  echo "SYMFONY_DEPRECATIONS_HELPER environment variable is already set as:"
+  echo -e "${GREEN}SYMFONY_DEPRECATIONS_HELPER environment variable is now set as:${NOCOLOR}"
   printenv SYMFONY_DEPRECATIONS_HELPER
 fi
 
 # Run all automated PHPUnit tests.
 # If --stop-on-failure is passed as an argument $1 will handle it.
-echo "Running phpunit tests for acquia_cms group."
-COMPOSER_PROCESS_TIMEOUT=0 ./vendor/bin/phpunit -c docroot/core --group acquia_cms $1
+echo -e "${YELLOW}Running phpunit tests for acquia_cms group. ${NOCOLOR}"
+COMPOSER_PROCESS_TIMEOUT=0 ./vendor/bin/phpunit -c docroot/core --group acquia_cms --stop-on-failure
 
 # Stop Chrome driver and drush server.
 # Check if fuser is present and stop processes for port 8080 and 9515.
@@ -90,22 +111,15 @@ COMPOSER_PROCESS_TIMEOUT=0 ./vendor/bin/phpunit -c docroot/core --group acquia_c
 
 case $OSTYPE in
    "linux-gnu"*)
-     if command -v fuser &> /dev/null
-     then
-       fuser -k 8080/tcp
-       echo 'Killed process for port 8080 to stop drush server.'
-       fuser -k 9515/tcp
-      echo 'Killed process for port 9515, to stop chromedriver.'
-     else
-       echo 'Please install fuser';
-      fi
+    echo -e "${YELLOW}Stopping drush webserver.${NOCOLOR}"
+    killProcessLinuxOs 8080
+    echo -e "${YELLOW}Stopping chromedriver.${NOCOLOR}"
+    killProcessLinuxOs 9515
     ;;
    "darwin"*)
-      # Stop 8080 server.
-      kill -9 $(lsof -t -i:8080)
-      echo 'Killed process for port 8080 to stop drush server.'
-      # Stop 9515 server.
-      kill -9 $(lsof -t -i:9515)
-      echo 'Killed process for port 9515, to stop chromedriver.'
+    echo -e "${YELLOW}Stopping drush webserver.${NOCOLOR}"
+    killProcessDarwinOs 8080
+    echo -e "${YELLOW}Stopping chromedriver.${NOCOLOR}"
+    killProcessDarwinOs 9515
     ;;
 esac
