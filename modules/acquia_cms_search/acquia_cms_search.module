@@ -1,0 +1,66 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for Acquia CMS Search.
+ */
+
+use Drupal\acquia_cms_search\Facade\SearchFacade;
+use Drupal\Core\DestructableInterface;
+use Drupal\node\NodeTypeInterface;
+use Drupal\search_api\ServerInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for node types.
+ */
+function acquia_cms_search_node_type_insert(NodeTypeInterface $node_type) {
+  // Avoid during config sync.
+  if (!Drupal::isConfigSyncing()) {
+    Drupal::classResolver(SearchFacade::class)->addNodeType($node_type);
+  }
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function acquia_cms_search_entity_insert() {
+  // Indexing the node just after the creation. As the nodes created
+  // programmatically are not getting indexed ( Specially in PHPUnit ), so
+  // using this service to destruct and do a indexing of the newly created node.
+  $indexer = Drupal::service('search_api.post_request_indexing');
+  if ($indexer instanceof DestructableInterface) {
+    $indexer->destruct();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for Search API server.
+ */
+function acquia_cms_search_search_api_server_insert(ServerInterface $server) {
+  // Looking into all the indexs that are there.
+  $index_storage = \Drupal::entityTypeManager()->getStorage('search_api_index');
+  $indexes = $index_storage->loadMultiple();
+  foreach ($indexes as $index) {
+    if (is_object($index)) {
+      $server_name = $index->getThirdPartySetting('acquia_cms', 'server', []);
+      if (!$index->status() && !$index->isServerEnabled() && ($server->id() == $server_name)) {
+        $index->setServer($server)->enable();
+        // Removing server third-party setting.
+        $index->unsetThirdPartySetting('acquia_cms', 'server');
+        $index->save();
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_config_schema_info_alter().
+ */
+function acquia_cms_search_config_schema_info_alter(&$definitions) {
+  // Appending search index schema into existing schema of the acquia_cms_common
+  // module.
+  $definitions['node.type.third_party.acquia_cms']['mapping']['search_index'] = [
+    'type' => 'string',
+    'label' => 'The machine name of the search index to which this content type should be added',
+  ];
+}
