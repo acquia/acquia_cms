@@ -238,10 +238,13 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
    * @param string[] $expected_order
    *   The machine names of the fields we expect in media type's form display,
    *   in the order we expect them to have.
+   * @param string $form_mode
+   *   The machine name of the form mode in which fields we expect in media
+   *   type's form display, in the order we expect them to have.
    */
-  protected function assertFieldsOrder(array $expected_order) {
+  protected function assertFieldsOrder(array $expected_order, $form_mode = 'default') {
     $display = $this->container->get('entity_display.repository')
-      ->getFormDisplay('media', $this->mediaType);
+      ->getFormDisplay('media', $this->mediaType, $form_mode);
 
     $this->assertDisplayComponentsOrder($display, $expected_order, "The fields of the '$this->mediaType' media type's edit form were not in the expected order.");
   }

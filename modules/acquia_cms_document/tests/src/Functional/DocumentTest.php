@@ -76,6 +76,14 @@ class DocumentTest extends MediaTypeTestBase {
       'field_tags',
     ]);
 
+    // Assert that the fields are in the correct order,
+    // for media_library form_mode.
+    $this->assertFieldsOrder([
+      'name',
+      'field_categories',
+      'field_tags',
+    ], 'media_library');
+
     // Submit the form and ensure that we see the expected error message(s).
     $page->pressButton('Save');
     $assert_session->pageTextContains('Name field is required.');
