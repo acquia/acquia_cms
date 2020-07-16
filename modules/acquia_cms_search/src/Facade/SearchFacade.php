@@ -148,19 +148,28 @@ final class SearchFacade implements ContainerInjectionInterface {
     // provide one in its third-party settings.
     $field_label = $field_storage->getThirdPartySetting('acquia_cms', 'search_label') ?: $field_storage->getLabel();
 
-    $data_source = 'entity:' . $field_storage->getTargetEntityTypeId();
+    $data_source_id = 'entity:' . $field_storage->getTargetEntityTypeId();
     // This will throw an exception if the data source doesn't exist, so this
     // is really just a way to prevent the field from using an invalid data
     // source.
-    $data_source = $index->getDatasource($data_source);
+    $data_source_id = $index->getDatasource($data_source_id)->getPluginId();
 
+    // Add the referenced term's ID to the index.
     $field = $this->fieldsHelper->createField($index, $field_name)
       ->setLabel($field_label)
-      ->setDatasourceId($data_source->getPluginId())
+      ->setDatasourceId($data_source_id)
+      ->setPropertyPath($field_name)
+      ->setType('integer');
+    $index->addField($field);
+
+    // Add the referenced term's label to the index.
+    $field = $this->fieldsHelper->createField($index, $field_name . '_name')
+      ->setLabel("$field_label: Name")
+      ->setDatasourceId($data_source_id)
       ->setPropertyPath("$field_name:entity:name")
       ->setType('string');
-
     $index->addField($field);
+
     $this->indexStorage->save($index);
   }
 
