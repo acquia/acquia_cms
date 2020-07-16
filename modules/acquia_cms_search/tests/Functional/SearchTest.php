@@ -83,72 +83,79 @@ class SearchTest extends BrowserTestBase {
     // Create some published and unpublished nodes to assert search
     // functionality properly.
     foreach ($node_types as $type) {
-      $type_id = $type->id();
-      $type_label = $type->label();
+      $node_type_id = $type->id();
+      $node_type_label = $type->label();
 
       $term_vocab = $music = $rock = NULL;
       // As we don't have any page type vocab.
-      if ($type_id != 'page') {
+      if ($node_type_id != 'page') {
         /** @var \Drupal\taxonomy\VocabularyInterface $term_vocab */
-        $term_vocab = Vocabulary::load($type_id . '_type');
-        $music = $this->createTerm($term_vocab, ['name' => $type_label . ' Music']);
-        $rock = $this->createTerm($term_vocab, ['name' => $type_label . ' Rocks']);
+        $term_vocab = Vocabulary::load($node_type_id . '_type');
+        $music = $this->createTerm($term_vocab, ['name' => $node_type_label . ' Music']);
+        $rock = $this->createTerm($term_vocab, ['name' => $node_type_label . ' Rocks']);
 
         $published_node = $this->drupalCreateNode([
-          'type' => $type_id,
+          'type' => $node_type_id,
           'title' => 'Test published ' . $type->label(),
-          'field_' . $type_id . '_type' => $music->id(),
+          'field_' . $node_type_id . '_type' => $music->id(),
           'moderation_state' => 'published',
         ]);
         $published_node->setPublished()->save();
         $unpublished_node = $this->drupalCreateNode([
-          'type' => $type_id,
+          'type' => $node_type_id,
           'title' => 'Test unpublished ' . $type->label(),
-          'field_' . $type_id . '_type' => $rock->id(),
+          'field_' . $node_type_id . '_type' => $rock->id(),
         ]);
         $unpublished_node->setUnpublished()->save();
       }
       else {
         $published_node = $this->drupalCreateNode([
-          'type' => $type_id,
+          'type' => $node_type_id,
           'title' => 'Test published ' . $type->label(),
           'moderation_state' => 'published',
         ]);
         $published_node->setPublished()->save();
         $unpublished_node = $this->drupalCreateNode([
-          'type' => $type_id,
+          'type' => $node_type_id,
           'title' => 'Test unpublished ' . $type->label(),
         ]);
         $unpublished_node->setUnpublished()->save();
       }
     }
 
-    // Visit the seach page.
     $this->drupalGet('/search');
     $assert_session->statusCodeEquals(200);
     $page->fillField('Keywords', 'Test');
     $page->pressButton('Search');
+    // Check if all the published nodes are visible and unpushished are not.
+    foreach ($node_types as $type) {
+      $node_type_label = $type->label();
 
-    foreach ($node_types as $type) {
-      $type_label = $type->label();
-      // Check if only published nodes are visible.
-      $assert_session->linkExists('Test published ' . $type_label);
-      // Check if unpublished nodes are not visible.
-      $assert_session->linkNotExists('Test unpublished ' . $type_label);
+      $assert_session->linkExists('Test published ' . $node_type_label);
+      $assert_session->linkNotExists('Test unpublished ' . $node_type_label);
     }
-    // Check if facets filter the content as expected.
+    // Check if facets filter the content type and term type is working
+    // as expected.
     foreach ($node_types as $type) {
-      $type_label = $type->label();
-      $page->clickLink($type_label . ' (1)');
+      $node_type_label = $type->label();
+      $page->clickLink($node_type_label . ' (1)');
       // Check if the selected content type from facets is shown.
-      $assert_session->linkExists('Test published ' . $type_label);
-      $assert_session->linkNotExists('Test unpublished ' . $type_label);
+      $assert_session->linkExists('Test published ' . $node_type_label);
+      $assert_session->linkNotExists('Test unpublished ' . $node_type_label);
 
       if ($type->id() != 'page') {
         // Check if term facet is working properly.
-        $assert_session->linkExists($type_label . ' Music (1)');
-        $assert_session->linkNotExists($type_label . ' Rocks (1)');
+        $page->clickLink($node_type_label . ' Music (1)');
+        // Check if node of the selected term is shown.
+        $assert_session->linkExists('Test published ' . $node_type_label);
+        $assert_session->linkNotExists('Test unpublished ' . $node_type_label);
+        $assert_session->linkNotExists($node_type_label . ' Rocks (1)');
       }
+      // Going back to the initial state to check the other content type and
+      // term facets.
+      $this->drupalGet('/search');
+      $page->fillField('Keywords', 'Test');
+      $page->pressButton('Search');
     }
   }
 
