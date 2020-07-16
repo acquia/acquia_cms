@@ -46,8 +46,7 @@ class GoogleAnalyticsAndGoogleTagManagerTest extends BrowserTestBase {
    * Tests Google Analytics & Google Tag Manager integration.
    */
   public function testGoogleAnalyticsAndTagManagerIntegration() {
-    $session = $this->getSession();
-    $page = $session->getPage();
+    $page = $this->getSession()->getPage();
     $assert_session = $this->assertSession();
 
     $account = $this->drupalCreateUser([
