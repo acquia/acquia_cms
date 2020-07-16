@@ -6,3 +6,18 @@ search_api.index.*.third_party.acquia_cms:
     search_server:
       type: string
       label: 'Machine name of Search API server to which the index will be attached'
+
+field.storage.*.*.third_party.acquia_cms:
+  type: mapping
+  label: 'Acquia CMS settings'
+  mapping:
+    # Allow fields to carry 'search_index' and 'search_label' settings. This is used
+    # by our facade to passively opt the field into a particular index.
+    # @see acquia_cms_search_field_storage_config_insert()
+    # @see \Drupal\acquia_cms_search\Facade\SearchFacade::addTaxonomyField()
+    search_index:
+      type: string
+      label: 'Machine name of Search API index to which this field should be added'
+    search_label:
+      type: string
+      label: 'The label of the field in the Search API index'
