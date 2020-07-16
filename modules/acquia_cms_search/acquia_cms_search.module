@@ -7,6 +7,7 @@
 
 use Drupal\acquia_cms_search\Facade\SearchFacade;
 use Drupal\Core\DestructableInterface;
+use Drupal\field\FieldStorageConfigInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\ServerInterface;
@@ -16,6 +17,15 @@ use Drupal\search_api\ServerInterface;
  */
 function acquia_cms_search_node_type_insert(NodeTypeInterface $node_type) {
   Drupal::classResolver(SearchFacade::class)->addNodeType($node_type);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for configurable field storages.
+ */
+function acquia_cms_search_field_storage_config_insert(FieldStorageConfigInterface $field_storage) {
+  if ($field_storage->getType() === 'entity_reference' && $field_storage->getSetting('target_type') === 'taxonomy_term') {
+    Drupal::classResolver(SearchFacade::class)->addTaxonomyField($field_storage);
+  }
 }
 
 /**

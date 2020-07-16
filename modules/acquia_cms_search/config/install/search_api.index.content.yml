@@ -5,7 +5,6 @@ dependencies:
     - node
     - search_api
   config:
-    - field.storage.node.field_categories
     - core.entity_view_mode.node.search_index
 third_party_settings:
   acquia_cms:
@@ -15,14 +14,6 @@ name: Content
 description: 'An index of all content in your site.'
 read_only: false
 field_settings:
-  field_categories:
-    label: Categories
-    datasource_id: 'entity:node'
-    property_path: field_categories
-    type: integer
-    dependencies:
-      config:
-        - field.storage.node.field_categories
   node_grants:
     label: 'Node access information'
     property_path: search_api_node_grants
