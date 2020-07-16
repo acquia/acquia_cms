@@ -70,7 +70,7 @@ final class GoogleTagManager extends ControllerBase {
       $message_type = 'status';
 
       if ($user_can_configure) {
-        $section['message']['#markup'] = Link::createFromRoute($this->t('Configure Google Tag Manager now.'), 'entity.google_tag_container.collection');
+        $section['message']['#markup'] = Link::createFromRoute($this->t('Configure Google Tag Manager now.'), 'entity.google_tag_container.collection')->toString();
       }
     }
     elseif ($user_can_configure) {

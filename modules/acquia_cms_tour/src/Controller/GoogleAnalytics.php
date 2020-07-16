@@ -49,7 +49,7 @@ final class GoogleAnalytics extends ControllerBase {
       $message_type = 'status';
 
       if ($user_can_configure) {
-        $section['message']['#markup'] = Link::createFromRoute($this->t('Configure Google Analytics now.'), 'google_analytics.admin_settings_form');
+        $section['message']['#markup'] = Link::createFromRoute($this->t('Configure Google Analytics now.'), 'google_analytics.admin_settings_form')->toString();
       }
     }
     elseif ($user_can_configure) {
