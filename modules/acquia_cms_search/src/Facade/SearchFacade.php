@@ -58,15 +58,7 @@ final class SearchFacade implements ContainerInjectionInterface {
     if (!empty($search_index)) {
       $index_storage = $this->entityTypeManager->getStorage('search_api_index');
       $index = $index_storage->load($search_index);
-      if (is_object($index)) {
-        // Updating bundles in the datasource.
-        $data_source = $index->getDatasource('entity:node');
-        if ($data_source) {
-          $configuration = $data_source->getConfiguration();
-          $configuration['bundles']['selected'][] = $node_type->id();
-          $data_source->setConfiguration($configuration);
-        }
-      }
+
       // Adding view mode in renderer HTML field.
       $field = $index->getField('rendered_item');
       if ($field) {
