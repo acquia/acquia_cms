@@ -16,7 +16,7 @@ Because there is a limited number of Cloud IDEs available to the Acquia CMS team
 
 1. Visit https://github.com/acquia/cli#installation and follow the instructions to get the Acquia CLI tool installed. For example:
 ```
-curl -OL https://github.com/acquia/cli/releases/download/v1.0.0-beta1/acli.phar
+curl -OL https://github.com/acquia/cli/releases/download/v1.0.0-rc3/acli.phar
 sudo mv acli.phar /usr/local/bin/acli
 chmod +x /usr/local/bin/acli
 acli --version
