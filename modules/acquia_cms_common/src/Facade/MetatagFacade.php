@@ -3,6 +3,7 @@
 namespace Drupal\acquia_cms_common\Facade;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ConfigInstallerInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\node\NodeTypeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -18,6 +19,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 final class MetatagFacade implements ContainerInjectionInterface {
 
   /**
+   * The config installer service.
+   *
+   * @var \Drupal\Core\Config\ConfigInstallerInterface
+   */
+  private $configInstaller;
+
+  /**
    * The config factory service.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
@@ -27,10 +35,13 @@ final class MetatagFacade implements ContainerInjectionInterface {
   /**
    * MetatagFacade constructor.
    *
+   * @param \Drupal\Core\Config\ConfigInstallerInterface $config_installer
+   *   The config installer service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory) {
+  public function __construct(ConfigInstallerInterface $config_installer, ConfigFactoryInterface $config_factory) {
+    $this->configInstaller = $config_installer;
     $this->configFactory = $config_factory;
   }
 
@@ -39,6 +50,7 @@ final class MetatagFacade implements ContainerInjectionInterface {
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('config.installer'),
       $container->get('config.factory')
     );
   }
@@ -53,8 +65,13 @@ final class MetatagFacade implements ContainerInjectionInterface {
    *   The new node type.
    */
   public function addNodeType(NodeTypeInterface $node_type) {
-    $settings = $node_type->getThirdPartySetting('acquia_cms', 'metatag', []);
+    // We don't want to do any secondary config writes during a config sync,
+    // since that can have major, unintentional side effects.
+    if ($this->configInstaller->isSyncing()) {
+      return;
+    }
 
+    $settings = $node_type->getThirdPartySetting('acquia_cms', 'metatag', []);
     if (isset($settings['tag_types'])) {
       $key = 'entity_type_groups.node.' . $node_type->id();
 
