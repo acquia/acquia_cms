@@ -11,11 +11,8 @@ use Drupal\node\Entity\NodeType;
  * Implements hook_install().
  */
 function acquia_cms_search_install() {
-  // Invoking ENTITY_TYPE_insert hook implemented in acquia_cms_search
-  // as it's not getting invoked because the module that creates node types
-  // are already getting installed before this search module is getting
-  // enabled.
-  /** @var \Drupal\node\NodeTypeInterface $node_types */
+  // Retroactively enable indexing for any content types that existed before
+  // this module was installed.
   $node_types = NodeType::loadMultiple();
   array_walk($node_types, 'acquia_cms_search_node_type_insert');
 }

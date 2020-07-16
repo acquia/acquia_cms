@@ -76,23 +76,24 @@ class SearchTest extends BrowserTestBase {
     $this->drupalLogin($account);
 
     $node_types = NodeType::loadMultiple();
-    // Create some published and unpublished nodes to assert search
-    // functionality properly.
+    // Create some published and unpublished nodes to assert that the search
+    // respects the published status of content.
     foreach ($node_types as $type) {
       $published_node = $this->drupalCreateNode([
         'type' => $type->id(),
         'title' => 'Test published ' . $type->label(),
         'moderation_state' => 'published',
       ]);
-      $published_node->setPublished()->save();
+      $this->assertTrue($published_node->isPublished());
+
       $unpublished_node = $this->drupalCreateNode([
         'type' => $type->id(),
         'title' => 'Test unpublished ' . $type->label(),
+        'moderation_state' => 'draft',
       ]);
-      $unpublished_node->setUnpublished()->save();
+      $this->assertFalse($unpublished_node->isPublished());
     }
 
-    // Visit the seach page.
     $this->drupalGet('/search');
     $assert_session->statusCodeEquals(200);
     $page->fillField('Keywords', 'Test');

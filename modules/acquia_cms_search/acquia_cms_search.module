@@ -8,25 +8,24 @@
 use Drupal\acquia_cms_search\Facade\SearchFacade;
 use Drupal\Core\DestructableInterface;
 use Drupal\node\NodeTypeInterface;
+use Drupal\search_api\Entity\Index;
 use Drupal\search_api\ServerInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_insert() for node types.
  */
 function acquia_cms_search_node_type_insert(NodeTypeInterface $node_type) {
-  // Avoid during config sync.
-  if (!Drupal::isConfigSyncing()) {
-    Drupal::classResolver(SearchFacade::class)->addNodeType($node_type);
-  }
+  Drupal::classResolver(SearchFacade::class)->addNodeType($node_type);
 }
 
 /**
  * Implements hook_entity_insert().
  */
 function acquia_cms_search_entity_insert() {
-  // Indexing the node just after the creation. As the nodes created
-  // programmatically are not getting indexed ( Specially in PHPUnit ), so
-  // using this service to destruct and do a indexing of the newly created node.
+  // Normally, content is indexed immediately after it is created or modified,
+  // at the end of the current request. But that means content created
+  // programmatically (i.e., in the PHPUnit tests) are not being indexed. So,
+  // explicitly invoke the indexer whenever an entity is created.
   $indexer = Drupal::service('search_api.post_request_indexing');
   if ($indexer instanceof DestructableInterface) {
     $indexer->destruct();
@@ -34,21 +33,32 @@ function acquia_cms_search_entity_insert() {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_insert() for Search API server.
+ * Implements hook_ENTITY_TYPE_insert() for Search API servers.
  */
 function acquia_cms_search_search_api_server_insert(ServerInterface $server) {
-  // Looking into all the indexs that are there.
-  $index_storage = \Drupal::entityTypeManager()->getStorage('search_api_index');
-  $indexes = $index_storage->loadMultiple();
+  // We don't want to do any secondary config writes during a config sync,
+  // since that can have major, unintentional side effects.
+  if (Drupal::isConfigSyncing()) {
+    return;
+  }
+
+  // Look for an index which is disabled, but wants to passively opt into using
+  // this server.
+  $indexes = Index::loadMultiple();
+  /** @var \Drupal\search_api\IndexInterface $index */
   foreach ($indexes as $index) {
-    if (is_object($index)) {
-      $server_name = $index->getThirdPartySetting('acquia_cms', 'server', []);
-      if (!$index->status() && !$index->isServerEnabled() && ($server->id() == $server_name)) {
-        $index->setServer($server)->enable();
-        // Removing server third-party setting.
-        $index->unsetThirdPartySetting('acquia_cms', 'server');
-        $index->save();
-      }
+    if ($index->status() || $index->isServerEnabled()) {
+      continue;
+    }
+
+    // If the index wants to opt into using this server, grant its wish.
+    $server_name = $index->getThirdPartySetting('acquia_cms', 'search_server');
+    if ($server_name && $server->id() === $server_name) {
+      $index->setServer($server)
+        ->enable()
+        // The third-party setting is only needed once.
+        ->unsetThirdPartySetting('acquia_cms', 'search_server')
+        ->save();
     }
   }
 }
@@ -56,10 +66,12 @@ function acquia_cms_search_search_api_server_insert(ServerInterface $server) {
 /**
  * Implements hook_config_schema_info_alter().
  */
-function acquia_cms_search_config_schema_info_alter(&$definitions) {
-  // Appending search index schema into existing schema of the acquia_cms_common
-  // module.
-  $definitions['node.type.third_party.acquia_cms']['mapping']['search_index'] = [
+function acquia_cms_search_config_schema_info_alter(array &$definitions) {
+  // Allow node types to carry a 'search_index' setting. This is used by our
+  // facade to passively opt the node type into a particular index.
+  // @see acquia_cms_search_node_type_insert()
+  // @see \Drupal\acquia_cms_search\Facade\SearchFacade::addNodeType()
+  $definitions['node.type.*.third_party.acquia_cms']['mapping']['search_index'] = [
     'type' => 'string',
     'label' => 'The machine name of the search index to which this content type should be added',
   ];
