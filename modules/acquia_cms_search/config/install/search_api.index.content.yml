@@ -12,7 +12,7 @@ dependencies:
     - core.entity_view_mode.node.search_index
 third_party_settings:
   acquia_cms:
-    server: database
+    search_server: database
 id: content
 name: Content
 description: 'An index of all content in your site.'
@@ -65,6 +65,16 @@ field_settings:
     indexed_locked: true
     type_locked: true
     hidden: true
+  published:
+    label: Published
+    datasource_id: 'entity:node'
+    property_path: status
+    type: boolean
+    indexed_locked: true
+    type_locked: true
+    dependencies:
+      module:
+        - node
   rendered_item:
     label: 'Rendered HTML output'
     property_path: rendered_item
@@ -72,12 +82,26 @@ field_settings:
     configuration:
       roles:
         anonymous: anonymous
-      view_mode: {  }
-  published:
-    label: Published
+      view_mode:
+        'entity:node':
+          article: search_index
+          event: search_index
+          page: search_index
+          person: search_index
+          place: search_index
+  type:
+    label: 'Content type'
     datasource_id: 'entity:node'
-    property_path: status
-    type: boolean
+    property_path: type
+    type: string
+    dependencies:
+      module:
+        - node
+  uid:
+    label: uid
+    datasource_id: 'entity:node'
+    property_path: uid
+    type: integer
     indexed_locked: true
     type_locked: true
     dependencies:
@@ -115,6 +139,7 @@ processor_settings:
     all_fields: true
     fields:
       - rendered_item
+      - type
     weights:
       preprocess_index: -9
       preprocess_query: -8

@@ -80,8 +80,8 @@ class SearchTest extends BrowserTestBase {
     $this->drupalLogin($account);
 
     $node_types = NodeType::loadMultiple();
-    // Create some published and unpublished nodes to assert search
-    // functionality properly.
+    // Create some published and unpublished nodes to assert that the search
+    // respects the published status of content.
     foreach ($node_types as $type) {
       $node_type_id = $type->id();
       $node_type_label = $type->label();
@@ -100,13 +100,13 @@ class SearchTest extends BrowserTestBase {
           'field_' . $node_type_id . '_type' => $music->id(),
           'moderation_state' => 'published',
         ]);
-        $published_node->setPublished()->save();
+        $this->assertTrue($published_node->isPublished());
         $unpublished_node = $this->drupalCreateNode([
           'type' => $node_type_id,
           'title' => 'Test unpublished ' . $type->label(),
           'field_' . $node_type_id . '_type' => $rock->id(),
         ]);
-        $unpublished_node->setUnpublished()->save();
+        $this->assertFalse($unpublished_node->isPublished());
       }
       else {
         $published_node = $this->drupalCreateNode([
@@ -114,12 +114,12 @@ class SearchTest extends BrowserTestBase {
           'title' => 'Test published ' . $type->label(),
           'moderation_state' => 'published',
         ]);
-        $published_node->setPublished()->save();
+        $this->assertTrue($published_node->isPublished());
         $unpublished_node = $this->drupalCreateNode([
           'type' => $node_type_id,
           'title' => 'Test unpublished ' . $type->label(),
         ]);
-        $unpublished_node->setUnpublished()->save();
+        $this->assertFalse($unpublished_node->isPublished());
       }
     }
 
