@@ -8,25 +8,23 @@ NOCOLOR="\033[0m"
 
 echo -e "${GREEN}Running on ${OSTYPE}${NOCOLOR}"
 
-# This script gets executed on running ./acms-test.sh from project folder.
-# This is a single command to execute code validation and automated testing.
+# This script can be executed by running ./acms-run-tests.sh from project folder. It will execute all Acquia CMS tests and quality checks for you.
 
-# Starting drush server and chrome driver, if they are not already running.
-# This is required to run phpunit and javascript tests respectively.
-# Assuming mink driver port is set to 9515 in phpunit.xml.
-
+# Start PHP's built-in http server on port 8080.
 runwebserver() {
   echo -e "${YELLOW}Starting PHP's built-in http server on 8080.${NOCOLOR}"
   nohup drush runserver 8080 &
   echo -e "${GREEN}Drush server started on port 8080.${NOCOLOR}"
 }
 
+# Run chromedriver on port 9515 (assuming mink driver port is set to 9515 in phpunit.xml).
 runchromedriver() {
   echo -e "${YELLOW}Starting Chromedriver on port 9515.${NOCOLOR}"
   nohup chromedriver --url-base=/wd/hub &
   echo -e "${GREEN}Started Chromedriver on port 9515.${NOCOLOR}"
 }
 
+# Kill any process on a linux GNU environment.
 killProcessLinuxOs() {
   if command -v fuser &> /dev/null
     then
@@ -34,9 +32,11 @@ killProcessLinuxOs() {
       echo -e "${YELLOW}Process killed on port $1 ${$NOCOLOR}"
     else
       echo 'Please install fuser';
+      exit 1
     fi
 }
 
+# Kill any process on a Darwin environment.
 killProcessDarwinOs() {
   nohup kill -9 $(lsof -t -i:${1})
   echo -e "${YELLOW}Process killed on port $1 ${NOCOLOR}"
@@ -75,25 +75,22 @@ esac
 # Run code quality checks.
 vendor/bin/grumphp run
 
-# Set the URL of the database being used,
-# only if it is not set, and display it's value.
+# Set SIMPLETEST_DB environment variable if it is not set already.
 if [ -z "$(printenv SIMPLETEST_DB)" ] ; then
   export SIMPLETEST_DB=sqlite://localhost/drupal.sqlite
   echo -e "${GREEN}SIMPLETEST_DB environment variable is now set as: ${NOCOLOR}"
   printenv SIMPLETEST_DB
-  echo -e "${YELLOW}If you are using SQL, set environment variable accordingly, ex (mysql://drupal:drupal@127.0.0.1/drupal) ${NOCOLOR}"
+  echo -e "${YELLOW}If you are using SQL, set environment variable accordingly, ex (mysql://drupal:drupal@127.0.0.1/drupal)${NOCOLOR}"
 fi
 
-# Set the URL where you can access the Drupal site,
-# only if it is not set, and display it's value.
+# Set SIMPLETEST_BASE_URL environment variable if it is not set already.
 if [ -z "$(printenv SIMPLETEST_BASE_URL)" ] ; then
   export SIMPLETEST_BASE_URL=http://127.0.0.1:8080
   echo -e "${GREEN}SIMPLETEST_BASE_URL environment variable is now set as: ${NOCOLOR}"
   printenv SIMPLETEST_BASE_URL
 fi
 
-# Silence deprecation errors.
-# only if it is not set, and display it's value.
+# Set SYMFONY_DEPRECATIONS_HELPER environment variable if it is not set already.
 if [ -z "$(printenv SYMFONY_DEPRECATIONS_HELPER)" ] ; then
   export SYMFONY_DEPRECATIONS_HELPER=weak
   echo -e "${GREEN}SYMFONY_DEPRECATIONS_HELPER environment variable is now set as:${NOCOLOR}"
@@ -103,12 +100,9 @@ fi
 # Run all automated PHPUnit tests.
 # If --stop-on-failure is passed as an argument $1 will handle it.
 echo -e "${YELLOW}Running phpunit tests for acquia_cms group. ${NOCOLOR}"
-COMPOSER_PROCESS_TIMEOUT=0 ./vendor/bin/phpunit -c docroot/core --group acquia_cms --stop-on-failure
+COMPOSER_PROCESS_TIMEOUT=0 ./vendor/bin/phpunit -c docroot/core --group acquia_cms $1
 
-# Stop Chrome driver and drush server.
-# Check if fuser is present and stop processes for port 8080 and 9515.
-# Check OS type to use fuser or kill accordingly.
-
+# Stop Chrome driver and drush server based on OS Type.
 case $OSTYPE in
    "linux-gnu"*)
     echo -e "${YELLOW}Stopping drush webserver.${NOCOLOR}"
