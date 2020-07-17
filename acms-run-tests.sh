@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Automatically abort the script if any errors occur.
-set -e
-
 RED="\033[1;31m"
 GREEN="\033[1;32m"
 YELLOW="\033[1;33m"
@@ -25,7 +22,7 @@ runwebserver() {
 # Run ChromeDriver on port "${CHROMEDRIVER_PORT}".
 runchromedriver() {
   echo -e "${YELLOW}Starting ChromeDriver on port "${CHROMEDRIVER_PORT}".${NOCOLOR}"
-  nohup chromedriver --port="${CHROMEDRIVER_PORT}" &
+  nohup ./vendor/bin/chromedriver --port="${CHROMEDRIVER_PORT}" &
   echo -e "${GREEN}Started ChromeDriver on port "${CHROMEDRIVER_PORT}".${NOCOLOR}"
 }
 
@@ -45,6 +42,33 @@ killProcessLinuxOs() {
 killProcessDarwinOs() {
   nohup kill -9 $(lsof -t -i:${1})
   echo -e "${YELLOW}Process killed on port $1 ${NOCOLOR}"
+}
+
+# Kill all the processes this script has started.
+acmsExit() {
+  if [ $1 -eq 0 ]
+  then
+    echo -e "${GREEN}${2}${NOCOLOR}"
+  else
+    echo -e "${RED}${2}${NOCOLOR}"
+  fi
+
+  # Kill the processes based on OS.
+  case $OSTYPE in
+    "linux-gnu"*)
+      echo -e "${YELLOW}Stopping drush webserver.${NOCOLOR}"
+      killProcessLinuxOs "${WEBSERVER_PORT}"
+      echo -e "${YELLOW}Stopping chromedriver.${NOCOLOR}"
+      killProcessLinuxOs "${CHROMEDRIVER_PORT}"
+      ;;
+    "darwin"*)
+      echo -e "${YELLOW}Stopping drush webserver.${NOCOLOR}"
+      killProcessDarwinOs "${WEBSERVER_PORT}"
+      echo -e "${YELLOW}Stopping chromedriver.${NOCOLOR}"
+      killProcessDarwinOs "${CHROMEDRIVER_PORT}"
+      ;;
+  esac
+  exit $1
 }
 
 # Switch case to handle macOS and Linux.
@@ -79,6 +103,11 @@ esac
 
 # Run code quality checks.
 vendor/bin/grumphp run
+
+# Check the status of grumphp, if it fails handle it gracefully.
+if [ $? -ne 0 ] ; then
+  acmsExit 1 "GrumPHP has failed. Stopping further processing!"
+fi
 
 # Set SIMPLETEST_DB environment variable if it is not set already.
 if [ -z "$(printenv SIMPLETEST_DB)" ] ; then
@@ -128,18 +157,10 @@ fi
 echo -e "${YELLOW}Running phpunit tests for acquia_cms. ${NOCOLOR}"
 COMPOSER_PROCESS_TIMEOUT=0 ./vendor/bin/phpunit -c docroot/core docroot/profiles/acquia_cms --debug $1
 
-# Stop ChromeDriver and Drush web server based on OS Type.
-case $OSTYPE in
-   "linux-gnu"*)
-    echo -e "${YELLOW}Stopping drush webserver.${NOCOLOR}"
-    killProcessLinuxOs "${WEBSERVER_PORT}"
-    echo -e "${YELLOW}Stopping chromedriver.${NOCOLOR}"
-    killProcessLinuxOs "${CHROMEDRIVER_PORT}"
-    ;;
-   "darwin"*)
-    echo -e "${YELLOW}Stopping drush webserver.${NOCOLOR}"
-    killProcessDarwinOs "${WEBSERVER_PORT}"
-    echo -e "${YELLOW}Stopping chromedriver.${NOCOLOR}"
-    killProcessDarwinOs "${CHROMEDRIVER_PORT}"
-    ;;
-esac
+# Terminate all the processes
+if [ $? -ne 0 ] ;
+then
+  acmsExit 1 "PHP Tests have failed. Stopping further processing!"
+else
+  acmsExit 0 "All tests are passing. Well done!"
+fi
