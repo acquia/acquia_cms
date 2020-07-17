@@ -2,25 +2,22 @@ langcode: en
 status: true
 dependencies:
   config:
-    - facets.facet.article_type
+    - facets.facet.content_type
   module:
-    - cohesion
     - facets
     - system
-  theme:
-    - cohesion_theme
-id: articletype
+id: content_type_facet
 theme: cohesion_theme
 region: content
-weight: -1
+weight: -2
 provider: null
-plugin: 'facet_block:article_type'
+plugin: 'facet_block:content_type'
 settings:
-  id: 'facet_block:article_type'
-  label: 'Article Type'
+  id: 'facet_block:content_type'
+  label: 'Content Type'
   provider: facets
   label_display: '0'
-  block_id: articletype
+  block_id: content_type_facet
 visibility:
   cohesion_master_template:
     id: cohesion_master_template

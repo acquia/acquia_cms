@@ -5,10 +5,6 @@ dependencies:
     - node
     - search_api
   config:
-    - field.storage.node.field_article_type
-    - field.storage.node.field_event_type
-    - field.storage.node.field_person_type
-    - field.storage.node.field_place_type
     - core.entity_view_mode.node.search_index
 third_party_settings:
   acquia_cms:
@@ -18,46 +14,6 @@ name: Content
 description: 'An index of all content in your site.'
 read_only: false
 field_settings:
-  content_type:
-    label: 'Content type'
-    datasource_id: 'entity:node'
-    property_path: type
-    type: string
-    dependencies:
-      module:
-        - node
-  field_article_type:
-    label: 'Article Type'
-    datasource_id: 'entity:node'
-    property_path: field_article_type
-    type: integer
-    dependencies:
-      config:
-        - field.storage.node.field_article_type
-  field_event_type:
-    label: 'Event Type'
-    datasource_id: 'entity:node'
-    property_path: field_event_type
-    type: integer
-    dependencies:
-      config:
-        - field.storage.node.field_event_type
-  field_person_type:
-    label: 'Person Type'
-    datasource_id: 'entity:node'
-    property_path: field_person_type
-    type: integer
-    dependencies:
-      config:
-        - field.storage.node.field_person_type
-  field_place_type:
-    label: 'Place Type'
-    datasource_id: 'entity:node'
-    property_path: field_place_type
-    type: integer
-    dependencies:
-      config:
-        - field.storage.node.field_place_type
   node_grants:
     label: 'Node access information'
     property_path: search_api_node_grants
@@ -82,13 +38,7 @@ field_settings:
     configuration:
       roles:
         anonymous: anonymous
-      view_mode:
-        'entity:node':
-          article: search_index
-          event: search_index
-          page: search_index
-          person: search_index
-          place: search_index
+      view_mode: {  }
   type:
     label: 'Content type'
     datasource_id: 'entity:node'
@@ -110,7 +60,7 @@ field_settings:
 datasource_settings:
   'entity:node':
     bundles:
-      default: true
+      default: false
       selected: {  }
     languages:
       default: true

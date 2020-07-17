@@ -2,25 +2,22 @@ langcode: en
 status: true
 dependencies:
   config:
-    - facets.facet.place_type
+    - facets.facet.person_type
   module:
-    - cohesion
     - facets
     - system
-  theme:
-    - cohesion_theme
-id: placetype
+id: person_type_facet
 theme: cohesion_theme
 region: content
-weight: 2
+weight: 1
 provider: null
-plugin: 'facet_block:place_type'
+plugin: 'facet_block:person_type'
 settings:
-  id: 'facet_block:place_type'
-  label: 'Place Type'
+  id: 'facet_block:person_type'
+  label: 'Person Type'
   provider: facets
   label_display: '0'
-  block_id: placetype
+  block_id: person_type_facet
 visibility:
   cohesion_master_template:
     id: cohesion_master_template

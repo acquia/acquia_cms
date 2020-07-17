@@ -4,12 +4,9 @@ dependencies:
   config:
     - facets.facet.event_type
   module:
-    - cohesion
     - facets
     - system
-  theme:
-    - cohesion_theme
-id: eventtype
+id: event_type_facet
 theme: cohesion_theme
 region: content
 weight: 0
@@ -20,7 +17,7 @@ settings:
   label: 'Event Type'
   provider: facets
   label_display: '0'
-  block_id: eventtype
+  block_id: event_type_facet
 visibility:
   cohesion_master_template:
     id: cohesion_master_template
