@@ -28,8 +28,8 @@ runchromedriver() {
 killProcessLinuxOs() {
   if command -v fuser &> /dev/null
     then
-      fuser -k "$1/tcp"
-      echo -e "${YELLOW}Process killed on port $1 ${$NOCOLOR}"
+      fuser -k "${1}/tcp"
+      echo -e "${YELLOW}Process killed on port $1 ${NOCOLOR}"
     else
       echo 'Please install fuser';
       exit 1
