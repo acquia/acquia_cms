@@ -6,22 +6,25 @@ GREEN="\033[1;32m"
 YELLOW="\033[1;33m"
 NOCOLOR="\033[0m"
 
+WEBSERVER_PORT=8080
+CHROMDRIVER_PORT=4444
+
 echo -e "${GREEN}Running on ${OSTYPE}${NOCOLOR}"
 
 # This script can be executed by running ./acms-run-tests.sh from project folder. It will execute all Acquia CMS tests and quality checks for you.
 
-# Start PHP's built-in http server on port 8080.
+# Start PHP's built-in http server on port "${WEBSERVER_PORT}".
 runwebserver() {
-  echo -e "${YELLOW}Starting PHP's built-in http server on 8080.${NOCOLOR}"
-  nohup drush runserver 8080 &
-  echo -e "${GREEN}Drush server started on port 8080.${NOCOLOR}"
+  echo -e "${YELLOW}Starting PHP's built-in http server on "${WEBSERVER_PORT}".${NOCOLOR}"
+  nohup drush runserver "${WEBSERVER_PORT}" &
+  echo -e "${GREEN}Drush server started on port "${WEBSERVER_PORT}".${NOCOLOR}"
 }
 
-# Run chromedriver on port 9515 (assuming mink driver port is set to 9515 in phpunit.xml).
+# Run chromedriver on port "${CHROMDRIVER_PORT}" (assuming mink driver port is set to "${CHROMDRIVER_PORT}" in phpunit.xml).
 runchromedriver() {
-  echo -e "${YELLOW}Starting Chromedriver on port 9515.${NOCOLOR}"
-  nohup chromedriver --url-base=/wd/hub &
-  echo -e "${GREEN}Started Chromedriver on port 9515.${NOCOLOR}"
+  echo -e "${YELLOW}Starting Chromedriver on port "${CHROMDRIVER_PORT}".${NOCOLOR}"
+  nohup chromedriver --port="${CHROMDRIVER_PORT}" &
+  echo -e "${GREEN}Started Chromedriver on port "${CHROMDRIVER_PORT}".${NOCOLOR}"
 }
 
 # Kill any process on a linux GNU environment.
@@ -46,28 +49,28 @@ killProcessDarwinOs() {
 case $OSTYPE in
   "linux-gnu"*)
     if declare -a array=($(tail -n +2 /proc/net/tcp | cut -d":" -f"3"|cut -d" " -f"1")) &&
-      for port in ${array[@]}; do echo $((0x$port)); done | grep 8080 ; then
-        echo -e "${RED}Port 8080 is already occupied. Webserver cannot start on port 8080.${NOCOLOR}"
+      for port in ${array[@]}; do echo $((0x$port)); done | grep "${WEBSERVER_PORT}" ; then
+        echo -e "${RED}Port "${WEBSERVER_PORT}" is already occupied. Webserver cannot start on port "${WEBSERVER_PORT}".${NOCOLOR}"
       else
         runwebserver
     fi
     if declare -a array=($(tail -n +2 /proc/net/tcp | cut -d":" -f"3"|cut -d" " -f"1")) &&
-      for port in ${array[@]}; do echo $((0x$port)); done | grep 9515 ; then
-        echo -e "${RED}Port 9515 is already occupied. Chromedriver cannot run on port 9515. ${NOCOLOR}"
+      for port in ${array[@]}; do echo $((0x$port)); done | grep "${CHROMDRIVER_PORT}" ; then
+        echo -e "${RED}Port "${CHROMDRIVER_PORT}" is already occupied. Chromedriver cannot run on port "${CHROMDRIVER_PORT}". ${NOCOLOR}"
       else
         runchromedriver
     fi
       ;;
   "darwin"*)
-      if [ -z "$(lsof -t -i:8080)" ] ; then
+      if [ -z "$(lsof -t -i:"${WEBSERVER_PORT}")" ] ; then
         runwebserver
       else
-        echo -e "${RED}Port 8080 is already occupied. Webserver cannot start on port 8080. ${NOCOLOR}"
+        echo -e "${RED}Port "${WEBSERVER_PORT}" is already occupied. Webserver cannot start on port "${WEBSERVER_PORT}". ${NOCOLOR}"
       fi
-      if [ -z "$(lsof -t -i:9515)" ] ; then
+      if [ -z "$(lsof -t -i:"${CHROMDRIVER_PORT}")" ] ; then
         runchromedriver
       else
-        echo -e "${RED}Port 9515 is already occupied. Chromedriver cannot run on port 9515. ${NOCOLOR}"
+        echo -e "${RED}Port "${CHROMDRIVER_PORT}" is already occupied. Chromedriver cannot run on port "${CHROMDRIVER_PORT}". ${NOCOLOR}"
       fi
       ;;
 esac
@@ -85,7 +88,7 @@ fi
 
 # Set SIMPLETEST_BASE_URL environment variable if it is not set already.
 if [ -z "$(printenv SIMPLETEST_BASE_URL)" ] ; then
-  export SIMPLETEST_BASE_URL=http://127.0.0.1:8080
+  export SIMPLETEST_BASE_URL=http://127.0.0.1:"${WEBSERVER_PORT}"
   echo -e "${GREEN}SIMPLETEST_BASE_URL environment variable is now set as: ${NOCOLOR}"
   printenv SIMPLETEST_BASE_URL
 fi
@@ -99,21 +102,21 @@ fi
 
 # Run all automated PHPUnit tests.
 # If --stop-on-failure is passed as an argument $1 will handle it.
-echo -e "${YELLOW}Running phpunit tests for acquia_cms group. ${NOCOLOR}"
-COMPOSER_PROCESS_TIMEOUT=0 ./vendor/bin/phpunit -c docroot/core --group acquia_cms $1
+echo -e "${YELLOW}Running phpunit tests for acquia_cms. ${NOCOLOR}"
+COMPOSER_PROCESS_TIMEOUT=0 ./vendor/bin/phpunit -c docroot/core docroot/sites/all/modules/ --testsuite=functional --debug -v $1
 
 # Stop Chrome driver and drush server based on OS Type.
 case $OSTYPE in
    "linux-gnu"*)
     echo -e "${YELLOW}Stopping drush webserver.${NOCOLOR}"
-    killProcessLinuxOs 8080
+    killProcessLinuxOs "${WEBSERVER_PORT}"
     echo -e "${YELLOW}Stopping chromedriver.${NOCOLOR}"
-    killProcessLinuxOs 9515
+    killProcessLinuxOs "${CHROMDRIVER_PORT}"
     ;;
    "darwin"*)
     echo -e "${YELLOW}Stopping drush webserver.${NOCOLOR}"
-    killProcessDarwinOs 8080
+    killProcessDarwinOs "${WEBSERVER_PORT}"
     echo -e "${YELLOW}Stopping chromedriver.${NOCOLOR}"
-    killProcessDarwinOs 9515
+    killProcessDarwinOs "${CHROMDRIVER_PORT}"
     ;;
 esac
