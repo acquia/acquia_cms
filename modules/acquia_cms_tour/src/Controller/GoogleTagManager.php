@@ -46,6 +46,7 @@ final class GoogleTagManager extends ControllerBase {
     $section = [
       '#type' => 'details',
       '#title' => $this->t('Google Tag Manager'),
+      '#open' => TRUE,
     ];
 
     return $this->moduleHandler()->moduleExists('google_tag')
@@ -68,6 +69,7 @@ final class GoogleTagManager extends ControllerBase {
     if ($gtm_container_id) {
       $message = $this->t('Google Tag Manager is enabled and configured.');
       $message_type = 'status';
+      $section['#open'] = FALSE;
 
       if ($user_can_configure) {
         $section['message']['#markup'] = Link::createFromRoute($this->t('Configure Google Tag Manager now.'), 'entity.google_tag_container.collection')->toString();

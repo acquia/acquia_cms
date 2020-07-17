@@ -25,6 +25,7 @@ final class GoogleAnalytics extends ControllerBase {
     $section = [
       '#type' => 'details',
       '#title' => $this->t('Google Analytics'),
+      '#open' => TRUE,
     ];
 
     return $this->moduleHandler()->moduleExists('google_analytics')
@@ -47,6 +48,7 @@ final class GoogleAnalytics extends ControllerBase {
     if ($ga_account) {
       $message = $this->t('Google Analytics is enabled and configured.');
       $message_type = 'status';
+      $section['#open'] = FALSE;
 
       if ($user_can_configure) {
         $section['message']['#markup'] = Link::createFromRoute($this->t('Configure Google Analytics now.'), 'google_analytics.admin_settings_form')->toString();
