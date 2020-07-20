@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\acquia_cms_document\Functional;
 
-use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
 use Drupal\Tests\TestFileCreationTrait;
 
@@ -45,9 +44,6 @@ class DocumentEmbedTest extends MediaEmbedTestBase {
    * {@inheritdoc}
    */
   public function testEmbedMedia() {
-    if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
-      $this->markTestSkipped('This cannot be run in a Cloud IDE right now');
-    }
     $session = $this->getSession();
     $assert_session = $this->assertSession();
 
