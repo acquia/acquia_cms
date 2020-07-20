@@ -19,6 +19,10 @@ default_value_callback: ''
 settings:
   available_countries: {  }
   langcode_override: ''
-  field_overrides: {  }
+  field_overrides:
+    givenName:
+      override: optional
+    familyName:
+      override: optional
   fields: {  }
 field_type: address
