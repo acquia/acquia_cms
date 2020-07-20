@@ -16,7 +16,7 @@ class DocumentTest extends MediaTypeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['acquia_cms_document', 'media_library'];
+  protected static $modules = ['acquia_cms_document'];
 
   /**
    * Disable strict config schema checks in this test.
@@ -75,14 +75,6 @@ class DocumentTest extends MediaTypeTestBase {
       'field_categories',
       'field_tags',
     ]);
-
-    // Assert that the fields are in the correct order,
-    // for media_library form_mode.
-    $this->assertFieldsOrder([
-      'name',
-      'field_categories',
-      'field_tags',
-    ], 'media_library');
 
     // Submit the form and ensure that we see the expected error message(s).
     $page->pressButton('Save');
