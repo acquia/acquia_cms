@@ -9,7 +9,7 @@ use Drupal\Tests\TestFileCreationTrait;
  * Tests embedding Document media in CKEditor.
  *
  * @group acquia_cms
- * @group acquia_cms_video
+ * @group acquia_cms_document
  */
 class DocumentEmbedTest extends MediaEmbedTestBase {
 

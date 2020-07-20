@@ -8,7 +8,7 @@ use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
  * Tests embedding Image media in CKEditor.
  *
  * @group acquia_cms
- * @group acquia_cms_video
+ * @group acquia_cms_image
  */
 class ImageEmbedTest extends MediaEmbedTestBase {
 
