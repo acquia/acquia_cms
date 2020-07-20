@@ -3,6 +3,7 @@
 namespace Drupal\Tests\acquia_cms_document\Functional;
 
 use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
+use Drupal\Tests\TestFileCreationTrait;
 
 /**
  * Tests embedding Document media in CKEditor.
@@ -11,6 +12,8 @@ use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
  *   Cloud IDEs support running functional JavaScript tests.
  */
 class DocumentEmbedTest extends MediaEmbedTestBase {
+
+  use TestFileCreationTrait;
 
   /**
    * {@inheritdoc}
@@ -36,5 +39,33 @@ class DocumentEmbedTest extends MediaEmbedTestBase {
    * {@inheritdoc}
    */
   protected $mediaType = 'document';
+
+  /**
+   * {@inheritdoc}
+   */
+  public function testEmbedMedia() {
+    $session = $this->getSession();
+    $assert_session = $this->assertSession();
+
+    parent::testEmbedMedia();
+    // Exit the CKEditor iFrame.
+    $session->switchToIFrame(NULL);
+
+    // Create a test file that we can upload into the media library.
+    $files = $this->getTestFiles('text');
+    $this->assertNotEmpty($files);
+    $uri = reset($files)->uri;
+    $path = $this->container->get('file_system')->realpath($uri);
+    $this->assertFileExists($uri);
+
+    $this->openMediaLibrary();
+    $session->getPage()->attachFileToField('Add file', $path);
+    // Wait for the file to be uploaded, and the required fields (if any) to
+    // appear.
+    $element = $assert_session->waitForElementVisible('css', '.js-media-library-add-form-added-media > li');
+    $this->assertNotEmpty($element);
+    // Ensure that the "File" field is not present in the required fields.
+    $assert_session->hiddenFieldNotExists('media[0][fields][field_media_file][0][fids]', $element);
+  }
 
 }
