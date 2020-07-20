@@ -7,6 +7,7 @@
 
 use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
+use Drupal\Component\Serialization\Yaml;
 
 /**
  * Implements hook_install_tasks_alter().
@@ -81,9 +82,24 @@ function acquia_cms_install_ui_kit(array &$install_state) {
   /** @var \Drupal\cohesion_sync\PackagerManager $packager */
   $packager = Drupal::service('cohesion_sync.packager');
 
-  $packages = [
-    __DIR__ . '/misc/ui-kit.package.yml',
-  ];
+  // Scan all installed modules for Cohesion sync packages.
+  $packages = [];
+  foreach (Drupal::moduleHandler()->getModuleList() as $module) {
+    $module_path = $module->getPath();
+    $package_list = "$module_path/config/dx8/packages.yml";
+
+    if (file_exists($package_list)) {
+      $package_list = file_get_contents($package_list);
+      $package_list = Yaml::decode($package_list);
+
+      foreach ($package_list as $package_file) {
+        $packages[] = "$module_path/$package_file";
+      }
+    }
+  }
+  // Finally, import the main UI kit.
+  $packages[] = __DIR__ . '/misc/ui-kit.package.yml';
+
   foreach ($packages as $package) {
     assert(file_exists($package), "The UI kit package ($package) does not exist.");
 

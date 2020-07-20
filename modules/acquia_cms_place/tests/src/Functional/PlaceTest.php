@@ -150,8 +150,6 @@ class PlaceTest extends ContentTypeTestBase {
     // Submit the form and ensure that we see the expected error message(s).
     $page->pressButton('Save');
     $assert_session->pageTextContains('Title field is required.');
-    $assert_session->pageTextContains('First name field is required.');
-    $assert_session->pageTextContains('Last name field is required.');
     $assert_session->pageTextContains('Street address field is required.');
     $assert_session->pageTextContains('City field is required.');
     $assert_session->pageTextContains('State field is required.');
