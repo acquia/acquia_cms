@@ -7,8 +7,8 @@ use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
 /**
  * Tests embedding video media in CKEditor.
  *
- * @todo Add this to the acquia_cms and acquia_cms_vedio groups when Acquia
- *   Cloud IDEs support running functional JavaScript tests.
+ * @group acquia_cms
+ * @group acquia_cms_video
  */
 class VideoEmbedTest extends MediaEmbedTestBase {
 

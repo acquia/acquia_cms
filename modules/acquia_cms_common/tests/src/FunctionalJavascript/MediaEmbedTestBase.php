@@ -41,6 +41,12 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
    * {@inheritdoc}
    */
   protected function setUp() {
+    // @todo Remove this check when Acquia Cloud IDEs support running functional
+    // JavaScript tests.
+    if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
+      $this->markTestSkipped('This test cannot run in an Acquia Cloud IDE.');
+    }
+
     // Ensure that the media type under test has been specified by a subclass.
     $this->assertNotEmpty($this->mediaType);
 
