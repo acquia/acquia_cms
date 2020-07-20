@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_common\FunctionalJavascript;
 
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\Tests\ckeditor\Traits\CKEditorTestTrait;
 use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
@@ -49,6 +50,9 @@ class CkeditorConfigurationTest extends WebDriverTestBase {
    * Tests that CKEditor is configured as we expect.
    */
   public function test() {
+    if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
+      $this->markTestSkipped('This cannot be run in a Cloud IDE right now');
+    }
     $session = $this->getSession();
 
     $node_type = $this->drupalCreateContentType()->id();

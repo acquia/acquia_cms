@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_common\FunctionalJavascript;
 
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\media\Entity\MediaType;
 use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
@@ -58,6 +59,9 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
    * Tests embedding media in CKEditor.
    */
   public function testEmbedMedia() {
+    if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
+      $this->markTestSkipped('This cannot be run in a Cloud IDE right now');
+    }
     $node_type = $this->drupalCreateContentType()->id();
     user_role_grant_permissions('content_author', [
       "create $node_type content",
