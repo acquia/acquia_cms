@@ -7,18 +7,9 @@ weight: -8
 is_admin: null
 permissions:
   - 'access cohesion sync'
-  - 'access cpt_cat_dynamic_components cohesion_component_category group'
-  - 'access cpt_cat_general_components cohesion_component_category group'
-  - 'access cpt_cat_interactive_components cohesion_component_category group'
-  - 'access cpt_cat_layout_components cohesion_component_category group'
-  - 'access cpt_cat_media_components cohesion_component_category group'
-  - 'access cpt_cat_template_components cohesion_component_category group'
-  - 'access hlp_cat_dynamic_helpers cohesion_helper_category group'
-  - 'access hlp_cat_general_helpers cohesion_helper_category group'
-  - 'access hlp_cat_interactive_helpers cohesion_helper_category group'
-  - 'access hlp_cat_layout_helpers cohesion_helper_category group'
-  - 'access hlp_cat_media_helpers cohesion_helper_category group'
   - 'access toolbar'
+  # These permissions are not really administrative. They are needed in order
+  # to allow this role to build components, styles, helpers, and templates for Site Studio at all.
   - 'administer cohesion'
   - 'administer component categories'
   - 'administer component content'
@@ -28,6 +19,7 @@ permissions:
   - 'administer helpers'
   - 'administer style helpers'
   - 'administer style_guide'
+  # The above comment is only applicable till here.
   - 'use text format cohesion'
   - 'use text format filtered_html'
   - 'view the administration theme'

@@ -109,21 +109,9 @@ class BasicPermissionsTest extends BrowserTestBase {
       // All roles should be able to access the toolbar.
       // @TODO: refactor this to be aligned with other toolbar assertions.
       $this->assertTrue($role->hasPermission('access toolbar'));
-      // Common permission that both developer and site_builder have access to
-      // these permissions.
+      // Common permission that both developer and site_builder have access.
       $this->assertTrue($role->hasPermission('use text format cohesion'));
       $this->assertTrue($role->hasPermission('access cohesion sync'));
-      $this->assertTrue($role->hasPermission('access cpt_cat_dynamic_components cohesion_component_category group'));
-      $this->assertTrue($role->hasPermission('access cpt_cat_general_components cohesion_component_category group'));
-      $this->assertTrue($role->hasPermission('access cpt_cat_interactive_components cohesion_component_category group'));
-      $this->assertTrue($role->hasPermission('access cpt_cat_layout_components cohesion_component_category group'));
-      $this->assertTrue($role->hasPermission('access cpt_cat_media_components cohesion_component_category group'));
-      $this->assertTrue($role->hasPermission('access cpt_cat_template_components cohesion_component_category group'));
-      $this->assertTrue($role->hasPermission('access hlp_cat_dynamic_helpers cohesion_helper_category group'));
-      $this->assertTrue($role->hasPermission('access hlp_cat_general_helpers cohesion_helper_category group'));
-      $this->assertTrue($role->hasPermission('access hlp_cat_interactive_helpers cohesion_helper_category group'));
-      $this->assertTrue($role->hasPermission('access hlp_cat_layout_helpers cohesion_helper_category group'));
-      $this->assertTrue($role->hasPermission('access hlp_cat_media_helpers cohesion_helper_category group'));
       $this->assertTrue($role->hasPermission('administer cohesion'));
       $this->assertTrue($role->hasPermission('administer component categories'));
       $this->assertTrue($role->hasPermission('administer component content'));
@@ -169,7 +157,6 @@ class BasicPermissionsTest extends BrowserTestBase {
       $this->assertSame($is_developer, $role->hasPermission('administer menu templates'));
       $this->assertSame($is_developer, $role->hasPermission('administer view templates'));
       $this->assertSame($is_developer, $role->hasPermission('administer website settings'));
-      $this->assertSame($is_developer, $role->hasPermission('bypass xss cohesion'));
 
     }
   }
