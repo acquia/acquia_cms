@@ -29,7 +29,7 @@ class PlaceTest extends ContentTypeTestBase {
     'metatag_open_graph',
     'metatag_twitter_cards',
     'pathauto',
-    'schema_article',
+    'schema_place',
   ];
 
   /**
@@ -178,9 +178,18 @@ class PlaceTest extends ContentTypeTestBase {
     $this->assertSchemaData([
       '@graph' => [
         [
-          '@type' => 'Article',
+          '@type' => 'Place',
+          'telephone' => '9829838487',
           'name' => 'Living with video',
           'description' => 'This is an awesome remix!',
+          'address' => [
+            '@type' => 'PostalAddress',
+            'streetAddress' => '12, block b,',
+            'addressLocality' => 'Santa Clara',
+            'addressRegion' => 'CA',
+            'postalCode' => '95050',
+            'addressCountry' => 'United States',
+          ],
           'image' => [
             '@type' => 'ImageObject',
             'url' => $image_url,
