@@ -109,8 +109,68 @@ class BasicPermissionsTest extends BrowserTestBase {
       // All roles should be able to access the toolbar.
       // @TODO: refactor this to be aligned with other toolbar assertions.
       $this->assertTrue($role->hasPermission('access toolbar'));
-      // @TODO: refactor this to actually "test" the proper cohesion permissions once ACMS-216 is done.
+      // Common permission that both developer and site_builder have access to
+      // these permissions.
       $this->assertTrue($role->hasPermission('use text format cohesion'));
+      $this->assertTrue($role->hasPermission('access cohesion sync'));
+      $this->assertTrue($role->hasPermission('access cpt_cat_dynamic_components cohesion_component_category group'));
+      $this->assertTrue($role->hasPermission('access cpt_cat_general_components cohesion_component_category group'));
+      $this->assertTrue($role->hasPermission('access cpt_cat_interactive_components cohesion_component_category group'));
+      $this->assertTrue($role->hasPermission('access cpt_cat_layout_components cohesion_component_category group'));
+      $this->assertTrue($role->hasPermission('access cpt_cat_media_components cohesion_component_category group'));
+      $this->assertTrue($role->hasPermission('access cpt_cat_template_components cohesion_component_category group'));
+      $this->assertTrue($role->hasPermission('access hlp_cat_dynamic_helpers cohesion_helper_category group'));
+      $this->assertTrue($role->hasPermission('access hlp_cat_general_helpers cohesion_helper_category group'));
+      $this->assertTrue($role->hasPermission('access hlp_cat_interactive_helpers cohesion_helper_category group'));
+      $this->assertTrue($role->hasPermission('access hlp_cat_layout_helpers cohesion_helper_category group'));
+      $this->assertTrue($role->hasPermission('access hlp_cat_media_helpers cohesion_helper_category group'));
+      $this->assertTrue($role->hasPermission('administer cohesion'));
+      $this->assertTrue($role->hasPermission('administer component categories'));
+      $this->assertTrue($role->hasPermission('administer component content'));
+      $this->assertTrue($role->hasPermission('administer components'));
+      $this->assertTrue($role->hasPermission('administer custom styles'));
+      $this->assertTrue($role->hasPermission('administer helper categories'));
+      $this->assertTrue($role->hasPermission('administer helpers'));
+      $this->assertTrue($role->hasPermission('administer style helpers'));
+      $this->assertTrue($role->hasPermission('administer style_guide'));
+
+      // Only developer will have access to these permissions.
+      $is_developer = $role->id() === 'developer';
+      $this->assertSame($is_developer, $role->hasPermission('access analytics'));
+      $this->assertSame($is_developer, $role->hasPermission('access animate on view'));
+      $this->assertSame($is_developer, $role->hasPermission('access color_picker'));
+      $this->assertSame($is_developer, $role->hasPermission('access component builder elements group'));
+      $this->assertSame($is_developer, $role->hasPermission('access component content'));
+      $this->assertSame($is_developer, $role->hasPermission('access components'));
+      $this->assertSame($is_developer, $role->hasPermission('access content elements group'));
+      $this->assertSame($is_developer, $role->hasPermission('access context visibility'));
+      $this->assertSame($is_developer, $role->hasPermission('access custom elements group'));
+      $this->assertSame($is_developer, $role->hasPermission('access drupal core elements group'));
+      $this->assertSame($is_developer, $role->hasPermission('access elements'));
+      $this->assertSame($is_developer, $role->hasPermission('access fields'));
+      $this->assertSame($is_developer, $role->hasPermission('access form fields fields group'));
+      $this->assertSame($is_developer, $role->hasPermission('access form help fields group'));
+      $this->assertSame($is_developer, $role->hasPermission('access form layout fields group'));
+      $this->assertSame($is_developer, $role->hasPermission('access helpers'));
+      $this->assertSame($is_developer, $role->hasPermission('access hide no data'));
+      $this->assertSame($is_developer, $role->hasPermission('access interactive elements group'));
+      $this->assertSame($is_developer, $role->hasPermission('access layout elements group'));
+      $this->assertSame($is_developer, $role->hasPermission('access markup'));
+      $this->assertSame($is_developer, $role->hasPermission('access media elements group'));
+      $this->assertSame($is_developer, $role->hasPermission('access menu elements group'));
+      $this->assertSame($is_developer, $role->hasPermission('access seo'));
+      $this->assertSame($is_developer, $role->hasPermission('access styles'));
+      $this->assertSame($is_developer, $role->hasPermission('access tokens'));
+      $this->assertSame($is_developer, $role->hasPermission('access view elements group'));
+      $this->assertSame($is_developer, $role->hasPermission('administer base styles'));
+      $this->assertSame($is_developer, $role->hasPermission('administer cohesion settings'));
+      $this->assertSame($is_developer, $role->hasPermission('administer content templates'));
+      $this->assertSame($is_developer, $role->hasPermission('administer master templates'));
+      $this->assertSame($is_developer, $role->hasPermission('administer menu templates'));
+      $this->assertSame($is_developer, $role->hasPermission('administer view templates'));
+      $this->assertSame($is_developer, $role->hasPermission('administer website settings'));
+      $this->assertSame($is_developer, $role->hasPermission('bypass xss cohesion'));
+
     }
   }
 
