@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_common\ExistingSiteJavascript;
 
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Behat\Mink\Element\ElementInterface;
 use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
 
@@ -9,6 +10,18 @@ use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
  * Defines a base class for testing Acquia CMS's Cohesion integration.
  */
 abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    // @todo Remove this check when Acquia Cloud IDEs support running functional
+    // JavaScript tests.
+    if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
+      $this->markTestSkipped('This test cannot run in an Acquia Cloud IDE.');
+    }
+    parent::setUp();
+  }
 
   /**
    * Adds a component to a layout canvas.

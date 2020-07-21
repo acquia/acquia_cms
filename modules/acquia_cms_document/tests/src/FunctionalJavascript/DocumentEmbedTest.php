@@ -8,8 +8,8 @@ use Drupal\Tests\TestFileCreationTrait;
 /**
  * Tests embedding Document media in CKEditor.
  *
- * @todo Add this to the acquia_cms and acquia_cms_document groups when Acquia
- *   Cloud IDEs support running functional JavaScript tests.
+ * @group acquia_cms
+ * @group acquia_cms_document
  */
 class DocumentEmbedTest extends MediaEmbedTestBase {
 
