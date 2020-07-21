@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_common\FunctionalJavascript;
 
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\Tests\ckeditor\Traits\CKEditorTestTrait;
 use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
@@ -9,8 +10,8 @@ use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
 /**
  * Tests the CKEditor configuration shipped with Acquia CMS.
  *
- * @todo Add this to the acquia_cms and acquia_cms_common groups when Acquia
- *   Cloud IDEs support running functional JavaScript tests.
+ * @group acquia_cms
+ * @group acquia_cms_video
  */
 class CkeditorConfigurationTest extends WebDriverTestBase {
 
@@ -44,6 +45,18 @@ class CkeditorConfigurationTest extends WebDriverTestBase {
   // @codingStandardsIgnoreStart
   protected $strictConfigSchema = FALSE;
   // @codingStandardsIgnoreEnd
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    // @todo Remove this check when Acquia Cloud IDEs support running functional
+    // JavaScript tests.
+    if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
+      $this->markTestSkipped('This test cannot run in an Acquia Cloud IDE.');
+    }
+    parent::setUp();
+  }
 
   /**
    * Tests that CKEditor is configured as we expect.

@@ -58,17 +58,22 @@ If 2 GB *still* isn't enough memory, try raising the limit even more.
 ### Running tests
 Acquia CMS's tests are written using the PHPUnit-based framework provided by Drupal core. To run tests, you need to do a bit of set-up:
 
-1. From the repository root, use PHP's built-in web server to serve the Drupal site: `drush runserver 8080`. You can use a different server if you want to; just be sure to adjust the `SIMPLETEST_BASE_URL` environment variable (described below) as needed.
+1. From the repository root, use PHP's built-in web server to serve the Drupal site: `drush runserver 8080`. You can use a different server if you want to; just be sure to adjust the `SIMPLETEST_BASE_URL` environment variable (described below) as needed. To run functional JavaScript tests, be sure that you have Chrome installed, and ChromeDriver running. From the repository root, you can start ChromeDriver in a new terminal window with `vendor/bin/chromedriver --port=4444`. (You can use any port you want, but 4444 is standard.) Note that **ChromeDriver must be running on the same host as Chrome itself!**.
 2. In a new terminal window, define a few environment variables:
 ```
 # The URL of the database you're using. This is the URL for the database in your cloud IDE, so it may differ in a local environment. For example, if you are running SQLite, this will be 'sqlite://localhost/drupal.sqlite' or similar.
 export SIMPLETEST_DB=mysql://drupal:drupal@127.0.0.1/drupal
 
-# The URL where you can access the Drupal site.
+# The URL where you can access the Drupal site. This must be set twice in order to support both the built-in PHPUnit test framework and the Drupal Test Traits framework.
 export SIMPLETEST_BASE_URL=http://127.0.0.1:8080
+export DTT_BASE_URL=$SIMPLETEST_BASE_URL
 
 # Optional: silence deprecation errors, which can be very distracting when debugging test failures.
 export SYMFONY_DEPRECATIONS_HELPER=weak
+
+# Set the options for running functional JavaScript tests through ChromeDriver. This must be set twice in order to support both the built-in PHPUnit test framework and the Drupal Test Traits framework. If needed, you can change the port at which ChromeDriver is listening. To watch the tests run in the GUI (usually only possible on a local development environment), remove the "headless" switch.
+export MINK_DRIVER_ARGS_WEBDRIVER='["chrome", {"chrome": {"switches": ["headless"]}}, "http://127.0.0.1:4444"]'
+export DTT_MINK_DRIVER_ARGS=$MINK_DRIVER_ARGS_WEBDRIVER
 ```
 
 To run all Acquia CMS tests (which may take a while), use this command:
