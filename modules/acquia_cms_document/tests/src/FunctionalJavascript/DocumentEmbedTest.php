@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\acquia_cms_document\Functional;
 
+use Behat\Mink\Element\ElementInterface;
 use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
-use Drupal\Tests\TestFileCreationTrait;
 
 /**
  * Tests embedding Document media in CKEditor.
@@ -12,8 +12,6 @@ use Drupal\Tests\TestFileCreationTrait;
  * @group acquia_cms_document
  */
 class DocumentEmbedTest extends MediaEmbedTestBase {
-
-  use TestFileCreationTrait;
 
   /**
    * {@inheritdoc}
@@ -44,28 +42,26 @@ class DocumentEmbedTest extends MediaEmbedTestBase {
    * {@inheritdoc}
    */
   public function testEmbedMedia() {
-    $session = $this->getSession();
-    $assert_session = $this->assertSession();
-
     parent::testEmbedMedia();
-    // Exit the CKEditor iFrame.
-    $session->switchToIFrame(NULL);
+    $this->doTestCreateMedia();
+  }
 
-    // Create a test file that we can upload into the media library.
-    $files = $this->getTestFiles('text');
-    $this->assertNotEmpty($files);
-    $uri = reset($files)->uri;
-    $path = $this->container->get('file_system')->realpath($uri);
-    $this->assertFileExists($uri);
+  /**
+   * {@inheritdoc}
+   */
+  protected function addMedia() {
+    $this->getSession()
+      ->getPage()
+      ->attachFileToField('Add file', $this->getTestFilePath('text'));
+  }
 
-    $this->openMediaLibrary();
-    $session->getPage()->attachFileToField('Add file', $path);
-    // Wait for the file to be uploaded, and the required fields (if any) to
-    // appear.
-    $element = $assert_session->waitForElementVisible('css', '.js-media-library-add-form-added-media > li');
-    $this->assertNotEmpty($element);
+  /**
+   * {@inheritdoc}
+   */
+  protected function assertAddedMedia(ElementInterface $added_media) {
     // Ensure that the "File" field is not present in the required fields.
-    $assert_session->hiddenFieldNotExists('media[0][fields][field_media_file][0][fids]', $element);
+    $this->assertSession()
+      ->hiddenFieldNotExists('media[0][fields][field_media_file][0][fids]', $added_media);
   }
 
 }
