@@ -3,6 +3,7 @@
 namespace Drupal\Tests\acquia_cms_image\Functional;
 
 use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
+use Drupal\Tests\TestFileCreationTrait;
 
 /**
  * Tests embedding Image media in CKEditor.
@@ -12,10 +13,12 @@ use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
  */
 class ImageEmbedTest extends MediaEmbedTestBase {
 
+  use TestFileCreationTrait;
+
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['acquia_cms_image'];
+  protected static $modules = ['acquia_cms_image', 'focal_point'];
 
   /**
    * Disable strict config schema checks in this test.
@@ -36,5 +39,52 @@ class ImageEmbedTest extends MediaEmbedTestBase {
    * {@inheritdoc}
    */
   protected $mediaType = 'image';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setUp();
+
+    /** @var \Drupal\Core\Entity\EntityDisplayRepositoryInterface $display_repository */
+    $this->container->get('entity_display.repository')
+      ->getFormDisplay('media', 'image', 'media_library')
+      ->setComponent('image', [
+        'type' => 'image_focal_point',
+        'settings' => [
+          'preview_image_style' => 'thumbnail',
+          'preview_link' => TRUE,
+          'offsets' => '50,50',
+          'progress_indicator' => 'throbber',
+        ],
+      ])
+      ->save();
+  }
+
+  /**
+   * Tests Focal Point integration with the media library.
+   */
+  public function testFocalPointMediaIntegration() {
+    $session = $this->getSession();
+    $assert_session = $this->assertSession();
+
+    parent::testEmbedMedia();
+    // Exit the CKEditor iFrame.
+    $session->switchToIFrame(NULL);
+
+    // Create a test image that we can upload into the media library.
+    $files = $this->getTestFiles('image');
+    $this->assertNotEmpty($files);
+    $uri = reset($files)->uri;
+    $path = $this->container->get('file_system')->realpath($uri);
+    $this->assertFileExists($uri);
+
+    $this->openMediaLibrary();
+    $session->getPage()->attachFileToField('Add file', $path);
+    // Wait for the file to be uploaded, and check that focal point widget
+    // appear.
+    $element = $assert_session->waitForElementVisible('css', '[data-media-library-added-delta] .focal-point-indicator');
+    $this->assertNotEmpty($element);
+  }
 
 }
