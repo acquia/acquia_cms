@@ -3,12 +3,11 @@
 namespace Drupal\Tests\acquia_cms_common\FunctionalJavascript;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
-use Behat\Mink\Element\ElementInterface;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\media\Entity\MediaType;
+use Drupal\Tests\acquia_cms_common\Traits\MediaLibraryCreationTrait;
 use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
 use Drupal\Tests\ckeditor\Traits\CKEditorTestTrait;
-use Drupal\Tests\TestFileCreationTrait;
 
 /**
  * Base class for testing CKEditor embeds of a specific media type.
@@ -17,7 +16,6 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
 
   use CKEditorTestTrait;
   use MediaTestTrait;
-  use TestFileCreationTrait;
 
   /**
    * {@inheritdoc}
@@ -88,63 +86,15 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
     $this->assertMediaIsEmbedded();
     // Exit the CKEditor iFrame.
     $this->getSession()->switchToIFrame(NULL);
-    // Test creating a new media item in the media library.
-    $this->doTestCreateMedia();
-  }
 
-  /**
-   * Returns the path of a test file to upload into the media library.
-   *
-   * @param string $type
-   *   The file type. This can be any of the types accepted by
-   *   \Drupal\Tests\TestFileCreationTrait::getTestFiles().
-   *
-   * @return string
-   *   The absolute path to the test file.
-   */
-  protected function getTestFilePath($type) {
-    $files = $this->getTestFiles($type);
-    $this->assertNotEmpty($files);
-    $uri = reset($files)->uri;
-    $path = $this->container->get('file_system')->realpath($uri);
-    $this->assertNotEmpty($path);
-    $this->assertFileExists($path);
-    return $path;
-  }
-
-  /**
-   * Tests creating a new media item in the media library.
-   *
-   * Sub-classes which do not want to test this should override this with an
-   * empty method.
-   */
-  protected function doTestCreateMedia() {
-    $this->openMediaLibrary();
-    $this->addMedia();
-    $added_media = $this->assertSession()->waitForElementVisible('css', '.js-media-library-add-form-added-media > li');
-    $this->assertNotEmpty($added_media);
-    $this->assertAddedMedia($added_media);
-  }
-
-  /**
-   * Asserts required fields of a media item being created in the media library.
-   *
-   * @param \Behat\Mink\Element\ElementInterface $added_media
-   *   The element containing the required fields of the media item being
-   *   created.
-   */
-  protected function assertAddedMedia(ElementInterface $added_media) {
-    // Nothing to do by default.
-  }
-
-  /**
-   * Begins creating a media item in the media library.
-   *
-   * Normally this should enter the source field value for the new media item
-   * (i.e., upload an image or file, enter a video URL, etc.)
-   */
-  protected function addMedia() {
-    // Nothing to do by default.
+    // If this class wants to test creating media in the media library, do it.
+    if (in_array(MediaLibraryCreationTrait::class, class_uses(static::class), TRUE)) {
+      $this->openMediaLibrary();
+      $this->addMedia();
+      $added_media = $this->assertSession()->waitForElementVisible('css', '.js-media-library-add-form-added-media > li');
+      $this->assertNotEmpty($added_media);
+      $this->assertAddedMedia($added_media);
+    }
   }
 
   /**

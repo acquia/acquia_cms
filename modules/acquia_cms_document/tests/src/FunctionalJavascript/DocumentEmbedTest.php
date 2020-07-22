@@ -4,6 +4,7 @@ namespace Drupal\Tests\acquia_cms_document\Functional;
 
 use Behat\Mink\Element\ElementInterface;
 use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
+use Drupal\Tests\acquia_cms_common\Traits\MediaLibraryCreationTrait;
 
 /**
  * Tests embedding Document media in CKEditor.
@@ -12,6 +13,8 @@ use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
  * @group acquia_cms_document
  */
 class DocumentEmbedTest extends MediaEmbedTestBase {
+
+  use MediaLibraryCreationTrait;
 
   /**
    * {@inheritdoc}
