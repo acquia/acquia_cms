@@ -37,4 +37,11 @@ class VideoEmbedTest extends MediaEmbedTestBase {
    */
   protected $mediaType = 'video';
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function doTestCreateMedia() {
+    // We do not test creating video media via the media library yet.
+  }
+
 }

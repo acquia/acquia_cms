@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\acquia_cms_image\Functional;
 
+use Behat\Mink\Element\ElementInterface;
 use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
-use Drupal\Tests\TestFileCreationTrait;
 
 /**
  * Tests embedding Image media in CKEditor.
@@ -12,8 +12,6 @@ use Drupal\Tests\TestFileCreationTrait;
  * @group acquia_cms_image
  */
 class ImageEmbedTest extends MediaEmbedTestBase {
-
-  use TestFileCreationTrait;
 
   /**
    * {@inheritdoc}
@@ -46,7 +44,6 @@ class ImageEmbedTest extends MediaEmbedTestBase {
   protected function setUp() {
     parent::setUp();
 
-    /** @var \Drupal\Core\Entity\EntityDisplayRepositoryInterface $display_repository */
     $this->container->get('entity_display.repository')
       ->getFormDisplay('media', 'image', 'media_library')
       ->setComponent('image', [
@@ -62,29 +59,25 @@ class ImageEmbedTest extends MediaEmbedTestBase {
   }
 
   /**
-   * Tests Focal Point integration with the media library.
+   * {@inheritdoc}
    */
-  public function testFocalPointMediaIntegration() {
-    $session = $this->getSession();
-    $assert_session = $this->assertSession();
+  protected function addMedia() {
+    $this->getSession()
+      ->getPage()
+      ->attachFileToField('Add file', $this->getTestFilePath('image'));
+  }
 
-    parent::testEmbedMedia();
-    // Exit the CKEditor iFrame.
-    $session->switchToIFrame(NULL);
-
-    // Create a test image that we can upload into the media library.
-    $files = $this->getTestFiles('image');
-    $this->assertNotEmpty($files);
-    $uri = reset($files)->uri;
-    $path = $this->container->get('file_system')->realpath($uri);
-    $this->assertFileExists($uri);
-
-    $this->openMediaLibrary();
-    $session->getPage()->attachFileToField('Add file', $path);
-    // Wait for the file to be uploaded, and check that focal point widget
-    // appear.
-    $element = $assert_session->waitForElementVisible('css', '[data-media-library-added-delta] .focal-point-indicator');
-    $this->assertNotEmpty($element);
+  /**
+   * {@inheritdoc}
+   */
+  protected function assertAddedMedia(ElementInterface $added_media) {
+    // Check that the focal point widget is being used when adding an image
+    // in the media library.
+    $indicator = $added_media->waitFor(10, function (ElementInterface $added_media) {
+      $indicator = $added_media->find('css', '.focal-point-indicator');
+      return $indicator && $indicator->isVisible();
+    });
+    $this->assertTrue($indicator);
   }
 
 }
