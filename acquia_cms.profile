@@ -97,6 +97,18 @@ function acquia_cms_install_ui_kit(array &$install_state) {
       }
     }
   }
+
+  // Scan profile for Cohesion sync packages.
+  $profile_config_package = __DIR__ . '/config/dx8/packages.yml';
+  if (file_exists($profile_config_package)) {
+    $profile_package_list = file_get_contents($profile_config_package);
+    $profile_package_list = Yaml::decode($profile_package_list);
+
+    foreach ($profile_package_list as $package_file) {
+      $packages[] = __DIR__ . "/$package_file";
+    }
+  }
+
   // Finally, import the main UI kit.
   $packages[] = __DIR__ . '/misc/ui-kit.package.yml';
 
