@@ -6,7 +6,20 @@ label: 'Site Builder'
 weight: -8
 is_admin: null
 permissions:
+  - 'access cohesion sync'
   - 'access toolbar'
+  # These permissions are not really administrative. They are needed in order
+  # to allow this role to build components, styles, helpers, and templates for Site Studio at all.
+  - 'administer cohesion'
+  - 'administer component categories'
+  - 'administer component content'
+  - 'administer components'
+  - 'administer custom styles'
+  - 'administer helper categories'
+  - 'administer helpers'
+  - 'administer style helpers'
+  - 'administer style_guide'
+  # The above comment is only applicable till here.
   - 'use text format cohesion'
   - 'use text format filtered_html'
   - 'view the administration theme'
