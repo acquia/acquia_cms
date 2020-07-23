@@ -199,12 +199,12 @@ class InstallStateTest extends ExistingSiteBase {
    *
    * - User with role User Administrator should be able to access the following
    *   modules' configuration pages:
-   * - sedkit
-   * - shield
-   * - honeypot
-   * - captcha
-   * - recaptcha
-   * - password_policy.
+   *   - seckit
+   *   - shield
+   *   - honeypot
+   *   - captcha
+   *   - recaptcha
+   *   - password_policy.
    */
   public function testSecurityModulesPermissions() {
     $assert_session = $this->assertSession();
@@ -214,60 +214,46 @@ class InstallStateTest extends ExistingSiteBase {
     $account->save();
     $this->drupalLogin($account);
 
-    // User Administrators should be able to access seckit configuration page.
     $this->drupalGet('/admin/config/system/seckit');
     $assert_session->statusCodeEquals(200);
 
-    // User Administrators should be able to access shield configuration page.
     $this->drupalGet('/admin/config/system/shield');
     $assert_session->statusCodeEquals(200);
 
-    // User Administrators should be able to access honeypot configuration page.
     $this->drupalGet('/admin/config/content/honeypot');
     $assert_session->statusCodeEquals(200);
 
-    // User Administrators should be able to access captcha configuration page.
     $this->drupalGet('/admin/config/people/captcha');
     $assert_session->statusCodeEquals(200);
 
-    // User Administrators should be able to access recaptcha
-    // configuration page.
     $this->drupalGet('/admin/config/people/captcha/recaptcha');
     $assert_session->statusCodeEquals(200);
 
-    // User Administrators should be able to access password policy
-    // configuration page.
     $this->drupalGet('/admin/config/security/password-policy');
     $assert_session->statusCodeEquals(200);
-
-    // User Administrators should be able to access password policy add
-    // configuration page.
     $this->drupalGet('/admin/config/security/password-policy/add');
     $assert_session->statusCodeEquals(200);
-
-    // User Administrators should be able to access password reset page.
     $this->drupalGet('/admin/config/security/password-policy/reset');
     $assert_session->statusCodeEquals(200);
   }
 
   /**
-   * Tests Acquia CMS password policy by registrering a new account.
+   * Tests Acquia CMS password policy by registering a new account.
    *
-   * - Password must contain at least 3 types of characters from the following
-   *   character types:
-   *   - lowercase letters,
-   *   - uppercase letters,
-   *   - digits,
-   *   - special characters (can be used but optional).
-   * - Password length must be at least 8 characters.
-   * - Password must not contain the user's username.
+   * - Passwords must contain at least 3 different types of characters:
+   *   - lowercase letters
+   *   - uppercase letters
+   *   - digits
+   *   - special characters (optional)
+   * - Passwords must be at least 8 characters long.
+   * - Passwords must not contain the username.
    */
   public function testPasswordPolicy() {
     $page = $this->getSession()->getPage();
     $assert_session = $this->assertSession();
 
-    // Password length must be at least 8 characters.
-    // Asserting password with 7 characters.".
+    // Password length must be at least 8 characters; try to create one that is
+    // only 7.
     $this->drupalGet('/user/register');
     $page->fillField('Email address', 'example@example.com');
     $page->fillField('Username', 'example123');
@@ -276,24 +262,21 @@ class InstallStateTest extends ExistingSiteBase {
     $page->pressButton('Create new account');
     $assert_session->pageTextContains('The password does not satisfy the password policies.');
 
-    // Password must contain at least 3 types of characters,
-    // Asserting a password with missing number.
+    // Passwords must contain at least 3 types of characters; try to create one
+    // without a number in it.
     $page->fillField('Password', 'AAexaample');
     $page->fillField('Confirm password', 'AAexaample');
     $page->pressButton('Create new account');
-    // Assert that a status message appears with error that the password does
-    // not satisfy the password policies.
     $assert_session->pageTextContains('The password does not satisfy the password policies.');
 
-    // Password must not contain the user's username.
+    // Password must not contain the username.
     // @TODO: Validation does not work for this constraint, need to check if
     // patch available for the same.
-    // Assert valid password for sucessful account creation.
     $page->fillField('Password', 'Acb#45nbcs');
     $page->fillField('Confirm password', 'Acb#45nbcs');
     $page->pressButton('Create new account');
-    // Assert that a status message appears with welcome text & does not have
-    // password policy error.
+    // Assert that a status message appears with welcome text, and no password
+    // policy error.
     $assert_session->pageTextNotContains('The password does not satisfy the password policies.');
     $assert_session->pageTextContains('Thank you for applying for an account. Your account is currently pending approval by the site administrator.');
   }
