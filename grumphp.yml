@@ -11,6 +11,9 @@ parameters:
         'Must begin with a JIRA issue number': '/^ACMS-[0-9]+: /'
       max_body_width: 0
       max_subject_width: 0
+    twigcs:
+      path: 'themes'
+      ruleset: 'Allocine\Twigcs\Ruleset\Official'
     phplint: ~
     yamllint: ~
     composer: ~
