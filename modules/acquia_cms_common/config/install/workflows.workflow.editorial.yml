@@ -1,28 +1,8 @@
 langcode: en
 status: true
 dependencies:
-  enforced:
-    config:
-      - workbench_email.workbench_email_template.back_to_draft
-      - workbench_email.workbench_email_template.transition_to_review
-      - workbench_email.workbench_email_template.to_published
-      - workbench_email.workbench_email_template.to_archived
   module:
     - content_moderation
-    - workbench_email
-third_party_settings:
-  workbench_email:
-    workbench_email_templates:
-      create_new_draft:
-        back_to_draft: back_to_draft
-      review:
-        transition_to_review: transition_to_review
-      publish:
-        to_published: to_published
-      archive:
-        to_archived: to_archived
-      archived_published:
-        to_published: to_published
 id: editorial
 label: Editorial
 type: content_moderation

@@ -6,6 +6,13 @@ node.type.*.third_party.acquia_cms:
     workflow_id:
       type: string
       label: 'Content Moderation workflow to which this content type should be automatically added'
+    # See \Drupal\acquia_cms_common\Facade\TemplateFacade::addTemplateType()
+    workbench_email_templates:
+      type: sequence
+      label: 'E-mail notification templates to which the content type should be automatically added'
+      sequence:
+        type: string
+        label: 'Template ID'
     # See \Drupal\acquia_cms_common\Facade\MetatagFacade::addNodeType()
     metatag:
       type: mapping
@@ -17,3 +24,19 @@ node.type.*.third_party.acquia_cms:
           sequence:
             type: string
             label: 'Tag type'
+
+workbench_email.workbench_email_template.third_party.acquia_cms:
+  type: mapping
+  label: 'Acquia CMS settings'
+  mapping:
+    # See \Drupal\acquia_cms_common\Facade\TemplateFacade::addTemplateType()
+    workflow_id:
+      type: string
+      label: 'Workflow to which this workbench email template should be automatically added'
+    # See \Drupal\acquia_cms_common\Facade\TemplateFacade::addTemplateType()
+    workflow_transitions:
+      type: sequence
+      label: 'Workflow transitions for which the email template should be automatically enabled'
+      sequence:
+        type: string
+        label: 'Workflow transition ID'

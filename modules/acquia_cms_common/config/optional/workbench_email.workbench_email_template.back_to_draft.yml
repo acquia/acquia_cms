@@ -3,6 +3,11 @@ status: true
 dependencies:
   config:
     - user.role.content_author
+third_party_settings:
+  acquia_cms:
+    workflow_id: editorial
+    workflow_transitions:
+      - create_new_draft
 id: back_to_draft
 label: 'Back to Draft'
 subject: '[node:title] State Changed'

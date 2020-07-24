@@ -5,11 +5,16 @@ dependencies:
     - user.role.content_administrator
     - user.role.content_author
     - user.role.content_editor
-id: to_published
-label: 'To Published'
+third_party_settings:
+  acquia_cms:
+    workflow_id: editorial
+    workflow_transitions:
+      - archive
+id: to_archived
+label: 'To Archived'
 subject: '[node:title] State Changed'
 body:
-  value: '[node:title] is published now'
+  value: '[node:title] is archived now'
   format: plain_text
 bundles: {  }
 recipient_types:
