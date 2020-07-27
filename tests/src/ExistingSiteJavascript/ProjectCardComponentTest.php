@@ -70,8 +70,11 @@ class ProjectCardComponentTest extends CohesionTestBase {
     $edit_form = $this->editComponent($component_added);
     $edit_form->pressButton('Select image');
 
-    // Upload media of type image.
-    $this->uploadMediaInComponent('image');
+    // Load the media library if it is configured.
+    if ($this->assertSession()->waitForText('Media Library')) {
+      // Upload media of type image.
+      $this->uploadMediaInComponent('image');
+    }
 
     $edit_form->fillField('Heading', 'Example component 123');
     $edit_form->fillField('Pre heading', 'Example');

@@ -158,8 +158,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    * Switch to iframe.
    */
   protected function switchToMediaLibraryIframe() {
-    // Load the media library and switch to iframe.
-    $this->assertSession()->waitForText('Media Library');
+    // Switch to iframe.
     $iframe = $this->getSession()->getPage()->find('css', 'iframe[title="Media Library"]');
 
     // NOTE: Media library add form modal is an 'iframe' without the name
