@@ -118,8 +118,8 @@ class ProjectCardComponentTest extends CohesionTestBase {
 
       // Click on 'edit' if the component exists on the page.
       $assert_session->pageTextContains('Card - project');
-      $assert_session->waitForElementVisible('css', 'ul[data-drupal-selector="edit-table-project-card-operations-data"] > li.edit > a')->click();
-      $assert_session->waitForElement('css', '.cohesion-component-project-card-form');
+      $this->getSession()->executeScript("jQuery('span:contains(Card - project)').parents('tr:first').find('li.edit > a')[0].click()");
+      $assert_session->waitForElement('css', '.cohesion-component-edit-form');
 
       // Save the component and check if the desired messages are present.
       $assert_session->waitForElementVisible('css', 'ul[data-drupal-selector="edit-save"] > li input[value="Save and continue"]')->click();
