@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_common\Functional;
 
+use Drupal\Core\Test\AssertMailTrait;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\file\Entity\File;
 use Drupal\media\Entity\Media;
@@ -12,6 +13,8 @@ use Drupal\node\Entity\NodeType;
  * Base class for testing generic functionality of a specific content type.
  */
 abstract class ContentTypeTestBase extends ContentModelTestBase {
+
+  use AssertMailTrait;
 
   /**
    * {@inheritdoc}
@@ -93,6 +96,12 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // We should be able to select the language of the node.
     $assert_session->selectExists('Language');
     $page->fillField('title[0][value]', 'Pastafazoul!');
+    // We should not be able to access the scheduler option.
+    $assert_session->fieldNotExists('publish_on[0][value][date]');
+    $assert_session->fieldNotExists('publish_on[0][value][time]');
+
+    $assert_session->fieldNotExists('unpublish_on[0][value][date]');
+    $assert_session->fieldNotExists('unpublish_on[0][value][time]');
     // We should be able to explicitly save this node as a draft.
     $page->selectFieldOption('Save as', 'Draft');
     $page->pressButton('Save');
@@ -145,6 +154,12 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // Test that we can edit our own content.
     $this->drupalGet($node->toUrl('edit-form'));
     $assert_session->statusCodeEquals(200);
+    // We should be able to access the scheduler option.
+    $assert_session->fieldExists('publish_on[0][value][date]');
+    $assert_session->fieldExists('publish_on[0][value][time]');
+
+    $assert_session->fieldExists('unpublish_on[0][value][date]');
+    $assert_session->fieldExists('unpublish_on[0][value][time]');
 
     // Test that we can edit others' content. Mark the node for review, then
     // transition between various workflow states.
@@ -200,6 +215,12 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // Test that we can edit our own content.
     $this->drupalGet('/node/4/edit');
     $assert_session->statusCodeEquals(200);
+    // We should be able to access the scheduler option.
+    $assert_session->fieldExists('publish_on[0][value][date]');
+    $assert_session->fieldExists('publish_on[0][value][time]');
+
+    $assert_session->fieldExists('unpublish_on[0][value][date]');
+    $assert_session->fieldExists('unpublish_on[0][value][time]');
 
     // Test that we can edit others' content and send it through various
     // workflow states.

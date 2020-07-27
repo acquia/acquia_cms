@@ -28,6 +28,13 @@ final class WorkflowFacade implements ContainerInjectionInterface {
   private $configInstaller;
 
   /**
+   * The workbench email template entity storage handler.
+   *
+   * @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface
+   */
+  private $workbenchEmailTemplateStorage;
+
+  /**
    * The workflow entity storage handler.
    *
    * @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface
@@ -46,13 +53,16 @@ final class WorkflowFacade implements ContainerInjectionInterface {
    *
    * @param \Drupal\Core\Config\ConfigInstallerInterface $config_installer
    *   The config installer service.
+   * @param \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $workbench_email_template_storage
+   *   The workbench email template entity storage handler.
    * @param \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $workflow_storage
    *   The workflow entity storage handler.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The logger channel.
    */
-  public function __construct(ConfigInstallerInterface $config_installer, ConfigEntityStorageInterface $workflow_storage, LoggerChannelInterface $logger) {
+  public function __construct(ConfigInstallerInterface $config_installer, ConfigEntityStorageInterface $workbench_email_template_storage, ConfigEntityStorageInterface $workflow_storage, LoggerChannelInterface $logger) {
     $this->configInstaller = $config_installer;
+    $this->workbenchEmailTemplateStorage = $workbench_email_template_storage;
     $this->workflowStorage = $workflow_storage;
     $this->logger = $logger;
   }
@@ -63,6 +73,7 @@ final class WorkflowFacade implements ContainerInjectionInterface {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.installer'),
+      $container->get('entity_type.manager')->getStorage('workbench_email_template'),
       $container->get('entity_type.manager')->getStorage('workflow'),
       $container->get('logger.factory')->get('acquia_cms')
     );
@@ -117,6 +128,20 @@ final class WorkflowFacade implements ContainerInjectionInterface {
     }
     else {
       $this->logger->warning('Could not add the %node_type content type to the %workflow workflow because the workflow does not use Content Moderation.', $variables);
+    }
+
+    // If the workbench template is defined in the workflow.
+    $workbench_templates = $workflow->getThirdPartySetting('workbench_email', 'workbench_email_templates');
+    foreach ($workbench_templates as $item) {
+      $template_id = array_values($item);
+      if (!empty($template_id)) {
+        // Ensure the workbench email template exists.
+        /** @var Drupal\workbench_email\TemplateInterface $template */
+        $template = $this->workbenchEmailTemplateStorage->load($template_id[0]);
+        $bundles = $template->getBundles();
+        $bundles['node:' . $node_type->id()] = 'node:' . $node_type->id();
+        $template->setBundles($bundles)->save();
+      }
     }
   }
 
