@@ -48,8 +48,9 @@ class ProjectCardComponentTest extends CohesionTestBase {
   protected $users;
 
   /**
-   * Tests that Project card component is installed and,
-   * used in Cohesion's layout canvas.
+   * Test that Project card component is installed.
+   *
+   * And used in Cohesion's layout canvas.
    */
   public function testProjectCardComponentInstall() {
     $this->adminAccount = $this->createUser();
@@ -84,7 +85,7 @@ class ProjectCardComponentTest extends CohesionTestBase {
   }
 
   /**
-   * Tests that project card component is use/edit by site builder and developer.
+   * Test that project card component is use/edit by site builder and developer.
    */
   public function testComponentUseEditAccess() {
     $roles = ['site_builder', 'developer'];

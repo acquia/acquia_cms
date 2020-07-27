@@ -4,8 +4,8 @@ namespace Drupal\Tests\acquia_cms_common\ExistingSiteJavascript;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Behat\Mink\Element\ElementInterface;
-use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
 use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
+use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
 
 /**
  * Defines a base class for testing Acquia CMS's Cohesion integration.
@@ -138,7 +138,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    * Upload Media in component.
    *
    * @param string $media_bundle
-   *    Media bundle.
+   *   Media bundle.
    */
   protected function uploadMediaInComponent($media_bundle) {
     $this->media = $this->createMedia([
