@@ -5,11 +5,14 @@ namespace Drupal\Tests\acquia_cms_common\ExistingSiteJavascript;
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Behat\Mink\Element\ElementInterface;
 use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
+use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
 
 /**
  * Defines a base class for testing Acquia CMS's Cohesion integration.
  */
 abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
+
+  use MediaTestTrait;
 
   /**
    * {@inheritdoc}
@@ -41,8 +44,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
     $selector = sprintf('.coh-layout-canvas-list-item[data-title="%s"]', $label);
     $this->waitForElementVisible('css', $selector, $element_browser)->doubleClick();
     $this->pressAriaButton($element_browser, 'Close sidebar browser');
-
-    return $this->assertComponent($canvas, 'Text');
+    return $this->assertComponent($canvas, $label);
   }
 
   /**
@@ -78,7 +80,6 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
     $form = $this->waitForElementVisible('css', '.coh-layout-canvas-settings');
     // ...then wait the form wrapper to load the actual settings form.
     $this->waitForElementVisible('css', 'coh-component-form', $form);
-
     return $form;
   }
 
@@ -131,6 +132,66 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
 
     $this->assertInstanceOf(ElementInterface::class, $element);
     return $element;
+  }
+
+  /**
+   * Upload Media in component.
+   *
+   * @param string $media_bundle
+   *    Media bundle.
+   */
+  protected function uploadMediaInComponent($media_bundle) {
+    $this->media = $this->createMedia([
+      'bundle' => $media_bundle,
+    ]);
+    $this->switchToMediaLibraryIframe();
+    $this->selectMedia(0);
+    $this->insertSelectedMedia();
+
+    // Switching from iframe back to component modal.
+    $this->getSession()->switchToIFrame();
+    $added_media = $this->assertSession()->waitForElementVisible('css', '.coh-file-browser-preview');
+    $this->assertNotNull($added_media);
+  }
+
+  /**
+   * Switch to iframe.
+   */
+  protected function switchToMediaLibraryIframe() {
+    // Load the media library and switch to iframe.
+    $this->assertSession()->waitForText('Media Library');
+    $iframe = $this->getSession()->getPage()->find('css', 'iframe[title="Media Library"]');
+
+    // NOTE: Media library add form modal is an 'iframe' without the name
+    // attribute. Name attribute is a must-have for selenium2-Driver to switch
+    // the test control from page to iframe. So we have set an custom 'name'
+    // attribute called 'media_library_iframe' which we will be passing to the
+    // `switchToIframe()` function.
+    $this->getSession()->executeScript("jQuery(document.getElementsByTagName('iframe')).attr('name', 'media_library_iframe')");
+    $this->getSession()->switchToIFrame($iframe->getAttribute('name'));
+    $this->assertSession()->waitForElementVisible('css', 'dialog-off-canvas-main-canvas');
+  }
+
+  /**
+   * Selects a media item in the media library.
+   *
+   * @param int $position
+   *   The zero-based index of the media item to select.
+   */
+  protected function selectMedia($position) {
+    $checkbox = $this->assertSession()
+      ->waitForElementVisible('named', ['field', "media_library_select_form[$position]"]);
+    $this->assertNotEmpty($checkbox);
+    $checkbox->check();
+  }
+
+  /**
+   * Inserts all selected media and switch from iframe.
+   */
+  protected function insertSelectedMedia() {
+    $this->assertSession()
+      ->elementExists('css', '.media-library-select.form-submit')->click();
+    $this->assertSession()->assertWaitOnAjaxRequest();
   }
 
 }
