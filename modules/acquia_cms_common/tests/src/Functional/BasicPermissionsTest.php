@@ -79,6 +79,10 @@ class BasicPermissionsTest extends BrowserTestBase {
       $this->drupalLogin($account);
       // All roles should have 'view the administration theme' permission.
       $this->assertTrue($account->hasPermission('view the administration theme'), "$role has view the administration theme permission");
+      // All roles should have 'use moderation dashboard' and 'use moderation
+      // sidebar' permission.
+      $this->assertTrue($account->hasPermission('use moderation dashboard'));
+      $this->assertTrue($account->hasPermission('use moderation sidebar'));
 
       // All roles should be able to access the toolbar.
       $assert_toolbar();

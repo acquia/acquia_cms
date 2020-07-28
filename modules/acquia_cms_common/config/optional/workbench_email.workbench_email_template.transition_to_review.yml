@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.content_administrator
+    - user.role.content_editor
+third_party_settings:
+  acquia_cms:
+    workflow_id: editorial
+    workflow_transitions:
+      - review
+id: transition_to_review
+label: 'Transition to Review'
+subject: '[node:title] State Changed'
+body:
+  value: '[node:title] needs review.'
+  format: plain_text
+bundles: {  }
+recipient_types:
+  role:
+    id: role
+    provider: workbench_email
+    status: true
+    settings:
+      roles:
+        content_administrator: content_administrator
+        content_editor: content_editor
