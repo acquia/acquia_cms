@@ -6,7 +6,7 @@
  */
 
 use Drupal\acquia_cms_common\Facade\MetatagFacade;
-use Drupal\acquia_cms_common\Facade\TemplateFacade;
+use Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade;
 use Drupal\acquia_cms_common\Facade\WorkflowFacade;
 use Drupal\node\NodeTypeInterface;
 use Drupal\workbench_email\TemplateInterface;
@@ -23,5 +23,6 @@ function acquia_cms_common_node_type_insert(NodeTypeInterface $node_type) {
  * Implements hook_ENTITY_TYPE_insert() for template types.
  */
 function acquia_cms_common_workbench_email_template_insert(TemplateInterface $template_type) {
-  Drupal::classResolver(TemplateFacade::class)->addTemplateType($template_type);
+  Drupal::classResolver(WorkbenchEmailFacade::class)
+    ->addTemplate($template_type);
 }

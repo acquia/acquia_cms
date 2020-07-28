@@ -10,14 +10,14 @@ use Drupal\workbench_email\TemplateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a facade for integration with Workflows, Node and Template.
+ * Provides a facade for integrating with Workbench Email.
  *
  * @internal
  *   This is a totally internal part of Acquia CMS and may be changed in any
  *   way, or removed outright, at any time without warning. External code should
  *   not use this class!
  */
-final class TemplateFacade implements ContainerInjectionInterface {
+final class WorkbenchEmailFacade implements ContainerInjectionInterface {
 
   /**
    * The config installer service.
@@ -48,7 +48,7 @@ final class TemplateFacade implements ContainerInjectionInterface {
   private $logger;
 
   /**
-   * TemplateFacade constructor.
+   * WorkbenchEmailFacade constructor.
    *
    * @param \Drupal\Core\Config\ConfigInstallerInterface $config_installer
    *   The config installer service.
@@ -70,26 +70,28 @@ final class TemplateFacade implements ContainerInjectionInterface {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
+    $entity_type_manager = $container->get('entity_type.manager');
+
     return new static(
       $container->get('config.installer'),
-      $container->get('entity_type.manager')->getStorage('workflow'),
-      $container->get('entity_type.manager')->getStorage('node_type'),
+      $entity_type_manager->getStorage('workflow'),
+      $entity_type_manager->getStorage('node_type'),
       $container->get('logger.factory')->get('acquia_cms')
     );
   }
 
   /**
-   * Acts on a newly created workbench email template type.
+   * Acts on a newly created Workbench Email template.
    *
-   * Tries to add the email template to a Content Moderation workflow specified
-   * by the acquia_cms.workflow_id third-party setting. Also, tries to enable
-   * the bundles in the email template based on the node type third-party
-   * setting acquia_cms.workbench_email_templates.
+   * Tries to enable the template in the workflow specified by the
+   * acquia_cms.workflow_id third-party setting, and for every existing node
+   * type that mentions the incoming template in its
+   * acquia_cms.workbench_email_templates third-party setting.
    *
    * @param \Drupal\workbench_email\TemplateInterface $template
-   *   The new workbench email template type.
+   *   The new workbench email template.
    */
-  public function addTemplateType(TemplateInterface $template) {
+  public function addTemplate(TemplateInterface $template) {
     // We don't want to do any secondary config writes during a config sync,
     // since that can have major, unintentional side effects.
     if ($this->configInstaller->isSyncing()) {
@@ -98,50 +100,54 @@ final class TemplateFacade implements ContainerInjectionInterface {
     }
 
     $variables = [
-      '%template_type' => $template->label(),
+      '%template' => $template->label(),
     ];
 
-    // Enabling bundles in the email template based on the node third-party
-    // settings.
+    // Node types can opt into using this template by mentioning it their
+    // acquia_cms.workbench_email_templates third-party setting.
     $node_types = $this->nodeTypeStorage->loadMultiple();
-    foreach ($node_types as $node_type) {
+    $enabled_bundles = $template->getBundles();
+    foreach ($node_types as $id => $node_type) {
       $variables['%node_type'] = $node_type->label();
-      // Adding bundles in the email template based on the presence of email
-      // template third-party setting in the node type.
+
       $email_templates = $node_type->getThirdPartySetting('acquia_cms', 'workbench_email_templates', []);
       if (array_key_exists($template->id(), $email_templates)) {
-        $bundles = $template->getBundles();
-        // Appending the node type in the existing bundle list to enable the
-        // workbench notification.
-        $bundles['node:' . $node_type->id()] = 'node:' . $node_type->id();
-        $template->setBundles($bundles)->save();
+        $enabled_bundles["node:$id"] = "node:$id";
       }
       else {
-        $this->logger->debug('%node_type node type is not enabled for %template_type email notification', $variables);
+        $this->logger->debug('The %template e-mail notification template was not enabled for the %node_type content type.', $variables);
       }
     }
+    $template->setBundles($enabled_bundles)->save();
 
-    // If the workbench email templte type does not specify a workflow, there's
-    // nothing to do.
-    $workflow_id = $template->getThirdPartySetting('acquia_cms', 'workflow_id', []);
-    $transitions = $template->getThirdPartySetting('acquia_cms', 'workflow_transitions', []);
-    if (empty($workflow_id) || empty($transitions)) {
+    // Add the template to the workflow specified in its third-party settings.
+    // If the template does not specify a workflow, there's nothing to do.
+    $workflow_id = $template->getThirdPartySetting('acquia_cms', 'workflow_id');
+    if (empty($workflow_id)) {
       return;
     }
-    // Ensure the workflow exists, and log a warning if it doesn't.
+
     /** @var \Drupal\workflows\WorkflowInterface $workflow */
     $workflow = $this->workflowStorage->load($workflow_id);
-    $variables['%workflow'] = $workflow_id;
     if (empty($workflow)) {
-      $this->logger->warning('Could not add the workbench email templates to the %workflow workflow because the workflow does not exist.', $variables);
+      $variables['%workflow'] = $workflow_id;
+      $this->logger->warning('Could not add the %template email notification template to the %workflow workflow because the workflow does not exist.', $variables);
       return;
     }
-    $values = $workflow->getThirdPartySetting('workbench_email', 'workbench_email_templates', []);
+
+    $enabled_templates = $workflow->getThirdPartySetting('workbench_email', 'workbench_email_templates', []);
+    $transitions = $template->getThirdPartySetting('acquia_cms', 'workflow_transitions', []);
     foreach ($transitions as $transition_id) {
-      $values[$transition_id][$template->id()] = $template->id();
+      // Enable this template for the specified transition, but only if the
+      // transition is not already associated with a template.
+      $enabled_templates += [
+        $transition_id => [
+          $template->id() => $template->id(),
+        ],
+      ];
     }
-    $workflow->setThirdPartySetting('workbench_email', 'workbench_email_templates', $values);
-    $workflow->save();
+    $workflow->setThirdPartySetting('workbench_email', 'workbench_email_templates', $enabled_templates);
+    $this->workflowStorage->save($workflow);
   }
 
 }
