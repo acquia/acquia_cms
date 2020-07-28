@@ -197,6 +197,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    */
   protected function insertSelectedMedia() {
     $this->assertSession()->buttonExists('Insert selected')->press();
+    $this->assertSession()->assertWaitOnAjaxRequest();
   }
 
   /**
