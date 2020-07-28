@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
-use Drupal\file\Entity\File;
 use Drupal\Tests\acquia_cms_common\ExistingSiteJavascript\CohesionTestBase;
 
 /**
@@ -13,50 +12,15 @@ use Drupal\Tests\acquia_cms_common\ExistingSiteJavascript\CohesionTestBase;
 class ProjectCardComponentTest extends CohesionTestBase {
 
   /**
-   * Media object that need to be deleted in tearDown().
-   *
-   * @var object
-   */
-  protected $media;
-
-  /**
-   * Node object that need to be deleted in tearDown().
-   *
-   * @var object
-   */
-  protected $node;
-
-  /**
-   * Administrator account object that need to be deleted in tearDown().
-   *
-   * @var object
-   */
-  protected $adminAccount;
-
-  /**
-   * Account object.
-   *
-   * @var object
-   */
-  protected $account;
-
-  /**
-   * Array containing user accounts that need to be deleted in tearDown().
-   *
-   * @var array
-   */
-  protected $users;
-
-  /**
    * Test that Project card component is installed.
    *
    * And used in Cohesion's layout canvas.
    */
   public function testProjectCardComponentInstall() {
-    $this->adminAccount = $this->createUser();
-    $this->adminAccount->addRole('administrator');
-    $this->adminAccount->save();
-    $this->drupalLogin($this->adminAccount);
+    $account = $this->createUser();
+    $account->addRole('administrator');
+    $account->save();
+    $this->drupalLogin($account);
 
     $this->drupalGet('/node/add/page');
     $page = $this->getSession()->getPage();
@@ -70,10 +34,11 @@ class ProjectCardComponentTest extends CohesionTestBase {
     $edit_form = $this->editComponent($component_added);
     $edit_form->pressButton('Select image');
 
+    $this->addMedia('image');
     // Load the media library if it is configured.
     if ($this->assertSession()->waitForText('Media Library')) {
       // Upload media of type image.
-      $this->uploadMediaInComponent('image');
+      $this->uploadMediaInComponent();
     }
 
     $edit_form->fillField('Heading', 'Example component 123');
@@ -82,75 +47,60 @@ class ProjectCardComponentTest extends CohesionTestBase {
     $edit_form->pressButton('Apply');
 
     // Save the node and assign node object to the class property.
-    $page = $this->waitForElementVisible('css', '.form-actions');
-    $this->node = $page->pressButton('Save');
+    $page = $this->waitForElementVisibleAssertion('css', '.form-actions');
+    $page->pressButton('Save');
     $assert_session->pageTextContains('Page Cohesion card project component has been created.');
   }
 
   /**
    * Test that project card component is use/edit by site builder and developer.
+   *
+   * @dataProvider roleProvider
    */
-  public function testComponentUseEditAccess() {
-    $roles = ['site_builder', 'developer'];
-    foreach ($roles as $role) {
-      // Create user with specific role and login.
-      $this->account = $this->createUser();
-      $this->users[] = $this->account;
-      $this->account->addRole($role);
-      $this->account->save();
-      $this->drupalLogin($this->account);
+  public function testComponentUseEditAccess($role) {
+    $account = $this->createUser();
+    $account->addRole($role);
+    $account->save();
+    $this->drupalLogin($account);
 
-      // Visit to cohesion components page.
-      $this->drupalGet('/admin/cohesion/components/components');
-      $page = $this->getSession()->getPage();
-      $assert_session = $this->assertSession();
+    // Visit to cohesion components page.
+    $this->drupalGet('/admin/cohesion/components/components');
+    $page = $this->getSession()->getPage();
+    $assert_session = $this->assertSession();
 
-      // Find general components category on page.
-      $general_component = $page->find('css', '#edit-accordion');
+    // Find general components category on page.
+    $general_component = $page->find('css', '#edit-accordion');
 
-      // Check weather general component accordion is open or not.
-      if (!$general_component->hasAttribute('open')) {
-        $assert_session->waitForElementVisible('css', '[aria-controls="edit-accordion"]')->press();
-      }
-      else {
-        $assert_session->waitForElementVisible('css', '[aria-controls="edit-accordion"]');
-      }
-
-      // Click on 'edit' if the component exists on the page.
-      $assert_session->pageTextContains('Card - project');
-      $this->getSession()->executeScript("jQuery('span:contains(Card - project)').parents('tr:first').find('li.edit > a')[0].click()");
-      $assert_session->waitForElement('css', '.cohesion-component-edit-form');
-
-      // Save the component and check if the desired messages are present.
-      $assert_session->waitForElementVisible('css', 'ul[data-drupal-selector="edit-save"] > li input[value="Save and continue"]')->click();
-      $assert_session->pageTextContains('Your component styles have been updated.');
-      $assert_session->pageTextContains('Saved the Component Card - project.');
-
-      $this->drupalLogout();
+    // Check weather general component accordion is open or not.
+    if (!$general_component->hasAttribute('open')) {
+      $this->waitForElementVisibleAssertion('css', '[aria-controls="edit-accordion"]')->press();
     }
+    else {
+      $this->waitForElementVisibleAssertion('css', '[aria-controls="edit-accordion"]');
+    }
+
+    // Click on 'edit' if the component exists on the page.
+    $assert_session->pageTextContains('Card - project');
+    $this->getSession()->executeScript("jQuery('span:contains(Card - project)').parents('tr:first').find('li.edit > a')[0].click()");
+    $assert_session->waitForElement('css', '.cohesion-component-edit-form');
+
+    // Save the component and check if the desired messages are present.
+    $assert_session->buttonExists('Save and continue')->press();
+    $assert_session->pageTextContains('Your component styles have been updated.');
+    $assert_session->pageTextContains('Saved the Component Card - project.');
   }
 
   /**
-   * Delete entities that were created during the test.
+   * Provide roles.
+   *
+   * @return array
+   *   Return role.
    */
-  public function tearDown(): void {
-    if ($this->media) {
-      $fid = $this->media->get('image')->target_id;
-      $file = File::load($fid);
-      $file->delete();
-      $this->media->delete();
-    }
-    if ($this->node) {
-      $this->node->delete();
-    }
-    if ($this->adminAccount) {
-      $this->adminAccount->delete();
-    }
-    if (!empty($this->users)) {
-      foreach ($this->users as $user) {
-        $user->delete();
-      }
-    }
+  public function roleProvider() {
+    return [
+      ['site_builder'],
+      ['developer'],
+    ];
   }
 
 }
