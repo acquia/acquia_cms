@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.content_author
+third_party_settings:
+  acquia_cms:
+    workflow_id: editorial
+    workflow_transitions:
+      - create_new_draft
+id: back_to_draft
+label: 'Back to Draft'
+subject: '[node:title] State Changed'
+body:
+  value: '[node:title] is moved back to draft, Please check.'
+  format: plain_text
+bundles: {  }
+recipient_types:
+  role:
+    id: role
+    provider: workbench_email
+    status: true
+    settings:
+      roles:
+        content_author: content_author

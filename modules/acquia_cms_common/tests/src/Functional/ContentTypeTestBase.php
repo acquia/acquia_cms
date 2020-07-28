@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_common\Functional;
 
+use Drupal\Core\Test\AssertMailTrait;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\file\Entity\File;
 use Drupal\media\Entity\Media;
@@ -13,6 +14,8 @@ use Drupal\node\Entity\NodeType;
  */
 abstract class ContentTypeTestBase extends ContentModelTestBase {
 
+  use AssertMailTrait;
+
   /**
    * {@inheritdoc}
    */
@@ -21,7 +24,11 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['content_translation'];
+  protected static $modules = [
+    'content_translation',
+    'scheduler',
+    'workbench_email',
+  ];
 
   /**
    * The machine name of the content type under test.
@@ -93,12 +100,24 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // We should be able to select the language of the node.
     $assert_session->selectExists('Language');
     $page->fillField('title[0][value]', 'Pastafazoul!');
+    // Asserts that content author cannot schedule nodes.
+    $assert_session->fieldNotExists('publish_on[0][value][date]');
+    $assert_session->fieldNotExists('publish_on[0][value][time]');
+
+    $assert_session->fieldNotExists('unpublish_on[0][value][date]');
+    $assert_session->fieldNotExists('unpublish_on[0][value][time]');
     // We should be able to explicitly save this node as a draft.
     $page->selectFieldOption('Save as', 'Draft');
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
+    // Asserts that content author is receiving emails when moderation state is
+    // changed to draft.
+    $this->assertCount(1, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
 
     $this->doMultipleModerationStateChanges(2, ['In review']);
+    // As we don't have any content editor and content administrator, so no
+    // email will be triggered.
+    $this->assertCount(0, $this->getMails(['id' => 'workbench_email_template::transition_to_review']));
 
     // Test that we cannot edit others' content.
     $this->drupalGet('/node/1/edit');
@@ -135,6 +154,9 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
       'type' => $this->nodeType,
       'uid' => $account->id(),
     ]);
+    // As the newly created node is without any state, so default one will be
+    // draft and 'content author' will receive the mail.
+    $this->assertCount(2, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
 
     $assert_session = $this->assertSession();
 
@@ -145,10 +167,19 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // Test that we can edit our own content.
     $this->drupalGet($node->toUrl('edit-form'));
     $assert_session->statusCodeEquals(200);
+    // Test that we are able to access the scheduler option.
+    $assert_session->fieldExists('publish_on[0][value][date]');
+    $assert_session->fieldExists('publish_on[0][value][time]');
+
+    $assert_session->fieldExists('unpublish_on[0][value][date]');
+    $assert_session->fieldExists('unpublish_on[0][value][time]');
 
     // Test that we can edit others' content. Mark the node for review, then
     // transition between various workflow states.
     Node::load(1)->set('moderation_state', 'review')->save();
+    // Assert that content editor receives an email when content is moved to
+    // review state.
+    $this->assertCount(1, $this->getMails(['id' => 'workbench_email_template::transition_to_review']));
     $this->doMultipleModerationStateChanges(1, [
       'In review',
       'Published',
@@ -158,6 +189,19 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
       'Published',
       'Archived',
     ]);
+    // As the state of node is changed to 'In review' only once, which results
+    // into the total count of mails to 2 as we only have content editor
+    // till now.
+    $this->assertCount(2, $this->getMails(['id' => 'workbench_email_template::transition_to_review']));
+    // Node has been published twice. Both content editors, and authors will
+    // receive two emails each.
+    $this->assertCount(4, $this->getMails(['id' => 'workbench_email_template::to_published']));
+    // Node has been transitioned to draft twice. Content Author would receive
+    // two emails. We already have 2 draft email notifications thus making it 4.
+    $this->assertCount(4, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
+    // Node has been archived Once. Both content  author and content editor
+    // would receive an email.
+    $this->assertCount(2, $this->getMails(['id' => 'workbench_email_template::to_archived']));
 
     // Test that we can delete our own content.
     $this->drupalGet($node->toUrl('delete-form'));
@@ -196,14 +240,25 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     $page->fillField('title[0][value]', 'Pastafazoul!');
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
+    // As the newly created node is without any state, so default one will be
+    // draft and 'content author' will receive the mail.
+    $this->assertCount(5, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
 
     // Test that we can edit our own content.
     $this->drupalGet('/node/4/edit');
     $assert_session->statusCodeEquals(200);
+    // Test that we are be able to access the scheduler option.
+    $assert_session->fieldExists('publish_on[0][value][date]');
+    $assert_session->fieldExists('publish_on[0][value][time]');
+
+    $assert_session->fieldExists('unpublish_on[0][value][date]');
+    $assert_session->fieldExists('unpublish_on[0][value][time]');
 
     // Test that we can edit others' content and send it through various
     // workflow states.
     Node::load(1)->set('moderation_state', 'draft')->save();
+    // State change to draft will trigger the mail to content author.
+    $this->assertCount(6, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
     $this->doMultipleModerationStateChanges(1, [
       'In review',
       'Published',
@@ -212,6 +267,21 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
       'Archived',
       'Draft',
     ]);
+    // Node has been transitioned to review once. Both content editors, and
+    // administrator would receive one email each. We already have 2 review
+    // email notifications thus making it 4.
+    $this->assertCount(4, $this->getMails(['id' => 'workbench_email_template::transition_to_review']));
+    // Node has been published twice. Content author, editor and administrator
+    // would receive the email. We already have 4 published email notification
+    // thus making it 10.
+    $this->assertCount(10, $this->getMails(['id' => 'workbench_email_template::to_published']));
+    // Node has been transitioned to draft twice. Content Author would receive
+    // two emails. We already have 6 draft email notifications thus making it 8.
+    $this->assertCount(8, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
+    // Node has been archived Once. Content  author, editor and administrator
+    // would receive one email each. We already have 2 archived email
+    // notification thus making it 5.
+    $this->assertCount(5, $this->getMails(['id' => 'workbench_email_template::to_archived']));
 
     // Test that we can delete our own content.
     $this->drupalGet('/node/4/delete');
