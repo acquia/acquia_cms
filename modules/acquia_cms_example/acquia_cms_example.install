@@ -1,0 +1,67 @@
+<?php
+
+/**
+ * @file
+ * Contains installation and update hooks for Acquia CMS Example.
+ */
+
+use Drupal\acquia_connector\Helper\Storage as ConnectorStorage;
+use Drupal\acquia_connector\Subscription;
+use Drupal\acquia_search_solr\Helper\Storage as SolrStorage;
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_example_install() {
+  $key = 'b560ae0de7e596c5d1f7fe54803c70cd';
+  $identifier = 'BGVZ-196143';
+
+  _acquia_connector_config($key, $identifier);
+  _acquia_search_solr_config($key, $identifier);
+}
+
+/**
+ * Pre-configures the Acquia Connector for development use.
+ *
+ * @param string $key
+ *   The Acquia hosting key.
+ * @param string $identifier
+ *   The Acquia hosting identifier.
+ */
+function _acquia_connector_config($key, $identifier) {
+  $config = \Drupal::configFactory()->getEditable('acquia_connector.settings');
+
+  // Replicating Storage from acquia_connector/src/Form/CredentialForm.php.
+  $storage = new ConnectorStorage();
+  $storage->setKey($key);
+  $storage->setIdentifier($identifier);
+
+  drupal_flush_all_caches();
+
+  $subscription = new Subscription();
+  $subscription->update();
+
+  // Setting specific config for Acquia Connector.
+  $config->set('subscription_name', "Aqquia Engineering");
+  $config->set('hide_signup_messages', 1);
+  $config->save();
+}
+
+/**
+ * Pre-configures the Acquia Search Solr module for development use.
+ *
+ * @param string $key
+ *   The Acquia hosting key.
+ * @param string $identifier
+ *   The Acquia hosting identifier.
+ */
+function _acquia_search_solr_config($key, $identifier) {
+  // Replicating Storage from acquia_search_solr/src/Form/SettingsForm.php.
+  $storage = new SolrStorage();
+  $storage->setApiHost('https://api.sr-prod02.acquia.com');
+  $storage->setUuid('f63c4427-2738-4e14-a756-5f7b80b74062');
+  $storage->setApiKey($key);
+  $storage->setIdentifier($identifier);
+
+  drupal_flush_all_caches();
+}

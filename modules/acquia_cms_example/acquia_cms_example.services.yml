@@ -1,0 +1,5 @@
+services:
+  acquia_cms_example.overrider:
+    class: \Drupal\acquia_cms_example\Config\AcquiaCmsExampleConfigOverrides
+    tags:
+      - { name: config.factory.override, priority: 5 }
