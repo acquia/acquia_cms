@@ -4,8 +4,8 @@
     "description": "An implementation of Lightning for running low code websites in the Acquia platform.",
     "license": "GPL-2.0-or-later",
     "require": {
-        "acquia/cohesion": "6.1.2",
-        "acquia/cohesion-theme": "6.1.2",
+        "acquia/cohesion": "^6.2",
+        "acquia/cohesion-theme": "^6.2",
         "acquia/drupal-environment-detector": "^1",
         "acquia/memcache-settings": "^1",
         "cweagans/composer-patches": "^1.6",
@@ -28,7 +28,7 @@
         "drupal/google_analytics": "^2",
         "drupal/google_tag": "^1",
         "drupal/honeypot": "2.0.x-dev",
-        "drupal/imce": "1.x-dev",
+        "drupal/imce": "2.x-dev",
         "drupal/memcache": "2.x-dev",
         "drupal/moderation_dashboard": "^1.0@beta",
         "drupal/moderation_sidebar": "^1.4",
@@ -117,9 +117,6 @@
             },
             "drupal/memcache": {
                 "PHPunit test failure due to memcache_test.info.yml": "https://www.drupal.org/files/issues/2020-06-17/3152678-2.patch"
-            },
-            "drupal/imce": {
-                "Remove theme declaration for imce_page": "https://www.drupal.org/files/issues/2020-06-05/3146463-2--remove_imce_page_theme_declaration.patch"
             },
             "drupal/focal_point": {
                 "Integrate focal point with media_library": "https://www.drupal.org/files/issues/2020-05-26/3094478-38.patch"
