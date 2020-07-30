@@ -51,7 +51,6 @@
   "private": true,
   "//": "The postinstall script is needed to work-around this Drupal core bug: https://www.drupal.org/node/2329453",
   "scripts": {
-    "gulp": "gulp",
     "postinstall": "find node_modules/ -name '*.info' -type f -delete",
     "install-tools": "npm ci",
     "uninstall-tools": "rm -r node_modules;",
