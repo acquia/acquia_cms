@@ -13,6 +13,23 @@ use Drupal\search_api\Entity\Index;
 use Drupal\search_api\ServerInterface;
 
 /**
+ * Implements hook_views_data().
+ */
+function acquia_cms_search_views_data() {
+  return [
+    'views' => [
+      'view_fallback' => [
+        'title' => t('Fallback view area'),
+        'help' => t('Insert a view inside an area if the search server is unavailable. If the view is not based on a Search API index, this behaves like a standard view area.'),
+        'area' => [
+          'id' => 'view_fallback',
+        ],
+      ],
+    ],
+  ];
+}
+
+/**
  * Implements hook_ENTITY_TYPE_insert() for node types.
  */
 function acquia_cms_search_node_type_insert(NodeTypeInterface $node_type) {

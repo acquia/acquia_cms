@@ -2,18 +2,18 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_article_type
-    - search_api.index.content
+    - core.entity_view_mode.node.teaser
+    - node.type.article
   module:
-    - acquia_cms_search
-    - cohesion
-id: articles
-label: Articles
+    - node
+    - user
+id: articles_fallback
+label: 'Articles (Fallback)'
 module: views
 description: ''
 tag: ''
-base_table: search_api_index_content
-base_field: search_api_id
+base_table: node_field_data
+base_field: nid
 display:
   default:
     display_plugin: default
@@ -22,17 +22,20 @@ display:
     position: 0
     display_options:
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'access content'
       cache:
-        type: search_api_tag
+        type: tag
         options: {  }
       query:
         type: views_query
         options:
-          bypass_access: false
-          skip_access: false
-          preserve_facet_query_args: false
+          disable_sql_rewrite: false
+          distinct: false
+          replica: false
+          query_comment: ''
+          query_tags: {  }
       exposed_form:
         type: basic
         options:
@@ -62,52 +65,43 @@ display:
             previous: ‹‹
             next: ››
       style:
-        type: cohesion_layout
+        type: default
         options:
-          views_template: view_tpl_articles
-          master_template: 79d2f5ce
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          uses_fields: false
       row:
-        type: search_api
+        type: 'entity:node'
+        options:
+          relationship: none
+          view_mode: teaser
       fields:
-        field_article_type:
-          table: search_api_index_content
-          field: field_article_type
-          id: field_article_type
-          entity_type: null
-          entity_field: null
-          plugin_id: search_api_field
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          entity_type: node
+          entity_field: title
+          label: ''
+          alter:
+            alter_text: false
+            make_link: false
+            absolute: false
+            trim: false
+            word_boundary: false
+            ellipsis: false
+            strip_tags: false
+            html: false
+          hide_empty: false
+          empty_zero: false
+          settings:
+            link_to_entity: true
+          plugin_id: field
           relationship: none
           group_type: group
           admin_label: ''
-          label: ''
           exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
           element_type: ''
           element_class: ''
           element_label_type: ''
@@ -117,13 +111,10 @@ display:
           element_wrapper_class: ''
           element_default_classes: true
           empty: ''
-          hide_empty: false
-          empty_zero: false
           hide_alter_empty: true
-          click_sort_column: target_id
-          type: entity_reference_label
-          settings: {  }
-          group_column: target_id
+          click_sort_column: value
+          type: string
+          group_column: value
           group_columns: {  }
           group_rows: true
           delta_limit: 0
@@ -133,23 +124,28 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          field_rendering: true
-          fallback_handler: search_api_entity
-          fallback_options:
-            link_to_item: false
-            use_highlighting: false
-            multi_type: separator
-            multi_separator: ', '
-            display_methods: {  }
       filters:
+        status:
+          value: '1'
+          table: node_field_data
+          field: status
+          plugin_id: boolean
+          entity_type: node
+          entity_field: status
+          id: status
+          expose:
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+          group: 1
         type:
           id: type
-          table: search_api_index_content
+          table: node_field_data
           field: type
           relationship: none
           group_type: group
           admin_label: ''
-          operator: or
+          operator: in
           value:
             article: article
           group: 1
@@ -181,24 +177,28 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          reduce_duplicates: false
-          plugin_id: search_api_options
-      sorts: {  }
-      title: Articles
-      header: {  }
-      footer: {  }
-      empty:
-        view_fallback:
-          id: view_fallback
-          table: views
-          field: view_fallback
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+      sorts:
+        created:
+          id: created
+          table: node_field_data
+          field: created
+          order: DESC
+          entity_type: node
+          entity_field: created
+          plugin_id: date
           relationship: none
           group_type: group
           admin_label: ''
-          empty: true
-          view_to_insert: 'articles:default'
-          inherit_arguments: 0
-          plugin_id: view_fallback
+          exposed: false
+          expose:
+            label: ''
+          granularity: second
+      header: {  }
+      footer: {  }
+      empty: {  }
       relationships: {  }
       arguments: {  }
       display_extenders: {  }
@@ -208,27 +208,6 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url.query_args
-        - url.path
         - 'user.node_grants:view'
-      tags:
-        - 'config:field.storage.node.field_article_type'
-        - 'config:search_api.index.content'
-  page:
-    display_plugin: page
-    id: page
-    display_title: Page
-    position: 1
-    display_options:
-      display_extenders: {  }
-      path: articles
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - url.query_args
-        - url.path
-        - 'user.node_grants:view'
-      tags:
-        - 'config:field.storage.node.field_article_type'
-        - 'config:search_api.index.content'
+        - user.permissions
+      tags: {  }
