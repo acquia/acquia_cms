@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies: {  }
+id: node__place
+label: 'Content: Place'
+tags:
+  description: '[node:summary]'
+  keywords: '[node:field_categories], [node:field_tags]'
+  og_description: '[node:summary]'
+  og_image: '[node:field_place_image:entity:image:entity:url]'
+  og_title: '[node:title]'
+  og_type: place
+  og_url: '[node:url:absolute]'
+  schema_place_address: 'a:6:{s:5:"@type";s:13:"PostalAddress";s:13:"streetAddress";s:82:"[node:field_place_address:address_line1], [node:field_place_address:address_line2]";s:15:"addressLocality";s:35:"[node:field_place_address:locality]";s:13:"addressRegion";s:46:"[node:field_place_address:administrative_area]";s:10:"postalCode";s:38:"[node:field_place_address:postal_code]";s:14:"addressCountry";s:39:"[node:field_place_address:country_name]";}'
+  schema_place_description: '[node:summary]'
+  schema_place_image: 'a:2:{s:5:"@type";s:11:"ImageObject";s:3:"url";s:48:"[node:field_place_image:entity:image:entity:url]";}'
+  schema_place_name: '[node:title]'
+  schema_place_type: Place
+  schema_place_telephone: '[node:field_place_telephone]'
+  twitter_cards_description: '[node:summary]'
+  twitter_cards_image: '[node:field_place_image:entity:image:entity:url]'
+  twitter_cards_title: '[node:title]'
+  twitter_cards_type: summary_large_image
+  twitter_cards_page_url: '[node:url:absolute]'

@@ -1,0 +1,49 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.byline_display
+    - field.field.node.person.body
+    - field.field.node.person.field_categories
+    - field.field.node.person.field_email
+    - field.field.node.person.field_person_image
+    - field.field.node.person.field_person_telephone
+    - field.field.node.person.field_person_type
+    - field.field.node.person.field_place
+    - field.field.node.person.field_tags
+    - node.type.person
+  module:
+    - user
+id: node.person.byline_display
+targetEntityType: node
+bundle: person
+mode: byline_display
+content:
+  content_moderation_control:
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_person_image:
+    type: entity_reference_label
+    weight: 0
+    region: content
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+  links:
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  body: true
+  field_categories: true
+  field_email: true
+  field_person_telephone: true
+  field_person_type: true
+  field_place: true
+  field_tags: true
+  langcode: true
+  search_api_excerpt: true

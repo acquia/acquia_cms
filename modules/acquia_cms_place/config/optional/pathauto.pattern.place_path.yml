@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: place_path
+label: 'Place path'
+type: 'canonical_entities:node'
+pattern: 'places/[node:title]'
+selection_criteria:
+  74e63172-7fa6-450c-addd-21d8e27a5b2e:
+    id: node_type
+    bundles:
+      place: place
+    negate: false
+    context_mapping:
+      node: node
+    uuid: 74e63172-7fa6-450c-addd-21d8e27a5b2e
+selection_logic: and
+weight: -5
+relationships: {  }
