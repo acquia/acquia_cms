@@ -11,7 +11,6 @@
 //   `gulp clean:css`
 //   `gulp compile:sass`
 //   `gulp lint:js`
-//   `gulp lint:css`
 //   `gulp minify:css`
 //   `gulp watch`
 //   `gulp watch:js`
@@ -132,7 +131,6 @@ require('./gulp-tasks/compile-sass')(gulp, plugins, options);
 require('./gulp-tasks/compile-js')(gulp, plugins, options);
 require('./gulp-tasks/default')(gulp, plugins, options);
 require('./gulp-tasks/lint-js')(gulp, plugins, options);
-require('./gulp-tasks/lint-css')(gulp, plugins, options);
 require('./gulp-tasks/minify-css')(gulp, plugins, options);
 require('./gulp-tasks/watch')(gulp, plugins, options);
 

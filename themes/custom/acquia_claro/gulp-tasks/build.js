@@ -14,8 +14,7 @@ module.exports = function (gulp, plugins, options) {
       'compile:sass',
       ['minify:css'],
       ['lint:js-gulp',
-        'lint:js-with-fail',
-        'lint:css-with-fail'],
+        'lint:js-with-fail'],
       'compile:js',
       cb);
   }));
@@ -25,8 +24,7 @@ module.exports = function (gulp, plugins, options) {
       'compile:sass',
       ['minify:css'],
       ['lint:js-gulp',
-        'lint:js',
-        'lint:css'],
+        'lint:js'],
       cb);
   }));
 };

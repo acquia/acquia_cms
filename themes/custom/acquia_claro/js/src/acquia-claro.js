@@ -12,10 +12,9 @@
    */
   Drupal.behaviors.acquiaClaro = {
     attach: function (context, settings) {
-
-      console.log('It works!');
-
+      // Example behavior.
     }
   };
 
 } (jQuery, Drupal));
+
