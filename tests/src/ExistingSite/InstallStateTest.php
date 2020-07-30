@@ -41,7 +41,7 @@ class InstallStateTest extends ExistingSiteBase {
     // Check that the default and admin themes are set as expected.
     $theme_config = $this->config('system.theme');
     $this->assertSame('cohesion_theme', $theme_config->get('default'));
-    $this->assertSame('claro', $theme_config->get('admin'));
+    $this->assertSame('acquia_claro', $theme_config->get('admin'));
 
     // Check that the node create form is using the admin theme.
     $this->assertTrue($this->config('node.settings')->get('use_admin_theme'));
