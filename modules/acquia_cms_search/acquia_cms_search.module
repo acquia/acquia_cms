@@ -6,6 +6,7 @@
  */
 
 use Drupal\acquia_cms_search\Facade\SearchFacade;
+use Drupal\acquia_cms_search\Plugin\views\query\SearchApiQuery;
 use Drupal\Core\DestructableInterface;
 use Drupal\field\FieldStorageConfigInterface;
 use Drupal\node\NodeTypeInterface;
@@ -27,6 +28,15 @@ function acquia_cms_search_views_data() {
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_views_plugins_query_alter().
+ */
+function acquia_cms_search_views_plugins_query_alter(array &$definitions) {
+  if (Drupal::moduleHandler()->moduleExists('facets_pretty_paths')) {
+    $definitions['search_api_query']['class'] = SearchApiQuery::class;
+  }
 }
 
 /**
