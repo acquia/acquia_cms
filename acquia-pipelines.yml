@@ -37,3 +37,7 @@ events:
             # in Pipelines doesn't seem to work. This deployment is ephemeral, so using
             # the existing config directory isn't a problem.
             - echo "\$config_directories['sync'] = '../config';" >> docroot/sites/default/settings.php
+      - front-end:
+          type: script
+          script:
+            - cd themes/acquia_claro && npm install && npm run build
