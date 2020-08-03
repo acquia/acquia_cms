@@ -35,7 +35,6 @@ class ProjectCardComponentTest extends CohesionTestBase {
     $edit_form->fillField('Heading', 'Example component 123');
     $edit_form->fillField('Pre heading', 'Example');
     $edit_form->fillField('Link to page', 'https://www.acquia.com');
-    $edit_form->pressButton('Apply');
   }
 
   /**
