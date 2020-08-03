@@ -12,44 +12,32 @@ use Drupal\Tests\acquia_cms_common\ExistingSiteJavascript\CohesionTestBase;
 class ProjectCardComponentTest extends CohesionTestBase {
 
   /**
-   * Test that Project card component is installed.
-   *
-   * And used in Cohesion's layout canvas.
+   * Test that the "Card - project" component can be added to a layout canvas.
    */
-  public function testProjectCardComponentInstall() {
+  public function testComponent() {
     $account = $this->createUser();
     $account->addRole('administrator');
     $account->save();
     $this->drupalLogin($account);
 
+    // Create a random image that we can select in the media library when
+    // editing the component.
+    $this->createMedia(['bundle' => 'image']);
+
     $this->drupalGet('/node/add/page');
-    $page = $this->getSession()->getPage();
-    $assert_session = $this->assertSession();
 
-    $page->fillField('Title', 'Cohesion card project component');
-
-    // Add the cohesion component in the field layout canvas.
+    // Add the component to the layout canvas.
     $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
     $component_added = $this->addComponent($canvas, 'Card - project');
     $edit_form = $this->editComponent($component_added);
-    $edit_form->pressButton('Select image');
-
-    $this->addMedia('image');
-    // Load the media library if it is configured.
-    if ($this->assertSession()->waitForText('Media Library')) {
-      // Upload media of type image.
-      $this->uploadMediaInComponent();
-    }
+    $this->openMediaLibrary($edit_form, 'Select image');
+    $this->selectMedia(0);
+    $this->insertSelectedMedia();
 
     $edit_form->fillField('Heading', 'Example component 123');
     $edit_form->fillField('Pre heading', 'Example');
     $edit_form->fillField('Link to page', 'https://www.acquia.com');
     $edit_form->pressButton('Apply');
-
-    // Save the node and assign node object to the class property.
-    $page = $this->waitForElementVisibleAssertion('css', '.form-actions');
-    $page->pressButton('Save');
-    $assert_session->pageTextContains('Page Cohesion card project component has been created.');
   }
 
   /**
@@ -73,10 +61,10 @@ class ProjectCardComponentTest extends CohesionTestBase {
 
     // Check weather general component accordion is open or not.
     if (!$general_component->hasAttribute('open')) {
-      $this->waitForElementVisibleAssertion('css', '[aria-controls="edit-accordion"]')->press();
+      $this->waitForElementVisible('css', '[aria-controls="edit-accordion"]')->press();
     }
     else {
-      $this->waitForElementVisibleAssertion('css', '[aria-controls="edit-accordion"]');
+      $this->waitForElementVisible('css', '[aria-controls="edit-accordion"]');
     }
 
     // Click on 'edit' if the component exists on the page.

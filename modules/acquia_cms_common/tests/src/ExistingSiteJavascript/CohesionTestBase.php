@@ -137,49 +137,39 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
   }
 
   /**
-   * Create media.
+   * Opens the media library from a component edit form, and enters its iFrame.
    *
-   * @param string $media_bundle
-   *   Media bundle.
+   * @param \Behat\Mink\Element\ElementInterface $edit_form
+   *   The component edit form.
+   * @param string $button_text
+   *   The text of the button which opens the media library.
    */
-  protected function addMedia($media_bundle) {
-    $this->createMedia([
-      'bundle' => $media_bundle,
-    ]);
+  protected function openMediaLibrary(ElementInterface $edit_form, string $button_text) {
+    $assert_session = $this->assertSession();
+
+    $edit_form->pressButton($button_text);
+    $this->assertNotEmpty($assert_session->waitForText('Media Library'));
+    $this->switchToMediaLibraryFrame();
   }
 
   /**
-   * Upload Media in component.
+   * Switches into the media library iFrame.
+   *
+   * Normally the iFrame does not have a 'name' attribute, but we need it to
+   * have one in order for Mink to switch into it. So, if the frame has no name,
+   * we assign it one automatically.
    */
-  protected function uploadMediaInComponent() {
-    $iframe = $this->getSession()->getPage()->find('css', 'iframe[title="Media Library"]');
-    if ($iframe != NULL) {
-      $this->switchToMediaLibraryIframe($iframe);
-      $this->selectMedia(0);
-      $this->insertSelectedMedia();
-      // Switching from iframe back to component modal.
-      $this->getSession()->switchToIFrame(NULL);
-    }
-    else {
-      $this->waitForElementVisibleAssertion('css', '.modal-body.is-loaded');
-      $this->waitForElementVisibleAssertion('css', '.coh-icon-cancel-circle')->click();
-    }
-  }
+  private function switchToMediaLibraryFrame() {
+    $session = $this->getSession();
 
-  /**
-   * Switch to iframe.
-   */
-  protected function switchToMediaLibraryIframe($iframe) {
-    if (empty($iframe->getAttribute('name'))) {
-      $this->getSession()->executeScript("jQuery(document.getElementsByTagName('iframe')).attr('name', 'media_library_iframe')");
+    $selector = 'iframe[title="Media Library"]';
+    $frame = $this->waitForElementVisible('css', $selector);
+    $name = $frame->getAttribute('name');
+    if (empty($name)) {
+      $name = 'media_library_iframe';
+      $session->executeScript("document.querySelector('$selector').setAttribute('name', '$name')");
     }
-    // NOTE: Media library add form modal is an 'iframe' without the name
-    // attribute. Name attribute is a must-have for selenium2-Driver to switch
-    // the test control from page to iframe. So we have set an custom 'name'
-    // attribute called 'media_library_iframe' which we will be passing to the
-    // `switchToIframe()` function.
-    $this->getSession()->switchToIFrame($iframe->getAttribute('name'));
-    $this->assertSession()->waitForElement('css', 'dialog-off-canvas-main-canvas');
+    $session->switchToIFrame($name);
   }
 
   /**
@@ -188,42 +178,27 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    * @param int $position
    *   The zero-based index of the media item to select.
    */
-  protected function selectMedia(int $position) {
-    $this->waitForElementVisibleAssertion('named', ['field', "media_library_select_form[$position]"])->check();
+  protected function selectMedia(int $position) : void {
+    $this->waitForElementVisible('named', ['field', "media_library_select_form[$position]"])->check();
   }
 
   /**
-   * Inserts all selected media and switch from iframe.
+   * Inserts the selected media items and exits the media library's iFrame.
    */
-  protected function insertSelectedMedia() {
-    $this->assertSession()->buttonExists('Insert selected')->press();
-    $this->assertSession()->assertWaitOnAjaxRequest();
+  protected function insertSelectedMedia() : void {
+    $session = $this->getSession();
+    $session->getPage()->pressButton('Insert selected');
+    $session->switchToIFrame(NULL);
+    $this->assertTrue($session->wait(10000, 'typeof window.media_library_iframe === "undefined"'));
   }
 
   /**
    * {@inheritdoc}
    */
-  private function createMedia(array $values = []) {
+  protected function createMedia(array $values = []) {
     $media = $this->traitCreateMedia($values);
     $this->markEntityForCleanup($media);
     return $media;
-  }
-
-  /**
-   * Helper method: wait for element to visible.
-   *
-   * @param string $selector
-   *   Element selector.
-   * @param string $locator
-   *   Element locator.
-   *
-   * @return \Behat\Mink\Element\ElementInterface
-   *   The element that has become visible.
-   */
-  protected function waitForElementVisibleAssertion($selector, $locator) {
-    $element = $this->assertSession()->waitForElementVisible($selector, $locator);
-    $this->assertNotEmpty($element);
-    return $element;
   }
 
 }
