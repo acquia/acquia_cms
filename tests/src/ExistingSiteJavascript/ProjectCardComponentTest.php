@@ -3,14 +3,14 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Tests that Project Card Component is installed and operating correctly.
+ * Tests that "Card - project" component is installed and operating correctly.
  *
  * @group acquia_cms
  */
 class ProjectCardComponentTest extends CohesionTestBase {
 
   /**
-   * Test that the "Card - project" component can be added to a layout canvas.
+   * Tests that the component can be added to a layout canvas.
    */
   public function testComponent() {
     $account = $this->createUser();
@@ -39,11 +39,14 @@ class ProjectCardComponentTest extends CohesionTestBase {
   }
 
   /**
-   * Test that project card component is use/edit by site builder and developer.
+   * Tests that component can be edited by a specific user role.
    *
-   * @dataProvider roleProvider
+   * @param string $role
+   *   The ID of the user role to test with.
+   *
+   * @dataProvider providerEditAccess
    */
-  public function testComponentUseEditAccess($role) {
+  public function testEditAccess(string $role) {
     $account = $this->createUser();
     $account->addRole($role);
     $account->save();
@@ -51,38 +54,26 @@ class ProjectCardComponentTest extends CohesionTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $page = $this->getSession()->getPage();
     $assert_session = $this->assertSession();
 
-    // Find general components category on page.
-    $general_component = $page->find('css', '#edit-accordion');
-
-    // Check weather general component accordion is open or not.
-    if (!$general_component->hasAttribute('open')) {
-      $this->waitForElementVisible('css', '[aria-controls="edit-accordion"]')->press();
-    }
-    else {
-      $this->waitForElementVisible('css', '[aria-controls="edit-accordion"]');
+    // Ensure that the group containing the component is open.
+    $details = $assert_session->elementExists('css', 'details > summary:contains(General components)')->getParent();
+    if (!$details->hasAttribute('open')) {
+      $details->find('css', 'summary')->click();
     }
 
-    // Click on 'edit' if the component exists on the page.
-    $assert_session->pageTextContains('Card - project');
-    $this->getSession()->executeScript("jQuery('span:contains(Card - project)').parents('tr:first').find('li.edit > a')[0].click()");
-    $assert_session->waitForElement('css', '.cohesion-component-edit-form');
-
-    // Save the component and check if the desired messages are present.
-    $assert_session->buttonExists('Save and continue')->press();
-    $assert_session->pageTextContains('Your component styles have been updated.');
-    $assert_session->pageTextContains('Saved the Component Card - project.');
+    $assert_session->elementExists('css', 'tr:contains("Card - project")', $details)
+      ->clickLink('Edit');
+    $this->waitForElementVisible('css', '.cohesion-component-edit-form');
   }
 
   /**
-   * Provide roles.
+   * Data provider for ::testEditAccess().
    *
-   * @return array
-   *   Return role.
+   * @return array[]
+   *   Sets of arguments to pass to the test method.
    */
-  public function roleProvider() {
+  public function providerEditAccess() {
     return [
       ['site_builder'],
       ['developer'],
