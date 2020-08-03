@@ -1,14 +1,16 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_common\ExistingSite;
+namespace Drupal\Tests\acquia_cms_article\ExistingSite;
 
 use Drupal\taxonomy\Entity\Vocabulary;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
- * @group acquia_cms_common
+ * Tests the "all articles" listing page.
+ *
+ * @group acquia_cms_article
  */
-class ArticleSearchTest extends ExistingSiteBase {
+class ArticleListTest extends ExistingSiteBase {
 
   /**
    * {@inheritdoc}
