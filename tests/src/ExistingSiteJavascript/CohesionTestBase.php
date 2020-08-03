@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_common\ExistingSiteJavascript;
+namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Behat\Mink\Element\ElementInterface;

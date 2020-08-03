@@ -2,8 +2,6 @@
 
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
-use Drupal\Tests\acquia_cms_common\ExistingSiteJavascript\CohesionTestBase;
-
 /**
  * Tests that Project Card Component is installed and operating correctly.
  *
