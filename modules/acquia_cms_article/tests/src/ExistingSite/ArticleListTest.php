@@ -100,15 +100,15 @@ class ArticleListTest extends ExistingSiteBase {
 
     $assert_session = $this->assertSession();
     // Assert that all categories facets are available.
-    $assert_session->linkExists('Music');
-    $assert_session->linkExists('Art');
-    $assert_session->linkExists('Literature');
-    $assert_session->linkExists('Math');
+    $assert_session->linkExists('Music (2)');
+    $assert_session->linkExists('Art (2)');
+    $assert_session->linkExists('Literature (1)');
+    $assert_session->linkExists('Math (1)');
 
     // Assert all article type facets are available.
-    $assert_session->linkExists('Blog Post');
-    $assert_session->linkExists('Press Release');
-    $assert_session->linkExists('News');
+    $assert_session->linkExists('Blog Post (2)');
+    $assert_session->linkExists('Press Release (2)');
+    $assert_session->linkExists('News (2)');
 
     // All articles should be visible except for the secret one.
     $this->assertLinksExistInOrder([
@@ -123,7 +123,7 @@ class ArticleListTest extends ExistingSiteBase {
 
     // Filter by a category and ensure that the expected articles are visible.
     $page = $this->getSession()->getPage();
-    $page->clickLink('Art');
+    $page->clickLink('Art (2)');
     $assert_session->addressEquals('/articles/category/art');
     $this->assertLinksExistInOrder(['Foxtrot', 'Beta']);
     $assert_session->linkNotExists('Alpha');
@@ -135,11 +135,11 @@ class ArticleListTest extends ExistingSiteBase {
     // The choice of a category should narrow down the results in the type
     // facet.
     $assert_session->linkNotExists('Blog Post');
-    $assert_session->linkExists('Press Release');
-    $assert_session->linkExists('News');
+    $assert_session->linkExists('Press Release (1)');
+    $assert_session->linkExists('News (1)');
 
     // Filtering by type should narrow the results down even more.
-    $page->clickLink('News');
+    $page->clickLink('News (1)');
     $assert_session->addressEquals('/articles/type/news/category/art');
     $assert_session->linkNotExists('Alpha');
     $assert_session->linkNotExists('Beta');
@@ -150,7 +150,7 @@ class ArticleListTest extends ExistingSiteBase {
     $assert_session->linkNotExists('The secret article');
 
     // Removing a facet should widen the results.
-    $page->clickLink('Art');
+    $page->clickLink('Art (1)');
     $assert_session->addressEquals('/articles/type/news');
     $this->assertLinksExistInOrder(['Foxtrot', 'Charlie']);
     $assert_session->linkNotExists('Alpha');
