@@ -35,12 +35,14 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    *   The layout canvas element.
    * @param string $label
    *   The component label.
+   * @param string $location
+   *   The button location.
    *
    * @return \Behat\Mink\Element\ElementInterface
    *   The component that has been added to the layout canvas.
    */
-  protected function addComponent(ElementInterface $canvas, string $label) : ElementInterface {
-    $this->pressAriaButton($canvas, 'Add content');
+  protected function addComponent(ElementInterface $canvas, string $label, string $location = 'component') : ElementInterface {
+    $location === 'dropzone' ? $this->pressDropZoneButton($canvas) : $this->pressAriaButton($canvas, 'Add content');
     $element_browser = $this->waitForElementBrowser();
 
     $selector = sprintf('.coh-layout-canvas-list-item[data-title="%s"]', $label);
@@ -105,6 +107,19 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    */
   private function pressAriaButton(ElementInterface $container, string $button_label) : void {
     $selector = sprintf('button[aria-label="%s"]', $button_label);
+    $button = $container->find('css', $selector);
+    $this->assertInstanceOf(ElementInterface::class, $button);
+    $button->press();
+  }
+
+  /**
+   * Locates the components add button in the dropzone and presses it.
+   *
+   * @param \Behat\Mink\Element\ElementInterface $container
+   *   The element that contains the button.
+   */
+  private function pressDropZoneButton(ElementInterface $container) : void {
+    $selector = 'button[class*="coh-add-btn"]';
     $button = $container->find('css', $selector);
     $this->assertInstanceOf(ElementInterface::class, $button);
     $button->press();
