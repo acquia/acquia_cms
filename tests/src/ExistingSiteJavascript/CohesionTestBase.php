@@ -139,27 +139,19 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
   /**
    * Opens the media library from a component edit form, and enters its iFrame.
    *
+   * Normally the iFrame does not have a 'name' attribute, but we need it to
+   * have one in order for Mink to switch into it. So, if the frame has no name,
+   * we assign it one automatically.
+   *
    * @param \Behat\Mink\Element\ElementInterface $edit_form
    *   The component edit form.
    * @param string $button_text
    *   The text of the button which opens the media library.
    */
   protected function openMediaLibrary(ElementInterface $edit_form, string $button_text) {
-    $assert_session = $this->assertSession();
-
     $edit_form->pressButton($button_text);
-    $this->assertNotEmpty($assert_session->waitForText('Media Library'));
-    $this->switchToMediaLibraryFrame();
-  }
+    $this->assertNotEmpty($this->assertSession()->waitForText('Media Library'));
 
-  /**
-   * Switches into the media library iFrame.
-   *
-   * Normally the iFrame does not have a 'name' attribute, but we need it to
-   * have one in order for Mink to switch into it. So, if the frame has no name,
-   * we assign it one automatically.
-   */
-  private function switchToMediaLibraryFrame() {
     $session = $this->getSession();
 
     $selector = 'iframe[title="Media Library"]';
