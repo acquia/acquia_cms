@@ -6,11 +6,38 @@
  */
 
 use Drupal\acquia_cms_search\Facade\SearchFacade;
+use Drupal\acquia_cms_search\Plugin\views\query\SearchApiQuery;
 use Drupal\Core\DestructableInterface;
 use Drupal\field\FieldStorageConfigInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\ServerInterface;
+
+/**
+ * Implements hook_views_data().
+ */
+function acquia_cms_search_views_data() {
+  return [
+    'views' => [
+      'view_fallback' => [
+        'title' => t('Fallback view area'),
+        'help' => t('Insert a view inside an area if the search server is unavailable. If the view is not based on a Search API index, this behaves like a standard view area.'),
+        'area' => [
+          'id' => 'view_fallback',
+        ],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_views_plugins_query_alter().
+ */
+function acquia_cms_search_views_plugins_query_alter(array &$definitions) {
+  if (Drupal::moduleHandler()->moduleExists('facets_pretty_paths')) {
+    $definitions['search_api_query']['class'] = SearchApiQuery::class;
+  }
+}
 
 /**
  * Implements hook_ENTITY_TYPE_insert() for node types.

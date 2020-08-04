@@ -14,6 +14,14 @@ name: Content
 description: 'An index of all content in your site.'
 read_only: false
 field_settings:
+  created:
+    label: 'Created time'
+    datasource_id: 'entity:node'
+    property_path: created
+    type: date
+    dependencies:
+      module:
+        - node
   node_grants:
     label: 'Node access information'
     property_path: search_api_node_grants
