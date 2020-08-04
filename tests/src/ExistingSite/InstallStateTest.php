@@ -19,6 +19,20 @@ class InstallStateTest extends ExistingSiteBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setUp();
+    // Update configuration so that password policy can be tested by
+    // registering an account through UI.
+    $this->container->get('config.factory')
+      ->getEditable('user.settings')
+      ->set('verify_mail', FALSE)
+      ->set('register', 'visitors_admin_approval')
+      ->save();
+  }
+
+  /**
    * Assert that all install tasks have done what they should do.
    *
    * See acquia_cms_install_tasks().
@@ -27,7 +41,7 @@ class InstallStateTest extends ExistingSiteBase {
     // Check that the default and admin themes are set as expected.
     $theme_config = $this->config('system.theme');
     $this->assertSame('cohesion_theme', $theme_config->get('default'));
-    $this->assertSame('claro', $theme_config->get('admin'));
+    $this->assertSame('acquia_claro', $theme_config->get('admin'));
 
     // Check that the node create form is using the admin theme.
     $this->assertTrue($this->config('node.settings')->get('use_admin_theme'));
@@ -178,6 +192,111 @@ class InstallStateTest extends ExistingSiteBase {
     $this->drupalLogin($account);
     $this->drupalGet('/admin/tour');
     $assert_session->statusCodeEquals(403);
+  }
+
+  /**
+   * Tests security related permission for User Administrator role.
+   *
+   * - User with role User Administrator should be able to access the following
+   *   modules' configuration pages:
+   *   - seckit
+   *   - shield
+   *   - honeypot
+   *   - captcha
+   *   - recaptcha
+   *   - password_policy.
+   */
+  public function testSecurityModulesPermissions() {
+    $assert_session = $this->assertSession();
+
+    $account = $this->createUser();
+    $account->addRole('user_administrator');
+    $account->save();
+    $this->drupalLogin($account);
+
+    $this->drupalGet('/admin/config/system/seckit');
+    $assert_session->statusCodeEquals(200);
+
+    $this->drupalGet('/admin/config/system/shield');
+    $assert_session->statusCodeEquals(200);
+
+    $this->drupalGet('/admin/config/content/honeypot');
+    $assert_session->statusCodeEquals(200);
+
+    $this->drupalGet('/admin/config/people/captcha');
+    $assert_session->statusCodeEquals(200);
+
+    $this->drupalGet('/admin/config/people/captcha/recaptcha');
+    $assert_session->statusCodeEquals(200);
+
+    $this->drupalGet('/admin/config/security/password-policy');
+    $assert_session->statusCodeEquals(200);
+    $this->drupalGet('/admin/config/security/password-policy/add');
+    $assert_session->statusCodeEquals(200);
+    $this->drupalGet('/admin/config/security/password-policy/reset');
+    $assert_session->statusCodeEquals(200);
+  }
+
+  /**
+   * Tests Acquia CMS password policy by registering a new account.
+   *
+   * - Passwords must contain at least 3 different types of characters:
+   *   - lowercase letters
+   *   - uppercase letters
+   *   - digits
+   *   - special characters (optional)
+   * - Passwords must be at least 8 characters long.
+   * - Passwords must not contain the username.
+   */
+  public function testPasswordPolicy() {
+    $page = $this->getSession()->getPage();
+    $assert_session = $this->assertSession();
+
+    // Password length must be at least 8 characters; try to create one that is
+    // only 7.
+    $this->drupalGet('/user/register');
+    $page->fillField('Email address', 'example@example.com');
+    $page->fillField('Username', 'example123');
+    $page->fillField('Password', 'Abc129!');
+    $page->fillField('Confirm password', 'Abc129!');
+    $page->pressButton('Create new account');
+    $assert_session->pageTextContains('The password does not satisfy the password policies.');
+
+    // Passwords must contain at least 3 types of characters; try to create one
+    // without a number in it.
+    $page->fillField('Password', 'AAexaample');
+    $page->fillField('Confirm password', 'AAexaample');
+    $page->pressButton('Create new account');
+    $assert_session->pageTextContains('The password does not satisfy the password policies.');
+
+    // Password must not contain the username.
+    // @TODO: Validation does not work for this constraint, isue has been raised
+    // Issue - https://www.drupal.org/project/password_policy/issues/3161012
+    $page->fillField('Password', 'Acb#45nbcs');
+    $page->fillField('Confirm password', 'Acb#45nbcs');
+    $page->pressButton('Create new account');
+    // Assert that a status message appears with welcome text, and no password
+    // policy error.
+    $assert_session->pageTextNotContains('The password does not satisfy the password policies.');
+    $assert_session->pageTextContains('Thank you for applying for an account. Your account is currently pending approval by the site administrator.');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function tearDown() {
+    // Delete user created during testing password policy.
+    $user = user_load_by_mail('example@example.com');
+    if ($user) {
+      $user->delete();
+    }
+    // Revert the configuration back to default, once password policy is tested.
+    $this->container->get('config.factory')
+      ->getEditable('user.settings')
+      ->set('verify_mail', TRUE)
+      ->set('register', 'visitors')
+      ->save();
+    parent::tearDown();
   }
 
 }

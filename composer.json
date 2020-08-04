@@ -11,6 +11,7 @@
         "cweagans/composer-patches": "^1.6",
         "drupal/acquia_connector": "^2",
         "drupal/acquia_purge": "^1",
+        "drupal/acquia_telemetry-acquia_telemetry": "^1.0-alpha3",
         "drupal/acsf": "^2",
         "drupal/address": "^1",
         "drupal/admin_toolbar": "^2.0",
@@ -36,20 +37,23 @@
         "drupal/recaptcha": "^3",
         "drupal/redirect": "^1",
         "drupal/responsive_preview": "^1.0@beta",
-        "drupal/schema_metatag": "1.6",
+        "drupal/scheduler_content_moderation_integration": "^1.3",
+        "drupal/schema_metatag": "^1.7",
         "drupal/search_api_autocomplete": "1.x-dev",
         "drupal/search_api_solr": "^4",
         "drupal/seckit": "^2",
         "drupal/shield": "^1",
         "drupal/simple_sitemap": "^3",
         "drupal/username_enumeration_prevention": "^1",
-        "drupal/webform": "^6"
+        "drupal/webform": "^6",
+        "drupal/workbench_email": "^1.7"
     },
     "require-dev": {
         "acquia/coding-standards": "^0.4.3",
         "drupal/core-composer-scaffold": "^9.0.0",
         "drupal/core-dev": "^9",
         "drush/drush": "^10",
+        "friendsoftwig/twigcs": "^3.2",
         "oomphinc/composer-installers-extender": "^1.1",
         "vaimo/binary-chromedriver": "^5.0",
         "vijaycs85/drupal-quality-checker": "^1.2",
@@ -116,10 +120,6 @@
             "drupal/imce": {
                 "Remove theme declaration for imce_page": "https://www.drupal.org/files/issues/2020-06-05/3146463-2--remove_imce_page_theme_declaration.patch"
             },
-            "drupal/schema_metatag": {
-                "Schema metatag for place": "https://www.drupal.org/files/issues/2020-07-06/schema_metatag-place_group_missing-3012037-8.patch",
-                "Schema metatag for place with D9 compatible": "https://www.drupal.org/files/issues/2020-07-21/d9_compatible-3160458-2.patch"
-            },
             "drupal/focal_point": {
                 "Integrate focal point with media_library": "https://www.drupal.org/files/issues/2020-05-26/3094478-38.patch"
             }
@@ -152,7 +152,8 @@
             "ln -s -f $PWD/config $PROFILE_DIR",
             "ln -s -f $PWD/misc $PROFILE_DIR",
             "ln -s -f $PWD/modules $MODULES_DIR",
-            "ln -s -f $PWD/modules $PROFILE_DIR/modules",
+            "ln -s -f $PWD/modules $PROFILE_DIR",
+            "ln -s -f $PWD/themes $PROFILE_DIR",
             "ln -s -f $PWD/src $PROFILE_DIR",
             "ln -s -f $PWD/tests $PROFILE_DIR",
             "find ./docroot/modules -type d -name tests -prune -exec rm -r -f '{}' ';'",
