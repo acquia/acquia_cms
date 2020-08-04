@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_article\ExistingSite;
 
+use Behat\Mink\Element\ElementInterface;
 use Drupal\taxonomy\Entity\Vocabulary;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
@@ -34,9 +35,12 @@ class ArticleListTest extends ExistingSiteBase {
       $this->createTerm($vocabulary, ['name' => 'News'])->id(),
     ];
 
+    $time = time();
+
     $this->createNode([
       'type' => 'article',
       'title' => 'The secret article',
+      'created' => $time++,
     ]);
     $this->createNode([
       'type' => 'article',
@@ -44,6 +48,7 @@ class ArticleListTest extends ExistingSiteBase {
       'moderation_state' => 'published',
       'field_categories' => $categories[0],
       'field_article_type' => $types[0],
+      'created' => $time++,
     ]);
     $this->createNode([
       'type' => 'article',
@@ -51,6 +56,7 @@ class ArticleListTest extends ExistingSiteBase {
       'moderation_state' => 'published',
       'field_categories' => $categories[1],
       'field_article_type' => $types[1],
+      'created' => $time++,
     ]);
     $this->createNode([
       'type' => 'article',
@@ -58,6 +64,7 @@ class ArticleListTest extends ExistingSiteBase {
       'moderation_state' => 'published',
       'field_categories' => $categories[2],
       'field_article_type' => $types[2],
+      'created' => $time++,
     ]);
     $this->createNode([
       'type' => 'article',
@@ -65,6 +72,7 @@ class ArticleListTest extends ExistingSiteBase {
       'moderation_state' => 'published',
       'field_categories' => $categories[3],
       'field_article_type' => $types[0],
+      'created' => $time++,
     ]);
     $this->createNode([
       'type' => 'article',
@@ -72,6 +80,7 @@ class ArticleListTest extends ExistingSiteBase {
       'moderation_state' => 'published',
       'field_categories' => $categories[0],
       'field_article_type' => $types[1],
+      'created' => $time++,
     ]);
     $this->createNode([
       'type' => 'article',
@@ -79,6 +88,7 @@ class ArticleListTest extends ExistingSiteBase {
       'moderation_state' => 'published',
       'field_categories' => $categories[1],
       'field_article_type' => $types[2],
+      'created' => $time++,
     ]);
   }
 
@@ -101,24 +111,25 @@ class ArticleListTest extends ExistingSiteBase {
     $assert_session->linkExists('News');
 
     // All articles should be visible except for the secret one.
-    $assert_session->linkExists('Alpha');
-    $assert_session->linkExists('Beta');
-    $assert_session->linkExists('Charlie');
-    $assert_session->linkExists('Delta');
-    $assert_session->linkExists('Echo');
-    $assert_session->linkExists('Foxtrot');
+    $this->assertLinksExistInOrder([
+      'Foxtrot',
+      'Echo',
+      'Delta',
+      'Charlie',
+      'Beta',
+      'Alpha',
+    ]);
     $assert_session->linkNotExists('The secret article');
 
     // Filter by a category and ensure that the expected articles are visible.
     $page = $this->getSession()->getPage();
     $page->clickLink('Art');
     $assert_session->addressEquals('/articles/category/art');
+    $this->assertLinksExistInOrder(['Foxtrot', 'Beta']);
     $assert_session->linkNotExists('Alpha');
-    $assert_session->linkExists('Beta');
     $assert_session->linkNotExists('Charlie');
     $assert_session->linkNotExists('Delta');
     $assert_session->linkNotExists('Echo');
-    $assert_session->linkExists('Foxtrot');
     $assert_session->linkNotExists('The secret article');
 
     // The choice of a category should narrow down the results in the type
@@ -141,13 +152,38 @@ class ArticleListTest extends ExistingSiteBase {
     // Removing a facet should widen the results.
     $page->clickLink('Art');
     $assert_session->addressEquals('/articles/type/news');
+    $this->assertLinksExistInOrder(['Foxtrot', 'Charlie']);
     $assert_session->linkNotExists('Alpha');
     $assert_session->linkNotExists('Beta');
-    $assert_session->linkExists('Charlie');
     $assert_session->linkNotExists('Delta');
     $assert_session->linkNotExists('Echo');
-    $assert_session->linkExists('Foxtrot');
     $assert_session->linkNotExists('The secret article');
+  }
+
+  /**
+   * Asserts that a set of links are on the page, in a specific order.
+   *
+   * @param string[] $expected_links_in_order
+   *   The titles of the links we expect to find, in the order that we expect
+   *   them to appear on the page.
+   */
+  private function assertLinksExistInOrder(array $expected_links_in_order) : void {
+    $actual_links = $this->getSession()
+      ->getPage()
+      ->findAll('css', 'a[title]');
+
+    $map = function (ElementInterface $link) {
+      // Our template for node teasers doesn't actually link the title -- which
+      // is probably an accessibility no-no, but let's not get into that now --
+      // but it does include a 'title' attribute in the "read more" link which
+      // contains the actual title of the linked node.
+      return $link->getAttribute('title');
+    };
+    $actual_links = array_map($map, $actual_links);
+    $actual_links = array_intersect($actual_links, $expected_links_in_order);
+    $actual_links = array_values($actual_links);
+
+    $this->assertSame($actual_links, $expected_links_in_order);
   }
 
 }

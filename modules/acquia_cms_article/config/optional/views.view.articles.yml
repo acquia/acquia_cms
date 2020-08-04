@@ -183,7 +183,19 @@ display:
             group_items: {  }
           reduce_duplicates: false
           plugin_id: search_api_options
-      sorts: {  }
+      sorts:
+        created:
+          id: created
+          table: search_api_index_content
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
       title: Articles
       header: {  }
       footer: {  }
