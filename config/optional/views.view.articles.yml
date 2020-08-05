@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.storage.node.field_article_type
     - search_api.index.content
+    - views.view.articles_fallback
   module:
     - acquia_cms_search
     - cohesion
@@ -208,7 +209,7 @@ display:
           group_type: group
           admin_label: ''
           empty: true
-          view_to_insert: 'articles:default'
+          view_to_insert: 'articles_fallback:default'
           inherit_arguments: 0
           plugin_id: view_fallback
         area:
