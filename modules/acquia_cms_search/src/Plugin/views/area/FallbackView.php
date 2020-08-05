@@ -21,8 +21,25 @@ final class FallbackView extends View {
   /**
    * {@inheritdoc}
    */
+  public function preQuery() {
+    $query = $this->view->getQuery();
+    $simulate_unavailable = $this->options['simulate_unavailable'] ?? FALSE;
+
+    if ($query instanceof SearchApiQuery && $simulate_unavailable) {
+      $query->abort();
+    }
+    parent::preQuery();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function render($empty = FALSE) {
-    return $this->isServerAvailable() ? [] : parent::render($empty);
+    if ($this->isServerAvailable()) {
+      $this->isEmpty = TRUE;
+      return [];
+    }
+    return parent::render($empty);
   }
 
   /**
@@ -36,6 +53,10 @@ final class FallbackView extends View {
     $query = $this->view->getQuery();
 
     if ($query instanceof SearchApiQuery) {
+      if ($query->shouldAbort()) {
+        return FALSE;
+      }
+
       try {
         return $query->getIndex()
           ->getServerInstance()
