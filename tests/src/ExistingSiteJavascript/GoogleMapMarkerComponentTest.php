@@ -22,8 +22,8 @@ class GoogleMapMarkerComponentTest extends CohesionTestBase {
 
     // Add the component to the layout canvas.
     $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $component_added = $this->addComponent($canvas, 'Google map marker');
-    $edit_form = $this->editComponent($component_added);
+    $component = $this->addComponent($canvas, 'Google map marker');
+    $edit_form = $this->editComponent($component);
 
     $edit_form->fillField('Address', 'Test Address');
     $edit_form->fillField('Latitude', '22.52138');
@@ -44,19 +44,8 @@ class GoogleMapMarkerComponentTest extends CohesionTestBase {
     $account->save();
     $this->drupalLogin($account);
 
-    // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $assert_session = $this->assertSession();
-
-    // Ensure that the group containing the component is open.
-    $details = $assert_session->elementExists('css', 'details > summary:contains(Map components)')->getParent();
-    if (!$details->hasAttribute('open')) {
-      $details->find('css', 'summary')->click();
-    }
-
-    $assert_session->elementExists('css', 'tr:contains("Google map marker")', $details)
-      ->clickLink('Edit');
-    $this->waitForElementVisible('css', '.cohesion-component-edit-form');
+    $this->editComponentDefinition('Map components', 'Google map marker');
   }
 
   /**
