@@ -56,7 +56,15 @@ php -d memory_limit=2G vendor/bin/drush site:install acquia_cms --yes --account-
 If 2 GB *still* isn't enough memory, try raising the limit even more.
 
 ### Running tests
-Acquia CMS's tests are written using the PHPUnit-based framework provided by Drupal core. To run tests, you need to do a bit of set-up:
+Acquia CMS's tests are written using the PHPUnit-based framework provided by Drupal core. To run tests, we have provided a shell script that automatically executes all code validation and tests in a single command.
+
+From the repository root, simply run:
+
+```
+./acms-run-tests.sh
+```
+
+If you want to run tests in a more ad-hoc or one-off fashion, you need to do a bit of set-up:
 
 1. From the repository root, use PHP's built-in web server to serve the Drupal site: `drush runserver 8080`. You can use a different server if you want to; just be sure to adjust the `SIMPLETEST_BASE_URL` environment variable (described below) as needed. To run functional JavaScript tests, be sure that you have Chrome installed, and ChromeDriver running. From the repository root, you can start ChromeDriver in a new terminal window with `vendor/bin/chromedriver --port=4444`. (You can use any port you want, but 4444 is standard.) Note that **ChromeDriver must be running on the same host as Chrome itself!**.
 2. In a new terminal window, define a few environment variables:
