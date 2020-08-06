@@ -53,17 +53,7 @@ class ProjectCardComponentTest extends CohesionTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $assert_session = $this->assertSession();
-
-    // Ensure that the group containing the component is open.
-    $details = $assert_session->elementExists('css', 'details > summary:contains(General components)')->getParent();
-    if (!$details->hasAttribute('open')) {
-      $details->find('css', 'summary')->click();
-    }
-
-    $assert_session->elementExists('css', 'tr:contains("Card - project")', $details)
-      ->clickLink('Edit');
-    $this->waitForElementVisible('css', '.cohesion-component-edit-form');
+    $this->editComponentDefinition('General components', 'Card - project');
   }
 
   /**
