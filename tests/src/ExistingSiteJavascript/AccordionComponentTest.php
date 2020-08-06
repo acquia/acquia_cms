@@ -3,9 +3,7 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Tests that "Accordion container and Accordion item" component is installed.
- *
- * And operating correctly.
+ * Tests the "Accordion container and Accordion item" components.
  *
  * @group acquia_cms
  */
@@ -24,13 +22,9 @@ class AccordionComponentTest extends CohesionTestBase {
 
     // Add the component to the layout canvas.
     $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $this->addComponent($canvas, 'Accordion container');
-    // Add the component in the dropzone of Accordion container.
-    $canvas = $this->waitForElementVisible('css', 'li[data-type="Accordion container"] coh-dynamic-nodes-renderer');
-    $this->addComponent($canvas, 'Accordion item', 'dropzone');
-    // Add the component in the dropzone of Accordion item.
-    $canvas = $this->waitForElementVisible('css', 'li[data-type="Accordion item"] coh-dynamic-nodes-renderer');
-    $this->addComponent($canvas, 'Text', 'dropzone');
+    $accordion_container = $this->addComponent($canvas, 'Accordion container');
+    $accordion_item = $this->addComponentToDropZone($accordion_container, 'Accordion item');
+    $this->addComponentToDropZone($accordion_item, 'Text');
   }
 
   /**
@@ -47,25 +41,10 @@ class AccordionComponentTest extends CohesionTestBase {
     $account->save();
     $this->drupalLogin($account);
 
-    // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $assert_session = $this->assertSession();
-
-    // Ensure that the group containing the component is open.
-    $details = $assert_session->elementExists('css', 'details > summary:contains(Interactive components)')->getParent();
-    if (!$details->hasAttribute('open')) {
-      $details->find('css', 'summary')->click();
-    }
-
-    $assert_session->elementExists('css', 'tr:contains("Accordion container")', $details)
-      ->clickLink('Edit');
-    $this->waitForElementVisible('css', '.cohesion-component-edit-form');
-
-    // Visit to cohesion components page.
-    $this->drupalGet('/admin/cohesion/components/components');
-    $assert_session->elementExists('css', 'tr:contains("Accordion item")', $details)
-      ->clickLink('Edit');
-    $this->waitForElementVisible('css', '.cohesion-component-edit-form');
+    $this->editComponentDefinition('Interactive components', 'Accordion container');
+    $this->getSession()->back();
+    $this->editComponentDefinition('Interactive components', 'Accordion item');
   }
 
   /**
