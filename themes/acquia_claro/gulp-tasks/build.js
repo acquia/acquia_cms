@@ -1,9 +1,7 @@
 /**
  * @file
- * Task: Build.
+ * Contains the build task for acquia_claro.
  */
-
-/* global module */
 
 module.exports = function (gulp, plugins, options) {
   'use strict';

@@ -1,8 +1,5 @@
-
-/**
-  Config file that contains centralized variables
-*/
-@import "config";
+// Theme configuration.
+@import '00-config/**/*';
 
 // Base
 //
@@ -12,26 +9,16 @@
 // to an HTML element, these styles will be the ones displayed.
 //
 // Style guide: base
-@import "base/**/*.scss";
+@import "01-base/**/*.scss";
 
-// Layout
-//
-// These are the layout rules.
-//
-// Style guide: layout
-@import "layout/**/*";
 
 // Components
 //
-// Design components are reusable styling that can be applied using just the CSS
-// class names specified in the component. Also known as design 'modules'.
+// These are the default base styles applied to HTML elements.
 //
-// Style guide: components
-@import "components/**/*";
+// Component classes can override these styles, but if no class applies a style
+// to an HTML element, these styles will be the ones displayed.
+//
+// Style guide: base
+@import "03-components/**/*.scss";
 
-// States
-//
-// States are variations that are usually applied via js, such as `.is-active`.
-//
-// Style guide: states
-@import "state/**/*";

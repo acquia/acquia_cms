@@ -1,7 +1,24 @@
 # Main theme library.
 global:
-  js:
-    js/dist/acquia-claro.js: {}
   css:
     theme:
       css/styles.css: {}
+  dependencies:
+    - acquia_claro/acquia-claro-colors
+
+acquia-claro-colors:
+  version: VERSION
+  css:
+    theme:
+      css/acquia_claro_colors.css: { weight: 1 }
+      '//fonts.googleapis.com/css?family=Material+Icons': { external: true }
+
+color.preview:
+  version: VERSION
+  css:
+    theme:
+      color/preview.css: {}
+  js:
+    color/preview.js: {}
+  dependencies:
+    - color/drupal.color

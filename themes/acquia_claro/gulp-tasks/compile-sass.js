@@ -1,6 +1,6 @@
 /**
  * @file
- * Task: Compile: Sass.
+ * Contains the compile:sass task for acquia_claro.
  */
 
 /* global module */
@@ -8,7 +8,7 @@
 module.exports = function (gulp, plugins, options) {
   'use strict';
 
-  gulp.task('compile:sass', gulp.series(async function compile () {
+  gulp.task('compile:sass', gulp.series('clean:css', async function compile () {
     return gulp.src([
       options.sass.files
     ])

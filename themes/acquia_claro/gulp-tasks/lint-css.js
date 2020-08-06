@@ -1,6 +1,6 @@
 /**
  * @file
- * Task: Lint: scss Files.
+ * Contains the lint:css task for acquia_claro.
  */
 
 /* global module */

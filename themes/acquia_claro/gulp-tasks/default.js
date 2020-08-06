@@ -1,6 +1,6 @@
 /**
  * @file
- * Task: Default.
+ * Contains the default task for acquia_claro.
  */
 
 /* global module */
