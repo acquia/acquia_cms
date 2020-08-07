@@ -65,7 +65,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
       'title' => 'Alpha',
       'moderation_state' => 'published',
       'field_categories' => $categories[0],
-      'field_article_type' => $types[0],
+      'field_' . $this->nodeType . '_type' => $types[0],
       'created' => $time++,
     ]);
     $this->createNode([
@@ -73,7 +73,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
       'title' => 'Beta',
       'moderation_state' => 'published',
       'field_categories' => $categories[1],
-      'field_article_type' => $types[1],
+      'field_' . $this->nodeType . '_type' => $types[1],
       'created' => $time++,
     ]);
     $this->createNode([
@@ -81,7 +81,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
       'title' => 'Charlie',
       'moderation_state' => 'published',
       'field_categories' => $categories[2],
-      'field_article_type' => $types[2],
+      'field_' . $this->nodeType . '_type' => $types[2],
       'created' => $time++,
     ]);
     $this->createNode([
@@ -89,7 +89,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
       'title' => 'Delta',
       'moderation_state' => 'published',
       'field_categories' => $categories[3],
-      'field_article_type' => $types[0],
+      'field_' . $this->nodeType . '_type' => $types[0],
       'created' => $time++,
     ]);
     $this->createNode([
@@ -97,7 +97,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
       'title' => 'Echo',
       'moderation_state' => 'published',
       'field_categories' => $categories[0],
-      'field_article_type' => $types[1],
+      'field_' . $this->nodeType . '_type' => $types[1],
       'created' => $time++,
     ]);
     $this->createNode([
@@ -105,7 +105,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
       'title' => 'Foxtrot',
       'moderation_state' => 'published',
       'field_categories' => $categories[1],
-      'field_article_type' => $types[2],
+      'field_' . $this->nodeType . '_type' => $types[2],
       'created' => $time++,
     ]);
   }
