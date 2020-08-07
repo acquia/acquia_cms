@@ -6,16 +6,16 @@ dependencies:
 id: event_path
 label: 'Event path'
 type: 'canonical_entities:node'
-pattern: 'events/[node:field_event_start:date:custom:Y]/[node:field_event_start:date:custom:m]/[node:title]'
+pattern: 'event/[node:field_event_start:date:custom:Y]/[node:field_event_start:date:custom:m]/[node:title]'
 selection_criteria:
-  71bae8d0-3222-4f02-ab20-f88bddf6cd25:
+  02726a68-6063-4416-8fb1-0e32a4f82593:
     id: node_type
     bundles:
       event: event
     negate: false
     context_mapping:
       node: node
-    uuid: 71bae8d0-3222-4f02-ab20-f88bddf6cd25
+    uuid: 02726a68-6063-4416-8fb1-0e32a4f82593
 selection_logic: and
 weight: -5
 relationships: {  }
