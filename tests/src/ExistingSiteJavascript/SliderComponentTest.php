@@ -22,9 +22,9 @@ class SliderComponentTest extends CohesionTestBase {
 
     // Add the component to the layout canvas.
     $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $accordion_container = $this->addComponent($canvas, 'Slide container');
-    $accordion_item = $this->addComponentToDropZone($accordion_container, 'Slide item');
-    $this->addComponentToDropZone($accordion_item, 'Text');
+    $slide_container = $this->addComponent($canvas, 'Slide container');
+    $slide_item = $this->addComponentToDropZone($slide_container, 'Slide item');
+    $this->addComponentToDropZone($slide_item, 'Text');
   }
 
   /**
