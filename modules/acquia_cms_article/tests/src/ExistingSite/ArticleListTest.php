@@ -4,6 +4,7 @@ namespace Drupal\Tests\acquia_cms_article\ExistingSite;
 
 use Behat\Mink\Element\ElementInterface;
 use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\views\Entity\View;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -93,6 +94,23 @@ class ArticleListTest extends ExistingSiteBase {
   }
 
   /**
+   * Toggle Fallback view.
+   *
+   * @param bool $status
+   *   Flag to use fallback view or not.
+   */
+  public function toggleFallback(bool $status) {
+    $view = View::load('articles');
+    $display = &$view->getDisplay('default');
+    $display['display_options']['cache'] = [
+      'type' => 'none',
+      'options' => [],
+    ];
+    $display['display_options']['empty']['view_fallback']['simulate_unavailable'] = $status;
+    $view->save();
+  }
+
+  /**
    * Tests the "all articles" listing page.
    */
   public function testListPage() {
@@ -161,6 +179,39 @@ class ArticleListTest extends ExistingSiteBase {
   }
 
   /**
+   * Tests the "all articles" listing page for fallback view.
+   */
+  public function testFallback() {
+    // Make sure that fallback view is enabled.
+    $this->toggleFallback(TRUE);
+
+    $this->drupalGet('/articles');
+    $assert_session = $this->assertSession();
+
+    // Assert that all categories facets are un-available.
+    $assert_session->linkNotExists('Music (2)');
+    $assert_session->linkNotExists('Art (2)');
+    $assert_session->linkNotExists('Literature (1)');
+    $assert_session->linkNotExists('Math (1)');
+
+    // Assert all article type facets are un-available.
+    $assert_session->linkNotExists('Blog Post (2)');
+    $assert_session->linkNotExists('Press Release (2)');
+    $assert_session->linkNotExists('News (2)');
+
+    // All articles should be visible except for the secret one.
+    $this->assertLinksExistInOrder([
+      'Foxtrot',
+      'Echo',
+      'Delta',
+      'Charlie',
+      'Beta',
+      'Alpha',
+    ]);
+    $assert_session->linkNotExists('The secret article');
+  }
+
+  /**
    * Asserts that a set of links are on the page, in a specific order.
    *
    * @param string[] $expected_links_in_order
@@ -184,6 +235,14 @@ class ArticleListTest extends ExistingSiteBase {
     $actual_links = array_values($actual_links);
 
     $this->assertSame($actual_links, $expected_links_in_order);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function tearDown() {
+    $this->toggleFallback(FALSE);
+    parent::tearDown();
   }
 
 }
