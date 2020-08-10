@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_article\ExistingSite;
+namespace Drupal\Tests\acquia_cms_common\ExistingSite;
 
 use Behat\Mink\Element\ElementInterface;
 use Drupal\Component\Utility\NestedArray;

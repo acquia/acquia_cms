@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_article\ExistingSite;
 
+use Drupal\Tests\acquia_cms_common\ExistingSite\ContentTypeListTestBase;
 use Drupal\views\Entity\View;
 
 /**
