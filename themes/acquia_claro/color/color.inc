@@ -17,7 +17,6 @@ $info = [
     'primarytabshover' => t('Primary Tabs Hover'),
     'primarybuttonhover' => t('Button Hover'),
     'focus' => t('Focus color'),
-
   ],
   // Pre-defined color schemes.
   'schemes' => [
