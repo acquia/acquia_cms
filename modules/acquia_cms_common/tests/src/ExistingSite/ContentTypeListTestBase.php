@@ -255,6 +255,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
     else {
       $expected_links_in_order = $this->getLinksInOrder();
     }
+    $expected_links_in_order = array_values($expected_links_in_order);
 
     $actual_links = $this->getSession()
       ->getPage()
