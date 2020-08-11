@@ -161,7 +161,7 @@ class ArticleTest extends ContentTypeTestBase {
     $assert_session->pageTextContains('Article Local news has been created.');
 
     // Assert that the Pathauto pattern was used to create the URL alias.
-    $assert_session->addressEquals('articles/local-news');
+    $assert_session->addressEquals('article/local-news');
 
     // Assert that the expected schema.org data and meta tags are present.
     $this->assertSchemaData([
