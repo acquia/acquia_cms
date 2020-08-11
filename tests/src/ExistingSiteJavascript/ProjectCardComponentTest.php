@@ -26,8 +26,8 @@ class ProjectCardComponentTest extends CohesionTestBase {
 
     // Add the component to the layout canvas.
     $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $component_added = $this->addComponent($canvas, 'Card - project');
-    $edit_form = $this->editComponent($component_added);
+    $project_card = $this->addComponent($canvas, 'Card - project');
+    $edit_form = $this->editComponent($project_card);
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMedia(0);
     $this->insertSelectedMedia();

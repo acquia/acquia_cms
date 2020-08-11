@@ -3,11 +3,11 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Test that "Google map" component is installed and operating correctly.
+ * Tests 'Card - Horizontal (Portrait)' cohesion component.
  *
  * @group acquia_cms
  */
-class GoogleMapComponentTest extends CohesionTestBase {
+class HorizontalPortraitCardComponentTest extends CohesionTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.
@@ -18,14 +18,24 @@ class GoogleMapComponentTest extends CohesionTestBase {
     $account->save();
     $this->drupalLogin($account);
 
+    // Create a random image that we can select in the media library when
+    // editing the component.
+    $this->createMedia(['bundle' => 'image']);
+
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
     $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $google_map = $this->addComponent($canvas, 'Google map');
-    $edit_form = $this->editComponent($google_map);
+    $horizontal_portrait_card = $this->addComponent($canvas, 'Card - Horizontal (Portrait)');
+    $edit_form = $this->editComponent($horizontal_portrait_card);
+    $this->openMediaLibrary($edit_form, 'Select image');
+    $this->selectMedia(0);
+    $this->insertSelectedMedia();
 
-    $edit_form->selectFieldOption('Width of accordion', 'Narrow');
+    $edit_form->fillField('Heading', 'Test Heading');
+    $edit_form->fillField('Sub Heading', 'Test Sub-Heading');
+    $edit_form->fillField('Paragraph', 'Test Paragraph');
+    $edit_form->fillField('Link to page', 'https://www.acquia.com');
   }
 
   /**
@@ -42,8 +52,9 @@ class GoogleMapComponentTest extends CohesionTestBase {
     $account->save();
     $this->drupalLogin($account);
 
+    // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editComponentDefinition('Map components', 'Google map');
+    $this->editComponentDefinition('General components', 'Card - Horizontal (Portrait)');
   }
 
   /**
