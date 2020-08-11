@@ -9,6 +9,7 @@ dependencies:
     - acquia_cms_search
     - cohesion
     - search_api
+    - user
 id: people
 label: People
 module: views
@@ -24,8 +25,9 @@ display:
     position: 0
     display_options:
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'access content'
       cache:
         type: search_api_tag
         options: {  }
@@ -197,14 +199,14 @@ display:
           reduce_duplicates: false
           plugin_id: search_api_options
       sorts:
-        created:
-          id: created
+        title:
+          id: title
           table: search_api_index_content
-          field: created
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
-          order: DESC
+          order: ASC
           exposed: false
           expose:
             label: ''
@@ -235,6 +237,7 @@ display:
         - url.path
         - url.query_args
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:field.storage.node.field_person_type'
         - 'config:search_api.index.content'
@@ -258,6 +261,7 @@ display:
         - url.path
         - url.query_args
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:field.storage.node.field_person_type'
         - 'config:search_api.index.content'
