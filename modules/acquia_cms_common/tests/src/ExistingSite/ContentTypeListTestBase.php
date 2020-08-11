@@ -4,7 +4,9 @@ namespace Drupal\Tests\acquia_cms_common\ExistingSite;
 
 use Behat\Mink\Element\ElementInterface;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\node\Entity\NodeType;
+use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\views\Entity\View;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
@@ -167,14 +169,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
     $assert_session->linkExists('Type O (2)');
 
     // All content should be visible except for the secret one.
-    $this->assertLinksExistInOrder([
-      'Foxtrot',
-      'Echo',
-      'Delta',
-      'Charlie',
-      'Beta',
-      'Alpha',
-    ]);
+    $this->assertLinksExistInOrder();
     $assert_session->linkNotExists('Secret');
 
     // Filter by a category and ensure that the expected content is visible.
@@ -239,14 +234,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
     $assert_session->linkNotExists('Type O (2)');
 
     // All content should be visible except for the secret one.
-    $this->assertLinksExistInOrder([
-      'Foxtrot',
-      'Echo',
-      'Delta',
-      'Charlie',
-      'Beta',
-      'Alpha',
-    ]);
+    $this->assertLinksExistInOrder();
     $assert_session->linkNotExists('Secret');
   }
 
@@ -254,10 +242,20 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
    * Asserts that a set of links are on the page, in a specific order.
    *
    * @param string[] $expected_links_in_order
-   *   The titles of the links we expect to find, in the order that we expect
-   *   them to appear on the page.
+   *   (optoinal) The titles of the links we expect to find, in the order that
+   *   we expect them to appear on the page. If not provided, this method will
+   *   search for links to all published content of the type under test.
    */
-  private function assertLinksExistInOrder(array $expected_links_in_order) : void {
+  private function assertLinksExistInOrder(array $expected_links_in_order = NULL) : void {
+    if ($expected_links_in_order) {
+      $count = count($expected_links_in_order);
+      $expected_links_in_order = array_intersect($this->getLinksInOrder(), $expected_links_in_order);
+      $this->assertCount($count, $expected_links_in_order);
+    }
+    else {
+      $expected_links_in_order = $this->getLinksInOrder();
+    }
+
     $actual_links = $this->getSession()
       ->getPage()
       ->findAll('css', 'a[title]');
@@ -274,6 +272,42 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
     $actual_links = array_values($actual_links);
 
     $this->assertSame($actual_links, $expected_links_in_order);
+  }
+
+  /**
+   * Returns the titles of all content of the type under test.
+   *
+   * @return string[]
+   *   The titles of all published content of the type under test, in the order
+   *   we would expect to see them on the listing page.
+   */
+  protected function getLinksInOrder() : array {
+    $ids = $this->getQuery()->execute();
+
+    /** @var \Drupal\node\NodeInterface[] $content */
+    $content = $this->container->get('entity_type.manager')
+      ->getStorage('node')
+      ->loadMultiple($ids);
+
+    $map = function (NodeInterface $node) {
+      return $node->getTitle();
+    };
+    return array_map($map, $content);
+  }
+
+  /**
+   * Builds a query for all published content of the type under test.
+   *
+   * @return \Drupal\Core\Entity\Query\QueryInterface
+   *   An entity query object to find all published content of the type under
+   *   test.
+   */
+  protected function getQuery() : QueryInterface {
+    return $this->container->get('entity_type.manager')
+      ->getStorage('node')
+      ->getQuery()
+      ->condition('type', $this->nodeType)
+      ->condition('status', TRUE);
   }
 
   /**
