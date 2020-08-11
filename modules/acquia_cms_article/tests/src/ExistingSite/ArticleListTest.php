@@ -9,6 +9,7 @@ use Drupal\views\Entity\View;
  * Tests the "all articles" listing page.
  *
  * @group acquia_cms_article
+ * @group acquia_cms
  */
 class ArticleListTest extends ContentTypeListTestBase {
 
