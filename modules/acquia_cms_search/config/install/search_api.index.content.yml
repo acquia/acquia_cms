@@ -47,6 +47,14 @@ field_settings:
       roles:
         anonymous: anonymous
       view_mode: {  }
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: string
+    dependencies:
+      module:
+        - node
   type:
     label: 'Content type'
     datasource_id: 'entity:node'
@@ -97,6 +105,7 @@ processor_settings:
     all_fields: true
     fields:
       - rendered_item
+      - title
       - type
     weights:
       preprocess_index: -9

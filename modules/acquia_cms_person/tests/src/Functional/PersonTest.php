@@ -163,7 +163,7 @@ class PersonTest extends ContentTypeTestBase {
     $assert_session->pageTextContains('Person Hank Aaron has been created.');
 
     // Assert that the Pathauto pattern was used to create the URL alias.
-    $assert_session->addressEquals('people/hank-aaron');
+    $assert_session->addressEquals('/person/hank-aaron');
 
     // Assert that the expected schema.org data and meta tags are present.
     $this->assertSchemaData([

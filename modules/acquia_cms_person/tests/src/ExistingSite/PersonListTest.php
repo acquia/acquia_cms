@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_person\ExistingSite;
 
+use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Tests\acquia_cms_common\ExistingSite\ContentTypeListTestBase;
 use Drupal\views\Entity\View;
 
@@ -30,6 +31,13 @@ class PersonListTest extends ContentTypeListTestBase {
    */
   protected function visitListPage() : void {
     $this->drupalGet('/people');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getQuery() : QueryInterface {
+    return parent::getQuery()->sort('title');
   }
 
 }
