@@ -154,6 +154,8 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
    * Tests the content type's listing page and the facets on it.
    */
   public function testListPage() {
+    // Create user with permission 'View unpublished content'.
+    $this->userWithUnpublishedPermission();
     $this->visitListPage();
 
     $assert_session = $this->assertSession();
@@ -218,6 +220,9 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
     // Simulate an unavailable search backend, which is the only condition under
     // which we display the fallback view.
     $this->setBackendAvailability(FALSE);
+
+    // Create user with permission 'View unpublished content'.
+    $this->userWithUnpublishedPermission();
 
     $this->visitListPage();
     $assert_session = $this->assertSession();
@@ -309,6 +314,15 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
       ->getQuery()
       ->condition('type', $this->nodeType)
       ->condition('status', TRUE);
+  }
+
+  /**
+   * Create user with permission 'Any unpublished content'.
+   */
+  private function userWithUnpublishedPermission() : void {
+    $account = $this->createUser(['bypass node access']);
+    $account->save();
+    $this->drupalLogin($account);
   }
 
   /**
