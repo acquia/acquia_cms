@@ -22,8 +22,8 @@ class GoogleMapMarkerComponentTest extends CohesionTestBase {
 
     // Add the component to the layout canvas.
     $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $component = $this->addComponent($canvas, 'Google map marker');
-    $edit_form = $this->editComponent($component);
+    $google_map_marker = $this->addComponent($canvas, 'Google map marker');
+    $edit_form = $this->editComponent($google_map_marker);
 
     $edit_form->fillField('Address', 'Test Address');
     $edit_form->fillField('Latitude', '22.52138');
