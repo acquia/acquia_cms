@@ -37,7 +37,7 @@ class PlaceListTest extends ContentTypeListTestBase {
    * {@inheritdoc}
    */
   protected function getQuery() : QueryInterface {
-    return parent::getQuery()->sort('created', 'DESC');
+    return parent::getQuery()->sort('title');
   }
 
 }
