@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.events_category
+  module:
+    - cohesion
+    - facets
+  theme:
+    - cohesion_theme
+id: events_category
+theme: cohesion_theme
+region: dx8_hidden
+weight: 0
+provider: null
+plugin: 'facet_block:events_category'
+settings:
+  id: 'facet_block:events_category'
+  label: Category
+  provider: facets
+  label_display: visible
+  block_id: events_category
+visibility:
+  cohesion_master_template:
+    id: cohesion_master_template
+    using_master_template: 0
+    negate: false
