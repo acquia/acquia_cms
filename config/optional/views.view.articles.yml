@@ -8,6 +8,7 @@ dependencies:
   module:
     - acquia_cms_search
     - cohesion
+    - user
 id: articles
 label: Articles
 module: views
@@ -23,8 +24,9 @@ display:
     position: 0
     display_options:
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'access content'
       cache:
         type: search_api_tag
         options: {  }
@@ -265,6 +267,7 @@ display:
         - url.path
         - url.query_args
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:field.storage.node.field_article_type'
         - 'config:search_api.index.content'
@@ -284,6 +287,7 @@ display:
         - url.path
         - url.query_args
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:field.storage.node.field_article_type'
         - 'config:search_api.index.content'
