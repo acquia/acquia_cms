@@ -151,9 +151,38 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
   abstract protected function visitListPage() : void;
 
   /**
-   * Tests the content type's listing page and the facets on it.
+   * Data provider for testing the listing page with different permissions.
+   *
+   * @return array[]
+   *   Sets of arguments to pass to the test method.
    */
-  public function testListPage() {
+  public function permissionProvider() : array {
+    return [
+      'anonymous user' => [NULL],
+      // Search API is really stupid about node access, and does not properly
+      // support Content Moderation. This is addressed by
+      // https://www.drupal.org/project/search_api/issues/3075684, so we should
+      // change this to a more restrictive permission, like "view any
+      // unpublished content" when that issue is fixed (or we bring in the patch
+      // directly).
+      'view unpublished' => [['bypass node access']],
+    ];
+  }
+
+  /**
+   * Tests the content type's listing page and the facets on it.
+   *
+   * @param string[] $permissions
+   *   (optional) A set of permissions with which to run this test. If omitted,
+   *   the test is run as the anonymous user.
+   *
+   * @dataProvider permissionProvider
+   */
+  public function testListPage(array $permissions = NULL) {
+    if (isset($permissions)) {
+      $account = $this->createUser($permissions);
+      $this->drupalLogin($account);
+    }
     $this->visitListPage();
 
     $assert_session = $this->assertSession();
@@ -213,11 +242,22 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
 
   /**
    * Tests that the listing page displays a fallback view if needed.
+   *
+   * @param string[] $permissions
+   *   (optional) A set of permissions with which to run this test. If omitted,
+   *   the test is run as the anonymous user.
+   *
+   * @dataProvider permissionProvider
    */
-  public function testFallback() {
+  public function testFallback(array $permissions = NULL) {
     // Simulate an unavailable search backend, which is the only condition under
     // which we display the fallback view.
     $this->setBackendAvailability(FALSE);
+
+    if (isset($permissions)) {
+      $account = $this->createUser($permissions);
+      $this->drupalLogin($account);
+    }
 
     $this->visitListPage();
     $assert_session = $this->assertSession();
