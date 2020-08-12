@@ -173,7 +173,7 @@ class PlaceTest extends ContentTypeTestBase {
     $page->pressButton('Save');
     $assert_session->pageTextContains('Living with video has been created.');
     // Assert that the Pathauto pattern was used to create the URL alias.
-    $assert_session->addressEquals('/places/living-video');
+    $assert_session->addressEquals('/place/living-video');
     // Assert that the expected schema.org data and meta tags are present.
     $this->assertSchemaData([
       '@graph' => [
