@@ -159,6 +159,12 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
   public function permissionProvider() : array {
     return [
       'anonymous user' => [NULL],
+      // Search API is really stupid about node access, and does not properly
+      // support Content Moderation. This is addressed by
+      // https://www.drupal.org/project/search_api/issues/3075684, so we should
+      // change this to a more restrictive permission, like "view any
+      // unpublished content" when that issue is fixed (or we bring in the patch
+      // directly).
       'view unpublished' => [['bypass node access']],
     ];
   }
