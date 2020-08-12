@@ -151,11 +151,32 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
   abstract protected function visitListPage() : void;
 
   /**
-   * Tests the content type's listing page and the facets on it.
+   * Data provider for testing the listing page with different permissions.
+   *
+   * @return array[]
+   *   Sets of arguments to pass to the test method.
    */
-  public function testListPage() {
-    // Create user with permission 'View unpublished content'.
-    $this->userWithUnpublishedPermission();
+  public function permissionProvider() : array {
+    return [
+      'anonymous user' => [NULL],
+      'view unpublished' => [['bypass node access']],
+    ];
+  }
+
+  /**
+   * Tests the content type's listing page and the facets on it.
+   *
+   * @param string[] $permissions
+   *   (optional) A set of permissions with which to run this test. If omitted,
+   *   the test is run as the anonymous user.
+   *
+   * @dataProvider permissionProvider
+   */
+  public function testListPage(array $permissions = NULL) {
+    if (isset($permissions)) {
+      $account = $this->createUser($permissions);
+      $this->drupalLogin($account);
+    }
     $this->visitListPage();
 
     $assert_session = $this->assertSession();
@@ -215,14 +236,22 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
 
   /**
    * Tests that the listing page displays a fallback view if needed.
+   *
+   * @param string[] $permissions
+   *   (optional) A set of permissions with which to run this test. If omitted,
+   *   the test is run as the anonymous user.
+   *
+   * @dataProvider permissionProvider
    */
-  public function testFallback() {
+  public function testFallback(array $permissions = NULL) {
     // Simulate an unavailable search backend, which is the only condition under
     // which we display the fallback view.
     $this->setBackendAvailability(FALSE);
 
-    // Create user with permission 'View unpublished content'.
-    $this->userWithUnpublishedPermission();
+    if (isset($permissions)) {
+      $account = $this->createUser($permissions);
+      $this->drupalLogin($account);
+    }
 
     $this->visitListPage();
     $assert_session = $this->assertSession();
@@ -314,15 +343,6 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
       ->getQuery()
       ->condition('type', $this->nodeType)
       ->condition('status', TRUE);
-  }
-
-  /**
-   * Create user with permission 'Any unpublished content'.
-   */
-  private function userWithUnpublishedPermission() : void {
-    $account = $this->createUser(['bypass node access']);
-    $account->save();
-    $this->drupalLogin($account);
   }
 
   /**
