@@ -3,29 +3,38 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Test that "Google map" component is installed and operating correctly.
+ * Tests 'Card - Video' cohesion component.
  *
  * @group acquia_cms
  */
-class GoogleMapComponentTest extends CohesionTestBase {
+class VideoCardComponentTest extends CohesionTestBase {
 
   /**
-   * Tests that the component can be added to a layout canvas.
+   * Test that Video card component is installed.
+   *
+   * And used in Cohesion's layout canvas.
    */
-  public function testComponent() {
+  public function testComponentInstalled() {
     $account = $this->createUser();
     $account->addRole('administrator');
     $account->save();
     $this->drupalLogin($account);
 
+    // Create a random image that we can select in the media library when
+    // editing the component.
+    $this->createMedia(['bundle' => 'image']);
+
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
     $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $google_map = $this->addComponent($canvas, 'Google map');
-    $edit_form = $this->editComponent($google_map);
+    $video_card = $this->addComponent($canvas, 'Card - Video');
+    $edit_form = $this->editComponent($video_card);
 
-    $edit_form->selectFieldOption('Width of accordion', 'Narrow');
+    $edit_form->fillField('Video URL', 'https://player.vimeo.com/external/317281590.hd.mp4');
+    $this->openMediaLibrary($edit_form, 'Select image');
+    $this->selectMedia(0);
+    $this->insertSelectedMedia();
   }
 
   /**
@@ -42,8 +51,9 @@ class GoogleMapComponentTest extends CohesionTestBase {
     $account->save();
     $this->drupalLogin($account);
 
+    // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editComponentDefinition('Map components', 'Google map');
+    $this->editComponentDefinition('General components', 'Card - Video');
   }
 
   /**

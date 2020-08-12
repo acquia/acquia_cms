@@ -3,11 +3,11 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Test that "Google map" component is installed and operating correctly.
+ * Tests 'Card - Image' cohesion component.
  *
  * @group acquia_cms
  */
-class GoogleMapComponentTest extends CohesionTestBase {
+class ImageCardComponentTest extends CohesionTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.
@@ -18,14 +18,19 @@ class GoogleMapComponentTest extends CohesionTestBase {
     $account->save();
     $this->drupalLogin($account);
 
+    // Create a random image that we can select in the media library when
+    // editing the component.
+    $this->createMedia(['bundle' => 'image']);
+
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
     $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $google_map = $this->addComponent($canvas, 'Google map');
-    $edit_form = $this->editComponent($google_map);
-
-    $edit_form->selectFieldOption('Width of accordion', 'Narrow');
+    $image_card = $this->addComponent($canvas, 'Card - Image');
+    $edit_form = $this->editComponent($image_card);
+    $this->openMediaLibrary($edit_form, 'Select image');
+    $this->selectMedia(0);
+    $this->insertSelectedMedia();
   }
 
   /**
@@ -42,8 +47,9 @@ class GoogleMapComponentTest extends CohesionTestBase {
     $account->save();
     $this->drupalLogin($account);
 
+    // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editComponentDefinition('Map components', 'Google map');
+    $this->editComponentDefinition('General components', 'Card - Image');
   }
 
   /**
