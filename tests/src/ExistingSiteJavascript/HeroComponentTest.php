@@ -69,6 +69,11 @@ class HeroComponentTest extends CohesionTestBase {
     $edit_form->selectFieldOption('Image position', 'Right to the content');
     $edit_form->selectFieldOption('Image position', 'Left to the content');
 
+    // Check if all the text box position styles are there in the select list.
+    $edit_form->selectFieldOption('Text box position', 'Left');
+    $edit_form->selectFieldOption('Text box position', 'Right');
+    $edit_form->selectFieldOption('Text box position', 'Center');
+
     // Styles.
     $edit_form->clickLink('Style');
 
