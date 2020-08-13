@@ -46,9 +46,9 @@ class PageTest extends ContentTypeTestBase {
   // @codingStandardsIgnoreEnd
 
   /**
-   * Tests the bundled functionality of the Page content type.
+   * {@inheritdoc}
    */
-  public function testPageContentType() {
+  protected function doTestEditForm() : void {
     $session = $this->getSession();
     $page = $session->getPage();
     $assert_session = $this->assertSession();

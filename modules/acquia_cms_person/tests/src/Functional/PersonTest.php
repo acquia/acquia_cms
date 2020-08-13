@@ -47,9 +47,9 @@ class PersonTest extends ContentTypeTestBase {
   // @codingStandardsIgnoreEnd
 
   /**
-   * Tests the bundled functionality of the Person content type.
+   * {@inheritdoc}
    */
-  public function testPersonContentType() {
+  protected function doTestEditForm() : void {
     /** @var \Drupal\taxonomy\VocabularyInterface $person_type */
     $person_type = Vocabulary::load('person_type');
     $this->createTerm($person_type, ['name' => 'Individual']);

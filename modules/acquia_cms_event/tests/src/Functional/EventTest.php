@@ -77,9 +77,9 @@ class EventTest extends ContentTypeTestBase {
   }
 
   /**
-   * Tests the bundled functionality of the Event content type.
+   * {@inheritdoc}
    */
-  public function testEventContentType() {
+  protected function doTestEditForm() : void {
     /** @var \Drupal\taxonomy\VocabularyInterface $event_type */
     $event_type = Vocabulary::load('event_type');
     $this->createTerm($event_type, ['name' => 'meetup']);
