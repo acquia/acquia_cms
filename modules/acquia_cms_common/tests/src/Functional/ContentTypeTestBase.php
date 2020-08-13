@@ -63,16 +63,42 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
   }
 
   /**
+   * Tests the add/edit form of the content type.
+   */
+  abstract protected function doTestEditForm() : void;
+
+  /**
    * Tests access to the content type for various user roles.
    */
-  public function testAccess() {
-    // Since we're just testing access, make configurable fields optional so
-    // we don't have to fill them out.
-    $this->makeRequiredFieldsOptional();
+  public function testContentType() {
+    /** @var \Drupal\Core\Entity\EntityStorageInterface $field_storage */
+    $field_storage = $this->container->get('entity_type.manager')
+      ->getStorage('field_config');
+
+    // While testing access, make configurable fields optional so we don't have
+    // to fill them out in the UI.
+    $required_fields = $field_storage->loadByProperties([
+      'entity_type' => 'node',
+      'bundle' => $this->nodeType,
+      'required' => TRUE,
+    ]);
+    /** @var \Drupal\field\Entity\FieldConfig $required_field */
+    foreach ($required_fields as $required_field) {
+      $required_field->setRequired(FALSE);
+      $field_storage->save($required_field);
+    }
 
     $this->doTestAuthorAccess();
     $this->doTestEditorAccess();
     $this->doTestAdministratorAccess();
+
+    // While testing the add/edit form, make the required fields behave as they
+    // normally would.
+    foreach ($required_fields as $required_field) {
+      $required_field->setRequired(TRUE);
+      $field_storage->save($required_field);
+    }
+    $this->doTestEditForm();
   }
 
   /**
@@ -353,34 +379,6 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     $field->setDefaultValue($media->id())->save();
 
     return file_create_url($file->getFileUri());
-  }
-
-  /**
-   * Makes all required fields of the content type under test optional.
-   *
-   * This is needed for testing access to the content type's add and edit forms.
-   * In those cases, we're just testing access; we don't actually care about
-   * data integrity, but we still need to interact with the forms and save
-   * entities via the UI.
-   *
-   * Subclasses should take implement their own methods for testing that the
-   * required fields actually behave the way we expect them to.
-   */
-  private function makeRequiredFieldsOptional() {
-    /** @var \Drupal\Core\Entity\EntityStorageInterface $storage */
-    $storage = $this->container->get('entity_type.manager')
-      ->getStorage('field_config');
-
-    $fields = $storage->loadByProperties([
-      'entity_type' => 'node',
-      'bundle' => $this->nodeType,
-      'required' => TRUE,
-    ]);
-    /** @var \Drupal\field\Entity\FieldConfig $field */
-    foreach ($fields as $field) {
-      $field->setRequired(FALSE);
-      $storage->save($field);
-    }
   }
 
   /**

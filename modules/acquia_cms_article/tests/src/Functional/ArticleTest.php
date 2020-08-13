@@ -47,9 +47,9 @@ class ArticleTest extends ContentTypeTestBase {
   // @codingStandardsIgnoreEnd
 
   /**
-   * Tests the bundled functionality of the Article content type.
+   * {@inheritdoc}
    */
-  public function testArticleContentType() {
+  protected function doTestEditForm() : void {
     /** @var \Drupal\taxonomy\VocabularyInterface $article_type */
     $article_type = Vocabulary::load('article_type');
     $this->createTerm($article_type, ['name' => 'Blog']);

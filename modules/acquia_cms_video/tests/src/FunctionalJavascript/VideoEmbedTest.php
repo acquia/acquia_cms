@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_video\Functional;
+namespace Drupal\Tests\acquia_cms_video\FunctionalJavascript;
 
 use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
 

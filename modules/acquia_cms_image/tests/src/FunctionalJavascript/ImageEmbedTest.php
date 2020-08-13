@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_image\Functional;
+namespace Drupal\Tests\acquia_cms_image\FunctionalJavascript;
 
 use Behat\Mink\Element\ElementInterface;
 use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
