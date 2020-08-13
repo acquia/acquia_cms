@@ -60,12 +60,18 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
   }
 
   /**
-   * Tests access to the media type for various user roles.
+   * Tests the add/edit form of the media type under test.
    */
-  public function testAccess() {
+  abstract protected function doTestEditForm() : void;
+
+  /**
+   * Tests the access restrictions and add/edit form of the media type.
+   */
+  public function testMediaType() {
     $this->doTestAuthorAccess();
     $this->doTestEditorAccess();
     $this->doTestAdministratorAccess();
+    $this->doTestEditForm();
   }
 
   /**

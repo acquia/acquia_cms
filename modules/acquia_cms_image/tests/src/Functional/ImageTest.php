@@ -39,9 +39,9 @@ class ImageTest extends MediaTypeTestBase {
   protected $mediaType = 'image';
 
   /**
-   * Tests the bundled functionality of the Image media type.
+   * {@inheritdoc}
    */
-  public function testImageMediaType() {
+  protected function doTestEditForm() : void {
     $session = $this->getSession();
     $page = $session->getPage();
     $assert_session = $this->assertSession();

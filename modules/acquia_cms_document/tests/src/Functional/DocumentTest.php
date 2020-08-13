@@ -39,9 +39,9 @@ class DocumentTest extends MediaTypeTestBase {
   protected $mediaType = 'document';
 
   /**
-   * Tests the functionality of the document media type.
+   * {@inheritdoc}
    */
-  public function testDocumentMediaType() {
+  protected function doTestEditForm() : void {
     $session = $this->getSession();
     $page = $session->getPage();
     $assert_session = $this->assertSession();

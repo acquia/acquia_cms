@@ -53,9 +53,9 @@ class VideoTest extends MediaTypeTestBase {
   }
 
   /**
-   * Tests the bundled functionality of the Video media type.
+   * {@inheritdoc}
    */
-  public function testVideoMediaType() {
+  protected function doTestEditForm() : void {
     $page = $this->getSession()->getPage();
     $assert_session = $this->assertSession();
 

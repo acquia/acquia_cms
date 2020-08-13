@@ -68,7 +68,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
   abstract protected function doTestEditForm() : void;
 
   /**
-   * Tests access to the content type for various user roles.
+   * Tests the access restrictions and add/edit form of the content type.
    */
   public function testContentType() {
     /** @var \Drupal\Core\Entity\EntityStorageInterface $field_storage */
