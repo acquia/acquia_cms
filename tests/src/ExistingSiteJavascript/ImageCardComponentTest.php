@@ -26,8 +26,8 @@ class ImageCardComponentTest extends CohesionTestBase {
 
     // Add the component to the layout canvas.
     $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $image_card = $this->addComponent($canvas, 'Card - Image');
-    $edit_form = $this->editComponent($image_card);
+    $component = $this->addComponent($canvas, 'Card - Image');
+    $edit_form = $this->editComponent($component);
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMedia(0);
     $this->insertSelectedMedia();
@@ -50,19 +50,6 @@ class ImageCardComponentTest extends CohesionTestBase {
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
     $this->editComponentDefinition('General components', 'Card - Image');
-  }
-
-  /**
-   * Data provider for ::testEditAccess().
-   *
-   * @return array[]
-   *   Sets of arguments to pass to the test method.
-   */
-  public function providerEditAccess() {
-    return [
-      ['site_builder'],
-      ['developer'],
-    ];
   }
 
 }

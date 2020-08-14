@@ -248,4 +248,17 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
     return $this->waitForElementVisible('css', '.cohesion-component-edit-form');
   }
 
+  /**
+   * Data provider for testing administrative edit access to components.
+   *
+   * @return array[]
+   *   Sets of arguments to pass to the test method.
+   */
+  public function providerEditAccess() {
+    return [
+      ['site_builder'],
+      ['developer'],
+    ];
+  }
+
 }
