@@ -51,17 +51,4 @@ class BackgroundImageContainerTest extends CohesionTestBase {
     $this->editComponentDefinition('Layout components', 'Background image container');
   }
 
-  /**
-   * Data provider for ::testEditAccess().
-   *
-   * @return array[]
-   *   Sets of arguments to pass to the test method.
-   */
-  public function providerEditAccess() {
-    return [
-      ['site_builder'],
-      ['developer'],
-    ];
-  }
-
 }

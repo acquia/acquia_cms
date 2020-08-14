@@ -3,16 +3,14 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Tests Hero Component.
+ * Tests the Hero component.
  *
  * @group acquia_cms
  */
 class HeroComponentTest extends CohesionTestBase {
 
   /**
-   * Test that the Hero component is installed.
-   *
-   * And used in Cohesion's layout canvas.
+   * Test that the Hero component can be added to a layout canvas.
    */
   public function testComponentInstalled() {
     $account = $this->createUser();
@@ -21,69 +19,79 @@ class HeroComponentTest extends CohesionTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/node/add/page');
-    $page = $this->getSession()->getPage();
-    $this->assertSession();
+    $assert_session = $this->assertSession();
 
     // Create a random image that we can select in the media library when
     // editing the component.
     $this->createMedia(['bundle' => 'image']);
 
-    // Content.
-    $page->fillField('Title', 'Cohesion Hero component');
-
-    // Add the cohesion component in the field layout canvas.
+    // Add the component to the layout canvas.
     $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $component_added = $this->addComponent($canvas, 'Hero');
-    $edit_form = $this->editComponent($component_added);
+    $component = $this->addComponent($canvas, 'Hero');
+    $edit_form = $this->editComponent($component);
 
-    // Test image field.
+    // Test adding an image to the component.
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMedia(0);
     $this->insertSelectedMedia();
 
     $edit_form->fillField('Link to page', 'https://www.acquia.com');
 
-    // Layout.
-    $edit_form->clickLink('Layout');
+    $assert_styles = function (string $select, array $styles) use ($assert_session, $edit_form) {
+      foreach ($styles as $style) {
+        $assert_session->optionExists($select, $style, $edit_form);
+      }
+    };
 
+    $edit_form->clickLink('Layout');
     // Check if all the height styles are there in the select list.
-    $edit_form->selectFieldOption('Height', 'Large');
-    $edit_form->selectFieldOption('Height', 'Small');
-    $edit_form->selectFieldOption('Height', '60% height of viewport');
+    $assert_styles('Height', [
+      'Large',
+      'Small',
+      '60% height of viewport',
+    ]);
 
     // Check if all the text position styles are there in the select list.
-    $edit_form->selectFieldOption('Text position', 'Left');
-    $edit_form->selectFieldOption('Text position', 'Right');
-    $edit_form->selectFieldOption('Text position', 'Center');
+    $assert_styles('Text position', [
+      'Left',
+      'Right',
+      'Center',
+    ]);
 
     // Check if all the padding styles are there in the select list.
-    $edit_form->selectFieldOption('Padding top and bottom', 'None');
-    $edit_form->selectFieldOption('Padding top and bottom', 'Top only');
-    $edit_form->selectFieldOption('Padding top and bottom', 'Bottom only');
-    $edit_form->selectFieldOption('Padding top and bottom', 'Top and bottom');
-
-    $edit_form->selectFieldOption('Padding left and right', 'None');
-    $edit_form->selectFieldOption('Padding left and right', 'Left and right');
+    $assert_styles('Padding top and bottom', [
+      'None',
+      'Top only',
+      'Bottom only',
+      'Top and bottom',
+    ]);
+    $assert_styles('Padding left and right', [
+      'None',
+      'Left and right',
+    ]);
 
     // Check if all the image position styles are there in the select list.
-    $edit_form->selectFieldOption('Image position', 'Right to the content');
-    $edit_form->selectFieldOption('Image position', 'Left to the content');
+    $assert_styles('Image position', [
+      'Right to the content',
+      'Left to the content',
+    ]);
 
     // Check if all the text box position styles are there in the select list.
-    $edit_form->selectFieldOption('Text box position', 'Left');
-    $edit_form->selectFieldOption('Text box position', 'Right');
-    $edit_form->selectFieldOption('Text box position', 'Center');
+    $assert_styles('Text box position', [
+      'Left',
+      'Right',
+      'Center',
+    ]);
 
-    // Styles.
     $edit_form->clickLink('Style');
 
     // Check if all the button styles are there in the select list.
-    $edit_form->selectFieldOption('Button style', 'Button light');
-    $edit_form->selectFieldOption('Button style', 'Button dark');
-    $edit_form->selectFieldOption('Button style', 'Button default');
-    $edit_form->selectFieldOption('Button style', 'None (transparent)');
-
-    $edit_form->pressButton('Apply');
+    $assert_styles('Button style', [
+      'Button light',
+      'Button dark',
+      'Button default',
+      'None (transparent)',
+    ]);
   }
 
   /**
@@ -102,19 +110,6 @@ class HeroComponentTest extends CohesionTestBase {
 
     $this->drupalGet('/admin/cohesion/components/components');
     $this->editComponentDefinition('Hero components', 'Hero');
-  }
-
-  /**
-   * Data provider for ::testEditAccess().
-   *
-   * @return array[]
-   *   Sets of arguments to pass to the test method.
-   */
-  public function providerEditAccess() {
-    return [
-      ['site_builder'],
-      ['developer'],
-    ];
   }
 
 }

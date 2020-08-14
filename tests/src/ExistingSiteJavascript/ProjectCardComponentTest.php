@@ -56,17 +56,4 @@ class ProjectCardComponentTest extends CohesionTestBase {
     $this->editComponentDefinition('General components', 'Card - project');
   }
 
-  /**
-   * Data provider for ::testEditAccess().
-   *
-   * @return array[]
-   *   Sets of arguments to pass to the test method.
-   */
-  public function providerEditAccess() {
-    return [
-      ['site_builder'],
-      ['developer'],
-    ];
-  }
-
 }

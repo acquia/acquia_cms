@@ -26,12 +26,17 @@ class ButtonComponentTest extends CohesionTestBase {
     $edit_form = $this->editComponent($button);
 
     $edit_form->clickLink('Style');
-
     // Check if all the button styles are there in the select list.
-    $edit_form->selectFieldOption('Button Style', 'Button CTA');
-    $edit_form->selectFieldOption('Button Style', 'Button Solid');
-    $edit_form->selectFieldOption('Button Style', 'Button Outline');
-    $edit_form->selectFieldOption('Button Style', 'Button Unstyled');
+    $styles = [
+      'Button CTA',
+      'Button Solid',
+      'Button Outline',
+      'Button Unstyled',
+    ];
+    $assert_session = $this->assertSession();
+    foreach ($styles as $style) {
+      $assert_session->optionExists('Button Style', $style, $edit_form);
+    }
   }
 
   /**
@@ -50,19 +55,6 @@ class ButtonComponentTest extends CohesionTestBase {
 
     $this->drupalGet('/admin/cohesion/components/components');
     $this->editComponentDefinition('General components', 'Button');
-  }
-
-  /**
-   * Data provider for ::testEditAccess().
-   *
-   * @return array[]
-   *   Sets of arguments to pass to the test method.
-   */
-  public function providerEditAccess() {
-    return [
-      ['site_builder'],
-      ['developer'],
-    ];
   }
 
 }

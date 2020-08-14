@@ -26,8 +26,9 @@ class Horizontal16Ratio9CardComponentTest extends CohesionTestBase {
 
     // Add the component to the layout canvas.
     $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $horizontal_16_9_card = $this->addComponent($canvas, 'Card - Horizontal (16:9)');
-    $edit_form = $this->editComponent($horizontal_16_9_card);
+    $component = $this->addComponent($canvas, 'Card - Horizontal (16:9)');
+    $edit_form = $this->editComponent($component);
+
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMedia(0);
     $this->insertSelectedMedia();
@@ -55,19 +56,6 @@ class Horizontal16Ratio9CardComponentTest extends CohesionTestBase {
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
     $this->editComponentDefinition('General components', 'Card - Horizontal (16:9)');
-  }
-
-  /**
-   * Data provider for ::testEditAccess().
-   *
-   * @return array[]
-   *   Sets of arguments to pass to the test method.
-   */
-  public function providerEditAccess() {
-    return [
-      ['site_builder'],
-      ['developer'],
-    ];
   }
 
 }
