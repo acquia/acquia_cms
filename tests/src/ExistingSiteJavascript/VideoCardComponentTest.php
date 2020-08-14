@@ -28,8 +28,8 @@ class VideoCardComponentTest extends CohesionTestBase {
 
     // Add the component to the layout canvas.
     $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $video_card = $this->addComponent($canvas, 'Card - Video');
-    $edit_form = $this->editComponent($video_card);
+    $component = $this->addComponent($canvas, 'Card - Video');
+    $edit_form = $this->editComponent($component);
 
     $edit_form->fillField('Video URL', 'https://player.vimeo.com/external/317281590.hd.mp4');
     $this->openMediaLibrary($edit_form, 'Select image');
@@ -54,19 +54,6 @@ class VideoCardComponentTest extends CohesionTestBase {
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
     $this->editComponentDefinition('General components', 'Card - Video');
-  }
-
-  /**
-   * Data provider for ::testEditAccess().
-   *
-   * @return array[]
-   *   Sets of arguments to pass to the test method.
-   */
-  public function providerEditAccess() {
-    return [
-      ['site_builder'],
-      ['developer'],
-    ];
   }
 
 }

@@ -48,17 +48,4 @@ class TabsComponentTest extends CohesionTestBase {
     $this->editComponentDefinition('Interactive components', 'Tab item');
   }
 
-  /**
-   * Data provider for ::testEditAccess().
-   *
-   * @return array[]
-   *   Sets of arguments to pass to the test method.
-   */
-  public function providerEditAccess() {
-    return [
-      ['site_builder'],
-      ['developer'],
-    ];
-  }
-
 }

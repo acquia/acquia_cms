@@ -48,17 +48,4 @@ class GoogleMapMarkerComponentTest extends CohesionTestBase {
     $this->editComponentDefinition('Map components', 'Google map marker');
   }
 
-  /**
-   * Data provider for ::testEditAccess().
-   *
-   * @return array[]
-   *   Sets of arguments to pass to the test method.
-   */
-  public function providerEditAccess() {
-    return [
-      ['site_builder'],
-      ['developer'],
-    ];
-  }
-
 }

@@ -24,8 +24,7 @@ class GoogleMapComponentTest extends CohesionTestBase {
     $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
     $google_map = $this->addComponent($canvas, 'Google map');
     $edit_form = $this->editComponent($google_map);
-
-    $edit_form->selectFieldOption('Width of accordion', 'Narrow');
+    $this->assertSession()->optionExists('Width of accordion', 'Narrow', $edit_form);
   }
 
   /**
@@ -44,19 +43,6 @@ class GoogleMapComponentTest extends CohesionTestBase {
 
     $this->drupalGet('/admin/cohesion/components/components');
     $this->editComponentDefinition('Map components', 'Google map');
-  }
-
-  /**
-   * Data provider for ::testEditAccess().
-   *
-   * @return array[]
-   *   Sets of arguments to pass to the test method.
-   */
-  public function providerEditAccess() {
-    return [
-      ['site_builder'],
-      ['developer'],
-    ];
   }
 
 }
