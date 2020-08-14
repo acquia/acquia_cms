@@ -1,9 +1,7 @@
 /**
  * @file
- * Task: Watch.
+ * Contains the watch tasks for acquia_claro.
  */
-
-/* global module */
 
 module.exports = function (gulp, plugins, options) {
   'use strict';

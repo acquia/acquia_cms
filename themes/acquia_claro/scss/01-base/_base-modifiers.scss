@@ -1,0 +1,29 @@
+p {
+  &.medium-paragraph {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  &.small-paragraph, &.meta-text {
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
+
+ul {
+ &.list-with-divider {
+   li {
+      border-top: 1px solid $gray-300;
+
+      &.last-child {
+        border-bottom: 1px solid $gray-300;
+      }
+   }
+ }
+
+  &.list-with-striped {
+    li:nth-child(odd){
+      background: $gray-300;
+    }
+  }
+}

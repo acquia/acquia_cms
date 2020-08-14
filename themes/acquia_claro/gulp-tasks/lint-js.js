@@ -1,6 +1,6 @@
 /**
  * @file
- * Task: Lint: Scripts.
+ * Contains all JavaScript linting tasks for acquia_claro.
  */
 
 /* global module */

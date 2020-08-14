@@ -1,8 +1,5 @@
-
-/**
-  Config file that contains centralized variables
-*/
-@import "config";
+// Theme configuration.
+@import '00-config/**/*';
 
 // Base
 //
@@ -12,14 +9,8 @@
 // to an HTML element, these styles will be the ones displayed.
 //
 // Style guide: base
-@import "base/**/*.scss";
+@import "01-base/**/*.scss";
 
-// Layout
-//
-// These are the layout rules.
-//
-// Style guide: layout
-@import "layout/**/*";
 
 // Components
 //
@@ -27,11 +18,5 @@
 // class names specified in the component. Also known as design 'modules'.
 //
 // Style guide: components
-@import "components/**/*";
+@import "03-components/**/*.scss";
 
-// States
-//
-// States are variations that are usually applied via js, such as `.is-active`.
-//
-// Style guide: states
-@import "state/**/*";

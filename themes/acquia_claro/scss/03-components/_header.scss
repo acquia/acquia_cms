@@ -1,0 +1,31 @@
+/* Header */
+.page-title-grid {
+  display: flex;
+  flex-wrap: wrap;
+
+  .grid-cell {
+    flex: 1;
+  }
+
+  .grid-cell.page-title {
+    flex: 5;
+  }
+
+  .grid-cell.logo {
+    text-align: right;
+  }
+}
+
+.admin-logo {
+  img {
+    max-width: 150px;
+    max-height: 80px;
+    padding-top: 10px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .grid-cell.logo {
+    display: none;
+  }
+}

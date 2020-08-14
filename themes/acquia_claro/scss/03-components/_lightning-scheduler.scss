@@ -1,0 +1,54 @@
+#edit-moderation-state-wrapper {
+  .form-item {
+    border-right: 1px solid rgba(216, 217, 224, 0.8);
+    border-left: 1px solid rgba(216, 217, 224, 0.8);
+    border-radius: 2px;
+    background-color: $white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: $df-grayish-navy;
+    font-size: 0.889rem;
+    font-weight: bold;
+    line-height: 1.125rem;
+    padding: 15px;
+    margin: 0;
+  }
+}
+
+div {
+  &.scheduled-transition {
+    border: 1px solid rgba(216, 217, 224, 0.8);
+    border-radius: 2px;
+    background-color: $white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: $df-grayish-navy;
+    font-size: 0.889rem;
+    font-weight: bold;
+    line-height: 1.125rem;
+    padding: 15px;
+
+    select {
+      -webkit-appearance: button;
+      -webkit-border-radius: 0.125rem;
+      border: 1px solid $df-manatee-grey;
+      background-color: $white;
+      font-size: 1rem;
+      padding: calc(0.75rem - 1px) calc(1rem - 1px);
+      padding-right: -webkit-calc(2rem - 1px);
+      padding-right: calc(2rem - 1px);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 9'%3E%3Cpath fill='none' stroke-width='1.5' d='M1 1L7 7L13 1' stroke='%23545560'/%3E%3C/svg%3E%0A");
+      background-repeat: no-repeat;
+      background-position: 100% 50%;
+      background-size: 2.75rem 0.5625rem;
+      margin: 10px;
+    }
+
+    input {
+      -webkit-appearance: button;
+      -webkit-border-radius: 0.125rem;
+      border: 1px solid $df-manatee-grey;
+      background-color: $white;
+      font-size: 1rem;
+      padding: calc(0.75rem - 1px) calc(1rem - 1px);
+    }
+  }
+}
