@@ -1,6 +1,6 @@
 /**
  * @file
- * Task: Clean:CSS.
+ * Contains the clean:css task for acquia_claro.
  */
 
 /* global module */

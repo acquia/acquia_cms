@@ -1,0 +1,350 @@
+@import "00-config/_colors.scss";
+
+body,
+.claro-details {
+  color: $df-grayish-navy;
+}
+
+.content-header {
+  background-color: $df-bright-blue;
+
+  .is-horizontal {
+    .tabs__link {
+      color: $df-light-grey;
+
+      &.is-active {
+        &::before {
+          border-color: $df-light-grey;
+        }
+      }
+
+      &:hover {
+        color: $df-blue;
+      }
+    }
+  }
+}
+
+a,
+.link,
+.tabs__link.is-active,
+.is-horizontal .tabs__link:hover,
+.claro-details__summary:hover,
+.claro-details[open] > .claro-details__summary:focus,
+.sortable-heading.is-active > a,
+.action-link:hover,
+[open] .claro-details__summary--accordion,
+[open] .claro-details__summary--accordion-item,
+[open] .claro-details__summary--vertical-tabs-item,
+.vertical-tabs__menu-item.is-selected .vertical-tabs__menu-link {
+  color: $df-blue;
+}
+
+.ui-autocomplete {
+  .ui-menu-item-wrapper {
+    &.ui-state-active {
+      background: $df-blue;
+    }
+  }
+}
+
+a:hover, .link:hover {
+  color: $df-ocean-blue;
+}
+
+.block-page-title-block,
+.page-title,
+.breadcrumb__item,
+.breadcrumb__link {
+  color: $white;
+}
+
+.breadcrumb__link:hover,
+.breadcrumb__link:focus {
+  color: $df-light-grey;
+}
+
+.breadcrumb__item {
+  & + .breadcrumb__item {
+    &::before {
+      vertical-align: middle;
+      color: $white;
+      font-family: $icon-font-family;
+      font-size: 12px;
+      font-weight: 100;
+      content: 'keyboard_arrow_right';
+      -webkit-font-smoothing: antialiased;
+    }
+  }
+}
+
+.sortable-heading {
+  &.is-active {
+    & > a {
+      &::before {
+        border-color: $df-blue;
+      }
+    }
+  }
+}
+
+.is-horizontal .tabs__link:hover,
+.panel__title,
+.system-modules tr.even,
+.system-modules tr.odd,
+.locale-translation-status-form tr.even,
+.locale-translation-status-form tr.odd,
+.views-ui-display-tab-bucket .views-display-setting:nth-of-type(even),
+.views-query-info table tr,
+.ui-dialog .ui-widget-content.ui-dialog-buttonpane,
+.views-ui-dialog .views-override:not(:empty) {
+  background: $df-dull-white;
+}
+
+th,
+.views-display-top,
+.form-edit .form-actions,
+.view-preview-form__title {
+  background: $df-pale-navy;
+}
+
+.is-horizontal {
+  .tabs__link {
+    &.is-active {
+      &::before {
+        border-color: $df-blue;
+      }
+    }
+  }
+}
+
+.page-wrapper *:focus,
+.ui-dialog *:focus {
+  -webkit-box-shadow: 0 0 0 2px $white, 0 0 0 5px $df-bright-green;
+  box-shadow: 0 0 0 2px $white, 0 0 0 5px $df-bright-green;
+  outline: 2px dotted transparent;
+}
+
+.is-horizontal .tabs--primary .tabs__link:focus,
+.is-horizontal .tabs__link:focus,
+.ui-dialog *:focus {
+  -webkit-box-shadow: 0 0 0 2px $white, 0 0 0 5px $df-bright-green;
+  box-shadow: 0 0 0 2px $white, 0 0 0 5px $df-bright-green;
+}
+
+.vertical-tabs__menu-item {
+  &.is-selected {
+    a {
+      color: $df-ocean-blue;
+    }
+
+    &:focus {
+      color: $df-ocean-blue;
+    }
+
+    .vertical-tabs__menu-link {
+      &:hover {
+        background: $df-dull-white;
+        color: $df-ocean-blue;
+      }
+    }
+  }
+}
+
+.vertical-tabs__menu-item.is-selected a:hover,
+.vertical-tabs__menu-item.is-selected a:focus {
+  color: $df-ocean-blue;
+}
+
+.dropbutton__item:first-of-type > *:focus:hover,
+.dropbutton__item:first-of-type > .button:focus:hover {
+  -webkit-box-shadow: 0 0 0 2px $white, 0 0 0 5px $df-bright-green;
+  box-shadow: 0 0 0 2px $white, 0 0 0 5px $df-bright-green;
+}
+
+.button--primary {
+  background-color: $df-blue;
+
+  &:hover {
+    background-color: $df-ocean-blue;
+  }
+}
+
+.form-boolean--type-checkbox {
+  &:checked {
+    background-color: $df-blue;
+    border-color: $df-blue;
+
+    &:hover {
+      background-color: $df-grayish-navy;
+      border-color: $df-grayish-navy;
+    }
+  }
+}
+
+.form-boolean--type-checkbox[disabled]:checked {
+  background-color: $df-sky-white;
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.7949219,7.095703 6.1816406,9.601563 12.205078,3.2753906 13.689453,4.8359375 6.1816406,12.724609 2.3105469,8.65625 Z' fill='%2382828c'/%3E%3C/svg%3E");
+  border-color: $df-french-grey;
+}
+
+.form-boolean--type-radio {
+  &:checked {
+    box-shadow: inset 0 0 0 3px $white;
+    background: $df-blue;
+    border: 2px solid $df-blue;
+    -webkit-box-shadow: inset 0 0 0 3px $white;
+
+    &:hover {
+      box-shadow: inset 0 0 0 3px $white;
+      background: $df-grayish-navy;
+      border: 2px solid $df-grayish-navy;
+      -webkit-box-shadow: inset 0 0 0 3px $white;
+    }
+  }
+}
+
+.form-boolean--type-radio:checked:focus,
+.form-boolean--type-radio:checked:hover:focus {
+  box-shadow: inset 0 0 0 4px $white, 0 0 0 5px $df-blue-shadow;
+  background: $df-blue;
+  border: 3px $df-blue;
+  -webkit-box-shadow: inset 0 0 0 4px $white, 0 0 0 5px $df-blue-shadow;
+}
+
+.claro-details__summary {
+  &::before {
+    background: $df-bright-grey;
+    border-color: $df-grayish-navy;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M5.2109375,1.3144531 3.7890625,2.7226562 9.0917969,8.0761719 3.7890625,13.429688 5.2109375,14.837891 11.908203,8.0761719Z' fill='%230036B1'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M5.2109375,1.3144531 3.7890625,2.7226562 9.0917969,8.0761719 3.7890625,13.429688 5.2109375,14.837891 11.908203,8.0761719Z' fill='%230036B1'/%3E%3C/svg%3E");
+  }
+
+  &:focus {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+
+  &::after {
+    -webkit-box-shadow: inset 0 0 0 3px $df-bright-green;
+    box-shadow: inset 0 0 0 3px $df-bright-green;
+  }
+}
+
+.claro-details__summary:hover::before,
+.claro-details__summary:hover:focus::before,
+.claro-details[open] > .claro-details__summary:focus::before,
+.claro-details[open] > .claro-details__summary--accordion::before,
+.claro-details[open] > .claro-details__summary--accordion-item::before {
+  background: $df-blue;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M5.2109375,1.3144531 3.7890625,2.7226562 9.0917969,8.0761719 3.7890625,13.429688 5.2109375,14.837891 11.908203,8.0761719Z' fill='%230036B1'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M5.2109375,1.3144531 3.7890625,2.7226562 9.0917969,8.0761719 3.7890625,13.429688 5.2109375,14.837891 11.908203,8.0761719Z' fill='%230036B1'/%3E%3C/svg%3E");
+}
+
+.claro-details__summary:hover,
+tr:hover, tr:focus {
+  background-color: $df-dull-white;
+}
+
+.admin-item__link {
+  &::before {
+    color: $df-blue;
+  }
+}
+
+.tablesort--asc, [dir="rtl"] .tablesort--asc {
+  background: $df-blue;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='16' viewBox='0 0 10 12'%3E%3Cpath d='M 5 0.43945312 L 0.71875 4.71875 L 1.78125 5.78125 L 4.25 3.3125 L 4.25 11.25 L 5.75 11.25 L 5.75 3.3125 L 8.21875 5.78125 L 9.28125 4.71875 L 5 0.43945312 z' fill='%23004adc'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='16' viewBox='0 0 10 12'%3E%3Cpath d='M 5 0.43945312 L 0.71875 4.71875 L 1.78125 5.78125 L 4.25 3.3125 L 4.25 11.25 L 5.75 11.25 L 5.75 3.3125 L 8.21875 5.78125 L 9.28125 4.71875 L 5 0.43945312 z' fill='%23004adc'/%3E%3C/svg%3E");
+}
+
+.cke.cke_chrome.cke_focus,
+.cke.cke_focus .cke_contents,
+.cke.cke_focus .cke_top,
+.cke.cke_focus .cke_bottom,
+.error .cke.cke_chrome.cke_focus,
+.error .cke.cke_focus .cke_contents,
+.error .cke.cke_focus .cke_top,
+.error .cke.cke_focus .cke_bottom {
+  border-color: $df-blue !important;
+}
+
+.form-element {
+  &:focus {
+    box-shadow: inset 0 0 0 0.0625rem $df-blue;
+    border-color: $df-blue;
+    outline: none;
+    -webkit-box-shadow: inset 0 0 0 0.0625rem $df-blue;
+  }
+}
+
+.form-element--type-select {
+  &:focus {
+    padding-right: 1.9375rem;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 9'%3E%3Cpath fill='none' stroke-width='1.5' d='M1 1L7 7L13 1' stroke='%23545560'/%3E%3C/svg%3E%0A");
+    background-position: 100% 50%;
+    background-repeat: no-repeat;
+    background-size: 2.75rem 0.5625rem;
+  }
+}
+
+.action-link {
+  &:hover {
+    color: $df-blue;
+  }
+}
+
+.action-link--icon-show:hover::before,
+.action-link--icon-hide:hover::before {
+  color: $df-blue;
+}
+
+.action-link--danger {
+  &:hover {
+    color: $df-persian-red;
+  }
+}
+
+[open] > .claro-details__summary--accordion:not(:focus):not(:active)::after,
+[open] > .claro-details__summary--accordion-item:not(:focus):not(:active)::after,
+.collapse-processed[open] > .claro-details__summary--accordion .details-title:not(:focus)::after,
+.collapse-processed[open] > .claro-details__summary--accordion-item .details-title:not(:focus)::after,
+[open] > .claro-details__summary--vertical-tabs-item:not(:focus):not(:active)::after,
+.collapse-processed[open] > .claro-details__summary--vertical-tabs-item .details-title:not(:focus)::after,
+.vertical-tabs__menu-item.is-selected .vertical-tabs__menu-link::before {
+  border-color: $df-blue;
+}
+
+.media-library-item__attributes,
+.media-library-item__click-to-select-trigger {
+  background: $df-blue;
+}
+
+.media-library-item__click-to-select-trigger {
+  img {
+    background: $white;
+  }
+}
+
+.media-library-item__attributes,
+.media-library-item__attributes a,
+.media-library-widget .media-library-item__name a,
+.media-library-view--widget .media-library-item__name a,
+.media-library-add-form__selected-media .media-library-item__name a {
+  color: $white;
+}
+
+.vertical-tabs__menu-link {
+  &:hover {
+    color: $df-ocean-blue;
+
+  &::before {
+      background: $df-dull-white;
+    }
+  }
+}
+
+.pager__link.is-active,
+.pager__item--current {
+  background-color: $df-blue;
+}

@@ -1,6 +1,6 @@
 /**
  * @file
- * Task: Test: CSS.
+ * Contains the test:css task for acquia_claro.
  */
 
 /* global module */

@@ -1,0 +1,66 @@
+
+$icon-font-family: 'Material Icons';
+
+/* Icons for Color Module */
+.admin-item__link {
+  margin-left: -2em;
+  padding-left: 2em;
+
+  &::before {
+    background-image: unset;
+    color: $df-blue;
+    font-family: $icon-font-family;
+    font-size: 30px;
+    line-height: 26px;
+    content: 'keyboard_arrow_right';
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.action-link--icon-show {
+  &::before {
+    top: 0.26rem !important;
+    background-image: unset;
+    color: $df-bright-grey;
+    font-family: $icon-font-family;
+    font-size: 16px;
+    content: 'visibility';
+    -webkit-font-smoothing: antialiased;
+  }
+
+  &:hover {
+    &::before {
+      color: $df-blue;
+      font-size: 16px;
+      font-family: $icon-font-family;
+      content: 'visibility';
+      -webkit-font-smoothing: antialiased;
+      background-image: unset;
+      top: 0.26rem !important;
+    }
+  }
+}
+
+.action-link--icon-hide {
+  &::before {
+    color: $df-bright-grey;
+    font-size: 16px;
+    font-family: $icon-font-family;
+    content: 'visibility_off';
+    -webkit-font-smoothing: antialiased;
+    background-image: unset;
+    top: 0.26rem !important;
+  }
+
+  &:hover {
+    &::before {
+      color: $df-blue;
+      font-size: 16px;
+      font-family: $icon-font-family;
+      content: 'visibility_off';
+      -webkit-font-smoothing: antialiased;
+      background-image: unset;
+      top: 0.26rem !important;
+    }
+  }
+}

@@ -1,6 +1,6 @@
 /**
  * @file
- * Task: Minify:CSS.
+ * Contains the minify:css task for acquia_claro.
  */
 
 /* global module */

@@ -1,6 +1,6 @@
 /**
  * @file
- * Task: Compile: JavaScript.
+ * Contains the compile:js task for acquia_claro.
  */
 
 /* global module */

@@ -1,0 +1,51 @@
+// Font mixins
+
+// Primary font
+
+@mixin font-primary {
+  font-family: $font-family-base;
+  font-style: normal;
+  font-weight: normal;
+}
+
+@mixin font-primary_italic {
+  font-family: $font-family-base;
+  font-style: italic;
+  font-weight: normal;
+}
+
+@mixin font-primary_light {
+  font-family: $font-family-secondary;
+  font-style: normal;
+  font-weight: 300;
+}
+
+@mixin font-primary_light-italic  {
+  font-family: $font-family-secondary;
+  font-style: italic;
+  font-weight: 300;
+}
+
+@mixin font-primary_medium {
+  font-family: $font-family-base;
+  font-style: normal;
+  font-weight: 500;
+}
+
+@mixin font-primary_medium-italic {
+  font-family: $font-family-base;
+  font-style: italic;
+  font-weight: 500;
+}
+
+@mixin font-primary_bold {
+  font-family: $font-family-base;
+  font-style: normal;
+  font-weight: bold;
+}
+
+@mixin font-primary_bold-italic {
+  font-family: $font-family-base;
+  font-style: italic;
+  font-weight: bold;
+}
