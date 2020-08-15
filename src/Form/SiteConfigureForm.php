@@ -3,6 +3,7 @@
 namespace Drupal\acquia_cms\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Installer\Form\SiteConfigureForm as CoreSiteConfigureForm;
@@ -21,6 +22,13 @@ final class SiteConfigureForm extends ConfigFormBase {
   private $apiUrl;
 
   /**
+   * The module installer.
+   *
+   * @var \Drupal\Core\Extension\ModuleInstallerInterface
+   */
+  private $moduleInstaller;
+
+  /**
    * The decorated form object.
    *
    * @var \Drupal\Core\Installer\Form\SiteConfigureForm
@@ -34,12 +42,15 @@ final class SiteConfigureForm extends ConfigFormBase {
    *   The config factory service.
    * @param string $api_url
    *   The Cohesion API URL.
+   * @param \Drupal\Core\Extension\ModuleInstallerInterface $module_installer
+   *   The module installer.
    * @param \Drupal\Core\Installer\Form\SiteConfigureForm $decorated
    *   The decorated form object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, string $api_url, CoreSiteConfigureForm $decorated) {
+  public function __construct(ConfigFactoryInterface $config_factory, string $api_url, ModuleInstallerInterface $module_installer, CoreSiteConfigureForm $decorated) {
     parent::__construct($config_factory);
     $this->apiUrl = $api_url;
+    $this->moduleInstaller = $module_installer;
     $this->decorated = $decorated;
   }
 
@@ -50,6 +61,7 @@ final class SiteConfigureForm extends ConfigFormBase {
     return new static(
       $container->get('config.factory'),
       $container->get('cohesion.api.utils')->getAPIServerURL(),
+      $container->get('module_installer'),
       CoreSiteConfigureForm::create($container)
     );
   }
@@ -85,6 +97,13 @@ final class SiteConfigureForm extends ConfigFormBase {
       '#description' => $this->t('Enter your API key and organization key to automatically set up Acquia Cohesion (note that this process can take a while). If you do not want to use Cohesion right now, leave these fields blank -- you can always set it up later.'),
       '#tree' => TRUE,
     ];
+    // Checkbox for Acquia Telemetry.
+    $form['acquia_telemetry'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Send anonymous usage information to Acquia'),
+      '#default_value' => 1,
+      '#description' => $this->t('This module intends to collect anonymous data about Acquia product usage. No private information will be gathered. Data will not be used for marketing or sold to any third party. This is an opt-in module and can be disabled at any time by uninstalling the acquia_telemetry module by your site administrator.'),
+    ];
     return $form;
   }
 
@@ -117,6 +136,11 @@ final class SiteConfigureForm extends ConfigFormBase {
         ->set('api_key', $api_key)
         ->set('organization_key', $org_key)
         ->save(TRUE);
+    }
+    // Enable the Acquia Telemetry module if user opt's in.
+    $acquia_telemetry_opt_in = $form_state->getValue(['acquia_telemetry']);
+    if ($acquia_telemetry_opt_in) {
+      $this->moduleInstaller->install(['acquia_telemetry']);
     }
   }
 
