@@ -249,6 +249,19 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
   }
 
   /**
+   * Presses the Save button on a node add/edit form.
+   *
+   * This is needed because there may be multiple "Save" buttons on the form
+   * (probably due to Cohesion interference) and we need to be sure we're
+   * pressing the one is that is part of the form's actions area.
+   */
+  protected function pressSaveButton() : void {
+    $this->assertSession()
+      ->elementExists('css', '#edit-actions')
+      ->pressButton('Save');
+  }
+
+  /**
    * Data provider for testing administrative edit access to components.
    *
    * @return array[]
