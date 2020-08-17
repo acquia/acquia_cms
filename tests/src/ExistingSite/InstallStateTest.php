@@ -158,6 +158,51 @@ class InstallStateTest extends ExistingSiteBase {
   }
 
   /**
+   * Tests Clone tab appears on node edit form page for all roles.
+   *
+   * @param string $role
+   *   The ID of the user role to test with.
+   *
+   * @dataProvider roleProvider
+   */
+  public function testCloneTabAvailability(string $role) {
+    $assert_session = $this->assertSession();
+
+    $account = $this->createUser();
+    $account->addRole($role);
+    $account->save();
+    $this->drupalLogin($account);
+
+    // Create a node of page type.
+    $node_page = $this->createNode([
+      'type' => 'page',
+      'title' => 'Categories Page',
+      'uid' => $account->id(),
+      'moderation_state' => 'published',
+    ]);
+    // Visit node edit page created above.
+    $this->drupalGet('/node/' . $node_page->id() . '/edit');
+    $assert_session->statusCodeEquals(200);
+
+    // Check weather clone tab exist.
+    $assert_session->linkExists('Clone');
+  }
+
+  /**
+   * Data provider for ::testCloneTabAvailability().
+   *
+   * @return array[]
+   *   Sets of arguments to pass to the test method.
+   */
+  public function roleProvider() {
+    return [
+      ['content_author'],
+      ['content_editor'],
+      ['content_administrator'],
+    ];
+  }
+
+  /**
    * Tests tour permission for user roles.
    *
    * - User roles with permission 'access acquia cms tour' should able to
