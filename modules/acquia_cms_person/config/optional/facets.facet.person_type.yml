@@ -5,7 +5,11 @@ dependencies:
     - search_api.index.content
     - views.view.search
   module:
+    - facets_pretty_paths
     - search_api
+third_party_settings:
+  facets_pretty_paths:
+    coder: taxonomy_term_name_coder
 id: person_type
 name: 'Person Type'
 url_alias: person_type
@@ -15,10 +19,16 @@ show_only_one_result: true
 field_identifier: field_person_type
 facet_source_id: 'search_api:views_page__search__search'
 widget:
-  type: dropdown
+  type: links
   config:
     show_numbers: true
-    default_option_label: Choose
+    soft_limit: 0
+    soft_limit_settings:
+      show_less_label: 'Show less'
+      show_more_label: 'Show more'
+    show_reset_link: false
+    reset_text: 'Show all'
+    hide_reset_when_no_selection: false
 query_operator: or
 use_hierarchy: false
 expand_hierarchy: false
@@ -68,4 +78,4 @@ processor_configs:
     settings: {  }
 empty_behavior:
   behavior: none
-show_title: true
+show_title: false

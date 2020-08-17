@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.article_type
+  module:
+    - cohesion
+    - facets
+  theme:
+    - cohesion_theme
+id: search_article_type
+theme: cohesion_theme
+region: dx8_hidden
+weight: 0
+provider: null
+plugin: 'facet_block:article_type'
+settings:
+  id: 'facet_block:article_type'
+  label: 'Article Type'
+  provider: facets
+  label_display: '0'
+  block_id: search_article_type
+visibility:
+  cohesion_master_template:
+    id: cohesion_master_template
+    using_master_template: 0
+    negate: false

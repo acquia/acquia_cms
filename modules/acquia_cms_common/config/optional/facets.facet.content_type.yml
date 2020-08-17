@@ -5,17 +5,21 @@ dependencies:
     - search_api.index.content
     - views.view.search
   module:
+    - facets_pretty_paths
     - search_api
+third_party_settings:
+  facets_pretty_paths:
+    coder: default_coder
 id: content_type
 name: 'Content Type'
 url_alias: content_type
 weight: 0
 min_count: 1
-show_only_one_result: false
+show_only_one_result: true
 field_identifier: type
 facet_source_id: 'search_api:views_page__search__search'
 widget:
-  type: checkbox
+  type: links
   config:
     show_numbers: true
     soft_limit: 0
@@ -64,4 +68,4 @@ processor_configs:
     settings: {  }
 empty_behavior:
   behavior: none
-show_title: true
+show_title: false
