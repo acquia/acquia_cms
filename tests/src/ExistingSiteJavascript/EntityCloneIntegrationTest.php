@@ -49,8 +49,9 @@ class EntityCloneIntegrationTest extends CohesionTestBase {
 
     $this->drupalGet($clone->toUrl('edit-form'));
     $assert_session->fieldValueEquals('Title', $node->getTitle() . ' - cloned');
-    // @TODO: Assert that the Cohesion components in the source node were cloned
+    // Assert that the Cohesion components in the source node were cloned
     // as well.
+    $this->assertComponent($canvas, "Hero");
   }
 
 }
