@@ -3,6 +3,7 @@
 namespace Drupal\Tests\acquia_cms\ExistingSite;
 
 use Drupal\Core\Config\ImmutableConfig;
+use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
@@ -203,6 +204,42 @@ class InstallStateTest extends ExistingSiteBase {
   }
 
   /**
+   * Test entity clone feature for new content type.
+   *
+   * Check if newly created content type's content can be
+   * cloned by user or not.
+   */
+  public function testEntityCloneForNewContentType() {
+
+    // Create new content type.
+    NodeType::create([
+      'type' => 'test_node',
+      'name' => 'Test node type',
+    ])->save();
+
+    $assert_session = $this->assertSession();
+    $account = $this->createUser();
+    $account->addRole('content_administrator');
+    $account->save();
+    $this->drupalLogin($account);
+
+    // Create a node of test_node type.
+    $node_page = $this->createNode([
+      'type' => 'test_node',
+      'title' => 'Categories Page',
+      'uid' => $account->id(),
+      'moderation_state' => 'published',
+    ]);
+
+    // Visit node edit page created above.
+    $this->drupalGet('/node/' . $node_page->id() . '/edit');
+    $assert_session->statusCodeEquals(200);
+
+    // Assert clone tab exists or not.
+    $assert_session->linkExists('Clone');
+  }
+
+  /**
    * Tests tour permission for user roles.
    *
    * - User roles with permission 'access acquia cms tour' should able to
@@ -341,6 +378,11 @@ class InstallStateTest extends ExistingSiteBase {
       ->set('verify_mail', TRUE)
       ->set('register', 'visitors')
       ->save();
+    // Delete the newly created test_node content type.
+    $content_type = $this->container->get('entity_type.manager')
+      ->getStorage('node_type')
+      ->load('test_node');
+    $content_type->delete();
     parent::tearDown();
   }
 
