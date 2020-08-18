@@ -27,6 +27,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
   protected static $modules = [
     'content_translation',
     'scheduler',
+    'entity_clone',
     'workbench_email',
   ];
 
@@ -111,6 +112,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
    * - Can delete their own content.
    * - Cannot delete others' content.
    * - Can transition their own content from draft to review.
+   * - Can clone content entity.
    */
   protected function doTestAuthorAccess() {
     $account = $this->drupalCreateUser();
@@ -156,6 +158,10 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // Test that we cannot delete others' content.
     $this->drupalGet('/node/1/delete');
     $assert_session->statusCodeEquals(403);
+
+    // Test that we can clone content.
+    $this->drupalGet('/entity_clone/node/2');
+    $assert_session->statusCodeEquals(200);
   }
 
   /**
@@ -169,6 +175,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
    * - Can delete others' content.
    * - Can transition others' content between all states, except for restoring
    *   archived content.
+   * - Can clone content entity.
    */
   protected function doTestEditorAccess() {
     $account = $this->drupalCreateUser();
@@ -236,6 +243,10 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // Test that we can delete others' content.
     $this->drupalGet('/node/1/delete');
     $assert_session->statusCodeEquals(200);
+
+    // Test that we can clone content.
+    $this->drupalGet('/entity_clone/node/1');
+    $assert_session->statusCodeEquals(200);
   }
 
   /**
@@ -248,6 +259,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
    * - Can delete their own content.
    * - Can delete others' content.
    * - Can transition others' content between all states.
+   * - Can clone content entity.
    */
   protected function doTestAdministratorAccess() {
     $account = $this->drupalCreateUser();
@@ -315,6 +327,10 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
 
     // Test that we can delete others' content.
     $this->drupalGet('/node/1/delete');
+    $assert_session->statusCodeEquals(200);
+
+    // Test that we can clone content.
+    $this->drupalGet('/entity_clone/node/4');
     $assert_session->statusCodeEquals(200);
   }
 
