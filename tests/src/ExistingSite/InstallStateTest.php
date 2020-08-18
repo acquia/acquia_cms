@@ -166,11 +166,11 @@ class InstallStateTest extends ExistingSiteBase {
    */
   public function testEntityCloneForNewContentType() {
     // Create new content type.
-    NodeType::create([
+    $test_node_type = NodeType::create([
       'type' => 'test_node',
       'name' => 'Test node type',
-    ])->save();
-    $test_node_type = NodeType::load('test_node');
+    ]);
+    $test_node_type->save();
     // Mark test entity for clean up at the end.
     $this->markEntityForCleanup($test_node_type);
 
@@ -189,10 +189,10 @@ class InstallStateTest extends ExistingSiteBase {
     ]);
 
     // Visit node edit page created above.
-    $this->drupalGet('/node/' . $node_page->id() . '/edit');
+    $this->drupalGet($node_page->toUrl('edit-form'));
     $assert_session->statusCodeEquals(200);
 
-    // Assert clone tab exists or not.
+    // Assert clone tab exists.
     $assert_session->linkExists('Clone');
   }
 
