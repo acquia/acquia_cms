@@ -27,6 +27,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
   protected static $modules = [
     'content_translation',
     'scheduler',
+    'entity_clone',
     'workbench_email',
   ];
 
