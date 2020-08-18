@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * Functions to support Acquia cms toolbar.
+ */
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function acquia_cms_toolbar_preprocess_html(&$variables) {
+  // Add acquia-cms-toolbar class to the body.
+  if (_acquia_cms_toolbar_is_access()) {
+    $variables['attributes']['class'][] = 'acquia-cms-toolbar';
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function acquia_cms_toolbar_page_attachments_alter(array &$page) {
+  // Attaches css assets globally.
+  if (_acquia_cms_toolbar_is_access()) {
+    $page['#attached']['library'][] = 'acquia_claro/acquia-cms-toolbar';
+  }
+}
+
+/**
+ * Implements hook_toolbar_alter().
+ */
+function acquia_cms_toolbar_toolbar_alter(&$items) {
+  // Add class to the user tab so it can be moved to the right.
+  if (_acquia_cms_toolbar_is_access()) {
+    $items['user']['#wrapper_attributes']['class'] = ['user-toolbar-tab'];
+  }
+}
+
+/**
+ * Helper function for checking user permission.
+ *
+ * We reallly only want to add styling and changes to toolbar when the user has
+ * access.
+ *
+ * Returns TRUE or FALSE.
+ */
+function _acquia_cms_toolbar_is_access() {
+  $user = \Drupal::currentUser();
+  return $user->hasPermission('access toolbar');
+}
