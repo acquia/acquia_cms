@@ -23,7 +23,6 @@ class BasicPermissionsTest extends BrowserTestBase {
    */
   protected static $modules = [
     'acquia_cms_common',
-    'entity_clone',
     'media',
     'toolbar',
     'views',
@@ -76,8 +75,6 @@ class BasicPermissionsTest extends BrowserTestBase {
       $this->assertSame($is_administrator, $account->hasPermission('administer media'));
       $this->assertSame($is_administrator, $account->hasPermission('administer taxonomy'));
       $this->assertSame($is_administrator, $account->hasPermission('bypass node access'));
-      // content_administrator should be able to clone the content entity.
-      $this->assertSame($is_administrator, $account->hasPermission('clone node entity'));
 
       $this->drupalLogin($account);
       // All roles should have 'view the administration theme' permission.

@@ -159,63 +159,20 @@ class InstallStateTest extends ExistingSiteBase {
   }
 
   /**
-   * Tests Clone tab appears on node edit form page for all roles.
-   *
-   * @param string $role
-   *   The ID of the user role to test with.
-   *
-   * @dataProvider roleProvider
-   */
-  public function testCloneTabAvailability(string $role) {
-    $assert_session = $this->assertSession();
-
-    $account = $this->createUser();
-    $account->addRole($role);
-    $account->save();
-    $this->drupalLogin($account);
-
-    // Create a node of page type.
-    $node_page = $this->createNode([
-      'type' => 'page',
-      'title' => 'Categories Page',
-      'uid' => $account->id(),
-      'moderation_state' => 'published',
-    ]);
-    // Visit node edit page created above.
-    $this->drupalGet('/node/' . $node_page->id() . '/edit');
-    $assert_session->statusCodeEquals(200);
-
-    // Check weather clone tab exist.
-    $assert_session->linkExists('Clone');
-  }
-
-  /**
-   * Data provider for ::testCloneTabAvailability().
-   *
-   * @return array[]
-   *   Sets of arguments to pass to the test method.
-   */
-  public function roleProvider() {
-    return [
-      ['content_author'],
-      ['content_editor'],
-      ['content_administrator'],
-    ];
-  }
-
-  /**
    * Test entity clone feature for new content type.
    *
    * Check if newly created content type's content can be
    * cloned by user or not.
    */
   public function testEntityCloneForNewContentType() {
-
     // Create new content type.
     NodeType::create([
       'type' => 'test_node',
       'name' => 'Test node type',
     ])->save();
+    $test_node_type = NodeType::load('test_node');
+    // Mark test entity for clean up at the end.
+    $this->markEntityForCleanup($test_node_type);
 
     $assert_session = $this->assertSession();
     $account = $this->createUser();
@@ -378,11 +335,6 @@ class InstallStateTest extends ExistingSiteBase {
       ->set('verify_mail', TRUE)
       ->set('register', 'visitors')
       ->save();
-    // Delete the newly created test_node content type.
-    $content_type = $this->container->get('entity_type.manager')
-      ->getStorage('node_type')
-      ->load('test_node');
-    $content_type->delete();
     parent::tearDown();
   }
 
