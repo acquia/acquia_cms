@@ -46,6 +46,21 @@ class InstallStateTest extends ExistingSiteBase {
 
     // Check that the node create form is using the admin theme.
     $this->assertTrue($this->config('node.settings')->get('use_admin_theme'));
+
+    // Check page caching set for one year and css/js are aggregated.
+    $performance_config = $this->config('system.performance');
+    $this->assertSame(31536000, $performance_config->get('cache.page.max_age'));
+    $this->assertSame(TRUE, $performance_config->get('css.preprocess'));
+    $this->assertSame(TRUE, $performance_config->get('js.preprocess'));
+
+    // Check purge configurations incorporating acquia purge.
+    $purge_plugin_config = $this->config('purge.plugins');
+    $purgers = $purge_plugin_config->get('purgers');
+    $this->assertSame('acquia_purge', $purgers[0]['plugin_id']);
+    $this->assertSame('cee22bc3fe', $purgers[0]['instance_id']);
+    $purge_logger_config = $this->config('purge.logger_channels');
+    $channels = $purge_logger_config->get('channels');
+    $this->assertSame('purger_acquia_purge_cee22bc3fe', $channels[3]['id']);
   }
 
   /**

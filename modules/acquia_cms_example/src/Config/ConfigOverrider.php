@@ -26,6 +26,16 @@ final class ConfigOverrider implements ConfigFactoryOverrideInterface {
     if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv() && in_array($name, $names, TRUE)) {
       $overrides[$name]['override_search_core'] = 'BGVZ-196143.dev.orionacms';
     }
+
+    // Override system performance on IDE and local environment.
+    $name = 'system.performance';
+    if (in_array($name, $names, TRUE)
+      && (AcquiaDrupalEnvironmentDetector::isAhIdeEnv() || AcquiaDrupalEnvironmentDetector::isLocalEnv())) {
+      $overrides[$name]['cache']['page']['max_age'] = 0;
+      $overrides[$name]['css']['preprocess'] = FALSE;
+      $overrides[$name]['js']['preprocess'] = FALSE;
+    }
+
     return $overrides;
   }
 
