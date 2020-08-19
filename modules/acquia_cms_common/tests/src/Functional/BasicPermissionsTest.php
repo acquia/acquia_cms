@@ -68,6 +68,41 @@ class BasicPermissionsTest extends BrowserTestBase {
       $account->addRole($role);
       $account->save();
 
+      // Permissions to add cohesion coomponents, helpers, elements and
+      // component content in layout canvas of content type.
+      $this->assertTrue($account->hasPermission('access animate on view'));
+      $this->assertTrue($account->hasPermission('access component builder elements group'));
+      $this->assertTrue($account->hasPermission('access component content'));
+      $this->assertTrue($account->hasPermission('access components'));
+      $this->assertTrue($account->hasPermission('access content elements group'));
+      $this->assertTrue($account->hasPermission('access cpt_cat_dynamic_components cohesion_component_category group'));
+      $this->assertTrue($account->hasPermission('access cpt_cat_general_components cohesion_component_category group'));
+      $this->assertTrue($account->hasPermission('access cpt_cat_hero_components cohesion_component_category group'));
+      $this->assertTrue($account->hasPermission('access cpt_cat_interactive_components cohesion_component_category group'));
+      $this->assertTrue($account->hasPermission('access cpt_cat_layout_components cohesion_component_category group'));
+      $this->assertTrue($account->hasPermission('access cpt_cat_map_components cohesion_component_category group'));
+      $this->assertTrue($account->hasPermission('access cpt_cat_media_components cohesion_component_category group'));
+      $this->assertTrue($account->hasPermission('access cpt_cat_template_components cohesion_component_category group'));
+      $this->assertTrue($account->hasPermission('access custom elements group'));
+      $this->assertTrue($account->hasPermission('access drupal core elements group'));
+      $this->assertTrue($account->hasPermission('access elements'));
+      $this->assertTrue($account->hasPermission('access fields'));
+      $this->assertTrue($account->hasPermission('access form fields fields group'));
+      $this->assertTrue($account->hasPermission('access form help fields group'));
+      $this->assertTrue($account->hasPermission('access form layout fields group'));
+      $this->assertTrue($account->hasPermission('access helpers'));
+      $this->assertTrue($account->hasPermission('access hlp_cat_dynamic_helpers cohesion_helper_category group'));
+      $this->assertTrue($account->hasPermission('access hlp_cat_general_helpers cohesion_helper_category group'));
+      $this->assertTrue($account->hasPermission('access hlp_cat_interactive_helpers cohesion_helper_category group'));
+      $this->assertTrue($account->hasPermission('access hlp_cat_layout_helpers cohesion_helper_category group'));
+      $this->assertTrue($account->hasPermission('access hlp_cat_media_helpers cohesion_helper_category group'));
+      $this->assertTrue($account->hasPermission('access interactive elements group'));
+      $this->assertTrue($account->hasPermission('access layout elements group'));
+      $this->assertTrue($account->hasPermission('access media elements group'));
+      $this->assertTrue($account->hasPermission('access menu elements group'));
+      $this->assertTrue($account->hasPermission('access view elements group'));
+      $this->assertTrue($account->hasPermission('use text format cohesion'));
+
       // Only content administrators should be able to administer nodes, media,
       // or taxonomy.
       $is_administrator = $role === 'content_administrator';
