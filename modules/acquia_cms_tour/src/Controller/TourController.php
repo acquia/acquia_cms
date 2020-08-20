@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_tour\Controller;
 
+use Drupal\acquia_cms_tour\Form\AcquiaTelemetryForm;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Controller\ControllerResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -22,8 +23,9 @@ final class TourController extends ControllerBase {
    * @var array
    */
   private const SECTIONS = [
-    'google_analytics' => GoogleAnalytics::class . '::build',
-    'google_tag_manager' => GoogleTagManager::class . '::build',
+    'acquia_telemetry' => AcquiaTelemetryForm::class,
+    'google_analytics' => GoogleAnalytics::class,
+    'google_tag_manager' => GoogleTagManager::class,
   ];
 
   /**
@@ -53,6 +55,27 @@ final class TourController extends ControllerBase {
   }
 
   /**
+   * Invokes a sub-controller and returns its output.
+   *
+   * @param string $controller_class
+   *   The class name.
+   *
+   * @return mixed
+   *   The markup/output of the sub-controller.
+   */
+  private function getSectionOutput(string $controller_class) {
+    if (is_a($controller_class, 'Drupal\Core\Form\FormInterface', TRUE)) {
+      return $this->formBuilder()->getForm($controller_class);
+    }
+    else {
+      $controller = $this->controllerResolver->getControllerFromDefinition($controller_class . '::build');
+      if ($controller) {
+        return $controller();
+      }
+    }
+  }
+
+  /**
    * Returns a renderable array for a tour page.
    */
   public function tour() {
@@ -61,10 +84,7 @@ final class TourController extends ControllerBase {
     // Delegate building each section to sub-controllers, in order to keep all
     // extension-specific logic cleanly encapsulated.
     foreach (static::SECTIONS as $key => $controller) {
-      $controller = $this->controllerResolver->getControllerFromDefinition($controller);
-      if ($controller) {
-        $tour[$key] = $controller();
-      }
+      $tour[$key] = $this->getSectionOutput($controller);
     }
     return $tour;
   }
