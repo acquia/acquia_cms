@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\acquia_cms_search\ExistingSite;
 
-use Behat\Mink\Element\ElementInterface;
 use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\views\Entity\View;
@@ -116,12 +115,11 @@ class SearchTest extends ExistingSiteBase {
     $page->fillField('Keywords', 'Test');
     $page->pressButton('Search');
     // Check if all the published nodes are visible and unpublished are not.
-    $links_present = $this->getCurrentSessionLinks();
     foreach ($node_types as $type) {
       $node_type_label = $type->label();
 
-      $this->assertContains('Test published ' . $node_type_label, $links_present);
-      $this->assertNotContains('Test unpublished ' . $node_type_label, $links_present);
+      $this->assertLinkExists('Test published ' . $node_type_label);
+      $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
     }
     // Check if facets filter the content type and term type is working
     // as expected.
@@ -130,17 +128,15 @@ class SearchTest extends ExistingSiteBase {
       $node_type_id = $type->id();
       // Check if the selected content type from facets is shown.
       $page->clickLink($node_type_label . ' (1)');
-      $links_present = $this->getCurrentSessionLinks();
-      $this->assertContains('Test published ' . $node_type_label, $links_present);
-      $this->assertNotContains('Test unpublished ' . $node_type_label, $links_present);
+      $this->assertLinkExists('Test published ' . $node_type_label);
+      $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
 
       if ($node_type_id !== 'page') {
         // Check if term facet is working properly.
         $page->clickLink($node_type_label . ' Music (1)');
-        $links_present = $this->getCurrentSessionLinks();
         // Check if node of the selected term is shown.
-        $this->assertContains('Test published ' . $node_type_label, $links_present);
-        $this->assertNotContains('Test unpublished ' . $node_type_label, $links_present);
+        $this->assertLinkExists('Test published ' . $node_type_label);
+        $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
         $assert_session->linkNotExists($node_type_label . ' Rocks (1)');
       }
       // Going back to the initial state to check the other content type and
@@ -150,26 +146,25 @@ class SearchTest extends ExistingSiteBase {
   }
 
   /**
-   * Provides title attribute of the links present in the current page session.
+   * Checks if a link exists with the given title attribute.
    *
-   * @return array
-   *   Array of title.
+   * @param string $title
+   *   The title of the node.
    */
-  private function getCurrentSessionLinks() : array {
-    $actual_links = $this->getSession()
-      ->getPage()
-      ->findAll('css', 'a.coh-link[title]');
+  private function assertLinkExists(string $title) : void {
+    $element = $this->assertSession()->elementExists('css', 'a.coh-link[title="' . $title . '"]');
+    $this->assertSame($title, $element->getAttribute('title'));
+  }
 
-    $map = function (ElementInterface $link) {
-      // Our template for node teasers doesn't actually link the title -- which
-      // is probably an accessibility no-no, but let's not get into that now --
-      // but it does include a 'title' attribute in the "read more" link which
-      // contains the actual title of the linked node.
-      return $link->getAttribute('title');
-    };
-    $actual_links = array_map($map, $actual_links);
-
-    return $actual_links;
+  /**
+   * Checks if a link doesn't exists with the given title attribute.
+   *
+   * @param string $title
+   *   The title of the node.
+   */
+  private function assertLinkNotExists(string $title) : void {
+    $element = $this->assertSession()->elementNotExists('css', 'a.coh-link[title="' . $title . '"]');
+    $this->assertNull($element);
   }
 
 }

@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - facets.facet.category
+    - facets.facet.search_category
   module:
     - cohesion
     - facets
@@ -13,9 +13,9 @@ theme: cohesion_theme
 region: dx8_hidden
 weight: 0
 provider: null
-plugin: 'facet_block:category'
+plugin: 'facet_block:search_category'
 settings:
-  id: 'facet_block:category'
+  id: 'facet_block:search_category'
   label: Category
   provider: facets
   label_display: '0'

@@ -2,9 +2,8 @@ langcode: en
 status: true
 dependencies:
   config:
-    - facets.facet.article_type
+    - facets.facet.search_article_type
   module:
-    - cohesion
     - facets
   theme:
     - cohesion_theme
@@ -13,9 +12,9 @@ theme: cohesion_theme
 region: dx8_hidden
 weight: 0
 provider: null
-plugin: 'facet_block:article_type'
+plugin: 'facet_block:search_article_type'
 settings:
-  id: 'facet_block:article_type'
+  id: 'facet_block:search_article_type'
   label: 'Article Type'
   provider: facets
   label_display: '0'

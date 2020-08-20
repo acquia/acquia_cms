@@ -10,13 +10,13 @@ dependencies:
 third_party_settings:
   facets_pretty_paths:
     coder: taxonomy_term_name_coder
-id: article_type
-name: 'Article Type'
-url_alias: article_type
+id: search_person_type
+name: 'Person Type'
+url_alias: person_type
 weight: 0
 min_count: 1
 show_only_one_result: true
-field_identifier: field_article_type
+field_identifier: field_person_type
 facet_source_id: 'search_api:views_page__search__search'
 widget:
   type: links
@@ -54,7 +54,7 @@ processor_configs:
     weights:
       build: 5
     settings:
-      content_type:
+      search_content_type:
         enable: true
         condition: not_empty
         values: ''
