@@ -58,6 +58,9 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
       'type' => $this->nodeType,
       'uid' => $this->rootUser->id(),
     ]);
+    // Asserts that node author is receiving emails when moderation state is
+    // changed to draft.
+    $this->assertCount(1, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
 
     // Ensure that all fields in this content type are translatable.
     $this->assertConfigurableFieldsAreTranslatable('node', $this->nodeType);
@@ -138,9 +141,9 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     $page->selectFieldOption('Save as', 'Draft');
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
-    // Asserts that content author is receiving emails when moderation state is
+    // Asserts that node author is receiving emails when moderation state is
     // changed to draft.
-    $this->assertCount(1, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
+    $this->assertCount(2, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
 
     $this->doMultipleModerationStateChanges(2, ['In review']);
     // As we don't have any content editor and content administrator, so no
@@ -188,8 +191,8 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
       'uid' => $account->id(),
     ]);
     // As the newly created node is without any state, so default one will be
-    // draft and 'content author' will receive the mail.
-    $this->assertCount(2, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
+    // draft and 'node author' will receive the mail.
+    $this->assertCount(3, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
 
     $assert_session = $this->assertSession();
 
@@ -226,15 +229,13 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // into the total count of mails to 2 as we only have content editor
     // till now.
     $this->assertCount(2, $this->getMails(['id' => 'workbench_email_template::transition_to_review']));
-    // Node has been published twice. Both content editors, and authors will
-    // receive two emails each.
-    $this->assertCount(4, $this->getMails(['id' => 'workbench_email_template::to_published']));
+    // Node has been published twice. So node author will receive two emails.
+    $this->assertCount(2, $this->getMails(['id' => 'workbench_email_template::to_published']));
     // Node has been transitioned to draft twice. Content Author would receive
-    // two emails. We already have 2 draft email notifications thus making it 4.
-    $this->assertCount(4, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
-    // Node has been archived Once. Both content  author and content editor
-    // would receive an email.
-    $this->assertCount(2, $this->getMails(['id' => 'workbench_email_template::to_archived']));
+    // two emails. We already have 3 draft email notifications thus making it 5.
+    $this->assertCount(5, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
+    // Node has been archived Once. Node author will receive the email.
+    $this->assertCount(1, $this->getMails(['id' => 'workbench_email_template::to_archived']));
 
     // Test that we can delete our own content.
     $this->drupalGet($node->toUrl('delete-form'));
@@ -279,8 +280,8 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
     // As the newly created node is without any state, so default one will be
-    // draft and 'content author' will receive the mail.
-    $this->assertCount(5, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
+    // draft and 'node author' will receive the mail.
+    $this->assertCount(6, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
 
     // Test that we can edit our own content.
     $this->drupalGet('/node/4/edit');
@@ -295,8 +296,8 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // Test that we can edit others' content and send it through various
     // workflow states.
     Node::load(1)->set('moderation_state', 'draft')->save();
-    // State change to draft will trigger the mail to content author.
-    $this->assertCount(6, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
+    // State change to draft will trigger the mail to node author.
+    $this->assertCount(7, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
     $this->doMultipleModerationStateChanges(1, [
       'In review',
       'Published',
@@ -309,17 +310,15 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // administrator would receive one email each. We already have 2 review
     // email notifications thus making it 4.
     $this->assertCount(4, $this->getMails(['id' => 'workbench_email_template::transition_to_review']));
-    // Node has been published twice. Content author, editor and administrator
-    // would receive the email. We already have 4 published email notification
-    // thus making it 10.
-    $this->assertCount(10, $this->getMails(['id' => 'workbench_email_template::to_published']));
-    // Node has been transitioned to draft twice. Content Author would receive
-    // two emails. We already have 6 draft email notifications thus making it 8.
-    $this->assertCount(8, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
-    // Node has been archived Once. Content  author, editor and administrator
-    // would receive one email each. We already have 2 archived email
-    // notification thus making it 5.
-    $this->assertCount(5, $this->getMails(['id' => 'workbench_email_template::to_archived']));
+    // Node has been published twice. Node author would receive two email. We
+    // already have 2 published email notification thus making it 4.
+    $this->assertCount(4, $this->getMails(['id' => 'workbench_email_template::to_published']));
+    // Node has been transitioned to draft twice. Node Author would receive
+    // two emails. We already have 7 draft email notifications thus making it 9.
+    $this->assertCount(9, $this->getMails(['id' => 'workbench_email_template::back_to_draft']));
+    // Node has been archived Once. Node author would receive one email. We
+    // already have 1 archived email notification thus making it 2.
+    $this->assertCount(2, $this->getMails(['id' => 'workbench_email_template::to_archived']));
 
     // Test that we can delete our own content.
     $this->drupalGet('/node/4/delete');
