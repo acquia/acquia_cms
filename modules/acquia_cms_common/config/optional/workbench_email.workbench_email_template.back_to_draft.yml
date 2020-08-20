@@ -1,8 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  config:
-    - user.role.content_author
+dependencies: {  }
 third_party_settings:
   acquia_cms:
     workflow_id: editorial
@@ -16,10 +14,8 @@ body:
   format: plain_text
 bundles: {  }
 recipient_types:
-  role:
-    id: role
+  author:
+    id: author
     provider: workbench_email
     status: true
-    settings:
-      roles:
-        content_author: content_author
+    settings: {  }
