@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.field.node.place.body
     - field.field.node.place.field_categories
+    - field.field.node.place.field_geofield
     - field.field.node.place.field_place_address
     - field.field.node.place.field_place_image
     - field.field.node.place.field_place_telephone
@@ -12,10 +13,9 @@ dependencies:
     - node.type.place
   module:
     - address
+    - geofield
     - text
     - user
-_core:
-  default_config_hash: 9fQtfYWeSO5Kcwwkd_k1bfXGkJe7YZ2kjQSB35Rn5GI
 id: node.place.default
 targetEntityType: node
 bundle: place
@@ -28,6 +28,15 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
+  field_geofield:
+    weight: 3
+    label: above
+    settings:
+      output_format: wkt
+      output_escape: true
+    third_party_settings: {  }
+    type: geofield_default
+    region: content
   field_place_address:
     type: address_default
     weight: 1
