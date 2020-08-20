@@ -138,7 +138,7 @@ final class SiteConfigureForm extends ConfigFormBase {
         ->save(TRUE);
     }
     // Enable the Acquia Telemetry module if user opt's in.
-    $acquia_telemetry_opt_in = $form_state->getValue(['acquia_telemetry']);
+    $acquia_telemetry_opt_in = $form_state->getValue('acquia_telemetry');
     if ($acquia_telemetry_opt_in) {
       $this->moduleInstaller->install(['acquia_telemetry']);
     }

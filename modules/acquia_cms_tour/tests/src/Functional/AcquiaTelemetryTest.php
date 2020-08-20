@@ -46,12 +46,14 @@ class AcquiaTelemetryTest extends BrowserTestBase {
     $page->checkField('Send anonymous data about Acquia product usage');
     $page->pressButton('Save');
     // Check if module is installed or not.
+    $assert_session->pageTextContains('You have opted into Acquia Telemetry. Thank you for helping improve Acquia products.');
     $this->rebuildContainer();
     $this->assertTrue($this->container->get('module_handler')->moduleExists('acquia_telemetry'));
     // Ensure we can uninstall the Acquia Telemetry module.
     $page->uncheckField('Send anonymous data about Acquia product usage');
     $page->pressButton('Save');
     // Check if module is uninstalled or not.
+    $assert_session->pageTextContains('You have successfully opted out of Acquia Telemetry. Anonymous usage information will no longer be collected.');
     $this->rebuildContainer();
     $this->assertFalse($this->container->get('module_handler')->moduleExists('acquia_telemetry'));
   }

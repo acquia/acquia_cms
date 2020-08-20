@@ -55,20 +55,17 @@ final class TourController extends ControllerBase {
   }
 
   /**
-   * Get the build mark up of the sub-controllers.
+   * Invokes a sub-controller and returns its output.
    *
    * @param string $controller_class
    *   The class name.
    *
    * @return mixed
-   *   The markup of the sub-controller.
+   *   The markup/output of the sub-controller.
    */
-  private function getSectionOutput($controller_class) {
+  private function getSectionOutput(string $controller_class) {
     if (is_a($controller_class, 'Drupal\Core\Form\FormInterface', TRUE)) {
-      $form = $this->formBuilder()->getForm($controller_class);
-      if ($form) {
-        return $form;
-      }
+      return $this->formBuilder()->getForm($controller_class);
     }
     else {
       $controller = $this->controllerResolver->getControllerFromDefinition($controller_class . '::build');

@@ -72,7 +72,6 @@ final class AcquiaTelemetryForm extends FormBase {
       '#open' => TRUE,
       '#title' => $this->t('Acquia Telemetry'),
       '#description' => $this->t('This module intends to collect anonymous data about Acquia product usage. No private information will be gathered. Data will not be used for marketing or sold to any third party. This is an opt-in module and can be disabled at any time by uninstalling the acquia_telemetry module by your site administrator.'),
-      '#tree' => TRUE,
     ];
     $form['acquia_telemetry']['actions']['submit'] = [
       '#type' => 'submit',
@@ -87,14 +86,14 @@ final class AcquiaTelemetryForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Enable the Acquia Telemetry module if user opt's in.
-    $acquia_telemetry_opt_in = $form_state->getValue(['acquia_telemetry', 'opt_in']);
+    $acquia_telemetry_opt_in = $form_state->getValue('opt_in');
     if ($acquia_telemetry_opt_in) {
       $this->moduleInstaller->install(['acquia_telemetry']);
-      $this->messenger()->addStatus('You have successfully opt in for Acquia Telemetry.');
+      $this->messenger()->addStatus('You have opted into Acquia Telemetry. Thank you for helping improve Acquia products.');
     }
     else {
       $this->moduleInstaller->uninstall(['acquia_telemetry']);
-      $this->messenger()->addStatus('You have opt out from Acquia Telemetry.');
+      $this->messenger()->addStatus('You have successfully opted out of Acquia Telemetry. Anonymous usage information will no longer be collected.');
     }
   }
 
