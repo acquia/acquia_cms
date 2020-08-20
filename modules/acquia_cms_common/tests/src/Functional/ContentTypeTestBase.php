@@ -123,6 +123,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
   protected function doTestAuthorAccess() {
     $account = $this->drupalCreateUser();
     $account->addRole('content_author');
+    $account->setEmail('content_author@testing.com');
     $account->save();
     $this->drupalLogin($account);
 
@@ -148,7 +149,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // changed to draft.
     $this->assertCount(1, $this->getMails([
       'id' => 'workbench_email_template::back_to_draft',
-      'to' => $account->getEmail(),
+      'to' => 'content_author@testing.com',
     ]));
 
     $this->doMultipleModerationStateChanges(2, ['In review']);
@@ -201,7 +202,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // draft and 'node author' will receive the mail.
     $this->assertCount(1, $this->getMails([
       'id' => 'workbench_email_template::back_to_draft',
-      'to' => $account->getEmail(),
+      'to' => 'content_editor@testing.com',
     ]));
 
     $assert_session = $this->assertSession();
@@ -227,7 +228,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // review state.
     $this->assertCount(1, $this->getMails([
       'id' => 'workbench_email_template::transition_to_review',
-      'to' => $account->getEmail(),
+      'to' => 'content_editor@testing.com',
     ]));
     $this->doMultipleModerationStateChanges(1, [
       'In review',
@@ -243,7 +244,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // till now.
     $this->assertCount(2, $this->getMails([
       'id' => 'workbench_email_template::transition_to_review',
-      'to' => $account->getEmail(),
+      'to' => 'content_editor@testing.com',
     ]));
     // Node has been published twice. So node author will receive two emails.
     $this->assertCount(2, $this->getMails([
@@ -309,7 +310,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // draft and 'node author' will receive the mail.
     $this->assertCount(1, $this->getMails([
       'id' => 'workbench_email_template::back_to_draft',
-      'to' => $account->getEmail(),
+      'to' => 'content_administrator@testing.com',
     ]));
 
     // Test that we can edit our own content.
@@ -342,7 +343,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // administrator would receive one email each.
     $this->assertCount(1, $this->getMails([
       'id' => 'workbench_email_template::transition_to_review',
-      'to' => $account->getEmail(),
+      'to' => 'content_administrator@testing.com',
     ]));
     // 'Content editor' is  already having 2 email notification thus making
     // it 3.
