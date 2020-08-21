@@ -115,6 +115,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "acquia/drupal-environment-detector": {
+                "Add get site name function to environment-detector": "./patches/environment-detector.patch"
+            },
             "drupal/default_content": {
                 "2933777 - REST/Serializer improvements in core/contrib make it less suitable for default_content use case": "https://www.drupal.org/files/issues/2020-07-14/default_content_yaml-2933777-33.patch"
             },
