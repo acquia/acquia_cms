@@ -37,7 +37,9 @@ events:
             # Prepare settings.php with the minimum required for Cloud.
             - chmod -R +w docroot/sites/default
             - cp docroot/sites/default/default.settings.php docroot/sites/default/settings.php
-            - echo "if (file_exists('/var/www/site-php')) { require '/var/www/site-php/orionacms/orionacms-settings.inc';}" >> docroot/sites/default/settings.php
+            # Place account agnostic Acquia Cloud hosting config in place. This
+            # will auto load database credentials and handle memcache configuration.
+            - bash scripts/place-acms-settings-file.sh
             # Clear any config directories that Cloud tries to set in the include file.
             - echo "\$config_directories = [];" >> docroot/sites/default/settings.php
             # Use the existing `config` directory we already have. Cloud gets confused
