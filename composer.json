@@ -116,7 +116,7 @@
         },
         "patches": {
             "acquia/drupal-environment-detector": {
-                "Add get site name function to environment-detector": "./patches/environment-detector.patch"
+                "Add get site name function to environment-detector": "https://github.com/acquia/drupal-environment-detector/commit/57c23ee0e4d3e2f37f9f59e191544ae055b45a09.patch"
             },
             "drupal/default_content": {
                 "2933777 - REST/Serializer improvements in core/contrib make it less suitable for default_content use case": "https://www.drupal.org/files/issues/2020-07-14/default_content_yaml-2933777-33.patch"
@@ -163,7 +163,6 @@
             "ln -s -f $PWD/misc $PROFILE_DIR",
             "ln -s -f $PWD/modules $MODULES_DIR",
             "ln -s -f $PWD/modules $PROFILE_DIR",
-            "ln -s -f $PWD/patches $PROFILE_DIR",
             "ln -s -f $PWD/themes $PROFILE_DIR",
             "ln -s -f $PWD/src $PROFILE_DIR",
             "ln -s -f $PWD/tests $PROFILE_DIR",
