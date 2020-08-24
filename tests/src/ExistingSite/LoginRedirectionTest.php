@@ -25,7 +25,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
     parent::setUp();
     $this->enabled = $this->container->get('config.factory')
       ->get('acquia_cms.settings')
-      ->get('user_login_redirect');
+      ->get('user_login_redirection');
   }
 
   /**
@@ -34,7 +34,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
   public function tearDown() {
     $this->container->get('config.factory')
       ->getEditable('acquia_cms.settings')
-      ->set('user_login_redirect', $this->enabled)
+      ->set('user_login_redirection', $this->enabled)
       ->save();
     parent::tearDown();
   }
@@ -54,7 +54,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
   public function testLoginDestination(bool $enable, string $destination, array $roles = []) : void {
     $this->container->get('config.factory')
       ->getEditable('acquia_cms.settings')
-      ->set('user_login_redirect', $enable)
+      ->set('user_login_redirection', $enable)
       ->save();
 
     $account = $this->createUser();
