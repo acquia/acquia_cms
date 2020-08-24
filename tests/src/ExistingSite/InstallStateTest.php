@@ -64,6 +64,18 @@ class InstallStateTest extends ExistingSiteBase {
   }
 
   /**
+   * Assert that entity clone has default settings for layout canvas field.
+   */
+  public function testEntityCloneConfig() {
+    // Check that the default entity clone config are set as expected.
+    $entity_clone_config = $this->config('entity_clone.settings');
+    $this->assertTrue($entity_clone_config->get('form_settings.cohesion_layout.default_value'));
+    $this->assertTrue($entity_clone_config->get('form_settings.cohesion_layout.hidden'));
+    $this->assertFalse($entity_clone_config->get('form_settings.cohesion_layout.disable'));
+
+  }
+
+  /**
    * Returns a config object by name.
    *
    * @param string $name
