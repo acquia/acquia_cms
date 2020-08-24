@@ -178,7 +178,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
       ],
       'site builder+user administrator without redirect' => [
         FALSE,
-        '/user/{uid}/moderation/dashboard',
+        '/user/{uid}',
         ['site_builder', 'user_administrator'],
       ],
       'content author+site builder+user administrator without redirect' => [
