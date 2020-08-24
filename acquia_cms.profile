@@ -8,9 +8,15 @@
 use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\Component\Serialization\Yaml;
-use Drupal\Core\Url;
-use Drupal\user\UserInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function acquia_cms_form_user_login_form_alter(array &$form) {
+  if (Drupal::config('acquia_cms.settings')->get('user_login_redirection')) {
+    $form['#submit'][] = '\Drupal\acquia_cms\RedirectHandler::submitForm';
+  }
+}
 
 /**
  * Implements hook_install_tasks_alter().
@@ -153,53 +159,5 @@ function acquia_cms_install_ui_kit(array &$install_state) {
   else {
     // We already imported the packages, so there's nothing else to do.
     return [];
-  }
-}
-
-/**
- * Set the redirection after user is logged in based on user roles.
- *
- * @param \Drupal\user\UserInterface $account
- *   The user account entity.
- */
-function acquia_cms_user_login(UserInterface $account) {
-  $config = \Drupal::config('acquia_cms.settings');
-  // Skip the redirection when redirection configuration is OFF.
-  if ($config->get('user_login_redirection') === 'OFF') {
-    return;
-  }
-
-  $destination = \Drupal::request()->query->get('destination');
-  if (!is_null($destination) && substr($destination, 0, strlen(DIRECTORY_SEPARATOR)) != '/') {
-    $destination = DIRECTORY_SEPARATOR . $destination;
-  }
-  // Execute the redirection if destination is not set and
-  // destination parameter is not starting with /user/*.
-  if (is_null($destination) || strpos($destination, '/user', 0) === 0) {
-    $content_roles = ['content_author',
-      'content_editor',
-      'content_administrator',
-      'administrator',
-    ];
-    $site_developer_roles = ['site_builder', 'developer'];
-    $user_admin_role = ['user_administrator'];
-    $roles = $account->getRoles();
-    if (count(array_intersect($content_roles, $roles)) > 0) {
-      $url = Url::fromUri('internal:/user/' . $account->id() . '/moderation/dashboard');
-      // Go to moderation-dashboard.
-      $response = new RedirectResponse($url->toString());
-      $response->send();
-    }
-    if (count(array_intersect($site_developer_roles, $roles)) > 0) {
-      // Go to Cohesion-admin.
-      $response = new RedirectResponse(Url::fromRoute('cohesion.settings')->toString());
-      $response->send();
-
-    }
-    if (count(array_intersect($user_admin_role, $roles)) > 0) {
-      // Go to Admin People.
-      $response = new RedirectResponse(Url::fromRoute('entity.user.collection')->toString());
-      $response->send();
-    }
   }
 }
