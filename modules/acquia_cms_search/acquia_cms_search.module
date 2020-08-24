@@ -106,7 +106,7 @@ function acquia_cms_search_search_api_server_insert(ServerInterface $server) {
  */
 function acquia_cms_search_views_pre_render(ViewExecutable $view) {
   if ($view->id() === 'search') {
-    $view->element['#attached']['library'][] = 'acquia_cms_search/facets';
+    $view->element['#attached']['library'][] = 'acquia_cms_search/page';
   }
 }
 

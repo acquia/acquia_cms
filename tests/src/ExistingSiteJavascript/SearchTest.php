@@ -1,11 +1,10 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_search\ExistingSite;
+namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 use Behat\Mink\Element\ElementInterface;
 use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
-use Drupal\views\Entity\View;
 use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
 
 /**
@@ -15,56 +14,6 @@ use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
  * @group acquia_cms
  */
 class SearchTest extends ExistingSiteSelenium2DriverTestBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $defaultTheme = 'cohesion_theme';
-
-  /**
-   * {@inheritdoc}
-   */
-  protected static $modules = [
-    'acquia_cms_search',
-    'acquia_cms_article',
-    'acquia_cms_event',
-    'acquia_cms_page',
-    'acquia_cms_person',
-    'acquia_cms_place',
-    'search_api_db',
-    'facets',
-  ];
-
-  /**
-   * Disable strict config schema checks in this test.
-   *
-   * Cohesion has a lot of config schema errors, and until they are all fixed,
-   * this test cannot pass unless we disable strict config schema checking
-   * altogether. Since strict config schema isn't critically important in
-   * testing this functionality, it's okay to disable it for now, but it should
-   * be re-enabled (i.e., this property should be removed) as soon as possible.
-   *
-   * @var bool
-   */
-  // @codingStandardsIgnoreStart
-  protected $strictConfigSchema = FALSE;
-  // @codingStandardsIgnoreEnd
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setUp();
-
-    /** @var \Drupal\views\ViewEntityInterface $view */
-    $view = View::load('search');
-    $display = &$view->getDisplay('default');
-    $display['display_options']['cache'] = [
-      'type' => 'none',
-      'options' => [],
-    ];
-    $view->save();
-  }
 
   /**
    * Tests the search functionality.
@@ -114,39 +63,38 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
     $this->drupalGet('/search');
     $page->fillField('keywords', 'Test');
     $page->pressButton('Search');
-    // Check if only Content Type Accordion is shown.
-    $element = $this->assertSession()->elementExists('css', '.coh-accordion-tabs-content-wrapper');
-    $this->assertTrue($this->assertLinkExists('Content Type', $element)->isVisible());
-    // Initially the dependent facets should not appear on the page.
-    $this->assertFalse($this->assertLinkExists('Article Type', $element)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Event Type', $element)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Person Type', $element)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Place Type', $element)->isVisible());
-    // Check if all the published nodes are visible and unpublished are not.
-    foreach ($node_types as $type) {
+
+    // Get the accordion container which holds the facets, and assert that,
+    // initially, the content type facet is visible but none of the dependent
+    // facets are.
+    $accordion_container = $this->assertSession()->elementExists('css', '.coh-accordion-tabs-content-wrapper');
+    $this->assertTrue($this->assertLinkExists('Content Type', $accordion_container)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Article Type', $accordion_container)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Event Type', $accordion_container)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Person Type', $accordion_container)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Place Type', $accordion_container)->isVisible());
+
+    // Facets should filter the content type and "type" taxonomy as expected,
+    // and we should only see published content.
+    foreach ($node_types as $node_type_id => $type) {
+      // Clear all selected facets.
+      $this->drupalGet('/search');
+
       $node_type_label = $type->label();
 
       $this->assertLinkExistsByTitle('Test published ' . $node_type_label);
       $this->assertLinkNotExistsByTitle('Test unpublished ' . $node_type_label);
-    }
-    // Check if facets filter the content type and term type is working
-    // as expected.
-    foreach ($node_types as $type) {
-      $node_type_label = $type->label();
-      $node_type_id = $type->id();
-      // Check if the selected content type from facets is shown.
-      $content_type_element = $this->assertLinkExists($node_type_label . ' (1)', $element);
-      $this->assertTrue($content_type_element->isVisible());
-      $content_type_element->click();
+
+      // Activate the facet for this content type.
+      $this->assertLinkExists($node_type_label . ' (1)', $accordion_container)->click();
 
       $this->assertLinkExistsByTitle('Test published ' . $node_type_label);
       $this->assertLinkNotExistsByTitle('Test unpublished ' . $node_type_label);
 
+      // Pages have no facets.
       if ($node_type_id !== 'page') {
-        // Open the Node Type Accordion.
-        $content_type_element = $this->assertLinkExists($node_type_label . ' Type', $element);
-        $this->assertTrue($content_type_element->isVisible());
-        $content_type_element->click();
+        // Open the accordion item for the "type" taxonomy of this content type.
+        $this->assertLinkExists($node_type_label . ' Type', $accordion_container)->click();
         // Check if term facet is working properly.
         $page->clickLink($node_type_label . ' Music (1)');
         // Check if node of the selected term is shown.
@@ -154,42 +102,39 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
         $this->assertLinkNotExistsByTitle('Test unpublished ' . $node_type_label);
         $assert_session->linkNotExists($node_type_label . ' Rocks (1)');
       }
-      // Going back to the initial state to check the other content type and
-      // term facets.
-      $this->drupalGet('/search');
     }
   }
 
   /**
-   * Assert that the link exists with the given title attribute.
+   * Asserts that a link exists with the given title attribute.
    *
    * @param string $title
-   *   The title of the node.
+   *   The title of the link.
    */
   private function assertLinkExistsByTitle(string $title) : void {
     $this->assertSession()->elementExists('css', 'a.coh-link[title="' . $title . '"]');
   }
 
   /**
-   * Assert that the link exists inside the accordion container.
+   * Asserts that a link exists.
    *
    * @param string $title
-   *   The title of the link field.
+   *   The title, text, or rel of the link.
    * @param \Behat\Mink\Element\ElementInterface $container
-   *   The accordion container element.
+   *   (optional) The element that contains the link.
    *
    * @return \Behat\Mink\Element\ElementInterface
-   *   The element that has the link.
+   *   The link element.
    */
   private function assertLinkExists(string $title, ElementInterface $container = NULL) : ElementInterface {
     return $this->assertSession()->elementExists('named', ['link', $title], $container);
   }
 
   /**
-   * Assert that the link doesn't exists with the given title attribute.
+   * Asserts that a link with the given title attribute doesn't exist.
    *
    * @param string $title
-   *   The title of the node.
+   *   The title of the link.
    */
   private function assertLinkNotExistsByTitle(string $title) : void {
     $this->assertSession()->elementNotExists('css', 'a.coh-link[title="' . $title . '"]');
