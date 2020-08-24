@@ -65,6 +65,10 @@ class InstallStateTest extends ExistingSiteBase {
 
   /**
    * Assert that entity clone has default settings for layout canvas field.
+   *
+   * Let's check that entity clone configuration is set to provide default
+   * value for layout canvas field and make sure that checkbox for it does
+   * not appears on the entity clone tab, while cloning the content.
    */
   public function testEntityCloneConfig() {
     // Check that the default entity clone config are set as expected.
@@ -72,7 +76,6 @@ class InstallStateTest extends ExistingSiteBase {
     $this->assertTrue($entity_clone_config->get('form_settings.cohesion_layout.default_value'));
     $this->assertTrue($entity_clone_config->get('form_settings.cohesion_layout.hidden'));
     $this->assertFalse($entity_clone_config->get('form_settings.cohesion_layout.disable'));
-
   }
 
   /**
