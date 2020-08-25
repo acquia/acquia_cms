@@ -30,6 +30,9 @@ events:
             - npm install
             - npm run build
             - cd -
+           # Theme directory is already copied to profiles in previous step without compiled css.
+           # So we need to copy compile css to theme in this step.
+            - cp -R themes/acquia_claro/css docroot/profiles/acquia_cms/themes/acquia_claro
       - cleanup:
           type: script
           script:
