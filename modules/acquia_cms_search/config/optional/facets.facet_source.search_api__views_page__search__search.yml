@@ -3,6 +3,9 @@ status: true
 dependencies: {  }
 id: search_api__views_page__search__search
 name: 'search_api:views_page__search__search'
-filter_key: null
-url_processor: query_string
-breadcrumb: {  }
+filter_key: ''
+url_processor: facets_pretty_paths
+breadcrumb:
+  active: false
+  before: true
+  group: false
