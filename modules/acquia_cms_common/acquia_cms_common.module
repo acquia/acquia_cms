@@ -5,11 +5,26 @@
  * Contains hook implementations for common, shared Acquia CMS functionality.
  */
 
+use Drupal\acquia_cms_common\Facade\BreadcrumbFacade;
 use Drupal\acquia_cms_common\Facade\MetatagFacade;
 use Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade;
 use Drupal\acquia_cms_common\Facade\WorkflowFacade;
 use Drupal\node\NodeTypeInterface;
 use Drupal\workbench_email\TemplateInterface;
+
+/**
+ * Implements hook_system_breadcrumb_alter().
+ */
+function acquia_cms_common_system_breadcrumb_alter(...$arguments) {
+  $module_handler = Drupal::moduleHandler();
+
+  // The facade requires Easy Breadcrumb and Facets to be available, so only
+  // invoke it if those two modules are installed, in order to avoid having hard
+  // dependencies on either of them.
+  if ($module_handler->moduleExists('easy_breadcrumb') && $module_handler->moduleExists('facets')) {
+    Drupal::classResolver(BreadcrumbFacade::class)->alter(...$arguments);
+  }
+}
 
 /**
  * Implements hook_ENTITY_TYPE_insert() for node types.
