@@ -61,21 +61,21 @@ class InstallStateTest extends ExistingSiteBase {
     $purge_logger_config = $this->config('purge.logger_channels');
     $channels = $purge_logger_config->get('channels');
     $this->assertSame('purger_acquia_purge_cee22bc3fe', $channels[3]['id']);
-  }
 
-  /**
-   * Assert that entity clone has default settings for layout canvas field.
-   *
-   * Let's check that entity clone configuration is set to provide default
-   * value for layout canvas field and make sure that checkbox for it does
-   * not appears on the entity clone tab, while cloning the content.
-   */
-  public function testEntityCloneConfig() {
-    // Check that the default entity clone config are set as expected.
-    $entity_clone_config = $this->config('entity_clone.settings');
-    $this->assertTrue($entity_clone_config->get('form_settings.cohesion_layout.default_value'));
-    $this->assertTrue($entity_clone_config->get('form_settings.cohesion_layout.hidden'));
-    $this->assertFalse($entity_clone_config->get('form_settings.cohesion_layout.disable'));
+    // Acquia CMS provides special configuration for the Entity Clone module in
+    // order to allow users to explicitly clone the layout canvas field (which,
+    // with this configuration, is the default action) if the entity being
+    // cloned has it. This way, the cloned entity will have its own instance of
+    // the layout canvas. This is needed because layout canvas fields are an
+    // "interesting" implementation of entity references and the default entity
+    // clone behavior will cause unintentional data loss. The configuration we
+    // are shipping implements Cohesion's documented best practice.
+    // @see https://support.cohesiondx.com/5.4/user-guide/entity-clone-module
+    $cohesion_layout_clone_settings = $this->config('entity_clone.settings')
+      ->get('form_settings.cohesion_layout');
+    $this->assertTrue($cohesion_layout_clone_settings['default_value']);
+    $this->assertTrue($cohesion_layout_clone_settings['hidden']);
+    $this->assertFalse($cohesion_layout_clone_settings['disable']);
   }
 
   /**
