@@ -5,20 +5,30 @@ dependencies:
     - search_api.index.content
     - views.view.search
   module:
+    - facets_pretty_paths
     - search_api
-id: event_type
-name: 'Event Type'
-url_alias: event_type
+third_party_settings:
+  facets_pretty_paths:
+    coder: taxonomy_term_name_coder
+id: search_category
+name: Category
+url_alias: category
 weight: 0
 min_count: 1
-show_only_one_result: true
-field_identifier: field_event_type
+show_only_one_result: false
+field_identifier: field_categories
 facet_source_id: 'search_api:views_page__search__search'
 widget:
-  type: dropdown
+  type: links
   config:
     show_numbers: true
-    default_option_label: Choose
+    soft_limit: 0
+    soft_limit_settings:
+      show_less_label: 'Show less'
+      show_more_label: 'Show more'
+    show_reset_link: false
+    reset_text: 'Show all'
+    hide_reset_when_no_selection: false
 query_operator: or
 use_hierarchy: false
 expand_hierarchy: false
@@ -39,16 +49,6 @@ processor_configs:
       sort: 30
     settings:
       sort: DESC
-  dependent_processor:
-    processor_id: dependent_processor
-    weights:
-      build: 5
-    settings:
-      content_type:
-        enable: true
-        condition: not_empty
-        values: ''
-        negate: false
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:
@@ -68,4 +68,4 @@ processor_configs:
     settings: {  }
 empty_behavior:
   behavior: none
-show_title: true
+show_title: false

@@ -5,14 +5,18 @@ dependencies:
     - search_api.index.content
     - views.view.search
   module:
+    - facets_pretty_paths
     - search_api
-id: categories
-name: Categories
-url_alias: categories
+third_party_settings:
+  facets_pretty_paths:
+    coder: taxonomy_term_name_coder
+id: search_article_type
+name: 'Article Type'
+url_alias: article_type
 weight: 0
 min_count: 1
-show_only_one_result: false
-field_identifier: field_categories
+show_only_one_result: true
+field_identifier: field_article_type
 facet_source_id: 'search_api:views_page__search__search'
 widget:
   type: links
@@ -45,12 +49,27 @@ processor_configs:
       sort: 30
     settings:
       sort: DESC
+  dependent_processor:
+    processor_id: dependent_processor
+    weights:
+      build: 5
+    settings:
+      search_content_type:
+        enable: true
+        condition: not_empty
+        values: ''
+        negate: false
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:
       sort: 40
     settings:
       sort: ASC
+  translate_entity:
+    processor_id: translate_entity
+    weights:
+      build: 5
+    settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
     weights:

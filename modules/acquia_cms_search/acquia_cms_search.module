@@ -12,6 +12,7 @@ use Drupal\field\FieldStorageConfigInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\ServerInterface;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_views_data().
@@ -97,6 +98,15 @@ function acquia_cms_search_search_api_server_insert(ServerInterface $server) {
         ->unsetThirdPartySetting('acquia_cms', 'search_server')
         ->save();
     }
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function acquia_cms_search_views_pre_render(ViewExecutable $view) {
+  if ($view->id() === 'search') {
+    $view->element['#attached']['library'][] = 'acquia_cms_search/page';
   }
 }
 
