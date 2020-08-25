@@ -9,6 +9,7 @@ use Drupal\Core\Routing\RedirectDestinationInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Handles special redirection logic for users after they log in.
@@ -35,16 +36,26 @@ final class RedirectHandler implements ContainerInjectionInterface {
   private $userStorage;
 
   /**
+   * Retrieves the currently active request object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  private $request;
+
+  /**
    * RedirectHandler constructor.
    *
    * @param \Drupal\Core\Routing\RedirectDestinationInterface $redirect_destination
    *   The redirect destination service.
    * @param \Drupal\Core\Entity\EntityStorageInterface $user_storage
    *   The user entity storage handler.
+   * @param \Symfony\Component\HttpFoundation\Request $current_request
+   *   The current active request object.
    */
-  public function __construct(RedirectDestinationInterface $redirect_destination, EntityStorageInterface $user_storage) {
+  public function __construct(RedirectDestinationInterface $redirect_destination, EntityStorageInterface $user_storage, Request $current_request) {
     $this->redirectDestination = $redirect_destination;
     $this->userStorage = $user_storage;
+    $this->request = $current_request;
   }
 
   /**
@@ -53,7 +64,8 @@ final class RedirectHandler implements ContainerInjectionInterface {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('redirect.destination'),
-      $container->get('entity_type.manager')->getStorage('user')
+      $container->get('entity_type.manager')->getStorage('user'),
+      $container->get('request_stack')->getCurrentRequest(),
     );
   }
 
@@ -86,6 +98,13 @@ final class RedirectHandler implements ContainerInjectionInterface {
     // If the redirect destination starts with '/user/', do our special sauce
     // redirect handling based on the role(s) the user has.
     if (strpos($destination, '/user/') === 0) {
+      // Removing destination query parameter value as the form request object
+      // target URL is getting overriden by the Symfony response object.
+      // @see \Drupal\node\Form\NodePreviewForm::submitForm()
+      $query = $this->request->query;
+      if ($query->has('destination')) {
+        $query->remove('destination');
+      }
       if ($this->isContributor($user)) {
         // @todo Don't redirect if Moderation Dashboard is not enabled.
         $url = Url::fromUri('internal:/user/' . $user->id() . '/moderation/dashboard');

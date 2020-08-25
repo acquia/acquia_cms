@@ -38,13 +38,16 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
    */
   protected static $modules = [
     // Cohesion's core module has an accidental dependency on
-    // cohesion_custom_styles when using the Cohesion text filter with certain
-    // CKEditor plugins enabled -- it tries all custom style entities, but
-    // without checking if that entity type is even defined first. D'oh! To work
-    // around this bug, we enable cohesion_custom_styles in the test.
+    // cohesion_custom_styles and cohesion_website_settings when using the
+    // Cohesion text filter with certain CKEditor plugins enabled -- it tries
+    // all custom style and website settings entities, but without checking if
+    // that entity type is even defined first. D'oh! To work around this bug, we
+    // enable cohesion_custom_styles and cohesion_website_settings in the test.
     // @todo Remove this when Cohesion fixes the bug.
     // @see \Drupal\cohesion\Plugin\CKEditorPlugin\DX8InlineStylesCombo::getStyleSet()
+    // @see \Drupal\cohesion\ApiPluginBase::prepareData()
     'cohesion_custom_styles',
+    'cohesion_website_settings',
     'media_library',
   ];
 
