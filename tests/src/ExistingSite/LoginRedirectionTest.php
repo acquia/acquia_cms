@@ -2,6 +2,8 @@
 
 namespace Drupal\Tests\acquia_cms\ExistingSite;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -10,6 +12,8 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * @group acquia_cms
  */
 class LoginRedirectionTest extends ExistingSiteBase {
+
+  use StringTranslationTrait;
 
   /**
    * Whether login redirect handling was enabled before the test case began.
@@ -185,6 +189,183 @@ class LoginRedirectionTest extends ExistingSiteBase {
         FALSE,
         '/user/{uid}/moderation/dashboard',
         ['content_author', 'site_builder', 'user_administrator'],
+      ],
+    ];
+  }
+
+  /**
+   * Tests special redirect handling upon user login with destination.
+   *
+   * @param bool $enable
+   *   Whether or not to enable special redirect handling.
+   * @param string $destination
+   *   The expected destination upon logging in.
+   * @param string $role
+   *   Additional user roles to apply to the account being logged in.
+   *
+   * @dataProvider providerDestinationParameter
+   */
+  public function testDestinationParameter(bool $enable, string $destination, string $role) : void {
+    $this->container->get('config.factory')
+      ->getEditable('acquia_cms.settings')
+      ->set('user_login_redirection', $enable)
+      ->save();
+
+    $account = $this->createUser();
+    $account->addRole($role);
+    $account->save();
+    $destination = str_replace('{uid}', $account->id(), $destination);
+    $edit = [
+      'name' => $account->getAccountName(),
+      'pass' => $account->passRaw,
+    ];
+
+    // If user redirection is enabled check destination parameter redirection.
+    if ($enable) {
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => 'user']]);
+      $this->assertSession()->addressEquals($destination);
+      $this->drupalLogout();
+
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => '/user']]);
+      $this->assertSession()->addressEquals($destination);
+      $this->drupalLogout();
+
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => '/user/']]);
+      $this->assertSession()->addressEquals($destination);
+      $this->drupalLogout();
+
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => "/user/{$account->id()}"]]);
+      $this->assertSession()->addressEquals($destination);
+      $this->drupalLogout();
+
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => "/user/{$account->id()}/edit"]]);
+      $this->assertSession()->addressEquals("/user/{$account->id()}/edit");
+      $this->drupalLogout();
+
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => '/user-stories']]);
+      $this->assertSession()->addressEquals('/user-stories');
+      $this->drupalLogout();
+
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => 'node/add']]);
+      $this->assertSession()->addressEquals('node/add');
+      $this->drupalLogout();
+
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => '']]);
+      $this->assertSession()->addressEquals($destination);
+      $this->drupalLogout();
+    }
+    else {
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => 'user']]);
+      $this->assertSession()->addressEquals("/user/{$account->id()}");
+      $this->drupalLogout();
+
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => '/user']]);
+      $this->assertSession()->addressEquals("/user/{$account->id()}");
+      $this->drupalLogout();
+
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => '/user/']]);
+      $this->assertSession()->addressEquals("/user/{$account->id()}");
+      $this->drupalLogout();
+
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => "/user/{$account->id()}"]]);
+      $this->assertSession()->addressEquals("/user/{$account->id()}");
+      $this->drupalLogout();
+
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => "/user/{$account->id()}/edit"]]);
+      $this->assertSession()->addressEquals("/user/{$account->id()}/edit");
+      $this->drupalLogout();
+
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => '/user-stories']]);
+      $this->assertSession()->addressEquals('/user-stories');
+      $this->drupalLogout();
+
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => 'node/add']]);
+      $this->assertSession()->addressEquals('node/add');
+      $this->drupalLogout();
+
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => '']]);
+      $this->assertSession()->addressEquals($destination);
+      $this->drupalLogout();
+    }
+  }
+
+  /**
+   * Data provider for ::testDestinationParameter().
+   *
+   * @return array[]
+   *   Sets of arguments to pass to the test method.
+   */
+  public function providerDestinationParameter() : array {
+    return [
+      'content author with redirect' => [
+        TRUE,
+        '/user/{uid}/moderation/dashboard',
+        'content_author',
+      ],
+      'content editor with redirect' => [
+        TRUE,
+        '/user/{uid}/moderation/dashboard',
+        'content_editor',
+      ],
+      'content administrator with redirect' => [
+        TRUE,
+        '/user/{uid}/moderation/dashboard',
+        'content_administrator',
+      ],
+      'administrator with redirect' => [
+        TRUE,
+        '/user/{uid}/moderation/dashboard',
+        'administrator',
+      ],
+      'site builder with redirect' => [
+        TRUE,
+        '/admin/cohesion',
+        'site_builder',
+      ],
+      'developer with redirect' => [
+        TRUE,
+        '/admin/cohesion',
+        'developer',
+      ],
+      'user administrator with redirect' => [
+        TRUE,
+        '/admin/people',
+        'user_administrator',
+      ],
+      'site builder without redirect' => [
+        FALSE,
+        '/user/{uid}',
+        'site_builder',
+      ],
+      'developer without redirect' => [
+        FALSE,
+        '/user/{uid}',
+        'developer',
+      ],
+      'user administrator without redirect' => [
+        FALSE,
+        '/user/{uid}',
+        'user_administrator',
+      ],
+      'content administrator without redirect' => [
+        FALSE,
+        '/user/{uid}/moderation/dashboard',
+        'content_administrator',
+      ],
+      'content author without redirect' => [
+        FALSE,
+        '/user/{uid}/moderation/dashboard',
+        'content_author',
+      ],
+      'content editor without redirect' => [
+        FALSE,
+        '/user/{uid}/moderation/dashboard',
+        'content_editor',
+      ],
+      'administrator without redirect' => [
+        FALSE,
+        '/user/{uid}/moderation/dashboard',
+        'administrator',
       ],
     ];
   }

@@ -5,7 +5,7 @@ namespace Drupal\acquia_cms;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Routing\RedirectDestinationInterface;
+use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -22,13 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 final class RedirectHandler implements ContainerInjectionInterface {
 
   /**
-   * The redirect destination service.
-   *
-   * @var \Drupal\Core\Routing\RedirectDestinationInterface
-   */
-  private $redirectDestination;
-
-  /**
    * The user entity storage handler.
    *
    * @var \Drupal\Core\Entity\EntityStorageInterface
@@ -43,19 +36,26 @@ final class RedirectHandler implements ContainerInjectionInterface {
   private $request;
 
   /**
+   * The path validator.
+   *
+   * @var \Drupal\Core\Path\PathValidatorInterface
+   */
+  protected $pathValidator;
+
+  /**
    * RedirectHandler constructor.
    *
-   * @param \Drupal\Core\Routing\RedirectDestinationInterface $redirect_destination
-   *   The redirect destination service.
    * @param \Drupal\Core\Entity\EntityStorageInterface $user_storage
    *   The user entity storage handler.
    * @param \Symfony\Component\HttpFoundation\Request $current_request
    *   The current active request object.
+   * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
+   *   The path validator.
    */
-  public function __construct(RedirectDestinationInterface $redirect_destination, EntityStorageInterface $user_storage, Request $current_request) {
-    $this->redirectDestination = $redirect_destination;
+  public function __construct(EntityStorageInterface $user_storage, Request $current_request, PathValidatorInterface $path_validator) {
     $this->userStorage = $user_storage;
     $this->request = $current_request;
+    $this->pathValidator = $path_validator;
   }
 
   /**
@@ -63,9 +63,9 @@ final class RedirectHandler implements ContainerInjectionInterface {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('redirect.destination'),
       $container->get('entity_type.manager')->getStorage('user'),
       $container->get('request_stack')->getCurrentRequest(),
+      $container->get('path.validator')
     );
   }
 
@@ -88,16 +88,21 @@ final class RedirectHandler implements ContainerInjectionInterface {
    *   The form state.
    */
   private function handleRedirect(FormStateInterface $form_state) {
-    $destination = $this->redirectDestination->get();
+    $destination = $this->request->query->get('destination');
 
     // This is set by the user login form.
     // @see \Drupal\user\Form\UserLoginForm::validateAuthentication()
     $user = $this->userStorage->load($form_state->get('uid'));
     assert($user instanceof AccountInterface);
 
+    $route_name = '';
+    $destination_url_object = $this->pathValidator->getUrlIfValid($destination);
+    if (!empty($destination_url_object)) {
+      $route_name = $destination_url_object->getRouteName();
+    }
     // If the redirect destination starts with '/user/', do our special sauce
     // redirect handling based on the role(s) the user has.
-    if (strpos($destination, '/user/') === 0) {
+    if (is_null($destination) || $destination === '' || in_array($route_name, ['user.page', 'entity.user.canonical'])) {
       // Removing destination query parameter value as the form request object
       // target URL is getting overriden by the Symfony response object.
       // @see \Drupal\node\Form\NodePreviewForm::submitForm()
