@@ -83,8 +83,6 @@ class BreadcrumbTest extends ExistingSiteBase {
    * @dataProvider providerBreadcrumb
    */
   public function testBreadcrumb(string $node_type, string $sub_type, array $expected_breadcrumb) : void {
-    $assert_session = $this->assertSession();
-
     $vocabulary = Vocabulary::load($node_type . '_type');
     $sub_type = $this->createTerm($vocabulary, ['name' => $sub_type]);
 
@@ -94,6 +92,54 @@ class BreadcrumbTest extends ExistingSiteBase {
       'moderation_state' => 'published',
     ]);
     $this->drupalGet($node->toUrl());
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertBreadcrumb($expected_breadcrumb);
+  }
+
+  /**
+   * Data provider for ::testBreadcrumbNoSubType().
+   *
+   * @return array[]
+   *   Sets of arguments to pass to the test method.
+   */
+  public function providerNoSubType() : array {
+    $map = function (array $arguments) : array {
+      unset($arguments[1], $arguments[2][1]);
+      return $arguments;
+    };
+    return array_map($map, $this->providerBreadcrumb());
+  }
+
+  /**
+   * Tests the breadcrumbs generated content without a sub-type.
+   *
+   * @param string $node_type
+   *   The content type under test.
+   * @param array[] $expected_breadcrumb
+   *   The expected breadcrumb links, in their expected order. Each element
+   *   should be a tuple containing the text of the link, and its target path.
+   *
+   * @dataProvider providerNoSubType
+   */
+  public function testBreadcrumbNoSubType(string $node_type, array $expected_breadcrumb) : void {
+    $node = $this->createNode([
+      'type' => $node_type,
+      'moderation_state' => 'published',
+    ]);
+    $this->drupalGet($node->toUrl());
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertBreadcrumb($expected_breadcrumb);
+  }
+
+  /**
+   * Asserts the presence of a set of breadcrumb links.
+   *
+   * @param array[] $expected_breadcrumb
+   *   The expected breadcrumb links, in their expected order. Each element
+   *   should be a tuple containing the text of the link, and its target path.
+   */
+  private function assertBreadcrumb(array $expected_breadcrumb) : void {
+    $assert_session = $this->assertSession();
 
     // Create an array of tuples containing the text and target path of every
     // breadcrumb link.
