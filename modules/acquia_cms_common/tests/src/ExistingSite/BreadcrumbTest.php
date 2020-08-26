@@ -149,7 +149,7 @@ class BreadcrumbTest extends ExistingSiteBase {
         $link->getAttribute('href'),
       ];
     };
-    $breadcrumb = array_map($map, $assert_session->elementExists('css', '#system-breadcrumb + ol')->findAll('css', 'a'));
+    $breadcrumb = array_map($map, $assert_session->elementExists('css', 'h2#system-breadcrumb + ol')->findAll('css', 'a'));
 
     $assert_session->statusCodeEquals(200);
     $this->assertSame($expected_breadcrumb, $breadcrumb);
