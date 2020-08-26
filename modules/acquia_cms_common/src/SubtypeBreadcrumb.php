@@ -117,6 +117,7 @@ final class SubtypeBreadcrumb implements BreadcrumbBuilderInterface {
    */
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
+    $breadcrumb->addCacheContexts(['route']);
 
     $settings = $this->getSettings($route_match);
     /** @var \Drupal\node\NodeInterface $node */
