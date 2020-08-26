@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - cohesion
+    - user
+  theme:
+    - cohesion_theme
+id: user_login
+theme: cohesion_theme
+region: dx8_hidden
+weight: 0
+provider: null
+plugin: user_login_block
+settings:
+  id: user_login_block
+  label: 'User login'
+  provider: user
+  label_display: '0'
+visibility:
+  cohesion_master_template:
+    id: cohesion_master_template
+    using_master_template: 0
+    negate: false
