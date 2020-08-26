@@ -1,0 +1,815 @@
+@import "00-config/_colors.scss";
+@import "00-config/_fonts.scss";
+
+.acquia-cms-toolbar {
+  .toolbar {
+    box-shadow: -1px 0 3px 1px rgba(0, 0, 0, 0.3333);
+
+    a {
+      @include font-primary-bold;
+      transition: all, 0.2s;
+      font-size: 14px;
+    }
+
+    .toolbar-bar {
+      box-shadow: none;
+      background-color: $df-grayish-navy;
+
+      .toolbar-tab {
+        > .toolbar-item.is-active {
+          background-color: rgba(255, 255, 255, .03);
+          background-image: none;
+          text-decoration: none;
+        }
+
+        > .toolbar-item {
+          &:focus {
+            background-color: rgba(255, 255, 255, .03);
+            background-image: none;
+            text-decoration: none;
+          }
+        }
+      }
+    }
+
+    .toolbar-menu {
+      background: $white;
+
+      .toolbar-menu {
+        .toolbar-icon.toolbar-handle {
+          &:before {
+            background-image: url(../../../themes/acquia_claro/scss/images/acacac/chevron-outline-disc-down.svg);
+            background-size: 100%;
+          }
+
+          &:hover {
+            &:before {
+              background-image: url(../../../themes/acquia_claro/scss/images/168ec4/chevron-outline-disc-down.svg);
+            }
+          }
+        }
+
+        .toolbar-icon.toolbar-handle.open {
+          &:before {
+            background-image: url(../../../themes/acquia_claro/scss/images/168ec4/chevron-outline-disc-close.svg);
+            background-size: 100%;
+          }
+        }
+
+        a {
+          color: $df-bright-grey;
+
+          &:hover {
+            color: $df-blue;
+          }
+        }
+      }
+
+      .toolbar-box {
+        &:hover {
+          .toolbar-icon.toolbar-handle {
+            &:before {
+              background-image: url(../../../themes/acquia_claro/scss/images/168ec4/chevron-outline-disc-down.svg);
+            }
+          }
+
+          .toolbar-icon.toolbar-handle.open {
+            &:before {
+              background-image: url(../../../themes/acquia_claro/scss/images/168ec4/chevron-outline-disc-close.svg);
+              background-size: 100%;
+            }
+          }
+        }
+      }
+    }
+
+    .toolbar-tray-horizontal {
+      ul {
+        ul {
+          li.menu-item {
+            &:first-child {
+              border: none;
+              border-top: 1px solid $df-blue;
+            }
+          }
+        }
+      }
+
+      .menu-item {
+        + {
+          .menu-item {
+            border-right: none;
+            border-left: none;
+          }
+        }
+
+        &:last-child {
+          border-right: none;
+          border-left: none;
+        }
+      }
+
+      box-shadow: -2px 1px 3px 1px rgba(0, 0, 0, 0.3333);
+      border-bottom: 1px solid $white;
+
+      .toolbar-toggle-orientation {
+        border: none;
+      }
+    }
+
+    .toolbar-tray-vertical {
+      box-shadow: -2px 2px 12px rgba(0, 0, 0, 0.85);
+      border: none;
+
+      .menu-item {
+        + {
+          .menu-item {
+            border: 0 none;
+          }
+        }
+      }
+
+      .toolbar-menu {
+        a {
+          color: $df-bright-grey;
+
+          &:hover {
+            color: $df-blue;
+            text-decoration: none;
+          }
+
+          &:focus {
+            color: $df-blue;
+            text-decoration: none;
+          }
+        }
+
+        ul {
+          ul {
+            border: none;
+          }
+        }
+      }
+    }
+
+    .toolbar-tray {
+      .menu-item--active-trail {
+        > .toolbar-box {
+          a {
+            color: $df-blue;
+            text-decoration: none;
+            font-weight: bold;
+          }
+        }
+      }
+
+      a.is-active {
+        color: $df-blue;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      background-color: $white;
+    }
+
+    .toolbar-toggle-orientation {
+      background-color: $white;
+    }
+
+    .toolbar-icon.toolbar-handle {
+      > span {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+
+      &:focus {
+        background-color: transparent;
+      }
+
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/acacac/chevron-outline-disc-down.svg);
+        transition: .25s;
+      }
+
+      &:hover {
+        &:before {
+          background-image: url(../../../themes/acquia_claro/scss/images/168ec4/chevron-outline-disc-down.svg);
+        }
+      }
+    }
+
+    .toolbar-icon.toolbar-handle.open {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/ffcfcf/chevron-outline-disc-close.svg) !important;
+        transform: rotate(180deg);
+      }
+    }
+
+    .level-3 {
+      a {
+        color: $df-light-grey !important;
+      }
+    }
+
+    .level-4 {
+      a {
+        color: $df-light-grey !important;
+      }
+    }
+
+    .menu-item {
+      &:hover {
+        background-color: $white;
+      }
+    }
+
+    .menu-item--expanded {
+      background-color: $white;
+    }
+  }
+
+  .toolbar-tray {
+    .toolbar-menu {
+      a {
+        background: transparent;
+        color: $df-bright-grey;
+      }
+
+      span {
+        background: transparent;
+        color: $df-bright-grey;
+      }
+
+      li {
+        background: $white;
+      }
+    }
+
+    ul {
+      li.menu-item {
+        border: none;
+      }
+    }
+
+    a {
+      color: $df-bright-grey;
+    }
+
+    span {
+      display: block;
+      padding: 1em 1.3em;
+      color: $df-bright-grey;
+    }
+  }
+
+  .toolbar-oriented {
+    .user-toolbar-tab {
+      float: right;
+    }
+  }
+
+  .toolbar-tray-horizontal {
+    a {
+      &:hover {
+        color: $df-blue;
+        text-decoration: none;
+      }
+
+      &:active {
+        color: $df-blue;
+        text-decoration: none;
+      }
+
+      &:focus {
+        background: $white;
+        color: $df-blue;
+        text-decoration: none;
+      }
+    }
+
+    .menu-item--expanded {
+      &:hover {
+        > a {
+          color: $df-blue !important;
+        }
+
+        > .toolbar-box {
+          > a {
+            color: $df-blue !important;
+          }
+        }
+
+        .toolbar-icon-admin-toolbar-tools-help {
+          &:before {
+            background-image: url(../../../themes/acquia_claro/scss/images/168ec4/drupal-8.svg);
+          }
+        }
+
+        .toolbar-icon-system-admin-content {
+          &:before {
+            background-image: url(../../../themes/acquia_claro/scss/images/168ec4/file.svg);
+          }
+        }
+
+        .toolbar-icon-system-admin-structure {
+          &:before {
+            background-image: url(../../../themes/acquia_claro/scss/images/168ec4/orgchart.svg);
+          }
+        }
+
+        .toolbar-icon-system-themes-page {
+          &:before {
+            background-image: url(../../../themes/acquia_claro/scss/images/168ec4/paintbrush.svg);
+          }
+        }
+
+        .toolbar-icon-entity-user-collection {
+          &:before {
+            background-image: url(../../../themes/acquia_claro/scss/images/168ec4/people.svg);
+          }
+        }
+
+        .toolbar-icon-system-modules-list {
+          &:before {
+            background-image: url(../../../themes/acquia_claro/scss/images/168ec4/puzzlepiece.svg);
+          }
+        }
+
+        .toolbar-icon-system-admin-config {
+          &:before {
+            background-image: url(../../../themes/acquia_claro/scss/images/168ec4/wrench.svg);
+          }
+        }
+
+        .toolbar-icon-system-admin-reports {
+          &:before {
+            background-image: url(../../../themes/acquia_claro/scss/images/168ec4/barchart.svg);
+          }
+        }
+      }
+    }
+
+    .menu-item {
+      a {
+        &:focus {
+          background: $white;
+        }
+      }
+    }
+
+    ul {
+      li.menu-item--expanded {
+        ul {
+          li.menu-item--expanded {
+            position: relative;
+            background-image: none;
+
+            &:after {
+              position: absolute;
+              top: 50%;
+              right: 5px;
+              color: #8eacc0;
+              font-size: 16px;
+              transform: translateY(-8px);
+              transition: all .2s;
+              content: url(../../../themes/acquia_claro/scss/images/0084d7/chevron-right.svg);
+              pointer-events: none;
+            }
+
+            &:hover {
+              &:after {
+                transform: translate(6px, -8px);
+                content: url(../../../themes/acquia_claro/scss/images/0084d7/chevron-right.svg);
+              }
+            }
+          }
+        }
+
+        .menu-item {
+          &:hover {
+            ul {
+              margin: -39px 0 0 200px;
+            }
+          }
+        }
+      }
+
+      li.menu-item {
+        border-top: none transparent;
+        border-right: none;
+        border-bottom: none;
+        border-left: none;
+      }
+
+      ul {
+        li {
+          li.menu-item {
+            &:first-child {
+              border-top: none !important;
+            }
+          }
+        }
+      }
+    }
+
+    .toolbar-menu {
+      ul {
+        .toolbar-icon {
+          padding: 1em 12px;
+        }
+      }
+    }
+  }
+
+  .level-1 {
+    .toolbar-handle.open {
+      background: #3b3b3b !important;
+    }
+  }
+
+  .toolbar-tray-vertical {
+    .level-2 {
+      background: #3b3b3b !important;
+    }
+
+    .level-3 {
+      background: #434343 !important;
+
+      a {
+        padding-left: 2.75em !important;
+      }
+    }
+
+    .level-4 {
+      background: #4c4c4c !important;
+    }
+
+    .level-5 {
+      background: #545454 !important;
+    }
+
+    .toolbar-icon-admin-toolbar-tools-help {
+      &:before {
+        margin-left: 0;
+      }
+
+      text-indent: 0;
+      transition: none;
+    }
+  }
+
+  .level-2 {
+    .toolbar-handle.open {
+      background: #434343 !important;
+    }
+  }
+
+  .level-3 {
+    .toolbar-handle.open {
+      background: #4c4c4c !important;
+    }
+  }
+
+  .level-4 {
+    .toolbar-handle.open {
+      background: #545454 !important;
+    }
+  }
+
+  .toolbar-handle.open {
+    border-top-left-radius: 10px;
+  }
+
+  .toolbar-box {
+    a {
+      &:focus {
+        background: $white;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .toolbar-icon-admin-toolbar-tools-help {
+    &:before {
+      padding: 0px;
+      margin-left: 7px;
+      background-image: url(../../../themes/acquia_claro/scss/images/acacac/drupal-8.svg);
+    }
+
+    &:hover {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/drupal-8.svg);
+      }
+    }
+
+    &:active {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/drupal-8.svg);
+      }
+    }
+  }
+
+  .toolbar-icon-system-admin-content {
+    &:before {
+      background-image: url(../../../themes/acquia_claro/scss/images/acacac/file.svg);
+    }
+
+    &:hover {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/file.svg);
+      }
+    }
+
+    &:active {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/file.svg);
+      }
+    }
+  }
+
+  .toolbar-icon-system-admin-structure {
+    &:before {
+      background-image: url(../../../themes/acquia_claro/scss/images/acacac/orgchart.svg);
+    }
+
+    &:hover {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/orgchart.svg);
+      }
+    }
+
+    &:active {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/orgchart.svg);
+      }
+    }
+  }
+
+  .toolbar-icon-system-themes-page {
+    &:before {
+      background-image: url(../../../themes/acquia_claro/scss/images/acacac/paintbrush.svg);
+    }
+
+    &:hover {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/paintbrush.svg);
+      }
+    }
+
+    &:active {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/paintbrush.svg);
+      }
+    }
+  }
+
+  .toolbar-icon-entity-user-collection {
+    &:before {
+      background-image: url(../../../themes/acquia_claro/scss/images/acacac/people.svg);
+    }
+
+    &:hover {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/people.svg);
+      }
+    }
+
+    &:active {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/people.svg);
+      }
+    }
+  }
+
+  .toolbar-icon-system-modules-list {
+    &:before {
+      background-image: url(../../../themes/acquia_claro/scss/images/acacac/puzzlepiece.svg);
+    }
+
+    &:hover {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/puzzlepiece.svg);
+      }
+    }
+
+    &:active {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/puzzlepiece.svg);
+      }
+    }
+  }
+
+  .toolbar-icon-system-admin-config {
+    &:before {
+      background-image: url(../../../themes/acquia_claro/scss/images/acacac/wrench.svg);
+    }
+
+    &:hover {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/wrench.svg);
+      }
+    }
+
+    &:active {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/wrench.svg);
+      }
+    }
+  }
+
+  .toolbar-icon-system-admin-reports {
+    &:before {
+      background-image: url(../../../themes/acquia_claro/scss/images/acacac/barchart.svg);
+    }
+
+    &:hover {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/barchart.svg);
+      }
+    }
+
+    &:active {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/barchart.svg);
+      }
+    }
+  }
+
+  .toolbar-icon-help-main {
+    &:before {
+      background-image: url(../../../themes/acquia_claro/scss/images/acacac/questionmark-disc.svg);
+    }
+
+    &:hover {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/questionmark-disc.svg);
+      }
+    }
+
+    &:active {
+      &:before {
+        background-image: url(../../../themes/acquia_claro/scss/images/168ec4/questionmark-disc.svg);
+      }
+    }
+  }
+
+  .toolbar-icon-admin-toolbar-tools-help.is-active {
+    &:before {
+      background-image: url(../../../themes/acquia_claro/scss/images/168ec4/drupal-8.svg);
+    }
+  }
+
+  .toolbar-icon-system-admin-content.is-active {
+    &:before {
+      background-image: url(../../../themes/acquia_claro/scss/images/168ec4/file.svg);
+    }
+  }
+
+  .toolbar-icon-system-admin-structure.is-active {
+    &:before {
+      background-image: url(../../../themes/acquia_claro/scss/images/168ec4/orgchart.svg);
+    }
+  }
+
+  .toolbar-icon-system-themes-page.is-active {
+    &:before {
+      background-image: url(../../../themes/acquia_claro/scss/images/168ec4/paintbrush.svg);
+    }
+  }
+
+  .toolbar-icon-entity-user-collection.is-active {
+    &:before {
+      background-image: url(../../../themes/acquia_claro/scss/images/168ec4/people.svg);
+    }
+  }
+
+  .toolbar-icon-system-modules-list.is-active {
+    &:before {
+      background-image: url(../../../themes/acquia_claro/scss/images/168ec4/puzzlepiece.svg);
+    }
+  }
+
+  .toolbar-icon-system-admin-config.is-active {
+    &:before {
+      background-image: url(../../../themes/acquia_claro/scss/images/168ec4/wrench.svg);
+    }
+  }
+
+  .toolbar-icon-system-admin-reports.is-active {
+    &:before {
+      background-image: url(../../../themes/acquia_claro/scss/images/168ec4/barchart.svg);
+    }
+  }
+
+  .menu-item--expanded {
+    &:hover {
+      .toolbar-icon-help-main {
+        &:before {
+          background-image: url(../../../themes/acquia_claro/scss/images/168ec4/questionmark-disc.svg);
+        }
+      }
+    }
+  }
+
+  .toolbar-icon-help-main.is-active {
+    &:before {
+      background-image: url(../../../themes/acquia_claro/scss/images/168ec4/questionmark-disc.svg);
+    }
+  }
+}
+
+#toolbar-item-administration-search-tray {
+  label {
+    background: transparent;
+    color: $df-bright-grey !important;
+  }
+}
+
+[dir="rtl"] {
+  .acquia-cms-toolbar {
+    .toolbar {
+      .toolbar-tray-horizontal {
+        .menu-item {
+          + {
+            .menu-item {
+              border-right: none;
+              border-left: none;
+            }
+          }
+        }
+      }
+    }
+
+    .toolbar-tray-horizontal {
+      ul {
+        li.menu-item--expanded {
+          ul {
+            li.menu-item--expanded {
+              position: relative;
+              background-image: none;
+
+              &:after {
+                top: 30%;
+                right: auto;
+                left: 5px;
+                transform: scaleX(-1);
+                filter: FlipH;
+                -moz-transform: scaleX(-1);
+                -o-transform: scaleX(-1);
+                -webkit-transform: scaleX(-1);
+                -ms-filter: "FlipH";
+              }
+
+              &:hover {
+                &:after {
+                  transform: scaleX(-1);
+                  transform-origin: 40% top;
+                  filter: FlipH;
+                  -moz-transform: scaleX(-1);
+                  -o-transform: scaleX(-1);
+                  -webkit-transform: scaleX(-1);
+                  -ms-filter: "FlipH";
+                }
+              }
+            }
+          }
+
+          .menu-item {
+            &:hover {
+              ul {
+                margin: -39px 200px 0 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.toolbar {
+  .toolbar-tray-vertical {
+    .level-3 {
+      ul {
+        margin-left: 0 !important;
+      }
+    }
+  }
+}
+
+.toolbar-tray-horizontal {
+  .toolbar-menu {
+    &:not(:first-child) {
+      li.menu-item--expanded {
+        > a {
+          &:focus {
+            background-image: none !important;
+          }
+        }
+      }
+    }
+  }
+}
