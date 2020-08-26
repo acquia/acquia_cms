@@ -103,6 +103,17 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
         $assert_session->linkNotExists($node_type_label . ' Rocks (1)');
       }
     }
+
+    // Assert that the search by title shows the proper result.
+    foreach ($node_types as $node_type_id => $type) {
+      $this->drupalGet('/search');
+
+      $node_type_label = $type->label();
+      $page->fillField('keywords', 'Test published ' . $node_type_label);
+      $page->pressButton('Search');
+
+      $this->assertLinkExistsByTitle('Test published ' . $node_type_label);
+    }
   }
 
   /**
