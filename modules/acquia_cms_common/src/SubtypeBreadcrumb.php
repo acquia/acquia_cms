@@ -84,18 +84,18 @@ final class SubtypeBreadcrumb implements BreadcrumbBuilderInterface {
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The current route match.
    *
-   * @return array|null
+   * @return array
    *   The sub-type settings for the type of node being viewed, if the node type
    *   defines those settings. If it does not, or we are not viewing a node
-   *   page, nothing is returned.
+   *   page, an empty array is returned.
    */
-  private function getSettings(RouteMatchInterface $route_match) : ?array {
+  private function getSettings(RouteMatchInterface $route_match) : array {
     if ($route_match->getRouteName() === 'entity.node.canonical') {
       /** @var \Drupal\node\NodeInterface $node */
       $node = $route_match->getParameter('node');
-      return $node->type->entity->getThirdPartySetting('acquia_cms', 'subtype');
+      return $node->type->entity->getThirdPartySetting('acquia_cms', 'subtype', []);
     }
-    return NULL;
+    return [];
   }
 
   /**
@@ -104,17 +104,9 @@ final class SubtypeBreadcrumb implements BreadcrumbBuilderInterface {
   public function applies(RouteMatchInterface $route_match) {
     $settings = $this->getSettings($route_match);
 
-    if ($settings) {
-      /** @var \Drupal\node\NodeInterface $node */
-      $node = $route_match->getParameter('node');
-
-      // We can only build a breadcrumb if we are viewing a node which is
-      // referencing a sub-type, and the referenced facet exists.
-      return (
-        $node->hasField($settings['field']) &&
-        $node->get($settings['field'])->isEmpty() === FALSE &&
-        $this->facetStorage->load($settings['facet'])
-      );
+    if (isset($settings['facet'])) {
+      $facet = $this->facetStorage->load($settings['facet']);
+      return isset($facet);
     }
     // If no sub-type settings are available, we cannot generate a breadcrumb.
     return FALSE;
@@ -129,20 +121,24 @@ final class SubtypeBreadcrumb implements BreadcrumbBuilderInterface {
     $settings = $this->getSettings($route_match);
     /** @var \Drupal\node\NodeInterface $node */
     $node = $route_match->getParameter('node');
+    $breadcrumb->addCacheableDependency($node);
+
     /** @var \Drupal\facets\FacetInterface $facet */
     $facet = $this->facetStorage->load($settings['facet']);
+    $breadcrumb->addCacheableDependency($facet);
 
     $link = $this->getListPageLink($node->type->entity, $facet);
     $breadcrumb->addLink($link);
 
-    /** @var \Drupal\taxonomy\TermInterface $term */
-    $term = $node->get($settings['field'])->entity;
-    $link = $this->getSubTypeLink($term, $facet);
-    $breadcrumb->addLink($link);
+    if (isset($settings['field']) && $node->hasField($settings['field'])) {
+      $sub_type = $node->get($settings['field'])->entity;
 
-    return $breadcrumb
-      ->addCacheableDependency($node)
-      ->addCacheableDependency($facet);
+      if ($sub_type) {
+        $link = $this->getSubTypeLink($sub_type, $facet);
+        $breadcrumb->addLink($link);
+      }
+    }
+    return $breadcrumb;
   }
 
   /**
