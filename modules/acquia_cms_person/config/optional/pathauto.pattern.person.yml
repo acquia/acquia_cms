@@ -6,7 +6,7 @@ dependencies:
 id: person
 label: 'Person path'
 type: 'canonical_entities:node'
-pattern: 'person/[node:title]'
+pattern: 'person/[node:field_person_type]/[node:title]'
 selection_criteria:
   c97ba0fc-5cd3-46f1-be0e-c8e165db8962:
     id: node_type
