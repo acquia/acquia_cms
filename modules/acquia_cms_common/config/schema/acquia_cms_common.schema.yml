@@ -24,6 +24,16 @@ node.type.*.third_party.acquia_cms:
           sequence:
             type: string
             label: 'Tag type'
+    subtype:
+      type: mapping
+      label: 'Sub-type information'
+      mapping:
+        field:
+          type: string
+          label: 'Machine name of the sub-type term reference field for this content type'
+        facet:
+          type: string
+          label: 'Machine name of the sub-type facet on the listing page for this content type'
 
 # See \Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade::addTemplate()
 workbench_email.workbench_email_template.third_party.acquia_cms:

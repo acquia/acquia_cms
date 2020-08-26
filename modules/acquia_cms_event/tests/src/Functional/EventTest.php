@@ -196,7 +196,7 @@ class EventTest extends ContentTypeTestBase {
     $assert_session->pageTextContains('Event Science fiction meetup has been created.');
     // Assert that the Pathauto pattern was used to create the URL alias.
     // $date = new DrupalDateTime('now');.
-    $assert_session->addressEquals('/event/2020/07/science-fiction-meetup');
+    $assert_session->addressEquals('/event/meetup/2020/07/science-fiction-meetup');
     // Assert that the expected schema.org data and meta tags are present.
     $expected_date = gmdate('c', $this->defaultTime);
     $this->assertSchemaData([
