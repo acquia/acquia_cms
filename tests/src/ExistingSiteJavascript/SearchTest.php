@@ -82,6 +82,9 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
       $node_type_label = $type->label();
 
+      $page->fillField('keywords', 'Test published ' . $node_type_label);
+      $page->pressButton('Search');
+      // Assert that the search by title shows the proper result.
       $this->assertLinkExistsByTitle('Test published ' . $node_type_label);
       $this->assertLinkNotExistsByTitle('Test unpublished ' . $node_type_label);
 
