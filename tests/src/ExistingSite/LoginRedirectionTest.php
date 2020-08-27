@@ -46,16 +46,18 @@ class LoginRedirectionTest extends ExistingSiteBase {
   /**
    * Tests special redirect handling upon user login.
    *
+   * Tests special redirect handling upon user login with destination.
+   *
    * @param bool $enable
    *   Whether or not to enable special redirect handling.
-   * @param string $destination
+   * @param string[] $destination
    *   The expected destination upon logging in.
    * @param string[] $roles
    *   Additional user roles to apply to the account being logged in.
    *
    * @dataProvider providerLoginDestination
    */
-  public function testLoginDestination(bool $enable, string $destination, array $roles = []) : void {
+  public function testLoginDestination(bool $enable, array $destination = [], array $roles = []): void {
     $this->container->get('config.factory')
       ->getEditable('acquia_cms.settings')
       ->set('user_login_redirection', $enable)
@@ -64,12 +66,17 @@ class LoginRedirectionTest extends ExistingSiteBase {
     $account = $this->createUser();
     array_walk($roles, [$account, 'addRole']);
     $account->save();
-    $this->drupalLogin($account);
 
-    $assert_session = $this->assertSession();
-    $assert_session->statusCodeEquals(200);
-    $destination = str_replace('{uid}', $account->id(), $destination);
-    $assert_session->addressEquals($destination);
+    foreach ($destination as $key) {
+      list($destination_parameter, $expected_destination_after_login) = str_replace('{uid}', $account->id(), $key);
+      $edit = [
+        'name' => $account->getAccountName(),
+        'pass' => $account->passRaw,
+      ];
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => $destination_parameter]]);
+      $this->assertSession()->addressEquals($expected_destination_after_login);
+      $this->drupalLogout();
+    }
   }
 
   /**
@@ -78,333 +85,315 @@ class LoginRedirectionTest extends ExistingSiteBase {
    * @return array[]
    *   Sets of arguments to pass to the test method.
    */
-  public function providerLoginDestination() : array {
+  public function providerLoginDestination(): array {
     return [
-      'content author with redirect' => [
+      'content author with redirect and destination' => [
         TRUE,
-        '/user/{uid}/moderation/dashboard',
+        [
+          ['', '/user/{uid}/moderation/dashboard'],
+          ['user', '/user/{uid}/moderation/dashboard'],
+          ['/user', '/user/{uid}/moderation/dashboard'],
+          ['/user/', '/user/{uid}/moderation/dashboard'],
+          ['/user/{uid}', '/user/{uid}/moderation/dashboard'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['content_author'],
       ],
-      'content editor with redirect' => [
+      'content editor with redirect and destination' => [
         TRUE,
-        '/user/{uid}/moderation/dashboard',
+        [
+          ['', '/user/{uid}/moderation/dashboard'],
+          ['user', '/user/{uid}/moderation/dashboard'],
+          ['/user', '/user/{uid}/moderation/dashboard'],
+          ['/user/', '/user/{uid}/moderation/dashboard'],
+          ['/user/{uid}', '/user/{uid}/moderation/dashboard'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['content_editor'],
       ],
-      'content administrator with redirect' => [
+      'content administrator with redirect and destination' => [
         TRUE,
-        '/user/{uid}/moderation/dashboard',
+        [
+          ['', '/user/{uid}/moderation/dashboard'],
+          ['user', '/user/{uid}/moderation/dashboard'],
+          ['/user', '/user/{uid}/moderation/dashboard'],
+          ['/user/', '/user/{uid}/moderation/dashboard'],
+          ['/user/{uid}', '/user/{uid}/moderation/dashboard'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['content_administrator'],
       ],
-      'administrator with redirect' => [
+      'administrator with redirect and destination' => [
         TRUE,
-        '/user/{uid}/moderation/dashboard',
+        [
+          ['', '/user/{uid}/moderation/dashboard'],
+          ['user', '/user/{uid}/moderation/dashboard'],
+          ['/user', '/user/{uid}/moderation/dashboard'],
+          ['/user/', '/user/{uid}/moderation/dashboard'],
+          ['/user/{uid}', '/user/{uid}/moderation/dashboard'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['administrator'],
       ],
-      'site builder with redirect' => [
+      'site builder with redirect and destination' => [
         TRUE,
-        '/admin/cohesion',
+        [
+          ['', '/admin/cohesion'],
+          ['user', '/admin/cohesion'],
+          ['/user', '/admin/cohesion'],
+          ['/user/', '/admin/cohesion'],
+          ['/user/{uid}', '/admin/cohesion'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['site_builder'],
       ],
-      'developer with redirect' => [
+      'developer with redirect and destination' => [
         TRUE,
-        '/admin/cohesion',
+        [
+          ['', '/admin/cohesion'],
+          ['user', '/admin/cohesion'],
+          ['/user', '/admin/cohesion'],
+          ['/user/', '/admin/cohesion'],
+          ['/user/{uid}', '/admin/cohesion'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['developer'],
       ],
-      'user administrator with redirect' => [
+      'user administrator with redirect and destination' => [
         TRUE,
-        '/admin/people',
+        [
+          ['', '/admin/people'],
+          ['user', '/admin/people'],
+          ['/user', '/admin/people'],
+          ['/user/', '/admin/people'],
+          ['/user/{uid}', '/admin/people'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['user_administrator'],
       ],
-      'content author+site builder with redirect' => [
+      'content author+site builder with redirect and destination' => [
         TRUE,
-        '/user/{uid}/moderation/dashboard',
+        [
+          ['', '/user/{uid}/moderation/dashboard'],
+          ['user', '/user/{uid}/moderation/dashboard'],
+          ['/user', '/user/{uid}/moderation/dashboard'],
+          ['/user/', '/user/{uid}/moderation/dashboard'],
+          ['/user/{uid}', '/user/{uid}/moderation/dashboard'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['content_author', 'site_builder'],
       ],
-      'content author+user administrator with redirect' => [
+      'content author+user administrator with redirect and destination' => [
         TRUE,
-        '/user/{uid}/moderation/dashboard',
+        [
+          ['', '/user/{uid}/moderation/dashboard'],
+          ['user', '/user/{uid}/moderation/dashboard'],
+          ['/user', '/user/{uid}/moderation/dashboard'],
+          ['/user/', '/user/{uid}/moderation/dashboard'],
+          ['/user/{uid}', '/user/{uid}/moderation/dashboard'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['content_author', 'user_administrator'],
       ],
-      'site builder+user administrator with redirect' => [
+      'site builder+user administrator with redirect and destination' => [
         TRUE,
-        '/admin/cohesion',
+        [
+          ['', '/admin/cohesion'],
+          ['user', '/admin/cohesion'],
+          ['/user', '/admin/cohesion'],
+          ['/user/', '/admin/cohesion'],
+          ['/user/{uid}', '/admin/cohesion'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['site_builder', 'user_administrator'],
       ],
-      'content author+site builder+user administrator with redirect' => [
+      'content author+site builder+user administrator with redirect and destination' => [
         TRUE,
-        '/user/{uid}/moderation/dashboard',
+        [
+          ['', '/user/{uid}/moderation/dashboard'],
+          ['user', '/user/{uid}/moderation/dashboard'],
+          ['/user', '/user/{uid}/moderation/dashboard'],
+          ['/user/', '/user/{uid}/moderation/dashboard'],
+          ['/user/{uid}', '/user/{uid}/moderation/dashboard'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['content_author', 'site_builder', 'user_administrator'],
       ],
-      'site builder without redirect' => [
+      'site builder without redirect and destination' => [
         FALSE,
-        '/user/{uid}',
+        [
+          ['', '/user/{uid}'],
+          ['user', '/user/{uid}'],
+          ['/user', '/user/{uid}'],
+          ['/user/', '/user/{uid}'],
+          ['/user/{uid}', '/user/{uid}'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['site_builder'],
       ],
-      'developer without redirect' => [
+      'developer without redirect and destination' => [
         FALSE,
-        '/user/{uid}',
+        [
+          ['', '/user/{uid}'],
+          ['user', '/user/{uid}'],
+          ['/user', '/user/{uid}'],
+          ['/user/', '/user/{uid}'],
+          ['/user/{uid}', '/user/{uid}'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['developer'],
       ],
-      'user administrator without redirect' => [
+      'user administrator without redirect and destination' => [
         FALSE,
-        '/user/{uid}',
+        [
+          ['', '/user/{uid}'],
+          ['user', '/user/{uid}'],
+          ['/user', '/user/{uid}'],
+          ['/user/', '/user/{uid}'],
+          ['/user/{uid}', '/user/{uid}'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['user_administrator'],
       ],
-      'content administrator without redirect' => [
+      'content administrator without redirect and destination' => [
         FALSE,
-        '/user/{uid}/moderation/dashboard',
+        [
+          ['', '/user/{uid}/moderation/dashboard'],
+          ['user', '/user/{uid}'],
+          ['/user', '/user/{uid}'],
+          ['/user/', '/user/{uid}'],
+          ['/user/{uid}', '/user/{uid}'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['content_administrator'],
       ],
-      'content author without redirect' => [
+      'content author without redirect and destination' => [
         FALSE,
-        '/user/{uid}/moderation/dashboard',
+        [
+          ['', '/user/{uid}/moderation/dashboard'],
+          ['user', '/user/{uid}'],
+          ['/user', '/user/{uid}'],
+          ['/user/', '/user/{uid}'],
+          ['/user/{uid}', '/user/{uid}'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['content_author'],
       ],
-      'content editor without redirect' => [
+      'content editor without redirect and destination' => [
         FALSE,
-        '/user/{uid}/moderation/dashboard',
+        [
+          ['', '/user/{uid}/moderation/dashboard'],
+          ['user', '/user/{uid}'],
+          ['/user', '/user/{uid}'],
+          ['/user/', '/user/{uid}'],
+          ['/user/{uid}', '/user/{uid}'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['content_editor'],
       ],
-      'administrator without redirect' => [
+      'administrator without redirect and destination' => [
         FALSE,
-        '/user/{uid}/moderation/dashboard',
+        [
+          ['', '/user/{uid}/moderation/dashboard'],
+          ['user', '/user/{uid}'],
+          ['/user', '/user/{uid}'],
+          ['/user/', '/user/{uid}'],
+          ['/user/{uid}', '/user/{uid}'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['administrator'],
       ],
-      'content author+site builder without redirect' => [
+      'content author+site builder without redirect and destination' => [
         FALSE,
-        '/user/{uid}/moderation/dashboard',
+        [
+          ['', '/user/{uid}/moderation/dashboard'],
+          ['user', '/user/{uid}'],
+          ['/user', '/user/{uid}'],
+          ['/user/', '/user/{uid}'],
+          ['/user/{uid}', '/user/{uid}'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['content_author', 'site_builder'],
       ],
-      'content author+user administrator without redirect' => [
+      'content author+user administrator without redirect and destination' => [
         FALSE,
-        '/user/{uid}/moderation/dashboard',
+        [
+          ['', '/user/{uid}/moderation/dashboard'],
+          ['user', '/user/{uid}'],
+          ['/user', '/user/{uid}'],
+          ['/user/', '/user/{uid}'],
+          ['/user/{uid}', '/user/{uid}'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['content_author', 'user_administrator'],
       ],
-      'site builder+user administrator without redirect' => [
+      'site builder+user administrator without redirect and destination' => [
         FALSE,
-        '/user/{uid}',
+        [
+          ['', '/user/{uid}'],
+          ['user', '/user/{uid}'],
+          ['/user', '/user/{uid}'],
+          ['/user/', '/user/{uid}'],
+          ['/user/{uid}', '/user/{uid}'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['site_builder', 'user_administrator'],
       ],
-      'content author+site builder+user administrator without redirect' => [
+      'content author+site builder+user administrator without redirect and destination' => [
         FALSE,
-        '/user/{uid}/moderation/dashboard',
+        [
+          ['', '/user/{uid}/moderation/dashboard'],
+          ['user', '/user/{uid}'],
+          ['/user', '/user/{uid}'],
+          ['/user/', '/user/{uid}'],
+          ['/user/{uid}', '/user/{uid}'],
+          ['/user/{uid}/edit', '/user/{uid}/edit'],
+          ['/user-stories', '/user-stories'],
+          ['/node/add', '/node/add'],
+        ],
         ['content_author', 'site_builder', 'user_administrator'],
-      ],
-    ];
-  }
-
-  /**
-   * Tests special redirect handling upon user login with destination.
-   *
-   * @param bool $enable
-   *   Whether or not to enable special redirect handling.
-   * @param string $role
-   *   Additional user roles to apply to the account being logged in.
-   * @param string[] $destination
-   *   The expected destination upon logging in.
-   * @param string[] $query
-   *   The expected query parameter.
-   *
-   * @dataProvider providerDestinationParameter
-   */
-  public function testDestinationParameter(bool $enable, string $role, array $destination = [], array $query = []) : void {
-    $this->container->get('config.factory')
-      ->getEditable('acquia_cms.settings')
-      ->set('user_login_redirection', $enable)
-      ->save();
-
-    $account = $this->createUser();
-    $account->addRole($role);
-    $account->save();
-
-    array_walk ($query, function ($value, $key, $params) {
-      $destination = str_replace('{uid}', $params[1]->id(), $params[0][$key]);
-      $query = str_replace('{uid}', $params[1]->id(), $value);
-      $edit = [
-        'name' => $params[1]->getAccountName(),
-        'pass' => $params[1]->passRaw,
-      ];
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => $query]]);
-      $this->assertSession()->addressEquals($destination);
-      $this->drupalLogout();
-    }, [$destination, $account]);
-  }
-
-  /**
-   * Data provider for ::testDestinationParameter().
-   *
-   * @return array[]
-   *   Sets of arguments to pass to the test method.
-   */
-  public function providerDestinationParameter() : array {
-    return [
-      'content author with redirect and user destination' => [
-        TRUE,
-        'content_author',
-        ['/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard'],
-        ['user', '/user', '/user/', '/user/{uid}', ''],
-      ],
-      'content author with redirect' => [
-        TRUE,
-        'content_author',
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-      ],
-      'content editor with redirect and user destination' => [
-        TRUE,
-        'content_editor',
-        ['/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard'],
-        ['user', '/user', '/user/', '/user/{uid}', ''],
-      ],
-      'content editor with redirect' => [
-        TRUE,
-        'content_editor',
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-      ],
-      'content administrator with redirect and user destination' => [
-        TRUE,
-        'content_administrator',
-        ['/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard'],
-        ['user', '/user', '/user/', '/user/{uid}', ''],
-      ],
-      'content administrator with redirect' => [
-        TRUE,
-        'content_administrator',
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-      ],
-      'administrator with redirect and user destination' => [
-        TRUE,
-        'administrator',
-        ['/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard'],
-        ['user', '/user', '/user/', '/user/{uid}', ''],
-      ],
-      'administrator with redirect' => [
-        TRUE,
-        'administrator',
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-      ],
-      'site builder with redirect and user destination' => [
-        TRUE,
-        'site_builder',
-        ['/admin/cohesion', '/admin/cohesion', '/admin/cohesion', '/admin/cohesion', '/admin/cohesion'],
-        ['user', '/user', '/user/', '/user/{uid}', ''],
-      ],
-      'site builder with redirect' => [
-        TRUE,
-        'site_builder',
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-      ],
-      'developer with redirect and user destination' => [
-        TRUE,
-        'developer',
-        ['/admin/cohesion', '/admin/cohesion', '/admin/cohesion', '/admin/cohesion', '/admin/cohesion'],
-        ['user', '/user', '/user/', '/user/{uid}', ''],
-      ],
-      'developer with redirect' => [
-        TRUE,
-        'developer',
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-      ],
-      'user administrator with redirect and user destination' => [
-        TRUE,
-        'user_administrator',
-        ['/admin/people', '/admin/people', '/admin/people', '/admin/people', '/admin/people'],
-        ['user', '/user', '/user/', '/user/{uid}', ''],
-      ],
-      'user administrator with redirect' => [
-        TRUE,
-        'user_administrator',
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-      ],
-      'site builder without redirect and user destination' => [
-        FALSE,
-        'site_builder',
-        ['/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}'],
-        ['user', '/user', '/user/', '/user/{uid}', ''],
-      ],
-      'site builder without redirect' => [
-        FALSE,
-        'site_builder',
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-      ],
-      'developer without redirect and user destination' => [
-        FALSE,
-        'developer',
-        ['/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}'],
-        ['user', '/user', '/user/', '/user/{uid}', ''],
-      ],
-      'developer without redirect' => [
-        FALSE,
-        'developer',
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-      ],
-      'user administrator without redirect and user destination' => [
-        FALSE,
-        'user_administrator',
-        ['/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}'],
-        ['user', '/user', '/user/', '/user/{uid}', ''],
-      ],
-      'user administrator without redirect' => [
-        FALSE,
-        'user_administrator',
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-      ],
-      'content administrator without redirect and user destination' => [
-        FALSE,
-        'content_administrator',
-        ['/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}/moderation/dashboard'],
-        ['user', '/user', '/user/', '/user/{uid}', ''],
-      ],
-      'content administrator without redirect' => [
-        FALSE,
-        'content_administrator',
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-      ],
-      'content author without redirect and user destination' => [
-        FALSE,
-        'content_author',
-        ['/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}/moderation/dashboard'],
-        ['user', '/user', '/user/', '/user/{uid}', ''],
-      ],
-      'content author without redirect' => [
-        FALSE,
-        'content_author',
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-      ],
-      'content editor without redirect and user destination' => [
-        FALSE,
-        'content_editor',
-        ['/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}/moderation/dashboard'],
-        ['user', '/user', '/user/', '/user/{uid}', ''],
-      ],
-      'content editor without redirect' => [
-        FALSE,
-        'content_editor',
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-      ],
-      'administrator without redirect and user destination' => [
-        FALSE,
-        'administrator',
-        ['/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}/moderation/dashboard'],
-        ['user', '/user', '/user/', '/user/{uid}', ''],
-      ],
-      'administrator without redirect' => [
-        FALSE,
-        'administrator',
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
-        ['/user/{uid}/edit', '/user-stories', '/node/add'],
       ],
     ];
   }
