@@ -198,14 +198,16 @@ class LoginRedirectionTest extends ExistingSiteBase {
    *
    * @param bool $enable
    *   Whether or not to enable special redirect handling.
-   * @param string $destination
-   *   The expected destination upon logging in.
    * @param string $role
    *   Additional user roles to apply to the account being logged in.
+   * @param string[] $destination
+   *   The expected destination upon logging in.
+   * @param string[] $query
+   *   The expected query parameter.
    *
    * @dataProvider providerDestinationParameter
    */
-  public function testDestinationParameter(bool $enable, string $destination, string $role) : void {
+  public function testDestinationParameter(bool $enable, string $role, array $destination = [], array $query = []) : void {
     $this->container->get('config.factory')
       ->getEditable('acquia_cms.settings')
       ->set('user_login_redirection', $enable)
@@ -214,79 +216,18 @@ class LoginRedirectionTest extends ExistingSiteBase {
     $account = $this->createUser();
     $account->addRole($role);
     $account->save();
-    $destination = str_replace('{uid}', $account->id(), $destination);
-    $edit = [
-      'name' => $account->getAccountName(),
-      'pass' => $account->passRaw,
-    ];
 
-    // If user redirection is enabled check destination parameter redirection.
-    if ($enable) {
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => 'user']]);
+    array_walk ($query, function ($value, $key, $params) {
+      $destination = str_replace('{uid}', $params[1]->id(), $params[0][$key]);
+      $query = str_replace('{uid}', $params[1]->id(), $value);
+      $edit = [
+        'name' => $params[1]->getAccountName(),
+        'pass' => $params[1]->passRaw,
+      ];
+      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => $query]]);
       $this->assertSession()->addressEquals($destination);
       $this->drupalLogout();
-
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => '/user']]);
-      $this->assertSession()->addressEquals($destination);
-      $this->drupalLogout();
-
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => '/user/']]);
-      $this->assertSession()->addressEquals($destination);
-      $this->drupalLogout();
-
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => "/user/{$account->id()}"]]);
-      $this->assertSession()->addressEquals($destination);
-      $this->drupalLogout();
-
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => "/user/{$account->id()}/edit"]]);
-      $this->assertSession()->addressEquals("/user/{$account->id()}/edit");
-      $this->drupalLogout();
-
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => '/user-stories']]);
-      $this->assertSession()->addressEquals('/user-stories');
-      $this->drupalLogout();
-
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => 'node/add']]);
-      $this->assertSession()->addressEquals('node/add');
-      $this->drupalLogout();
-
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => '']]);
-      $this->assertSession()->addressEquals($destination);
-      $this->drupalLogout();
-    }
-    else {
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => 'user']]);
-      $this->assertSession()->addressEquals("/user/{$account->id()}");
-      $this->drupalLogout();
-
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => '/user']]);
-      $this->assertSession()->addressEquals("/user/{$account->id()}");
-      $this->drupalLogout();
-
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => '/user/']]);
-      $this->assertSession()->addressEquals("/user/{$account->id()}");
-      $this->drupalLogout();
-
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => "/user/{$account->id()}"]]);
-      $this->assertSession()->addressEquals("/user/{$account->id()}");
-      $this->drupalLogout();
-
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => "/user/{$account->id()}/edit"]]);
-      $this->assertSession()->addressEquals("/user/{$account->id()}/edit");
-      $this->drupalLogout();
-
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => '/user-stories']]);
-      $this->assertSession()->addressEquals('/user-stories');
-      $this->drupalLogout();
-
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => 'node/add']]);
-      $this->assertSession()->addressEquals('node/add');
-      $this->drupalLogout();
-
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => '']]);
-      $this->assertSession()->addressEquals($destination);
-      $this->drupalLogout();
-    }
+    }, [$destination, $account]);
   }
 
   /**
@@ -297,75 +238,173 @@ class LoginRedirectionTest extends ExistingSiteBase {
    */
   public function providerDestinationParameter() : array {
     return [
+      'content author with redirect and user destination' => [
+        TRUE,
+        'content_author',
+        ['/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard'],
+        ['user', '/user', '/user/', '/user/{uid}', ''],
+      ],
       'content author with redirect' => [
         TRUE,
-        '/user/{uid}/moderation/dashboard',
         'content_author',
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+      ],
+      'content editor with redirect and user destination' => [
+        TRUE,
+        'content_editor',
+        ['/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard'],
+        ['user', '/user', '/user/', '/user/{uid}', ''],
       ],
       'content editor with redirect' => [
         TRUE,
-        '/user/{uid}/moderation/dashboard',
         'content_editor',
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+      ],
+      'content administrator with redirect and user destination' => [
+        TRUE,
+        'content_administrator',
+        ['/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard'],
+        ['user', '/user', '/user/', '/user/{uid}', ''],
       ],
       'content administrator with redirect' => [
         TRUE,
-        '/user/{uid}/moderation/dashboard',
         'content_administrator',
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+      ],
+      'administrator with redirect and user destination' => [
+        TRUE,
+        'administrator',
+        ['/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard', '/user/{uid}/moderation/dashboard'],
+        ['user', '/user', '/user/', '/user/{uid}', ''],
       ],
       'administrator with redirect' => [
         TRUE,
-        '/user/{uid}/moderation/dashboard',
         'administrator',
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+      ],
+      'site builder with redirect and user destination' => [
+        TRUE,
+        'site_builder',
+        ['/admin/cohesion', '/admin/cohesion', '/admin/cohesion', '/admin/cohesion', '/admin/cohesion'],
+        ['user', '/user', '/user/', '/user/{uid}', ''],
       ],
       'site builder with redirect' => [
         TRUE,
-        '/admin/cohesion',
         'site_builder',
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+      ],
+      'developer with redirect and user destination' => [
+        TRUE,
+        'developer',
+        ['/admin/cohesion', '/admin/cohesion', '/admin/cohesion', '/admin/cohesion', '/admin/cohesion'],
+        ['user', '/user', '/user/', '/user/{uid}', ''],
       ],
       'developer with redirect' => [
         TRUE,
-        '/admin/cohesion',
         'developer',
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+      ],
+      'user administrator with redirect and user destination' => [
+        TRUE,
+        'user_administrator',
+        ['/admin/people', '/admin/people', '/admin/people', '/admin/people', '/admin/people'],
+        ['user', '/user', '/user/', '/user/{uid}', ''],
       ],
       'user administrator with redirect' => [
         TRUE,
-        '/admin/people',
         'user_administrator',
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+      ],
+      'site builder without redirect and user destination' => [
+        FALSE,
+        'site_builder',
+        ['/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}'],
+        ['user', '/user', '/user/', '/user/{uid}', ''],
       ],
       'site builder without redirect' => [
         FALSE,
-        '/user/{uid}',
         'site_builder',
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+      ],
+      'developer without redirect and user destination' => [
+        FALSE,
+        'developer',
+        ['/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}'],
+        ['user', '/user', '/user/', '/user/{uid}', ''],
       ],
       'developer without redirect' => [
         FALSE,
-        '/user/{uid}',
         'developer',
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+      ],
+      'user administrator without redirect and user destination' => [
+        FALSE,
+        'user_administrator',
+        ['/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}'],
+        ['user', '/user', '/user/', '/user/{uid}', ''],
       ],
       'user administrator without redirect' => [
         FALSE,
-        '/user/{uid}',
         'user_administrator',
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+      ],
+      'content administrator without redirect and user destination' => [
+        FALSE,
+        'content_administrator',
+        ['/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}/moderation/dashboard'],
+        ['user', '/user', '/user/', '/user/{uid}', ''],
       ],
       'content administrator without redirect' => [
         FALSE,
-        '/user/{uid}/moderation/dashboard',
         'content_administrator',
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+      ],
+      'content author without redirect and user destination' => [
+        FALSE,
+        'content_author',
+        ['/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}/moderation/dashboard'],
+        ['user', '/user', '/user/', '/user/{uid}', ''],
       ],
       'content author without redirect' => [
         FALSE,
-        '/user/{uid}/moderation/dashboard',
         'content_author',
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+      ],
+      'content editor without redirect and user destination' => [
+        FALSE,
+        'content_editor',
+        ['/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}/moderation/dashboard'],
+        ['user', '/user', '/user/', '/user/{uid}', ''],
       ],
       'content editor without redirect' => [
         FALSE,
-        '/user/{uid}/moderation/dashboard',
         'content_editor',
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+      ],
+      'administrator without redirect and user destination' => [
+        FALSE,
+        'administrator',
+        ['/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}', '/user/{uid}/moderation/dashboard'],
+        ['user', '/user', '/user/', '/user/{uid}', ''],
       ],
       'administrator without redirect' => [
         FALSE,
-        '/user/{uid}/moderation/dashboard',
         'administrator',
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
+        ['/user/{uid}/edit', '/user-stories', '/node/add'],
       ],
     ];
   }
