@@ -57,7 +57,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
    *
    * @dataProvider providerLoginDestination
    */
-  public function testLoginDestination(bool $enable, array $destination = [], array $roles = []): void {
+  public function testLoginDestination(bool $enable, array $destination = [], array $roles = []) : void {
     $this->container->get('config.factory')
       ->getEditable('acquia_cms.settings')
       ->set('user_login_redirection', $enable)
@@ -85,7 +85,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
    * @return array[]
    *   Sets of arguments to pass to the test method.
    */
-  public function providerLoginDestination(): array {
+  public function providerLoginDestination() : array {
     return [
       'content author with redirect and destination' => [
         TRUE,
