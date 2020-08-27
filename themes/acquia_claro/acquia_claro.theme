@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file
+ * Contains hooks and pre-process functions for the Acquia Claro theme.
+ */
+
+use Drupal\acquia_claro\PreRender;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function acquia_claro_form_media_library_add_form_upload_alter(array &$form) {
+  // Add a pre-render function to the file upload element which will collapse
+  // the details wrapper that Claro puts around it.
+  if (isset($form['container']['upload'])) {
+    $pre_render = Drupal::service('plugin.manager.element_info')
+      ->getInfoProperty('managed_file', '#pre_render', []);
+
+    array_push($pre_render, [PreRender::class, 'managedFile']);
+    $form['container']['upload']['#pre_render'] = $pre_render;
+  }
+}
+
+/**
+ * Implements hook_preprocess_image_widget().
+ */
+function acquia_claro_preprocess_image_widget(array &$variables) {
+  // Work around a bug in Cohesion, which generates the preview without
+  // respecting the #access flag (if set) of the preview displayed by the image
+  // widget. This function can be removed when the bug is fixed in Cohesion.
+  // @see cohesion_elements_preprocess_image_widget()
+  if (isset($variables['data']['preview'], $variables['element']['preview']['#access'])) {
+    $variables['data']['preview']['#access'] = $variables['element']['preview']['#access'];
+  }
+}
