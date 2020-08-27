@@ -164,6 +164,11 @@
             "find ./docroot/modules -type d -name tests -prune -exec rm -r -f '{}' ';'",
             "cp -f phpunit.xml ./docroot/core"
         ],
+        "build:frontend": [
+            "cd themes/acquia_claro && npm run build",
+            "mkdir -p modules/acquia_cms_toolbar/css",
+            "cp themes/acquia_claro/css/acquia_cms_toolbar.css modules/acquia_cms_toolbar/css"
+        ],
         "cohesion:fixture": [
             "@putenv FILES_DIR=./docroot/sites/default/files",
             "drush config:export --yes --quiet --destination $TMPDIR/cex",
@@ -171,6 +176,11 @@
             "cp -f $TMPDIR/cex/cohesion_* $FILES_DIR/cohesion/config",
             "tar -c -z -f ./tests/cohesion.tar.gz --directory $FILES_DIR cohesion",
             "rm -rf $TMPDIR/cex"
+        ],
+        "install:frontend": [
+            "rm -rf themes/acquia_claro/node_modules",
+            "cd themes/acquia_claro && npm install",
+            "composer build:frontend"
         ],
         "nuke": "rm -r -f docroot vendor"
     }
