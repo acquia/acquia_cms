@@ -22,6 +22,7 @@ events:
             # We can probably remove this, along with the acquia_cms_example module
             # itself, once we have a permanent demo site in place.
             - cp -R modules/acquia_cms_example docroot/profiles/acquia_cms/modules
+            - cp config/optional/views.view.acquia_search_solr.yml docroot/profiles/acquia_cms/config/optional
       - front-end:
           type: script
           script:
@@ -29,6 +30,10 @@ events:
             - npm install
             - npm run build
             - cd -
+           # Theme directory is already copied to profiles in previous step without compiled css.
+           # So we need to copy compile css to theme in this step.
+            - cp -R themes/acquia_claro/css docroot/profiles/acquia_cms/themes/acquia_claro
+            - cp -R themes/acquia_claro/css/acquia_cms_toolbar.css docroot/profiles/acquia_cms/modules/acquia_cms_toolbar/css
       - cleanup:
           type: script
           script:

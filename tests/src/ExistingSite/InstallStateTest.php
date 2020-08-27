@@ -61,6 +61,21 @@ class InstallStateTest extends ExistingSiteBase {
     $purge_logger_config = $this->config('purge.logger_channels');
     $channels = $purge_logger_config->get('channels');
     $this->assertSame('purger_acquia_purge_cee22bc3fe', $channels[3]['id']);
+
+    // Acquia CMS provides special configuration for the Entity Clone module in
+    // order to allow users to explicitly clone the layout canvas field (which,
+    // with this configuration, is the default action) if the entity being
+    // cloned has it. This way, the cloned entity will have its own instance of
+    // the layout canvas. This is needed because layout canvas fields are an
+    // "interesting" implementation of entity references and the default entity
+    // clone behavior will cause unintentional data loss. The configuration we
+    // are shipping implements Cohesion's documented best practice.
+    // @see https://support.cohesiondx.com/5.4/user-guide/entity-clone-module
+    $cohesion_layout_clone_settings = $this->config('entity_clone.settings')
+      ->get('form_settings.cohesion_layout');
+    $this->assertTrue($cohesion_layout_clone_settings['default_value']);
+    $this->assertTrue($cohesion_layout_clone_settings['hidden']);
+    $this->assertFalse($cohesion_layout_clone_settings['disable']);
   }
 
   /**

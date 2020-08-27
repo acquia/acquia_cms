@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.search_category
+  module:
+    - cohesion
+    - facets
+  theme:
+    - cohesion_theme
+id: search_category
+theme: cohesion_theme
+region: dx8_hidden
+weight: 0
+provider: null
+plugin: 'facet_block:search_category'
+settings:
+  id: 'facet_block:search_category'
+  label: Category
+  provider: facets
+  label_display: '0'
+  block_id: search_category
+visibility:
+  cohesion_master_template:
+    id: cohesion_master_template
+    using_master_template: 0
+    negate: false

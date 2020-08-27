@@ -12,16 +12,14 @@
         "drupal/acquia_connector": "^2",
         "drupal/acquia_purge": "^1",
         "drupal/acquia_search_solr": "^1.0",
-        "drupal/acquia_telemetry-acquia_telemetry": "^1.0-alpha3",
+        "drupal/acquia_telemetry-acquia_telemetry": "1.0-alpha3",
         "drupal/acsf": "^2",
         "drupal/address": "^1",
         "drupal/admin_toolbar": "^2.0",
-        "drupal/adminimal_admin_toolbar": "^1.10",
         "drupal/core": "^9.0",
         "drupal/default_content": "^1.0@alpha",
         "drupal/diff": "^1",
-        "drupal/easy_breadcrumb": "^1.13",
-        "drupal/entity_clone": "^1.0",
+        "drupal/entity_clone": "1.0-beta4",
         "drupal/environment_indicator": "^4.0",
         "drupal/facets": "^1.5",
         "drupal/facets_pretty_paths": "1.x-dev",
@@ -126,6 +124,12 @@
             },
             "drupal/core": {
                 "Media Library widget produces error this value should not be null when field is required": "https://www.drupal.org/files/issues/2020-08-11/media-library-not-null-3160238-10.patch"
+            },
+            "drupal/acquia_telemetry-acquia_telemetry": {
+                "Add check for core index": "https://www.drupal.org/files/issues/2020-08-18/3165473-27.patch"
+            },
+            "drupal/entity_clone": {
+                "Allow fields implementing EntityReferenceFieldItemListInterface to clone their referenced entities": "https://www.drupal.org/files/issues/2019-02-22/3013286-8.patch"
             }
         }
     },

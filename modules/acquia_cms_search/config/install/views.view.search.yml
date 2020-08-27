@@ -4,6 +4,7 @@ dependencies:
   config:
     - search_api.index.content
   module:
+    - cohesion
     - search_api
 id: search
 label: Search
@@ -49,8 +50,8 @@ display:
           id: 0
           total_pages: null
           tags:
-            previous: ‹‹
-            next: ››
+            previous: '‹ Previous'
+            next: 'Next ›'
             first: '« First'
             last: 'Last »'
           expose:
@@ -61,14 +62,70 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
-          quantity: 9
+          quantity: 3
       style:
-        type: default
+        type: cohesion_layout
+        options:
+          views_template: view_tpl_search
+          master_template: 79d2f5ce
       row:
         type: search_api
         options:
           view_modes: {  }
-      fields: {  }
+      fields:
+        rendered_item:
+          id: rendered_item
+          table: search_api_index_content
+          field: rendered_item
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          link_to_item: false
+          use_highlighting: false
+          multi_type: separator
+          multi_separator: ', '
+          plugin_id: search_api
       filters:
         search_api_fulltext:
           id: search_api_fulltext
@@ -172,7 +229,17 @@ display:
             label: ''
           plugin_id: search_api
       title: Search
-      header: {  }
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: false
+          content: '@end of @total results'
+          plugin_id: result
       footer: {  }
       empty:
         area:
@@ -196,8 +263,11 @@ display:
       contexts:
         - 'languages:language_interface'
         - url
+        - url.path
         - url.query_args
-      tags: {  }
+        - 'user.node_grants:view'
+      tags:
+        - 'config:search_api.index.content'
   search:
     display_plugin: page
     id: search
@@ -206,10 +276,18 @@ display:
     display_options:
       display_extenders: {  }
       path: search
+      cache:
+        type: search_api_tag
+        options: {  }
+      defaults:
+        cache: false
     cache_metadata:
       max-age: -1
       contexts:
         - 'languages:language_interface'
         - url
+        - url.path
         - url.query_args
-      tags: {  }
+        - 'user.node_grants:view'
+      tags:
+        - 'config:search_api.index.content'
