@@ -36,11 +36,11 @@ final class RedirectHandler implements ContainerInjectionInterface {
   private $request;
 
   /**
-   * The path validator.
+   * The path validator service.
    *
    * @var \Drupal\Core\Path\PathValidatorInterface
    */
-  protected $pathValidator;
+  private $pathValidator;
 
   /**
    * RedirectHandler constructor.
@@ -50,7 +50,7 @@ final class RedirectHandler implements ContainerInjectionInterface {
    * @param \Symfony\Component\HttpFoundation\Request $current_request
    *   The current active request object.
    * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
-   *   The path validator.
+   *   The path validator service.
    */
   public function __construct(EntityStorageInterface $user_storage, Request $current_request, PathValidatorInterface $path_validator) {
     $this->userStorage = $user_storage;
@@ -88,21 +88,14 @@ final class RedirectHandler implements ContainerInjectionInterface {
    *   The form state.
    */
   private function handleRedirect(FormStateInterface $form_state) {
-    $destination = $this->request->query->get('destination');
-
     // This is set by the user login form.
     // @see \Drupal\user\Form\UserLoginForm::validateAuthentication()
     $user = $this->userStorage->load($form_state->get('uid'));
     assert($user instanceof AccountInterface);
 
-    $route_name = '';
-    $destination_url_object = $this->pathValidator->getUrlIfValid($destination);
-    if (!empty($destination_url_object)) {
-      $route_name = $destination_url_object->getRouteName();
-    }
-    // If the redirect destination starts with '/user/', do our special sauce
-    // redirect handling based on the role(s) the user has.
-    if (is_null($destination) || $destination === '' || in_array($route_name, ['user.page', 'entity.user.canonical'])) {
+    // If the user is about to be redirected to their user page, do our special
+    // sauce redirect handling based on the role(s) the user has.
+    if ($this->willRedirectToUserPage()) {
       // Removing destination query parameter value as the form request object
       // target URL is getting overriden by the Symfony response object.
       // @see \Drupal\node\Form\NodePreviewForm::submitForm()
@@ -121,6 +114,29 @@ final class RedirectHandler implements ContainerInjectionInterface {
         $form_state->setRedirect('entity.user.collection');
       }
     }
+  }
+
+  /**
+   * Determines if the user is going to be redirected to their user page.
+   *
+   * If the 'destination' query string parameter is available, we check to see
+   * if it maps to any of the user page routes. Otherwise, we assume that the
+   * user is going to be redirected to their user page.
+   *
+   * @return bool
+   *   TRUE if the user will be redirected to their user page, FALSE otherwise.
+   */
+  private function willRedirectToUserPage() : bool {
+    $destination = $this->request->query->get('destination');
+
+    if ($destination) {
+      $destination = $this->pathValidator->getUrlIfValid($destination);
+
+      return $destination
+        ? in_array($destination->getRouteName(), ['user.page', 'entity.user.canonical'], TRUE)
+        : FALSE;
+    }
+    return TRUE;
   }
 
   /**

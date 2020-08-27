@@ -2,8 +2,6 @@
 
 namespace Drupal\Tests\acquia_cms\ExistingSite;
 
-use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Url;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -12,8 +10,6 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * @group acquia_cms
  */
 class LoginRedirectionTest extends ExistingSiteBase {
-
-  use StringTranslationTrait;
 
   /**
    * Whether login redirect handling was enabled before the test case began.
@@ -27,9 +23,19 @@ class LoginRedirectionTest extends ExistingSiteBase {
    */
   protected function setUp() {
     parent::setUp();
+
+    // Store the current config flag so we can restore it in tearDown().
     $this->enabled = $this->container->get('config.factory')
       ->get('acquia_cms.settings')
       ->get('user_login_redirection');
+
+    // Create a node with the path '/user-stories', so we can ensure the
+    // redirect handler properly handles paths starting with 'user'.
+    $this->createNode([
+      'type' => 'page',
+      'title' => 'User Stories',
+      'moderation_state' => 'published',
+    ]);
   }
 
   /**
@@ -50,14 +56,16 @@ class LoginRedirectionTest extends ExistingSiteBase {
    *
    * @param bool $enable
    *   Whether or not to enable special redirect handling.
-   * @param string[] $destination
-   *   The expected destination upon logging in.
+   * @param array[] $destination_map
+   *   An array of tuples, each containing the value of the 'destination' query
+   *   string parameter (or an empty value to omit the parameter), and the path
+   *   where the user is expected to land after logging in.
    * @param string[] $roles
    *   Additional user roles to apply to the account being logged in.
    *
    * @dataProvider providerLoginDestination
    */
-  public function testLoginDestination(bool $enable, array $destination = [], array $roles = []) : void {
+  public function testLoginDestination(bool $enable, array $destination_map = [], array $roles = []) : void {
     $this->container->get('config.factory')
       ->getEditable('acquia_cms.settings')
       ->set('user_login_redirection', $enable)
@@ -67,14 +75,23 @@ class LoginRedirectionTest extends ExistingSiteBase {
     array_walk($roles, [$account, 'addRole']);
     $account->save();
 
-    foreach ($destination as $key) {
-      list($destination_parameter, $expected_destination_after_login) = str_replace('{uid}', $account->id(), $key);
-      $edit = [
-        'name' => $account->getAccountName(),
-        'pass' => $account->passRaw,
-      ];
-      $this->drupalPostForm(Url::fromRoute('user.login'), $edit, $this->t('Log in'), ['query' => ['destination' => $destination_parameter]]);
-      $this->assertSession()->addressEquals($expected_destination_after_login);
+    $session = $this->getSession();
+    $page = $session->getPage();
+    $assert_session = $this->assertSession();
+
+    foreach ($destination_map as $destination) {
+      list ($destination_parameter, $expected_destination_after_login) = str_replace('{uid}', $account->id(), $destination);
+
+      $options = [];
+      if ($destination_parameter) {
+        $options['query']['destination'] = $destination_parameter;
+      }
+      $this->drupalGet('/user/login', $options);
+      $page->fillField('name', $account->getAccountName());
+      $page->fillField('pass', $account->passRaw);
+      $page->pressButton('Log in');
+      $assert_session->statusCodeEquals(200);
+      $assert_session->addressEquals($expected_destination_after_login);
       $this->drupalLogout();
     }
   }
@@ -87,7 +104,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
    */
   public function providerLoginDestination() : array {
     return [
-      'content author with redirect and destination' => [
+      'content author with redirect' => [
         TRUE,
         [
           ['', '/user/{uid}/moderation/dashboard'],
@@ -101,7 +118,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
         ],
         ['content_author'],
       ],
-      'content editor with redirect and destination' => [
+      'content editor with redirect' => [
         TRUE,
         [
           ['', '/user/{uid}/moderation/dashboard'],
@@ -111,11 +128,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
           ['/user/{uid}', '/user/{uid}/moderation/dashboard'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
-          ['/node/add', '/node/add'],
+          ['/admin/content', '/admin/content'],
         ],
         ['content_editor'],
       ],
-      'content administrator with redirect and destination' => [
+      'content administrator with redirect' => [
         TRUE,
         [
           ['', '/user/{uid}/moderation/dashboard'],
@@ -129,7 +146,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
         ],
         ['content_administrator'],
       ],
-      'administrator with redirect and destination' => [
+      'administrator with redirect' => [
         TRUE,
         [
           ['', '/user/{uid}/moderation/dashboard'],
@@ -143,7 +160,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
         ],
         ['administrator'],
       ],
-      'site builder with redirect and destination' => [
+      'site builder with redirect' => [
         TRUE,
         [
           ['', '/admin/cohesion'],
@@ -153,11 +170,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
           ['/user/{uid}', '/admin/cohesion'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
-          ['/node/add', '/node/add'],
+          ['/admin/cohesion', '/admin/cohesion'],
         ],
         ['site_builder'],
       ],
-      'developer with redirect and destination' => [
+      'developer with redirect' => [
         TRUE,
         [
           ['', '/admin/cohesion'],
@@ -167,11 +184,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
           ['/user/{uid}', '/admin/cohesion'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
-          ['/node/add', '/node/add'],
+          ['/admin/cohesion', '/admin/cohesion'],
         ],
         ['developer'],
       ],
-      'user administrator with redirect and destination' => [
+      'user administrator with redirect' => [
         TRUE,
         [
           ['', '/admin/people'],
@@ -181,11 +198,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
           ['/user/{uid}', '/admin/people'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
-          ['/node/add', '/node/add'],
+          ['/admin/people', '/admin/people'],
         ],
         ['user_administrator'],
       ],
-      'content author+site builder with redirect and destination' => [
+      'content author+site builder with redirect' => [
         TRUE,
         [
           ['', '/user/{uid}/moderation/dashboard'],
@@ -199,7 +216,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
         ],
         ['content_author', 'site_builder'],
       ],
-      'content author+user administrator with redirect and destination' => [
+      'content author+user administrator with redirect' => [
         TRUE,
         [
           ['', '/user/{uid}/moderation/dashboard'],
@@ -213,7 +230,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
         ],
         ['content_author', 'user_administrator'],
       ],
-      'site builder+user administrator with redirect and destination' => [
+      'site builder+user administrator with redirect' => [
         TRUE,
         [
           ['', '/admin/cohesion'],
@@ -223,11 +240,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
           ['/user/{uid}', '/admin/cohesion'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
-          ['/node/add', '/node/add'],
+          ['/admin/cohesion', '/admin/cohesion'],
         ],
         ['site_builder', 'user_administrator'],
       ],
-      'content author+site builder+user administrator with redirect and destination' => [
+      'content author+site builder+user administrator with redirect' => [
         TRUE,
         [
           ['', '/user/{uid}/moderation/dashboard'],
@@ -241,7 +258,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
         ],
         ['content_author', 'site_builder', 'user_administrator'],
       ],
-      'site builder without redirect and destination' => [
+      'site builder without redirect' => [
         FALSE,
         [
           ['', '/user/{uid}'],
@@ -251,11 +268,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
           ['/user/{uid}', '/user/{uid}'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
-          ['/node/add', '/node/add'],
+          ['/admin/cohesion', '/admin/cohesion'],
         ],
         ['site_builder'],
       ],
-      'developer without redirect and destination' => [
+      'developer without redirect' => [
         FALSE,
         [
           ['', '/user/{uid}'],
@@ -265,11 +282,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
           ['/user/{uid}', '/user/{uid}'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
-          ['/node/add', '/node/add'],
+          ['/admin/cohesion', '/admin/cohesion'],
         ],
         ['developer'],
       ],
-      'user administrator without redirect and destination' => [
+      'user administrator without redirect' => [
         FALSE,
         [
           ['', '/user/{uid}'],
@@ -279,11 +296,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
           ['/user/{uid}', '/user/{uid}'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
-          ['/node/add', '/node/add'],
+          ['/admin/people', '/admin/people'],
         ],
         ['user_administrator'],
       ],
-      'content administrator without redirect and destination' => [
+      'content administrator without redirect' => [
         FALSE,
         [
           ['', '/user/{uid}/moderation/dashboard'],
@@ -293,11 +310,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
           ['/user/{uid}', '/user/{uid}'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
-          ['/node/add', '/node/add'],
+          ['/admin/content', '/admin/content'],
         ],
         ['content_administrator'],
       ],
-      'content author without redirect and destination' => [
+      'content author without redirect' => [
         FALSE,
         [
           ['', '/user/{uid}/moderation/dashboard'],
@@ -311,7 +328,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
         ],
         ['content_author'],
       ],
-      'content editor without redirect and destination' => [
+      'content editor without redirect' => [
         FALSE,
         [
           ['', '/user/{uid}/moderation/dashboard'],
@@ -321,11 +338,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
           ['/user/{uid}', '/user/{uid}'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
-          ['/node/add', '/node/add'],
+          ['/admin/content', '/admin/content'],
         ],
         ['content_editor'],
       ],
-      'administrator without redirect and destination' => [
+      'administrator without redirect' => [
         FALSE,
         [
           ['', '/user/{uid}/moderation/dashboard'],
@@ -339,7 +356,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
         ],
         ['administrator'],
       ],
-      'content author+site builder without redirect and destination' => [
+      'content author+site builder without redirect' => [
         FALSE,
         [
           ['', '/user/{uid}/moderation/dashboard'],
@@ -353,7 +370,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
         ],
         ['content_author', 'site_builder'],
       ],
-      'content author+user administrator without redirect and destination' => [
+      'content author+user administrator without redirect' => [
         FALSE,
         [
           ['', '/user/{uid}/moderation/dashboard'],
@@ -367,7 +384,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
         ],
         ['content_author', 'user_administrator'],
       ],
-      'site builder+user administrator without redirect and destination' => [
+      'site builder+user administrator without redirect' => [
         FALSE,
         [
           ['', '/user/{uid}'],
@@ -377,11 +394,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
           ['/user/{uid}', '/user/{uid}'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
-          ['/node/add', '/node/add'],
+          ['/admin/cohesion', '/admin/cohesion'],
         ],
         ['site_builder', 'user_administrator'],
       ],
-      'content author+site builder+user administrator without redirect and destination' => [
+      'content author+site builder+user administrator without redirect' => [
         FALSE,
         [
           ['', '/user/{uid}/moderation/dashboard'],
