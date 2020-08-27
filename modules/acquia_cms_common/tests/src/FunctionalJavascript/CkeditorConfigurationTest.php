@@ -30,10 +30,11 @@ class CkeditorConfigurationTest extends WebDriverTestBase {
     'acquia_cms_common',
     // Cohesion's core module has an accidental dependency on
     // cohesion_custom_styles and cohesion_website_settings when using the
-    // Cohesion text filter with certain CKEditor plugins enabled -- it tries
-    // all custom style and website settings entities, but without checking if
-    // that entity type is even defined first. D'oh! To work around this bug, we
-    // enable cohesion_custom_styles and cohesion_website_settings in the test.
+    // cohesion text filter with certain CKEditor plugins enabled -- it tries
+    // to load all custom style and website settings entities, but without
+    // checking if those entity types are even defined first. D'oh! To work
+    // around this bug, we enable cohesion_custom_styles and
+    // cohesion_website_settings in the test.
     // @todo Remove this when Cohesion fixes the bug.
     // @see \Drupal\cohesion\Plugin\CKEditorPlugin\DX8InlineStylesCombo::getStyleSet()
     // @see \Drupal\cohesion\ApiPluginBase::prepareData()
@@ -93,7 +94,7 @@ class CkeditorConfigurationTest extends WebDriverTestBase {
 
       $this->drupalGet("/node/add/$node_type");
 
-      // Ensure that only the filtered_html and cohesion format exists.
+      // Ensure that only the filtered_html and cohesion formats exist.
       $formats = $session->evaluateScript('Object.keys(drupalSettings.editor.formats)');
       $this->assertSame(['filtered_html', 'cohesion'], $formats);
 

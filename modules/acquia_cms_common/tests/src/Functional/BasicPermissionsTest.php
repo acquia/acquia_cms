@@ -68,7 +68,7 @@ class BasicPermissionsTest extends BrowserTestBase {
       $account->addRole($role);
       $account->save();
 
-      // Permissions to add cohesion coomponents, helpers, elements and
+      // Permissions to add cohesion components, helpers, elements and
       // component content in layout canvas of content type.
       $this->assertTrue($account->hasPermission('access animate on view'));
       $this->assertTrue($account->hasPermission('access component builder elements group'));
