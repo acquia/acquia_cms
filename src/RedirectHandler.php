@@ -96,12 +96,12 @@ final class RedirectHandler implements ContainerInjectionInterface {
     // If the user is about to be redirected to their user page, do our special
     // sauce redirect handling based on the role(s) the user has.
     if ($this->willRedirectToUserPage()) {
-      // Removing destination query parameter value as the form request object
-      // target URL is getting overriden by the Symfony response object.
-      // @see \Drupal\node\Form\NodePreviewForm::submitForm()
-      // @todo Remove this when https://www.drupal.org/project/drupal/issues/2950883
-      // is fixed in core.
+      // Remove the 'destination' query sting parameter, since it will cause our
+      // redirect to be totally ignored due to a core quirk.
+      // @todo Remove when https://www.drupal.org/project/drupal/issues/2950883
+      // is fixed.
       $this->request->query->remove('destination');
+
       if ($this->isContributor($user)) {
         // @todo Don't redirect if Moderation Dashboard is not enabled.
         $url = Url::fromUri('internal:/user/' . $user->id() . '/moderation/dashboard');
