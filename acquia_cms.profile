@@ -10,6 +10,15 @@ use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\Component\Serialization\Yaml;
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function acquia_cms_form_user_login_form_alter(array &$form) {
+  if (Drupal::config('acquia_cms.settings')->get('user_login_redirection')) {
+    $form['#submit'][] = '\Drupal\acquia_cms\RedirectHandler::submitForm';
+  }
+}
+
+/**
  * Implements hook_install_tasks_alter().
  */
 function acquia_cms_install_tasks_alter(array &$tasks) {
