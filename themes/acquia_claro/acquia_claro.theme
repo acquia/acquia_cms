@@ -21,3 +21,16 @@ function acquia_claro_form_media_library_add_form_upload_alter(array &$form) {
     $form['container']['upload']['#pre_render'] = $pre_render;
   }
 }
+
+/**
+ * Implements hook_preprocess_image_widget().
+ */
+function acquia_claro_preprocess_image_widget(array &$variables) {
+  // Work around a bug in Cohesion, which generates the preview without
+  // respecting the #access flag (if set) of the preview displayed by the image
+  // widget. This function can be removed when the bug is fixed in Cohesion.
+  // @see cohesion_elements_preprocess_image_widget()
+  if (isset($variables['data']['preview'], $variables['element']['preview']['#access'])) {
+    $variables['data']['preview']['#access'] = $variables['element']['preview']['#access'];
+  }
+}
