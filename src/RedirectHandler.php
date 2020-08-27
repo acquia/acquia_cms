@@ -106,10 +106,9 @@ final class RedirectHandler implements ContainerInjectionInterface {
       // Removing destination query parameter value as the form request object
       // target URL is getting overriden by the Symfony response object.
       // @see \Drupal\node\Form\NodePreviewForm::submitForm()
-      $query = $this->request->query;
-      if ($query->has('destination')) {
-        $query->remove('destination');
-      }
+      // @todo Remove this when https://www.drupal.org/project/drupal/issues/2950883
+      // is fixed in core.
+      $this->request->query->remove('destination');
       if ($this->isContributor($user)) {
         // @todo Don't redirect if Moderation Dashboard is not enabled.
         $url = Url::fromUri('internal:/user/' . $user->id() . '/moderation/dashboard');
