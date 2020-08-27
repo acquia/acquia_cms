@@ -6,7 +6,7 @@ dependencies:
     - field.field.media.image.field_categories
     - field.field.media.image.field_tags
     - field.field.media.image.image
-    - image.style.thumbnail
+    - image.style.media_library
     - media.type.image
   module:
     - field_group
@@ -52,9 +52,9 @@ content:
     type: image_focal_point
     weight: 1
     settings:
-      preview_image_style: thumbnail
+      preview_image_style: media_library
       preview_link: true
-      offsets: '50,50'
+      offsets: '110,110'
       progress_indicator: throbber
     third_party_settings: {}
     region: content
