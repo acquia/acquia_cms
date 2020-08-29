@@ -1,22 +1,3 @@
-
-/**
- * Load local development override configuration, if available.
- *
- * Create a settings.local.php file to override variables on secondary (staging,
- * development, etc.) installations of this site.
- *
- * Typical uses of settings.local.php include:
- * - Disabling caching.
- * - Disabling JavaScript/CSS compression.
- * - Rerouting outgoing emails.
- *
- * Keep this code block at the end of this file to take full effect.
- */
-#
-# if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
-#   include $app_root . '/' . $site_path . '/settings.local.php';
-# }
-
 /**
  * Auto-connect to the correct Acquia credentials file.
  */
@@ -42,16 +23,18 @@ if (AcquiaDrupalEnvironmentDetector::isAhEnv()) {
       require "/var/www/site-php/$ah_group/$safe_site_name-settings.inc";
     }
   }
+}
 
-  /**
-   * ACMS will only load memcache if the user explicitly asks us to.
-   * acquia/memcache-settings will only configure the cache bins if
-   * servers are present in $settings['memcache'], which are set in
-   * the Acquia common settings files above. This lets us disable
-   * memcache without a code deploy. This logic should make its way
-   * to acquia/memcache-settings eventually.
-   */
-  if (!getenv('ENABLE_MEMCACHED')) {
-    unset($settings['memcache']);
-  }
+/**
+  * ACMS will only load memcache if the user explicitly asks us to.
+  * acquia/memcache-settings will only configure the cache bins if
+  * servers are present in $settings['memcache'], which are set in
+  * the Acquia common settings files above. This lets us disable
+  * memcache without a code deploy. This logic should make its way
+  * to acquia/memcache-settings eventually.
+  */
+$repo_root = dirname(DRUPAL_ROOT);
+$memcacheSettingsFile = $repo_root . '/vendor/acquia/memcache-settings/memcache.settings.php';
+if (file_exists($memcacheSettingsFile) && getenv('ENABLE_MEMCACHED')) {
+  require $memcacheSettingsFile;
 }

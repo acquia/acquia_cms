@@ -7,7 +7,7 @@
         "acquia/cohesion": "^6.2",
         "acquia/cohesion-theme": "^6.2",
         "acquia/drupal-environment-detector": "^1",
-        "acquia/memcache-settings": "dev-9-drupal-scaffold",
+        "acquia/memcache-settings": "^1",
         "cweagans/composer-patches": "^1.6",
         "drupal/acquia_connector": "^2",
         "drupal/acquia_purge": "^1",
@@ -69,8 +69,7 @@
     "extra": {
         "drupal-scaffold": {
             "allowed-packages": [
-                "drupal/core",
-                "acquia/memcache-settings"
+                "drupal/core"
             ],
             "locations": {
                 "web-root": "./docroot"
@@ -79,7 +78,7 @@
                 "[project-root]/.gitattributes": false,
                 "[project-root]/.editorconfig": false,
                 "[web-root]/sites/default/default.settings.php": {
-                    "path": "./patches/d9-acms-settings.txt"
+                    "append": "./patches/d9-acms-settings.patch"
                 },
                 "[web-root]/example.gitignore": false,
                 "[web-root]/.csslintrc": false,
@@ -198,9 +197,6 @@
             "cd themes/acquia_claro && npm install",
             "composer build:frontend"
         ],
-        "nuke": "rm -r -f docroot vendor",
-        "pre-drupal-scaffold-cmd": [
-            "cd docroot && patch -p1 -s <../patches/d9-acms-settings.patch &>/dev/null || true"
-        ]
+        "nuke": "rm -r -f docroot vendor"
     }
 }
