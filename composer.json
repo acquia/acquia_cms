@@ -78,7 +78,9 @@
             "file-mapping": {
                 "[project-root]/.gitattributes": false,
                 "[project-root]/.editorconfig": false,
-                "[project-root]/patches": false,
+                "[project-root]/patches/d9-acms-settings.patch": {
+                    "path": "patches/d9-acms-settings.patch"
+                },
                 "[web-root]/example.gitignore": false,
                 "[web-root]/.csslintrc": false,
                 "[web-root]/modules/README.txt": false,
@@ -198,7 +200,7 @@
         ],
         "nuke": "rm -r -f docroot vendor",
         "pre-drupal-scaffold-cmd": [
-            "cd docroot && patch -p1 -s <../patches/d9-acms-settings.patch || true"
+            "cd docroot && patch -p1 -s <../patches/d9-acms-settings.patch &>/dev/null || true"
         ]
     }
 }
