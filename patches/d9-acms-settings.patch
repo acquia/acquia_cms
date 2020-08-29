@@ -1,13 +1,15 @@
 diff --git a/core/assets/scaffold/files/default.settings.php b/core/assets/scaffold/files/default.settings.php
-index afbe2332d4..2acbf20eb1 100644
+index afbe2332d4..47d1d6b086 100644
 --- a/core/assets/scaffold/files/default.settings.php
 +++ b/core/assets/scaffold/files/default.settings.php
-@@ -773,3 +773,28 @@
+@@ -773,3 +773,42 @@
  # if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
  #   include $app_root . '/' . $site_path . '/settings.local.php';
  # }
 +
-+// Auto-connect to the correct Acquia credentials file.
++/**
++ * Auto-connect to the correct Acquia credentials file.
++ */
 +use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 +
 +/**
@@ -29,5 +31,17 @@ index afbe2332d4..2acbf20eb1 100644
 +      $safe_site_name = str_replace('.', '_', $site_name);
 +      require "/var/www/site-php/$ah_group/$safe_site_name-settings.inc";
 +    }
++  }
++
++  /**
++   * ACMS will only load memcache if the user explicitly asks us to.
++   * acquia/memcache-settings will only configure the cache bins if
++   * servers are present in $settings['memcache'], which are set in
++   * the Acquia common settings files above. This lets us disable
++   * memcache without a code deploy. This logic should make its way
++   * to acquia/memcache-settings eventually.
++   */
++  if (!getenv('ENABLE_MEMCACHED')) {
++    unset($settings['memcache']);
 +  }
 +}

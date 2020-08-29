@@ -197,7 +197,7 @@
         ],
         "nuke": "rm -r -f docroot vendor",
         "pre-drupal-scaffold-cmd": [
-            "cd docroot && patch -p1 <../patches/d9-acms-settings.patch"
+            "cd docroot && patch -p1 -s <../patches/d9-acms-settings.patch || true"
         ]
     }
 }
