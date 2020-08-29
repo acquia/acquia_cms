@@ -68,12 +68,18 @@
     },
     "extra": {
         "drupal-scaffold": {
+            "allowed-packages": [
+                "drupal/core"
+            ],
             "locations": {
-                "web-root": "docroot/"
+                "web-root": "./docroot"
             },
             "file-mapping": {
                 "[project-root]/.gitattributes": false,
                 "[project-root]/.editorconfig": false,
+                "[web-root]/sites/default/default.settings.php": {
+                    "append": "misc/acms.settings.txt"
+                },
                 "[web-root]/example.gitignore": false,
                 "[web-root]/.csslintrc": false,
                 "[web-root]/modules/README.txt": false,
@@ -113,9 +119,6 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "acquia/drupal-environment-detector": {
-                "Add get site name function to environment-detector": "./patches/environment-detector.patch"
-            },
             "drupal/default_content": {
                 "2933777 - REST/Serializer improvements in core/contrib make it less suitable for default_content use case": "https://www.drupal.org/files/issues/2020-07-14/default_content_yaml-2933777-33.patch"
             },

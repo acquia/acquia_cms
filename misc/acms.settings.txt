@@ -1,10 +1,4 @@
-<?php
-
-/**
- * @file
- * Auto-connect to the correct Acquia credentials file.
- */
-
+// Auto-connect to the correct Acquia credentials file.
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 
 /**
@@ -28,12 +22,4 @@ if (AcquiaDrupalEnvironmentDetector::isAhEnv()) {
       require "/var/www/site-php/$ah_group/$safe_site_name-settings.inc";
     }
   }
-}
-
-// Use memcache as cache backend if Acquia configuration is present.
-$repo_root = dirname(DRUPAL_ROOT);
-$memcacheSettingsFile = $repo_root . '/vendor/acquia/memcache-settings/memcache.settings.php';
-if (file_exists($memcacheSettingsFile) && getenv('ENABLE_MEMCACHED')) {
-  // phpcs:ignore
-  require $memcacheSettingsFile;
 }
