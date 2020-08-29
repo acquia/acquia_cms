@@ -7,7 +7,7 @@
         "acquia/cohesion": "^6.2",
         "acquia/cohesion-theme": "^6.2",
         "acquia/drupal-environment-detector": "^1",
-        "acquia/memcache-settings": "^1",
+        "acquia/memcache-settings": "dev-9-drupal-scaffold",
         "cweagans/composer-patches": "^1.6",
         "drupal/acquia_connector": "^2",
         "drupal/acquia_purge": "^1",
@@ -69,7 +69,8 @@
     "extra": {
         "drupal-scaffold": {
             "allowed-packages": [
-                "drupal/core"
+                "drupal/core",
+                "acquia/memcache-settings"
             ],
             "locations": {
                 "web-root": "./docroot"
@@ -77,9 +78,6 @@
             "file-mapping": {
                 "[project-root]/.gitattributes": false,
                 "[project-root]/.editorconfig": false,
-                "[web-root]/sites/default/default.settings.php": {
-                    "append": "misc/acms.settings.txt"
-                },
                 "[web-root]/example.gitignore": false,
                 "[web-root]/.csslintrc": false,
                 "[web-root]/modules/README.txt": false,
@@ -154,6 +152,11 @@
             "type": "vcs",
             "url": "https://github.com/acquia/drupal-environment-detector.git",
             "no-api": true
+        },
+        "memcache-settings": {
+            "type": "vcs",
+            "url": "https://github.com/msherron/memcache-settings.git",
+            "no-api": true
         }
     },
     "minimum-stability": "dev",
@@ -192,6 +195,9 @@
             "cd themes/acquia_claro && npm install",
             "composer build:frontend"
         ],
-        "nuke": "rm -r -f docroot vendor"
+        "nuke": "rm -r -f docroot vendor",
+        "pre-drupal-scaffold-cmd": [
+            "cd docroot && patch -p1 <../patches/d9-acms-settings.patch"
+        ]
     }
 }
