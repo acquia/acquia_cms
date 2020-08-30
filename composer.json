@@ -68,12 +68,18 @@
     },
     "extra": {
         "drupal-scaffold": {
+            "allowed-packages": [
+                "drupal/core"
+            ],
             "locations": {
-                "web-root": "docroot/"
+                "web-root": "./docroot"
             },
             "file-mapping": {
                 "[project-root]/.gitattributes": false,
                 "[project-root]/.editorconfig": false,
+                "[web-root]/sites/default/default.settings.php": {
+                    "append": "./patches/d9-acms-settings.patch"
+                },
                 "[web-root]/example.gitignore": false,
                 "[web-root]/.csslintrc": false,
                 "[web-root]/modules/README.txt": false,
@@ -123,6 +129,9 @@
             "drupal/core": {
                 "Media Library widget produces error this value should not be null when field is required": "https://www.drupal.org/files/issues/2020-08-11/media-library-not-null-3160238-10.patch"
             },
+            "drupal/memcache": {
+                "Debug mode test throws error during bootstrap": "https://www.drupal.org/files/issues/2020-08-21/3166664-memcached-debug-bug.patch"
+            },
             "drupal/acquia_telemetry-acquia_telemetry": {
                 "Add check for core index": "https://www.drupal.org/files/issues/2020-08-18/3165473-27.patch"
             },
@@ -144,6 +153,11 @@
         "environment-detector": {
             "type": "vcs",
             "url": "https://github.com/acquia/drupal-environment-detector.git",
+            "no-api": true
+        },
+        "memcache-settings": {
+            "type": "vcs",
+            "url": "https://github.com/msherron/memcache-settings.git",
             "no-api": true
         }
     },
