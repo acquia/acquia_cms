@@ -264,6 +264,7 @@ display:
         filter_groups: false
         style: false
         row: false
+        sorts: false
       filter_groups:
         operator: AND
         groups:
@@ -278,6 +279,20 @@ display:
         options:
           relationship: none
           view_mode: card
+      sorts:
+        field_event_start_value:
+          id: field_event_start_value
+          table: node__field_event_start
+          field: field_event_start_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: false
+          expose:
+            label: ''
+          granularity: second
+          plugin_id: datetime
     cache_metadata:
       max-age: -1
       contexts:
