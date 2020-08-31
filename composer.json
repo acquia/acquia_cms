@@ -71,12 +71,18 @@
     },
     "extra": {
         "drupal-scaffold": {
+            "allowed-packages": [
+                "drupal/core"
+            ],
             "locations": {
-                "web-root": "docroot/"
+                "web-root": "./docroot"
             },
             "file-mapping": {
                 "[project-root]/.gitattributes": false,
                 "[project-root]/.editorconfig": false,
+                "[web-root]/sites/default/default.settings.php": {
+                    "append": "./patches/d9-acms-settings.patch"
+                },
                 "[web-root]/example.gitignore": false,
                 "[web-root]/.csslintrc": false,
                 "[web-root]/modules/README.txt": false,
@@ -120,10 +126,14 @@
                 "2933777 - REST/Serializer improvements in core/contrib make it less suitable for default_content use case": "https://www.drupal.org/files/issues/2020-07-14/default_content_yaml-2933777-33.patch"
             },
             "drupal/focal_point": {
-                "Integrate focal point with media_library": "https://www.drupal.org/files/issues/2020-05-26/3094478-38.patch"
+                "3094478 - Integrate focal point with media_library": "https://www.drupal.org/files/issues/2020-05-26/3094478-38.patch",
+                "3162210 - Preview link accidentally closes the media library": "https://www.drupal.org/files/issues/2020-08-18/3162210-3.patch"
             },
             "drupal/core": {
                 "Media Library widget produces error this value should not be null when field is required": "https://www.drupal.org/files/issues/2020-08-11/media-library-not-null-3160238-10.patch"
+            },
+            "drupal/memcache": {
+                "Debug mode test throws error during bootstrap": "https://www.drupal.org/files/issues/2020-08-21/3166664-memcached-debug-bug.patch"
             },
             "drupal/acquia_telemetry-acquia_telemetry": {
                 "Add check for core index": "https://www.drupal.org/files/issues/2020-08-18/3165473-27.patch"
@@ -147,6 +157,11 @@
             "type": "vcs",
             "url": "https://github.com/acquia/drupal-environment-detector.git",
             "no-api": true
+        },
+        "memcache-settings": {
+            "type": "vcs",
+            "url": "https://github.com/msherron/memcache-settings.git",
+            "no-api": true
         }
     },
     "minimum-stability": "dev",
@@ -165,7 +180,13 @@
             "ln -s -f $PWD/src $PROFILE_DIR",
             "ln -s -f $PWD/tests $PROFILE_DIR",
             "find ./docroot/modules -type d -name tests -prune -exec rm -r -f '{}' ';'",
-            "cp -f phpunit.xml ./docroot/core"
+            "cp -f phpunit.xml ./docroot/core",
+            "composer install:frontend"
+        ],
+        "build:frontend": [
+            "cd themes/acquia_claro && npm run build",
+            "mkdir -p modules/acquia_cms_toolbar/css",
+            "cp themes/acquia_claro/css/acquia_cms_toolbar.css modules/acquia_cms_toolbar/css"
         ],
         "cohesion:fixture": [
             "@putenv FILES_DIR=./docroot/sites/default/files",
@@ -174,6 +195,10 @@
             "cp -f $TMPDIR/cex/cohesion_* $FILES_DIR/cohesion/config",
             "tar -c -z -f ./tests/cohesion.tar.gz --directory $FILES_DIR cohesion",
             "rm -rf $TMPDIR/cex"
+        ],
+        "install:frontend": [
+            "cd themes/acquia_claro && npm install",
+            "composer build:frontend"
         ],
         "nuke": "rm -r -f docroot vendor"
     }
