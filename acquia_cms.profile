@@ -5,7 +5,8 @@
  * Contains install-time code for the Acquia CMS profile.
  */
 
-use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
+use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\Component\Serialization\Yaml;
@@ -36,7 +37,7 @@ function acquia_cms_install_tasks() {
 
   $config = Drupal::config('cohesion.settings');
   $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
-  $acquia_telemetry_heartbeat = \Drupal::service('module_handler')->moduleExists('acquia_telemetry');
+  $send_telemetry = Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv();
 
   // If the user has configured their Cohesion keys, import all elements.
   $tasks['acquia_cms_initialize_cohesion'] = [
@@ -53,9 +54,7 @@ function acquia_cms_install_tasks() {
   ];
   // If the user has opted in for Acquia Telemetry, send heartbeat event.
   $tasks['acquia_cms_send_heartbeat_event'] = [
-    'display_name' => t('Heartbeat event of Acquia Telemetry'),
-    'display' => $acquia_telemetry_heartbeat,
-    'run' => $acquia_telemetry_heartbeat ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+    'run' => $send_telemetry ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
   ];
   return $tasks;
 }
@@ -64,10 +63,9 @@ function acquia_cms_install_tasks() {
  * Send heartbeat event after site installation.
  */
 function acquia_cms_send_heartbeat_event() {
-  // Send heartbeat event.
-  \Drupal::service('acquia.telemetry')->sendTelemetry('acms_install', [
-    'Application UUID' => AcquiaDrupalEnvironmentDetector::getAhApplicationUuid(),
-    'Site Environment' => AcquiaDrupalEnvironmentDetector::getAhEnv(),
+  \Drupal::service('acquia.telemetry')->sendTelemetry('acquia_cms_installed', [
+    'Application UUID' => Environment::getAhApplicationUuid(),
+    'Site Environment' => Environment::getAhEnv(),
   ]);
 }
 
@@ -92,31 +90,11 @@ function acquia_cms_initialize_cohesion() {
 }
 
 /**
- * Gets an array of all non Acquia Drupal extensions.
- *
- * @return array
- *   A flat array of all non Acquia Drupal extensions.
- */
-function acquia_cms_non_acquia_extension_names() {
-  $module_names = array_keys(\Drupal::service('extension.list.module')->getAllAvailableInfo());
-  $acquia_modules_name = \Drupal::service('acquia.telemetry')->getAcquiaExtensionNames();
-
-  return array_diff($module_names, $acquia_modules_name);
-}
-
-/**
  * Implements hook_modules_installed().
  */
 function acquia_cms_modules_installed(array $modules) {
-  // Proceed only if the telemetry module exists.
   if (\Drupal::service('module_handler')->moduleExists('acquia_telemetry')) {
-    /** @var \Drupal\acquia_telemetry\Telemetry $telemetry_service */
-    $telemetry_service = \Drupal::service('acquia.telemetry');
-    $installed_extensions = array_intersect($modules, acquia_cms_non_acquia_extension_names());
-    if ($installed_extensions) {
-      $event_properties = ['installed_extensions' => array_values($installed_extensions)];
-      $telemetry_service->sendTelemetry('Extensions installed', $event_properties);
-    }
+    Drupal::classResolver(TelemetryFacade::class)->modulesInstalled($modules);
   }
 }
 
@@ -124,15 +102,8 @@ function acquia_cms_modules_installed(array $modules) {
  * Implements hook_modules_uninstalled().
  */
 function acquia_cms_modules_uninstalled(array $modules) {
-  // Proceed only if the telemetry module exists.
   if (\Drupal::service('module_handler')->moduleExists('acquia_telemetry')) {
-    /** @var \Drupal\acquia_telemetry\Telemetry $telemetry_service */
-    $telemetry_service = \Drupal::service('acquia.telemetry');
-    $uninstalled_extensions = array_intersect($modules, acquia_cms_non_acquia_extension_names());
-    if ($uninstalled_extensions) {
-      $event_properties = ['uninstalled_extensions' => array_values($uninstalled_extensions)];
-      $telemetry_service->sendTelemetry('Extensions uninstalled', $event_properties);
-    }
+    Drupal::classResolver(TelemetryFacade::class)->modulesUninstalled($modules);
   }
 }
 
