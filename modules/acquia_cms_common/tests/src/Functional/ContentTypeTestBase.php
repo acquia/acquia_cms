@@ -466,10 +466,11 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
    *   display, in the order we expect them to have.
    */
   protected function assertFieldsOrder(array $expected_order) {
-    $display = $this->container->get('entity_display.repository')
-      ->getFormDisplay('node', $this->nodeType);
+    $components = $this->container->get('entity_display.repository')
+      ->getFormDisplay('node', $this->nodeType)
+      ->getComponents();
 
-    $this->assertDisplayComponentsOrder($display, $expected_order, "The fields of the '$this->nodeType' content type's edit form were not in the expected order.");
+    $this->assertDisplayComponentsOrder($components, $expected_order, "The fields of the '$this->nodeType' content type's edit form were not in the expected order.");
   }
 
 }
