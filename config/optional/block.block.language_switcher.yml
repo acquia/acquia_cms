@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - cohesion
+    - language
+  theme:
+    - cohesion_theme
+id: language_switcher
+theme: cohesion_theme
+region: dx8_hidden
+weight: 0
+provider: null
+plugin: 'language_block:language_interface'
+settings:
+  id: 'language_block:language_interface'
+  label: 'Language switcher'
+  provider: language
+  label_display: visible
+visibility:
+  cohesion_master_template:
+    id: cohesion_master_template
+    using_master_template: 0
+    negate: false
