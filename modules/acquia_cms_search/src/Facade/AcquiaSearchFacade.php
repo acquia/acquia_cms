@@ -72,7 +72,7 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
     $index = $this->indexStorage->load('content');
 
     if ($index && $index->getServerId() === 'database') {
-      $form['#submit'][] = static::class . '::submitSettings';
+      $form['#submit'][] = static::class . '::submitSettingsForm';
     }
   }
 
