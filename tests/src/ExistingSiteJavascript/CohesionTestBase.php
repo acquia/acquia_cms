@@ -29,56 +29,6 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
   }
 
   /**
-   * Adds a component to a layout canvas.
-   *
-   * @param \Behat\Mink\Element\ElementInterface $canvas
-   *   The layout canvas element.
-   * @param string $label
-   *   The component label.
-   *
-   * @return \Behat\Mink\Element\ElementInterface
-   *   The component that has been added to the layout canvas.
-   */
-  protected function addComponent(ElementInterface $canvas, string $label) : ElementInterface {
-    $this->pressAriaButton($canvas, 'Add content');
-    $this->selectComponentInElementBrowser($label);
-    return $this->assertComponent($canvas, $label);
-  }
-
-  /**
-   * Adds a component inside another component's dropzone.
-   *
-   * @param \Behat\Mink\Element\ElementInterface $container
-   *   The containing component, which contains a dropzone.
-   * @param string $label
-   *   The label of the component to add.
-   *
-   * @return \Behat\Mink\Element\ElementInterface
-   *   The component added to the dropzone.
-   */
-  protected function addComponentToDropZone(ElementInterface $container, string $label) : ElementInterface {
-    $dropzone = $this->waitForElementVisible('css', '.coh-layout-canvas-list-dropzone', $container);
-    $dropzone->mouseOver();
-    $this->waitForElementVisible('css', '.coh-add-btn', $dropzone)->press();
-    $this->selectComponentInElementBrowser($label);
-    return $this->assertComponent($container, $label);
-  }
-
-  /**
-   * Selects a component from the element browser.
-   *
-   * @param string $label
-   *   The label of the component to select.
-   */
-  private function selectComponentInElementBrowser(string $label) : void {
-    $element_browser = $this->waitForElementBrowser();
-
-    $selector = sprintf('.coh-layout-canvas-list-item[data-title="%s"]', $label);
-    $this->waitForElementVisible('css', $selector, $element_browser)->doubleClick();
-    $this->pressAriaButton($element_browser, 'Close sidebar browser');
-  }
-
-  /**
    * Asserts that a component appears in a layout canvas.
    *
    * @param \Behat\Mink\Element\ElementInterface $canvas
@@ -92,26 +42,6 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
   protected function assertComponent(ElementInterface $canvas, string $label) : ElementInterface {
     $selector = sprintf('.coh-layout-canvas-list-item[data-type="%s"]', $label);
     return $this->waitForElementVisible('css', $selector, $canvas);
-  }
-
-  /**
-   * Opens the modal edit form for a component.
-   *
-   * @param \Behat\Mink\Element\ElementInterface $component
-   *   The component element.
-   *
-   * @return \Behat\Mink\Element\ElementInterface
-   *   The modal edit form for the component.
-   */
-  protected function editComponent(ElementInterface $component) : ElementInterface {
-    $this->pressAriaButton($component, 'More actions');
-    $this->waitForElementVisible('css', '.coh-layout-canvas-utils-dropdown-menu .coh-edit-btn')->press();
-
-    // Wait for the form wrapper to appear...
-    $form = $this->waitForElementVisible('css', '.coh-layout-canvas-settings');
-    // ...then wait the form wrapper to load the actual settings form.
-    $this->waitForElementVisible('css', 'coh-component-form', $form);
-    return $form;
   }
 
   /**
@@ -132,7 +62,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    * @param string $button_label
    *   The button's ARIA label.
    */
-  private function pressAriaButton(ElementInterface $container, string $button_label) : void {
+  protected function pressAriaButton(ElementInterface $container, string $button_label) : void {
     $selector = sprintf('button[aria-label="%s"]', $button_label);
     $button = $container->find('css', $selector);
     $this->assertInstanceOf(ElementInterface::class, $button);
@@ -223,32 +153,6 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
   }
 
   /**
-   * Tries to open the edit form for a component in the administrative UI.
-   *
-   * @param string $group
-   *   The group to which the component belongs.
-   * @param string $label
-   *   The label of the component.
-   *
-   * @return \Behat\Mink\Element\ElementInterface
-   *   The component's administrative edit form.
-   */
-  protected function editComponentDefinition(string $group, string $label) : ElementInterface {
-    $assert_session = $this->assertSession();
-
-    // Ensure that the component's group container is open.
-    $group = $assert_session->elementExists('css', "details > summary:contains($group)");
-    if ($group->getParent()->hasAttribute('open') === FALSE) {
-      $group->click();
-    }
-
-    $assert_session->elementExists('css', 'tr:contains("' . $label . '")', $group->getParent())
-      ->clickLink('Edit');
-
-    return $this->waitForElementVisible('css', '.cohesion-component-edit-form');
-  }
-
-  /**
    * Presses the Save button on a node add/edit form.
    *
    * This is needed because there may be multiple "Save" buttons on the form
@@ -271,81 +175,6 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
     return [
       ['site_builder'],
       ['developer'],
-    ];
-  }
-
-  /**
-   * Tries to open the edit form for a helper in the administrative UI.
-   *
-   * @param string $group
-   *   The group to which the component belongs.
-   * @param string $label
-   *   The label of the component.
-   *
-   * @return \Behat\Mink\Element\ElementInterface
-   *   The component's administrative edit form.
-   */
-  protected function editHelperDefinition(string $group, string $label) : ElementInterface {
-    $assert_session = $this->assertSession();
-
-    // Ensure that the helper's group container is open.
-    $group = $assert_session->elementExists('css', "details > summary:contains($group)");
-    if ($group->getParent()->hasAttribute('open') === FALSE) {
-      $group->click();
-    }
-
-    $assert_session->elementExists('css', 'tr:contains("' . $label . '")', $group->getParent())
-      ->clickLink('Edit');
-
-    return $this->waitForElementVisible('css', '.cohesion-helper-edit-form');
-  }
-
-  /**
-   * Adds a helper to a layout canvas.
-   *
-   * @param \Behat\Mink\Element\ElementInterface $canvas
-   *   The layout canvas element.
-   * @param string $label
-   *   The helper label.
-   * @param string $layout_canvas_label
-   *   The helper label which is used by layout canvas.
-   *
-   * @return \Behat\Mink\Element\ElementInterface
-   *   The helper that has been added to the layout canvas.
-   */
-  protected function addHelper(ElementInterface $canvas, string $label, string $layout_canvas_label) : ElementInterface {
-    $this->pressAriaButton($canvas, 'Add content');
-    $this->selectHelperInElementBrowser($label);
-    return $this->assertComponent($canvas, $layout_canvas_label);
-  }
-
-  /**
-   * Selects a helper from the element browser.
-   *
-   * @param string $label
-   *   The label of the helper to select.
-   */
-  private function selectHelperInElementBrowser(string $label) : void {
-    $element_browser = $this->waitForElementBrowser();
-    $this->waitForElementVisible('css', '.coh-layout-canvas-menu');
-    $this->assertSession()->elementExists('css', '.coh-nav-dropdown')->click();
-    $this->waitForElementVisible('css', "a.nav-link:contains('Helpers')")->press();
-    $selector = sprintf('.coh-layout-canvas-list-item[data-title="%s"]', $label);
-    $this->waitForElementVisible('css', $selector, $element_browser)->doubleClick();
-    $this->pressAriaButton($element_browser, 'Close sidebar browser');
-  }
-
-  /**
-   * Data provider for testing helpers in the layout canvas.
-   *
-   * @return array[]
-   *   Sets of arguments to pass to the test method.
-   */
-  public function providerHelperInstallation() {
-    return [
-      [
-        ['content_author', 'site_builder'],
-      ],
     ];
   }
 

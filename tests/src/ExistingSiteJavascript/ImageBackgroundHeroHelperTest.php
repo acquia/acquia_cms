@@ -7,7 +7,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  *
  * @group acquia_cms
  */
-class ImageBackgroundHeroHelperTest extends CohesionTestBase {
+class ImageBackgroundHeroHelperTest extends CohesionHelperTestBase {
 
   /**
    * Tests that the helper can be added to a layout canvas.
