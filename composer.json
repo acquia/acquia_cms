@@ -1,7 +1,7 @@
 {
     "name": "acquia/acquia_cms",
     "type": "drupal-profile",
-    "description": "An implementation of Lightning for running low code websites in the Acquia platform.",
+    "description": "An implementation of Drupal 9 for running custom, low code websites on the Acquia platform.",
     "license": "GPL-2.0-or-later",
     "require": {
         "acquia/cohesion": "^6.2",
@@ -149,16 +149,6 @@
         "assets": {
             "type": "composer",
             "url": "https://asset-packagist.org"
-        },
-        "environment-detector": {
-            "type": "vcs",
-            "url": "https://github.com/acquia/drupal-environment-detector.git",
-            "no-api": true
-        },
-        "memcache-settings": {
-            "type": "vcs",
-            "url": "https://github.com/msherron/memcache-settings.git",
-            "no-api": true
         }
     },
     "minimum-stability": "dev",
