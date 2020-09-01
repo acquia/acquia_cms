@@ -7,7 +7,7 @@ use Behat\Mink\Element\ElementInterface;
 /**
  * Base class for testing Acquia CMS's Cohesion Components.
  */
-class CohesionComponentTestBase extends CohesionTestBase {
+abstract class CohesionComponentTestBase extends CohesionTestBase {
 
   /**
    * Adds a component to a layout canvas.
