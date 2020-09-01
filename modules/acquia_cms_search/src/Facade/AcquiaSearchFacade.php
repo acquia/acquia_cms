@@ -62,21 +62,6 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
   }
 
   /**
-   * Alters the Acquia Search settings form.
-   *
-   * @param array $form
-   *   The form array.
-   */
-  public function alterSettingsForm(array &$form) : void {
-    /** @var \Drupal\search_api\IndexInterface $index */
-    $index = $this->indexStorage->load('content');
-
-    if ($index && $index->getServerId() === 'database') {
-      $form['#submit'][] = static::class . '::submitSettingsForm';
-    }
-  }
-
-  /**
    * Submit handler for the Acquia Search settings form.
    */
   public static function submitSettingsForm() : void {
@@ -110,7 +95,7 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
     /** @var \Drupal\search_api\ServerInterface $server */
     $server = $this->serverStorage->load('acquia_search_solr_search_api_solr_server');
 
-    if ($index && $server) {
+    if ($index && $server && $index->getServerId() === 'database') {
       $index->setServer($server)->reindex();
       $this->indexStorage->save($index);
 
