@@ -54,13 +54,14 @@ class AcquiaSearchSolrIntegrationTest extends BrowserTestBase {
     $this->drupalGet('/admin/config/search/acquia-search-solr');
 
     $page = $this->getSession()->getPage();
-    $page->fillField('Acquia Subscription identifier', $this->randomString());
+    $page->fillField('Acquia Subscription identifier', 'ABCD-12345');
     $page->fillField('Acquia Connector key', $this->randomString());
-    $page->fillField('Acquia Application UUID', $this->randomString());
+    $page->fillField('Acquia Application UUID', $this->container->get('uuid')->generate());
     $page->pressButton('Save configuration');
 
     $assert_session = $this->assertSession();
     $assert_session->statusCodeEquals(200);
+    $assert_session->pageTextContains('The configuration options have been saved.');
     $assert_session->pageTextContains('The Content search index is now using the Acquia Search Solr Search API Solr server server. All content will be reindexed.');
 
     $this->assertSame('acquia_search_solr_search_api_solr_server', Index::load('content')->getServerId());
