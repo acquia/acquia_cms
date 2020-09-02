@@ -52,10 +52,14 @@ function acquia_cms_install_tasks() {
     'type' => 'batch',
     'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
   ];
+  $tasks['acquia_cms_install_logger'] = [
+    'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+  ];
   // If the user has opted in for Acquia Telemetry, send heartbeat event.
   $tasks['acquia_cms_send_heartbeat_event'] = [
     'run' => $send_telemetry ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
   ];
+
   return $tasks;
 }
 
@@ -194,5 +198,29 @@ function acquia_cms_install_ui_kit(array &$install_state) {
   else {
     // We already imported the packages, so there's nothing else to do.
     return [];
+  }
+}
+
+/**
+ * Installs module to handle system logs on a specific environment.
+ *
+ * @param array $install_state
+ *   The current state of the installation.
+ */
+function acquia_cms_install_logger(array &$install_state) {
+  $module_handler = \Drupal::service('module_handler');
+  $module_installer = \Drupal::service('module_installer');
+
+  // Install dblog for system logs in Local, IDE or ODE environment.
+  if (Environment::isAhOdeEnv() || Environment::isAhIdeEnv() || Environment::isLocalEnv()) {
+    if (!$module_handler->moduleExists('dblog')) {
+      $module_installer->install(['dblog']);
+    }
+  }
+  // For other environments install syslog for system logs.
+  else {
+    if (!$module_handler->moduleExists('syslog')) {
+      $module_installer->install(['syslog']);
+    }
   }
 }
