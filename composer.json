@@ -1,11 +1,11 @@
 {
     "name": "acquia/acquia_cms",
     "type": "drupal-profile",
-    "description": "An implementation of Lightning for running low code websites in the Acquia platform.",
+    "description": "An implementation of Drupal 9 for running custom, low code websites on the Acquia platform.",
     "license": "GPL-2.0-or-later",
     "require": {
-        "acquia/cohesion": "^6.2",
-        "acquia/cohesion-theme": "^6.2",
+        "acquia/cohesion": "^6.3",
+        "acquia/cohesion-theme": "^6.3",
         "acquia/drupal-environment-detector": "^1",
         "acquia/memcache-settings": "^1",
         "cweagans/composer-patches": "^1.6",
@@ -17,7 +17,7 @@
         "drupal/address": "^1",
         "drupal/admin_toolbar": "^2.0",
         "drupal/core": "^9.0",
-        "drupal/default_content": "^1.0@alpha",
+        "drupal/default_content": "^2",
         "drupal/diff": "^1",
         "drupal/entity_clone": "1.0-beta4",
         "drupal/environment_indicator": "^4.0",
@@ -27,7 +27,7 @@
         "drupal/focal_point": "1.4",
         "drupal/google_analytics": "^2",
         "drupal/google_tag": "^1",
-        "drupal/honeypot": "2.0.x-dev",
+        "drupal/honeypot": "^2.0",
         "drupal/imce": "2.x-dev",
         "drupal/memcache": "2.x-dev",
         "drupal/moderation_dashboard": "^1.0@beta",
@@ -37,7 +37,7 @@
         "drupal/pathauto": "^1",
         "drupal/recaptcha": "^3",
         "drupal/redirect": "^1",
-        "drupal/responsive_preview": "^1.0@beta",
+        "drupal/responsive_preview": "^1.0",
         "drupal/scheduler_content_moderation_integration": "^1.3",
         "drupal/schema_metatag": "^1.7",
         "drupal/search_api_autocomplete": "1.x-dev",
@@ -119,9 +119,6 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/default_content": {
-                "2933777 - REST/Serializer improvements in core/contrib make it less suitable for default_content use case": "https://www.drupal.org/files/issues/2020-07-14/default_content_yaml-2933777-33.patch"
-            },
             "drupal/focal_point": {
                 "3094478 - Integrate focal point with media_library": "https://www.drupal.org/files/issues/2020-05-26/3094478-38.patch",
                 "3162210 - Preview link accidentally closes the media library": "https://www.drupal.org/files/issues/2020-08-18/3162210-3.patch"
@@ -149,16 +146,6 @@
         "assets": {
             "type": "composer",
             "url": "https://asset-packagist.org"
-        },
-        "environment-detector": {
-            "type": "vcs",
-            "url": "https://github.com/acquia/drupal-environment-detector.git",
-            "no-api": true
-        },
-        "memcache-settings": {
-            "type": "vcs",
-            "url": "https://github.com/msherron/memcache-settings.git",
-            "no-api": true
         }
     },
     "minimum-stability": "dev",

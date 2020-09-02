@@ -1,17 +1,13 @@
-/**
- * Auto-connect to the correct Acquia credentials file.
- */
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 
 /**
- * Site path.
- *
- * @var $site_path
- * This is always set and exposed by the Drupal Kernel.
+ * Acquia Cloud automatically generates a settings file that contains the
+ * database credentials for a given Drupal application, along with some other
+ * required plumbing. The code below uses a plugin to load the correct file
+ * based on the current product, site, and environment.
  */
 // phpcs:ignore
 $site_name = AcquiaDrupalEnvironmentDetector::getSiteName($site_path);
-// Acquia Cloud settings.
 if (AcquiaDrupalEnvironmentDetector::isAhEnv()) {
   $ah_group = AcquiaDrupalEnvironmentDetector::getAhGroup();
   if (!AcquiaDrupalEnvironmentDetector::isAcsfEnv()) {
