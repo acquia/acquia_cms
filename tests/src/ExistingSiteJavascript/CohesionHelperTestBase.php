@@ -42,16 +42,13 @@ abstract class CohesionHelperTestBase extends CohesionTestBase {
    *   The layout canvas element.
    * @param string $label
    *   The helper label.
-   * @param string $layout_canvas_label
-   *   The helper label which is used by layout canvas.
-   *
-   * @return \Behat\Mink\Element\ElementInterface
-   *   The helper that has been added to the layout canvas.
+   * @param array $components_label
+   *   Array of component's label in helper.
    */
-  protected function addHelper(ElementInterface $canvas, string $label, string $layout_canvas_label) : ElementInterface {
+  protected function addHelper(ElementInterface $canvas, string $label, array $components_label) {
     $this->pressAriaButton($canvas, 'Add content');
     $this->selectHelperInElementBrowser($label);
-    return $this->assertComponent($canvas, $layout_canvas_label);
+    $this->assertAllComponentsOfHelper($canvas, $components_label);
   }
 
   /**
@@ -68,6 +65,21 @@ abstract class CohesionHelperTestBase extends CohesionTestBase {
     $selector = sprintf('.coh-layout-canvas-list-item[data-title="%s"]', $label);
     $this->waitForElementVisible('css', $selector, $element_browser)->doubleClick();
     $this->pressAriaButton($element_browser, 'Close sidebar browser');
+  }
+
+  /**
+   * Asserts that a helper appears in a layout canvas.
+   *
+   * @param \Behat\Mink\Element\ElementInterface $canvas
+   *   The layout canvas element.
+   * @param array $components_label
+   *   Array of component's label.
+   */
+  protected function assertAllComponentsOfHelper(ElementInterface $canvas, array $components_label) {
+    foreach ($components_label as $label) {
+      $selector = sprintf('.coh-layout-canvas-list-item[data-type="%s"]', $label);
+      $this->waitForElementVisible('css', $selector, $canvas);
+    }
   }
 
   /**

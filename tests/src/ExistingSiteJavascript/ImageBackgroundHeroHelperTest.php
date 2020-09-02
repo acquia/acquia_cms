@@ -27,7 +27,7 @@ class ImageBackgroundHeroHelperTest extends CohesionHelperTestBase {
 
     // Add the helper to the layout canvas.
     $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $this->addHelper($canvas, 'Image Background Hero', 'Background image container');
+    $this->addHelper($canvas, 'Image Background Hero', ['Background image container', 'Hero']);
   }
 
   /**
