@@ -49,6 +49,10 @@ class AcquiaSearchSolrIntegrationTest extends BrowserTestBase {
   public function testAcquiaSearchSolrIntegration() {
     $this->assertSame('database', Index::load('content')->getServerId());
 
+    $index = Index::load('acquia_search_solr_search_api_solr_index');
+    $this->assertTrue($index->status());
+    $this->assertSame('acquia_search_solr_search_api_solr_server', $index->getServerId());
+
     $account = $this->drupalCreateUser(['administer site configuration']);
     $this->drupalLogin($account);
     $this->drupalGet('/admin/config/search/acquia-search-solr');
@@ -65,6 +69,10 @@ class AcquiaSearchSolrIntegrationTest extends BrowserTestBase {
     $assert_session->pageTextContains('The Content search index is now using the Acquia Search Solr Search API Solr server server. All content will be reindexed.');
 
     $this->assertSame('acquia_search_solr_search_api_solr_server', Index::load('content')->getServerId());
+
+    $index = Index::load('acquia_search_solr_search_api_solr_index');
+    $this->assertFalse($index->status());
+    $this->assertNull($index->getServerId());
   }
 
 }

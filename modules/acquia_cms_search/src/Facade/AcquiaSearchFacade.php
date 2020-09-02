@@ -5,8 +5,10 @@ namespace Drupal\acquia_cms_search\Facade;
 use Drupal\acquia_search_solr\Helper\Storage as AcquiaSearch;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Solarium\Exception\ExceptionInterface as SolariumException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -37,16 +39,26 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
   private $serverStorage;
 
   /**
+   * The logger channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  private $logger;
+
+  /**
    * AcquiaSearchFacade constructor.
    *
    * @param \Drupal\Core\Entity\EntityStorageInterface $index_storage
    *   The search index entity storage handler.
    * @param \Drupal\Core\Entity\EntityStorageInterface $server_storage
    *   The search server entity storage handler.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The logger channel.
    */
-  public function __construct(EntityStorageInterface $index_storage, EntityStorageInterface $server_storage) {
+  public function __construct(EntityStorageInterface $index_storage, EntityStorageInterface $server_storage, LoggerChannelInterface $logger) {
     $this->indexStorage = $index_storage;
     $this->serverStorage = $server_storage;
+    $this->logger = $logger;
   }
 
   /**
@@ -57,7 +69,8 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
 
     return new static(
       $entity_type_manager->getStorage('search_api_index'),
-      $entity_type_manager->getStorage('search_api_server')
+      $entity_type_manager->getStorage('search_api_server'),
+      $container->get('logger.factory')->get('acquia_cms_search')
     );
   }
 
@@ -104,6 +117,31 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
         '%server' => $server->label(),
       ]);
       $this->messenger()->addStatus($message);
+    }
+
+    // If two indexes are being stored on the same Solr core, Search API might
+    // complain mildly about it. Also, it's possible that things might not work
+    // as well as they should. To get past that, load the index that ships
+    // with Acquia Search Solr and unlink it from the Solr server.
+    $index = $this->indexStorage->load('acquia_search_solr_search_api_solr_index');
+    if ($index && $index->getServerId() === $server->id()) {
+      $index->setServer(NULL);
+
+      try {
+        $this->indexStorage->save($index);
+      }
+      catch (SolariumException $e) {
+        // Look...we're just trying to unlink the index from the server, man.
+        // Solarium might throw an error if Acquia Search hasn't been properly
+        // set up yet, but that's obviously harmless. Then again, we might have
+        // also caught a not-so-harmless error condition, so let's just log it
+        // and hope for the best.
+        $this->logger->warning('An error occurred while unlinking the %server server from the %index index: @error', [
+          '%server' => $server->label(),
+          '%index' => $index->label(),
+          '@error' => $e->getMessage(),
+        ]);
+      }
     }
   }
 
