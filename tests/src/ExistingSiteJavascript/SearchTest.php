@@ -16,6 +16,38 @@ use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
 class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
   /**
+   * Tests the ACMS search functionality.
+   */
+  public function testAcmsSearch() {
+    $page = $this->getSession()->getPage();
+
+    $account = $this->createUser();
+    $account->addRole('content_administrator');
+    $account->save();
+    $this->drupalLogin($account);
+
+    $published_node = $this->createNode([
+      'type' => 'page',
+      'title' => 'Test published ',
+      'moderation_state' => 'published',
+    ]);
+    $this->assertTrue($published_node->isPublished());
+    $unpublished_node = $this->createNode([
+      'type' => 'page',
+      'title' => 'Test unpublished ',
+      'moderation_state' => 'draft',
+    ]);
+    $this->assertFalse($unpublished_node->isPublished());
+
+    $this->drupalGet('/node');
+    $page->fillField('keywords', 'Test');
+    $page->pressButton('Search');
+    // Assert that the search by title shows the proper result.
+    $this->assertLinkExistsByTitle('Test published');
+    $this->assertLinkNotExistsByTitle('Test unpublished');
+  }
+
+  /**
    * Tests the search functionality.
    */
   public function testSearch() {
