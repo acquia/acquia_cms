@@ -5,6 +5,8 @@
  * Contains install-time code for the Acquia CMS profile.
  */
 
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
+use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\Component\Serialization\Yaml;
@@ -35,6 +37,7 @@ function acquia_cms_install_tasks() {
 
   $config = Drupal::config('cohesion.settings');
   $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
+  $send_telemetry = Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv();
 
   // If the user has configured their Cohesion keys, import all elements.
   $tasks['acquia_cms_initialize_cohesion'] = [
@@ -49,7 +52,21 @@ function acquia_cms_install_tasks() {
     'type' => 'batch',
     'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
   ];
+  // If the user has opted in for Acquia Telemetry, send heartbeat event.
+  $tasks['acquia_cms_send_heartbeat_event'] = [
+    'run' => $send_telemetry ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+  ];
   return $tasks;
+}
+
+/**
+ * Send heartbeat event after site installation.
+ */
+function acquia_cms_send_heartbeat_event() {
+  \Drupal::service('acquia.telemetry')->sendTelemetry('acquia_cms_installed', [
+    'Application UUID' => Environment::getAhApplicationUuid(),
+    'Site Environment' => Environment::getAhEnv(),
+  ]);
 }
 
 /**
@@ -70,6 +87,24 @@ function acquia_cms_initialize_cohesion() {
     return [];
   }
   return $batch;
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function acquia_cms_modules_installed(array $modules) {
+  if (\Drupal::service('module_handler')->moduleExists('acquia_telemetry')) {
+    Drupal::classResolver(TelemetryFacade::class)->modulesInstalled($modules);
+  }
+}
+
+/**
+ * Implements hook_modules_uninstalled().
+ */
+function acquia_cms_modules_uninstalled(array $modules) {
+  if (\Drupal::service('module_handler')->moduleExists('acquia_telemetry')) {
+    Drupal::classResolver(TelemetryFacade::class)->modulesUninstalled($modules);
+  }
 }
 
 /**
