@@ -135,6 +135,9 @@ class BasicPermissionsTest extends BrowserTestBase {
     $account->save();
     $this->assertTrue($account->hasPermission('administer users'));
 
+    // All roles should have 'view the administration theme' permission.
+    $this->assertTrue($account->hasPermission('view the administration theme'), "$role has view the administration theme permission");
+
     $this->drupalLogin($account);
     $assert_toolbar();
     $this->drupalGet('/admin/people');
@@ -197,6 +200,9 @@ class BasicPermissionsTest extends BrowserTestBase {
       $this->assertSame($is_developer, $role->hasPermission('administer menu templates'));
       $this->assertSame($is_developer, $role->hasPermission('administer view templates'));
       $this->assertSame($is_developer, $role->hasPermission('administer website settings'));
+
+      // All roles should have 'view the administration theme' permission.
+      $this->assertTrue($account->hasPermission('view the administration theme'), "$role has view the administration theme permission");
 
     }
   }
