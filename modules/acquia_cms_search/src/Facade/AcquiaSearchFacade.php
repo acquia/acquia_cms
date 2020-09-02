@@ -39,6 +39,13 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
   private $serverStorage;
 
   /**
+   * The view entity storage handler.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  private $viewStorage;
+
+  /**
    * The logger channel.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -52,12 +59,15 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
    *   The search index entity storage handler.
    * @param \Drupal\Core\Entity\EntityStorageInterface $server_storage
    *   The search server entity storage handler.
+   * @param \Drupal\Core\Entity\EntityStorageInterface $view_storage
+   *   The view entity storage handler.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The logger channel.
    */
-  public function __construct(EntityStorageInterface $index_storage, EntityStorageInterface $server_storage, LoggerChannelInterface $logger) {
+  public function __construct(EntityStorageInterface $index_storage, EntityStorageInterface $server_storage, EntityStorageInterface $view_storage, LoggerChannelInterface $logger) {
     $this->indexStorage = $index_storage;
     $this->serverStorage = $server_storage;
+    $this->viewStorage = $view_storage;
     $this->logger = $logger;
   }
 
@@ -70,6 +80,7 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
     return new static(
       $entity_type_manager->getStorage('search_api_index'),
       $entity_type_manager->getStorage('search_api_server'),
+      $entity_type_manager->getStorage('view'),
       $container->get('logger.factory')->get('acquia_cms_search')
     );
   }
@@ -141,6 +152,17 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
           '%index' => $index->label(),
           '@error' => $e->getMessage(),
         ]);
+      }
+
+      // Disable any views that are using the now-disabled index.
+      $views = $this->viewStorage->loadByProperties([
+        'status' => TRUE,
+        'base_table' => 'search_api_index_' . $index->id(),
+      ]);
+      /** @var \Drupal\views\ViewEntityInterface $view */
+      foreach ($views as $view) {
+        $view->disable();
+        $this->viewStorage->save($view);
       }
     }
   }

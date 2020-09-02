@@ -4,6 +4,7 @@ namespace Drupal\Tests\acquia_cms_search\Functional;
 
 use Drupal\search_api\Entity\Index;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\views\Entity\View;
 
 /**
  * Tests integration with Acquia Search Solr.
@@ -53,6 +54,8 @@ class AcquiaSearchSolrIntegrationTest extends BrowserTestBase {
     $this->assertTrue($index->status());
     $this->assertSame('acquia_search_solr_search_api_solr_server', $index->getServerId());
 
+    $this->assertTrue(View::load('acquia_search_solr')->status());
+
     $account = $this->drupalCreateUser(['administer site configuration']);
     $this->drupalLogin($account);
     $this->drupalGet('/admin/config/search/acquia-search-solr');
@@ -68,11 +71,14 @@ class AcquiaSearchSolrIntegrationTest extends BrowserTestBase {
     $assert_session->pageTextContains('The configuration options have been saved.');
     $assert_session->pageTextContains('The Content search index is now using the Acquia Search Solr Search API Solr server server. All content will be reindexed.');
 
+    // Our index should be using the Solr server, whereas the one that ships
+    // with Acquia Search Solr should be disabled, along with any views that are
+    // using it.
     $this->assertSame('acquia_search_solr_search_api_solr_server', Index::load('content')->getServerId());
-
     $index = Index::load('acquia_search_solr_search_api_solr_index');
     $this->assertFalse($index->status());
     $this->assertNull($index->getServerId());
+    $this->assertFalse(View::load('acquia_search_solr')->status());
   }
 
 }
