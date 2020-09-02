@@ -104,7 +104,7 @@ final class CohesionFacade implements ContainerInjectionInterface {
     }
     // @todo This line should be deleted when we are no longer shipping the big
     // UI kit package.
-    $packages[] = __DIR__ . '/misc/ui-kit.package.yml';
+    $packages[] = $this->moduleHandler->getModule('acquia_cms')->getPath() . '/misc/ui-kit.package.yml';
 
     return $packages;
   }
