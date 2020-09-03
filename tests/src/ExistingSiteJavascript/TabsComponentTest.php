@@ -7,7 +7,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  *
  * @group acquia_cms
  */
-class TabsComponentTest extends CohesionTestBase {
+class TabsComponentTest extends CohesionComponentTestBase {
 
   /**
    * Test that the components can be added to a layout canvas.

@@ -7,7 +7,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  *
  * @group acquia_cms
  */
-class BackgroundImageContainerTest extends CohesionTestBase {
+class BackgroundImageContainerTest extends CohesionComponentTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.

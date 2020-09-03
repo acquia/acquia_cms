@@ -7,7 +7,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  *
  * @group acquia_cms
  */
-class VideoCardComponentTest extends CohesionTestBase {
+class VideoCardComponentTest extends CohesionComponentTestBase {
 
   /**
    * Test that Video card component is installed.

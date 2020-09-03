@@ -7,7 +7,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  *
  * @group acquia_cms
  */
-class TextComponentTest extends CohesionTestBase {
+class TextComponentTest extends CohesionComponentTestBase {
 
   /**
    * Test that the Text component can be added to a layout canvas.
