@@ -15,7 +15,7 @@ class ImageBackgroundHeroHelperTest extends CohesionHelperTestBase {
    * @param string[] $roles
    *   Additional user roles to apply to the account being logged in.
    *
-   * @dataProvider providerHelperInstallation
+   * @dataProvider providerAddHelperToLayoutCanvas
    */
   public function testHelper(array $roles = []) {
     $account = $this->createUser();

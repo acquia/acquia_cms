@@ -88,7 +88,7 @@ abstract class CohesionHelperTestBase extends CohesionTestBase {
    * @return array[]
    *   Sets of arguments to pass to the test method.
    */
-  public function providerHelperInstallation() {
+  public function providerAddHelperToLayoutCanvas() {
     return [
       [
         ['content_author', 'site_builder'],
