@@ -8,6 +8,7 @@ use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\Tests\acquia_cms_common\Traits\AssertLinksTrait;
 use Drupal\views\Entity\View;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
@@ -19,6 +20,8 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * unfaceted view of content is displayed instead.
  */
 abstract class ContentTypeListTestBase extends ExistingSiteBase {
+
+  use AssertLinksTrait;
 
   /**
    * The machine name of the content type under test.
@@ -279,25 +282,10 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
   }
 
   /**
-   * Asserts that a set of links are on the page, in a specific order.
-   *
-   * @param string[] $expected_links_in_order
-   *   (optoinal) The titles of the links we expect to find, in the order that
-   *   we expect them to appear on the page. If not provided, this method will
-   *   search for links to all published content of the type under test.
+   * {@inheritdoc}
    */
-  private function assertLinksExistInOrder(array $expected_links_in_order = NULL) : void {
-    if ($expected_links_in_order) {
-      $count = count($expected_links_in_order);
-      $expected_links_in_order = array_intersect($this->getLinksInOrder(), $expected_links_in_order);
-      $this->assertCount($count, $expected_links_in_order);
-    }
-    else {
-      $expected_links_in_order = $this->getLinksInOrder();
-    }
-    $expected_links_in_order = array_values($expected_links_in_order);
-
-    $actual_links = $this->getSession()
+  protected function getLinks() : array {
+    $links = $this->getSession()
       ->getPage()
       ->findAll('css', 'a[title]');
 
@@ -308,21 +296,13 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
       // contains the actual title of the linked node.
       return $link->getAttribute('title');
     };
-    $actual_links = array_map($map, $actual_links);
-    $actual_links = array_intersect($actual_links, $expected_links_in_order);
-    $actual_links = array_values($actual_links);
-
-    $this->assertSame($actual_links, $expected_links_in_order);
+    return array_map($map, $links);
   }
 
   /**
-   * Returns the titles of all content of the type under test.
-   *
-   * @return string[]
-   *   The titles of all published content of the type under test, in the order
-   *   we would expect to see them on the listing page.
+   * {@inheritdoc}
    */
-  protected function getLinksInOrder() : array {
+  protected function getExpectedLinks() : array {
     $ids = $this->getQuery()->execute();
 
     /** @var \Drupal\node\NodeInterface[] $content */
