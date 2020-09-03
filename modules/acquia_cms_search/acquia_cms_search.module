@@ -5,6 +5,7 @@
  * Contains hook implementations for Acquia CMS Search.
  */
 
+use Drupal\acquia_cms_search\Facade\AcquiaSearchFacade;
 use Drupal\acquia_cms_search\Facade\SearchFacade;
 use Drupal\acquia_cms_search\Plugin\views\query\SearchApiQuery;
 use Drupal\Core\DestructableInterface;
@@ -114,12 +115,22 @@ function acquia_cms_search_views_pre_render(ViewExecutable $view) {
  * Implements hook_config_schema_info_alter().
  */
 function acquia_cms_search_config_schema_info_alter(array &$definitions) {
+  $key = 'node.type.*.third_party.acquia_cms';
   // Allow node types to carry a 'search_index' setting. This is used by our
   // facade to passively opt the node type into a particular index.
   // @see acquia_cms_search_node_type_insert()
   // @see \Drupal\acquia_cms_search\Facade\SearchFacade::addNodeType()
-  $definitions['node.type.*.third_party.acquia_cms']['mapping']['search_index'] = [
-    'type' => 'string',
-    'label' => 'The machine name of the search index to which this content type should be added',
-  ];
+  if (array_key_exists($key, $definitions)) {
+    $definitions[$key]['mapping']['search_index'] = [
+      'type' => 'string',
+      'label' => 'The machine name of the search index to which this content type should be added',
+    ];
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function acquia_cms_search_form_acquia_search_solr_settings_form_alter(array &$form) {
+  $form['#submit'][] = AcquiaSearchFacade::class . '::submitSettingsForm';
 }
