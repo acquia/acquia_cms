@@ -25,7 +25,7 @@ class PastEventsBlockTest extends ExistingSiteBase {
    */
   protected function setUp() {
     parent::setUp();
-    $block = $this->placeBlock('views_block:event_cards-block_2', [
+    $block = $this->placeBlock('views_block:event_cards-past_events_block', [
       'region' => 'content',
     ]);
     $this->markEntityForCleanup($block);

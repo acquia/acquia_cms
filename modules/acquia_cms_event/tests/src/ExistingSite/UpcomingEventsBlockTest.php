@@ -25,7 +25,7 @@ class UpcomingEventsBlockTest extends ExistingSiteBase {
    */
   protected function setUp() {
     parent::setUp();
-    $block = $this->placeBlock('views_block:event_cards-block_1', [
+    $block = $this->placeBlock('views_block:event_cards-upcoming_events_block', [
       'region' => 'content',
     ]);
     $this->markEntityForCleanup($block);

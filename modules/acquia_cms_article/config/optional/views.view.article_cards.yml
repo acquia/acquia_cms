@@ -56,7 +56,7 @@ display:
         type: cohesion_layout
         options:
           views_template: view_tpl_recent_articles_with_fe
-          master_template: 79d2f5ce
+          master_template: master_template_boxed
       row:
         type: 'entity:node'
         options:
@@ -183,9 +183,9 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }
-  block_1:
+  recent_articles_block:
     display_plugin: block
-    id: block_1
+    id: recent_articles_block
     display_title: Block
     position: 1
     display_options:

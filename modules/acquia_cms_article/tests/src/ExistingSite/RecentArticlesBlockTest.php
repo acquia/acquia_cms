@@ -23,7 +23,7 @@ class RecentArticlesBlockTest extends ExistingSiteBase {
    */
   protected function setUp() {
     parent::setUp();
-    $block = $this->placeBlock('views_block:article_cards-block_1', [
+    $block = $this->placeBlock('views_block:article_cards-recent_articles_block', [
       'region' => 'content',
     ]);
     $this->markEntityForCleanup($block);
