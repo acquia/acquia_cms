@@ -18,12 +18,6 @@ function acquia_cms_example_install() {
 
   _acquia_connector_config($key, $identifier);
   _acquia_search_solr_config($key, $identifier);
-
-  // Add shield module credential configurations.
-  $config = \Drupal::configFactory()->getEditable('shield.settings');
-  $config->set('credentials.shield.user', 'acms');
-  $config->set('credentials.shield.pass', 'DmpU05sN13o1@bQ!');
-  $config->save();
 }
 
 /**
