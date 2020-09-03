@@ -32,7 +32,7 @@ class UpcomingEventsBlockTest extends ExistingSiteBase {
     $this->createNode([
       'type' => 'event',
       'title' => 'Event Example 1',
-      'field_event_start' => '2039-10-03T22:00:00',
+      'field_event_start' => '2030-10-03T22:00:00',
       'field_event_end' => '2030-10-09T12:00:00',
       'moderation_state' => 'published',
     ]);
@@ -87,9 +87,9 @@ class UpcomingEventsBlockTest extends ExistingSiteBase {
    */
   protected function getExpectedLinks() : array {
     return [
-      'Event Example 1',
-      'Event Example 2',
       'Event Example 3',
+      'Event Example 2',
+      'Event Example 1',
     ];
   }
 

@@ -87,8 +87,8 @@ class PastEventsBlockTest extends ExistingSiteBase {
    */
   protected function getExpectedLinks() : array {
     return [
-      'Event Example 3',
       'Event Example 2',
+      'Event Example 3',
       'Event Example 1',
     ];
   }

@@ -29,25 +29,31 @@ class RecentArticlesBlockTest extends ExistingSiteBase {
     ]);
     $this->markEntityForCleanup($block);
 
+    $time = time();
+
     $this->createNode([
       'type' => 'article',
       'title' => 'Article Example 1',
       'moderation_state' => 'published',
+      'created' => $time++,
     ]);
     $this->createNode([
       'type' => 'article',
       'title' => 'Article Example 2',
       'moderation_state' => 'published',
+      'created' => $time++,
     ]);
     $this->createNode([
       'type' => 'article',
       'title' => 'Article Example 3',
       'moderation_state' => 'published',
+      'created' => $time++,
     ]);
     $this->createNode([
       'type' => 'article',
       'title' => 'Article Example 4',
       'moderation_state' => 'draft',
+      'created' => $time++,
     ]);
   }
 
