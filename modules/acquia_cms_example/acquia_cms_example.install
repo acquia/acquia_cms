@@ -5,6 +5,7 @@
  * Contains installation and update hooks for Acquia CMS Example.
  */
 
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
 use Drupal\acquia_connector\Helper\Storage as ConnectorStorage;
 use Drupal\acquia_connector\Subscription;
 use Drupal\acquia_search_solr\Helper\Storage as SolrStorage;
@@ -19,11 +20,14 @@ function acquia_cms_example_install() {
   _acquia_connector_config($key, $identifier);
   _acquia_search_solr_config($key, $identifier);
 
-  Drupal::configFactory()
-    ->getEditable('shield.settings')
-    ->set('credentials.shield.user', 'acms')
-    ->set('credentials.shield.pass', 'DmpU05sN13o1@bQ!')
-    ->save();
+  // Configure shield if it is an Acquia cloud environment.
+  if (Environment::isAhEnv()) {
+    Drupal::configFactory()
+      ->getEditable('shield.settings')
+      ->set('credentials.shield.user', 'acms')
+      ->set('credentials.shield.pass', 'DmpU05sN13o1@bQ!')
+      ->save();
+  }
 }
 
 /**
