@@ -145,7 +145,7 @@ class UpcomingEventsBlockTest extends ExistingSiteBase {
       ->condition('status', TRUE)
       ->condition('field_event_end', $current_datetime, '>=')
       ->sort('field_event_start', 'ASC')
-      ->pager(7);
+      ->pager(5);
   }
 
 }
