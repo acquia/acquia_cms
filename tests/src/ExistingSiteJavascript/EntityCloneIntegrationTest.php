@@ -9,7 +9,7 @@ use Drupal\node\Entity\Node;
  *
  * @group acquia_cms
  */
-class EntityCloneIntegrationTest extends CohesionTestBase {
+class EntityCloneIntegrationTest extends CohesionComponentTestBase {
 
   /**
    * Tests that a user is able to clone a node and its components.

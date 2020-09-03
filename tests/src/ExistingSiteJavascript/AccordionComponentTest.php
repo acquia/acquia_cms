@@ -7,7 +7,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  *
  * @group acquia_cms
  */
-class AccordionComponentTest extends CohesionTestBase {
+class AccordionComponentTest extends CohesionComponentTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.

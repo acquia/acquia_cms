@@ -7,7 +7,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  *
  * @group acquia_cms
  */
-class HeroComponentTest extends CohesionTestBase {
+class HeroComponentTest extends CohesionComponentTestBase {
 
   /**
    * Test that the Hero component can be added to a layout canvas.

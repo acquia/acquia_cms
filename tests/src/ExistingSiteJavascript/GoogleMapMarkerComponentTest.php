@@ -7,7 +7,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  *
  * @group acquia_cms
  */
-class GoogleMapMarkerComponentTest extends CohesionTestBase {
+class GoogleMapMarkerComponentTest extends CohesionComponentTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.
