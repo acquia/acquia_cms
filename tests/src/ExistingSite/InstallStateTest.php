@@ -286,9 +286,6 @@ class InstallStateTest extends ExistingSiteBase {
     $this->drupalGet('/admin/config/system/seckit');
     $assert_session->statusCodeEquals(200);
 
-    $this->drupalGet('/admin/config/system/shield');
-    $assert_session->statusCodeEquals(200);
-
     $this->drupalGet('/admin/config/content/honeypot');
     $assert_session->statusCodeEquals(200);
 

@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: thumbnail
+label: 'Thumbnail (100×100)'
+effects:
+  1cfec298-8620-4749-b100-ccb6c4500779:
+    uuid: 1cfec298-8620-4749-b100-ccb6c4500779
+    id: image_scale
+    weight: 0
+    data:
+      width: 100
+      height: null
+      upscale: false
+  903a3416-3fe4-45c9-9b01-97e9ea5c452c:
+    uuid: 903a3416-3fe4-45c9-9b01-97e9ea5c452c
+    id: focal_point_crop
+    weight: 2
+    data:
+      width: 100
+      height: 100
+      crop_type: focal_point
