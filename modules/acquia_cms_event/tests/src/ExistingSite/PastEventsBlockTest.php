@@ -25,6 +25,7 @@ class PastEventsBlockTest extends ExistingSiteBase {
     parent::setUp();
     $block = $this->placeBlock('views_block:event_cards-past_events_block', [
       'region' => 'content',
+      'id' => 'past_events_block',
     ]);
     $this->markEntityForCleanup($block);
 
@@ -73,7 +74,7 @@ class PastEventsBlockTest extends ExistingSiteBase {
   protected function getLinks(): array {
     $links = $this->getSession()
       ->getPage()
-      ->findAll('css', '.view-event-cards .coh-container .coh-heading');
+      ->findAll('css', '#block-past-events-block .view-event-cards .coh-container .coh-heading');
 
     $map = function (ElementInterface $link) {
       return $link->getText();

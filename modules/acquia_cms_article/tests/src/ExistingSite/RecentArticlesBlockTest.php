@@ -25,6 +25,7 @@ class RecentArticlesBlockTest extends ExistingSiteBase {
     parent::setUp();
     $block = $this->placeBlock('views_block:article_cards-recent_articles_block', [
       'region' => 'content',
+      'id' => 'recent_articles_block',
     ]);
     $this->markEntityForCleanup($block);
 
@@ -65,7 +66,7 @@ class RecentArticlesBlockTest extends ExistingSiteBase {
   protected function getLinks() : array {
     $links = $this->getSession()
       ->getPage()
-      ->findAll('css', '.view-article-cards .coh-container .coh-heading');
+      ->findAll('css', '#block-recent-articles-block .view-article-cards .coh-container .coh-heading');
 
     $map = function (ElementInterface $link) {
       return $link->getText();

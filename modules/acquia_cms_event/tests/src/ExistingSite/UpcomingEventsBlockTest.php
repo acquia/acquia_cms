@@ -25,6 +25,7 @@ class UpcomingEventsBlockTest extends ExistingSiteBase {
     parent::setUp();
     $block = $this->placeBlock('views_block:event_cards-upcoming_events_block', [
       'region' => 'content',
+      'id' => 'upcoming_events_block',
     ]);
     $this->markEntityForCleanup($block);
 
@@ -73,7 +74,7 @@ class UpcomingEventsBlockTest extends ExistingSiteBase {
   protected function getLinks() : array {
     $links = $this->getSession()
       ->getPage()
-      ->findAll('css', '.view-event-cards .coh-container .coh-heading');
+      ->findAll('css', '#block-upcoming-events-block .view-event-cards .coh-container .coh-heading');
 
     $map = function (ElementInterface $link) {
       return $link->getText();
