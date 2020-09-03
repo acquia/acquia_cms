@@ -8,6 +8,7 @@
 use Drupal\acquia_cms_common\Facade\MetatagFacade;
 use Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade;
 use Drupal\acquia_cms_common\Facade\WorkflowFacade;
+use Drupal\imce\Imce;
 use Drupal\node\NodeTypeInterface;
 use Drupal\workbench_email\TemplateInterface;
 
@@ -25,4 +26,15 @@ function acquia_cms_common_node_type_insert(NodeTypeInterface $node_type) {
 function acquia_cms_common_workbench_email_template_insert(TemplateInterface $template_type) {
   Drupal::classResolver(WorkbenchEmailFacade::class)
     ->addTemplate($template_type);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for html.
+ */
+function acquia_cms_common_preprocess_html(&$variables) {
+  $path = Drupal::service('path.current')->getPath();
+  if (Imce::access() && $path == '/imce') {
+    $variables['attributes']['class'][] = 'acquia-cms';
+    $variables['#attached']['library'][] = 'acquia_cms_common/imce';
+  }
 }
