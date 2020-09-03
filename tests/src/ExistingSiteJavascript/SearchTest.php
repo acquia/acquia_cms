@@ -5,6 +5,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 use Behat\Mink\Element\ElementInterface;
 use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\Tests\acquia_cms\Traits\CohesionTestTrait;
 use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
 
 /**
@@ -14,6 +15,8 @@ use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
  * @group acquia_cms
  */
 class SearchTest extends ExistingSiteSelenium2DriverTestBase {
+
+  use CohesionTestTrait;
 
   /**
    * Tests the search functionality.
@@ -109,16 +112,6 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
   }
 
   /**
-   * Asserts that a link exists with the given title attribute.
-   *
-   * @param string $title
-   *   The title of the link.
-   */
-  private function assertLinkExistsByTitle(string $title) : void {
-    $this->assertSession()->elementExists('css', 'a.coh-link[title="' . $title . '"]');
-  }
-
-  /**
    * Asserts that a link exists.
    *
    * @param string $title
@@ -131,16 +124,6 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    */
   private function assertLinkExists(string $title, ElementInterface $container = NULL) : ElementInterface {
     return $this->assertSession()->elementExists('named', ['link', $title], $container);
-  }
-
-  /**
-   * Asserts that a link with the given title attribute doesn't exist.
-   *
-   * @param string $title
-   *   The title of the link.
-   */
-  private function assertLinkNotExistsByTitle(string $title) : void {
-    $this->assertSession()->elementNotExists('css', 'a.coh-link[title="' . $title . '"]');
   }
 
 }
