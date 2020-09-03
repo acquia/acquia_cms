@@ -18,6 +18,12 @@ function acquia_cms_example_install() {
 
   _acquia_connector_config($key, $identifier);
   _acquia_search_solr_config($key, $identifier);
+
+  Drupal::configFactory()
+    ->getEditable('shield.settings')
+    ->set('credentials.shield.user', 'acms')
+    ->set('credentials.shield.pass', 'DmpU05sN13o1@bQ!')
+    ->save();
 }
 
 /**
