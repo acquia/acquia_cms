@@ -15,7 +15,7 @@ class TwoColumnPageWithHeroHelperTest extends CohesionHelperTestBase {
    * @param string[] $roles
    *   Additional user roles to apply to the account being logged in.
    *
-   * @dataProvider providerHelperInstallation
+   * @dataProvider providerAddHelperToLayoutCanvas
    */
   public function testHelper(array $roles = []) {
     $account = $this->createUser();
@@ -26,8 +26,12 @@ class TwoColumnPageWithHeroHelperTest extends CohesionHelperTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the helper to the layout canvas.
-    $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $this->addHelper($canvas, 'Two column page with hero', ['Hero', 'Breadcrumb', 'Left col', 'Right left']);
+    $this->getLayoutCanvas()->addHelper('Two column page with hero', [
+      'Hero',
+      'Breadcrumb',
+      'Left col',
+      'Right col',
+    ]);
   }
 
   /**
@@ -44,9 +48,8 @@ class TwoColumnPageWithHeroHelperTest extends CohesionHelperTestBase {
     $account->save();
     $this->drupalLogin($account);
 
-    // Visit to cohesion helpers page.
     $this->drupalGet('/admin/cohesion/helpers/helpers');
-    $this->editHelperDefinition('Layout helpers', 'Two column page with hero');
+    $this->editDefinition('Layout helpers', 'Two column page with hero');
   }
 
 }
