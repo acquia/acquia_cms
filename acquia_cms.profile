@@ -6,10 +6,10 @@
  */
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
+use Drupal\acquia_cms\Facade\CohesionFacade;
 use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
-use Drupal\Component\Serialization\Yaml;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -123,57 +123,15 @@ function acquia_cms_install_ui_kit(array &$install_state) {
     return [];
   }
 
-  /** @var \Drupal\cohesion_sync\PackagerManager $packager */
-  $packager = Drupal::service('cohesion_sync.packager');
+  /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
+  $facade = Drupal::classResolver(CohesionFacade::class);
 
-  // Scan all installed modules for Cohesion sync packages.
-  $packages = [];
-  foreach (Drupal::moduleHandler()->getModuleList() as $module) {
-    $module_path = $module->getPath();
-    $package_list = "$module_path/config/dx8/packages.yml";
-
-    if (file_exists($package_list)) {
-      $package_list = file_get_contents($package_list);
-      $package_list = Yaml::decode($package_list);
-
-      foreach ($package_list as $package_file) {
-        $packages[] = "$module_path/$package_file";
-      }
-    }
-  }
-  // Finally, import the main UI kit.
-  $packages[] = __DIR__ . '/misc/ui-kit.package.yml';
-
-  foreach ($packages as $package) {
-    assert(file_exists($package), "The UI kit package ($package) does not exist.");
-
-    // Prepare to import the package. This code is delicate because it was
-    // basically written by rooting around in Cohesion's internals. So be
-    // extremely careful when changing it.
-    // @see \Drupal\cohesion_sync\Form\ImportFileForm::submitForm()
-    // @see \Drupal\cohesion_sync\Drush\CommandHelpers::import()
+  foreach ($facade->getAllPackages() as $package) {
     try {
-      $action_data = $packager->validateYamlPackageStream($package);
-
-      // Basically, overwrite everything without validating. This is equivalent
-      // to passing the --overwrite-all and --force options to the 'sync:import'
-      // Drush command.
-      foreach ($action_data as &$action) {
-        $action['entry_action_state'] = ENTRY_EXISTING_OVERWRITTEN;
-      }
+      $facade->importPackage($package, $install_state['interactive']);
     }
-    catch (\Throwable $e) {
+    catch (Throwable $e) {
       Drupal::messenger()->addError($e->getMessage());
-      continue;
-    }
-
-    // If we are installing in the UI, prepare a batch job to import the
-    // package. Otherwise, just execute the import right now.
-    if ($install_state['interactive']) {
-      $packager->applyBatchYamlPackageStream($package, $action_data);
-    }
-    else {
-      $packager->applyYamlPackageStream($package, $action_data);
     }
   }
 
