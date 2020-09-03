@@ -37,7 +37,6 @@ function acquia_cms_install_tasks() {
 
   $config = Drupal::config('cohesion.settings');
   $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
-  $send_telemetry = Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv();
 
   // If the user has configured their Cohesion keys, import all elements.
   $tasks['acquia_cms_initialize_cohesion'] = [
@@ -52,9 +51,11 @@ function acquia_cms_install_tasks() {
     'type' => 'batch',
     'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
   ];
+  $tasks['acquia_cms_install_logger'] = [];
+
   // If the user has opted in for Acquia Telemetry, send heartbeat event.
   $tasks['acquia_cms_send_heartbeat_event'] = [
-    'run' => $send_telemetry ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+    'run' => Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
   ];
   return $tasks;
 }
@@ -152,5 +153,19 @@ function acquia_cms_install_ui_kit(array &$install_state) {
   else {
     // We already imported the packages, so there's nothing else to do.
     return [];
+  }
+}
+
+/**
+ * Installs a module to handle logging, depending on the environment.
+ */
+function acquia_cms_install_logger() {
+  $module_installer = Drupal::service('module_installer');
+
+  if (Environment::isAhOdeEnv() || Environment::isAhIdeEnv() || Environment::isLocalEnv()) {
+    $module_installer->install(['dblog']);
+  }
+  else {
+    $module_installer->install(['syslog']);
   }
 }
