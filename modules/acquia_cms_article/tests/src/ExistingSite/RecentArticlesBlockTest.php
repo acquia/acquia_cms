@@ -25,6 +25,7 @@ class RecentArticlesBlockTest extends ExistingSiteBase {
     parent::setUp();
     $block = $this->placeBlock('views_block:article_cards-recent_articles_block', [
       'region' => 'content',
+      'id' => 'recent_articles_block',
     ]);
     $this->markEntityForCleanup($block);
 
@@ -80,7 +81,7 @@ class RecentArticlesBlockTest extends ExistingSiteBase {
 
     $actual_links = $this->getSession()
       ->getPage()
-      ->findAll('css', '.view-article-cards .coh-container .coh-heading');
+      ->findAll('css', '#block-recent-articles-block .view-article-cards .coh-container .coh-heading');
 
     $map = function (ElementInterface $link) {
       // Our template for node teasers doesn't actually link the title -- which
@@ -92,7 +93,6 @@ class RecentArticlesBlockTest extends ExistingSiteBase {
     $actual_links = array_map($map, $actual_links);
     $actual_links = array_intersect($actual_links, $expected_links_in_order);
     $actual_links = array_values($actual_links);
-
     $this->assertSame($actual_links, $expected_links_in_order);
   }
 

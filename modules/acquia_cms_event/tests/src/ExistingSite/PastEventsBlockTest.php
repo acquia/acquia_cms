@@ -27,6 +27,7 @@ class PastEventsBlockTest extends ExistingSiteBase {
     parent::setUp();
     $block = $this->placeBlock('views_block:event_cards-past_events_block', [
       'region' => 'content',
+      'id' => 'past_events_block',
     ]);
     $this->markEntityForCleanup($block);
 
@@ -53,7 +54,7 @@ class PastEventsBlockTest extends ExistingSiteBase {
     ]);
     $this->createNode([
       'type' => 'event',
-      'title' => 'Event Example 3',
+      'title' => 'Event Example 4',
       'field_event_start' => '2020-08-03T22:00:00',
       'field_event_end' => '2020-08-03T12:00:00',
       'moderation_state' => 'draft',
@@ -90,7 +91,7 @@ class PastEventsBlockTest extends ExistingSiteBase {
 
     $actual_links = $this->getSession()
       ->getPage()
-      ->findAll('css', '.view-event-cards .coh-container .coh-heading');
+      ->findAll('css', '#block-past-events-block .view-event-cards .coh-container .coh-heading');
 
     $map = function (ElementInterface $link) {
       // Our template for node teasers doesn't actually link the title -- which

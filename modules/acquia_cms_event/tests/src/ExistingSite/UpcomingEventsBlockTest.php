@@ -27,6 +27,7 @@ class UpcomingEventsBlockTest extends ExistingSiteBase {
     parent::setUp();
     $block = $this->placeBlock('views_block:event_cards-upcoming_events_block', [
       'region' => 'content',
+      'id' => 'upcoming_events_block',
     ]);
     $this->markEntityForCleanup($block);
 
@@ -47,13 +48,13 @@ class UpcomingEventsBlockTest extends ExistingSiteBase {
     $this->createNode([
       'type' => 'event',
       'title' => 'Event Example 3',
-      'field_event_start' => '2020-09-03T22:00:00',
-      'field_event_end' => '2020-09-03T12:00:00',
+      'field_event_start' => '2020-10-22T22:00:00',
+      'field_event_end' => '2020-10-22T12:00:00',
       'moderation_state' => 'published',
     ]);
     $this->createNode([
       'type' => 'event',
-      'title' => 'Event Example 3',
+      'title' => 'Event Example 4',
       'field_event_start' => '2020-10-03T22:00:00',
       'field_event_end' => '2020-10-03T12:00:00',
       'moderation_state' => 'draft',
@@ -90,7 +91,7 @@ class UpcomingEventsBlockTest extends ExistingSiteBase {
 
     $actual_links = $this->getSession()
       ->getPage()
-      ->findAll('css', '.view-event-cards .coh-container .coh-heading');
+      ->findAll('css', '#block-upcoming-events-block .view-event-cards .coh-container .coh-heading');
 
     $map = function (ElementInterface $link) {
       // Our template for node teasers doesn't actually link the title -- which
