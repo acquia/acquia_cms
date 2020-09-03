@@ -1,5 +1,6 @@
 services:
   acquia_cms_json_api.restrict_resource_subscriber:
     class: Drupal\acquia_cms_json_api\EventSubscriber\RestrictResourceEventSubscriber
+    arguments: ['@entity_type.manager']
     tags:
       - { name: event_subscriber }
