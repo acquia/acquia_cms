@@ -80,6 +80,7 @@ class PersonTest extends ContentTypeTestBase {
 
     // Assert that the expected fields show up.
     $assert_session->fieldExists('Name');
+    $assert_session->fieldExists('Job Title');
     $assert_session->fieldExists('Bio');
     $assert_session->fieldExists('Place');
     $assert_session->fieldExists('Email');
@@ -129,6 +130,7 @@ class PersonTest extends ContentTypeTestBase {
     // Assert that the fields are in the correct order.
     $this->assertFieldsOrder([
       'title',
+      'field_job_title',
       'body',
       'field_person_image',
       'field_place',
