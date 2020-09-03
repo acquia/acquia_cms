@@ -51,7 +51,7 @@ display:
       pager:
         type: some
         options:
-          items_per_page: 7
+          items_per_page: 5
           offset: 0
       style:
         type: default
@@ -179,9 +179,118 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }
-  block_1:
+  past_events_block:
     display_plugin: block
-    id: block_1
+    id: past_events_block
+    display_title: 'Past Events'
+    position: 2
+    display_options:
+      display_extenders: {  }
+      title: 'Past Events'
+      defaults:
+        title: false
+        filters: false
+        filter_groups: false
+        style: false
+        row: false
+      filters:
+        status:
+          value: '1'
+          table: node_field_data
+          field: status
+          plugin_id: boolean
+          entity_type: node
+          entity_field: status
+          id: status
+          expose:
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+          group: 1
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          value:
+            event: event
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+        field_event_end_value:
+          id: field_event_end_value
+          table: node__field_event_end
+          field: field_event_end_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: '<='
+          value:
+            min: ''
+            max: ''
+            value: now
+            type: offset
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            placeholder: ''
+            min_placeholder: ''
+            max_placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          plugin_id: datetime
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      style:
+        type: cohesion_layout
+        options:
+          views_template: view_tpl_event_cards_with_featur
+          master_template: master_template_boxed
+      row:
+        type: 'entity:node'
+        options:
+          relationship: none
+          view_mode: card
+      display_description: ''
+      block_description: 'Past Events'
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - 'user.node_grants:view'
+        - user.permissions
+      tags: {  }
+  upcoming_events_block:
+    display_plugin: block
+    id: upcoming_events_block
     display_title: 'Upcoming Events'
     position: 1
     display_options:
@@ -273,7 +382,7 @@ display:
         type: cohesion_layout
         options:
           views_template: view_tpl_event_cards_with_featur
-          master_template: 79d2f5ce
+          master_template: master_template_boxed
       row:
         type: 'entity:node'
         options:
@@ -293,115 +402,6 @@ display:
             label: ''
           granularity: second
           plugin_id: datetime
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - 'user.node_grants:view'
-        - user.permissions
-      tags: {  }
-  block_2:
-    display_plugin: block
-    id: block_2
-    display_title: 'Past Events'
-    position: 2
-    display_options:
-      display_extenders: {  }
-      title: 'Past Events'
-      defaults:
-        title: false
-        filters: false
-        filter_groups: false
-        style: false
-        row: false
-      filters:
-        status:
-          value: '1'
-          table: node_field_data
-          field: status
-          plugin_id: boolean
-          entity_type: node
-          entity_field: status
-          id: status
-          expose:
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-          group: 1
-        type:
-          id: type
-          table: node_field_data
-          field: type
-          value:
-            event: event
-          entity_type: node
-          entity_field: type
-          plugin_id: bundle
-          expose:
-            operator_limit_selection: false
-            operator_list: {  }
-        field_event_end_value:
-          id: field_event_end_value
-          table: node__field_event_end
-          field: field_event_end_value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: '<='
-          value:
-            min: ''
-            max: ''
-            value: now
-            type: offset
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            placeholder: ''
-            min_placeholder: ''
-            max_placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: datetime
-      filter_groups:
-        operator: AND
-        groups:
-          1: AND
-      style:
-        type: cohesion_layout
-        options:
-          views_template: view_tpl_event_cards_with_featur
-          master_template: 79d2f5ce
-      row:
-        type: 'entity:node'
-        options:
-          relationship: none
-          view_mode: card
-      display_description: ''
-      block_description: 'Past Events'
     cache_metadata:
       max-age: -1
       contexts:
