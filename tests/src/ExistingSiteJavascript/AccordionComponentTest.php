@@ -21,10 +21,10 @@ class AccordionComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $accordion_container = $this->addComponent($canvas, 'Accordion container');
-    $accordion_item = $this->addComponentToDropZone($accordion_container, 'Accordion item');
-    $this->addComponentToDropZone($accordion_item, 'Text');
+    $this->getLayoutCanvas()
+      ->add('Accordion container')
+      ->drop('Accordion item')
+      ->drop('Text');
   }
 
   /**
@@ -42,9 +42,9 @@ class AccordionComponentTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editComponentDefinition('Interactive components', 'Accordion container');
+    $this->editDefinition('Interactive components', 'Accordion container');
     $this->getSession()->back();
-    $this->editComponentDefinition('Interactive components', 'Accordion item');
+    $this->editDefinition('Interactive components', 'Accordion item');
   }
 
 }

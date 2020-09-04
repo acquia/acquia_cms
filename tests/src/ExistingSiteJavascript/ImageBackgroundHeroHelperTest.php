@@ -26,8 +26,10 @@ class ImageBackgroundHeroHelperTest extends CohesionHelperTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the helper to the layout canvas.
-    $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $this->addHelper($canvas, 'Image Background Hero', ['Background image container', 'Hero']);
+    $this->getLayoutCanvas()->addHelper('Image Background Hero', [
+      'Background image container',
+      'Hero',
+    ]);
   }
 
   /**
@@ -45,7 +47,7 @@ class ImageBackgroundHeroHelperTest extends CohesionHelperTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/helpers/helpers');
-    $this->editHelperDefinition('Layout helpers', 'Image Background Hero');
+    $this->editDefinition('Layout helpers', 'Image Background Hero');
   }
 
 }

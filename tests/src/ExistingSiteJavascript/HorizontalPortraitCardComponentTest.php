@@ -25,9 +25,7 @@ class HorizontalPortraitCardComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $component = $this->addComponent($canvas, 'Card - Horizontal (Portrait)');
-    $edit_form = $this->editComponent($component);
+    $edit_form = $this->getLayoutCanvas()->add('Card - Horizontal (Portrait)')->edit();
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMedia(0);
     $this->insertSelectedMedia();
@@ -54,7 +52,7 @@ class HorizontalPortraitCardComponentTest extends CohesionComponentTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editComponentDefinition('General components', 'Card - Horizontal (Portrait)');
+    $this->editDefinition('General components', 'Card - Horizontal (Portrait)');
   }
 
 }

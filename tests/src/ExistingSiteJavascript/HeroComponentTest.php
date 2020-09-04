@@ -26,9 +26,7 @@ class HeroComponentTest extends CohesionComponentTestBase {
     $this->createMedia(['bundle' => 'image']);
 
     // Add the component to the layout canvas.
-    $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $component = $this->addComponent($canvas, 'Hero');
-    $edit_form = $this->editComponent($component);
+    $edit_form = $this->getLayoutCanvas()->add('Hero')->edit();
 
     // Test adding an image to the component.
     $this->openMediaLibrary($edit_form, 'Select image');
@@ -109,7 +107,7 @@ class HeroComponentTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editComponentDefinition('Hero components', 'Hero');
+    $this->editDefinition('Hero components', 'Hero');
   }
 
 }

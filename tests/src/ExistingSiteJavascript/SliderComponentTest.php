@@ -21,10 +21,10 @@ class SliderComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $slide_container = $this->addComponent($canvas, 'Slide container');
-    $slide_item = $this->addComponentToDropZone($slide_container, 'Slide item');
-    $this->addComponentToDropZone($slide_item, 'Text');
+    $this->getLayoutCanvas()
+      ->add('Slide container')
+      ->drop('Slide item')
+      ->drop('Text');
   }
 
   /**
@@ -42,9 +42,9 @@ class SliderComponentTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editComponentDefinition('Interactive components', 'Slide container');
+    $this->editDefinition('Interactive components', 'Slide container');
     $this->getSession()->back();
-    $this->editComponentDefinition('Interactive components', 'Slide item');
+    $this->editDefinition('Interactive components', 'Slide item');
   }
 
 }

@@ -21,9 +21,7 @@ class ButtonComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $button = $this->addComponent($canvas, 'Button');
-    $edit_form = $this->editComponent($button);
+    $edit_form = $this->getLayoutCanvas()->add('Button')->edit();
 
     $edit_form->clickLink('Style');
     // Check if all the button styles are there in the select list.
@@ -54,7 +52,7 @@ class ButtonComponentTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editComponentDefinition('General components', 'Button');
+    $this->editDefinition('General components', 'Button');
   }
 
 }

@@ -25,9 +25,7 @@ class ContactInformationComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $component = $this->addComponent($canvas, 'Contact information');
-    $edit_form = $this->editComponent($component);
+    $edit_form = $this->getLayoutCanvas()->add('Contact information')->edit();
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMedia(0);
     $this->insertSelectedMedia();
@@ -54,7 +52,7 @@ class ContactInformationComponentTest extends CohesionComponentTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editComponentDefinition('General components', 'Contact information');
+    $this->editDefinition('General components', 'Contact information');
   }
 
 }
