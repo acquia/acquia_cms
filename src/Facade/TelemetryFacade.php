@@ -63,7 +63,7 @@ final class TelemetryFacade implements ContainerInjectionInterface {
   public function modulesInstalled(array $modules) : void {
     $event_properties = [
       'installed_extensions' => array_values($modules),
-      'previously_installed_extensions' => array_diff(array_keys($this->moduleList->getAllInstalledInfo()), $modules),
+      'previously_installed_extensions' => array_values(array_diff(array_keys($this->moduleList->getAllInstalledInfo()), $modules)),
     ];
     $this->telemetry->sendTelemetry('Extensions installed', $event_properties);
   }
@@ -77,7 +77,7 @@ final class TelemetryFacade implements ContainerInjectionInterface {
   public function modulesUninstalled(array $modules) : void {
     $event_properties = [
       'uninstalled_extensions' => array_values($modules),
-      'previously_installed_extensions' => array_diff(array_keys($this->moduleList->getAllInstalledInfo()), $modules),
+      'previously_installed_extensions' => array_values(array_diff(array_keys($this->moduleList->getAllInstalledInfo()), $modules)),
     ];
     $this->telemetry->sendTelemetry('Extensions uninstalled', $event_properties);
   }
