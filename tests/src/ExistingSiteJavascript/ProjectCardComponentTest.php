@@ -25,9 +25,7 @@ class ProjectCardComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $project_card = $this->addComponent($canvas, 'Card - project');
-    $edit_form = $this->editComponent($project_card);
+    $edit_form = $this->getLayoutCanvas()->add('Card - project')->edit();
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMedia(0);
     $this->insertSelectedMedia();
@@ -53,7 +51,7 @@ class ProjectCardComponentTest extends CohesionComponentTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editComponentDefinition('General components', 'Card - project');
+    $this->editDefinition('General components', 'Card - project');
   }
 
 }

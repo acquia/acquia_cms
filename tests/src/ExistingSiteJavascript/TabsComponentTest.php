@@ -21,10 +21,10 @@ class TabsComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $tabs_container = $this->addComponent($canvas, 'Tabs container - horizontal tabs');
-    $tab_item = $this->addComponentToDropZone($tabs_container, 'Tab item');
-    $this->addComponentToDropZone($tab_item, 'Text and image');
+    $this->getLayoutCanvas()
+      ->add('Tabs container - horizontal tabs')
+      ->drop('Tab item')
+      ->drop('Text and image');
   }
 
   /**
@@ -43,9 +43,9 @@ class TabsComponentTest extends CohesionComponentTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editComponentDefinition('Interactive components', 'Tabs container - horizontal tabs');
+    $this->editDefinition('Interactive components', 'Tabs container - horizontal tabs');
     $this->getSession()->back();
-    $this->editComponentDefinition('Interactive components', 'Tab item');
+    $this->editDefinition('Interactive components', 'Tab item');
   }
 
 }

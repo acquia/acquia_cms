@@ -21,8 +21,7 @@ class TextComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $this->addComponent($canvas, 'Text');
+    $this->getLayoutCanvas()->add('Text');
   }
 
   /**
@@ -40,7 +39,7 @@ class TextComponentTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editComponentDefinition('General components', 'Text');
+    $this->editDefinition('General components', 'Text');
   }
 
 }

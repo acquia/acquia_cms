@@ -27,9 +27,7 @@ class VideoCardComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $component = $this->addComponent($canvas, 'Card - Video');
-    $edit_form = $this->editComponent($component);
+    $edit_form = $this->getLayoutCanvas()->add('Card - Video')->edit();
 
     $edit_form->fillField('Video URL', 'https://player.vimeo.com/external/317281590.hd.mp4');
     $this->openMediaLibrary($edit_form, 'Select image');
@@ -53,7 +51,7 @@ class VideoCardComponentTest extends CohesionComponentTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editComponentDefinition('General components', 'Card - Video');
+    $this->editDefinition('General components', 'Card - Video');
   }
 
 }

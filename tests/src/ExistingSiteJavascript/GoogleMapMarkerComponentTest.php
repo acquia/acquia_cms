@@ -21,9 +21,7 @@ class GoogleMapMarkerComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $google_map_marker = $this->addComponent($canvas, 'Google map marker');
-    $edit_form = $this->editComponent($google_map_marker);
+    $edit_form = $this->getLayoutCanvas()->add('Google map marker')->edit();
 
     $edit_form->fillField('Address', 'Test Address');
     $edit_form->fillField('Latitude', '22.52138');
@@ -45,7 +43,7 @@ class GoogleMapMarkerComponentTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editComponentDefinition('Map components', 'Google map marker');
+    $this->editDefinition('Map components', 'Google map marker');
   }
 
 }

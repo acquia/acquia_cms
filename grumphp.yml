@@ -4,6 +4,7 @@ parameters:
     succeeded: vendor/vijaycs85/drupal-quality-checker/resources/ascii/happy.txt
   git_dir: .
   bin_dir: vendor/bin
+  process_timeout: 0
   tasks:
     git_commit_message:
       enforce_no_subject_trailing_period: false

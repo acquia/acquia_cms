@@ -21,9 +21,7 @@ class GoogleMapComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $google_map = $this->addComponent($canvas, 'Google map');
-    $edit_form = $this->editComponent($google_map);
+    $edit_form = $this->getLayoutCanvas()->add('Google map')->edit();
     $this->assertSession()->optionExists('Width of accordion', 'Narrow', $edit_form);
   }
 
@@ -42,7 +40,7 @@ class GoogleMapComponentTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editComponentDefinition('Map components', 'Google map');
+    $this->editDefinition('Map components', 'Google map');
   }
 
 }

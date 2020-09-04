@@ -30,8 +30,7 @@ class EntityCloneIntegrationTest extends CohesionComponentTestBase {
     $assert_session = $this->assertSession();
 
     // Add Hero component to the layout canvas.
-    $canvas = $this->waitForElementVisible('css', '.coh-layout-canvas');
-    $this->addComponent($canvas, 'Hero');
+    $this->getLayoutCanvas()->add('Hero');
     $this->pressSaveButton();
 
     // Clone the node in the UI.
@@ -51,7 +50,7 @@ class EntityCloneIntegrationTest extends CohesionComponentTestBase {
     $assert_session->fieldValueEquals('Title', $node->getTitle() . ' - cloned');
     // Assert that the Cohesion components in the source node were cloned
     // as well.
-    $this->assertComponent($canvas, "Hero");
+    $this->getLayoutCanvas()->assertComponent('Hero');
   }
 
 }
