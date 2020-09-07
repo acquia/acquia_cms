@@ -29,6 +29,7 @@ class PlaceTest extends ContentTypeTestBase {
     'metatag_open_graph',
     'metatag_twitter_cards',
     'pathauto',
+    'field_ui',
     'schema_place',
   ];
 
@@ -64,6 +65,9 @@ class PlaceTest extends ContentTypeTestBase {
         'country_code' => 'US',
       ])
       ->save();
+
+    // Change the Geocoder provider to 'Random' to perform the test.
+    $this->changeGeocoderProviderToRandom();
 
     $session = $this->getSession();
     $page = $session->getPage();
@@ -131,6 +135,11 @@ class PlaceTest extends ContentTypeTestBase {
     $assert_session->fieldExists('State', $group);
     $assert_session->fieldExists('Zip code', $group);
 
+    // Ensure Latitude and Longitude group is present and has fields.
+    $group = $assert_session->elementExists('css', '#edit-field-geofield-wrapper');
+    $assert_session->fieldExists('Latitude', $group);
+    $assert_session->fieldExists('Longitude', $group);
+
     // Assert that select fields are present with correct field type.
     $assert_session->selectExists('Place Type');
 
@@ -139,6 +148,7 @@ class PlaceTest extends ContentTypeTestBase {
       'title',
       'body',
       'field_place_address',
+      'field_geofield',
       'field_place_telephone',
       'field_place_image',
       'field_categories',
@@ -174,6 +184,33 @@ class PlaceTest extends ContentTypeTestBase {
     $assert_session->pageTextContains('Living with video has been created.');
     // Assert that the Pathauto pattern was used to create the URL alias.
     $assert_session->addressEquals('/place/residential/living-video');
+    // Confirm if the Latitude and Longitude fields are filled.
+    $this->drupalGet('/node/5/edit');
+    $group = $assert_session->elementExists('css', '#edit-field-geofield-wrapper');
+    $element = $assert_session->fieldExists('Latitude', $group);
+    $this->assertNotEmpty($element->getValue());
+    $previous_lat = $element->getValue();
+    $element = $assert_session->fieldExists('Longitude', $group);
+    $this->assertNotEmpty($element->getValue());
+    $previous_lon = $element->getValue();
+
+    // Change the Zip code to check if the coordinates are changing.
+    $page->fillField('Zip code', '94050');
+    $page->pressButton('Save');
+
+    $this->drupalGet('/node/5/edit');
+    $group = $assert_session->elementExists('css', '#edit-field-geofield-wrapper');
+    $element = $assert_session->fieldExists('Latitude', $group);
+    $this->assertNotEmpty($element->getValue());
+    $new_lat = $element->getValue();
+    $element = $assert_session->fieldExists('Longitude', $group);
+    $this->assertNotEmpty($element->getValue());
+    $new_lon = $element->getValue();
+    $page->pressButton('Save');
+
+    // Assert that Latitude and Longitude is updated after address change.
+    $this->assertNotSame($previous_lat, $new_lat);
+    $this->assertNotSame($previous_lon, $new_lon);
     // Assert that the expected schema.org data and meta tags are present.
     $this->assertSchemaData([
       '@graph' => [
@@ -187,7 +224,7 @@ class PlaceTest extends ContentTypeTestBase {
             'streetAddress' => '12, block b,',
             'addressLocality' => 'Santa Clara',
             'addressRegion' => 'CA',
-            'postalCode' => '95050',
+            'postalCode' => '94050',
             'addressCountry' => 'United States',
           ],
           'image' => [
@@ -216,6 +253,16 @@ class PlaceTest extends ContentTypeTestBase {
     $this->assertInstanceOf(Term::class, $tag);
     $this->assertSame('tags', $tag->bundle());
     $this->assertSame('techno', $tag->getName());
+  }
+
+  /**
+   * Change the Geocoder Provider to perform test.
+   */
+  protected function changeGeocoderProviderToRandom() : void {
+    $this->container->get('config.factory')
+      ->getEditable('geocoder.geocoder_provider.googlemaps')
+      ->set('plugin', 'random')
+      ->save();
   }
 
 }
