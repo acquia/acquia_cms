@@ -3,11 +3,11 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Tests "Background image container" component.
+ * Tests "Background container" component.
  *
  * @group acquia_cms
  */
-class BackgroundImageContainerTest extends CohesionComponentTestBase {
+class BackgroundContainerTest extends CohesionComponentTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.
@@ -25,7 +25,7 @@ class BackgroundImageContainerTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $edit_form = $this->getLayoutCanvas()->add('Background image container')->edit();
+    $edit_form = $this->getLayoutCanvas()->add('Background container')->edit();
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMedia(0);
     $this->insertSelectedMedia();
@@ -46,7 +46,7 @@ class BackgroundImageContainerTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('Layout components', 'Background image container');
+    $this->editDefinition('Layout components', 'Background container');
   }
 
 }
