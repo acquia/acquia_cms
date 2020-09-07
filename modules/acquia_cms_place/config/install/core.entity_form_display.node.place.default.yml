@@ -3,8 +3,9 @@ status: true
 dependencies:
   config:
     - field.field.node.place.body
-    - field.field.node.place.field_place_address
     - field.field.node.place.field_categories
+    - field.field.node.place.field_geofield
+    - field.field.node.place.field_place_address
     - field.field.node.place.field_place_image
     - field.field.node.place.field_place_telephone
     - field.field.node.place.field_place_type
@@ -15,6 +16,7 @@ dependencies:
     - address
     - content_moderation
     - field_group
+    - geofield
     - media_library
     - path
     - telephone
@@ -39,7 +41,7 @@ third_party_settings:
       children:
         - field_place_image
       parent_name: ''
-      weight: 4
+      weight: 5
       format_type: fieldset
       region: content
       format_settings:
@@ -65,21 +67,28 @@ content:
     region: content
   created:
     type: datetime_timestamp
-    weight: 15
+    weight: 12
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_categories:
+    weight: 6
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_geofield:
+    weight: 3
+    settings:
+      html5_geolocation: false
+    third_party_settings: {  }
+    type: geofield_latlon
+    region: content
   field_place_address:
     weight: 2
     settings: {  }
     third_party_settings: {  }
     type: address_default
-    region: content
-  field_categories:
-    weight: 7
-    settings: {  }
-    third_party_settings: {  }
-    type: options_select
     region: content
   field_place_image:
     type: media_library_widget
@@ -89,20 +98,20 @@ content:
     third_party_settings: {  }
     region: content
   field_place_telephone:
-    weight: 3
+    weight: 4
     settings:
       placeholder: ''
     third_party_settings: {  }
     type: telephone_default
     region: content
   field_place_type:
-    weight: 9
+    weight: 7
     settings: {  }
     third_party_settings: {  }
     type: options_select
     region: content
   field_tags:
-    weight: 8
+    weight: 6
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -113,14 +122,14 @@ content:
     region: content
   langcode:
     type: language_select
-    weight: 10
+    weight: 8
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   moderation_state:
     type: moderation_state_default
-    weight: 12
+    weight: 9
     settings: {  }
     region: content
     third_party_settings: {  }
@@ -139,13 +148,13 @@ content:
       placeholder: ''
     third_party_settings: {  }
   translation:
-    weight: 14
+    weight: 11
     region: content
     settings: {  }
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 13
+    weight: 10
     settings:
       match_operator: CONTAINS
       size: 60
@@ -154,7 +163,7 @@ content:
     region: content
     third_party_settings: {  }
   url_redirects:
-    weight: 17
+    weight: 14
     region: content
     settings: {  }
     third_party_settings: {  }
