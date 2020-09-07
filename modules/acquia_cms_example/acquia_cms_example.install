@@ -28,6 +28,11 @@ function acquia_cms_example_install() {
       ->set('credentials.shield.pass', 'DmpU05sN13o1@bQ!')
       ->save();
   }
+
+  // Since Acquia solr search view is disabled, the exposed form filter block
+  // for this view is broken. Delete the broken block.
+  $block = \Drupal::service('entity_type.manager')->getStorage('block');
+  $block->load('exposed_form_acquia_search_solr_page')->delete();
 }
 
 /**
