@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for Acquia CMS Search.
+ */
+
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function acquia_cms_demo_pubsec_views_pre_render(ViewExecutable $view) {
+  $allowed_views_ids = ['articles'];
+  if (in_array($view->id(), $allowed_views_ids)) {
+    $view->element['#attached']['library'][] = 'acquia_cms_search/page';
+  }
+}
