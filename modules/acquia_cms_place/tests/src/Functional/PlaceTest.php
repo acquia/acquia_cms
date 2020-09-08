@@ -3,6 +3,7 @@
 namespace Drupal\Tests\acquia_cms_place\Functional;
 
 use Drupal\field\Entity\FieldConfig;
+use Drupal\geocoder\Entity\GeocoderProvider;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
@@ -66,8 +67,9 @@ class PlaceTest extends ContentTypeTestBase {
       ])
       ->save();
 
-    // Change the Geocoder provider to 'Random' to perform the test.
-    $this->changeGeocoderProviderToRandom();
+    // Use a random geocoder, since we don't want to actually call out to Google
+    // Maps or any other real geocoding service in tests.
+    GeocoderProvider::load('googlemaps')->setPlugin('random')->save();
 
     $session = $this->getSession();
     $page = $session->getPage();
@@ -184,33 +186,22 @@ class PlaceTest extends ContentTypeTestBase {
     $assert_session->pageTextContains('Living with video has been created.');
     // Assert that the Pathauto pattern was used to create the URL alias.
     $assert_session->addressEquals('/place/residential/living-video');
-    // Confirm if the Latitude and Longitude fields are filled.
+    // Confirm that the Latitude and Longitude fields are filled.
     $this->drupalGet('/node/5/edit');
-    $group = $assert_session->elementExists('css', '#edit-field-geofield-wrapper');
-    $element = $assert_session->fieldExists('Latitude', $group);
-    $this->assertNotEmpty($element->getValue());
-    $previous_lat = $element->getValue();
-    $element = $assert_session->fieldExists('Longitude', $group);
-    $this->assertNotEmpty($element->getValue());
-    $previous_lon = $element->getValue();
+    list ($previous_lat, $previous_lon) = $this->getCoordinates();
 
-    // Change the Zip code to check if the coordinates are changing.
+    // Change the ZIP code, which should cause the coordinates to change on
+    // save.
     $page->fillField('Zip code', '94050');
     $page->pressButton('Save');
 
     $this->drupalGet('/node/5/edit');
-    $group = $assert_session->elementExists('css', '#edit-field-geofield-wrapper');
-    $element = $assert_session->fieldExists('Latitude', $group);
-    $this->assertNotEmpty($element->getValue());
-    $new_lat = $element->getValue();
-    $element = $assert_session->fieldExists('Longitude', $group);
-    $this->assertNotEmpty($element->getValue());
-    $new_lon = $element->getValue();
+    list ($new_lat, $new_lon) = $this->getCoordinates();
     $page->pressButton('Save');
-
-    // Assert that Latitude and Longitude is updated after address change.
+    // Assert that coordinates are updated after address change.
     $this->assertNotSame($previous_lat, $new_lat);
     $this->assertNotSame($previous_lon, $new_lon);
+
     // Assert that the expected schema.org data and meta tags are present.
     $this->assertSchemaData([
       '@graph' => [
@@ -256,13 +247,20 @@ class PlaceTest extends ContentTypeTestBase {
   }
 
   /**
-   * Change the Geocoder Provider to perform test.
+   * Returns the values of the latitude and longitude fields.
+   *
+   * @return mixed[]
+   *   The non-empty values of the latitude and longitude fields.
    */
-  protected function changeGeocoderProviderToRandom() : void {
-    $this->container->get('config.factory')
-      ->getEditable('geocoder.geocoder_provider.googlemaps')
-      ->set('plugin', 'random')
-      ->save();
+  private function getCoordinates() : array {
+    $assert_session = $this->assertSession();
+    $group = $assert_session->elementExists('css', '#edit-field-geofield-wrapper');
+    $coordinates = [
+      $assert_session->fieldExists('Latitude', $group)->getValue(),
+      $assert_session->fieldExists('Longitude', $group)->getValue(),
+    ];
+    array_walk($coordinates, [$this, 'assertNotEmpty']);
+    return $coordinates;
   }
 
 }
