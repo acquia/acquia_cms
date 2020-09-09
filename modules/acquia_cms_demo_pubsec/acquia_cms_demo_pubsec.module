@@ -16,8 +16,8 @@ function acquia_cms_demo_pubsec_views_pre_render(ViewExecutable $view) {
   $target_views = [
     'articles',
     'places',
+    'events',
   ];
-
   if (in_array($view->id(), $target_views, TRUE)) {
     $view->element['#attached']['library'][] = 'acquia_cms_search/page';
   }
