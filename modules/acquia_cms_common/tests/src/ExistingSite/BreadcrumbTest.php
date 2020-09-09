@@ -40,40 +40,36 @@ class BreadcrumbTest extends ExistingSiteBase {
         'article',
         'Blog',
         [
-          'with_link' => [
-            ['Articles', '/articles'],
-            ['Blog', '/articles/type/blog'],
-          ],
+          ['Articles', '/articles'],
+          ['Blog', '/articles/type/blog'],
+          'My amazing article node',
         ],
       ],
       [
         'event',
         'Party',
         [
-          'with_link' => [
-            ['Events', '/events'],
-            ['Party', '/events/type/party'],
-          ],
+          ['Events', '/events'],
+          ['Party', '/events/type/party'],
+          'My amazing event node',
         ],
       ],
       [
         'place',
         'Restaurant',
         [
-          'with_link' => [
-            ['Places', '/places'],
-            ['Restaurant', '/places/type/restaurant'],
-          ],
+          ['Places', '/places'],
+          ['Restaurant', '/places/type/restaurant'],
+          'My amazing place node',
         ],
       ],
       [
         'person',
         'Techno DJ',
         [
-          'with_link' => [
-            ['People', '/people'],
-            ['Techno DJ', '/people/type/techno-dj'],
-          ],
+          ['People', '/people'],
+          ['Techno DJ', '/people/type/techno-dj'],
+          'My amazing person node',
         ],
       ],
     ];
@@ -97,16 +93,14 @@ class BreadcrumbTest extends ExistingSiteBase {
     $sub_type = $this->createTerm($vocabulary, ['name' => $sub_type]);
 
     $node = $this->createNode([
+      'title' => $expected_breadcrumb[2],
       'type' => $node_type,
       'field_' . $vocabulary->id() => $sub_type->id(),
       'moderation_state' => 'published',
     ]);
-    // Adding breadcrumb title that needs to be shown without link.
-    $expected_breadcrumb['without_link'][] = [$node->label()];
     $this->drupalGet($node->toUrl());
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertBreadcrumbWithLink($expected_breadcrumb['with_link']);
-    $this->assertBreadcrumbWithoutLink($expected_breadcrumb['without_link']);
+    $this->assertBreadcrumb($expected_breadcrumb);
   }
 
   /**
@@ -117,7 +111,8 @@ class BreadcrumbTest extends ExistingSiteBase {
    */
   public function providerNoSubType() : array {
     $map = function (array $arguments) : array {
-      unset($arguments[1], $arguments[2]['with_link'][1]);
+      array_splice($arguments, 1, 1);
+      array_splice($arguments[1], 1, 1);
       return $arguments;
     };
     return array_map($map, $this->providerBreadcrumb());
@@ -136,12 +131,13 @@ class BreadcrumbTest extends ExistingSiteBase {
    */
   public function testBreadcrumbNoSubType(string $node_type, array $expected_breadcrumb) : void {
     $node = $this->createNode([
+      'title' => $expected_breadcrumb[1],
       'type' => $node_type,
       'moderation_state' => 'published',
     ]);
     $this->drupalGet($node->toUrl());
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertBreadcrumbWithLink($expected_breadcrumb['with_link']);
+    $this->assertBreadcrumb($expected_breadcrumb);
   }
 
   /**
@@ -151,39 +147,24 @@ class BreadcrumbTest extends ExistingSiteBase {
    *   The expected breadcrumb links, in their expected order. Each element
    *   should be a tuple containing the text of the link, and its target path.
    */
-  private function assertBreadcrumbWithLink(array $expected_breadcrumb) : void {
+  private function assertBreadcrumb(array $expected_breadcrumb) : void {
     $assert_session = $this->assertSession();
 
     // Create an array of tuples containing the text and target path of every
     // breadcrumb link.
-    $map = function (ElementInterface $link) {
-      return [
-        $link->getText(),
-        $link->getAttribute('href'),
-      ];
+    $map = function (ElementInterface $list) {
+      $item = $list->getText();
+
+      if ($link = $list->find('css', 'a')) {
+        return [
+          $item,
+          $link->getAttribute('href'),
+        ];
+      }
+
+      return $item;
     };
-    $breadcrumb = array_map($map, $assert_session->elementExists('css', 'h2#system-breadcrumb + ol')->findAll('css', 'a'));
-
-    $assert_session->statusCodeEquals(200);
-    $this->assertSame($expected_breadcrumb, $breadcrumb);
-  }
-
-  /**
-   * Asserts the presence of a breadcrumb item without link.
-   *
-   * @param array[] $expected_breadcrumb
-   *   The expected breadcrumb title.
-   */
-  private function assertBreadcrumbWithoutLink(array $expected_breadcrumb) : void {
-    $assert_session = $this->assertSession();
-
-    // Create an array of the text every breadcrumb item.
-    $map = function (ElementInterface $link) {
-      return [
-        $link->getText(),
-      ];
-    };
-    $breadcrumb = array_map($map, $assert_session->elementExists('css', 'h2#system-breadcrumb + ol')->findAll('css', 'li:last-child'));
+    $breadcrumb = array_map($map, $assert_session->elementExists('css', 'h2#system-breadcrumb + ol')->findAll('css', 'li'));
 
     $assert_session->statusCodeEquals(200);
     $this->assertSame($expected_breadcrumb, $breadcrumb);
