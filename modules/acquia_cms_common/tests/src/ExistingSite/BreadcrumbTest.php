@@ -128,10 +128,12 @@ class BreadcrumbTest extends ExistingSiteBase {
    */
   public function testBreadcrumbNoSubType(string $node_type, array $expected_breadcrumb) : void {
     $node = $this->createNode([
-      'title' => $expected_breadcrumb[1],
       'type' => $node_type,
       'moderation_state' => 'published',
     ]);
+    // The breadcrumb should always have the unlinked node title at the end.
+    array_push($expected_breadcrumb, $node->getTitle());
+
     $this->drupalGet($node->toUrl());
     $this->assertSession()->statusCodeEquals(200);
     $this->assertBreadcrumb($expected_breadcrumb);
