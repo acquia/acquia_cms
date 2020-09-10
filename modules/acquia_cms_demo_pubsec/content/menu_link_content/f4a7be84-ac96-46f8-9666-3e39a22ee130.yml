@@ -1,24 +1,22 @@
 _meta:
   version: '1.0'
   entity_type: menu_link_content
-  uuid: 31b5e4c4-869d-47dd-8f37-a963783ff6ee
+  uuid: f4a7be84-ac96-46f8-9666-3e39a22ee130
   bundle: menu_link_content
   default_langcode: en
-  depends:
-    b69f7341-1466-472f-b165-666f10b47e1e: menu_link_content
 default:
   enabled:
     -
       value: true
   title:
     -
-      value: 'Style Guide'
+      value: 'Accordion + Accordion Container'
   menu_name:
     -
-      value: footer
+      value: sidebar-menu
   link:
     -
-      uri: 'internal:#'
+      uri: 'internal:/accordion-accordion-container'
       title: ''
       options: {  }
       path: ''
@@ -30,13 +28,10 @@ default:
       value: true
   weight:
     -
-      value: 0
+      value: -49
   expanded:
     -
       value: false
-  parent:
-    -
-      value: 'menu_link_content:b69f7341-1466-472f-b165-666f10b47e1e'
   revision_translation_affected:
     -
       value: true

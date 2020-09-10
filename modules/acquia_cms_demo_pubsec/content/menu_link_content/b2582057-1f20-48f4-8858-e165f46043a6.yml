@@ -1,24 +1,22 @@
 _meta:
   version: '1.0'
   entity_type: menu_link_content
-  uuid: 31b5e4c4-869d-47dd-8f37-a963783ff6ee
+  uuid: b2582057-1f20-48f4-8858-e165f46043a6
   bundle: menu_link_content
   default_langcode: en
-  depends:
-    b69f7341-1466-472f-b165-666f10b47e1e: menu_link_content
 default:
   enabled:
     -
       value: true
   title:
     -
-      value: 'Style Guide'
+      value: 'Contact Information'
   menu_name:
     -
-      value: footer
+      value: sidebar-menu
   link:
     -
-      uri: 'internal:#'
+      uri: 'internal:/contact-information'
       title: ''
       options: {  }
       path: ''
@@ -30,13 +28,10 @@ default:
       value: true
   weight:
     -
-      value: 0
+      value: -45
   expanded:
     -
       value: false
-  parent:
-    -
-      value: 'menu_link_content:b69f7341-1466-472f-b165-666f10b47e1e'
   revision_translation_affected:
     -
       value: true
