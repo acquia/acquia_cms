@@ -131,6 +131,8 @@ class BreadcrumbTest extends ExistingSiteBase {
       'type' => $node_type,
       'moderation_state' => 'published',
     ]);
+    // Resetting the keys so that proper key order is maintained.
+    $expected_breadcrumb = array_values($expected_breadcrumb);
     // The breadcrumb should always have the unlinked node title at the end.
     array_push($expected_breadcrumb, $node->getTitle());
 
