@@ -93,6 +93,9 @@ class BreadcrumbTest extends ExistingSiteBase {
       'field_' . $vocabulary->id() => $sub_type->id(),
       'moderation_state' => 'published',
     ]);
+    // The breadcrumb should always have the unlinked node title at the end.
+    array_push($expected_breadcrumb, $node->getTitle());
+
     $this->drupalGet($node->toUrl());
     $this->assertSession()->statusCodeEquals(200);
     $this->assertBreadcrumb($expected_breadcrumb);
@@ -128,6 +131,11 @@ class BreadcrumbTest extends ExistingSiteBase {
       'type' => $node_type,
       'moderation_state' => 'published',
     ]);
+    // Resetting the keys so that proper key order is maintained.
+    $expected_breadcrumb = array_values($expected_breadcrumb);
+    // The breadcrumb should always have the unlinked node title at the end.
+    array_push($expected_breadcrumb, $node->getTitle());
+
     $this->drupalGet($node->toUrl());
     $this->assertSession()->statusCodeEquals(200);
     $this->assertBreadcrumb($expected_breadcrumb);
@@ -136,22 +144,29 @@ class BreadcrumbTest extends ExistingSiteBase {
   /**
    * Asserts the presence of a set of breadcrumb links.
    *
-   * @param array[] $expected_breadcrumb
-   *   The expected breadcrumb links, in their expected order. Each element
-   *   should be a tuple containing the text of the link, and its target path.
+   * @param array $expected_breadcrumb
+   *   The expected breadcrumb items, in their expected order. Each element
+   *   should either be a tuple containing the text of the link and its target
+   *   path, or a string with the text of the item (if the item is not a link).
    */
   private function assertBreadcrumb(array $expected_breadcrumb) : void {
     $assert_session = $this->assertSession();
 
     // Create an array of tuples containing the text and target path of every
     // breadcrumb link.
-    $map = function (ElementInterface $link) {
-      return [
-        $link->getText(),
-        $link->getAttribute('href'),
-      ];
+    $map = function (ElementInterface $list_item) {
+      $link = $list_item->find('css', 'a');
+      if ($link) {
+        return [
+          $link->getText(),
+          $link->getAttribute('href'),
+        ];
+      }
+      else {
+        return $list_item->getText();
+      }
     };
-    $breadcrumb = array_map($map, $assert_session->elementExists('css', 'h2#system-breadcrumb + ol')->findAll('css', 'a'));
+    $breadcrumb = array_map($map, $assert_session->elementExists('css', 'h2#system-breadcrumb + ol')->findAll('css', 'li'));
 
     $assert_session->statusCodeEquals(200);
     $this->assertSame($expected_breadcrumb, $breadcrumb);
