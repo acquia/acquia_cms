@@ -104,12 +104,10 @@ final class SiteConfigureForm extends ConfigFormBase {
       '#default_value' => 1,
       '#description' => $this->t('This module intends to collect anonymous data about Acquia product usage. No private information will be gathered. Data will not be used for marketing or sold to any third party. This is an opt-in module and can be disabled at any time by uninstalling the acquia_telemetry module by your site administrator.'),
     ];
-    // Checkbox to enable Decoupled functionality.
     $form['decoupled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable decoupled functionality'),
-      '#default_value' => 0,
-      '#description' => $this->t('Enable the decoupled functionality into the site to use it as a content backend for your mobile apps.'),
+      '#description' => $this->t('If checked, additional modules will be installed to help you build your site as a content backend for mobile apps.'),
     ];
     return $form;
   }
@@ -149,9 +147,8 @@ final class SiteConfigureForm extends ConfigFormBase {
     if ($acquia_telemetry_opt_in) {
       $this->moduleInstaller->install(['acquia_telemetry']);
     }
-    // Enable the JSON API Extras if user opt's in for decoupled functionality.
-    $decoupled_opt_in = $form_state->getValue('decoupled');
-    if ($decoupled_opt_in) {
+    // Enable the JSON API Extras if user opts in for decoupled functionality.
+    if ($form_state->getValue('decoupled')) {
       $this->moduleInstaller->install(['jsonapi_extras']);
     }
   }
