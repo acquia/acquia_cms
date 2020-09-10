@@ -139,6 +139,11 @@ final class SubtypeBreadcrumb implements BreadcrumbBuilderInterface {
         $breadcrumb->addLink($link);
       }
     }
+
+    // Add the unlinked node title to the breadcrumb.
+    $link = Link::fromTextAndUrl($node->label(), Url::fromRoute('<none>'));
+    $breadcrumb->addLink($link);
+
     return $breadcrumb;
   }
 
