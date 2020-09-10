@@ -163,7 +163,7 @@ function acquia_cms_install_logger() {
   $module_installer = Drupal::service('module_installer');
 
   if (Environment::isAhOdeEnv() || Environment::isAhIdeEnv() || Environment::isLocalEnv()) {
-    $module_installer->install(['dblog']);
+    $module_installer->install(['dblog', 'jsonapi_extras']);
   }
   else {
     $module_installer->install(['syslog']);
