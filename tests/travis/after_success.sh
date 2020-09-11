@@ -17,8 +17,10 @@ source ../../../orca/bin/travis/_includes.sh
 # Run ORCA's standard post-success script.
 ../../../orca/bin/travis/after_success.sh
 
+cd $ORCA_FIXTURE_DIR
+drush pm-enable --yes acquia_cms_demo_pubsec
+
 cd $TRAVIS_BUILD_DIR
 npm install
-drush pm-enable --yes acquia_cms_demo_pubsec
 orca fixture:run-server &
 npm run-tests
