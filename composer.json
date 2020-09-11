@@ -176,7 +176,8 @@
             "ln -s -f $PWD/tests $PROFILE_DIR",
             "find ./docroot/modules -type d -name tests -prune -exec rm -r -f '{}' ';'",
             "cp -f phpunit.xml ./docroot/core",
-            "composer install:frontend"
+            "composer install:frontend",
+            "composer build:frontend"
         ],
         "build:frontend": [
             "cd themes/acquia_claro && npm run build",
@@ -192,8 +193,7 @@
             "rm -rf $TMPDIR/cex"
         ],
         "install:frontend": [
-            "cd themes/acquia_claro && npm install",
-            "composer build:frontend"
+            "cd themes/acquia_claro && npm install"
         ],
         "nuke": "rm -r -f docroot vendor"
     }
