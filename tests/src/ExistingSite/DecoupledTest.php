@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_json_api\Functional;
+namespace Drupal\Tests\acquia_cms\ExistingSite;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityInterface;
@@ -12,9 +12,8 @@ use Drupal\Tests\jsonapi\Functional\JsonApiRequestTestTrait;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
- * Tests JSON API endpoints.
+ * Tests access to JSON:API endpoints.
  *
- * @group acquia_cms_json_api
  * @group acquia_cms
  */
 class DecoupledTest extends ExistingSiteBase {
@@ -23,187 +22,175 @@ class DecoupledTest extends ExistingSiteBase {
   use MediaTestTrait;
 
   /**
-   * Assert that all the endpoints are working as expected.
-   *
-   * - node, taxonomy_term, media, and taxonomy_vocabulary are accessible.
-   * - Rest all resource type should not be accessible.
+   * Tests that the out-of-the-box JSON:API endpoints work as expected.
    *
    * @param string[]|null $roles
    *   The user role(s) to test with, or NULL to test as an anonymous user. If
    *   this is an empty array, the test will run as an authenticated user with
    *   no additional roles.
    *
-   * @dataProvider providerNonRestrictedEndpoints
+   * @dataProvider providerRoles
    */
-  public function testNonRestrictedEndpoints(?array $roles) {
-    // 1. GET, POST, PATCH request to node Resource type.
-    $node = $this->createNode(['type' => 'article', 'moderation_state' => 'published']);
-    $this->assertEndpoint($node, 'node', $roles);
+  public function testResourceTypes(?array $roles) {
+    if (isset($roles)) {
+      $account = $this->createUser();
+      array_walk($roles, [$account, 'addRole']);
+      $account->save();
+      $this->setCurrentUser($account);
+    }
+    else {
+      $this->assertFalse($this->container->get('current_user')->isAuthenticated());
+    }
 
-    // 2. GET, POST, PATCH request to media Resource type.
+    // The node resource type should be enabled, which means we should be able
+    // to GET, but not PATCH or POST.
+    $node = $this->createNode([
+      'type' => 'article',
+      'moderation_state' => 'published',
+    ]);
+    $this->assertResourceType(TRUE, $node, [
+      'POST' => [
+        'type' => 'article',
+        'title' => $this->randomString(),
+      ],
+      'PATCH' => [
+        'title' => $this->randomString(),
+      ],
+    ]);
+
+    // The media resource type should be enabled, so we should be able to GET,
+    // but not PATCH or POST.
     $media = $this->createMedia([
       'bundle' => 'image',
       'name' => 'Test Image',
     ]);
     $this->markEntityForCleanup($media);
-    $this->assertEndpoint($media, 'media', $roles);
-
-    // 3. GET, POST, PATCH request to taxonomy_term Resource type.
-    $vocab = Vocabulary::load('tags');
-    $term = $this->createTerm($vocab);
-    $this->assertEndpoint($term, 'taxonomy_term', $roles);
-  }
-
-  /**
-   * Asserts the GET, POST and PATCH method for the provided resources.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $resource
-   *   An object containing all the information about the resource.
-   * @param string $entity_type_id
-   *   Id of the entity_type to which resource belongs to.
-   * @param string[]|null $roles
-   *   The user role(s) to test with, or NULL to test as an anonymous user. If
-   *   this is an empty array, the test will run as an authenticated user with
-   *   no additional roles.
-   */
-  protected function assertEndpoint(EntityInterface $resource, string $entity_type_id, ?array $roles) : void {
-
-    $account = $this->createUser();
-    $account->addRole($roles);
-    $account->save();
-
-    // Assert GET, POST, PATCH request for the given Resource type.
-    $resource_url = Url::fromUri("base:/jsonapi/{$entity_type_id}/{$resource->bundle()}");
-    // Assert that GET request is allowed.
-    $response = $this->request('GET', $resource_url, []);
-    $this->assertEquals(200, $response->getStatusCode());
-
-    // Assert that GET request is allowed for individual resources.
-    $individual_resource_url = Url::fromUri("base:/jsonapi/{$entity_type_id}/{$resource->bundle()}/{$resource->uuid()}");
-    $response = $this->request('GET', $individual_resource_url, []);
-    $this->assertEquals(200, $response->getStatusCode());
-
-    $body = [
-      'data' => [
-        'type' => $entity_type_id . '--' . $resource->bundle(),
-        'attributes' => [
-          'title' => 'Custom' . $resource->bundle(),
-        ],
+    $this->assertResourceType(TRUE, $media, [
+      'POST' => [
+        'bundle' => 'image',
+        'name' => 'Test image',
       ],
-    ];
-    $response = $this->request('POST', $resource_url, [
-      'body' => Json::encode($body),
-      'auth' => [$account->getAccountName(), $account->pass_raw],
-      'headers' => ['Content-Type' => 'application/vnd.api+json'],
-    ]);
-    // Assert that POST request is not allowed.
-    $this->assertEquals(405, $response->getStatusCode());
-
-    $body = [
-      'data' => [
-        'type' => $entity_type_id . '--' . $resource->bundle(),
-        'id' => $resource->uuid(),
-        'attributes' => [
-          'title' => 'Updated' . $resource->bundle(),
-        ],
+      'PATCH' => [
+        'name' => 'Test image',
       ],
-    ];
-    $response = $this->request('PATCH', $resource_url, [
-      'body' => Json::encode($body),
-      'auth' => [$account->getAccountName(), $account->pass_raw],
-      'headers' => ['Content-Type' => 'application/vnd.api+json'],
     ]);
-    // Assert that PATCH request is not allowed.
-    $this->assertEquals(405, $response->getStatusCode());
-  }
 
-  /**
-   * Assert that all other endpoints are not accessible.
-   */
-  public function testRestrictedEndpoints() {
-
-    $account = $this->createUser();
-    $account->addRole('administrator');
-    $account->save();
-
-    // Field for testing field endpoint.
-    $field_config = FieldConfig::loadByName('node', 'article', 'field_tags');
-
-    // 1. GET request to check the restriction.
-    $user_url = Url::fromUri('base:/jsonapi/user/user');
-    $response = $this->request('GET', $user_url, []);
-    $this->assertEquals(404, $response->getStatusCode());
-    // Individual user endpoint.
-    $user_individual_url = Url::fromUri('base:/jsonapi/user/user/' . $account->uuid());
-    $response = $this->request('GET', $user_individual_url, []);
-    $this->assertEquals(404, $response->getStatusCode());
-
-    $field_config_url = Url::fromUri('base:/jsonapi/field_config/field_config');
-    $response = $this->request('GET', $field_config_url, []);
-    $this->assertEquals(404, $response->getStatusCode());
-
-    $field_config_individual_url = Url::fromUri('base:/jsonapi/field_config/field_config/' . $field_config->uuid());
-    $response = $this->request('GET', $field_config_individual_url, []);
-    $this->assertEquals(404, $response->getStatusCode());
-
-    // 2. PATCH request to check the restriction.
-    $body = [
-      'data' => [
-        'type' => 'field--config',
-        'id' => $field_config->uuid(),
-        'attributes' => [
-          'label' => 'Custom EndPoint',
-        ],
+    // The taxonomy term resource type should be enabled, which means we should
+    // be able to GET, but not PATCH or POST.
+    $term = $this->createTerm(Vocabulary::load('tags'));
+    $this->assertResourceType(TRUE, $term, [
+      'POST' => [
+        'name' => 'Pastafazoul',
       ],
-    ];
-    $response = $this->request('PATCH', $field_config_individual_url, [
-      'body' => Json::encode($body),
-      'auth' => [$account->getAccountName(), $account->pass_raw],
-      'headers' => ['Content-Type' => 'application/vnd.api+json'],
-    ]);
-    $this->assertEquals(404, $response->getStatusCode());
-
-    $body = [
-      'data' => [
-        'type' => 'user--user',
-        'id' => $account->uuid(),
-        'attributes' => [
-          'display_name' => 'Superman',
-        ],
+      'PATCH' => [
+        'name' => 'Pastafazoul',
       ],
-    ];
-    $response = $this->request('PATCH', $user_individual_url, [
-      'body' => Json::encode($body),
-      'auth' => [$account->getAccountName(), $account->pass_raw],
-      'headers' => ['Content-Type' => 'application/vnd.api+json'],
     ]);
-    $this->assertEquals(404, $response->getStatusCode());
 
-    // 3. POST request to check the restriction.
-    $body = [
-      'data' => 'field_storage_config--field_storage_config',
-      'attributes' => [
+    // The user resource type should be disabled, so we should not be able to
+    // do anything with it.
+    $this->assertResourceType(FALSE, $this->createUser(), [
+      'PATCH' => [
+        'display_name' => 'Superman',
+      ],
+    ]);
+
+    // The field_config resource type should be disabled, so we should not be
+    // able to do anything with it.
+    $field = FieldConfig::loadByName('node', 'article', 'field_tags');
+    $this->assertResourceType(FALSE, $field, [
+      'PATCH' => [
+        'label' => 'Custom EndPoint',
+      ],
+      'POST' => [
         'field_name' => 'field_storage_tags',
         'entity_type' => 'node',
         'field_storage_config_type' => 'entity_reference',
       ],
-    ];
-    $field_storage_config_url = Url::fromUri('base:/jsonapi/field_storage_config/field_storage_config');
-    $response = $this->request('POST', $field_storage_config_url, [
-      'body' => Json::encode($body),
-      'auth' => [$account->getAccountName(), $account->pass_raw],
-      'headers' => ['Content-Type' => 'application/vnd.api+json'],
     ]);
-    $this->assertEquals(404, $response->getStatusCode());
   }
 
   /**
-   * Data provider for ::testNonRestrictedEndpoints().
+   * Asserts that a resource type is either enabled or disabled.
+   *
+   * Enabled resource types are expected to be readable (GET should succeed for
+   * both individual resources and collections) but not writeable (POST and
+   * PATCH should fail). Disabled resource types should always produce a 404 no
+   * matter what we try to do.
+   *
+   * @param bool $is_enabled
+   *   TRUE if the resource type is enabled, FALSE otherwise.
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   A sample entity of this resource type, to test reading and writing
+   *   individual resources.
+   * @param array[] $attributes
+   *   Arrays of attributes to send when testing the POST and PATCH methods,
+   *   keyed by method (e.g., 'POST' => [...], 'PATCH' => [...]).
+   */
+  private function assertResourceType(bool $is_enabled, EntityInterface $entity, array $attributes) : void {
+    $resource_type = $entity->getEntityTypeId() . '--' . $entity->bundle();
+    $base_uri = '/jsonapi/' . str_replace('--', '/', $resource_type);
+    $resource_uri = $base_uri . '/' . $entity->uuid();
+
+    $assert_status = function (string $method, string $url, array $request_options, int $expected_status) {
+      $url = Url::fromUri("base:$url");
+      $status = $this->request($method, $url, $request_options)->getStatusCode();
+      $this->assertSame($expected_status, $status);
+    };
+
+    $request_options = [];
+
+    // If this resource type is enabled, we should be able to read both the
+    // individual resource and a collection of this resource type. Otherwise,
+    // we should just get a 404.
+    $expected_status = $is_enabled ? 200 : 404;
+    $assert_status('GET', $base_uri, $request_options, $expected_status);
+    $assert_status('GET', $resource_uri, $request_options, $expected_status);
+
+    $account = $this->container->get('current_user')->getAccount();
+    if ($account->isAuthenticated()) {
+      $request_options['auth'] = [
+        $account->getAccountName(),
+        $account->passRaw,
+      ];
+    }
+    $request_options['headers']['Content-Type'] = 'application/vnd.api+json';
+
+    // If this resource type is enabled, we should be get a 405 when we attempt
+    // to POST or PATCH. Otherwise we should just get a 404.
+    $expected_status = $is_enabled ? 405 : 404;
+
+    // Assert that we cannot create a new resource of this type.
+    if (isset($attributes['POST'])) {
+      $request_options['body'] = Json::encode([
+        'data' => [
+          'type' => $resource_type,
+          'attributes' => $attributes['POST'],
+        ],
+      ]);
+      $assert_status('POST', $base_uri, $request_options, $expected_status);
+    }
+
+    // Assert that we cannot update an existing resource of this type.
+    if (isset($attributes['PATCH'])) {
+      $request_options['body'] = Json::encode([
+        'data' => [
+          'type' => $resource_type,
+          'id' => $entity->uuid(),
+          'attributes' => $attributes['PATCH'],
+        ],
+      ]);
+      $assert_status('PATCH', $resource_uri, $request_options, $expected_status);
+    }
+  }
+
+  /**
+   * Data provider for ::testResourceTypes().
    *
    * @return array[]
    *   Sets of arguments to pass to the test method.
    */
-  public function providerNonRestrictedEndpoints() {
+  public function providerRoles() {
     return [
       'anonymous user' => [
         NULL,
