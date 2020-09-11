@@ -22,6 +22,7 @@ function acquia_cms_example_install() {
 
   // Configure shield if it is an Acquia cloud environment.
   if (Environment::isAhEnv()) {
+    \Drupal::service('module_installer')->install(['shield']);
     Drupal::configFactory()
       ->getEditable('shield.settings')
       ->set('credentials.shield.user', 'acms')
