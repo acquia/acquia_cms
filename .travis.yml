@@ -69,9 +69,7 @@ install: ./tests/travis/install.sh
 before_script: ../orca/bin/travis/before_script.sh
 
 # Run the test script.
-script:
-  # - ../orca/bin/travis/script.sh
-  - echo "A script would go here..."
+script: ../orca/bin/travis/script.sh
 
 # Reserved for future use.
 before_cache: ../orca/bin/travis/before_cache.sh
