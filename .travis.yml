@@ -69,13 +69,13 @@ install: ./tests/travis/install.sh
 before_script: ../orca/bin/travis/before_script.sh
 
 # Run the test script.
-script: ../orca/bin/travis/script.sh
+script: ./tests/travis/script.sh
 
 # Reserved for future use.
 before_cache: ../orca/bin/travis/before_cache.sh
 
 # Reserved for future use.
-after_success: ./tests/travis/after_success.sh
+after_success: ../orca/bin/travis/after_success.sh
 
 # Display debugging information in case of failure.
 after_failure: ../orca/bin/travis/after_failure.sh
