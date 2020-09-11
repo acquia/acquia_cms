@@ -1,7 +1,15 @@
 acquia_cms_tour.tour:
   path: '/admin/tour'
   defaults:
-    _controller: '\Drupal\acquia_cms_tour\Controller\TourController::tour'
+    _controller: '\Drupal\acquia_cms_tour\Controller\TourController::build'
     _title: 'Tour'
+  requirements:
+    _permission: 'access acquia cms tour'
+
+acquia_cms_tour.tour_dashboard:
+  path: '/admin/tour/dashboard'
+  defaults:
+    _controller: '\Drupal\acquia_cms_tour\Controller\DashboardController::tour'
+    _title: 'Tour Dashboard'
   requirements:
     _permission: 'access acquia cms tour'
