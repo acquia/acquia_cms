@@ -24,7 +24,7 @@ class TabsComponentTest extends CohesionComponentTestBase {
     $this->getLayoutCanvas()
       ->add('Tabs container - horizontal tabs')
       ->drop('Tab item')
-      ->drop('Text and image');
+      ->drop('Text');
   }
 
   /**
