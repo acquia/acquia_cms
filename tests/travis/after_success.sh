@@ -23,4 +23,4 @@ drush pm-enable --yes acquia_cms_demo_pubsec
 cd $TRAVIS_BUILD_DIR
 npm install
 orca fixture:run-server &
-npm run-tests
+npm run tests
