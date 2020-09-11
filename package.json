@@ -13,7 +13,7 @@
     "postinstall": "find node_modules/ -name '*.info' -type f -delete",
     "install-tools": "npm ci",
     "uninstall-tools": "rm -r node_modules;",
-    "tests": "pa11y-ci --config tests/pa11y/.pa11yci.js"
+    "tests": "pa11y-ci --config tests/.pa11yci.js"
   },
   "dependencies": {
     "pa11y-ci": "^2.4.0"

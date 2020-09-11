@@ -71,16 +71,13 @@ before_script: ../orca/bin/travis/before_script.sh
 # Run the test script.
 script:
   # - ../orca/bin/travis/script.sh
-  - npm install
-  - $TRAVIS_BUILD_DIR/../orca/bin/drush en acquia_cms_demo_pubsec
-  - $TRAVIS_BUILD_DIR/../orca/bin/orca fixture:run-server &
-  - npm run tests
+  - echo "A script would go here..."
 
 # Reserved for future use.
 before_cache: ../orca/bin/travis/before_cache.sh
 
 # Reserved for future use.
-after_success: ../orca/bin/travis/after_success.sh
+after_success: ./tests/travis/after_success.sh
 
 # Display debugging information in case of failure.
 after_failure: ../orca/bin/travis/after_failure.sh
