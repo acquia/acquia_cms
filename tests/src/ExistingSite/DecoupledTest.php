@@ -3,12 +3,15 @@
 namespace Drupal\Tests\acquia_cms\ExistingSite;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Datetime\Entity\DateFormat;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\file\Entity\File;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
 use Drupal\Tests\jsonapi\Functional\JsonApiRequestTestTrait;
+use Drupal\user\Entity\Role;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -106,6 +109,45 @@ class DecoupledTest extends ExistingSiteBase {
         'field_name' => 'field_storage_tags',
         'entity_type' => 'node',
         'field_storage_config_type' => 'entity_reference',
+      ],
+    ]);
+    // The user_role resource type should be disabled, so we should not be able
+    // to do anything with it.
+    $role = Role::load('administrator');
+    $this->assertResourceType(FALSE, $role, [
+      'PATCH' => [
+        'label' => 'Buggy administrator',
+      ],
+      'POST' => [
+        'is_admin' => FALSE,
+        'status' => FALSE,
+      ],
+    ]);
+    // The file resource type should be enabled, which means we should be able
+    // to GET, but not PATCH or POST.
+    $file = File::create([
+      'uri' => 'public://test.txt',
+      'uid' => 1,
+    ]);
+    $file->save();
+    $this->markEntityForCleanup($file);
+    $this->assertResourceType(TRUE, $file, [
+      'PATCH' => [
+        'filename' => 'Hello World',
+      ],
+      'POST' => [
+        'status' => FALSE,
+      ],
+    ]);
+    // The date_format type should be enabled, which means we should be able to
+    // GET, but not PATCH or POST.
+    $date_format = DateFormat::load('medium');
+    $this->assertResourceType(TRUE, $date_format, [
+      'PATCH' => [
+        'label' => 'Cool date',
+      ],
+      'POST' => [
+        'pattern' => 'D, f',
       ],
     ]);
   }
