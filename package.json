@@ -1,0 +1,21 @@
+{
+  "name": "acms",
+  "version": "0.1.0",
+  "description": "Front-end build tools for Acquia CMS.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/acquia/acquia_cms.git"
+  },
+  "engines": {
+    "node": "13.x"
+  },
+  "scripts": {
+    "postinstall": "find node_modules/ -name '*.info' -type f -delete",
+    "install-tools": "npm ci",
+    "uninstall-tools": "rm -r node_modules;",
+    "tests": "pa11y-ci --config tests/pa11y/.pa11yci.js"
+  },
+  "dependencies": {
+    "pa11y-ci": "^2.4.0"
+  }
+}
