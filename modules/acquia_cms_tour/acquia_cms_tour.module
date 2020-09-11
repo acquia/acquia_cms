@@ -60,7 +60,7 @@ function dashboard_checklistapi_checklist_items() {
     'acquia_search_solr', 'cohesion', 'acquia_connector', 'acquia_lift',
     'acquia_contenthub',
   ];
-  sort($module_list);
+  sort($modules);
 
   foreach ($modules as $module) {
     $module_name = \Drupal::service('module_handler')->getName($module);
