@@ -9,7 +9,10 @@
 # DESCRIPTION
 #     Conditionally sends code coverage data to Coveralls.
 
-cd "$(dirname "$0")" || exit 1; source _includes.sh
+cd "$(dirname "$0")"
+
+# Reuse ORCA's own includes.
+source ../../../orca/bin/travis/_includes.sh
 
 # Run ORCA's standard post-success script.
 ../../../orca/bin/travis/after_success.sh
