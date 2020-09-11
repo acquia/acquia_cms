@@ -38,7 +38,7 @@ events:
       - cleanup:
           type: script
           script:
-            - rm acquia_cms.tar
+            - rm acquia_cms.zip
             # Prepare settings.php with the minimum required for Cloud.
             - chmod -R +w docroot/sites/default
             - cp docroot/sites/default/default.settings.php docroot/sites/default/settings.php
