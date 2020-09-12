@@ -20,6 +20,9 @@ source ../../../orca/bin/travis/_includes.sh
 # If there is no fixture, there's nothing else for us to do.
 [[ -d "$ORCA_FIXTURE_DIR" ]] || exit 0
 
+# TODO: Delete this line when we require pa11y to pass.
+exit 0
+
 cd $ORCA_FIXTURE_DIR
 # Install the demo site so we have a lot of material to run through
 # pa11y.
