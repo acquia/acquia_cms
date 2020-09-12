@@ -17,10 +17,12 @@ source ../../../orca/bin/travis/_includes.sh
 # Run ORCA's standard script.
 ../../../orca/bin/travis/script.sh
 
-cd $ORCA_FIXTURE_DIR
-drush pm-enable --yes acquia_cms_demo_pubsec
+case "$ORCA_JOB" in
+  cd $ORCA_FIXTURE_DIR
+  drush pm-enable --yes acquia_cms_demo_pubsec
 
-cd $TRAVIS_BUILD_DIR
-npm install
-orca fixture:run-server &
-npm run tests
+  cd $TRAVIS_BUILD_DIR
+  npm install
+  orca fixture:run-server &
+  npm run tests
+esac
