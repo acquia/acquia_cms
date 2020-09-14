@@ -130,7 +130,8 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
       $this->drupalGet('/search');
       $page->fillField('keywords', $node_type_label);
 
-      // Trigger keydown event to open autocomplete dropdown.
+      // By default autocomplete dropdown does not appears after
+      // filling field value so, let's trigger keydown event to open it.
       $this->getSession()->executeScript("jQuery('#edit-keywords--2').trigger('keydown')");
       $autocomplete_results = $this->assertSession()->waitForElementVisible('css', '.search-api-autocomplete-search');
       $this->assertNotEmpty($autocomplete_results);
