@@ -19,17 +19,10 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
   use CohesionTestTrait;
 
   /**
-   * Tests the search functionality.
+   * {@inheritdoc}
    */
-  public function testSearch() {
-    $page = $this->getSession()->getPage();
-    $assert_session = $this->assertSession();
-
-    $account = $this->createUser();
-    $account->addRole('content_administrator');
-    $account->save();
-    $this->drupalLogin($account);
-
+  protected function setUp() {
+    parent::setUp();
     $node_types = NodeType::loadMultiple();
     // Create some published and unpublished nodes to assert that the search
     // respects the published status of content.
@@ -62,6 +55,21 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
       ]);
       $this->assertFalse($unpublished_node->isPublished());
     }
+  }
+
+  /**
+   * Tests the search functionality.
+   */
+  public function testSearch() {
+    $page = $this->getSession()->getPage();
+    $assert_session = $this->assertSession();
+
+    $account = $this->createUser();
+    $account->addRole('content_administrator');
+    $account->save();
+    $this->drupalLogin($account);
+
+    $node_types = NodeType::loadMultiple();
 
     $this->drupalGet('/search');
     $page->fillField('keywords', 'Test');
@@ -109,6 +117,36 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
         $assert_session->linkNotExists($node_type_label . ' Rocks (1)');
       }
     }
+  }
+
+  /**
+   * Tests autocomplete search functionality.
+   */
+  public function testAutocomplete() {
+    $page = $this->getSession()->getPage();
+    $node_types = NodeType::loadMultiple();
+    foreach ($node_types as $type) {
+      $node_type_label = $type->label();
+      $this->drupalGet('/search');
+      $page->fillField('keywords', $node_type_label);
+
+      // Trigger keydown event to open autocomplete dropdown.
+      $this->getSession()->executeScript("jQuery('#edit-keywords--2').trigger('keydown')");
+      $autocomplete_results = $this->assertSession()->waitForElementVisible('css', '.search-api-autocomplete-search');
+      $this->assertNotEmpty($autocomplete_results);
+
+      $published_title = 'Test published ' . $node_type_label;
+      $unpublished_title = 'Test unpublished ' . $node_type_label;
+
+      // Assert that autocomplete dropdown contains the title
+      // of published node of the particular node type.
+      $this->assertSession()->elementExists('css', 'span:contains("' . $published_title . '")', $autocomplete_results);
+
+      // Assert that autocomplete dropdown does not contains
+      // the title of unpublished node of the particular node type.
+      $this->assertSession()->elementNotExists('css', 'span:contains("' . $unpublished_title . '")', $autocomplete_results);
+    }
+
   }
 
   /**
