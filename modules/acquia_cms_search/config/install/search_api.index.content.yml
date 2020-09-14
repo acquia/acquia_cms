@@ -22,6 +22,14 @@ field_settings:
     dependencies:
       module:
         - node
+  field_event_start:
+    label: 'Start Date'
+    datasource_id: 'entity:node'
+    property_path: field_event_start
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_event_start
   node_grants:
     label: 'Node access information'
     property_path: search_api_node_grants
@@ -78,7 +86,8 @@ datasource_settings:
   'entity:node':
     bundles:
       default: false
-      selected: {  }
+      selected:
+        - event
     languages:
       default: true
       selected: {  }
