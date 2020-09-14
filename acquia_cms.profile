@@ -51,7 +51,7 @@ function acquia_cms_install_tasks() {
     'type' => 'batch',
     'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
   ];
-  $tasks['acquia_cms_install_logger'] = [];
+  $tasks['acquia_cms_install_additional_modules'] = [];
 
   // If the user has opted in for Acquia Telemetry, send heartbeat event.
   $tasks['acquia_cms_send_heartbeat_event'] = [
@@ -157,13 +157,13 @@ function acquia_cms_install_ui_kit(array &$install_state) {
 }
 
 /**
- * Installs a module to handle logging, depending on the environment.
+ * Installs additional required modules, depending on the environment.
  */
-function acquia_cms_install_logger() {
+function acquia_cms_install_additional_modules() {
   $module_installer = Drupal::service('module_installer');
 
   if (Environment::isAhOdeEnv() || Environment::isAhIdeEnv() || Environment::isLocalEnv()) {
-    $module_installer->install(['dblog']);
+    $module_installer->install(['dblog', 'jsonapi_extras']);
   }
   else {
     $module_installer->install(['syslog']);
