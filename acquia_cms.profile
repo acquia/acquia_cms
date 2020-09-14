@@ -10,6 +10,7 @@ use Drupal\acquia_cms\Facade\CohesionFacade;
 use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -17,6 +18,18 @@ use Drupal\cohesion\Controller\AdministrationController;
 function acquia_cms_form_user_login_form_alter(array &$form) {
   if (Drupal::config('acquia_cms.settings')->get('user_login_redirection')) {
     $form['#submit'][] = '\Drupal\acquia_cms\RedirectHandler::submitForm';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function acquia_cms_form_cohesion_account_settings_form_alter(array &$form) {
+  $config = Drupal::config('cohesion.settings');
+  $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
+  // We should add submit handler, only if cohesion keys are not already set.
+  if (!$cohesion_configured) {
+    $form['#submit'][] = 'acquia_cms_account_settings_form_submit';
   }
 }
 
@@ -167,5 +180,30 @@ function acquia_cms_install_additional_modules() {
   }
   else {
     $module_installer->install(['syslog']);
+  }
+}
+
+/**
+ * Imports cohesion ui kit, on submitting account settings form.
+ */
+function acquia_cms_account_settings_form_submit($form, FormStateInterface $form_state) {
+  // During testing, we don't import the UI kit, because it takes forever.
+  // Instead, we swap in a pre-built directory of Cohesion templates and assets.
+  if (getenv('COHESION_ARTIFACT')) {
+    return [];
+  }
+
+  // Imports all Cohesion elements.
+  batch_set(acquia_cms_initialize_cohesion());
+
+  /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
+  $facade = Drupal::classResolver(CohesionFacade::class);
+  foreach ($facade->getAllPackages() as $package) {
+    try {
+      $facade->importPackage($package, TRUE);
+    }
+    catch (Throwable $e) {
+      Drupal::messenger()->addError($e->getMessage());
+    }
   }
 }
