@@ -236,6 +236,18 @@ display:
             group_items: {  }
           plugin_id: search_api_boolean
       sorts:
+        field_event_start:
+          id: field_event_start
+          table: search_api_index_content
+          field: field_event_start
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
         title:
           id: title
           table: search_api_index_content

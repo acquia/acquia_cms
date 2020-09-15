@@ -55,6 +55,11 @@ function acquia_cms_search_field_storage_config_insert(FieldStorageConfigInterfa
   if ($field_storage->getType() === 'entity_reference' && $field_storage->getSetting('target_type') === 'taxonomy_term') {
     Drupal::classResolver(SearchFacade::class)->addTaxonomyField($field_storage);
   }
+
+  // To index event start date field.
+  if ($field_storage->getType() === 'datetime' && $field_storage->getName() === 'field_event_start') {
+    Drupal::classResolver(SearchFacade::class)->addEventStartDate($field_storage);
+  }
 }
 
 /**

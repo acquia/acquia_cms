@@ -5,6 +5,7 @@ dependencies:
     - core.entity_view_mode.node.teaser
     - node.type.event
   module:
+    - datetime
     - node
     - user
 id: events_fallback
@@ -180,6 +181,19 @@ display:
           entity_field: type
           plugin_id: bundle
       sorts:
+        field_event_start_value:
+          id: field_event_start_value
+          table: node__field_event_start
+          field: field_event_start_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: false
+          expose:
+            label: ''
+          granularity: second
+          plugin_id: datetime
         title:
           id: title
           table: node_field_data
