@@ -29,8 +29,7 @@ class TwoColumnPageWithHeroHelperTest extends CohesionHelperTestBase {
     $this->getLayoutCanvas()->addHelper('Two column page with hero', [
       'Hero',
       'Breadcrumb',
-      'Left col',
-      'Right col',
+      'Two column',
     ]);
   }
 
