@@ -13,9 +13,27 @@
 
     .toolbar-bar {
       box-shadow: none;
-      background-color: $df-grayish-navy;
+      background-color: $df-grayish-navy !important;
+      top: 10px;
+
+      &:before{
+        content:'';
+        width: 100%;
+        top: -10px;
+        background: red;
+        position: absolute;
+        height: 10px;
+      }
 
       .toolbar-tab {
+        > .toolbar-icon{
+          &.toolbar-icon-edit{
+            &.toolbar-item {
+              background: transparent;
+            }
+          }
+        }
+
         > .toolbar-item.is-active {
           background-color: rgba(255, 255, 255, .03);
           background-image: none;
@@ -28,6 +46,10 @@
             background-image: none;
             text-decoration: none;
           }
+        }
+
+        .toolbar-icon-environment {
+          background: red;
         }
       }
     }
@@ -304,7 +326,7 @@
 
         .toolbar-icon-admin-toolbar-tools-help {
           &:before {
-            background-image: url(../images/168ec4/drupal-8.svg);
+            background-image: url(../images/168ec4/drupal-9.svg);
           }
         }
 
@@ -496,18 +518,18 @@
     &:before {
       padding: 0px;
       margin-left: 7px;
-      background-image: url(../images/acacac/drupal-8.svg);
+      background-image: url(../images/acacac/drupal-9.svg);
     }
 
     &:hover {
       &:before {
-        background-image: url(../images/168ec4/drupal-8.svg);
+        background-image: url(../images/168ec4/drupal-9.svg);
       }
     }
 
     &:active {
       &:before {
-        background-image: url(../images/168ec4/drupal-8.svg);
+        background-image: url(../images/168ec4/drupal-9.svg);
       }
     }
   }
@@ -658,7 +680,7 @@
 
   .toolbar-icon-admin-toolbar-tools-help.is-active {
     &:before {
-      background-image: url(../images/168ec4/drupal-8.svg);
+      background-image: url(../images/168ec4/drupal-9.svg);
     }
   }
 
