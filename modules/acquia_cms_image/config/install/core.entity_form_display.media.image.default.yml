@@ -5,11 +5,12 @@ dependencies:
     - field.field.media.image.field_categories
     - field.field.media.image.field_tags
     - field.field.media.image.image
-    - image.style.thumbnail
+    - image.style.medium
     - media.type.image
   module:
     - field_group
-    - image
+    - focal_point
+    - imce
 third_party_settings:
   field_group:
     group_taxonomy:
@@ -48,12 +49,16 @@ content:
     type: entity_reference_autocomplete_tags
     region: content
   image:
-    type: image_image
+    type: image_focal_point
     weight: 1
     settings:
+      preview_image_style: medium
+      preview_link: true
+      offsets: '50,50'
       progress_indicator: throbber
-      preview_image_style: thumbnail
-    third_party_settings: {  }
+    third_party_settings:
+      imce:
+        enabled: false
     region: content
   langcode:
     type: language_select
