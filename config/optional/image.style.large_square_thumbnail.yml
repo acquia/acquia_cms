@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: large_square_thumbnail
+label: 'Large square thumbnail (480X480)'
+effects:
+  ea4195e2-cef7-40e6-934f-e0ac4b0cb992:
+    uuid: ea4195e2-cef7-40e6-934f-e0ac4b0cb992
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 480
+      height: 480
+      crop_type: focal_point
