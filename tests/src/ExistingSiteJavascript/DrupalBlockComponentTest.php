@@ -5,11 +5,12 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 /**
  * Verify that Cohesion Drupal block component has the following options:.
  *
- * - User Login
- * - Article Cards (view block)
- * - Upcoming Events (view block)
- * - Past Events (view block)
- * - Language Switcher.
+ * - Article Cards
+ * - Language Switcher
+ * - Past Events
+ * - Social Media Links
+ * - Upcoming Events
+ * - User Login.
  *
  * @group acquia_cms
  */
@@ -41,9 +42,9 @@ class DrupalBlockComponentTest extends CohesionComponentTestBase {
     $assert_session->optionExists('Select Block', 'Article Cards', $edit_form);
     $assert_session->optionExists('Select Block', 'Language switcher', $edit_form);
     $assert_session->optionExists('Select Block', 'Past Events', $edit_form);
+    $assert_session->optionExists('Select Block', 'Social Media Links', $edit_form);
     $assert_session->optionExists('Select Block', 'Upcoming Events', $edit_form);
     $assert_session->optionExists('Select Block', 'User login', $edit_form);
-
   }
 
   /**
