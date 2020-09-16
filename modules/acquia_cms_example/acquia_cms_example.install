@@ -20,8 +20,8 @@ function acquia_cms_example_install() {
   _acquia_connector_config($key, $identifier);
   _acquia_search_solr_config($key, $identifier);
 
-  // Configure shield if it is an Acquia cloud environment.
-  if (Environment::isAhEnv()) {
+  // Configure shield if it is an Acquia cloud environment (but not an IDE).
+  if (Environment::isAhEnv() && !Environment::isAhIdeEnv()) {
     \Drupal::service('module_installer')->install(['shield']);
     Drupal::configFactory()
       ->getEditable('shield.settings')
