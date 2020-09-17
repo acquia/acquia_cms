@@ -113,6 +113,9 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
       'field_' . $this->nodeType . '_type' => $types[2],
       'created' => $time++,
     ]);
+
+    // Update additional field value.
+    $this->updateNodeFieldValues();
   }
 
   /**
@@ -152,6 +155,11 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
    * Visits the listing page.
    */
   abstract protected function visitListPage() : void;
+
+  /**
+   * Update specific field value for nodes.
+   */
+  protected function updateNodeFieldValues() : void {}
 
   /**
    * Data provider for testing the listing page with different permissions.

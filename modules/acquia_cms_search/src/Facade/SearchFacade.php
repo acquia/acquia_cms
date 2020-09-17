@@ -174,6 +174,43 @@ final class SearchFacade implements ContainerInjectionInterface {
   }
 
   /**
+   * Acts on event start date field.
+   *
+   * Tries to add the field to the list of fields known to the index specified
+   * by 'acquia_cms.search_index' third-party setting.
+   *
+   * @param \Drupal\field\FieldStorageConfigInterface $field_storage
+   *   The new field's storage definition.
+   */
+  public function addEventStartDate(FieldStorageConfigInterface $field_storage) {
+    $index = $this->loadIndexFromSettings($field_storage);
+    if (empty($index)) {
+      return;
+    }
+
+    $field_name = $field_storage->getName();
+    // Field storages don't normally have a human-readable label, so allow it to
+    // provide one in its third-party settings.
+    $field_label = $field_storage->getThirdPartySetting('acquia_cms', 'search_label') ?: $field_storage->getLabel();
+
+    $data_source_id = 'entity:' . $field_storage->getTargetEntityTypeId();
+    // This will throw an exception if the data source doesn't exist, so this
+    // is really just a way to prevent the field from using an invalid data
+    // source.
+    $data_source_id = $index->getDatasource($data_source_id)->getPluginId();
+
+    // Add the referenced term's ID to the index.
+    $field = $this->fieldsHelper->createField($index, $field_name)
+      ->setLabel($field_label)
+      ->setDatasourceId($data_source_id)
+      ->setPropertyPath($field_name)
+      ->setType('date');
+    $index->addField($field);
+
+    $this->indexStorage->save($index);
+  }
+
+  /**
    * Load a search index from the 'acquia_cms.search_index' third-party setting.
    *
    * @param \Drupal\Core\Config\Entity\ThirdPartySettingsInterface $object
