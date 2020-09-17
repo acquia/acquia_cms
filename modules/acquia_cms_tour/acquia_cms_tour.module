@@ -78,6 +78,15 @@ function dashboard_checklistapi_checklist_items() {
           ],
         ];
       }
+      elseif ($module == 'google_tag') {
+        $checklist_items['Enabled Modules'][$module] = [
+          '#title' => $module_name,
+          'module_configure_link' => [
+            '#text' => t('Configure'),
+            '#url' => Url::fromUri('route:google_tag.settings_form'),
+          ],
+        ];
+      }
       else {
         $checklist_items['Enabled Modules'][$module] = [
           '#title' => $module_name,
