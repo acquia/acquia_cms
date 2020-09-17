@@ -3,6 +3,7 @@
 namespace Drupal\Tests\acquia_cms_event\ExistingSite;
 
 use Drupal\Core\Entity\Query\QueryInterface;
+use Drupal\node\Entity\Node;
 use Drupal\Tests\acquia_cms_common\ExistingSite\ContentTypeListTestBase;
 use Drupal\views\Entity\View;
 
@@ -36,8 +37,23 @@ class EventListTest extends ContentTypeListTestBase {
   /**
    * {@inheritdoc}
    */
+  protected function updateNodeFieldValues() : void {
+    $time = time();
+    $ids = parent::getQuery()->execute();
+
+    // Update event nodes with random start date.
+    $nodes = Node::loadMultiple($ids);
+    foreach ($nodes as $node) {
+      $node->set('field_event_start', date('Y-m-d\TH:i:s', $time + rand(10000, 999999)));
+      $node->save();
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function getQuery() : QueryInterface {
-    return parent::getQuery()->sort('title');
+    return parent::getQuery()->sort('field_event_start')->sort('title');
   }
 
 }
