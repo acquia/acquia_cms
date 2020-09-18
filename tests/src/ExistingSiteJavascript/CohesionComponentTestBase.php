@@ -17,4 +17,18 @@ abstract class CohesionComponentTestBase extends CohesionTestBase {
     return $this->waitForElementVisible('css', '.cohesion-component-edit-form', $this->getSession()->getPage());
   }
 
+  /**
+   * Data provider for testing components in the layout canvas.
+   *
+   * @return array[]
+   *   Sets of arguments to pass to the test method.
+   */
+  public function providerAddComponentToLayoutCanvas() {
+    return [
+      [
+        ['content_author', 'site_builder'],
+      ],
+    ];
+  }
+
 }
