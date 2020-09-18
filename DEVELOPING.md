@@ -40,6 +40,8 @@ composer run post-install-cmd
 11. In the "Open Drupal Site" menu, choose "Open site in a new tab" and ensure you can see the Drupal site, and log in with the username "admin" and password "admin".
 
 ### Installing Acquia CMS
+
+#### Installing from the Command Line
 For development purposes, it's easiest to install Acquia CMS at the command line using Drush. In these instructions, I assume that you have the [Drush launcher](https://github.com/drush-ops/drush-launcher) installed globally in your PATH (`drush --version`).
 
 To save time and resources, Acquia CMS will not by default import any templates from Cohesion during installation. If you want to automatically import Cohesion templates during installation, you'll need to provide the Cohesion API key and organization key, which you can get from your manager or technical architect, as environment variables:
@@ -54,6 +56,18 @@ It can take a lot of memory to install Acquia CMS. If you run into memory errors
 php -d memory_limit=2G vendor/bin/drush site:install acquia_cms --yes --account-pass admin
 ```
 If 2 GB *still* isn't enough memory, try raising the limit even more.
+
+#### Installing through the Browser
+Due to some of the work being done on Acquia CMS (specifically related to installation tasks) it may be necessary to do a manual install through the browser.
+
+In this case, you will need to manually drop your existing database with mysql and then re-visit the site via your browser.
+
+For Cloud IDEs that can be accomplished with:
+```
+mysql -u root
+drop database drupal;
+exit
+```
 
 ### Running tests
 Acquia CMS's tests are written using the PHPUnit-based framework provided by Drupal core. To run tests, we have provided a shell script that automatically executes all code validation and tests in a single command.
