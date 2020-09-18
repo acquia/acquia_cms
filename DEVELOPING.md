@@ -69,7 +69,7 @@ If you want to run tests in a more ad-hoc or one-off fashion, you need to do a b
 1. From the repository root, use PHP's built-in web server to serve the Drupal site: `drush runserver 8080`. You can use a different server if you want to; just be sure to adjust the `SIMPLETEST_BASE_URL` environment variable (described below) as needed. To run functional JavaScript tests, be sure that you have Chrome installed, and ChromeDriver running. From the repository root, you can start ChromeDriver in a new terminal window with `vendor/bin/chromedriver --port=4444`. (You can use any port you want, but 4444 is standard.) Note that **ChromeDriver must be running on the same host as Chrome itself!**.
 2. In a new terminal window, define a few environment variables:
 ```
-# The URL of the database you're using. This is the URL for the database in your cloud IDE, so it may differ in a local environment. For example, if you are running SQLite, this will be 'sqlite://localhost/drupal.sqlite' or similar.
+# The URL of the database you're using. This is the URL for the database in your cloud IDE, so it may differ in a local environment.
 export SIMPLETEST_DB=mysql://drupal:drupal@127.0.0.1/drupal
 
 # The URL where you can access the Drupal site. This must be set twice in order to support both the built-in PHPUnit test framework and the Drupal Test Traits framework.
@@ -118,8 +118,6 @@ composer install
 composer run post-install-cmd
 ```
 Then, install Acquia CMS as detailed in the "Installing Acquia CMS" section above.
-
-Note that, in a local environment, it can be more convenient to use a SQLite database instead of MySQL, since SQLite doesn't require any additional servers to be running. Use `php -i | grep sqlite` to see if your copy of PHP supports SQLite. If so, and you want to use it, pass the `--db-url sqlite://drupal.sqlite` option to `drush site:install`.
 
 Once you've installed Acquia CMS, how you serve it is up to you. For local development, the most convenient option is PHP's built-in web server: `drush runserver 8080`.
 
