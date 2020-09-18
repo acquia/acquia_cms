@@ -252,13 +252,20 @@ class InstallStateTest extends ExistingSiteBase {
       // User should be able to access the toolbar and see a Tour link.
       $assert_session->elementExists('css', '#toolbar-administration')
         ->clickLink('Tour');
-      $assert_session->addressEquals('/admin/tour');
+      // Visit the tour dashboard page.
+      $assert_session->addressEquals('/admin/tour/dashboard');
+      $assert_session->statusCodeEquals(200);
+      // Visit the tour page.
+      $this->drupalGet('/admin/tour');
       $assert_session->statusCodeEquals(200);
     }
 
-    // Regular authenticated users should not be able to access the tour.
+    // Regular authenticated users should not be able to access the dashboard
+    // and tour page.
     $account = $this->createUser();
     $this->drupalLogin($account);
+    $this->drupalGet('/admin/tour/dashboard');
+    $assert_session->statusCodeEquals(403);
     $this->drupalGet('/admin/tour');
     $assert_session->statusCodeEquals(403);
   }
