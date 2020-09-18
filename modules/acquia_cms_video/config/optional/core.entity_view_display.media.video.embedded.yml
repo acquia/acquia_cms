@@ -1,0 +1,34 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.embedded
+    - field.field.media.video.field_categories
+    - field.field.media.video.field_media_oembed_video
+    - field.field.media.video.field_tags
+    - media.type.video
+  module:
+    - media
+id: media.video.embedded
+targetEntityType: media
+bundle: video
+mode: embedded
+content:
+  field_media_oembed_video:
+    type: oembed
+    weight: 0
+    region: content
+    label: visually_hidden
+    settings:
+      max_width: 0
+      max_height: 0
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_categories: true
+  field_tags: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true
