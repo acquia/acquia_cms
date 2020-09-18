@@ -79,8 +79,6 @@ final class SiteConfigureForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = $this->decorated->buildForm($form, $form_state);
 
-    // @todo When relying on Cohesion 6.2.0 or later, change "Acquia Cohesion"
-    // to "Acquia Site Studio".
     $form['cohesion'] = [
       'api_key' => [
         '#type' => 'textfield',
@@ -93,8 +91,8 @@ final class SiteConfigureForm extends ConfigFormBase {
         '#default_value' => getenv('COHESION_ORG_KEY'),
       ],
       '#type' => 'details',
-      '#title' => $this->t('Acquia Cohesion'),
-      '#description' => $this->t('Enter your API key and organization key to automatically set up Acquia Cohesion (note that this process can take a while). If you do not want to use Cohesion right now, leave these fields blank -- you can always set it up later.'),
+      '#title' => $this->t('Acquia Site Studio'),
+      '#description' => $this->t('Enter your API key and organization key to automatically set up Acquia Site Studio (note that this process can take a while). If you do not want to use Site Studio right now, leave these fields blank -- you can always set it up later.'),
       '#tree' => TRUE,
     ];
     // Checkbox for Acquia Telemetry.
