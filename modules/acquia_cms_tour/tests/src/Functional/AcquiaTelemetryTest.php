@@ -37,7 +37,7 @@ class AcquiaTelemetryTest extends BrowserTestBase {
     $this->drupalLogin($account);
 
     // Visit the tour page.
-    $this->drupalGet('/admin/tour');
+    $this->drupalGet('/admin/tour/dashboard');
     $assert_session->statusCodeEquals(200);
 
     // Initially the checkbox should be turned off.

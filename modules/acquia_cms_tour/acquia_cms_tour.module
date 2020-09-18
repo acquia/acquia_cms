@@ -5,6 +5,8 @@
  * Contains hook implementations for the acquia_cms_tour module.
  */
 
+use Drupal\Core\Url;
+
 /**
  * Implements hook_menu_links_discovered_alter().
  */
@@ -12,9 +14,111 @@ function acquia_cms_tour_menu_links_discovered_alter(array &$links) {
   // Direct the Help link to our tour, leaving the help available to people who
   // know where it is.
   if (array_key_exists('help.main', $links)) {
-    $links['help.main']['route_name'] = $links['acquia_cms_tour.tour']['route_name'];
-    $links['help.main']['title'] = $links['acquia_cms_tour.tour']['title'];
+    $links['help.main']['route_name'] = $links['acquia_cms_tour.tour_dashboard']['route_name'];
+    $links['help.main']['title'] = $links['acquia_cms_tour.tour_dashboard']['title'];
     // Don't show our Tour link twice.
-    unset($links['acquia_cms_tour.tour']);
+    unset($links['acquia_cms_tour.tour_dashboard']);
   }
+}
+
+/**
+ * Define the checklist for tour dashboard page.
+ *
+ * Implements hook_checklistapi_checklist_info().
+ */
+function acquia_cms_tour_checklistapi_checklist_info() {
+  $definitions = [];
+  $definitions['tour_dashboard'] = [
+    '#title' => t('Dashboard Checklist'),
+    '#path' => '/admin/tour/dashboard',
+    '#callback' => 'dashboard_checklistapi_checklist_items',
+    '#description' => t('Checklist for tour dashboard page.'),
+    '#storage' => 'state',
+  ];
+  return $definitions;
+}
+
+/**
+ * Implements callback_checklistapi_checklist_items() for tour_dashboard.
+ */
+function dashboard_checklistapi_checklist_items() {
+  $checklist_items = [
+    'Enabled Modules' => [
+      '#title' => 'Enabled Modules',
+      '#description' => t('<p>List of enabled modules.</p>'),
+    ],
+    'Disabled Modules' => [
+      '#title' => 'Disabled Modules',
+      '#description' => t('<p>List of disabled modules.</p>'),
+    ],
+  ];
+
+  // List of modules to determines if the module is enabled or not and,
+  // accordingly adding into enabled / disabled groups.
+  $modules = [
+    'google_analytics', 'google_tag', 'recaptcha',
+    'acquia_search_solr', 'cohesion', 'acquia_connector', 'acquia_lift',
+    'acquia_contenthub',
+  ];
+  sort($modules);
+
+  foreach ($modules as $module) {
+    $module_name = \Drupal::service('module_handler')->getName($module);
+    if (\Drupal::service('module_handler')->moduleExists($module)) {
+      // Get the module info file path to fetch the configure link.
+      $module_path = \Drupal::service('module_handler')->getModule($module)->getPathname();
+      $info = \Drupal::service('info_parser')
+        ->parse($module_path);
+      if ($module == 'cohesion') {
+        $checklist_items['Enabled Modules'][$module] = [
+          '#title' => $module_name,
+          'module_configure_link' => [
+            '#text' => t('Configure'),
+            '#url' => Url::fromUri('route:cohesion.configuration.account_settings'),
+          ],
+        ];
+      }
+      elseif ($module == 'google_tag') {
+        $checklist_items['Enabled Modules'][$module] = [
+          '#title' => $module_name,
+          'module_configure_link' => [
+            '#text' => t('Configure'),
+            '#url' => Url::fromUri('route:google_tag.settings_form'),
+          ],
+        ];
+      }
+      else {
+        $checklist_items['Enabled Modules'][$module] = [
+          '#title' => $module_name,
+          'module_configure_link' => isset($info['configure']) ? [
+            '#text' => t('Configure'),
+            '#url' => Url::fromUri('route:' . $info['configure']),
+          ] : '',
+        ];
+      }
+    }
+    else {
+      $checklist_items['Disabled Modules'][$module] = [
+        '#title' => $module_name,
+        'module_configure_link' => [
+          '#text' => t('Configure'),
+          '#url' => Url::fromUri('route:system.modules_list'),
+        ],
+      ];
+    }
+  }
+  return $checklist_items;
+}
+
+/**
+ * Register tour twig file.
+ *
+ * Implements hook_theme().
+ */
+function acquia_cms_tour_theme() {
+  return [
+    'tour' => [
+      'variables' => [],
+    ],
+  ];
 }
