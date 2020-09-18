@@ -40,13 +40,13 @@ function acquia_cms_install_tasks() {
 
   // If the user has configured their Cohesion keys, import all elements.
   $tasks['acquia_cms_initialize_cohesion'] = [
-    'display_name' => t('Import Cohesion elements'),
+    'display_name' => t('Import Site Studio elements'),
     'display' => $cohesion_configured,
     'type' => 'batch',
     'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
   ];
   $tasks['acquia_cms_install_ui_kit'] = [
-    'display_name' => t('Import Cohesion components'),
+    'display_name' => t('Import Site Studio components'),
     'display' => $cohesion_configured,
     'type' => 'batch',
     'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
