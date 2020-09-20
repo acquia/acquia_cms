@@ -2,19 +2,23 @@ langcode: en
 status: true
 dependencies:
   config:
-    - search_api.index.content
-    - views.view.search_fallback
+    - core.entity_view_mode.node.teaser
+    - field.storage.node.body
+    - node.type.article
+    - node.type.event
+    - node.type.person
+    - node.type.place
   module:
-    - acquia_cms_search
     - cohesion
-    - search_api
-id: search
-label: Search
+    - node
+    - text
+id: search_fallback
+label: 'Search Fallback'
 module: views
 description: ''
 tag: ''
-base_table: search_api_index_content
-base_field: search_api_id
+base_table: node_field_data
+base_field: nid
 display:
   default:
     display_plugin: default
@@ -26,14 +30,16 @@ display:
         type: none
         options: {  }
       cache:
-        type: search_api_tag
+        type: tag
         options: {  }
       query:
         type: views_query
         options:
-          bypass_access: false
-          skip_access: false
-          preserve_facet_query_args: false
+          disable_sql_rewrite: false
+          distinct: false
+          replica: false
+          query_comment: ''
+          query_tags: {  }
       exposed_form:
         type: basic
         options:
@@ -68,23 +74,65 @@ display:
       style:
         type: cohesion_layout
         options:
-          views_template: view_tpl_search
+          views_template: view_tpl_search_fallback
           master_template: master_template_boxed
       row:
-        type: search_api
+        type: 'entity:node'
         options:
-          view_modes:
-            'entity:node':
-              article: teaser
-              event: teaser
-              page: teaser
-              person: teaser
-              place: teaser
+          relationship: none
+          view_mode: teaser
       fields:
-        rendered_item:
-          id: rendered_item
-          table: search_api_index_content
-          field: rendered_item
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          entity_type: node
+          entity_field: title
+          label: ''
+          alter:
+            alter_text: false
+            make_link: false
+            absolute: false
+            trim: false
+            word_boundary: false
+            ellipsis: false
+            strip_tags: false
+            html: false
+          hide_empty: false
+          empty_zero: false
+          settings:
+            link_to_entity: true
+          plugin_id: field
+          relationship: none
+          group_type: group
+          admin_label: ''
+          exclude: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        body:
+          id: body
+          table: node__body
+          field: body
           relationship: none
           group_type: group
           admin_label: ''
@@ -129,29 +177,98 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          link_to_item: false
-          use_highlighting: false
+          click_sort_column: value
+          type: text_default
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
           multi_type: separator
-          multi_separator: ', '
-          plugin_id: search_api
+          separator: ', '
+          field_api_classes: false
+          plugin_id: field
       filters:
-        search_api_fulltext:
-          id: search_api_fulltext
-          table: search_api_index_content
-          field: search_api_fulltext
+        status:
+          value: '1'
+          table: node_field_data
+          field: status
+          plugin_id: boolean
+          entity_type: node
+          entity_field: status
+          id: status
+          expose:
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+          group: 1
+        type:
+          id: type
+          table: node_field_data
+          field: type
           relationship: none
           group_type: group
           admin_label: ''
-          operator: or
+          operator: in
+          value:
+            all: all
+            article: article
+            event: event
+            page: page
+            person: person
+            place: place
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+        combine:
+          id: combine
+          table: views
+          field: combine
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: word
           value: ''
           group: 1
           exposed: true
           expose:
-            operator_id: search_api_fulltext_op
-            label: ''
+            operator_id: combine_op
+            label: Keyword
             description: ''
             use_operator: false
-            operator: search_api_fulltext_op
+            operator: combine_op
             operator_limit_selection: false
             operator_list: {  }
             identifier: keywords
@@ -181,62 +298,26 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          parse_mode: terms
-          min_length: null
-          fields: {  }
-          plugin_id: search_api_fulltext
-        published:
-          id: published
-          table: search_api_index_content
-          field: published
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: '='
-          value: '1'
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: search_api_boolean
+          fields:
+            title: title
+            body: body
+          plugin_id: combine
       sorts:
-        search_api_relevance:
-          id: search_api_relevance
-          table: search_api_index_content
-          field: search_api_relevance
+        title:
+          id: title
+          table: node_field_data
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
-          order: DESC
+          order: ASC
           exposed: false
           expose:
             label: ''
-          plugin_id: search_api
-      title: Search
+          entity_type: node
+          entity_field: title
+          plugin_id: standard
+      title: 'Search Fallback'
       header:
         result:
           id: result
@@ -250,52 +331,47 @@ display:
           plugin_id: result
       footer: {  }
       empty:
-        view_fallback:
-          id: view_fallback
+        area:
+          id: area
           table: views
-          field: view_fallback
+          field: area
           relationship: none
           group_type: group
           admin_label: ''
           empty: true
-          view_to_insert: 'search_fallback:search_fallback_block'
-          inherit_arguments: 0
-          plugin_id: view_fallback
-          simulate_unavailable: 'TRUE'
+          tokenize: false
+          content:
+            value: 'Your search did not return any results.'
+            format: filtered_html
+          plugin_id: text
       relationships: {  }
       arguments: {  }
       display_extenders: {  }
+      use_ajax: true
     cache_metadata:
       max-age: -1
       contexts:
+        - 'languages:language_content'
         - 'languages:language_interface'
         - url
-        - url.path
         - url.query_args
         - 'user.node_grants:view'
       tags:
-        - 'config:search_api.index.content'
-  search:
-    display_plugin: page
-    id: search
-    display_title: Page
-    position: 1
+        - 'config:field.storage.node.body'
+  search_fallback_block:
+    display_plugin: block
+    id: search_fallback_block
+    display_title: Block
+    position: 2
     display_options:
       display_extenders: {  }
-      path: search
-      cache:
-        type: search_api_tag
-        options: {  }
-      defaults:
-        cache: false
-      exposed_block: true
     cache_metadata:
       max-age: -1
       contexts:
+        - 'languages:language_content'
         - 'languages:language_interface'
         - url
-        - url.path
         - url.query_args
         - 'user.node_grants:view'
       tags:
-        - 'config:search_api.index.content'
+        - 'config:field.storage.node.body'
