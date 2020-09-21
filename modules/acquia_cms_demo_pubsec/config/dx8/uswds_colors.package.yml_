@@ -1,4 +1,16 @@
 -
+  type: cohesion_sync_package
+  export:
+    uuid: f46d8119-1c4f-44fd-aac1-c8cc6e8eaaa9
+    langcode: en
+    status: true
+    dependencies: {  }
+    id: pack_uswds_colors
+    label: 'USWDS Colors'
+    description: 'USWDS Color package. Refer to https://designsystem.digital.gov/design-tokens/color/overview/ for usage.'
+    excluded_entity_types: '[]'
+    settings: '{"d8c7c13f-2439-4b90-98fe-a50eb54c8542":{"type":"cohesion_color","items":{"d8c7c13f-2439-4b90-98fe-a50eb54c8542":{"type":"cohesion_color"}},"checked":true},"5c531ac8-3f9c-49c6-94db-da7b25846889":{"type":"cohesion_color","items":{"5c531ac8-3f9c-49c6-94db-da7b25846889":{"type":"cohesion_color"}},"checked":true},"9e094c3a-1e4e-4ea0-90c8-37a93e38f170":{"type":"cohesion_color","items":{"9e094c3a-1e4e-4ea0-90c8-37a93e38f170":{"type":"cohesion_color"}},"checked":true},"3c2163e6-f247-41a3-ae26-f505882b3a5c":{"type":"cohesion_color","items":{"3c2163e6-f247-41a3-ae26-f505882b3a5c":{"type":"cohesion_color"}},"checked":true},"6b205309-ee73-48e6-8e98-2973c162de8c":{"type":"cohesion_color","items":{"6b205309-ee73-48e6-8e98-2973c162de8c":{"type":"cohesion_color"}},"checked":true},"0ade69bc-6c15-4fec-a35b-a9e1635ddfed":{"type":"cohesion_color","items":{"0ade69bc-6c15-4fec-a35b-a9e1635ddfed":{"type":"cohesion_color"}},"checked":true},"5fb6c342-7d91-4130-bfc4-488103fdddcc":{"type":"cohesion_color","items":{"5fb6c342-7d91-4130-bfc4-488103fdddcc":{"type":"cohesion_color"}},"checked":true},"0cc5fb44-7895-4d03-9c61-7e251dae1de1":{"type":"cohesion_color","items":{"0cc5fb44-7895-4d03-9c61-7e251dae1de1":{"type":"cohesion_color"}},"checked":true},"2c995f35-d010-4aba-9bfa-24169de55359":{"type":"cohesion_color","items":{"2c995f35-d010-4aba-9bfa-24169de55359":{"type":"cohesion_color"}},"checked":true},"c05e61e5-e941-4099-a020-d651e7671547":{"type":"cohesion_color","items":{"c05e61e5-e941-4099-a020-d651e7671547":{"type":"cohesion_color"}},"checked":true},"078021ca-ce7a-479f-a3a1-e75ab7291e98":{"type":"cohesion_color","items":{"078021ca-ce7a-479f-a3a1-e75ab7291e98":{"type":"cohesion_color"}},"checked":true},"a8034ec4-9fd8-483a-b2a6-5e618f1edeca":{"type":"cohesion_color","items":{"a8034ec4-9fd8-483a-b2a6-5e618f1edeca":{"type":"cohesion_color"}},"checked":true},"75556ff1-c6f0-48c8-b2a6-37a3a1cff6b4":{"type":"cohesion_color","items":{"75556ff1-c6f0-48c8-b2a6-37a3a1cff6b4":{"type":"cohesion_color"}},"checked":true}}'
+-
   type: cohesion_color
   export:
     uuid: d8c7c13f-2439-4b90-98fe-a50eb54c8542
@@ -7,7 +19,7 @@
     dependencies: {  }
     id: blue-60v
     label: 'Blue 60v'
-    json_values: '{"link":true,"name":"Blue 60v","uid":"blue-60v","class":".coh-color-blue-60v","variable":"$coh-color-blue-60v","value":{"value":{"hex":"#005ea2","rgba":"rgba(0, 94, 162, 1)"}},"inuse":false}'
+    json_values: '{"link":true,"name":"Blue 60v","uid":"blue-60v","class":".coh-color-blue-60v","variable":"$coh-color-blue-60v","value":{"value":{"hex":"#005ea2","rgba":"rgba(0, 94, 162, 1)"}},"inuse":false,"tags":[{"label":"USWDS","value":"uswds"},{"label":"Dark","value":"dark"}]}'
     json_mapper: '{}'
     last_entity_update: entityupdate_0027
     locked: false
@@ -17,13 +29,29 @@
 -
   type: cohesion_color
   export:
+    uuid: 5c531ac8-3f9c-49c6-94db-da7b25846889
+    langcode: en
+    status: true
+    dependencies: {  }
+    id: blue-cool-10
+    label: 'Blue Cool 10'
+    json_values: '{"link":true,"name":"Blue Cool 10","uid":"blue-cool-10","class":".coh-color-blue-cool-10","variable":"$coh-color-blue-cool-10","value":{"value":{"hex":"#dae9ee","rgba":"rgba(218, 233, 238, 1)"}},"inuse":true,"tags":[{"label":"USWDS","value":"uswds"},{"label":"Light","value":"light"}]}'
+    json_mapper: '{}'
+    last_entity_update: entityupdate_0027
+    locked: false
+    modified: true
+    selectable: true
+    weight: 15
+-
+  type: cohesion_color
+  export:
     uuid: 9e094c3a-1e4e-4ea0-90c8-37a93e38f170
     langcode: en
     status: true
     dependencies: {  }
     id: blue-cool-40v
     label: 'Blue Cool 40v'
-    json_values: '{"link":true,"name":"Blue Cool 40v","uid":"blue-cool-40v","class":".coh-color-blue-cool-40v","variable":"$coh-color-blue-cool-40v","value":{"value":{"hex":"#28a0cb","rgba":"rgba(40, 160, 203, 1)"}},"inuse":false}'
+    json_values: '{"link":true,"name":"Blue Cool 40v","uid":"blue-cool-40v","class":".coh-color-blue-cool-40v","variable":"$coh-color-blue-cool-40v","value":{"value":{"hex":"#28a0cb","rgba":"rgba(40, 160, 203, 1)"}},"inuse":false,"tags":[{"label":"USWDS","value":"uswds"}]}'
     json_mapper: '{}'
     last_entity_update: entityupdate_0027
     locked: false
@@ -39,7 +67,7 @@
     dependencies: {  }
     id: blue-cool-50v
     label: 'Blue Cool 50v'
-    json_values: '{"link":true,"name":"Blue Cool 50v","uid":"blue-cool-50v","class":".coh-color-blue-cool-50v","variable":"$coh-color-blue-cool-50v","value":{"value":{"hex":"#0d7ea2","rgba":"rgba(13, 126, 162, 1)"}},"inuse":false}'
+    json_values: '{"link":true,"name":"Blue Cool 50v","uid":"blue-cool-50v","class":".coh-color-blue-cool-50v","variable":"$coh-color-blue-cool-50v","value":{"value":{"hex":"#0d7ea2","rgba":"rgba(13, 126, 162, 1)"}},"inuse":true,"tags":[{"label":"USWDS","value":"uswds"}]}'
     json_mapper: '{}'
     last_entity_update: entityupdate_0027
     locked: false
@@ -49,13 +77,29 @@
 -
   type: cohesion_color
   export:
+    uuid: 6b205309-ee73-48e6-8e98-2973c162de8c
+    langcode: en
+    status: true
+    dependencies: {  }
+    id: black
+    label: Black
+    json_values: '{"value":{"value":{"hex":"#000000","rgba":"rgba(0, 0, 0, 1)"}},"name":"Black","uid":"black","class":".coh-color-black","variable":"$coh-color-black","wysiwyg":true,"inuse":true,"link":true,"tags":[{"label":"USWDS","value":"uswds"},{"label":"Dark","value":"dark"}]}'
+    json_mapper: '{}'
+    last_entity_update: entityupdate_0027
+    locked: false
+    modified: true
+    selectable: true
+    weight: 0
+-
+  type: cohesion_color
+  export:
     uuid: 0ade69bc-6c15-4fec-a35b-a9e1635ddfed
     langcode: en
     status: true
     dependencies: {  }
     id: cyan-60v
     label: 'Cyan 60v'
-    json_values: '{"link":true,"name":"Cyan 60v","uid":"cyan-60v","class":".coh-color-cyan-60v","variable":"$coh-color-cyan-60v","value":{"value":{"hex":"#00687d","rgba":"rgba(0, 104, 125, 1)"}},"inuse":false}'
+    json_values: '{"link":true,"name":"Cyan 60v","uid":"cyan-60v","class":".coh-color-cyan-60v","variable":"$coh-color-cyan-60v","value":{"value":{"hex":"#00687d","rgba":"rgba(0, 104, 125, 1)"}},"inuse":true,"tags":[{"label":"USWDS","value":"uswds"},{"label":"Dark","value":"dark"}]}'
     json_mapper: '{}'
     last_entity_update: entityupdate_0027
     locked: false
@@ -65,19 +109,35 @@
 -
   type: cohesion_color
   export:
+    uuid: 5fb6c342-7d91-4130-bfc4-488103fdddcc
+    langcode: en
+    status: true
+    dependencies: {  }
+    id: gold-10v
+    label: 'Gold 10v'
+    json_values: '{"link":true,"name":"Gold 10v","uid":"gold-10v","class":".coh-color-gold-10v","variable":"$coh-color-gold-10v","value":{"value":{"hex":"#ffe396","rgba":"rgba(255, 227, 150, 1)"}},"inuse":true,"tags":[{"label":"USWDS","value":"uswds"},{"label":"Light","value":"light"}]}'
+    json_mapper: '{}'
+    last_entity_update: entityupdate_0027
+    locked: false
+    modified: true
+    selectable: true
+    weight: 17
+-
+  type: cohesion_color
+  export:
     uuid: 0cc5fb44-7895-4d03-9c61-7e251dae1de1
     langcode: en
     status: true
     dependencies: {  }
     id: gold-20v
     label: 'Gold 20v'
-    json_values: '{"link":true,"name":"Gold 20v","uid":"gold-20v","class":".coh-color-gold-20v","variable":"$coh-color-gold-20v","value":{"value":{"hex":"#ffbe2e","rgba":"rgba(255, 190, 46, 1)"}},"inuse":false}'
+    json_values: '{"link":true,"name":"Gold 20v","uid":"gold-20v","class":".coh-color-gold-20v","variable":"$coh-color-gold-20v","value":{"value":{"hex":"#ffbe2e","rgba":"rgba(255, 190, 46, 1)"}},"inuse":true,"tags":[{"label":"USWDS","value":"uswds"}]}'
     json_mapper: '{}'
     last_entity_update: entityupdate_0027
     locked: false
     modified: true
     selectable: true
-    weight: 15
+    weight: 16
 -
   type: cohesion_color
   export:
@@ -87,7 +147,7 @@
     dependencies: {  }
     id: gray-30
     label: 'Gray 30'
-    json_values: '{"link":true,"name":"Gray 30","uid":"gray-30","class":".coh-color-gray-30","variable":"$coh-color-gray-30","value":{"value":{"hex":"#adadad","rgba":"rgba(173, 173, 173, 1)"}},"inuse":false}'
+    json_values: '{"link":true,"name":"Gray 30","uid":"gray-30","class":".coh-color-gray-30","variable":"$coh-color-gray-30","value":{"value":{"hex":"#adadad","rgba":"rgba(173, 173, 173, 1)"}},"inuse":true,"tags":[{"label":"USWDS","value":"uswds"}]}'
     json_mapper: '{}'
     last_entity_update: entityupdate_0027
     locked: false
@@ -103,7 +163,7 @@
     dependencies: {  }
     id: gray-5
     label: 'Gray 5'
-    json_values: '{"link":true,"name":"Gray 5","uid":"gray-5","class":".coh-color-gray-5","variable":"$coh-color-gray-5","value":{"value":{"hex":"#f0f0f0","rgba":"rgba(240, 240, 240, 1)"}},"inuse":false}'
+    json_values: '{"link":true,"name":"Gray 5","uid":"gray-5","class":".coh-color-gray-5","variable":"$coh-color-gray-5","value":{"value":{"hex":"#f0f0f0","rgba":"rgba(240, 240, 240, 1)"}},"inuse":true,"tags":[{"label":"USWDS","value":"uswds"},{"label":"Light","value":"light"}]}'
     json_mapper: '{}'
     last_entity_update: entityupdate_0027
     locked: false
@@ -119,7 +179,7 @@
     dependencies: {  }
     id: gray-70
     label: 'Gray 70'
-    json_values: '{"link":true,"name":"Gray 70","uid":"gray-70","class":".coh-color-gray-70","variable":"$coh-color-gray-70","value":{"value":{"hex":"#454545","rgba":"rgba(69, 69, 69, 1)"}},"inuse":false}'
+    json_values: '{"link":true,"name":"Gray 70","uid":"gray-70","class":".coh-color-gray-70","variable":"$coh-color-gray-70","value":{"value":{"hex":"#454545","rgba":"rgba(69, 69, 69, 1)"}},"inuse":true,"tags":[{"label":"USWDS","value":"uswds"},{"label":"Dark","value":"dark"}]}'
     json_mapper: '{}'
     last_entity_update: entityupdate_0027
     locked: false
@@ -135,7 +195,7 @@
     dependencies: {  }
     id: gray-90
     label: 'Gray 90'
-    json_values: '{"link":true,"name":"Gray 90","uid":"gray-90","class":".coh-color-gray-90","variable":"$coh-color-gray-90","value":{"value":{"hex":"#1b1b1b","rgba":"rgba(27, 27, 27, 1)"}},"inuse":false}'
+    json_values: '{"link":true,"name":"Gray 90","uid":"gray-90","class":".coh-color-gray-90","variable":"$coh-color-gray-90","value":{"value":{"hex":"#1b1b1b","rgba":"rgba(27, 27, 27, 1)"}},"inuse":true,"tags":[{"label":"USWDS","value":"uswds"},{"label":"Dark","value":"dark"}]}'
     json_mapper: '{}'
     last_entity_update: entityupdate_0027
     locked: false
@@ -145,32 +205,16 @@
 -
   type: cohesion_color
   export:
-    uuid: 5c531ac8-3f9c-49c6-94db-da7b25846889
+    uuid: 75556ff1-c6f0-48c8-b2a6-37a3a1cff6b4
     langcode: en
     status: true
     dependencies: {  }
-    id: blue-cool-10
-    label: 'Blue Cool 10'
-    json_values: '{"link":true,"name":"Blue Cool 10","uid":"blue-cool-10","class":".coh-color-blue-cool-10","variable":"$coh-color-blue-cool-10","value":{"value":{"hex":"#dae9ee","rgba":"rgba(218, 233, 238, 1)"}}}'
+    id: white
+    label: White
+    json_values: '{"name":"White","uid":"white","value":{"value":{"hex":"#ffffff","rgba":"rgba(255, 255, 255, 1)"}},"wysiwyg":true,"class":".coh-color-white","variable":"$coh-color-white","inuse":true,"link":true,"tags":[{"label":"USWDS","value":"uswds"},{"label":"Light","value":"light"}]}'
     json_mapper: '{}'
     last_entity_update: entityupdate_0027
     locked: false
-    modified: true
+    modified: false
     selectable: true
-    weight: 15
--
-  type: cohesion_color
-  export:
-    uuid: 5fb6c342-7d91-4130-bfc4-488103fdddcc
-    langcode: en
-    status: true
-    dependencies: {  }
-    id: gold-10v
-    label: 'Gold 10v'
-    json_values: '{"link":true,"name":"Gold 10v","uid":"gold-10v","class":".coh-color-gold-10v","variable":"$coh-color-gold-10v","value":{"value":{"hex":"#ffe396","rgba":"rgba(255, 227, 150, 1)"}}}'
-    json_mapper: '{}'
-    last_entity_update: entityupdate_0027
-    locked: false
-    modified: true
-    selectable: true
-    weight: 17
+    weight: 6
