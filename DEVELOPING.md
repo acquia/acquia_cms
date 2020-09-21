@@ -40,6 +40,8 @@ composer run post-install-cmd
 11. In the "Open Drupal Site" menu, choose "Open site in a new tab" and ensure you can see the Drupal site, and log in with the username "admin" and password "admin".
 
 ### Installing Acquia CMS
+
+#### Installing from the Command Line
 For development purposes, it's easiest to install Acquia CMS at the command line using Drush. In these instructions, I assume that you have the [Drush launcher](https://github.com/drush-ops/drush-launcher) installed globally in your PATH (`drush --version`).
 
 To save time and resources, Acquia CMS will not by default import any templates from Cohesion during installation. If you want to automatically import Cohesion templates during installation, you'll need to provide the Cohesion API key and organization key, which you can get from your manager or technical architect, as environment variables:
@@ -55,6 +57,18 @@ php -d memory_limit=2G vendor/bin/drush site:install acquia_cms --yes --account-
 ```
 If 2 GB *still* isn't enough memory, try raising the limit even more.
 
+#### Installing through the Browser
+Due to some of the work being done on Acquia CMS (specifically related to installation tasks) it may be necessary to do a manual install through the browser.
+
+In this case, you will need to manually drop your existing database with mysql and then re-visit the site via your browser.
+
+For Cloud IDEs that can be accomplished with:
+```
+mysql -u root
+drop database drupal;
+exit
+```
+
 ### Running tests
 Acquia CMS's tests are written using the PHPUnit-based framework provided by Drupal core. To run tests, we have provided a shell script that automatically executes all code validation and tests in a single command.
 
@@ -69,7 +83,7 @@ If you want to run tests in a more ad-hoc or one-off fashion, you need to do a b
 1. From the repository root, use PHP's built-in web server to serve the Drupal site: `drush runserver 8080`. You can use a different server if you want to; just be sure to adjust the `SIMPLETEST_BASE_URL` environment variable (described below) as needed. To run functional JavaScript tests, be sure that you have Chrome installed, and ChromeDriver running. From the repository root, you can start ChromeDriver in a new terminal window with `vendor/bin/chromedriver --port=4444`. (You can use any port you want, but 4444 is standard.) Note that **ChromeDriver must be running on the same host as Chrome itself!**.
 2. In a new terminal window, define a few environment variables:
 ```
-# The URL of the database you're using. This is the URL for the database in your cloud IDE, so it may differ in a local environment. For example, if you are running SQLite, this will be 'sqlite://localhost/drupal.sqlite' or similar.
+# The URL of the database you're using. This is the URL for the database in your cloud IDE, so it may differ in a local environment.
 export SIMPLETEST_DB=mysql://drupal:drupal@127.0.0.1/drupal
 
 # The URL where you can access the Drupal site. This must be set twice in order to support both the built-in PHPUnit test framework and the Drupal Test Traits framework.
@@ -118,8 +132,6 @@ composer install
 composer run post-install-cmd
 ```
 Then, install Acquia CMS as detailed in the "Installing Acquia CMS" section above.
-
-Note that, in a local environment, it can be more convenient to use a SQLite database instead of MySQL, since SQLite doesn't require any additional servers to be running. Use `php -i | grep sqlite` to see if your copy of PHP supports SQLite. If so, and you want to use it, pass the `--db-url sqlite://drupal.sqlite` option to `drush site:install`.
 
 Once you've installed Acquia CMS, how you serve it is up to you. For local development, the most convenient option is PHP's built-in web server: `drush runserver 8080`.
 
