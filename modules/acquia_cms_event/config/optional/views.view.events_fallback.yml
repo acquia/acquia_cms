@@ -5,6 +5,7 @@ dependencies:
     - core.entity_view_mode.node.teaser
     - node.type.event
   module:
+    - cohesion
     - datetime
     - node
     - user
@@ -48,15 +49,17 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       pager:
-        type: mini
+        type: full
         options:
           items_per_page: 10
           offset: 0
           id: 1
           total_pages: null
           tags:
-            previous: ‹‹
-            next: ››
+            previous: '‹ Previous'
+            next: 'Next ›'
+            first: '« First'
+            last: 'Last »'
           expose:
             items_per_page: false
             items_per_page_label: 'Items per page'
@@ -65,12 +68,12 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
+          quantity: 5
       style:
-        type: default
+        type: cohesion_layout
         options:
-          row_class: ''
-          default_row_class: true
-          uses_fields: false
+          views_template: view_tpl_events_fallback
+          master_template: master_template_boxed
       row:
         type: 'entity:node'
         options:
