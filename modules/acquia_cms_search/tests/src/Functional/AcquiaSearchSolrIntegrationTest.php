@@ -42,6 +42,11 @@ class AcquiaSearchSolrIntegrationTest extends BrowserTestBase {
     'acquia_search_solr',
     'cohesion',
     'search_api_db',
+    'acquia_cms_article',
+    'acquia_cms_event',
+    'acquia_cms_person',
+    'acquia_cms_place',
+    'acquia_cms_page',
   ];
 
   /**
