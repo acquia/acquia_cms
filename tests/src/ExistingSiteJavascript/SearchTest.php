@@ -177,7 +177,6 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
     // Simulate an unavailable search backend, which is the only condition under
     // which we display the fallback view.
     $this->setBackendAvailability(FALSE);
-    $page = $this->getSession()->getPage();
 
     $account = $this->createUser();
     $account->addRole('content_administrator');
@@ -197,8 +196,6 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
     $this->assertFalse($this->assertLinkExists('Place Type', $accordion_container)->isVisible());
 
     $this->assertLinksExistInOrder();
-    $page->fillField('keywords', 'Test');
-    $page->pressButton('Search');
   }
 
   /**
