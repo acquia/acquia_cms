@@ -6,6 +6,9 @@ use Behat\Mink\Element\ElementInterface;
 use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms\Traits\CohesionTestTrait;
+use Drupal\Tests\acquia_cms_common\Traits\AssertLinksTrait;
+use Drupal\Tests\acquia_cms_common\Traits\SetBackendAvailabilityTrait;
+use Drupal\views\Entity\View;
 use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
 
 /**
@@ -17,6 +20,8 @@ use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
 class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
   use CohesionTestTrait;
+  use AssertLinksTrait;
+  use SetBackendAvailabilityTrait;
 
   /**
    * {@inheritdoc}
@@ -163,6 +168,83 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    */
   private function assertLinkExists(string $title, ElementInterface $container = NULL) : ElementInterface {
     return $this->assertSession()->elementExists('named', ['link', $title], $container);
+  }
+
+  /**
+   * Tests that the listing page displays a fallback view if needed.
+   */
+  public function testFallback() {
+    // Simulate an unavailable search backend, which is the only condition under
+    // which we display the fallback view.
+    $this->setBackendAvailability(FALSE);
+
+    $account = $this->createUser();
+    $account->addRole('content_administrator');
+    $account->save();
+    $this->drupalLogin($account);
+
+    $this->drupalGet('/search');
+
+    // Get the accordion container which holds the facets, and assert that,
+    // initially, the content type facet is not visible but none of the
+    // dependent facets are.
+    $accordion_container = $this->assertSession()->elementExists('css', '.coh-accordion-tabs-content-wrapper');
+    $this->assertFalse($this->assertLinkExists('Content Type', $accordion_container)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Article Type', $accordion_container)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Event Type', $accordion_container)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Person Type', $accordion_container)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Place Type', $accordion_container)->isVisible());
+
+    $this->assertLinksExistInOrder();
+  }
+
+  /**
+   * Returns the view entity for the listing page.
+   *
+   * @return \Drupal\views\Entity\View
+   *   The listing page's view.
+   */
+  protected function getView() : View {
+    return View::load('search');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getLinks() : array {
+    $links = $this->getSession()
+      ->getPage()
+      ->findAll('css', 'a[title]');
+
+    $map = function (ElementInterface $link) {
+      // Our template for node teasers doesn't actually link the title -- which
+      // is probably an accessibility no-no, but let's not get into that now --
+      // but it does include a 'title' attribute in the "read more" link which
+      // contains the actual title of the linked node.
+      return $link->getAttribute('title');
+    };
+    return array_map($map, $links);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getExpectedLinks() : array {
+    return [
+      'Test published Article',
+      'Test published Event',
+      'Test published Page',
+      'Test published Person',
+      'Test published Place',
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function tearDown() {
+    $this->setBackendAvailability(TRUE);
+    parent::tearDown();
   }
 
 }
