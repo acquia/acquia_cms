@@ -10,6 +10,7 @@ use Drupal\acquia_cms\Facade\CohesionFacade;
 use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
+use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -30,6 +31,7 @@ function acquia_cms_form_cohesion_account_settings_form_alter(array &$form) {
   // We should add submit handler, only if cohesion keys are not already set.
   if (!$cohesion_configured) {
     $form['#submit'][] = 'acquia_cms_account_settings_form_submit';
+    $form['#submit'][] = 'acquia_cms_rebuild_cohesion';
   }
 }
 
@@ -206,4 +208,23 @@ function acquia_cms_account_settings_form_submit($form, FormStateInterface $form
       Drupal::messenger()->addError($e->getMessage());
     }
   }
+}
+
+/**
+ * Rebuilds the cohesion componenets.
+ */
+function acquia_cms_rebuild_cohesion($form, FormStateInterface $form_state) {
+  // During testing, we don't import the UI kit, because it takes forever.
+  // Instead, we swap in a pre-built directory of Cohesion templates and assets.
+  if (getenv('COHESION_ARTIFACT')) {
+    return [];
+  }
+  // Get the batch array filled with operations that should be performed during
+  // rebuild.
+  $batch = WebsiteSettingsController::batch(TRUE);
+  if (isset($batch['error'])) {
+    Drupal::messenger()->addError($batch['error']);
+    return [];
+  }
+  batch_set($batch);
 }
