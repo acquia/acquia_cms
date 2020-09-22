@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Contains installation and update hooks for Acquia CMS Starter.
+ */
+
+/**
+ * Implements hook_requirements().
+ *
+ * Check pubsec demo module is enabled or not.
+ */
+function acquia_cms_starter_requirements($phase) {
+  $requirements = [];
+
+  switch ($phase) {
+    // Called while the module is installed.
+    case 'install':
+      if (\Drupal::moduleHandler()->moduleExists('acquia_cms_demo_pubsec')) {
+        $requirements[] = [
+          'title' => t('Acquia CMS Demo Pubsec'),
+          'description' => t('Acquia CMS Demo Pubsec conflicts with Starter.'),
+          'severity' => REQUIREMENT_ERROR,
+        ];
+      }
+      break;
+  }
+  return $requirements;
+}

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains installation and update hooks for Acquia CMS Example.
+ * Contains installation and update hooks for Acquia CMS Development.
  */
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
@@ -13,7 +13,7 @@ use Drupal\acquia_search_solr\Helper\Storage as SolrStorage;
 /**
  * Implements hook_install().
  */
-function acquia_cms_example_install() {
+function acquia_cms_development_install() {
   $key = 'b560ae0de7e596c5d1f7fe54803c70cd';
   $identifier = 'BGVZ-196143';
 

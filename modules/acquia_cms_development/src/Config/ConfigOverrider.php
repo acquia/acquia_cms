@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acquia_cms_example\Config;
+namespace Drupal\acquia_cms_development\Config;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\Core\Cache\CacheableMetadata;
