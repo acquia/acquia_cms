@@ -31,6 +31,16 @@ function acquia_cms_form_cohesion_account_settings_form_alter(array &$form) {
   // We should add submit handler, only if cohesion keys are not already set.
   if (!$cohesion_configured) {
     $form['#submit'][] = 'acquia_cms_account_settings_form_submit';
+    // Here we are adding a separate submit handler to rebuild the cohesion
+    // styles. Now the reason why we are doing this is because the rebuild is
+    // expecting that all the entities of cohesion are in place but as the
+    // cohesion is getting build for the first time and
+    // acquia_cms_initialize_cohesion is responsible for importing the entities.
+    // So we cannot execute both the batch process in a single function, Hence
+    // to achieve the synchronous behaviour we have separated cohesion
+    // configuration import and cohesion style rebuild functionality into
+    // separate submit handlers.
+    // @see \Drupal\cohesion_website_settings\Controller\WebsiteSettingsController::batch
     $form['#submit'][] = 'acquia_cms_rebuild_cohesion';
   }
 }
@@ -189,12 +199,6 @@ function acquia_cms_install_additional_modules() {
  * Imports cohesion ui kit, on submitting account settings form.
  */
 function acquia_cms_account_settings_form_submit($form, FormStateInterface $form_state) {
-  // During testing, we don't import the UI kit, because it takes forever.
-  // Instead, we swap in a pre-built directory of Cohesion templates and assets.
-  if (getenv('COHESION_ARTIFACT')) {
-    return [];
-  }
-
   // Imports all Cohesion elements.
   batch_set(acquia_cms_initialize_cohesion());
 
@@ -214,11 +218,6 @@ function acquia_cms_account_settings_form_submit($form, FormStateInterface $form
  * Rebuilds the cohesion componenets.
  */
 function acquia_cms_rebuild_cohesion($form, FormStateInterface $form_state) {
-  // During testing, we don't import the UI kit, because it takes forever.
-  // Instead, we swap in a pre-built directory of Cohesion templates and assets.
-  if (getenv('COHESION_ARTIFACT')) {
-    return [];
-  }
   // Get the batch array filled with operations that should be performed during
   // rebuild.
   $batch = WebsiteSettingsController::batch(TRUE);
