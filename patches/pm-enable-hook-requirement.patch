@@ -1,0 +1,45 @@
+diff --git a/src/Drupal/Commands/pm/PmCommands.php b/src/Drupal/Commands/pm/PmCommands.php
+index 4c7bc68ba..984c473b9 100644
+--- a/src/Drupal/Commands/pm/PmCommands.php
++++ b/src/Drupal/Commands/pm/PmCommands.php
+@@ -87,6 +87,10 @@ class PmCommands extends DrushCommands
+             }
+         }
+
++        // To run hook_requirement on pm:enable adding patch.
++        // Reference: https://github.com/drush-ops/drush/pull/4337/files
++        $this->validateInstallModules($todo);
++
+         if (!$this->getModuleInstaller()->install($modules, true)) {
+             throw new \Exception('Unable to install modules.');
+         }
+@@ -306,4 +310,29 @@ class PmCommands extends DrushCommands
+         }
+         return $module_list;
+     }
++
++    public function validateInstallModules(array $modules)
++    {
++        // Run requirements checks on each module.
++        // @see \drupal_check_module()
++        require_once DRUSH_DRUPAL_CORE . '/includes/install.inc';
++        foreach ($modules as $module) {
++            module_load_install($module);
++            $requirements = \Drupal::moduleHandler()->invoke($module, 'requirements', ['install']);
++            if (is_array($requirements) && drupal_requirements_severity($requirements) == REQUIREMENT_ERROR) {
++                $reasons = [];
++                // Print any error messages
++                foreach ($requirements as $id => $requirement) {
++                    if (isset($requirement['severity']) && $requirement['severity'] == REQUIREMENT_ERROR) {
++                        $message = $requirement['description'];
++                        if (isset($requirement['value']) && $requirement['value']) {
++                            $message = dt('@requirements_message (Currently using @item version @version)', ['@requirements_message' => $requirement['description'], '@item' => $requirement['title'], '@version' => $requirement['value']]);
++                        }
++                        $reasons[$id] = "$module: " . (string) $message;
++                    }
++                }
++                throw new \Exception(implode("\n", $reasons));
++            }
++        }
++    }
+ }
