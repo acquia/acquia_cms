@@ -6,6 +6,9 @@ language: php
 # @see https://docs.acquia.com/acquia-cloud/arch/tech-platform/
 php: "7.3"
 
+services:
+  - mysql
+
 addons:
   chrome: stable
 
@@ -54,11 +57,12 @@ matrix:
     - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_SUT }
 #    - { name: "Isolated test w/ recommended package versions", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^8.9 --sut-only" }
 #    - { name: "Integrated test w/ recommended package versions", env: ORCA_JOB=INTEGRATED_RECOMMENDED }
-    - { name: "Isolated test w/ dev package versions", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only" }
+    - { name: "Isolated test w/ dev package versions", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite" }
 #    - { name: "Integrated test w/ dev package versions", env: ORCA_JOB=INTEGRATED_DEV }
 
 # Install ORCA and prepare the environment.
 before_install:
+  - mysql -u root < ./tests/travis/install.sql
   - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
   - ../orca/bin/travis/before_install.sh
 
