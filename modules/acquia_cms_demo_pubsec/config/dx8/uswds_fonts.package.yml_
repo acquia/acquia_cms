@@ -1,4 +1,46 @@
 -
+  type: cohesion_sync_package
+  export:
+    uuid: 3c8b4f88-4e2a-4f19-a998-d50571e90eab
+    langcode: en
+    status: true
+    dependencies: {  }
+    id: pack_uswds_fonts
+    label: 'USWDS Fonts'
+    description: 'USWDS font libraries and font stacks.'
+    excluded_entity_types: '[]'
+    settings: '{"5cf5a758-9bad-4153-8ec0-095f16c7d2bc":{"type":"cohesion_website_settings","items":{"5cf5a758-9bad-4153-8ec0-095f16c7d2bc":{"type":"cohesion_website_settings"}},"checked":true},"f8896622-01e7-4037-a123-57d5ec4ef8f6":{"type":"cohesion_website_settings","items":{"f8896622-01e7-4037-a123-57d5ec4ef8f6":{"type":"cohesion_website_settings"}},"checked":true},"29c34f15-860b-4aec-a109-d3db5f10f253":{"type":"cohesion_font_library","items":{"29c34f15-860b-4aec-a109-d3db5f10f253":{"type":"cohesion_font_library"}},"checked":true},"114be2ac-4388-480a-816c-4a5f48b03310":{"type":"cohesion_font_stack","items":{"114be2ac-4388-480a-816c-4a5f48b03310":{"type":"cohesion_font_stack"}},"checked":true},"480aad98-61fc-4453-9128-08410b9ce9c3":{"type":"cohesion_font_stack","items":{"480aad98-61fc-4453-9128-08410b9ce9c3":{"type":"cohesion_font_stack"}},"checked":true},"bfb4db84-4ef0-4103-b38e-14fc9a5a3d78":{"type":"cohesion_font_stack","items":{"bfb4db84-4ef0-4103-b38e-14fc9a5a3d78":{"type":"cohesion_font_stack"}},"checked":true}}'
+-
+  type: cohesion_website_settings
+  export:
+    uuid: 5cf5a758-9bad-4153-8ec0-095f16c7d2bc
+    langcode: en
+    status: true
+    dependencies: {  }
+    id: base_unit_settings
+    label: 'Base unit settings'
+    json_values: '{"baseFontSize":{"value":16},"baseFontSizeEnable":true,"defaultUnitConversion":"rem"}'
+    json_mapper: '{}'
+    last_entity_update: entityupdate_0027
+    locked: false
+    modified: true
+    selectable: true
+-
+  type: cohesion_website_settings
+  export:
+    uuid: f8896622-01e7-4037-a123-57d5ec4ef8f6
+    langcode: en
+    status: true
+    dependencies: {  }
+    id: default_font_settings
+    label: 'Default font settings'
+    json_values: '{"defaultFontStack":"$coh-font-public-sans","color":{"value":{"hex":"#1b1b1b","rgba":"rgba(27, 27, 27, 1)"}}}'
+    json_mapper: '{}'
+    last_entity_update: entityupdate_0027
+    locked: false
+    modified: true
+    selectable: true
+-
   type: cohesion_font_library
   export:
     uuid: 29c34f15-860b-4aec-a109-d3db5f10f253
@@ -7,13 +49,29 @@
     dependencies: {  }
     id: eacf85bfef09f547990a87a487b8c515
     label: 'Public Sans and Source Sans Pro and Roboto'
-    json_values: '{"type":"import","url":"https:\/\/fonts.googleapis.com\/css2?family=Public+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap","name":"Public Sans and Source Sans Pro and Roboto","uid":"eacf85bfef09f547990a87a487b8c515"}'
+    json_values: '{"type":"import","url":"https:\/\/fonts.googleapis.com\/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap","name":"Public Sans and Source Sans Pro and Roboto","uid":"eacf85bfef09f547990a87a487b8c515"}'
     json_mapper: '{}'
     last_entity_update: entityupdate_0027
     locked: false
     modified: true
     selectable: true
     source: fonts
+-
+  type: cohesion_font_stack
+  export:
+    uuid: 114be2ac-4388-480a-816c-4a5f48b03310
+    langcode: en
+    status: true
+    dependencies: {  }
+    id: roboto-mono
+    label: 'Roboto Mono'
+    json_values: '{"inuse":false,"systemfont":false,"link":true,"name":"Roboto Mono","uid":"roboto-mono","class":".coh-font-roboto-mono","variable":"$coh-font-roboto-mono","fontStack":"\"Roboto Mono\", \"Bitstream Vera Sans Mono\", \"Consolas\", \"Courier\", monospace"}'
+    json_mapper: '{}'
+    last_entity_update: entityupdate_0027
+    locked: false
+    modified: true
+    selectable: true
+    source: fontStacks
 -
   type: cohesion_font_stack
   export:
@@ -33,62 +91,16 @@
 -
   type: cohesion_font_stack
   export:
-    uuid: 114be2ac-4388-480a-816c-4a5f48b03310
-    langcode: en
-    status: true
-    dependencies: {  }
-    id: roboto-mono
-    label: 'Roboto Mono'
-    json_values: '{"inuse":true,"systemfont":false,"link":true,"name":"Roboto Mono","uid":"roboto-mono","class":".coh-font-roboto-mono","variable":"$coh-font-roboto-mono","fontStack":"\"Roboto Mono\", \"Bitstream Vera Sans Mono\", \"Consolas\", \"Courier\", monospace"}'
-    json_mapper: '{}'
-    last_entity_update: entityupdate_0027
-    locked: false
-    modified: true
-    selectable: true
-    source: fontStacks
--
-  type: cohesion_font_stack
-  export:
     uuid: bfb4db84-4ef0-4103-b38e-14fc9a5a3d78
     langcode: en
     status: true
     dependencies: {  }
     id: source-sans-pro
     label: 'Source Sans Pro'
-    json_values: '{"inuse":true,"systemfont":false,"link":true,"fontStack":"\"Source Sans Pro\", \"Helvetica Neue\", \"Helvetica\", \"Roboto\", \"Arial\", sans-serif","name":"Source Sans Pro","uid":"source-sans-pro","class":".coh-font-source-sans-pro","variable":"$coh-font-source-sans-pro"}'
+    json_values: '{"inuse":false,"systemfont":false,"link":true,"fontStack":"\"Source Sans Pro\", \"Helvetica Neue\", \"Helvetica\", \"Roboto\", \"Arial\", sans-serif","name":"Source Sans Pro","uid":"source-sans-pro","class":".coh-font-source-sans-pro","variable":"$coh-font-source-sans-pro"}'
     json_mapper: '{}'
     last_entity_update: entityupdate_0027
     locked: false
     modified: true
     selectable: true
     source: fontStacks
--
-  type: cohesion_website_settings
-  export:
-    uuid: ccd29ee0-94ad-4abe-9914-396645147b80
-    langcode: en
-    status: true
-    dependencies: {  }
-    id: base_unit_settings
-    label: 'Base unit settings'
-    json_values: '{"baseFontSize":{"value":16},"baseFontSizeEnable":true,"defaultUnitConversion":"rem"}'
-    json_mapper: '{}'
-    last_entity_update: entityupdate_0027
-    locked: false
-    modified: true
-    selectable: true
--
-  type: cohesion_website_settings
-  export:
-    uuid: ef059614-4e5a-443d-8f91-9c3cd0d73937
-    langcode: en
-    status: true
-    dependencies: {  }
-    id: default_font_settings
-    label: 'Default font settings'
-    json_values: '{"defaultFontStack":"$coh-font-public-sans","color":{"value":{"hex":"#1b1b1b","rgba":"rgba(27, 27, 27, 1)"}}}'
-    json_mapper: '{}'
-    last_entity_update: entityupdate_0027
-    locked: false
-    modified: true
-    selectable: true
