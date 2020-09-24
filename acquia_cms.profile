@@ -199,6 +199,9 @@ function acquia_cms_install_additional_modules() {
  * Imports cohesion ui kit, on submitting account settings form.
  */
 function acquia_cms_account_settings_form_submit($form, FormStateInterface $form_state) {
+  // @todo This needs to be removed once the memory limit issue is fixed in
+  // cohesion.
+  ini_set('memory_limit', '1024M');
   // Imports all Cohesion elements.
   batch_set(acquia_cms_initialize_cohesion());
 
