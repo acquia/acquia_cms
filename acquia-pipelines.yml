@@ -17,11 +17,11 @@ events:
             - mkdir -p docroot/profiles/acquia_cms
             - composer archive --format zip --file acquia_cms
             - unzip acquia_cms.zip -d docroot/profiles/acquia_cms
-            # The acquia_cms_example module is ignored for export in .gitattributes,
+            # The acquia_cms_development module is ignored for export in .gitattributes,
             # but we DO want to deploy it to our Cloud environment for testing.
-            # We can probably remove this, along with the acquia_cms_example module
+            # We can probably remove this, along with the acquia_cms_development module
             # itself, once we have a permanent demo site in place.
-            - cp -R modules/acquia_cms_example docroot/profiles/acquia_cms/modules
+            - cp -R modules/acquia_cms_development docroot/profiles/acquia_cms/modules
             - cp config/optional/views.view.acquia_search_solr.yml docroot/profiles/acquia_cms/config/optional
       - front-end:
           type: script
