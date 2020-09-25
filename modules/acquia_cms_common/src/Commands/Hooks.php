@@ -45,6 +45,13 @@ final class Hooks extends DrushCommands {
   /**
    * Validate the result of the pm:enable command.
    *
+   * For acquia_cms_starter and acquia_cms_demo_pubsec we implemented the
+   * hook_requirements() to check if the other module is enabled or not.
+   * Drush pm:enable command is not running hook_requirements().
+   *
+   * @todo Reference: https://github.com/drush-ops/drush/pull/4337/files
+   * once patch will get applied to drush we can remove this method.
+   *
    * @hook validate pm:enable
    */
   public function validateRequirement(CommandData $commandData) {
