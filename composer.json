@@ -4,6 +4,8 @@
     "description": "An implementation of Drupal 9 for running custom, low code websites on the Acquia platform.",
     "license": "GPL-2.0-or-later",
     "require": {
+        "php": "~7.3",
+        "composer/composer": "~1.9.2",
         "acquia/cohesion": "^6.3",
         "acquia/cohesion-theme": "^6.3",
         "acquia/drupal-environment-detector": "^1",
@@ -84,8 +86,6 @@
                 "web-root": "./docroot"
             },
             "file-mapping": {
-                "[project-root]/.gitattributes": false,
-                "[project-root]/.editorconfig": false,
                 "[web-root]/sites/default/default.settings.php": {
                     "append": "./patches/d9-acms-settings.patch"
                 },
@@ -161,7 +161,10 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "post-install-cmd": [
+        "pre-update-cmd": [
+          "@putenv COMPOSER_MEMORY_LIMIT=2G"
+        ],
+        "post-update-cmd": [
             "@putenv PROFILE_DIR=./docroot/profiles/acquia_cms",
             "@putenv MODULES_DIR=./docroot/sites/all",
             "mkdir -p $PROFILE_DIR $MODULES_DIR",
@@ -178,6 +181,9 @@
             "composer install:frontend",
             "composer build:frontend"
         ],
+        "install:frontend": [
+            "cd themes/acquia_claro && npm install"
+        ],
         "build:frontend": [
             "cd themes/acquia_claro && npm run build",
             "mkdir -p modules/acquia_cms_toolbar/css",
@@ -190,9 +196,6 @@
             "cp -f $TMPDIR/cex/cohesion_* $FILES_DIR/cohesion/config",
             "tar -c -z -f ./tests/cohesion.tar.gz --directory $FILES_DIR cohesion",
             "rm -rf $TMPDIR/cex"
-        ],
-        "install:frontend": [
-            "cd themes/acquia_claro && npm install"
         ],
         "nuke": "rm -r -f docroot vendor"
     }
