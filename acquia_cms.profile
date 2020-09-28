@@ -10,6 +10,8 @@ use Drupal\acquia_cms\Facade\CohesionFacade;
 use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
+use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -17,6 +19,33 @@ use Drupal\cohesion\Controller\AdministrationController;
 function acquia_cms_form_user_login_form_alter(array &$form) {
   if (Drupal::config('acquia_cms.settings')->get('user_login_redirection')) {
     $form['#submit'][] = '\Drupal\acquia_cms\RedirectHandler::submitForm';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function acquia_cms_form_cohesion_account_settings_form_alter(array &$form) {
+  $config = Drupal::config('cohesion.settings');
+  $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
+  // We should add submit handler, only if cohesion keys are not already set.
+  if (!$cohesion_configured) {
+    $form['#submit'][] = 'acquia_cms_cohesion_init';
+    // Here we have added a separate submit handler to import UI kit because the
+    // YAML validation is taking a lot of time and hence resulting into memory
+    // limit.
+    $form['#submit'][] = 'acquia_cms_import_ui_kit';
+    // Here we are adding a separate submit handler to rebuild the cohesion
+    // styles. Now the reason why we are doing this is because the rebuild is
+    // expecting that all the entities of cohesion are in place but as the
+    // cohesion is getting build for the first time and
+    // acquia_cms_initialize_cohesion is responsible for importing the entities.
+    // So we cannot execute both the batch process in a single function, Hence
+    // to achieve the synchronous behaviour we have separated cohesion
+    // configuration import and cohesion style rebuild functionality into
+    // separate submit handlers.
+    // @see \Drupal\cohesion_website_settings\Controller\WebsiteSettingsController::batch
+    $form['#submit'][] = 'acquia_cms_rebuild_cohesion';
   }
 }
 
@@ -168,4 +197,51 @@ function acquia_cms_install_additional_modules() {
   else {
     $module_installer->install(['syslog']);
   }
+}
+
+/**
+ * Imports all Cohesion elements.
+ */
+function acquia_cms_cohesion_init($form, FormStateInterface $form_state) {
+  // Build and run the batch job for the initial import of Cohesion elements and
+  // assets.
+  // @todo When Cohesion provides a service to generate this batch job, use
+  // that instead of calling an internal method of an internal controller, since
+  // this may break at any time due to internal refactoring done by Cohesion.
+  $batch = AdministrationController::batchAction(TRUE);
+  if (isset($batch['error'])) {
+    Drupal::messenger()->addError($batch['error']);
+    return [];
+  }
+  batch_set($batch);
+}
+
+/**
+ * Imports cohesion ui kit, on submitting account settings form.
+ */
+function acquia_cms_import_ui_kit($form, FormStateInterface $form_state) {
+  /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
+  $facade = Drupal::classResolver(CohesionFacade::class);
+  foreach ($facade->getAllPackages() as $package) {
+    try {
+      $facade->importPackage($package, TRUE);
+    }
+    catch (Throwable $e) {
+      Drupal::messenger()->addError($e->getMessage());
+    }
+  }
+}
+
+/**
+ * Rebuilds the cohesion componenets.
+ */
+function acquia_cms_rebuild_cohesion($form, FormStateInterface $form_state) {
+  // Get the batch array filled with operations that should be performed during
+  // rebuild.
+  $batch = WebsiteSettingsController::batch(TRUE);
+  if (isset($batch['error'])) {
+    Drupal::messenger()->addError($batch['error']);
+    return [];
+  }
+  batch_set($batch);
 }
