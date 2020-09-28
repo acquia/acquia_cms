@@ -24,11 +24,12 @@ bundle: event
 mode: horizontal_card
 content:
   body:
-    type: text_default
-    weight: 1
+    type: text_summary_or_trimmed
+    weight: 2
     region: content
     label: hidden
-    settings: {  }
+    settings:
+      trim_length: 300
     third_party_settings: {  }
   content_moderation_control:
     weight: 0
