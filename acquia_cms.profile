@@ -30,7 +30,11 @@ function acquia_cms_form_cohesion_account_settings_form_alter(array &$form) {
   $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
   // We should add submit handler, only if cohesion keys are not already set.
   if (!$cohesion_configured) {
-    $form['#submit'][] = 'acquia_cms_account_settings_form_submit';
+    $form['#submit'][] = 'acquia_cms_cohesion_init';
+    // Here we have added a separate submit handler to import UI kit because the
+    // YAML validation is taking a lot of time and hence resulting into memory
+    // limit.
+    $form['#submit'][] = 'acquia_cms_import_ui_kit';
     // Here we are adding a separate submit handler to rebuild the cohesion
     // styles. Now the reason why we are doing this is because the rebuild is
     // expecting that all the entities of cohesion are in place but as the
@@ -196,15 +200,26 @@ function acquia_cms_install_additional_modules() {
 }
 
 /**
+ * Imports all Cohesion elements.
+ */
+function acquia_cms_cohesion_init($form, FormStateInterface $form_state) {
+  // Build and run the batch job for the initial import of Cohesion elements and
+  // assets.
+  // @todo When Cohesion provides a service to generate this batch job, use
+  // that instead of calling an internal method of an internal controller, since
+  // this may break at any time due to internal refactoring done by Cohesion.
+  $batch = AdministrationController::batchAction(TRUE);
+  if (isset($batch['error'])) {
+    Drupal::messenger()->addError($batch['error']);
+    return [];
+  }
+  batch_set($batch);
+}
+
+/**
  * Imports cohesion ui kit, on submitting account settings form.
  */
-function acquia_cms_account_settings_form_submit($form, FormStateInterface $form_state) {
-  // @todo This needs to be removed once the memory limit issue is fixed in
-  // cohesion.
-  ini_set('memory_limit', '1024M');
-  // Imports all Cohesion elements.
-  batch_set(acquia_cms_initialize_cohesion());
-
+function acquia_cms_import_ui_kit($form, FormStateInterface $form_state) {
   /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
   $facade = Drupal::classResolver(CohesionFacade::class);
   foreach ($facade->getAllPackages() as $package) {
