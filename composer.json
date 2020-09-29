@@ -87,6 +87,8 @@
                 "web-root": "./docroot"
             },
             "file-mapping": {
+                "[project-root]/.gitattributes": false,
+                "[project-root]/.editorconfig": false,
                 "[web-root]/sites/default/default.settings.php": {
                     "append": "./patches/d9-acms-settings.patch"
                 },
