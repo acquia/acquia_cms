@@ -23,6 +23,15 @@ function acquia_cms_demo_pubsec_requirements($phase) {
           'severity' => REQUIREMENT_ERROR,
         ];
       }
+      $preserved_nids = [500, 501, 502, 503, 504, 505];
+      $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($preserved_nids);
+      if (!empty($nodes)) {
+        $requirements[] = [
+          'title' => t('Content already exists!'),
+          'description' => t('Please remove these entity ids [:nid] from the system.', [':nid' => print_r($preserved_nids)]),
+          'severity' => REQUIREMENT_ERROR,
+        ];
+      }
       break;
   }
   return $requirements;
