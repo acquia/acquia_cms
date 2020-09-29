@@ -184,6 +184,7 @@
         ],
         "build:frontend": [
             "cd themes/acquia_claro && npm run build",
+            "Composer\\Config::disableProcessTimeout",
             "mkdir -p modules/acquia_cms_toolbar/css",
             "cp themes/acquia_claro/css/acquia_cms_toolbar.css modules/acquia_cms_toolbar/css"
         ],
@@ -196,6 +197,7 @@
             "rm -rf $TMPDIR/cex"
         ],
         "install:frontend": [
+            "Composer\\Config::disableProcessTimeout",
             "cd themes/acquia_claro && npm install"
         ],
         "nuke": "rm -r -f docroot vendor"
