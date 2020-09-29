@@ -13,7 +13,7 @@ events:
           type: script
           script:
             - composer validate --no-check-all --ansi --no-interaction
-            - composer install
+            - composer install --no-scripts
             - mkdir -p docroot/profiles/acquia_cms
             - composer archive --format zip --file acquia_cms
             - unzip acquia_cms.zip -d docroot/profiles/acquia_cms

@@ -4,7 +4,6 @@
     "description": "An implementation of Drupal 9 for running custom, low code websites on the Acquia platform.",
     "license": "GPL-2.0-or-later",
     "require": {
-        "php": "~7.3",
         "acquia/cohesion": "^6.3",
         "acquia/cohesion-theme": "^6.3",
         "acquia/drupal-environment-detector": "^1",
@@ -168,11 +167,25 @@
         ],
         "post-update-cmd": [
             "Composer\\Config::disableProcessTimeout",
-            "bash ./scripts/post-update.sh"
+            "@putenv PROFILE_DIR=./docroot/profiles/acquia_cms",
+            "@putenv MODULES_DIR=./docroot/sites/all",
+            "mkdir -p $PROFILE_DIR $MODULES_DIR",
+            "find $PWD -name 'acquia_cms.*' -type f -maxdepth 1 -exec ln -s -f '{}' $PROFILE_DIR ';'",
+            "ln -s -f $PWD/config $PROFILE_DIR",
+            "ln -s -f $PWD/misc $PROFILE_DIR",
+            "ln -s -f $PWD/modules $MODULES_DIR",
+            "ln -s -f $PWD/modules $PROFILE_DIR",
+            "ln -s -f $PWD/themes $PROFILE_DIR",
+            "ln -s -f $PWD/src $PROFILE_DIR",
+            "ln -s -f $PWD/tests $PROFILE_DIR",
+            "find ./docroot/modules -type d -name tests -prune -exec rm -r -f '{}' ';'",
+            "cp -f phpunit.xml ./docroot/core",
+            "composer install:frontend",
+            "composer build:frontend"
         ],
         "build:frontend": [
-            "cd themes/acquia_claro && npm run build",
             "Composer\\Config::disableProcessTimeout",
+            "cd themes/acquia_claro && npm run build",
             "mkdir -p modules/acquia_cms_toolbar/css",
             "cp themes/acquia_claro/css/acquia_cms_toolbar.css modules/acquia_cms_toolbar/css"
         ],
