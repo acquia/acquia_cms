@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # These commands shouldn't run in acquia pipelines.
-if [ $PIPELINE_ENV != "true" ]; then
+if [ "$PIPELINE_ENV" != "true" ]; then
   export PROFILE_DIR=./docroot/profiles/acquia_cms
   export MODULES_DIR=./docroot/sites/all
   mkdir -p $PROFILE_DIR $MODULES_DIR
