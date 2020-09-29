@@ -1,0 +1,47 @@
+{#
+/**
+ * @file
+ * Default theme implementation for config checklist form.
+ */
+#}
+{{ form.form_build_id }}
+{{ form.form_token }}
+{{ form.form_id }}
+
+{% set progress = (form.check_count['#value'] ? (form.check_count['#value'] * 100)/form.check_total['#value'] : 0)|round %}
+
+<div class="tour-checklist {{ form.form_id['#value'] }}">
+  {% if form.show_progress %}
+    <div class="progress__track">
+        <div class="progress__bar" style="width: {{ progress }}%;"></div>
+    </div>
+  {% endif %}
+
+  <div class="checklist-body">
+    <div class="checklist-heading">
+      <div class="checklist-title">
+        <div>{{ form.checklist_heading }}</div>
+        <div class='form-item__description'>{{ form.checklist_description }}</div>
+      </div>
+      <div class="checklist-progess">
+        {% if form.show_progress %}
+            <span class="progess-info-percent">{{ progress }}%</span>
+            <span class="progess-info-configured">({{ form.check_count['#value'] }} of {{ form.check_total['#value'] }} configured)</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class='list-items'>
+      {% for key, item in form.items %}
+        {% if item.check %}
+          <div class='checklist-item-wrapper'>
+            <div class='checklist-checkbox'>{{ item.check }}</div>
+            <div class='checklist-config'>{{ item.link }}</div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {{ form.submit }}
+  </div>
+</div>
