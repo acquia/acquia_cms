@@ -7,32 +7,35 @@
 
 /**
  * Implements hook_requirements().
- *
- * Check starter module is enabled or not.
  */
 function acquia_cms_demo_pubsec_requirements($phase) {
   $requirements = [];
 
-  switch ($phase) {
-    // Called while the module is installed.
-    case 'install':
-      if (\Drupal::moduleHandler()->moduleExists('acquia_cms_starter')) {
-        $requirements[] = [
-          'title' => t('Acquia CMS Starter'),
-          'description' => t('Acquia CMS Starter conflicts with Pubsec demo.'),
-          'severity' => REQUIREMENT_ERROR,
-        ];
-      }
-      // Stop installation of module if there is already content.
-      $existing_nodes = Drupal::entityTypeManager()->getStorage('node')->getQuery()->count()->execute();
-      if ($existing_nodes) {
-        $requirements['acquia_cms_demo_pubsec_pre_existing_content'] = [
-          'title' => t('Content already exists!'),
-          'description' => t('The public sector demo site cannot be installed if content already exists.'),
-          'severity' => REQUIREMENT_ERROR,
-        ];
-      }
-      break;
+  if ($phase === 'install') {
+    // This module conflicts with acquia_cms_starter.
+    if (Drupal::moduleHandler()->moduleExists('acquia_cms_starter')) {
+      $requirements['acquia_cms_demo_pubsec_starter_conflict'] = [
+        'title' => t('Acquia CMS Starter'),
+        'description' => t('Acquia CMS Starter conflicts with Pubsec demo.'),
+        'severity' => REQUIREMENT_ERROR,
+      ];
+    }
+    // Currently, content that ships with this module depends on specific node
+    // IDs -- serial IDs, not UUIDs. That can spell big trouble if content
+    // already exists. Since this is just a demo site, do not allow it to be
+    // installed if there's pre-existing content.
+    $existing_nodes = Drupal::entityTypeManager()
+      ->getStorage('node')
+      ->getQuery()
+      ->count()
+      ->execute();
+    if ($existing_nodes) {
+      $requirements['acquia_cms_demo_pubsec_pre_existing_content'] = [
+        'title' => t('Content already exists!'),
+        'description' => t('The public sector demo site cannot be installed if content already exists.'),
+        'severity' => REQUIREMENT_ERROR,
+      ];
+    }
   }
   return $requirements;
 }
