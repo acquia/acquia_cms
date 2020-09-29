@@ -5,11 +5,11 @@
     "license": "GPL-2.0-or-later",
     "require": {
         "php": "~7.3",
-        "composer/composer": "~1.9.2",
         "acquia/cohesion": "^6.3",
         "acquia/cohesion-theme": "^6.3",
         "acquia/drupal-environment-detector": "^1",
         "acquia/memcache-settings": "^1",
+        "composer/composer": "~1.9.2",
         "cweagans/composer-patches": "^1.6",
         "drupal/acquia_connector": "^2",
         "drupal/acquia_contenthub": "^2.16",
@@ -162,7 +162,7 @@
     "prefer-stable": true,
     "scripts": {
         "pre-update-cmd": [
-          "@putenv COMPOSER_MEMORY_LIMIT=2G"
+            "@putenv COMPOSER_MEMORY_LIMIT=2G"
         ],
         "post-update-cmd": [
             "@putenv PROFILE_DIR=./docroot/profiles/acquia_cms",
@@ -181,9 +181,6 @@
             "composer install:frontend",
             "composer build:frontend"
         ],
-        "install:frontend": [
-            "cd themes/acquia_claro && npm install"
-        ],
         "build:frontend": [
             "cd themes/acquia_claro && npm run build",
             "mkdir -p modules/acquia_cms_toolbar/css",
@@ -196,6 +193,9 @@
             "cp -f $TMPDIR/cex/cohesion_* $FILES_DIR/cohesion/config",
             "tar -c -z -f ./tests/cohesion.tar.gz --directory $FILES_DIR cohesion",
             "rm -rf $TMPDIR/cex"
+        ],
+        "install:frontend": [
+            "cd themes/acquia_claro && npm install"
         ],
         "nuke": "rm -r -f docroot vendor"
     }
