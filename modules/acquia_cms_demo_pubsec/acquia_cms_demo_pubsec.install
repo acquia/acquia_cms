@@ -23,12 +23,12 @@ function acquia_cms_demo_pubsec_requirements($phase) {
           'severity' => REQUIREMENT_ERROR,
         ];
       }
-      $preserved_nids = [500, 501, 502, 503, 504, 505];
-      $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($preserved_nids);
-      if (!empty($nodes)) {
-        $requirements[] = [
+      // Stop installation of module if there is already content.
+      $existing_nodes = Drupal::entityTypeManager()->getStorage('node')->getQuery()->count()->execute();
+      if ($existing_nodes) {
+        $requirements['acquia_cms_demo_pubsec_pre_existing_content'] = [
           'title' => t('Content already exists!'),
-          'description' => t('Please remove these entity ids [:nid] from the system.', [':nid' => print_r($preserved_nids)]),
+          'description' => t('The public sector demo site cannot be installed if content already exists.'),
           'severity' => REQUIREMENT_ERROR,
         ];
       }
