@@ -5,6 +5,7 @@ These instructions assume that you have an Acquia Cloud account, and that you ar
 
 You should also have:
 * PHP 7.3 or later installed. (`php --version`)
+* Composer 1.9.2 or later. (`composer --version`)
 * An invitation to the Acquia Engineering subscription in Acquia Cloud. Your manager or technical architect should be able to get you an invitation to this subscription if you need one.
 * A GitHub account which is authorized within the Acquia organization and can access https://github.com/acquia/acquia_cms.
 
@@ -34,10 +35,9 @@ acli --version
 ```
 cd project
 composer install
-composer run post-install-cmd
 ```
-10. Install Acquia CMS, as detailed in the "Installing Acquia CMS" section below.
-11. In the "Open Drupal Site" menu, choose "Open site in a new tab" and ensure you can see the Drupal site, and log in with the username "admin" and password "admin".
+11. Install Acquia CMS, as detailed in the "Installing Acquia CMS" section below.
+12. In the "Open Drupal Site" menu, choose "Open site in a new tab" and ensure you can see the Drupal site, and log in with the username "admin" and password "admin".
 
 ### Installing Acquia CMS
 
@@ -129,7 +129,6 @@ Clone the repository and install all dependencies:
 git clone git@github.com:acquia/acquia_cms.git --branch develop
 cd acquia_cms
 composer install
-composer run post-install-cmd
 ```
 Then, install Acquia CMS as detailed in the "Installing Acquia CMS" section above.
 
