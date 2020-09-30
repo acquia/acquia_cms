@@ -82,15 +82,14 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
     $page->fillField('keywords', 'Test');
     $page->pressButton('Search');
 
-    // Get the accordion container which holds the facets, and assert that,
-    // initially, the content type facet is visible but none of the dependent
-    // facets are.
-    $accordion_container = $this->assertSession()->elementExists('css', '.coh-accordion-tabs-content-wrapper');
-    $this->assertTrue($this->assertLinkExists('Content Type', $accordion_container)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Article Type', $accordion_container)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Event Type', $accordion_container)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Person Type', $accordion_container)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Place Type', $accordion_container)->isVisible());
+    // Get the container which holds the facets, and assert that, initially,
+    // the content type facet is visible but none of the dependent facets are.
+    $facets = $this->assertSession()->elementExists('css', '.facets-column');
+    $this->assertTrue($this->assertLinkExists('Content Type', $facets)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Article Type', $facets)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Event Type', $facets)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Person Type', $facets)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Place Type', $facets)->isVisible());
 
     // Facets should filter the content type and "type" taxonomy as expected,
     // and we should only see published content.
@@ -107,7 +106,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
       $this->assertLinkNotExistsByTitle('Test unpublished ' . $node_type_label);
 
       // Activate the facet for this content type.
-      $this->assertLinkExists($node_type_label . ' (1)', $accordion_container)->click();
+      $this->assertLinkExists($node_type_label . ' (1)', $facets)->click();
 
       $this->assertLinkExistsByTitle('Test published ' . $node_type_label);
       $this->assertLinkNotExistsByTitle('Test unpublished ' . $node_type_label);
@@ -115,7 +114,10 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
       // Pages have no facets.
       if ($node_type_id !== 'page') {
         // Open the accordion item for the "type" taxonomy of this content type.
-        $this->assertLinkExists($node_type_label . ' Type', $accordion_container)->click();
+        // @todo This is commented out because, at the moment, the facets are
+        // expanded by default. If we change them to be collapsed by default, we
+        // can uncomment this line.
+        // $this->assertLinkExists($node_type_label . ' Type', $facets)->click();
         // Check if term facet is working properly.
         $page->clickLink($node_type_label . ' Music (1)');
         // Check if node of the selected term is shown.
@@ -189,15 +191,14 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
     $this->drupalGet('/search');
 
-    // Get the accordion container which holds the facets, and assert that,
-    // initially, the content type facet is not visible but none of the
-    // dependent facets are.
-    $accordion_container = $this->assertSession()->elementExists('css', '.coh-accordion-tabs-content-wrapper');
-    $this->assertFalse($this->assertLinkExists('Content Type', $accordion_container)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Article Type', $accordion_container)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Event Type', $accordion_container)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Person Type', $accordion_container)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Place Type', $accordion_container)->isVisible());
+    // Get the container which holds the facets, and assert that, initially, the
+    // content type facet is not visible but none of the dependent facets are.
+    $facets = $this->assertSession()->elementExists('css', '.facets-column');
+    $this->assertFalse($this->assertLinkExists('Content Type', $facets)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Article Type', $facets)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Event Type', $facets)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Person Type', $facets)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Place Type', $facets)->isVisible());
 
     $this->assertLinksExistInOrder();
   }
