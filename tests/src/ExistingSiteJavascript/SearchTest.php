@@ -146,11 +146,13 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
       // Assert that autocomplete dropdown contains the title
       // of published node of the particular node type.
-      $this->assertSession()->elementExists('css', 'span:contains("' . $published_title . '")', $autocomplete_results);
+      // @todo re-enable Pages in Content Index once ACMS-445 completed.
+      // $this->assertSession()->elementExists('css', 'span:contains("' . $published_title . '")', $autocomplete_results);
 
       // Assert that autocomplete dropdown does not contains
       // the title of unpublished node of the particular node type.
-      $this->assertSession()->elementNotExists('css', 'span:contains("' . $unpublished_title . '")', $autocomplete_results);
+      // @todo re-enable Pages in Content Index once ACMS-445 completed.
+      // $this->assertSession()->elementNotExists('css', 'span:contains("' . $unpublished_title . '")', $autocomplete_results);
     }
 
   }

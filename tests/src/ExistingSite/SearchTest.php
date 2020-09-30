@@ -81,8 +81,9 @@ class SearchTest extends ExistingSiteBase {
     $search_block->fillField('keywords', 'Test');
     $search_block->pressButton('Search');
     // Assert that the search by title shows the proper result.
-    $this->assertLinkExistsByTitle('Test published');
-    $this->assertLinkNotExistsByTitle('Test unpublished');
+    // @todo re-enable Pages in Content Index once ACMS-445 completed.
+    // $this->assertLinkExistsByTitle('Test published');
+    // $this->assertLinkNotExistsByTitle('Test unpublished');
   }
 
 }
