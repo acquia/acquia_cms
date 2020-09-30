@@ -10,6 +10,7 @@ use Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade;
 use Drupal\acquia_cms_common\Facade\WorkflowFacade;
 use Drupal\imce\Imce;
 use Drupal\node\NodeTypeInterface;
+use Drupal\views\ViewExecutable;
 use Drupal\workbench_email\TemplateInterface;
 
 /**
@@ -36,5 +37,15 @@ function acquia_cms_common_preprocess_html(&$variables) {
   if (Imce::access() && $path == '/imce') {
     $variables['attributes']['class'][] = 'acquia-cms';
     $variables['#attached']['library'][] = 'acquia_cms_common/imce';
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function acquia_cms_common_views_pre_render(ViewExecutable $view) {
+  $search_pages = ['articles', 'search', 'events', 'people', 'places'];
+  if (in_array($view->id(), $search_pages)) {
+    $view->element['#attached']['library'][] = 'acquia_cms_common/page';
   }
 }
