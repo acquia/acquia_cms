@@ -133,7 +133,10 @@ final class RedirectHandler implements ContainerInjectionInterface {
       $destination = $this->pathValidator->getUrlIfValid($destination);
 
       return $destination
-        ? in_array($destination->getRouteName(), ['user.page', 'entity.user.canonical'], TRUE)
+        ? in_array($destination->getRouteName(), [
+          'user.page',
+          'entity.user.canonical',
+        ], TRUE)
         : FALSE;
     }
     return TRUE;
