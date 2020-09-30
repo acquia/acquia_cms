@@ -117,7 +117,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
         // @todo This is commented out because, at the moment, the facets are
         // expanded by default. If we change them to be collapsed by default, we
         // can uncomment this line.
-        // $this->assertLinkExists($node_type_label . ' Type', $facets)->click();
+        // $this->assertLinkExists("$node_type_label Type", $facets)->click();
         // Check if term facet is working properly.
         $page->clickLink($node_type_label . ' Music (1)');
         // Check if node of the selected term is shown.
