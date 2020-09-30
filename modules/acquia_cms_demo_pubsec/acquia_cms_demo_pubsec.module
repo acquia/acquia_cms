@@ -5,7 +5,9 @@
  * Contains hook implementations for Acquia Pubsec Demo.
  */
 
+use Drupal\acquia_cms\Facade\CohesionFacade;
 use Drupal\views\ViewExecutable;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Implements hook_views_pre_render().
@@ -20,5 +22,61 @@ function acquia_cms_demo_pubsec_views_pre_render(ViewExecutable $view) {
   ];
   if (in_array($view->id(), $target_views, TRUE)) {
     $view->element['#attached']['library'][] = 'acquia_cms_search/page';
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function acquia_cms_demo_pubsec_module_implements_alter(&$implementations, $hook) {
+  switch ($hook) {
+    // Removing the cohesion sync modules_installed hook implementation to
+    // resolve the memory limit issue. Because cohesion_sync is trying to import
+    // all the configuration in a single process and that results into memory
+    // exaust error. So we are replacing it with our modules_installed hook to
+    // import it via batch.
+    case 'modules_installed':
+      unset($implementations['cohesion_sync']);
+      break;
+  }
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function acquia_cms_demo_pubsec_modules_installed($modules) {
+  $batch = batch_get();
+  $batch['operations'][] = ['acquia_cms_demo_pubsec_import', [$modules]];
+  batch_set($batch);
+}
+
+/**
+ * Import the pubsec module configuration via batch.
+ */
+function acquia_cms_demo_pubsec_import($modules) {
+  foreach ($modules as $module) {
+    // Check to see if the config/dx8/packages.yml file exists.
+    $packages_yaml_file = drupal_get_path('module', $module) . "/config/dx8/packages.yml";
+    if (file_exists($packages_yaml_file)) {
+      // Decode the file.
+      $config = Yaml::parse(file_get_contents($packages_yaml_file));
+      if (is_array($config)) {
+        // Loop through the packages and deploy them.
+        foreach ($config as $path) {
+          // If it's a local path, patch in the path to the module.
+          if (file_exists(drupal_get_path('module', $module) . '/' . $path)) {
+            $path = drupal_get_path('module', $module) . '/' . $path;
+          }
+          /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
+          $facade = Drupal::classResolver(CohesionFacade::class);
+          try {
+            $facade->importPackage($path, TRUE);
+          }
+          catch (Throwable $e) {
+            Drupal::messenger()->addError($e->getMessage());
+          }
+        }
+      }
+    }
   }
 }
