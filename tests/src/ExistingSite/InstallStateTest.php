@@ -51,7 +51,7 @@ class InstallStateTest extends ExistingSiteBase {
 
     $pages_to_check = [
       '/admin/content',
-      '/admin/structure/blocks',
+      '/admin/structure/block',
       '/admin/people',
     ];
     $session = $this->getSession();
