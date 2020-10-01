@@ -34,6 +34,34 @@ class InstallStateTest extends ExistingSiteBase {
   }
 
   /**
+   * Tests that key administrative pages are available.
+   *
+   * Acquia CMS is a big and complicated system, and it is possible that simple
+   * dependency updates can produce WSODs in key administrative places. To
+   * detect that kind of thing, this method logs in as an administrator, visits
+   * a bunch of those key administrative pages, and verifies that they produce
+   * a 200 status code. That doesn't mean they work as intended, of course, but
+   * at least they are not producing scary blank (or error) screens.
+   */
+  public function testKeyAdministrativePages() : void {
+    $account = $this->createUser();
+    $account->addRole('administrator');
+    $account->save();
+    $this->drupalLogin($account);
+
+    $pages_to_check = [
+      '/admin/content',
+      '/admin/structure/blocks',
+      '/admin/people',
+    ];
+    $assert_session = $this->assertSession();
+    foreach ($pages_to_check as $path) {
+      $this->drupalGet($path);
+      $assert_session->statusCodeEquals(200);
+    }
+  }
+
+  /**
    * Assert that all install tasks have done what they should do.
    *
    * See acquia_cms_install_tasks().
