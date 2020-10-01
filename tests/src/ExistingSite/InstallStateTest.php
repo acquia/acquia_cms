@@ -54,10 +54,11 @@ class InstallStateTest extends ExistingSiteBase {
       '/admin/structure/blocks',
       '/admin/people',
     ];
-    $assert_session = $this->assertSession();
+    $session = $this->getSession();
     foreach ($pages_to_check as $path) {
       $this->drupalGet($path);
-      $assert_session->statusCodeEquals(200);
+      $status_code = $session->getStatusCode();
+      $this->assertSame(200, $status_code, "$path returned status code $status_code.");
     }
   }
 
