@@ -75,6 +75,8 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
     $this->drupalLogin($account);
 
     $node_types = NodeType::loadMultiple();
+    // @todo Delete this line once ACMS-445 is fixed.
+    unset($node_types['page']);
 
     $this->drupalGet('/search');
     $page->fillField('keywords', 'Test');
@@ -130,6 +132,8 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
   public function testAutocomplete() {
     $page = $this->getSession()->getPage();
     $node_types = NodeType::loadMultiple();
+    // @todo Delete this line once ACMS-445 is fixed.
+    unset($node_types['page']);
     foreach ($node_types as $type) {
       $node_type_label = $type->label();
       $this->drupalGet('/search');
@@ -146,13 +150,11 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
       // Assert that autocomplete dropdown contains the title
       // of published node of the particular node type.
-      // @todo re-enable Pages in Content Index once ACMS-445 completed.
-      // $this->assertSession()->elementExists('css', 'span:contains("' . $published_title . '")', $autocomplete_results);
+      $this->assertSession()->elementExists('css', 'span:contains("' . $published_title . '")', $autocomplete_results);
 
       // Assert that autocomplete dropdown does not contains
       // the title of unpublished node of the particular node type.
-      // @todo re-enable Pages in Content Index once ACMS-445 completed.
-      // $this->assertSession()->elementNotExists('css', 'span:contains("' . $unpublished_title . '")', $autocomplete_results);
+      $this->assertSession()->elementNotExists('css', 'span:contains("' . $unpublished_title . '")', $autocomplete_results);
     }
 
   }
