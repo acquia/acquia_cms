@@ -123,8 +123,31 @@ function acquia_cms_initialize_cohesion() {
  * Implements hook_modules_installed().
  */
 function acquia_cms_modules_installed(array $modules) {
-  if (\Drupal::service('module_handler')->moduleExists('acquia_telemetry')) {
+  $module_handler = Drupal::moduleHandler();
+
+  if ($module_handler->moduleExists('acquia_telemetry')) {
     Drupal::classResolver(TelemetryFacade::class)->modulesInstalled($modules);
+  }
+  if ($module_handler->moduleExists('cohesion_sync')) {
+    if (PHP_SAPI === 'cli') {
+      $module_handler->invoke('cohesion_sync', 'modules_installed', [$modules]);
+    }
+    else {
+      $modules = array_map([$module_handler, 'getModule'], $modules);
+      /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
+      $facade = Drupal::classResolver(CohesionFacade::class);
+      foreach ($modules as $module) {
+        $packages = $facade->getPackagesFromExtension($module);
+        foreach ($packages as $package) {
+          try {
+            $facade->importPackage($package, TRUE);
+          }
+          catch (Throwable $e) {
+            Drupal::messenger()->addError($e->getMessage());
+          }
+        }
+      }
+    }
   }
 }
 
@@ -244,4 +267,18 @@ function acquia_cms_rebuild_cohesion($form, FormStateInterface $form_state) {
     return [];
   }
   batch_set($batch);
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function acquia_cms_module_implements_alter(array &$implementations, string $hook) : void {
+  if ($hook === 'modules_installed') {
+    // Prevent cohesion_sync from reacting to module installation, for an
+    // excellent reason: it tries to import all of the new module's sync
+    // packages, at once, in the current request, which leads to memory errors.
+    // We replace it with a slightly smarter implementation that uses the batch
+    // system when installing a module via the UI.
+    unset($implementations['cohesion_sync']);
+  }
 }
