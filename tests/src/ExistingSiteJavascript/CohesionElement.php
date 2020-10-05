@@ -55,10 +55,13 @@ abstract class CohesionElement extends NodeElement {
    *
    * @param string $button_label
    *   The button's ARIA label.
+   * @param \Behat\Mink\Element\ElementInterface $container
+   *   (optional) The element that contains the button. Defaults to the called
+   *   object.
    */
-  protected function pressAriaButton(string $button_label) : void {
+  protected function pressAriaButton(string $button_label, ElementInterface $container = NULL) : void {
     $selector = sprintf('button[aria-label="%s"]', $button_label);
-    $button = $this->find('css', $selector);
+    $button = ($container ?: $this)->find('css', $selector);
     Assert::assertInstanceOf(ElementInterface::class, $button);
     $button->press();
   }
