@@ -18,7 +18,8 @@ final class ElementBrowser extends CohesionElement {
    */
   public function select(string $label) : self {
     $selector = sprintf('.coh-layout-canvas-list-item[data-title="%s"]', $label);
-    $this->waitForElementVisible('css', $selector, $this)->doubleClick();
+    $item = $this->waitForElementVisible('css', $selector, $this);
+    $this->pressAriaButton('add to canvas', $item);
     return $this;
   }
 
