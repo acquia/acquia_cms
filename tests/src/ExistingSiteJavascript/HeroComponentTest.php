@@ -69,7 +69,7 @@ class HeroComponentTest extends CohesionComponentTestBase {
     ]);
 
     // Check if all the image position styles are there in the select list.
-    $assert_styles('Image position', [
+    $assert_styles('Position', [
       'Right to the content',
       'Left to the content',
     ]);
