@@ -122,6 +122,8 @@ function acquia_cms_initialize_cohesion() {
  * Implements hook_modules_installed().
  */
 function acquia_cms_modules_installed(array $modules) {
+  // @todo The below code needs to be updated once the memory limit issue is
+  // fixed by the site studio.
   $module_handler = Drupal::moduleHandler();
 
   if ($module_handler->moduleExists('acquia_telemetry')) {
@@ -295,6 +297,8 @@ function acquia_cms_rebuild_cohesion() {
  * Implements hook_module_implements_alter().
  */
 function acquia_cms_module_implements_alter(array &$implementations, string $hook) : void {
+  // @todo The below code needs to be updated once the memory limit issue is
+  // fixed by the site studio.
   if ($hook === 'modules_installed') {
     // Prevent cohesion_sync from reacting to module installation, for an
     // excellent reason: it tries to import all of the new module's sync
