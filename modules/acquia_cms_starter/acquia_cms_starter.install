@@ -8,7 +8,7 @@
 /**
  * Implements hook_requirements().
  *
- * Check pubsec demo module is enabled or not.
+ * Check pubsec demo module is enabled or not and if the GMaps API key is set.
  */
 function acquia_cms_starter_requirements($phase) {
   $requirements = [];
@@ -20,6 +20,21 @@ function acquia_cms_starter_requirements($phase) {
         $requirements[] = [
           'title' => t('Acquia CMS Demo Pubsec'),
           'description' => t('Acquia CMS Demo Pubsec conflicts with Starter.'),
+          'severity' => REQUIREMENT_ERROR,
+        ];
+      }
+
+      // Block install if the GMaps API keys aren't set in geocoder.
+      $geocoder_api_key = \Drupal::configFactory()
+        ->get('geocoder.geocoder_provider.googlemaps')
+        ->get('configuration.apiKey');
+      if (empty($geocoder_api_key)) {
+        $requirements['acquia_cms_starter_google_maps_api_key'] = [
+          'title' => t('Google Maps API Key missing!'),
+          'description' => t(
+            'Acquia CMS Starter requires a Google Maps API key to be set. <a href="@url">Go here to set it.</a>',
+            ['@url' => '/admin/tour/dashboard']
+          ),
           'severity' => REQUIREMENT_ERROR,
         ];
       }

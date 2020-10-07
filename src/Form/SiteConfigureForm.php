@@ -3,6 +3,7 @@
 namespace Drupal\acquia_cms\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -29,6 +30,13 @@ final class SiteConfigureForm extends ConfigFormBase {
   private $moduleInstaller;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  private $moduleHandler;
+
+  /**
    * The decorated form object.
    *
    * @var \Drupal\Core\Installer\Form\SiteConfigureForm
@@ -44,13 +52,22 @@ final class SiteConfigureForm extends ConfigFormBase {
    *   The Cohesion API URL.
    * @param \Drupal\Core\Extension\ModuleInstallerInterface $module_installer
    *   The module installer.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    * @param \Drupal\Core\Installer\Form\SiteConfigureForm $decorated
    *   The decorated form object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, string $api_url, ModuleInstallerInterface $module_installer, CoreSiteConfigureForm $decorated) {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    string $api_url,
+    ModuleInstallerInterface $module_installer,
+    ModuleHandlerInterface $module_handler,
+    CoreSiteConfigureForm $decorated
+  ) {
     parent::__construct($config_factory);
     $this->apiUrl = $api_url;
     $this->moduleInstaller = $module_installer;
+    $this->moduleHandler = $module_handler;
     $this->decorated = $decorated;
   }
 
@@ -62,6 +79,7 @@ final class SiteConfigureForm extends ConfigFormBase {
       $container->get('config.factory'),
       $container->get('cohesion.api.utils')->getAPIServerURL(),
       $container->get('module_installer'),
+      $container->get('module_handler'),
       CoreSiteConfigureForm::create($container)
     );
   }
@@ -95,6 +113,17 @@ final class SiteConfigureForm extends ConfigFormBase {
       '#description' => $this->t('Enter your API key and organization key to automatically set up Acquia Site Studio (note that this process can take a while). If you do not want to use Site Studio right now, leave these fields blank -- you can always set it up later.'),
       '#tree' => TRUE,
     ];
+    $form['acquia_google_maps_api'] = [
+      'maps_api_key' => [
+        '#type' => 'textfield',
+        '#title' => $this->t('Maps API key'),
+        '#default_value' => '',
+      ],
+      '#type' => 'details',
+      '#title' => $this->t('Google Maps'),
+      '#description' => $this->t('Enter your Google Maps APIkey.'),
+      '#tree' => TRUE,
+    ];
     // Checkbox for Acquia Telemetry.
     $form['acquia_telemetry'] = [
       '#type' => 'checkbox',
@@ -114,7 +143,10 @@ final class SiteConfigureForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   protected function getEditableConfigNames() {
-    return ['cohesion.settings'];
+    return [
+      'cohesion.settings',
+      'geocoder.geocoder_provider.googlemaps',
+    ];
   }
 
   /**
@@ -125,6 +157,10 @@ final class SiteConfigureForm extends ConfigFormBase {
 
     $api_key = $form_state->getValue(['cohesion', 'api_key']);
     $org_key = $form_state->getValue(['cohesion', 'organization_key']);
+    $maps_api_key = $form_state->getValue([
+      'acquia_google_maps_api',
+      'maps_api_key',
+    ]);
 
     if ($api_key && $org_key) {
       // For reasons I can't fathom, not resetting the config factory causes
@@ -148,6 +184,22 @@ final class SiteConfigureForm extends ConfigFormBase {
     // Enable the JSON API Extras if user opts in for decoupled functionality.
     if ($form_state->getValue('decoupled')) {
       $this->moduleInstaller->install(['jsonapi_extras']);
+    }
+    // Configure Google Maps API Key.
+    if ($maps_api_key) {
+
+      // Site Studio is always on, so this is essentially safe to set.
+      $this->config('cohesion.settings')
+        ->set('google_map_api_key', $maps_api_key)
+        ->save(TRUE);
+
+      // ACMS Place may not be installed, so test if it's on before setting the
+      // key here.
+      if ($this->moduleHandler->moduleExists('acquia_cms_place')) {
+        $this->config('geocoder.geocoder_provider.googlemaps')
+          ->set('apiKey', $maps_api_key)
+          ->save(TRUE);
+      }
     }
   }
 
