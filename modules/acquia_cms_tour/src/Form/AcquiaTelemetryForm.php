@@ -61,23 +61,25 @@ final class AcquiaTelemetryForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $form['#theme'] = 'acquia_cms_tour_checklist_form';
+    $form['#attached']['library'][] = 'acquia_cms_tour/styling';
+
+    $form['checklist_heading']['#markup'] = $this->t('Acquia Telemetry');
+
     // Checkbox for Acquia Telemetry.
-    $form['acquia_telemetry'] = [
-      'opt_in' => [
-        '#type' => 'checkbox',
-        '#title' => $this->t('Send anonymous data about Acquia product usage'),
-        '#default_value' => $this->moduleHandler->moduleExists('acquia_telemetry'),
-      ],
-      '#type' => 'details',
-      '#open' => TRUE,
-      '#title' => $this->t('Acquia Telemetry'),
+    $form['items']['acquia_telemetry']['check'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Send anonymous data about Acquia product usage'),
+      '#default_value' => $this->moduleHandler->moduleExists('acquia_telemetry'),
       '#description' => $this->t('This module intends to collect anonymous data about Acquia product usage. No private information will be gathered. Data will not be used for marketing or sold to any third party. This is an opt-in module and can be disabled at any time by uninstalling the acquia_telemetry module by your site administrator.'),
     ];
-    $form['acquia_telemetry']['actions']['submit'] = [
+
+    $form['submit'] = [
       '#type' => 'submit',
       '#value' => 'Save',
       '#button_type' => 'primary',
     ];
+
     return $form;
   }
 
@@ -85,8 +87,9 @@ final class AcquiaTelemetryForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Enable the Acquia Telemetry module if user opt's in.
-    $acquia_telemetry_opt_in = $form_state->getValue('opt_in');
+    // Enable the Acquia Telemetry module if user opts in.
+    $acquia_telemetry_opt_in = $form_state->getValue('check');
+
     if ($acquia_telemetry_opt_in) {
       $this->moduleInstaller->install(['acquia_telemetry']);
       $this->messenger()->addStatus('You have opted into Acquia Telemetry. Thank you for helping improve Acquia products.');
