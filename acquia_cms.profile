@@ -11,7 +11,6 @@ use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
-use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -123,8 +122,66 @@ function acquia_cms_initialize_cohesion() {
  * Implements hook_modules_installed().
  */
 function acquia_cms_modules_installed(array $modules) {
-  if (\Drupal::service('module_handler')->moduleExists('acquia_telemetry')) {
+  // @todo The below code needs to be updated once the memory limit issue is
+  // fixed by the site studio.
+  $module_handler = Drupal::moduleHandler();
+
+  if ($module_handler->moduleExists('acquia_telemetry')) {
     Drupal::classResolver(TelemetryFacade::class)->modulesInstalled($modules);
+  }
+  if ($module_handler->moduleExists('cohesion_sync')) {
+    if (PHP_SAPI === 'cli') {
+      $module_handler->invoke('cohesion_sync', 'modules_installed', [$modules]);
+    }
+    else {
+      $modules = array_map([$module_handler, 'getModule'], $modules);
+      // Instead of just adding the package import code we have used the batch
+      // process here to overcome the memory limit exausted error.
+      // To reproduce this issue just remove the below code and replace it with
+      // the acquia_cms_module_cohesion_config_import function code. And this
+      // memory limit exausted error occurs because cohesion is doing an
+      // incredibly heavy operation while importing the cohesion configuration.
+      //
+      // Here we are checking if a batch is already running, if yes then it
+      // appending a new batch set else creating a new batch to import cohesion
+      // configurations. This is done because when we install the site via UI,
+      // a batch process executes to install the site configuration, modules,
+      // etc.
+      // @see \Drupal\cohesion_sync\PackagerManager::getConfigImporter()
+      $batch = batch_get();
+      if (empty($batch['id'])) {
+        $batch['operations'][] = [
+          'acquia_cms_module_cohesion_config_import', [$modules],
+        ];
+        batch_set($batch);
+      }
+      else {
+        $batch['current_set'] = 'cohesion_config_import';
+        $batch['sets']['cohesion_config_import']['operations'][] = [
+          'acquia_cms_module_cohesion_config_import', [$modules],
+        ];
+        _batch_append_set($batch, []);
+      }
+    }
+  }
+}
+
+/**
+ * Imports the module cohesion configuration via batch.
+ */
+function acquia_cms_module_cohesion_config_import(array $modules) {
+  /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
+  $facade = Drupal::classResolver(CohesionFacade::class);
+  foreach ($modules as $module) {
+    $packages = $facade->getPackagesFromExtension($module);
+    foreach ($packages as $package) {
+      try {
+        $facade->importPackage($package, TRUE);
+      }
+      catch (Throwable $e) {
+        Drupal::messenger()->addError($e->getMessage());
+      }
+    }
   }
 }
 
@@ -200,26 +257,17 @@ function acquia_cms_install_additional_modules() {
 }
 
 /**
- * Imports all Cohesion elements.
+ * Imports all Cohesion elements immediately in a batch process.
  */
-function acquia_cms_cohesion_init($form, FormStateInterface $form_state) {
-  // Build and run the batch job for the initial import of Cohesion elements and
-  // assets.
-  // @todo When Cohesion provides a service to generate this batch job, use
-  // that instead of calling an internal method of an internal controller, since
-  // this may break at any time due to internal refactoring done by Cohesion.
-  $batch = AdministrationController::batchAction(TRUE);
-  if (isset($batch['error'])) {
-    Drupal::messenger()->addError($batch['error']);
-    return [];
-  }
-  batch_set($batch);
+function acquia_cms_cohesion_init() {
+  // Instead of returning the batch array, we are just executing the batch here.
+  batch_set(acquia_cms_initialize_cohesion());
 }
 
 /**
  * Imports cohesion ui kit, on submitting account settings form.
  */
-function acquia_cms_import_ui_kit($form, FormStateInterface $form_state) {
+function acquia_cms_import_ui_kit() {
   /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
   $facade = Drupal::classResolver(CohesionFacade::class);
   foreach ($facade->getAllPackages() as $package) {
@@ -235,13 +283,28 @@ function acquia_cms_import_ui_kit($form, FormStateInterface $form_state) {
 /**
  * Rebuilds the cohesion componenets.
  */
-function acquia_cms_rebuild_cohesion($form, FormStateInterface $form_state) {
+function acquia_cms_rebuild_cohesion() {
   // Get the batch array filled with operations that should be performed during
   // rebuild.
   $batch = WebsiteSettingsController::batch(TRUE);
   if (isset($batch['error'])) {
     Drupal::messenger()->addError($batch['error']);
-    return [];
   }
   batch_set($batch);
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function acquia_cms_module_implements_alter(array &$implementations, string $hook) : void {
+  // @todo The below code needs to be updated once the memory limit issue is
+  // fixed by the site studio.
+  if ($hook === 'modules_installed') {
+    // Prevent cohesion_sync from reacting to module installation, for an
+    // excellent reason: it tries to import all of the new module's sync
+    // packages, at once, in the current request, which leads to memory errors.
+    // We replace it with a slightly smarter implementation that uses the batch
+    // system when installing a module via the UI.
+    unset($implementations['cohesion_sync']);
+  }
 }
