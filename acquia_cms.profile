@@ -254,6 +254,19 @@ function acquia_cms_install_additional_modules() {
   else {
     $module_installer->install(['syslog']);
   }
+
+  // @todo once PF-3025 has been resolved, update this to work on IDEs too.
+  if (Environment::isAhEnv() && !Environment::isAhIdeEnv()) {
+    $module_installer->install(['imagemagick']);
+    Drupal::configFactory()
+      ->getEditable('imagemagick.settings')
+      ->set('path_to_binaries', '/usr/bin/')
+      ->save();
+    Drupal::configFactory()
+      ->getEditable('system.image')
+      ->set('toolkit', 'imagemagick')
+      ->save();
+  }
 }
 
 /**
