@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_tour\Functional;
 
+use Drupal\geocoder\Entity\GeocoderProvider;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -41,37 +42,28 @@ class AcquiaGoogleMapsTest extends BrowserTestBase {
   // @codingStandardsIgnoreEnd
 
   /**
-   * Tests if Google Maps API key can be managed via tour page.
+   * Tests that the Google Maps API key can be set on the tour page.
    */
   public function testAcquiaGoogleMaps() {
-    $page = $this->getSession()->getPage();
     $assert_session = $this->assertSession();
 
-    // Acquia CMS place needs to be installed.
-    $this->container->get('module_installer')->install(['acquia_cms_place']);
-
-    $account = $this->drupalCreateUser([
-      'access acquia cms tour',
-    ]);
+    $account = $this->drupalCreateUser(['access acquia cms tour']);
     $this->drupalLogin($account);
 
     // Visit the tour page.
     $this->drupalGet('/admin/tour/dashboard');
     $assert_session->statusCodeEquals(200);
 
+    $container = $assert_session->elementExists('css', '[data-drupal-selector="edit-acquia-google-maps-api"]');
     // API key should be blank to start.
-    $assert_session->fieldValueEquals('maps_api_key', '');
-    // We shouldn't be able to submit a null value.
-    $button_id = 'maps-submit';
-    $page->pressButton($button_id);
-    $assert_session->pageTextContains(
-      'The Google Maps API key cannot be null.'
-    );
+    $assert_session->fieldValueEquals('maps_api_key', '', $container);
+    $container->pressButton('Save');
+    $assert_session->pageTextContains('Maps API key field is required.');
 
     // Save a dummmy API key.
     $dummy_key = 'keykeykey123';
-    $page->fillField('edit-maps-api-key', $dummy_key);
-    $page->pressButton($button_id);
+    $container->fillField('edit-maps-api-key', $dummy_key);
+    $container->pressButton('Save');
     $assert_session->pageTextContains('The Google Maps API key has been set.');
 
     // Now test that the config values we expect are set correctly.
@@ -79,9 +71,8 @@ class AcquiaGoogleMapsTest extends BrowserTestBase {
       ->get('google_map_api_key');
     $this->assertSame($cohesion_map_key, $dummy_key);
 
-    $geocoder_map_key = $this->config('geocoder.geocoder_provider.googlemaps')
-      ->get('configuration.apiKey');
-    $this->assertSame($geocoder_map_key, $dummy_key);
+    $configuration = GeocoderProvider::load('googlemaps')->get('configuration');
+    $this->assertSame($configuration['apiKey'], $dummy_key);
   }
 
 }

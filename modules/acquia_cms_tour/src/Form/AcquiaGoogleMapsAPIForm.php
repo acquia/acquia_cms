@@ -77,7 +77,6 @@ final class AcquiaGoogleMapsAPIForm extends ConfigFormBase {
     ];
     $form['acquia_google_maps_api']['submit'] = [
       '#type' => 'submit',
-      '#id' => 'maps-submit',
       '#value' => $this->t('Save'),
       '#button_type' => 'primary',
     ];
