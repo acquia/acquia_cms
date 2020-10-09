@@ -1,4 +1,5 @@
 _meta:
+  version: '1.0'
   entity_type: node
   uuid: 80b6f0a0-366e-41fe-9c84-534aa3da492a
   bundle: place
@@ -8,7 +9,8 @@ _meta:
     472f6aba-272a-4149-9d0e-86106b58da1e: taxonomy_term
 default:
   nid:
-    - value: 505
+    -
+      value: 505
   revision_uid:
     -
       target_id: 1
@@ -53,6 +55,11 @@ default:
   content_translation_outdated:
     -
       value: false
+  body:
+    -
+      value: "<p>Acquiaville Library comprises of best curated Drupal modules, along site out of the box site studio components. This will give you a head start into your site development.</p>\r\n\r\n<p>To more about the it, browse through this demo.&nbsp;</p>\r\n"
+      format: filtered_html
+      summary: ''
   field_place_address:
     -
       langcode: ''
