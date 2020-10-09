@@ -12,6 +12,8 @@ function acquia_cms_demo_pubsec_requirements($phase) {
   $requirements = [];
 
   if ($phase === 'install') {
+    $entity_type_manager = Drupal::entityTypeManager();
+
     // This module conflicts with acquia_cms_starter.
     if (Drupal::moduleHandler()->moduleExists('acquia_cms_starter')) {
       $requirements['acquia_cms_demo_pubsec_starter_conflict'] = [
@@ -24,8 +26,7 @@ function acquia_cms_demo_pubsec_requirements($phase) {
     // IDs -- serial IDs, not UUIDs. That can spell big trouble if content
     // already exists. Since this is just a demo site, do not allow it to be
     // installed if there's pre-existing content.
-    $existing_nodes = Drupal::entityTypeManager()
-      ->getStorage('node')
+    $existing_nodes = $entity_type_manager->getStorage('node')
       ->getQuery()
       ->count()
       ->execute();
@@ -37,19 +38,25 @@ function acquia_cms_demo_pubsec_requirements($phase) {
       ];
     }
 
-    // Block install if the GMaps API keys aren't set in geocoder.
-    $geocoder_api_key = \Drupal::configFactory()
-      ->get('geocoder.geocoder_provider.googlemaps')
-      ->get('configuration.apiKey');
-    if (empty($geocoder_api_key)) {
-      $requirements['acquia_cms_demo_pubsec_google_maps_api_key'] = [
-        'title' => t('Google Maps API Key missing!'),
-        'description' => t(
-          'Acquia CMS Demo Pubsec requires a Google Maps API key to be set. <a href="@url">Go here to set it.</a>',
-          ['@url' => '/admin/tour/dashboard']
-        ),
-        'severity' => REQUIREMENT_ERROR,
-      ];
+    // Block install if the Google Maps API keys aren't set in the Geocoder
+    // provider.
+    if ($entity_type_manager->hasDefinition('geocoder_provider')) {
+      /** @var \Drupal\geocoder\GeocoderProviderInterface $provider */
+      $provider = $entity_type_manager->getStorage('geocoder_provider')
+        ->load('googlemaps');
+
+      if ($provider) {
+        $configuration = $provider->get('configuration');
+        if (empty($configuration['apiKey'])) {
+          $requirements['acquia_cms_demo_pubsec_google_maps_api_key'] = [
+            'title' => t('Google Maps API Key missing!'),
+            'description' => t('Acquia CMS Demo Pubsec requires a Google Maps API key to be set. <a href="@url">Go here to set it.</a>', [
+              '@url' => '/admin/tour/dashboard',
+            ]),
+            'severity' => REQUIREMENT_ERROR,
+          ];
+        }
+      }
     }
   }
   return $requirements;

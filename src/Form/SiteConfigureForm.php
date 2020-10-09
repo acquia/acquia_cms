@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms\Form;
 
+use Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
@@ -37,11 +38,18 @@ final class SiteConfigureForm extends ConfigFormBase {
   private $moduleHandler;
 
   /**
-   * The decorated form object.
+   * The decorated site configuration form object.
    *
    * @var \Drupal\Core\Installer\Form\SiteConfigureForm
    */
-  private $decorated;
+  private $siteForm;
+
+  /**
+   * The decorated Google Maps configuration form object.
+   *
+   * @var \Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm
+   */
+  private $mapsForm;
 
   /**
    * SiteConfigureForm constructor.
@@ -54,21 +62,18 @@ final class SiteConfigureForm extends ConfigFormBase {
    *   The module installer.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
-   * @param \Drupal\Core\Installer\Form\SiteConfigureForm $decorated
-   *   The decorated form object.
+   * @param \Drupal\Core\Installer\Form\SiteConfigureForm $site_form
+   *   The decorated site configuration form object.
+   * @param \Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm $maps_form
+   *   The decorated Google Maps configuration form object.
    */
-  public function __construct(
-    ConfigFactoryInterface $config_factory,
-    string $api_url,
-    ModuleInstallerInterface $module_installer,
-    ModuleHandlerInterface $module_handler,
-    CoreSiteConfigureForm $decorated
-  ) {
+  public function __construct(ConfigFactoryInterface $config_factory, string $api_url, ModuleInstallerInterface $module_installer, ModuleHandlerInterface $module_handler, CoreSiteConfigureForm $site_form, AcquiaGoogleMapsAPIForm $maps_form) {
     parent::__construct($config_factory);
     $this->apiUrl = $api_url;
     $this->moduleInstaller = $module_installer;
     $this->moduleHandler = $module_handler;
-    $this->decorated = $decorated;
+    $this->siteForm = $site_form;
+    $this->mapsForm = $maps_form;
   }
 
   /**
@@ -80,22 +85,30 @@ final class SiteConfigureForm extends ConfigFormBase {
       $container->get('cohesion.api.utils')->getAPIServerURL(),
       $container->get('module_installer'),
       $container->get('module_handler'),
-      CoreSiteConfigureForm::create($container)
+      CoreSiteConfigureForm::create($container),
+      AcquiaGoogleMapsAPIForm::create($container)
     );
   }
 
   /**
    * {@inheritdoc}
    */
+  protected function getEditableConfigNames() {
+    return ['cohesion.settings'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getFormId() {
-    return $this->decorated->getFormId();
+    return $this->siteForm->getFormId();
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form = $this->decorated->buildForm($form, $form_state);
+    $form = $this->siteForm->buildForm($form, $form_state);
 
     $form['cohesion'] = [
       'api_key' => [
@@ -113,18 +126,13 @@ final class SiteConfigureForm extends ConfigFormBase {
       '#description' => $this->t('Enter your API key and organization key to automatically set up Acquia Site Studio (note that this process can take a while). If you do not want to use Site Studio right now, leave these fields blank -- you can always set it up later.'),
       '#tree' => TRUE,
     ];
-    $form['acquia_google_maps_api'] = [
-      'maps_api_key' => [
-        '#type' => 'textfield',
-        '#title' => $this->t('Maps API key'),
-        '#default_value' => '',
-      ],
-      '#type' => 'details',
-      '#title' => $this->t('Google Maps'),
-      '#description' => $this->t('Enter your Google Maps APIkey.'),
-      '#tree' => TRUE,
-    ];
-    // Checkbox for Acquia Telemetry.
+
+    $form = $this->mapsForm->buildForm($form, $form_state);
+    unset(
+      $form['acquia_google_maps_api']['maps_api_key']['#required'],
+      $form['acquia_google_maps_api']['submit']
+    );
+
     $form['acquia_telemetry'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Send anonymous usage information to Acquia'),
@@ -142,25 +150,15 @@ final class SiteConfigureForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  protected function getEditableConfigNames() {
-    return [
-      'cohesion.settings',
-      'geocoder.geocoder_provider.googlemaps',
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->decorated->submitForm($form, $form_state);
+    $this->siteForm->submitForm($form, $form_state);
+
+    if ($form_state->hasValue('maps_api_key')) {
+      $this->mapsForm->submitForm($form, $form_state);
+    }
 
     $api_key = $form_state->getValue(['cohesion', 'api_key']);
     $org_key = $form_state->getValue(['cohesion', 'organization_key']);
-    $maps_api_key = $form_state->getValue([
-      'acquia_google_maps_api',
-      'maps_api_key',
-    ]);
 
     if ($api_key && $org_key) {
       // For reasons I can't fathom, not resetting the config factory causes
@@ -184,22 +182,6 @@ final class SiteConfigureForm extends ConfigFormBase {
     // Enable the JSON API Extras if user opts in for decoupled functionality.
     if ($form_state->getValue('decoupled')) {
       $this->moduleInstaller->install(['jsonapi_extras']);
-    }
-    // Configure Google Maps API Key.
-    if ($maps_api_key) {
-
-      // Site Studio is always on, so this is essentially safe to set.
-      $this->config('cohesion.settings')
-        ->set('google_map_api_key', $maps_api_key)
-        ->save(TRUE);
-
-      // ACMS Place may not be installed, so test if it's on before setting the
-      // key here.
-      if ($this->moduleHandler->moduleExists('acquia_cms_place')) {
-        $this->config('geocoder.geocoder_provider.googlemaps')
-          ->set('apiKey', $maps_api_key)
-          ->save(TRUE);
-      }
     }
   }
 
