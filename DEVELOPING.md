@@ -80,7 +80,7 @@ From the repository root, simply run:
 
 If you want to run tests in a more ad-hoc or one-off fashion, you need to do a bit of set-up:
 
-1. From the repository root, use PHP's built-in web server to serve the Drupal site: `drush runserver 8080`. You can use a different server if you want to; just be sure to adjust the `SIMPLETEST_BASE_URL` environment variable (described below) as needed. To run functional JavaScript tests, be sure that you have Chrome installed, and ChromeDriver running. From the repository root, you can start ChromeDriver in a new terminal window with `vendor/bin/chromedriver --port=4444`. (You can use any port you want, but 4444 is standard.) Note that **ChromeDriver must be running on the same host as Chrome itself!**.
+1. From the repository root, use PHP's built-in web server to serve the Drupal site: `drush runserver 8080`. You can use a different server if you want to; just be sure to adjust the `SIMPLETEST_BASE_URL` environment variable (described below) as needed. To run functional JavaScript tests, be sure that you have Chrome and [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver) installed and running. You can start ChromeDriver in a new terminal window with `chromedriver --port=4444`. (You can use any port you want, but 4444 is standard.) Note that **ChromeDriver must be running on the same host as Chrome itself!**
 2. In a new terminal window, define a few environment variables:
 ```
 # The URL of the database you're using. This is the URL for the database in your cloud IDE, so it may differ in a local environment.
