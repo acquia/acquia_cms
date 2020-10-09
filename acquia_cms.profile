@@ -92,6 +92,10 @@ function acquia_cms_install_tasks() {
  * Send heartbeat event after site installation.
  */
 function acquia_cms_send_heartbeat_event() {
+  Drupal::configFactory()
+    ->getEditable('acquia_telemetry.settings')
+    ->set('api_key', 'e896d8a97a24013cee91e37a35bf7b0b')
+    ->save();
   \Drupal::service('acquia.telemetry')->sendTelemetry('acquia_cms_installed', [
     'Application UUID' => Environment::getAhApplicationUuid(),
     'Site Environment' => Environment::getAhEnv(),
