@@ -3,6 +3,7 @@
 namespace Drupal\acquia_cms_tour\Controller;
 
 use Drupal\acquia_cms_tour\Form\AcquiaCmsToolChecklistForm;
+use Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm;
 use Drupal\acquia_cms_tour\Form\AcquiaTelemetryForm;
 use Drupal\acquia_cms_tour\Form\GoogleApiChecklistForm;
 use Drupal\Core\Controller\ControllerBase;
@@ -24,6 +25,7 @@ final class DashboardController extends ControllerBase {
    */
   private const SECTIONS = [
     'acquia_telemetry' => AcquiaTelemetryForm::class,
+    'acquia_google_maps_api' => AcquiaGoogleMapsAPIForm::class,
     'acquia_cms_tool_checklist' => AcquiaCmsToolChecklistForm::class,
     'google_api_checklist' => GoogleApiChecklistForm::class,
   ];
