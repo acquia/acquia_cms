@@ -47,7 +47,7 @@ class AcquiaGoogleMapsTest extends BrowserTestBase {
   public function testAcquiaGoogleMaps() {
     $assert_session = $this->assertSession();
 
-    $account = $this->drupalCreateUser(['access acquia cms tour']);
+    $account = $this->drupalCreateUser(['access acquia cms tour dashboard']);
     $this->drupalLogin($account);
 
     // Visit the tour page.
