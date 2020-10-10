@@ -6,10 +6,18 @@ acquia_cms_tour.tour:
   requirements:
     _permission: 'access acquia cms tour'
 
-acquia_cms_tour.tour_dashboard:
+acquia_cms_tour.enabled_modules:
   path: '/admin/tour/dashboard'
   defaults:
-    _controller: '\Drupal\acquia_cms_tour\Controller\DashboardController::tour'
-    _title: 'Tour Dashboard'
+    _controller: '\Drupal\acquia_cms_tour\Controller\DashboardController::content'
+    _title: 'CMS Dashboard'
   requirements:
-    _permission: 'access acquia cms tour'
+    _permission: 'access acquia cms tour dashboard'
+
+acquia_cms_tour.disabled_modules:
+  path: '/admin/tour/dashboard/disabled'
+  defaults:
+    _controller: '\Drupal\acquia_cms_tour\Controller\DashboardDisabledController::content'
+    _title: 'CMS Dashboard'
+  requirements:
+    _permission: 'access acquia cms tour dashboard'

@@ -19,23 +19,30 @@ targetEntityType: node
 bundle: place
 mode: teaser
 content:
+  body:
+    type: text_summary_or_trimmed
+    weight: 0
+    region: content
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
   field_place_address:
     type: address_default
-    weight: 0
+    weight: 1
     region: content
     label: hidden
     settings: {  }
     third_party_settings: {  }
   field_place_telephone:
     type: string
-    weight: 1
+    weight: 2
     region: content
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
 hidden:
-  body: true
   content_moderation_control: true
   field_categories: true
   field_place_image: true

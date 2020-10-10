@@ -29,6 +29,7 @@ class HeroComponentTest extends CohesionComponentTestBase {
     $edit_form = $this->getLayoutCanvas()->add('Hero')->edit();
 
     // Test adding an image to the component.
+    $edit_form->selectFieldOption('Image/Video', 'Image');
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMedia(0);
     $this->insertSelectedMedia();
@@ -69,7 +70,7 @@ class HeroComponentTest extends CohesionComponentTestBase {
     ]);
 
     // Check if all the image position styles are there in the select list.
-    $assert_styles('Image position', [
+    $assert_styles('Position', [
       'Right to the content',
       'Left to the content',
     ]);

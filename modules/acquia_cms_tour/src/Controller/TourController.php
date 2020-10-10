@@ -19,7 +19,13 @@ final class TourController extends ControllerBase {
    */
   public function build() {
     return [
-      '#theme' => 'tour',
+      '#theme' => 'acquia_cms_tour',
+      '#attached' => [
+        'library' => [
+          'node/drupal.node',
+          'acquia_cms_tour/styling',
+        ],
+      ],
     ];
   }
 
