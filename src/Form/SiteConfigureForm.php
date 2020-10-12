@@ -2,7 +2,9 @@
 
 namespace Drupal\acquia_cms\Form;
 
+use Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -29,11 +31,25 @@ final class SiteConfigureForm extends ConfigFormBase {
   private $moduleInstaller;
 
   /**
-   * The decorated form object.
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  private $moduleHandler;
+
+  /**
+   * The decorated site configuration form object.
    *
    * @var \Drupal\Core\Installer\Form\SiteConfigureForm
    */
-  private $decorated;
+  private $siteForm;
+
+  /**
+   * The decorated Google Maps configuration form object.
+   *
+   * @var \Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm
+   */
+  private $mapsForm;
 
   /**
    * SiteConfigureForm constructor.
@@ -44,14 +60,20 @@ final class SiteConfigureForm extends ConfigFormBase {
    *   The Cohesion API URL.
    * @param \Drupal\Core\Extension\ModuleInstallerInterface $module_installer
    *   The module installer.
-   * @param \Drupal\Core\Installer\Form\SiteConfigureForm $decorated
-   *   The decorated form object.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
+   * @param \Drupal\Core\Installer\Form\SiteConfigureForm $site_form
+   *   The decorated site configuration form object.
+   * @param \Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm $maps_form
+   *   The decorated Google Maps configuration form object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, string $api_url, ModuleInstallerInterface $module_installer, CoreSiteConfigureForm $decorated) {
+  public function __construct(ConfigFactoryInterface $config_factory, string $api_url, ModuleInstallerInterface $module_installer, ModuleHandlerInterface $module_handler, CoreSiteConfigureForm $site_form, AcquiaGoogleMapsAPIForm $maps_form) {
     parent::__construct($config_factory);
     $this->apiUrl = $api_url;
     $this->moduleInstaller = $module_installer;
-    $this->decorated = $decorated;
+    $this->moduleHandler = $module_handler;
+    $this->siteForm = $site_form;
+    $this->mapsForm = $maps_form;
   }
 
   /**
@@ -62,22 +84,31 @@ final class SiteConfigureForm extends ConfigFormBase {
       $container->get('config.factory'),
       $container->get('cohesion.api.utils')->getAPIServerURL(),
       $container->get('module_installer'),
-      CoreSiteConfigureForm::create($container)
+      $container->get('module_handler'),
+      CoreSiteConfigureForm::create($container),
+      AcquiaGoogleMapsAPIForm::create($container)
     );
   }
 
   /**
    * {@inheritdoc}
    */
+  protected function getEditableConfigNames() {
+    return ['cohesion.settings'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getFormId() {
-    return $this->decorated->getFormId();
+    return $this->siteForm->getFormId();
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form = $this->decorated->buildForm($form, $form_state);
+    $form = $this->siteForm->buildForm($form, $form_state);
 
     $form['cohesion'] = [
       'api_key' => [
@@ -95,7 +126,13 @@ final class SiteConfigureForm extends ConfigFormBase {
       '#description' => $this->t('Enter your API key and organization key to automatically set up Acquia Site Studio (note that this process can take a while). If you do not want to use Site Studio right now, leave these fields blank -- you can always set it up later.'),
       '#tree' => TRUE,
     ];
-    // Checkbox for Acquia Telemetry.
+
+    $form = $this->mapsForm->buildForm($form, $form_state);
+    unset(
+      $form['acquia_google_maps_api']['maps_api_key']['#required'],
+      $form['acquia_google_maps_api']['submit']
+    );
+
     $form['acquia_telemetry'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Send anonymous usage information to Acquia'),
@@ -113,15 +150,12 @@ final class SiteConfigureForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  protected function getEditableConfigNames() {
-    return ['cohesion.settings'];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->decorated->submitForm($form, $form_state);
+    $this->siteForm->submitForm($form, $form_state);
+
+    if ($form_state->hasValue('maps_api_key')) {
+      $this->mapsForm->submitForm($form, $form_state);
+    }
 
     $api_key = $form_state->getValue(['cohesion', 'api_key']);
     $org_key = $form_state->getValue(['cohesion', 'organization_key']);

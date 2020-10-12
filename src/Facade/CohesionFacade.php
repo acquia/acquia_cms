@@ -100,7 +100,7 @@ final class CohesionFacade implements ContainerInjectionInterface {
   public function getAllPackages() : array {
     $packages = [];
     foreach ($this->getSortedModules() as $module) {
-      $packages = array_merge($packages, $this->getExtensionPackages($module));
+      $packages = array_merge($packages, $this->getPackagesFromExtension($module));
     }
     // @todo This line should be deleted when we are no longer shipping the big
     // UI kit package.
@@ -118,7 +118,7 @@ final class CohesionFacade implements ContainerInjectionInterface {
    * @return string[]
    *   An array of sync package paths, relative to the Drupal root.
    */
-  private function getExtensionPackages(Extension $extension) : array {
+  public function getPackagesFromExtension(Extension $extension) : array {
     $dir = $extension->getPath();
 
     $list = "$dir/config/dx8/packages.yml";

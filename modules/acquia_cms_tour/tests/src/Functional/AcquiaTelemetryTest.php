@@ -32,7 +32,7 @@ class AcquiaTelemetryTest extends BrowserTestBase {
     $assert_session = $this->assertSession();
 
     $account = $this->drupalCreateUser([
-      'access acquia cms tour',
+      'access acquia cms tour dashboard',
     ]);
     $this->drupalLogin($account);
 

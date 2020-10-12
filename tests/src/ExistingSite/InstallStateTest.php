@@ -34,6 +34,35 @@ class InstallStateTest extends ExistingSiteBase {
   }
 
   /**
+   * Tests that key administrative pages are available.
+   *
+   * Acquia CMS is a big and complicated system, and it is possible that simple
+   * dependency updates can produce WSODs in key administrative places. To
+   * detect that kind of thing, this method logs in as an administrator, visits
+   * a bunch of those key administrative pages, and verifies that they produce
+   * a 200 status code. That doesn't mean they work as intended, of course, but
+   * at least they are not producing scary blank (or error) screens.
+   */
+  public function testKeyAdministrativePages() : void {
+    $account = $this->createUser();
+    $account->addRole('administrator');
+    $account->save();
+    $this->drupalLogin($account);
+
+    $pages_to_check = [
+      '/admin/content',
+      '/admin/structure/block',
+      '/admin/people',
+    ];
+    $session = $this->getSession();
+    foreach ($pages_to_check as $path) {
+      $this->drupalGet($path);
+      $status_code = $session->getStatusCode();
+      $this->assertSame(200, $status_code, "$path returned status code $status_code.");
+    }
+  }
+
+  /**
    * Assert that all install tasks have done what they should do.
    *
    * See acquia_cms_install_tasks().
@@ -252,19 +281,26 @@ class InstallStateTest extends ExistingSiteBase {
       // User should be able to access the toolbar and see a Tour link.
       $assert_session->elementExists('css', '#toolbar-administration')
         ->clickLink('Tour');
-      // Visit the tour dashboard page.
-      $assert_session->addressEquals('/admin/tour/dashboard');
-      $assert_session->statusCodeEquals(200);
       // Visit the tour page.
       $this->drupalGet('/admin/tour');
       $assert_session->statusCodeEquals(200);
     }
+
+    // User with dashboard permission shall access the dashboard pages.
+    $account = $this->createUser(['access acquia cms tour dashboard']);
+    $this->drupalLogin($account);
+    $this->drupalGet('/admin/tour/dashboard');
+    $assert_session->statusCodeEquals(200);
+    $this->drupalGet('/admin/tour/dashboard/disabled');
+    $assert_session->statusCodeEquals(200);
 
     // Regular authenticated users should not be able to access the dashboard
     // and tour page.
     $account = $this->createUser();
     $this->drupalLogin($account);
     $this->drupalGet('/admin/tour/dashboard');
+    $assert_session->statusCodeEquals(403);
+    $this->drupalGet('/admin/tour/dashboard/disabled');
     $assert_session->statusCodeEquals(403);
     $this->drupalGet('/admin/tour');
     $assert_session->statusCodeEquals(403);

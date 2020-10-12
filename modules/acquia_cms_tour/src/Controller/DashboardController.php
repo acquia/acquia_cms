@@ -2,8 +2,10 @@
 
 namespace Drupal\acquia_cms_tour\Controller;
 
+use Drupal\acquia_cms_tour\Form\AcquiaCmsToolChecklistForm;
+use Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm;
 use Drupal\acquia_cms_tour\Form\AcquiaTelemetryForm;
-use Drupal\checklistapi\Form\ChecklistapiChecklistForm;
+use Drupal\acquia_cms_tour\Form\GoogleApiChecklistForm;
 use Drupal\Core\Controller\ControllerBase;
 
 /**
@@ -22,8 +24,10 @@ final class DashboardController extends ControllerBase {
    * @var array
    */
   private const SECTIONS = [
-    'dashboard_checklist' => ChecklistapiChecklistForm::class,
     'acquia_telemetry' => AcquiaTelemetryForm::class,
+    'acquia_google_maps_api' => AcquiaGoogleMapsAPIForm::class,
+    'acquia_cms_tool_checklist' => AcquiaCmsToolChecklistForm::class,
+    'google_api_checklist' => GoogleApiChecklistForm::class,
   ];
 
   /**
@@ -39,14 +43,6 @@ final class DashboardController extends ControllerBase {
    */
   private function getSectionOutput(string $key, string $controller_class) {
     if (is_a($controller_class, 'Drupal\Core\Form\FormInterface', TRUE)) {
-      if ($key === 'dashboard_checklist') {
-        return [
-          '#type' => 'details',
-          '#open' => TRUE,
-          '#title' => $this->t('Dashboard Checklist'),
-          $this->formBuilder()->getForm($controller_class, 'tour_dashboard', 'any', ['TRUE']),
-        ];
-      }
       return $this->formBuilder()->getForm($controller_class);
     }
   }
@@ -54,15 +50,16 @@ final class DashboardController extends ControllerBase {
   /**
    * Returns a renderable array for a tour dashboard page.
    */
-  public function tour() {
-    $tour = [];
+  public function content() {
+    $build = [];
 
     // Delegate building each section to sub-controllers, in order to keep all
     // extension-specific logic cleanly encapsulated.
     foreach (static::SECTIONS as $key => $controller) {
-      $tour[$key] = $this->getSectionOutput($key, $controller);
+      $build[$key] = $this->getSectionOutput($key, $controller);
     }
-    return $tour;
+
+    return $build;
   }
 
 }
