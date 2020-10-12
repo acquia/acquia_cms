@@ -42,12 +42,17 @@
       {% endfor %}
     </div>
 
-    {% if form.maps_api_key %}
-      {{ form.maps_api_key }}
+    {% if form.acquia_google_maps_api.maps_api_key %}
+      {{ form.acquia_google_maps_api.maps_api_key }}
     {% endif %}
 
     {% if form.submit %}
       {{ form.submit }}
     {% endif %}
+
+    {% if form.acquia_google_maps_api.submit %}
+      {{ form.acquia_google_maps_api.submit }}
+    {% endif %}
+
   </div>
 </div>

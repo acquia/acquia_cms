@@ -69,14 +69,16 @@ final class AcquiaGoogleMapsAPIForm extends ConfigFormBase {
     $form['checklist_heading']['#markup'] = $this->t('Google Maps');
     $form['checklist_description']['#markup'] = $this->t('Enter your Google Maps API Key to automatically generate maps for Place content in Acquia CMS.');
 
-    $form['maps_api_key'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Maps API key'),
-      '#default_value' => $maps_api_key,
-      '#required' => TRUE,
+    $form['acquia_google_maps_api'] = [
+      'maps_api_key' => [
+        '#type' => 'textfield',
+        '#title' => $this->t('Maps API key'),
+        '#default_value' => $maps_api_key,
+        '#required' => TRUE,
+      ],
     ];
 
-    $form['submit'] = [
+    $form['acquia_google_maps_api']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Save'),
       '#button_type' => 'primary',
