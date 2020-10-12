@@ -42,6 +42,12 @@
       {% endfor %}
     </div>
 
-    {{ form.submit }}
+    {% if form.maps_api_key %}
+      {{ form.maps_api_key }}
+    {% endif %}
+
+    {% if form.submit %}
+      {{ form.submit }}
+    {% endif %}
   </div>
 </div>
