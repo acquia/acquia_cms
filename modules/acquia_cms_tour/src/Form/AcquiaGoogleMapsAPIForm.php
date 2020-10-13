@@ -51,9 +51,6 @@ final class AcquiaGoogleMapsAPIForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['#theme'] = 'acquia_cms_tour_checklist_form';
-    $form['#attached']['library'][] = 'acquia_cms_tour/styling';
-
     // Text input for Google Maps. ACMS can use the Gmaps API in two totally
     // different features (Site Studio and Place nodes). Site Studio is always
     // enabled in ACMS, but Place may not.
@@ -66,16 +63,17 @@ final class AcquiaGoogleMapsAPIForm extends ConfigFormBase {
       $maps_api_key = $configuration['apiKey'];
     }
 
-    $form['checklist_heading']['#markup'] = $this->t('Google Maps');
-    $form['checklist_description']['#markup'] = $this->t('Enter your Google Maps API Key to automatically generate maps for Place content in Acquia CMS.');
-
     $form['acquia_google_maps_api'] = [
       'maps_api_key' => [
         '#type' => 'textfield',
         '#title' => $this->t('Maps API key'),
+        '#description' => $this->t('Enter your Google Maps API Key to automatically generate maps for Place content in Acquia CMS.'),
         '#default_value' => $maps_api_key,
         '#required' => TRUE,
       ],
+      '#type' => 'fieldset',
+      '#open' => TRUE,
+      '#title' => $this->t('Google Maps'),
     ];
 
     $form['acquia_google_maps_api']['submit'] = [
