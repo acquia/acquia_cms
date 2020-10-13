@@ -45,7 +45,7 @@ function acquia_cms_demo_pubsec_requirements($phase) {
       $provider = $entity_type_manager->getStorage('geocoder_provider')
         ->load('googlemaps');
 
-      if ($provider) {
+      if ($provider && PHP_SAPI !== 'cli') {
         $configuration = $provider->get('configuration');
         if (empty($configuration['apiKey'])) {
           $requirements['acquia_cms_demo_pubsec_google_maps_api_key'] = [
