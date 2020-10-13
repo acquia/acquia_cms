@@ -4,6 +4,7 @@ form > .fieldset {
   padding: 16px 16px 24px 16px;
   border-radius: 8px;
   margin-bottom: 28px;
+  box-shadow: none;
 }
 .tour-checklist .progress__track {
   border: 1px #bbbec5 solid;
@@ -19,7 +20,8 @@ form > .fieldset {
 .checklist-body {
   padding: 0 24px 0 16px;
 }
-.checklist-heading {
+.checklist-heading,
+.fieldset__label {
   font-size: 20px;
   font-weight: 500;
   margin-top: 8px;
@@ -73,6 +75,9 @@ form .fieldset .form-item label {
 .checklist-progess {
   text-align: right;
   width: 100%;
+}
+form .fieldset__wrapper {
+  margin-bottom: 0;
 }
 @media only screen and (max-width: 767px) {
   .tour-checklist {
