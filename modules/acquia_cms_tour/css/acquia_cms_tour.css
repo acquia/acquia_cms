@@ -161,12 +161,20 @@ form .fieldset__wrapper {
   padding: 1rem 0.5rem;
 }
 .tour .layout-region-node-secondary .menu li {
-  padding-bottom: 0.5rem;
-  list-style-type: disc;
-  font-size: 16px;
+  padding-bottom: 1rem;
+  list-style-type: none;
+  font-size: 18px;
 }
 .tour h1 {
   font-style: italic;
+  color: #168ec4;
+}
+.tour h4 {
+  font-style: italic;
+  color: #168ec4;
+}
+.tour li {
+  font-size: 16px;
 }
 @media only screen and (max-width: 768px) {
   .tour {
@@ -178,4 +186,14 @@ form .fieldset__wrapper {
   .tour .layout-region-node-main {
     width: 100%;
   }
+}
+.toolbar-fixed :target:before {
+  content: "";
+  display: block;
+  height: 39px; /* Amount of padding toolbar gives to body */
+  margin-top: -39px;
+}
+.toolbar-horizontal.toolbar-tray-open :target:before {
+  height: 99px; /* Amount of padding toolbar gives to body when the tray is open horizontally */
+  margin-top: -99px;
 }
