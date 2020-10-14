@@ -11,6 +11,7 @@ use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
+use Drupal\Core\Installer\InstallerKernel;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -125,14 +126,22 @@ function acquia_cms_initialize_cohesion() {
 /**
  * Implements hook_modules_installed().
  */
-function acquia_cms_modules_installed(array $modules) {
-  // @todo The below code needs to be updated once the memory limit issue is
-  // fixed by the site studio.
+function acquia_cms_modules_installed(array $modules) : void {
+  // Don't do anything during site installation, since that can break things in
+  // a big way if modules are being installed due to changes made on the site
+  // configuration form.
+  if (InstallerKernel::installationAttempted()) {
+    return;
+  }
+
+  // @todo The below code needs to be updated, or possibly removed outright,
+  // once Site Studio's imports no longer cause memory exhaustion.
   $module_handler = Drupal::moduleHandler();
 
   if ($module_handler->moduleExists('acquia_telemetry')) {
     Drupal::classResolver(TelemetryFacade::class)->modulesInstalled($modules);
   }
+
   if ($module_handler->moduleExists('cohesion_sync')) {
     if (PHP_SAPI === 'cli') {
       $module_handler->invoke('cohesion_sync', 'modules_installed', [$modules]);
