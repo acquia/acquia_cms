@@ -45,3 +45,11 @@ function acquia_cms_starter_requirements(string $phase) : array {
 
   return $requirements;
 }
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_starter_install() {
+  \Drupal::service('module_installer')->install(['webform']);
+  \Drupal::service('module_installer')->install(['webform_ui']);
+}
