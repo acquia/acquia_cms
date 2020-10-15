@@ -9,6 +9,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Provides a 'ClearAllFacet' Block.
@@ -28,6 +29,13 @@ class ClearAllFacet extends BlockBase implements BlockPluginInterface, Container
   protected $routematch;
 
   /**
+   * The config factory object.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $request;
+
+  /**
    * Constructs the ClearAllFacet Block.
    *
    * @param array $configuration
@@ -41,11 +49,15 @@ class ClearAllFacet extends BlockBase implements BlockPluginInterface, Container
    *   The plugin implementation definition.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $route_match
    *   The config factory.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request
+   *   The config factory.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, CurrentRouteMatch $route_match) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, CurrentRouteMatch $route_match, RequestStack $request) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->routematch = $route_match;
+    $this->blockmanager = $block_manager;
+    $this->request = $request;
   }
 
   /**
@@ -56,7 +68,8 @@ class ClearAllFacet extends BlockBase implements BlockPluginInterface, Container
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('current_route_match')
+      $container->get('current_route_match'),
+      $container->get('request_stack')
     );
   }
 
@@ -68,10 +81,11 @@ class ClearAllFacet extends BlockBase implements BlockPluginInterface, Container
     // reset link.
     if ($this->routematch->getParameter('facets_query')) {
       $url = $this->routematch->getRouteName();
-      $link = Link::createFromRoute($this->t('Clear filter(s)'), $url);
+      $link = Link::createFromRoute($this->t('Clear filter(s)'), $url, $this->request->getCurrentRequest()->query->all());
 
       return $link->toRenderable();
     }
+
     return [];
   }
 
@@ -81,5 +95,4 @@ class ClearAllFacet extends BlockBase implements BlockPluginInterface, Container
   public function getCacheContexts() {
     return Cache::mergeContexts(parent::getCacheContexts(), ['url']);
   }
-
 }
