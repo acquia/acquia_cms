@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - acquia_cms_search
+    - cohesion
+    - collapsiblock
+  theme:
+    - cohesion_theme
+third_party_settings:
+  collapsiblock:
+    collapse_action: '0'
+id: clear_all_facets
+theme: cohesion_theme
+region: dx8_hidden
+weight: 0
+provider: null
+plugin: clearall_facet
+settings:
+  id: clearall_facet
+  label: 'Clear All Facets'
+  provider: acquia_cms_search
+  label_display: '0'
+visibility:
+  cohesion_master_template:
+    id: cohesion_master_template
+    using_master_template: 0
+    negate: false
