@@ -26,7 +26,7 @@ class ClearAllFacet extends BlockBase implements BlockPluginInterface, Container
    *
    * @var \Drupal\Core\Routing\CurrentRouteMatch
    */
-  protected $routematch;
+  protected $routeMatch;
 
   /**
    * The config factory object.
@@ -55,8 +55,7 @@ class ClearAllFacet extends BlockBase implements BlockPluginInterface, Container
   public function __construct(array $configuration, $plugin_id, $plugin_definition, CurrentRouteMatch $route_match, RequestStack $request) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
-    $this->routematch = $route_match;
-    $this->blockmanager = $block_manager;
+    $this->routeMatch = $route_match;
     $this->request = $request;
   }
 
@@ -79,8 +78,8 @@ class ClearAllFacet extends BlockBase implements BlockPluginInterface, Container
   public function build() {
     // Check if any facets_query is present in the url. If yes then display the
     // reset link.
-    if ($this->routematch->getParameter('facets_query')) {
-      $url = $this->routematch->getRouteName();
+    if ($this->routeMatch->getParameter('facets_query')) {
+      $url = $this->routeMatch->getRouteName();
       $link = Link::createFromRoute($this->t('Clear filter(s)'), $url, $this->request->getCurrentRequest()->query->all());
 
       return $link->toRenderable();
@@ -95,4 +94,5 @@ class ClearAllFacet extends BlockBase implements BlockPluginInterface, Container
   public function getCacheContexts() {
     return Cache::mergeContexts(parent::getCacheContexts(), ['url']);
   }
+
 }
