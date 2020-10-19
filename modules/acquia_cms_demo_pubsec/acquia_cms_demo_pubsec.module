@@ -22,3 +22,10 @@ function acquia_cms_demo_pubsec_views_pre_render(ViewExecutable $view) {
     $view->element['#attached']['library'][] = 'acquia_cms_search/page';
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for html.
+ */
+function acquia_cms_demo_pubsec_preprocess_html(&$variables) {
+  $variables['#attached']['library'][] = 'acquia_cms_demo_pubsec/pubsec_styles';
+}
