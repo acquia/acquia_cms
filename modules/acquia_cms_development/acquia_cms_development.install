@@ -34,6 +34,16 @@ function acquia_cms_development_install() {
   // for this view is broken. Delete the broken block.
   $block = \Drupal::service('entity_type.manager')->getStorage('block');
   $block->load('exposed_form_acquia_search_solr_page')->delete();
+
+  // Both PubSec and Starter "really" need Google Maps API Keys to "work."
+  // This code is a work around for the dev team to ensure that we can install
+  // these modules w/o issue until a more permanent API key is supplied by
+  // Acquia AND/OR we provide a free maps option.
+  // @todo remove this once the above conditions are met.
+  Drupal::configFactory()
+    ->getEditable('geocoder.geocoder_provider.googlemaps')
+    ->set('configuration.apiKey', 'AIzaSyBr7XorQ408VCspnrw-F6-2i3t2g0W5Se4')
+    ->save();
 }
 
 /**

@@ -67,14 +67,15 @@ final class AcquiaGoogleMapsAPIForm extends ConfigFormBase {
       'maps_api_key' => [
         '#type' => 'textfield',
         '#title' => $this->t('Maps API key'),
+        '#description' => $this->t('Enter your Google Maps API Key to automatically generate maps for Place content in Acquia CMS.'),
         '#default_value' => $maps_api_key,
         '#required' => TRUE,
       ],
-      '#type' => 'details',
+      '#type' => 'fieldset',
       '#open' => TRUE,
       '#title' => $this->t('Google Maps'),
-      '#description' => $this->t('Enter your Google Maps API Key to automatically generate maps for Place content in Acquia CMS.'),
     ];
+
     $form['acquia_google_maps_api']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Save'),
