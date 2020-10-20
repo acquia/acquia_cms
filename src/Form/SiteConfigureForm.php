@@ -150,10 +150,22 @@ final class SiteConfigureForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    parent::validateForm($form, $form_state);
+    $this->siteForm->validateForm($form, $form_state);
+
+    if ($form_state->getValue('maps_api_key')) {
+      $this->mapsForm->validateForm($form, $form_state);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->siteForm->submitForm($form, $form_state);
 
-    if ($form_state->hasValue('maps_api_key')) {
+    if ($form_state->getValue('maps_api_key')) {
       $this->mapsForm->submitForm($form, $form_state);
     }
 
