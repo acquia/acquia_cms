@@ -252,11 +252,17 @@ function acquia_cms_install_ui_kit(array &$install_state) {
 function acquia_cms_install_additional_modules() {
   $module_installer = Drupal::service('module_installer');
 
-  if (Environment::isAhOdeEnv() || Environment::isAhIdeEnv() || Environment::isLocalEnv()) {
+  $is_dev = Environment::isAhIdeEnv() || Environment::isLocalEnv();
+
+  if (Environment::isAhOdeEnv() || $is_dev) {
     $module_installer->install(['dblog', 'jsonapi_extras']);
   }
   else {
     $module_installer->install(['syslog']);
+  }
+
+  if (!$is_dev) {
+    $module_installer->install(['autologout']);
   }
 
   // @todo once PF-3025 has been resolved, update this to work on IDEs too.
