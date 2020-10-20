@@ -9,6 +9,7 @@ use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Installer\Form\SiteConfigureForm as CoreSiteConfigureForm;
+use Drupal\Core\State\StateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -52,6 +53,13 @@ final class SiteConfigureForm extends ConfigFormBase {
   private $mapsForm;
 
   /**
+   * State.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
+
+  /**
    * SiteConfigureForm constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -66,14 +74,17 @@ final class SiteConfigureForm extends ConfigFormBase {
    *   The decorated site configuration form object.
    * @param \Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm $maps_form
    *   The decorated Google Maps configuration form object.
+   * @param \Drupal\Core\State\StateInterface $state
+   *   State service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, string $api_url, ModuleInstallerInterface $module_installer, ModuleHandlerInterface $module_handler, CoreSiteConfigureForm $site_form, AcquiaGoogleMapsAPIForm $maps_form) {
+  public function __construct(ConfigFactoryInterface $config_factory, string $api_url, ModuleInstallerInterface $module_installer, ModuleHandlerInterface $module_handler, CoreSiteConfigureForm $site_form, AcquiaGoogleMapsAPIForm $maps_form, StateInterface $state) {
     parent::__construct($config_factory);
     $this->apiUrl = $api_url;
     $this->moduleInstaller = $module_installer;
     $this->moduleHandler = $module_handler;
     $this->siteForm = $site_form;
     $this->mapsForm = $maps_form;
+    $this->state = $state;
   }
 
   /**
@@ -86,7 +97,8 @@ final class SiteConfigureForm extends ConfigFormBase {
       $container->get('module_installer'),
       $container->get('module_handler'),
       CoreSiteConfigureForm::create($container),
-      AcquiaGoogleMapsAPIForm::create($container)
+      AcquiaGoogleMapsAPIForm::create($container),
+      $container->get('state')
     );
   }
 
@@ -144,6 +156,16 @@ final class SiteConfigureForm extends ConfigFormBase {
       '#title' => $this->t('Enable decoupled functionality'),
       '#description' => $this->t('If checked, additional modules will be installed to help you build your site as a content backend for mobile apps.'),
     ];
+    $form['demonstration_module'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Install the Demonstration Version of the Site'),
+      '#states' => [
+        'visible' => [
+          ':input[name="cohesion[api_key]"]' => ['filled' => TRUE],
+          ':input[name="cohesion[organization_key]"]' => ['filled' => TRUE],
+        ],
+      ],
+    ];
     return $form;
   }
 
@@ -183,6 +205,7 @@ final class SiteConfigureForm extends ConfigFormBase {
     if ($form_state->getValue('decoupled')) {
       $this->moduleInstaller->install(['jsonapi_extras']);
     }
+    $this->state->set('demonstration_module', $form_state->getValue('demonstration_module'));
   }
 
 }

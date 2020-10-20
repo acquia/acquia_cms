@@ -38,6 +38,17 @@ function acquia_cms_demo_pubsec_requirements($phase) {
       ];
     }
 
+    // Block install if the cohesion API keys aren't set.
+    $config = Drupal::config('cohesion.settings');
+    $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
+    if (!$cohesion_configured) {
+      $requirements['acquia_cms_demo_pubsec_cohesion_api_key'] = [
+        'title' => t('Cohesion API Key missing!'),
+        'description' => t('Acquia CMS Demo Pubsec requires a Cohesion API key to be set.'),
+        'severity' => REQUIREMENT_ERROR,
+      ];
+    }
+
     // Block install if the Google Maps API keys aren't set in the Geocoder
     // provider.
     if ($entity_type_manager->hasDefinition('geocoder_provider')) {

@@ -65,6 +65,7 @@ function acquia_cms_install_tasks() {
 
   $config = Drupal::config('cohesion.settings');
   $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
+  $demonstration_module = Drupal::state()->get('demonstration_module');
 
   // If the user has configured their Cohesion keys, import all elements.
   $tasks['acquia_cms_initialize_cohesion'] = [
@@ -80,12 +81,27 @@ function acquia_cms_install_tasks() {
     'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
   ];
   $tasks['acquia_cms_install_additional_modules'] = [];
+  $tasks['acquia_cms_install_demonstration_module'] = [
+    'display_name' => t('Install the Demonstration module'),
+    'display' => $cohesion_configured,
+    'type' => 'batch',
+    'run' => $demonstration_module === 1 && $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+  ];
 
   // If the user has opted in for Acquia Telemetry, send heartbeat event.
   $tasks['acquia_cms_send_heartbeat_event'] = [
     'run' => Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
   ];
   return $tasks;
+}
+
+/**
+ * Enable pubsec demo module.
+ */
+function acquia_cms_install_demonstration_module() {
+  $module_installer = Drupal::service('module_installer');
+  $module_installer->install(['acquia_cms_demo_pubsec']);
+  Drupal::state()->delete('demonstration_module');
 }
 
 /**
