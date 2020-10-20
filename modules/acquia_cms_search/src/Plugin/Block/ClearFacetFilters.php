@@ -12,14 +12,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Provides a 'ClearAllFacet' Block.
+ * Provides a 'ClearFacetFilters' Block.
  *
  * @Block(
- *   id = "clearall_facet",
- *   admin_label = @Translation("Clear All Facets"),
+ *   id = "clear_facet_filters",
+ *   admin_label = @Translation("Clear Facet Filters"),
  * )
  */
-class ClearAllFacet extends BlockBase implements BlockPluginInterface, ContainerFactoryPluginInterface {
+class ClearFacetFilters extends BlockBase implements BlockPluginInterface, ContainerFactoryPluginInterface {
 
   /**
    * The config factory object.
@@ -36,7 +36,7 @@ class ClearAllFacet extends BlockBase implements BlockPluginInterface, Container
   protected $request;
 
   /**
-   * Constructs the ClearAllFacet Block.
+   * Constructs the ClearFacetFilters Block.
    *
    * @param array $configuration
    *   The plugin configuration, i.e. an array with configuration values keyed
