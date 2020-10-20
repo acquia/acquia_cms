@@ -158,7 +158,8 @@ final class SiteConfigureForm extends ConfigFormBase {
     ];
     $form['demonstration_module'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Install the Demonstration Version of the Site'),
+      '#title' => $this->t('Install the demonstration version of the site'),
+      '#description' => $this->t('Checking this option will install the demonstration version of Acquia CMS including additional content, media, and styling. This option should only be checked for demonstrative purposes.'),
       '#states' => [
         'visible' => [
           ':input[name="cohesion[api_key]"]' => ['filled' => TRUE],
