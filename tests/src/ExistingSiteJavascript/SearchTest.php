@@ -120,6 +120,8 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
         // $this->assertLinkExists("$node_type_label Type", $facets)->click();
         // Check if term facet is working properly.
         $page->clickLink($node_type_label . ' Music (1)');
+        // Assert that the clear filter is present.
+        $assert_session->linkExists('Clear filter(s)');
         // Check if node of the selected term is shown.
         $this->assertLinkExistsByTitle('Test published ' . $node_type_label);
         $this->assertLinkNotExistsByTitle('Test unpublished ' . $node_type_label);

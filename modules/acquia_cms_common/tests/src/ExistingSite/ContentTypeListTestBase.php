@@ -191,6 +191,9 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
     // Filter by a category and ensure that the expected content is visible.
     $page = $this->getSession()->getPage();
     $page->clickLink('Art (2)');
+    // Assert that the clear filter is present.
+    $assert_session->linkExists('Clear filter(s)');
+
     $assert_session->addressMatches('/.\/category\/art/');
     $this->assertLinksExistInOrder(['Foxtrot', 'Beta']);
     $assert_session->linkNotExists('Alpha');
