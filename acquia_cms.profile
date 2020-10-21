@@ -11,6 +11,7 @@ use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
+use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Installer\InstallerKernel;
 
 /**
@@ -226,32 +227,45 @@ function acquia_cms_install_ui_kit(array &$install_state) {
   /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
   $facade = Drupal::classResolver(CohesionFacade::class);
 
+  if ($install_state['interactive']) {
+    $batch = new BatchBuilder();
+  }
+
   foreach ($facade->getAllPackages() as $package) {
-    try {
-      $facade->importPackage($package, $install_state['interactive']);
+    if (isset($batch)) {
+      $batch->addOperation('_acquia_cms_install_ui_kit_package', [$package]);
     }
-    catch (Throwable $e) {
-      Drupal::messenger()->addError($e->getMessage());
+    else {
+      _acquia_cms_install_ui_kit_package($package);
     }
   }
 
-  if ($install_state['interactive']) {
-    // We want to return the batch jobs by value, because the installer will
-    // call batch_set() on them. However, because the packager has already done
-    // that, we also need to clear the static variables maintained by
-    // batch_get() so that the installer doesn't add more jobs than we actually
-    // want to run.
-    // @see \Drupal\cohesion_sync\PackagerManager::validateYamlPackageStream()
-    // @see install_run_task()
-    $batch = batch_get();
-    $batch_static = &batch_get();
-    $batch_static['sets'] = [];
-
-    return $batch['sets'];
+  if (isset($batch)) {
+    return [
+      $batch->toArray(),
+    ];
   }
   else {
     // We already imported the packages, so there's nothing else to do.
     return [];
+  }
+}
+
+/**
+ * Imports a single sync package during site installation.
+ *
+ * @param string $package
+ *   The path to the sync package, relative to the Drupal root.
+ */
+function _acquia_cms_install_ui_kit_package(string $package) : void {
+  /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
+  $facade = Drupal::classResolver(CohesionFacade::class);
+
+  try {
+    $facade->importPackage($package, FALSE);
+  }
+  catch (Throwable $e) {
+    Drupal::messenger()->addError($e->getMessage());
   }
 }
 
