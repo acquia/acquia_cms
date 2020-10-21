@@ -4,7 +4,6 @@ namespace Drupal\acquia_cms_search\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Block\BlockPluginInterface;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
@@ -91,8 +90,11 @@ class ClearFacetFilters extends BlockBase implements BlockPluginInterface, Conta
   /**
    * {@inheritdoc}
    */
-  public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['url']);
+  public function getCacheMaxAge() {
+    // Clear facets filter block cannot be cached because for every page and
+    // every facet the url changes and also the toggling of block is happening
+    // on the basis of facets selected.
+    return 0;
   }
 
 }
