@@ -19,13 +19,14 @@ $env-text-color: var(--env-text-color);
       background-color: $df-grayish-navy !important;
       top: 10px;
 
-      &:before{
+      &:before {
         content:'';
         width: 100%;
         top: -10px;
         background: $env_background;
         position: absolute;
         height: 10px;
+        left: 0;
       }
 
       .toolbar-tab {
@@ -59,7 +60,6 @@ $env-text-color: var(--env-text-color);
 
           @media only screen and (max-width: 767px){
             text-indent: 50px;
-            text-transform: UPPERCASE;
           }
 
           &:before {
@@ -69,6 +69,10 @@ $env-text-color: var(--env-text-color);
 
           &:hover {
             text-decoration: none;
+          }
+
+          &:focus {
+            background: $env_background;
           }
         }
       }

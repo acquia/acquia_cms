@@ -71,7 +71,7 @@ function acquia_cms_toolbar_page_attachments(&$page) {
  * Get color configuration for current environment.
  */
 function environment_indicator_color_config() {
-  $environment_settings = \Drupal::config('environment_indicator.settings');
+  $environment_settings = \Drupal::config('acquia_cms_toolbar.environment_indicator.settings');
 
   if (EnvironmentDetector::isAhEnv()) {
     $environment_indicator['name'] = ucfirst($_ENV['AH_SITE_ENVIRONMENT']);
