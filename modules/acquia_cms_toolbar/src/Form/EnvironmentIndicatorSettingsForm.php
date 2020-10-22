@@ -22,7 +22,7 @@ class EnvironmentIndicatorSettingsForm extends ConfigFormBase {
    */
   protected function getEditableConfigNames() {
     return [
-      'environment_indicator.settings',
+      'acquia_cms_toolbar.environment_indicator.settings',
     ];
   }
 
@@ -37,7 +37,7 @@ class EnvironmentIndicatorSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('environment_indicator.settings');
+    $config = $this->config('acquia_cms_toolbar.environment_indicator.settings');
     $form = parent::buildForm($form, $form_state);
     $form['production'] = [
       '#type' => 'fieldset',
@@ -118,7 +118,7 @@ class EnvironmentIndicatorSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->configFactory()->getEditable('environment_indicator.settings');
+    $config = $this->configFactory()->getEditable('acquia_cms_toolbar.environment_indicator.settings');
     $values = $form_state->getValues();
     $config->set('prod_bgcolor', $values['prod_bgcolor'])
       ->set('prod_text_color', $values['prod_text_color'])
