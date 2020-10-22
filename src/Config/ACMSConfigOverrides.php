@@ -2,7 +2,6 @@
 
 namespace Drupal\acquia_cms\Config;
 
-use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as EnvironmentDetector;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryOverrideInterface;
 use Drupal\Core\Config\StorageInterface;
@@ -17,33 +16,6 @@ class ACMSConfigOverrides implements ConfigFactoryOverrideInterface {
    */
   public function loadOverrides($names) {
     $overrides = [];
-    // Environment_indicator settings.
-    $overrides['environment_indicator_overwrite'] = TRUE;
-    $overrides['environment_indicator.indicator']['fg_color'] = '#ffffff';
-
-    if (EnvironmentDetector::isAhEnv()) {
-      $overrides['environment_indicator.indicator']['name'] = ucfirst($_ENV['AH_SITE_ENVIRONMENT']);
-
-      if (EnvironmentDetector::isAhIdeEnv()) {
-        $overrides['environment_indicator.indicator']['bg_color'] = '#3363aa';
-      }
-
-      if (EnvironmentDetector::isAhDevEnv()) {
-        $overrides['environment_indicator.indicator']['bg_color'] = '#33aa3c';
-      }
-
-      if (EnvironmentDetector::isAhStageEnv()) {
-        $overrides['environment_indicator.indicator']['bg_color'] = '#ffBB00';
-      }
-
-      if (EnvironmentDetector::isAhProdEnv()) {
-        $overrides['environment_indicator.indicator']['bg_color'] = '#aa3333';
-      }
-    }
-    else {
-      $overrides['environment_indicator.indicator']['name'] = 'Local';
-      $overrides['environment_indicator.indicator']['bg_color'] = '#3363aa';
-    }
 
     return $overrides;
   }
