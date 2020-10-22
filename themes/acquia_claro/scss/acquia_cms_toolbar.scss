@@ -1,7 +1,10 @@
 @import "00-config/_colors.scss";
 @import "00-config/_fonts.scss";
+$env_background: var(--env-background);
+$env-text-color: var(--env-text-color);
 
 .acquia-cms-toolbar {
+  margin-top: 12px;
   .toolbar {
     box-shadow: -1px 0 3px 1px rgba(0, 0, 0, 0.3333);
 
@@ -20,7 +23,7 @@
         content:'';
         width: 100%;
         top: -10px;
-        background: red;
+        background: $env_background;
         position: absolute;
         height: 10px;
       }
@@ -49,7 +52,24 @@
         }
 
         .toolbar-icon-environment {
-          background: red;
+          background: $env_background;
+          color: $env-text-color;
+          width: auto;
+          padding-right: 12px;
+
+          @media only screen and (max-width: 767px){
+            text-indent: 50px;
+            text-transform: UPPERCASE;
+          }
+
+          &:before {
+            background-image: url(../images/acacac/env-ffffff.svg);
+            max-width: 55px;
+          }
+
+          &:hover {
+            text-decoration: none;
+          }
         }
       }
     }
