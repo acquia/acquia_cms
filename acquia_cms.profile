@@ -68,6 +68,9 @@ function acquia_cms_install_tasks_alter(array &$tasks) {
 function acquia_cms_install_tasks() {
   $tasks = [];
 
+  // Set default logo for ACMS.
+  $tasks['acquia_cms_set_logo'] = [];
+
   $config = Drupal::config('cohesion.settings');
   $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
 
@@ -379,4 +382,20 @@ function alter_update_widget(array &$form, FormStateInterface $form_state, Reque
     ->get($state)
     ->getSelectionResponse($state, $selected_ids)
     ->addCommand(new CloseDialogCommand('#modal-body'));
+}
+
+/**
+ * Set the path to the logo file based on install directory.
+ */
+function acquia_cms_set_logo() {
+  $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+
+  Drupal::configFactory()
+    ->getEditable('system.theme.global')
+    ->set('logo', [
+      'path' => $acquia_cms_path . '/acquia_cms.png',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->save(TRUE);
 }

@@ -9,3 +9,9 @@ drush:
     include:
       - '${env.home}/.drush'
       - /usr/share/drush/commands
+command:
+  site:
+    install:
+      options:
+        # Set a predetermined site-name when using site-install.
+        site-name: 'Acquia CMS'
