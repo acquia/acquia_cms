@@ -5,24 +5,6 @@
  * Contains hook implementations for Acquia Pubsec Demo.
  */
 
-use Drupal\views\ViewExecutable;
-
-/**
- * Implements hook_views_pre_render().
- */
-function acquia_cms_demo_pubsec_views_pre_render(ViewExecutable $view) {
-  // A list of view IDs to which the acquia_cms_search/page library should be
-  // attached.
-  $target_views = [
-    'articles',
-    'places',
-    'events',
-  ];
-  if (in_array($view->id(), $target_views, TRUE)) {
-    $view->element['#attached']['library'][] = 'acquia_cms_search/page';
-  }
-}
-
 /**
  * Implements hook_preprocess_HOOK() for html.
  */
