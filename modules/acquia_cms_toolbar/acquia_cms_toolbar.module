@@ -71,35 +71,33 @@ function acquia_cms_toolbar_page_attachments(&$page) {
  * Get color configuration for current environment.
  */
 function environment_indicator_color_config() {
-  $environment_settings = \Drupal::config('acquia_cms_toolbar.environment_indicator.settings');
-
   if (EnvironmentDetector::isAhEnv()) {
     $environment_indicator['name'] = ucfirst($_ENV['AH_SITE_ENVIRONMENT']);
 
     if (EnvironmentDetector::isAhIdeEnv()) {
-      $environment_indicator['bg_color'] = $environment_settings->get('local_bgcolor');
-      $environment_indicator['text_color'] = $environment_settings->get('local_text_color');
+      $environment_indicator['bg_color'] = '#1078C2';
+      $environment_indicator['text_color'] = '#FFFFFF';
     }
 
     if (EnvironmentDetector::isAhDevEnv()) {
-      $environment_indicator['bg_color'] = $environment_settings->get('dev_bgcolor');
-      $environment_indicator['text_color'] = $environment_settings->get('dev_text_color');
+      $environment_indicator['bg_color'] = '#498414';
+      $environment_indicator['text_color'] = '#FFFFFF';
     }
 
     if (EnvironmentDetector::isAhStageEnv()) {
-      $environment_indicator['bg_color'] = $environment_settings->get('stage_bgcolor');
-      $environment_indicator['text_color'] = $environment_settings->get('stage_text_color');
+      $environment_indicator['bg_color'] = '#FEB32B';
+      $environment_indicator['text_color'] = '#000000';
     }
 
     if (EnvironmentDetector::isAhProdEnv()) {
-      $environment_indicator['bg_color'] = $environment_settings->get('prod_bgcolor');
-      $environment_indicator['text_color'] = $environment_settings->get('prod_text_color');
+      $environment_indicator['bg_color'] = '#CD3A3D';
+      $environment_indicator['text_color'] = '#FFFFFF';
     }
   }
   else {
     $environment_indicator['name'] = 'Local';
-    $environment_indicator['bg_color'] = $environment_settings->get('environment_local') ?? '#1078C2';
-    $environment_indicator['text_color'] = $environment_settings->get('local_text_color') ?? '#FFFFFF';
+    $environment_indicator['bg_color'] = '#1078C2';
+    $environment_indicator['text_color'] = '#FFFFFF';
   }
 
   return $environment_indicator;
