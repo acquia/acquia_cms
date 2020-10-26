@@ -109,7 +109,8 @@ final class SiteConfigureForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = $this->siteForm->buildForm($form, $form_state);
-
+    // Set default value for site name.
+    $form['site_information']['site_name']['#default_value'] = $this->t('Acquia CMS');
     $form['cohesion'] = [
       'api_key' => [
         '#type' => 'textfield',
