@@ -1,7 +1,7 @@
 @import "00-config/_colors.scss";
 @import "00-config/_fonts.scss";
-
 .acquia-cms-toolbar {
+  margin-top: 12px;
   .toolbar {
     box-shadow: -1px 0 3px 1px rgba(0, 0, 0, 0.3333);
 
@@ -13,9 +13,27 @@
 
     .toolbar-bar {
       box-shadow: none;
-      background-color: $df-grayish-navy;
+      background-color: $df-grayish-navy !important;
+      top: 10px;
+
+      &:before {
+        content:'';
+        width: 100%;
+        top: -10px;
+        position: absolute;
+        height: 10px;
+        left: 0;
+      }
 
       .toolbar-tab {
+        > .toolbar-icon{
+          &.toolbar-icon-edit{
+            &.toolbar-item {
+              background: transparent;
+            }
+          }
+        }
+
         > .toolbar-item.is-active {
           background-color: rgba(255, 255, 255, .03);
           background-image: none;
@@ -29,6 +47,60 @@
             text-decoration: none;
           }
         }
+
+        .toolbar-icon-environment {
+          color: $white;
+          width: auto;
+          padding-right: 12px;
+
+          @media only screen and (max-width: 767px){
+            text-indent: 50px;
+          }
+
+          &:before {
+            background-image: url(../images/acacac/env-ffffff.svg);
+            max-width: 55px;
+          }
+
+          &:hover {
+            text-decoration: none;
+          }
+
+          &.environment-local,
+          &.environment-ide {
+            background-color: $acquia-blue-darker;
+            &:focus {
+              background: $acquia-blue-darker;
+            }
+          }
+
+          &.environment-dev {
+            background-color: $success-alert-color;
+
+            &:focus {
+              background: $success-alert-color;
+            }
+          }
+
+          &.environment-stage {
+            background-color: $warning-alert-color;
+            color: $black;
+
+            &:focus {
+              background: $warning-alert-color;
+            }
+          }
+
+          &.environment-prod {
+            background-color: $danger-alert-color;
+
+            &:focus {
+              background: $warning-alert-color;
+            }
+          }
+
+        }
+
       }
     }
 
@@ -304,7 +376,7 @@
 
         .toolbar-icon-admin-toolbar-tools-help {
           &:before {
-            background-image: url(../images/168ec4/drupal-8.svg);
+            background-image: url(../images/168ec4/drupal-9.svg);
           }
         }
 
@@ -496,18 +568,18 @@
     &:before {
       padding: 0px;
       margin-left: 7px;
-      background-image: url(../images/acacac/drupal-8.svg);
+      background-image: url(../images/acacac/drupal-9.svg);
     }
 
     &:hover {
       &:before {
-        background-image: url(../images/168ec4/drupal-8.svg);
+        background-image: url(../images/168ec4/drupal-9.svg);
       }
     }
 
     &:active {
       &:before {
-        background-image: url(../images/168ec4/drupal-8.svg);
+        background-image: url(../images/168ec4/drupal-9.svg);
       }
     }
   }
@@ -658,7 +730,7 @@
 
   .toolbar-icon-admin-toolbar-tools-help.is-active {
     &:before {
-      background-image: url(../images/168ec4/drupal-8.svg);
+      background-image: url(../images/168ec4/drupal-9.svg);
     }
   }
 
@@ -795,6 +867,33 @@
     .level-3 {
       ul {
         margin-left: 0 !important;
+      }
+    }
+  }
+
+  .toolbar-bar {
+    .acquia-cms-toolbar.acquia-cms-environment-local &,
+    .acquia-cms-toolbar.acquia-cms-environment-ide & {
+      &:before {
+        background-color: $acquia-blue-darker;
+      }
+    }
+
+    .acquia-cms-toolbar.acquia-cms-environment-dev & {
+      &:before {
+        background-color: $success-alert-color;
+      }
+    }
+
+    .acquia-cms-toolbar.acquia-cms-environment-stage & {
+      &:before {
+        background-color: $warning-alert-color;
+      }
+    }
+
+    .acquia-cms-toolbar.acquia-cms-environment-prod & {
+      &:before {
+        background-color: $danger-alert-color;
       }
     }
   }
