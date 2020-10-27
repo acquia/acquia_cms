@@ -11,8 +11,12 @@ use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
+use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Batch\BatchBuilder;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Installer\InstallerKernel;
+use Drupal\media_library\MediaLibraryState;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -64,6 +68,9 @@ function acquia_cms_install_tasks_alter(array &$tasks) {
  */
 function acquia_cms_install_tasks() {
   $tasks = [];
+
+  // Set default logo for ACMS.
+  $tasks['acquia_cms_set_logo'] = [];
 
   $config = Drupal::config('cohesion.settings');
   $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
@@ -353,4 +360,56 @@ function acquia_cms_module_implements_alter(array &$implementations, string $hoo
     // system when installing a module via the UI.
     unset($implementations['cohesion_sync']);
   }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function acquia_cms_form_alter(array &$form, FormStateInterface $form_state, $form_id) : void {
+  // Instead of directly adding a patch in core, we are modifying the ajax
+  // callback.
+  if ($form_id === 'views_form_media_library_widget_image') {
+    $request = Drupal::request();
+    $state = MediaLibraryState::fromRequest($request);
+    if ($state->getOpenerId() === 'media_library.opener.cohesion') {
+      $form['actions']['submit']['#ajax']['callback'] = 'alter_update_widget';
+    }
+  }
+}
+
+/**
+ * Callback for the media library image widget.
+ */
+function alter_update_widget(array &$form, FormStateInterface $form_state, Request $request) {
+  // As cohesion is using angular for the media library popup, So the modal id
+  // mismatch is causing the issue of no media selection. To resolve this we are
+  // passing the selector in the CloseDialogCommand.
+  // @see \Drupal\media_library\Plugin\views\field\MediaLibrarySelectForm::updateWidget().
+  $field_id = $form_state->getTriggeringElement()['#field_id'];
+  $selected_ids = $form_state->getValue($field_id);
+  $selected_ids = $selected_ids ? array_filter(explode(',', $selected_ids)) : [];
+
+  // Allow the opener service to handle the selection.
+  $state = MediaLibraryState::fromRequest($request);
+
+  return Drupal::service('media_library.opener_resolver')
+    ->get($state)
+    ->getSelectionResponse($state, $selected_ids)
+    ->addCommand(new CloseDialogCommand('#modal-body'));
+}
+
+/**
+ * Set the path to the logo file based on install directory.
+ */
+function acquia_cms_set_logo() {
+  $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+
+  Drupal::configFactory()
+    ->getEditable('system.theme.global')
+    ->set('logo', [
+      'path' => $acquia_cms_path . '/acquia_cms.png',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->save(TRUE);
 }
