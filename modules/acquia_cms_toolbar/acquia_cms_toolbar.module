@@ -5,7 +5,7 @@
  * Functions to support Acquia CMS toolbar.
  */
 
-use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as EnvironmentDetector;
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Url;
 
@@ -30,14 +30,14 @@ function acquia_cms_toolbar_toolbar_alter(array &$items) {
  * Implements hook_toolbar().
  */
 function acquia_cms_toolbar_toolbar() {
-  $environment_indicator_settings = environment_indicator_color_config();
+  $environment_indicator_settings = get_environment_indicator_color_config();
   $items['environment_indicator'] = [
     '#type' => 'toolbar_item',
     '#weight' => 125,
     'tab' => [
       '#type' => 'link',
       '#title' => $environment_indicator_settings['name'],
-      '#url' => Url::fromRoute('acquia_cms_toolbar.settings'),
+      '#url' => Url::fromRoute('<front>'),
       '#attributes' => [
         'title' => t('Environments'),
         'class' => [
@@ -54,9 +54,9 @@ function acquia_cms_toolbar_toolbar() {
 /**
  * Implements hook_page_attachments().
  */
-function acquia_cms_toolbar_page_attachments(&$page) {
-  // Add a css variable for environment indicator color.
-  $environment_settings = environment_indicator_color_config();
+function acquia_cms_toolbar_page_attachments(array &$page): void {
+  // Add css variables for environment indicator colors.
+  $environment_settings = get_environment_indicator_color_config();
   $style = ':root {--env-background:' . $environment_settings['bg_color'] .
     '; --env-text-color:' . $environment_settings['text_color'] . ' } ';
   $page['#attached']['html_head'][] = [
@@ -68,36 +68,38 @@ function acquia_cms_toolbar_page_attachments(&$page) {
 }
 
 /**
- * Get color configuration for current environment.
+ * Get environment indicator settings for current environment.
+ *
+ * @return array
+ *   name => 'Local' // Environment name
+ *   bg_color => '#1078C2' // Background color for env indicator menu item
+ *   text_color => '#FFFFFF' // Text color for env indicator menu item
  */
-function environment_indicator_color_config() {
-  if (EnvironmentDetector::isAhEnv()) {
-    $environment_indicator['name'] = ucfirst($_ENV['AH_SITE_ENVIRONMENT']);
+function get_environment_indicator_color_config() : array {
+  if (Environment::isAhEnv()) {
+    $environment_indicator['name'] = ucfirst(Environment::getAhEnv());
+    $environment_indicator['text_color'] = '#FFFFFF';
 
-    if (EnvironmentDetector::isAhIdeEnv()) {
+    if (Environment::isAhIdeEnv()) {
       $environment_indicator['bg_color'] = '#1078C2';
-      $environment_indicator['text_color'] = '#FFFFFF';
     }
 
-    if (EnvironmentDetector::isAhDevEnv()) {
+    if (Environment::isAhDevEnv()) {
       $environment_indicator['bg_color'] = '#498414';
-      $environment_indicator['text_color'] = '#FFFFFF';
     }
 
-    if (EnvironmentDetector::isAhStageEnv()) {
+    if (Environment::isAhStageEnv()) {
       $environment_indicator['bg_color'] = '#FEB32B';
       $environment_indicator['text_color'] = '#000000';
     }
 
-    if (EnvironmentDetector::isAhProdEnv()) {
+    if (Environment::isAhProdEnv()) {
       $environment_indicator['bg_color'] = '#CD3A3D';
-      $environment_indicator['text_color'] = '#FFFFFF';
     }
   }
   else {
     $environment_indicator['name'] = 'Local';
     $environment_indicator['bg_color'] = '#1078C2';
-    $environment_indicator['text_color'] = '#FFFFFF';
   }
 
   return $environment_indicator;
