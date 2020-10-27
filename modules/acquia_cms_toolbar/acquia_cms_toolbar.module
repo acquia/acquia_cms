@@ -5,11 +5,16 @@
  * Functions to support Acquia CMS toolbar.
  */
 
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
+use Drupal\Core\Url;
+
 /**
  * Implements hook_preprocess_HOOK().
  */
 function acquia_cms_toolbar_preprocess_html(array &$variables) {
+  $environment_indicator_settings = get_environment_indicator_color_config();
   $variables['attributes']['class'][] = 'acquia-cms-toolbar';
+  $variables['attributes']['class'][] = 'acquia-cms-' . $environment_indicator_settings['environment'];
 }
 
 /**
@@ -20,4 +25,65 @@ function acquia_cms_toolbar_toolbar_alter(array &$items) {
     $items['user']['#wrapper_attributes']['class'] = ['user-toolbar-tab'];
     $items['admin_toolbar_tools']['#attached']['library'][] = 'acquia_cms_toolbar/styling';
   }
+}
+
+/**
+ * Implements hook_toolbar().
+ */
+function acquia_cms_toolbar_toolbar() {
+  $environment_indicator_settings = get_environment_indicator_color_config();
+  $items['environment_indicator'] = [
+    '#type' => 'toolbar_item',
+    '#weight' => 125,
+    'tab' => [
+      '#type' => 'link',
+      '#title' => $environment_indicator_settings['name'],
+      '#url' => Url::fromRoute('<front>'),
+      '#attributes' => [
+        'title' => t('Environments'),
+        'class' => [
+          'toolbar-icon',
+          'toolbar-icon-environment',
+          $environment_indicator_settings['environment'],
+        ],
+      ],
+    ],
+  ];
+
+  return $items;
+}
+
+/**
+ * Get environment indicator settings for current environment.
+ *
+ * @return array
+ *   name => 'Local' // Environment name
+ *   environment => 'environment-ide' // CSS class name
+ */
+function get_environment_indicator_color_config() : array {
+  if (Environment::isAhEnv()) {
+    $environment_indicator['name'] = ucfirst(Environment::getAhEnv());
+
+    if (Environment::isAhIdeEnv()) {
+      $environment_indicator['environment'] = 'environment-ide';
+    }
+
+    if (Environment::isAhDevEnv()) {
+      $environment_indicator['environment'] = 'environment-dev';
+    }
+
+    if (Environment::isAhStageEnv()) {
+      $environment_indicator['environment'] = 'environment-stage';
+    }
+
+    if (Environment::isAhProdEnv()) {
+      $environment_indicator['environment'] = 'environment-prod';
+    }
+  }
+  else {
+    $environment_indicator['name'] = 'Local';
+    $environment_indicator['environment'] = 'environment-local';
+  }
+
+  return $environment_indicator;
 }
