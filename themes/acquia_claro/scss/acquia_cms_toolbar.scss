@@ -1,8 +1,5 @@
 @import "00-config/_colors.scss";
 @import "00-config/_fonts.scss";
-$env_background: var(--env-background);
-$env_text_color: var(--env-text-color);
-
 .acquia-cms-toolbar {
   margin-top: 12px;
   .toolbar {
@@ -23,7 +20,6 @@ $env_text_color: var(--env-text-color);
         content:'';
         width: 100%;
         top: -10px;
-        background: $env_background;
         position: absolute;
         height: 10px;
         left: 0;
@@ -53,8 +49,7 @@ $env_text_color: var(--env-text-color);
         }
 
         .toolbar-icon-environment {
-          background: $env_background;
-          color: $env_text_color;
+          color: $white;
           width: auto;
           padding-right: 12px;
 
@@ -71,10 +66,41 @@ $env_text_color: var(--env-text-color);
             text-decoration: none;
           }
 
-          &:focus {
-            background: $env_background;
+          &.environment-local,
+          &.environment-ide {
+            background-color: $acquia-blue-darker;
+            &:focus {
+              background: $acquia-blue-darker;
+            }
           }
+
+          &.environment-dev {
+            background-color: $success-alert-color;
+
+            &:focus {
+              background: $success-alert-color;
+            }
+          }
+
+          &.environment-stage {
+            background-color: $warning-alert-color;
+            color: $black;
+
+            &:focus {
+              background: $warning-alert-color;
+            }
+          }
+
+          &.environment-prod {
+            background-color: $danger-alert-color;
+
+            &:focus {
+              background: $warning-alert-color;
+            }
+          }
+
         }
+
       }
     }
 
@@ -841,6 +867,33 @@ $env_text_color: var(--env-text-color);
     .level-3 {
       ul {
         margin-left: 0 !important;
+      }
+    }
+  }
+
+  .toolbar-bar {
+    .acquia-cms-toolbar.acquia-cms-environment-local &,
+    .acquia-cms-toolbar.acquia-cms-environment-ide & {
+      &:before {
+        background-color: $acquia-blue-darker;
+      }
+    }
+
+    .acquia-cms-toolbar.acquia-cms-environment-dev & {
+      &:before {
+        background-color: $success-alert-color;
+      }
+    }
+
+    .acquia-cms-toolbar.acquia-cms-environment-stage & {
+      &:before {
+        background-color: $warning-alert-color;
+      }
+    }
+
+    .acquia-cms-toolbar.acquia-cms-environment-prod & {
+      &:before {
+        background-color: $danger-alert-color;
       }
     }
   }
