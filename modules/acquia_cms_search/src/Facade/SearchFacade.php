@@ -209,10 +209,6 @@ final class SearchFacade implements ContainerInjectionInterface {
         $type = 'string';
         break;
 
-      case 'text_with_summary':
-        $type = 'text';
-        break;
-
       case 'datetime':
         $type = 'date';
         break;
