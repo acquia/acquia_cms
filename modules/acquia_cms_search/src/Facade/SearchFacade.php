@@ -174,7 +174,7 @@ final class SearchFacade implements ContainerInjectionInterface {
   }
 
   /**
-   * Acts on event start date field.
+   * Acts on certain fields type.
    *
    * Tries to add the field to the list of fields known to the index specified
    * by 'acquia_cms.search_index' third-party setting.
@@ -182,13 +182,14 @@ final class SearchFacade implements ContainerInjectionInterface {
    * @param \Drupal\field\FieldStorageConfigInterface $field_storage
    *   The new field's storage definition.
    */
-  public function addEventStartDate(FieldStorageConfigInterface $field_storage) {
+  public function addFields(FieldStorageConfigInterface $field_storage) {
     $index = $this->loadIndexFromSettings($field_storage);
     if (empty($index)) {
       return;
     }
 
     $field_name = $field_storage->getName();
+    $field_type = $field_storage->getType();
     // Field storages don't normally have a human-readable label, so allow it to
     // provide one in its third-party settings.
     $field_label = $field_storage->getThirdPartySetting('acquia_cms', 'search_label') ?: $field_storage->getLabel();
@@ -199,12 +200,29 @@ final class SearchFacade implements ContainerInjectionInterface {
     // source.
     $data_source_id = $index->getDatasource($data_source_id)->getPluginId();
 
+    $type = '';
+    switch ($field_type) {
+      case 'string':
+      case 'email':
+      case 'telephone':
+      case 'address':
+        $type = 'string';
+        break;
+
+      case 'text_with_summary':
+        $type = 'text';
+        break;
+
+      case 'datetime':
+        $type = 'date';
+        break;
+    }
     // Add the referenced term's ID to the index.
     $field = $this->fieldsHelper->createField($index, $field_name)
       ->setLabel($field_label)
       ->setDatasourceId($data_source_id)
       ->setPropertyPath($field_name)
-      ->setType('date');
+      ->setType($type);
     $index->addField($field);
 
     $this->indexStorage->save($index);
