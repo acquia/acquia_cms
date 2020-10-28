@@ -56,6 +56,14 @@ field_settings:
     dependencies:
       module:
         - node
+  body:
+    label: Body
+    datasource_id: 'entity:node'
+    property_path: body
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.body
   type:
     label: 'Content type'
     datasource_id: 'entity:node'
