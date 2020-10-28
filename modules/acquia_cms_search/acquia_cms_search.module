@@ -55,9 +55,19 @@ function acquia_cms_search_field_storage_config_insert(FieldStorageConfigInterfa
     Drupal::classResolver(SearchFacade::class)->addTaxonomyField($field_storage);
   }
 
-  // To index event start date field.
-  if ($field_storage->getType() === 'datetime' && $field_storage->getName() === 'field_event_start') {
-    Drupal::classResolver(SearchFacade::class)->addEventStartDate($field_storage);
+  // List of fields type which needs to be indexed.
+  $allowed_fields_type = [
+    'datetime',
+    'string',
+    'text_with_summary',
+    'email',
+    'telephone',
+    'address',
+  ];
+
+  // Index allowed fields type.
+  if (in_array($field_storage->getType(), $allowed_fields_type)) {
+    Drupal::classResolver(SearchFacade::class)->addFields($field_storage);
   }
 }
 
