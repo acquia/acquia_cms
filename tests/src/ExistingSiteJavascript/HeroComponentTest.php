@@ -60,13 +60,27 @@ class HeroComponentTest extends CohesionComponentTestBase {
     // Check if all the padding styles are there in the select list.
     $assert_styles('Padding top and bottom', [
       'None',
-      'Top only',
-      'Bottom only',
-      'Top and bottom',
+      'Top - small',
+      'Bottom - small',
+      'Top and bottom - small',
+      'Top - medium',
+      'Bottom - medium',
+      'Top and bottom - medium',
+      'Top - large',
+      'Bottom - large',
+      'Top and bottom - large',
     ]);
     $assert_styles('Padding left and right', [
       'None',
-      'Left and right',
+      'Left - small',
+      'Right - small',
+      'Left and right - small',
+      'Left - medium',
+      'Right - medium',
+      'Left and right - medium',
+      'Left - large',
+      'Right - large',
+      'Left and right - large',
     ]);
 
     // Check if all the image position styles are there in the select list.
