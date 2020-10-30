@@ -29,8 +29,9 @@ class PersonListTest extends ContentTypeListTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function visitListPage() : void {
-    $this->drupalGet('/people');
+  protected function visitListPage($langcode = NULL) : void {
+    $page = $langcode ? "/$langcode/people" : "/people";
+    $this->drupalGet($page);
   }
 
   /**
