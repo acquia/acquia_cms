@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acquia_cms_starter\EventSubscriber;
+namespace Drupal\acquia_cms_demo_pubsec\EventSubscriber;
 
 use Drupal\acquia_cms_event\DefaultContentEventUpdate;
 use Drupal\default_content\Event\DefaultContentEvents;
@@ -43,7 +43,7 @@ class DefaultContentEventUpdateSubscriber implements EventSubscriberInterface {
    */
   public function updateEvent(ImportEvent $event) {
     $module = $event->getModule();
-    if ($module == 'acquia_cms_starter') {
+    if ($module == 'acquia_cms_demo_pubsec') {
       foreach ($event->getImportedEntities() as $entity) {
         /** @var \Drupal\node\NodeInterface */
         if ($entity instanceof NodeInterface && $entity->bundle() === 'event') {

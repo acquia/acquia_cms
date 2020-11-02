@@ -13,6 +13,11 @@ use Drupal\Tests\UnitTestCase;
  */
 class DefaultContentUpdateEventTest extends UnitTestCase {
 
+  /**
+   * DefaultContentEventUpdate object.
+   *
+   * @var \Drupal\acquia_cms_event\DefaultContentEventUpdate
+   */
   protected $updateEvent;
 
   /**
@@ -22,28 +27,59 @@ class DefaultContentUpdateEventTest extends UnitTestCase {
     $this->updateEvent = new DefaultContentEventUpdate();
   }
 
+  /**
+   * Tests the UpdateEvent function to update the event date and time.
+   *
+   * @see Drupal\acquia_cms_event\DefaultContentEventUpdate::getUpdatedDates()
+   */
   public function testUpdateEvent() {
-    // @TODO drupalCreateNode is not working.
-    $pastStartDate = $this->drupalCreateNode([
-      'type' => 'event',
-      'title' => 'Event Example 1',
-      'field_event_start' => date('Y-m-d\TH:i:s', strtotime('-15 days')),
-      'field_event_end' => date('Y-m-d\TH:i:s', strtotime('-14 days')),
-      'field_door_time' => date('Y-m-d\TH:i:s', strtotime('-15 days')),
-      'moderation_state' => 'published',
-    ]);
-    $past_event = $this->updateEvent->updateEventDates($pastStartDate);
-    $this->assertEquals(date('Y-m-d', strtotime("30 days")), $past_event->get('field_event_start')->date->format('Y-m-d'));
-    $this->assertEquals(date('Y-m-d', strtotime("30 days")), $past_event->get('field_event_end')->date->format('Y-m-d'));
-    $this->assertEquals(date('Y-m-d', strtotime("30 days")), $past_event->get('field_door_time')->date->format('Y-m-d'));
+    // Asserting when event is in past.
+    $pastEvent = [
+      'start_date' => date('Y-m-d', strtotime('-15 days')),
+      'end_date' => date('Y-m-d', strtotime('-14 days')),
+      'door_time' => date('Y-m-d', strtotime('-15 days')),
+    ];
+    $updated_event = $this->updateEvent->getUpdatedDates($pastEvent);
+    $this->assertEquals(date('Y-m-d', strtotime("30 days")), $updated_event['start_date']);
+    $this->assertEquals(date('Y-m-d', strtotime("31 days")), $updated_event['end_date']);
+    $this->assertEquals(date('Y-m-d', strtotime("30 days")), $updated_event['door_time']);
+    // Asserting when event in past and door time greater than event end time.
+    $pastEvent = [
+      'start_date' => date('Y-m-d', strtotime('-15 days')),
+      'end_date' => date('Y-m-d', strtotime('-18 days')),
+      'door_time' => date('Y-m-d', strtotime('+15 days')),
+    ];
+    $updated_event = $this->updateEvent->getUpdatedDates($pastEvent);
+    $this->assertEquals(date('Y-m-d', strtotime("30 days")), $updated_event['start_date']);
+    $this->assertEquals(date('Y-m-d', strtotime("31 days")), $updated_event['end_date']);
+    $this->assertEquals(date('Y-m-d', strtotime("30 days")), $updated_event['door_time']);
+    // Asserting when start date is greater than end date.
+    $pastEvent = [
+      'start_date' => date('Y-m-d', strtotime('+36 days')),
+      'end_date' => date('Y-m-d', strtotime('-18 days')),
+      'door_time' => date('Y-m-d', strtotime('+15 days')),
+    ];
+    $updated_event = $this->updateEvent->getUpdatedDates($pastEvent);
+    $this->assertEquals(date('Y-m-d', strtotime("30 days")), $updated_event['start_date']);
+    $this->assertEquals(date('Y-m-d', strtotime("31 days")), $updated_event['end_date']);
+    $this->assertEquals(date('Y-m-d', strtotime("30 days")), $updated_event['door_time']);
+    // Asserting when event is in future.
+    $pastEvent = [
+      'start_date' => date('Y-m-d', strtotime('+36 days')),
+      'end_date' => date('Y-m-d', strtotime('+40 days')),
+      'door_time' => date('Y-m-d', strtotime('+38 days')),
+    ];
+    $updated_event = $this->updateEvent->getUpdatedDates($pastEvent);
+    $this->assertEquals(date('Y-m-d', strtotime("36 days")), $updated_event['start_date']);
+    $this->assertEquals(date('Y-m-d', strtotime("40 days")), $updated_event['end_date']);
+    $this->assertEquals(date('Y-m-d', strtotime("38 days")), $updated_event['door_time']);
   }
 
   /**
    * Once test method has finished running, tearDown() will be invoked.
-   *
-   * @TODO need to check weather we need this method or not.
    */
   public function tearDown() {
+    parent::tearDown();
     unset($this->updateEvent);
   }
 
