@@ -115,12 +115,12 @@ final class SiteConfigureForm extends ConfigFormBase {
       'api_key' => [
         '#type' => 'textfield',
         '#title' => $this->t('API key'),
-        '#default_value' => getenv('COHESION_API_KEY'),
+        '#default_value' => getenv('SITESTUDIO_API_KEY'),
       ],
       'organization_key' => [
         '#type' => 'textfield',
         '#title' => $this->t('Organization key'),
-        '#default_value' => getenv('COHESION_ORG_KEY'),
+        '#default_value' => getenv('SITESTUDIO_ORG_KEY'),
       ],
       '#type' => 'details',
       '#title' => $this->t('Acquia Site Studio'),
