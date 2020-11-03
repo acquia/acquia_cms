@@ -43,7 +43,7 @@ class DefaultContentEventUpdateSubscriber implements EventSubscriberInterface {
    */
   public function updateEvent(ImportEvent $event) {
     $module = $event->getModule();
-    if ($module == 'acquia_cms_demo_pubsec') {
+    if ($module === 'acquia_cms_demo_pubsec') {
       foreach ($event->getImportedEntities() as $entity) {
         /** @var \Drupal\node\NodeInterface */
         if ($entity instanceof NodeInterface && $entity->bundle() === 'event') {
@@ -54,28 +54,10 @@ class DefaultContentEventUpdateSubscriber implements EventSubscriberInterface {
           ];
           $updated_data = $this->updateEventImport->getUpdatedDates($date_time);
           // Updating event node with modified dates.
-          $this->updateEventNode($entity, $updated_data);
+          $this->updateEventImport->updateEventNode($entity, $updated_data);
         }
       }
     }
-  }
-
-  /**
-   * Update event node with modified date & time.
-   *
-   * @param \Drupal\node\NodeInterface $entity
-   *   The entity object.
-   * @param array $updated_data
-   *   Contains the updated event dates & time.
-   */
-  private function updateEventNode(NodeInterface $entity, array $updated_data) {
-    $entity->set('field_event_start', date('Y-m-d\T' . $entity->get('field_event_start')->date->format('H:i:s'), strtotime($updated_data['start_date'])));
-    if (!empty($date_time['end_date'])) {
-      $entity->set('field_event_end', date('Y-m-d\T' . $entity->get('field_event_end')->date->format('H:i:s'), strtotime($updated_data['end_date'])));
-    }
-    $entity->set('field_door_time', date('Y-m-d\T' . $entity->get('field_door_time')->date->format('H:i:s'), strtotime($updated_data['door_time'])));
-
-    $entity->save();
   }
 
 }
