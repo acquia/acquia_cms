@@ -8,9 +8,9 @@
 use Drupal\acquia_cms_common\Facade\MetatagFacade;
 use Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade;
 use Drupal\acquia_cms_common\Facade\WorkflowFacade;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\imce\Imce;
 use Drupal\node\NodeTypeInterface;
-use Drupal\views\ViewExecutable;
 use Drupal\workbench_email\TemplateInterface;
 
 /**
@@ -41,11 +41,16 @@ function acquia_cms_common_preprocess_html(&$variables) {
 }
 
 /**
- * Implements hook_views_pre_render().
+ * Implements hook_form_alter() for html.
  */
-function acquia_cms_common_views_pre_render(ViewExecutable $view) {
-  $search_pages = ['articles', 'search', 'events', 'people', 'places'];
-  if (in_array($view->id(), $search_pages)) {
-    $view->element['#attached']['library'][] = 'acquia_cms_common/page';
+function acquia_cms_common_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'views_exposed_form') {
+    $form['edit-keywords-label'] = [
+      '#type' => 'markup',
+      '#markup' => '<label for="edit-keywords" class="visually-hidden">' . t('Search') . '</label>',
+      '#allowed_tags' => [
+        'label',
+      ],
+    ];
   }
 }

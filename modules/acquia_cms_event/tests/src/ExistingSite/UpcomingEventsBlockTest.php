@@ -29,32 +29,35 @@ class UpcomingEventsBlockTest extends ExistingSiteBase {
     ]);
     $this->markEntityForCleanup($block);
 
+    // To show event start/end date always in future.
+    $future_year = date('Y', strtotime('+10 year'));
+
     $this->createNode([
       'type' => 'event',
       'title' => 'Event Example 1',
-      'field_event_start' => '2030-10-03T22:00:00',
-      'field_event_end' => '2030-10-09T12:00:00',
+      'field_event_start' => $future_year . '-10-03T22:00:00',
+      'field_event_end' => $future_year . '-10-09T12:00:00',
       'moderation_state' => 'published',
     ]);
     $this->createNode([
       'type' => 'event',
       'title' => 'Event Example 2',
-      'field_event_start' => '2030-09-13T22:00:00',
-      'field_event_end' => '2030-09-16T12:00:00',
+      'field_event_start' => $future_year . '-09-13T22:00:00',
+      'field_event_end' => $future_year . '-09-16T12:00:00',
       'moderation_state' => 'published',
     ]);
     $this->createNode([
       'type' => 'event',
       'title' => 'Event Example 3',
-      'field_event_start' => '2030-09-03T22:00:00',
-      'field_event_end' => '2030-09-03T12:00:00',
+      'field_event_start' => $future_year . '-09-03T22:00:00',
+      'field_event_end' => $future_year . '-09-03T12:00:00',
       'moderation_state' => 'published',
     ]);
     $this->createNode([
       'type' => 'event',
       'title' => 'Event Example 4',
-      'field_event_start' => '2030-10-03T22:00:00',
-      'field_event_end' => '2030-10-03T12:00:00',
+      'field_event_start' => $future_year . '-10-03T22:00:00',
+      'field_event_end' => $future_year . '-10-03T12:00:00',
       'moderation_state' => 'draft',
     ]);
   }
