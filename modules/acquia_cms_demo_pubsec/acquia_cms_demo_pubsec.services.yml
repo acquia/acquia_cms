@@ -1,0 +1,6 @@
+services:
+  acquia_cms_demo_pubsec_subscriber:
+    class: '\Drupal\acquia_cms_demo_pubsec\EventSubscriber\DefaultContentEventUpdateSubscriber'
+    arguments: ['@acquia_cms_event.default_content_event_update']
+    tags:
+      - { name: 'event_subscriber' }
