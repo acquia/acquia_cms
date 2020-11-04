@@ -3,6 +3,7 @@
 namespace Drupal\acquia_cms_search\Plugin\views\area;
 
 use Drupal\search_api\Plugin\views\query\SearchApiQuery;
+use Drupal\search_api\SearchApiException;
 use Drupal\views\Plugin\views\area\View;
 
 /**
@@ -28,6 +29,45 @@ final class FallbackView extends View {
       $query->abort();
     }
     parent::preQuery();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function render($empty = FALSE) {
+    if ($this->isServerAvailable()) {
+      $this->isEmpty = TRUE;
+      return [];
+    }
+    return parent::render($empty);
+  }
+
+  /**
+   * Checks if the Search API server for this view is available.
+   *
+   * @return bool
+   *   TRUE if the server is available, FALSE otherwise. If the view's query
+   *   handler is not Search API's query handler, returns TRUE.
+   */
+  private function isServerAvailable() : bool {
+    $query = $this->view->getQuery();
+
+    if ($query instanceof SearchApiQuery) {
+      if ($query->shouldAbort()) {
+        return FALSE;
+      }
+
+      try {
+        return $query->getIndex()
+          ->getServerInstance()
+          ->getBackend()
+          ->isAvailable();
+      }
+      catch (SearchApiException $e) {
+        return FALSE;
+      }
+    }
+    return TRUE;
   }
 
 }

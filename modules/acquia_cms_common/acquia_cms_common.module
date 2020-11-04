@@ -11,6 +11,9 @@ use Drupal\acquia_cms_common\Facade\WorkflowFacade;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\imce\Imce;
 use Drupal\node\NodeTypeInterface;
+use Drupal\search_api\Plugin\views\query\SearchApiQuery;
+use Drupal\search_api\SearchApiException;
+use Drupal\views\ViewExecutable;
 use Drupal\workbench_email\TemplateInterface;
 
 /**
@@ -53,4 +56,48 @@ function acquia_cms_common_form_alter(&$form, FormStateInterface $form_state, $f
       ],
     ];
   }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function acquia_cms_common_views_pre_render(ViewExecutable $view) {
+  $listing_pages = ['articles', 'search', 'events', 'people', 'places'];
+  if (in_array($view->id(), $listing_pages)) {
+    // Main view has the two no result behaviour, so when server is not
+    // available, we want to hide the no result behaviour - text area message
+    // of main view from fallback pages.
+    if (!is_server_available($view)) {
+      unset($view->empty['area']);
+    }
+  }
+}
+
+/**
+ * Checks if the Search API server for view is available.
+ *
+ * @param object $view
+ *   View object.
+ *
+ * @return bool
+ *   TRUE if the server is available, FALSE otherwise. If the view's query
+ *   handler is not Search API's query handler, returns TRUE.
+ */
+function is_server_available($view) : bool {
+  $query = $view->getQuery();
+  if ($query instanceof SearchApiQuery) {
+    if ($query->shouldAbort()) {
+      return FALSE;
+    }
+    try {
+      return $query->getIndex()
+        ->getServerInstance()
+        ->getBackend()
+        ->isAvailable();
+    }
+    catch (SearchApiException $e) {
+      return FALSE;
+    }
+  }
+  return TRUE;
 }

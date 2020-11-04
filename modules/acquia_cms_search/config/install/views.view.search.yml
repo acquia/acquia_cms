@@ -262,6 +262,19 @@ display:
           view_to_insert: 'search_fallback:search_fallback_block'
           inherit_arguments: 0
           plugin_id: view_fallback
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: true
+          tokenize: false
+          content:
+            value: 'Sorry, no content found. Please try to search with different keywords.'
+            format: filtered_html
+          plugin_id: text
       relationships: {  }
       arguments: {  }
       display_extenders: {  }
