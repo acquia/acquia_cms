@@ -51,6 +51,14 @@ function acquia_cms_search_node_type_insert(NodeTypeInterface $node_type) {
  * Implements hook_ENTITY_TYPE_insert() for configurable field storages.
  */
 function acquia_cms_search_field_storage_config_insert(FieldStorageConfigInterface $field_storage) {
+  // Adding the third party settings in the node.body storage configuration to
+  // index the body field for searching.
+  if ($field_storage->getType() === 'text_with_summary' && $field_storage->id() === 'node.body') {
+    $field_storage->setThirdPartySetting('acquia_cms', 'search_index', 'content')
+      ->setThirdPartySetting('acquia_cms', 'search_label', 'Body')
+      ->save();
+  }
+
   if ($field_storage->getType() === 'entity_reference' && $field_storage->getSetting('target_type') === 'taxonomy_term') {
     Drupal::classResolver(SearchFacade::class)->addTaxonomyField($field_storage);
   }
@@ -62,6 +70,7 @@ function acquia_cms_search_field_storage_config_insert(FieldStorageConfigInterfa
     'email',
     'telephone',
     'address',
+    'text_with_summary',
   ];
 
   // Index allowed fields type.
