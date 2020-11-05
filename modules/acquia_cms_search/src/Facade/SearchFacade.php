@@ -212,6 +212,10 @@ final class SearchFacade implements ContainerInjectionInterface {
       case 'datetime':
         $type = 'date';
         break;
+
+      case 'text_with_summary':
+        $type = 'text';
+        break;
     }
     // Add the referenced term's ID to the index.
     $field = $this->fieldsHelper->createField($index, $field_name)
