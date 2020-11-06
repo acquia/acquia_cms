@@ -50,7 +50,13 @@ class DefaultContentEventUpdate {
       $time_diff = date_diff(
         new \DateTime($entity->get('field_event_end')->value),
         new \DateTime($entity->get('field_event_start')->value));
-      $entity->set('field_event_duration', $time_diff->format("%a day, %h hours, %i minutes"));
+
+      $day = $time_diff->d > 1 ? 'days' : 'day';
+      $hour = $time_diff->h > 1 ? 'hours' : 'hour';
+      $minute = $time_diff->i > 1 ? 'minutes' : 'minute';
+      $entity->set(
+        'field_event_duration',
+        $time_diff->format("%a " . $day . ", %h " . $hour . ", %i " . $minute));
     }
     $entity->set('field_door_time', date('Y-m-d\T' . $entity->get('field_door_time')->date->format('H:i:s'), strtotime($updated_data['door_time'])));
 
