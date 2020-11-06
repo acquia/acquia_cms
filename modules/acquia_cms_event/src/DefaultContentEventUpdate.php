@@ -48,6 +48,11 @@ class DefaultContentEventUpdate {
     $entity->set('field_event_start', date('Y-m-d\T' . $entity->get('field_event_start')->date->format('H:i:s'), strtotime($updated_data['start_date'])));
     if (!empty($updated_data['end_date'])) {
       $entity->set('field_event_end', date('Y-m-d\T' . $entity->get('field_event_end')->date->format('H:i:s'), strtotime($updated_data['end_date'])));
+      // Updating the duration field based on start and end date of event.
+      $time_diff = date_diff(
+        new \DateTime($entity->get('field_event_end')->value),
+        new \DateTime($entity->get('field_event_start')->value));
+      $entity->set('field_event_duration', $time_diff->format("%a days, %h hours, %i minutes"));
     }
     $entity->set('field_door_time', date('Y-m-d\T' . $entity->get('field_door_time')->date->format('H:i:s'), strtotime($updated_data['door_time'])));
 
