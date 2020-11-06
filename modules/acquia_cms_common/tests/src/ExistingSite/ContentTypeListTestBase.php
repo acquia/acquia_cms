@@ -4,6 +4,7 @@ namespace Drupal\Tests\acquia_cms_common\ExistingSite;
 
 use Behat\Mink\Element\ElementInterface;
 use Drupal\Core\Entity\Query\QueryInterface;
+use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Vocabulary;
@@ -38,6 +39,12 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
    */
   protected function setUp() {
     parent::setUp();
+
+    $langcode = 'es';
+    if (!ConfigurableLanguage::load($langcode)) {
+      ConfigurableLanguage::createFromLangcode($langcode)->save();
+    }
+
     $this->assertNotEmpty($this->nodeType);
     $this->assertInstanceOf(NodeType::class, NodeType::load($this->nodeType));
 
@@ -66,7 +73,8 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
       'title' => 'Secret',
       'created' => $time++,
     ]);
-    $this->createNode([
+
+    $node = $this->createNode([
       'type' => $this->nodeType,
       'title' => 'Alpha',
       'moderation_state' => 'published',
@@ -74,6 +82,12 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
       'field_' . $this->nodeType . '_type' => $types[0],
       'created' => $time++,
     ]);
+
+    // Create a translation for the node.
+    $translate_node = $node->toArray();
+    $translate_node['title'] = 'Spanish - Alpha';
+    $node->addTranslation('es', $translate_node)->save();
+
     $this->createNode([
       'type' => $this->nodeType,
       'title' => 'Beta',
@@ -129,8 +143,11 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
 
   /**
    * Visits the listing page.
+   *
+   * @param string $langcode
+   *   Langcode to visit tranlated page.
    */
-  abstract protected function visitListPage() : void;
+  abstract protected function visitListPage($langcode = NULL) : void;
 
   /**
    * Update specific field value for nodes.
@@ -187,6 +204,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
     // All content should be visible except for the secret one.
     $this->assertLinksExistInOrder();
     $assert_session->linkNotExists('Secret');
+    $assert_session->linkNotExists('Spanish - Alpha');
 
     // Filter by a category and ensure that the expected content is visible.
     $page = $this->getSession()->getPage();
@@ -228,6 +246,21 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
     $assert_session->linkNotExists('Delta');
     $assert_session->linkNotExists('Echo');
     $assert_session->linkNotExists('Secret');
+
+    // Assert translated items on translated-list page.
+    $this->visitListPage('es');
+    $assert_session->linkExists('Spanish - Alpha');
+
+    // Assert filtered nodes on search page.
+    $options = [
+      'query' => ['keywords' => 'Alpha'],
+    ];
+    $this->drupalGet('/search', $options);
+    $assert_session->linkExists('Alpha');
+    $assert_session->linkNotExists('Spanish - Alpha');
+
+    $this->drupalGet('/es/search', $options);
+    $assert_session->linkExists('Spanish - Alpha');
   }
 
   /**
