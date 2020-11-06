@@ -54,3 +54,20 @@ function acquia_cms_common_form_alter(&$form, FormStateInterface $form_state, $f
     ];
   }
 }
+
+/**
+ * Implements hook_views_data().
+ */
+function acquia_cms_common_views_data() {
+  return [
+    'views' => [
+      'main_listing_pages_view' => [
+        'title' => t('Main listing pages - Text area'),
+        'help' => t('Insert a text area inside a main view listing pages if the search server is available. If the view is not based on a Search API index, this behaves like a standard text area.'),
+        'area' => [
+          'id' => 'main_listing_pages_view',
+        ],
+      ],
+    ],
+  ];
+}
