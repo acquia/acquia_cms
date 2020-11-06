@@ -17,7 +17,7 @@ class DefaultContentEventUpdate {
    */
   public function getUpdatedDates(array $date_time) : array {
     if (strtotime($date_time['start_date']) < strtotime('+30 days') ||
-      strtotime($date_time['start_date']) > strtotime($date_time['end_date'])) {
+      (!empty($date_time['end_date']) && strtotime($date_time['start_date']) > strtotime($date_time['end_date']))) {
       $date_time['start_date'] = date('Y-m-d', strtotime('+30 days'));
     }
 
