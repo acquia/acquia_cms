@@ -72,7 +72,7 @@ class DefaultContentUpdateEventTest extends UnitTestCase {
     $updated_event = $this->updateEvent->getUpdatedDates($pastEvent);
     $this->assertEquals(date('Y-m-d', strtotime("36 days")), $updated_event['start_date']);
     $this->assertEquals(date('Y-m-d', strtotime("40 days")), $updated_event['end_date']);
-    $this->assertEquals(date('Y-m-d', strtotime("38 days")), $updated_event['door_time']);
+    $this->assertEquals(date('Y-m-d', strtotime("36 days")), $updated_event['door_time']);
   }
 
   /**
