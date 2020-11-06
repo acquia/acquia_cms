@@ -240,7 +240,6 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
     return [
       'Test published Article',
       'Test published Event',
-      'Test published Page',
       'Test published Person',
       'Test published Place',
     ];

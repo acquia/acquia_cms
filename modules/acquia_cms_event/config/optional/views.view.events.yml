@@ -319,6 +319,19 @@ display:
           view_to_insert: 'events_fallback:default'
           inherit_arguments: 0
           plugin_id: view_fallback
+        main_listing_pages_view:
+          id: main_listing_pages_view
+          table: views
+          field: main_listing_pages_view
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: true
+          tokenize: 0
+          content:
+            value: 'Sorry, no content found. Please try to search with different keywords.'
+            format: filtered_html
+          plugin_id: main_listing_pages_view
       relationships: {  }
       arguments: {  }
       display_extenders: {  }
