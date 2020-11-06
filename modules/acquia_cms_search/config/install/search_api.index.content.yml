@@ -22,6 +22,14 @@ field_settings:
     dependencies:
       module:
         - node
+  langcode:
+    label: Language
+    datasource_id: 'entity:node'
+    property_path: langcode
+    type: string
+    dependencies:
+      module:
+        - node
   node_grants:
     label: 'Node access information'
     property_path: search_api_node_grants
@@ -105,6 +113,7 @@ processor_settings:
   ignorecase:
     all_fields: true
     fields:
+      - langcode
       - rendered_item
       - title
       - type
