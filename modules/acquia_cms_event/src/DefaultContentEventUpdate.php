@@ -27,11 +27,9 @@ class DefaultContentEventUpdate {
         $date_time['end_date'] = date('Y-m-d', strtotime('+31 days'));
       }
     }
+    // Door time will always be same as start_date.
+    $date_time['door_time'] = $date_time['start_date'];
 
-    if (strtotime($date_time['door_time']) > strtotime($date_time['end_date']) ||
-      strtotime($date_time['door_time']) < strtotime('+30 days')) {
-      $date_time['door_time'] = date('Y-m-d', strtotime('+30 days'));
-    }
     return $date_time;
 
   }
@@ -52,7 +50,7 @@ class DefaultContentEventUpdate {
       $time_diff = date_diff(
         new \DateTime($entity->get('field_event_end')->value),
         new \DateTime($entity->get('field_event_start')->value));
-      $entity->set('field_event_duration', $time_diff->format("%a days, %h hours, %i minutes"));
+      $entity->set('field_event_duration', $time_diff->format("%a day, %h hours, %i minutes"));
     }
     $entity->set('field_door_time', date('Y-m-d\T' . $entity->get('field_door_time')->date->format('H:i:s'), strtotime($updated_data['door_time'])));
 
