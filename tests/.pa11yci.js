@@ -17,7 +17,8 @@ module.exports = {
     ignore: ['notice', 'warning'],
     chromeLaunchConfig: {
       args: ['--no-sandbox']
-    }
+    },
+    hideElements: ['button.mobile-menu-button']
   },
   urls: urls.map(url => `${baseURL}${url}`)
 };

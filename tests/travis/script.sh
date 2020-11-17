@@ -31,5 +31,5 @@ if [ "$TRAVIS_JOB_NAME" == "Starter" ]; then
   # Runs Backstop.js
    npm run backstop-starter
   # Runs Pa11y.js
-  # npm run pa11y-starter
+  npm run pa11y-starter
 fi
