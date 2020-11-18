@@ -1,0 +1,15 @@
+acquia_cms_support.config_sync:
+  path: '/admin/config/development/acms_configuration'
+  defaults:
+    _controller: '\Drupal\acquia_cms_support\Controller\AcmsConfigSync::build'
+    _title: 'ACMS Configuration'
+  requirements:
+    _permission: 'synchronize configuration'
+
+acquia_cms_support.config_diff:
+  path: '/admin/config/development/acms_configuration/sync/diff/{name}/{type}/{storage}/{source_name}/{target_name}'
+  defaults:
+    _controller: '\Drupal\acquia_cms_support\Controller\AcmsConfigDiff::diff'
+    target_name: NULL
+  requirements:
+    _permission: 'synchronize configuration'
