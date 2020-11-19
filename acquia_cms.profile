@@ -72,6 +72,9 @@ function acquia_cms_install_tasks() {
   // Set default logo for ACMS.
   $tasks['acquia_cms_set_logo'] = [];
 
+  // Set default favicon for ACMS.
+  $tasks['acquia_cms_set_favicon'] = [];
+
   $config = Drupal::config('cohesion.settings');
   $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
 
@@ -407,6 +410,22 @@ function acquia_cms_set_logo() {
   Drupal::configFactory()
     ->getEditable('system.theme.global')
     ->set('logo', [
+      'path' => $acquia_cms_path . '/acquia_cms.png',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->save(TRUE);
+}
+
+/**
+ * Set the path to the favicon file based on install directory.
+ */
+function acquia_cms_set_favicon() {
+  $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+
+  Drupal::configFactory()
+    ->getEditable('system.theme.global')
+    ->set('favicon', [
       'path' => $acquia_cms_path . '/acquia_cms.png',
       'url' => '',
       'use_default' => FALSE,
