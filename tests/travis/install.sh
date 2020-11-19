@@ -45,5 +45,20 @@ find ../../../profiles/contrib/acquia_cms/modules -maxdepth 1 -mindepth 1 -type 
 # Ensure the symlinks are included in the ORCA fixture snapshot.
 git add .
 
+# Enable Starter or Pubsec Demo if Appropriate
+if [ "$TRAVIS_JOB_NAME" == "Starter" ]; then
+    echo "Installing Starter Kit"
+    drush en acquia_cms_development -y
+    drush pmu shield -y
+    drush en acquia_cms_starter -y
+fi
+
+if [ "$TRAVIS_JOB_NAME" == "PubSec Demo" ]; then
+    echo "Installing PubSec Demo"
+    drush en acquia_cms_development -y
+    drush pmu shield -y
+    drush en acquia_cms_demo_pubsec -y
+fi
+
 # Set the fixture state to reset to between tests.
 orca fixture:backup --force
