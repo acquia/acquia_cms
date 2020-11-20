@@ -283,6 +283,7 @@ function acquia_cms_install_additional_modules() {
   $module_installer = Drupal::service('module_installer');
 
   $is_dev = Environment::isAhIdeEnv() || Environment::isLocalEnv();
+  $is_prod = Environment::isAhProdEnv();
 
   if (Environment::isAhOdeEnv() || $is_dev) {
     $module_installer->install(['dblog', 'jsonapi_extras']);
@@ -295,6 +296,9 @@ function acquia_cms_install_additional_modules() {
     $module_installer->install(['autologout']);
   }
 
+  if (!$is_prod) {
+    $module_installer->install(['reroute_email']);
+  }
   // @todo once PF-3025 has been resolved, update this to work on IDEs too.
   if (Environment::isAhEnv() && !Environment::isAhIdeEnv()) {
     $module_installer->install(['imagemagick']);
