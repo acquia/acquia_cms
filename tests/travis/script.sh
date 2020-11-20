@@ -29,7 +29,7 @@ if [ "$TRAVIS_JOB_NAME" == "Starter" ]; then
   npm install
   orca fixture:run-server &
   # Runs Backstop.js
-   npm run vr
+   npm run backstop-starter
   # Runs Pa11y.js
-  # npm run tests
+  # npm run pa11y-starter
 fi

@@ -133,7 +133,7 @@ npm install
 To run Backstop tests on Acquia CMS, run the following command:
 
 ```
-npm run vr
+npm run backstop-starter
 ```
 
 ##### Adding New Test Cases / Scenarios

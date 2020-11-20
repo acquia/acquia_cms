@@ -13,8 +13,8 @@
     "postinstall": "find node_modules/ -name '*.info' -type f -delete",
     "install-tools": "npm ci",
     "uninstall-tools": "rm -r node_modules;",
-    "tests": "pa11y-ci --config tests/.pa11yci.js",
-    "vr": "backstop test --config=tests/backstop/backstop.json"
+    "pa11y-starter": "pa11y-ci --config tests/.pa11yci.js",
+    "backstop-starter": "backstop test --config=tests/backstop/backstop.json"
   },
   "dependencies": {
     "backstopjs": "^5.0.6",
