@@ -61,21 +61,3 @@ function acquia_cms_demo_pubsec_requirements($phase) {
   }
   return $requirements;
 }
-
-/**
- * Implements hook_install().
- */
-function acquia_cms_demo_pubsec_install() {
-  \Drupal::service('module_installer')->install(['webform_ui']);
-
-  // Set the path to the logo file based on install directory of pubsec demo.
-  $acquia_cms_demo_pubsec = drupal_get_path('module', 'acquia_cms_demo_pubsec');
-  Drupal::configFactory()
-    ->getEditable('system.theme.global')
-    ->set('logo', [
-      'path' => $acquia_cms_demo_pubsec . '/pubsec_demo.png',
-      'url' => '',
-      'use_default' => FALSE,
-    ])
-    ->save(TRUE);
-}
