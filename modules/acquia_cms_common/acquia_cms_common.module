@@ -6,6 +6,7 @@
  */
 
 use Drupal\acquia_cms_common\Facade\MetatagFacade;
+use Drupal\acquia_cms_common\Facade\SitemapFacade;
 use Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade;
 use Drupal\acquia_cms_common\Facade\WorkflowFacade;
 use Drupal\Core\Form\FormStateInterface;
@@ -19,6 +20,7 @@ use Drupal\workbench_email\TemplateInterface;
 function acquia_cms_common_node_type_insert(NodeTypeInterface $node_type) {
   Drupal::classResolver(WorkflowFacade::class)->addNodeType($node_type);
   Drupal::classResolver(MetatagFacade::class)->addNodeType($node_type);
+  Drupal::classResolver(SitemapFacade::class)->enableSitemap($node_type);
 }
 
 /**
