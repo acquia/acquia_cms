@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   way, or removed outright, at any time without warning. External code should
  *   not use this class!
  */
-class AcmsConfigSync extends ControllerBase implements ContainerInjectionInterface {
+class AcquiaCmsConfigSync extends ControllerBase implements ContainerInjectionInterface {
 
   /**
    * The config factory service.
@@ -53,7 +53,7 @@ class AcmsConfigSync extends ControllerBase implements ContainerInjectionInterfa
   protected $moduleHandler;
 
   /**
-   * AcmsConfigSync constructor.
+   * AcquiaCmsConfigSync constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory service.
@@ -89,49 +89,55 @@ class AcmsConfigSync extends ControllerBase implements ContainerInjectionInterfa
   public function build() {
     $header = [
       $this->t('Name'),
-      $this->t('Active vs ACMS Config in (%)'),
+      $this->t('Default parity'),
       $this->t('Operations'),
     ];
     $rows = [];
-    $acms_profile_modules = $this->getAcmsProfileModuleList();
+    $acquia_cms_profile_modules = $this->getAcquiaCmsProfileModuleList();
 
-    foreach ($acms_profile_modules as $key => $value) {
-      $config_path = $this->getAcmsConfigPath($value->getType(), $key, NULL);
+    foreach ($acquia_cms_profile_modules as $key => $value) {
+      $type = $value->getType();
+      $config_path = ($type === 'profile') ? '../' : '../modules/' . $key;
 
-      // Check profile/module has the config directory and it has install/
-      // optional folder in it.
-      if ((is_dir($config_path . '/config') &&
-        (is_dir($config_path . '/' . InstallStorage::CONFIG_INSTALL_DIRECTORY)
-          || is_dir($config_path . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY)))) {
+      if (!is_dir($config_path . '/config')) {
+        // No config directory move to next module.
+        continue;
+      }
+      $config_install_dir = $config_path . '/' . InstallStorage::CONFIG_INSTALL_DIRECTORY;
+      $config_optional_dir = $config_path . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY;
 
-        $installed_list = $this->getInstalledConfig($config_path . '/' . InstallStorage::CONFIG_INSTALL_DIRECTORY);
-        $optional_list = $this->getOptionalConfig($config_path . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY);
-        $config_files_list = array_merge($installed_list, $optional_list);
+      if (!$config_install_dir && !$config_optional_dir) {
+        // No install or optional directory, move to next module.
+        continue;
+      }
 
-        foreach ($config_files_list as $config_file => $storage) {
-          $storage_config_path = $this->getAcmsConfigPath($value->getType(), $key, $storage);
-          $sync_storage = $this->getFileStorage($storage_config_path);
-          $delta = $this->getDelta($config_file, $sync_storage);
-          $links = $this->getViewDifference($key, $value->getType(), $storage, $config_file);
-          $class_name = 'color-error';
+      $installed_list = $this->getConfigList($config_install_dir, 'install');
+      $optional_list = $this->getConfigList($config_optional_dir, 'optional');
+      $config_files_list = array_merge($installed_list, $optional_list);
 
-          if ($delta == '100') {
-            $class_name = 'color-success';
-          }
-          $rows[] = [
-            'name' => $config_file,
-            'config' => [
-              'class' => $class_name,
-              'data' => $delta . '%',
-            ],
-            'operations' => [
-              'data' => [
-                '#type' => 'operations',
-                '#links' => $links,
-              ],
-            ],
-          ];
+      foreach ($config_files_list as $config_file => $storage) {
+        $storage_config_path = ($type === 'profile') ? '../config/' . $storage : '../modules/' . $key . '/config/' . $storage;
+        $sync_storage = $this->getFileStorage($storage_config_path);
+        $delta = $this->getDelta($config_file, $sync_storage);
+        $links = $this->getViewDifference($key, $value->getType(), $storage, $config_file);
+        $class_name = 'color-error';
+
+        if ($delta == '100') {
+          $class_name = 'color-success';
         }
+        $rows[] = [
+          'name' => $config_file,
+          'config' => [
+            'class' => $class_name,
+            'data' => $delta . '%',
+          ],
+          'operations' => [
+            'data' => [
+              '#type' => 'operations',
+              '#links' => $links,
+            ],
+          ],
+        ];
       }
     }
     asort($rows);
@@ -144,9 +150,9 @@ class AcmsConfigSync extends ControllerBase implements ContainerInjectionInterfa
   }
 
   /**
-   * Fetch the acms profile with list of enabled modules of acms.
+   * Fetch the acquia cms profile with list of enabled modules of acms.
    */
-  public function getAcmsProfileModuleList() {
+  public function getAcquiaCmsProfileModuleList() {
     // Fetch acms profile and enabled modules which ships with acms.
     $profile_modules = $this->moduleHandler->getModuleList();
     $acms_profile_modules = array_filter($profile_modules, function ($key) {
@@ -182,36 +188,13 @@ class AcmsConfigSync extends ControllerBase implements ContainerInjectionInterfa
   }
 
   /**
-   * Get the install folder configuration.
+   * Get the install/optional folder configuration.
    */
-  public function getInstalledConfig($path) {
-    $installed_storage = $this->getFileStorage($path);
-    $installed_list = $installed_storage->listAll();
-    $installed_list = array_fill_keys($installed_list, 'install');
-    return $installed_list;
-  }
-
-  /**
-   * Get the optional folder configuration.
-   */
-  public function getOptionalConfig($path) {
-    $optional_storage = $this->getFileStorage($path);
-    $optional_list = $optional_storage->listAll();
-    $optional_list = array_fill_keys($optional_list, 'optional');
-    return $optional_list;
-  }
-
-  /**
-   * Get the file storage path.
-   */
-  public function getAcmsConfigPath($type, $module_name, $storage) {
-    if ($type == 'profile') {
-      $path = isset($storage) ? '../config/' . $storage : '../';
-    }
-    else {
-      $path = isset($storage) ? '../modules/' . $module_name . '/config/' . $storage : '../modules/' . $module_name;
-    }
-    return $path;
+  public function getConfigList($path, $config_dir = 'install') {
+    $storage = $this->getFileStorage($path);
+    $config_list = $storage->listAll();
+    $config_list = array_fill_keys($config_list, $config_dir);
+    return $config_list;
   }
 
   /**
@@ -224,26 +207,34 @@ class AcmsConfigSync extends ControllerBase implements ContainerInjectionInterfa
   }
 
   /**
-   * Get the delta between ACMS vs Active configuration.
+   * Get the delta between Acquia CMS vs Active configuration.
+   *
+   * @param string $config_file
+   *   Configuration file.
+   * @param string $original_configuration_storage
+   *   Original configuration storage.
+   *
+   * @return float
+   *   Delta between configuration.
    */
-  public function getDelta($config_file, $sync_storage) {
+  public function getDelta($config_file, $original_configuration_storage) {
     // Database configuration.
-    $source_data = explode("\n", Yaml::encode($this->targetStorage->read($config_file)));
+    $active_configuration = explode("\n", Yaml::encode($this->targetStorage->read($config_file)));
     // Configuration in files.
-    $target_data = explode("\n", Yaml::encode($sync_storage->read($config_file)));
-    $source_data = array_values(array_filter(
-      $source_data,
-      function ($val, $key) use (&$source_data) {
+    $original_configuration = explode("\n", Yaml::encode($original_configuration_storage->read($config_file)));
+    $active_configuration = array_values(array_filter(
+      $active_configuration,
+      function ($val, $key) use (&$active_configuration) {
         return (strpos($val, '_core') !== 0) && (strpos(trim($val), 'default_config_hash:') !== 0) && (strpos($val, 'uuid:') !== 0);
       },
       ARRAY_FILTER_USE_BOTH
     ));
     // Show configuration which present in both places.
-    $diff = array_intersect($source_data, $target_data);
+    $diff = array_intersect($active_configuration, $original_configuration);
     // Count of config which present in both places vs count of database
     // configuration.
     // Active configuration have matches with Staged configuration.
-    $percentage = round(count($diff) / count($source_data) * 100, 2);
+    $percentage = round(count($diff) / count($active_configuration) * 100, 2);
     return $percentage;
   }
 

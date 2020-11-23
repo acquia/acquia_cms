@@ -15,9 +15,9 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Returns responses for ACMS config sync route.
+ * Returns responses for Acquia CMS config sync route.
  */
-class AcmsConfigDiff implements ContainerInjectionInterface {
+class AcquiaCmsConfigDiff implements ContainerInjectionInterface {
 
   use StringTranslationTrait;
 
@@ -99,12 +99,7 @@ class AcmsConfigDiff implements ContainerInjectionInterface {
    *   Table showing a two-way diff between the active and staged configuration.
    */
   public function diff($name, $type, $storage, $source_name, $target_name = NULL) {
-    if ($type == 'profile') {
-      $path = '../config/' . $storage;
-    }
-    else {
-      $path = '../modules/' . $name . '/config/' . $storage;
-    }
+    $path = ($type === 'profile') ? '../config/' . $storage : '../modules/' . $name . '/config/' . $storage;
 
     $file = new FileStorage($path);
     $sync_storage = $this->importTransformer->transform($file);
@@ -169,7 +164,7 @@ class AcmsConfigDiff implements ContainerInjectionInterface {
           'dialog-cancel',
         ],
       ],
-      '#title' => "Back to 'Synchronize configuration' page.",
+      '#title' => "Back to configuration inspector",
       '#url' => Url::fromRoute('acquia_cms_support.config_sync'),
     ];
 
