@@ -70,7 +70,9 @@ exit
 ```
 
 ### Running tests
-Acquia CMS's tests are written using the PHPUnit-based framework provided by Drupal core. To run tests, we have provided a shell script that automatically executes all code validation and tests in a single command.
+
+#### PHPUnit
+Most of Acquia CMS's tests are written using the PHPUnit-based framework provided by Drupal core. To run tests, we have provided a shell script that automatically executes all code validation and tests in a single command.
 
 From the repository root, simply run:
 
@@ -113,6 +115,66 @@ To run a particular test:
 cd docroot
 ../vendor/bin/phpunit -c core --debug profiles/acquia_cms/modules/acquia_cms_page/tests/src/Functional/PageTest.php
 ```
+
+#### Visual Regression Tests - Backstop.js
+
+Acquia CMS utilizes [Backstop.js](https://github.com/garris/BackstopJS) as its visual regression tool. Backstop is installed via npm in the root of the ACMS project directory.
+
+##### Installing Dependencies
+
+To install Backstop and its dependencies, you must use npm.
+
+```
+npm install
+```
+
+##### Running Existing Tests
+
+To run Backstop tests on Acquia CMS, run the following command:
+
+```
+npm run backstop-starter
+```
+
+##### Adding New Test Cases / Scenarios
+
+All of the Backstop tests are configured in tests/backstop/backstop.js. The reference images are stored in tests/backstop/bitmaps_reference.
+
+If new development has been performed, then Backstop must be updated to capture these new cases.
+
+To add a new test "case" edit the scenarios section of the backstop.js file to add one or more additional URLs to the array. Then, generate new reference images:
+
+```
+./node_modules/.bin/backstop reference --config=tests/backstop/backstop.json
+```
+
+This will generate the new images. They must then be approved with the following command.
+
+```
+./node_modules/.bin/backstop approve --config=tests/backstop/backstop.json
+```
+
+Make sure to commit changes to the backstop.js and reference images!
+
+##### Updating Existing Test Cases / Scenarios
+
+If development / content creation is done that causes a test to start failing (meaning the visual look of a page has changed) the reference screen shots must be updated.
+
+```
+./node_modules/.bin/backstop reference --config=tests/backstop/backstop.json
+```
+
+This will generate the new images. They must then be approved with the following command.
+
+```
+./node_modules/.bin/backstop approve --config=tests/backstop/backstop.json
+```
+
+Make sure to commit changes to the backstop.js and reference images!
+
+##### Backstop Limitations
+
+Note there is an outstanding issue with Backstop related to background images and desktop resolutions - https://github.com/garris/BackstopJS/issues/820
 
 ### Coding standards
 Compliance with Acquia's coding standards is automatically checked on commit; however, only changed files are analyzed. Our CI process does a thorough scan of the entire code base, and will fail if any problems are found. If you want to check coding standards compliance across the entire code base before submitting a pull request, run `vendor/bin/grumphp run`.
