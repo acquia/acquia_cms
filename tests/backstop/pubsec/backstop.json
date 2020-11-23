@@ -40,7 +40,7 @@
       "requireSameDimensions": true
     },
     {
-      "label": "ACMS Articles (Starter)",
+      "label": "ACMS Articles (Pubsec)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
       "url": "http://127.0.0.1:8080/articles",
       "referenceUrl": "",
@@ -59,7 +59,7 @@
       "requireSameDimensions": true
     },
     {
-      "label": "ACMS Events (Starter)",
+      "label": "ACMS Events (Pubsec)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
       "url": "http://127.0.0.1:8080/events",
       "referenceUrl": "",
@@ -78,7 +78,7 @@
       "requireSameDimensions": true
     },
     {
-      "label": "ACMS People (Starter)",
+      "label": "ACMS People (Pubsec)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
       "url": "http://127.0.0.1:8080/people",
       "referenceUrl": "",
@@ -97,7 +97,7 @@
       "requireSameDimensions": true
     },
     {
-      "label": "ACMS Places (Starter)",
+      "label": "ACMS Places (Pubsec)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
       "url": "http://127.0.0.1:8080/places",
       "referenceUrl": "",
@@ -116,9 +116,9 @@
       "requireSameDimensions": true
     },
     {
-      "label": "ACMS Person (Starter)",
+      "label": "ACMS Contact Us (Pubsec)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://127.0.0.1:8080/person/professor/person-1",
+      "url": "http://127.0.0.1:8080/contact-us",
       "referenceUrl": "",
       "readyEvent": "",
       "readySelector": "",
@@ -135,9 +135,9 @@
       "requireSameDimensions": true
     },
     {
-      "label": "ACMS Place (Starter)",
+      "label": "ACMS Stie Studio Components (Pubsec)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://127.0.0.1:8080/place/museum/place-example-1",
+      "url": "http://127.0.0.1:8080/site-studio-components",
       "referenceUrl": "",
       "readyEvent": "",
       "readySelector": "",
@@ -154,9 +154,9 @@
       "requireSameDimensions": true
     },
     {
-      "label": "ACMS Event (Starter)",
+      "label": "ACMS Article (Pubsec)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://127.0.0.1:8080/event/conference/2021/02/conference-event-1",
+      "url": "http://127.0.0.1:8080/article/news/and-away",
       "referenceUrl": "",
       "readyEvent": "",
       "readySelector": "",
@@ -173,9 +173,66 @@
       "requireSameDimensions": true
     },
     {
-      "label": "ACMS Article (Starter)",
+      "label": "ACMS Place (Pubsec)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://127.0.0.1:8080/article/book/article-1",
+      "url": "http://127.0.0.1:8080/place/government-office/acquiaville-city-council",
+      "referenceUrl": "",
+      "readyEvent": "",
+      "readySelector": "",
+      "delay": 0,
+      "hideSelectors": [],
+      "removeSelectors": [],
+      "hoverSelector": "",
+      "clickSelector": "",
+      "postInteractionWait": 0,
+      "selectors": [],
+      "selectorExpansion": true,
+      "expect": 0,
+      "misMatchThreshold": 0.1,
+      "requireSameDimensions": true
+    },
+    {
+      "label": "ACMS Event (Pubsec)",
+      "cookiePath": "backstop_data/engine_scripts/cookies.json",
+      "url": "http://127.0.0.1:8080/event/charity/2020/12/parks-fitness-yoga-class-local-fitness-expert",
+      "referenceUrl": "",
+      "readyEvent": "",
+      "readySelector": "",
+      "delay": 0,
+      "hideSelectors": [],
+      "removeSelectors": [],
+      "hoverSelector": "",
+      "clickSelector": "",
+      "postInteractionWait": 0,
+      "selectors": [],
+      "selectorExpansion": true,
+      "expect": 0,
+      "misMatchThreshold": 0.1,
+      "requireSameDimensions": true
+    },
+    {
+      "label": "ACMS Search (Pubsec)",
+      "cookiePath": "backstop_data/engine_scripts/cookies.json",
+      "url": "http://127.0.0.1:8080/search",
+      "referenceUrl": "",
+      "readyEvent": "",
+      "readySelector": "",
+      "delay": 0,
+      "hideSelectors": [],
+      "removeSelectors": [],
+      "hoverSelector": "",
+      "clickSelector": "",
+      "postInteractionWait": 0,
+      "selectors": [],
+      "selectorExpansion": true,
+      "expect": 0,
+      "misMatchThreshold": 0.1,
+      "requireSameDimensions": true
+    },
+    {
+      "label": "ACMS Person (Pubsec)",
+      "cookiePath": "backstop_data/engine_scripts/cookies.json",
+      "url": "http://127.0.0.1:8080/person/city-council-member/rachel-wilson",
       "referenceUrl": "",
       "readyEvent": "",
       "readySelector": "",
@@ -193,11 +250,11 @@
     }
   ],
   "paths": {
-    "bitmaps_reference": "tests/backstop/bitmaps_reference",
-    "bitmaps_test": "tests/backstop/bitmaps_test",
-    "engine_scripts": "tests/backstop/engine_scripts",
-    "html_report": "tests/backstop/html_report",
-    "ci_report": "tests/backstop/ci_report"
+    "bitmaps_reference": "tests/backstop/pubsec/bitmaps_reference",
+    "bitmaps_test": "tests/backstop/pubsec/bitmaps_test",
+    "engine_scripts": "tests/backstop/pubsec/engine_scripts",
+    "html_report": "tests/backstop/pubsec/html_report",
+    "ci_report": "tests/backstop/pubsec/ci_report"
   },
   "report": ["browser"],
   "engine": "puppeteer",

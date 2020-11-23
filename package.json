@@ -14,7 +14,8 @@
     "install-tools": "npm ci",
     "uninstall-tools": "rm -r node_modules;",
     "pa11y-starter": "pa11y-ci --config tests/.pa11yci.js",
-    "backstop-starter": "backstop test --config=tests/backstop/backstop.json"
+    "backstop-starter": "backstop test --config=tests/backstop/starter/backstop.json",
+    "backstop-pubsec": "backstop test --config=tests/backstop/pubsec/backstop.json"
   },
   "dependencies": {
     "backstopjs": "^5.0.6",

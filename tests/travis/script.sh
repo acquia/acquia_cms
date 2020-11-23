@@ -33,3 +33,14 @@ if [ "$TRAVIS_JOB_NAME" == "Starter" ]; then
   # Runs Pa11y.js
   # npm run pa11y-starter
 fi
+
+if [ "$TRAVIS_JOB_NAME" == "PubSec Demo" ]; then
+  # Install npm dependencies and run JS test suites.
+  cd $TRAVIS_BUILD_DIR
+  npm install
+  orca fixture:run-server &
+  # Runs Backstop.js
+   npm run backstop-pubsec
+  # Runs Pa11y.js
+  # npm run pa11y-starter
+fi
