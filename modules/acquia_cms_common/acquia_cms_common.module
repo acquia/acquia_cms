@@ -71,3 +71,31 @@ function acquia_cms_common_views_data() {
     ],
   ];
 }
+
+/**
+ * Implements hook_theme().
+ */
+function acquia_cms_common_theme($existing, $type, $theme, $path) {
+  return [
+    'page__system__403' => [
+      'template' => 'page--system--403',
+      'path' => $path . '/templates',
+      'variables' => [
+        'headline' => t('Access denied!'),
+        'message' => t('You are not authorized to access this page.'),
+        'button_home' => t('Back to home'),
+        'button_search' => NULL,
+      ],
+    ],
+    'page__system__404' => [
+      'template' => 'page--system--404',
+      'path' => $path . '/templates',
+      'variables' => [
+        'headline' => t('Whoops!'),
+        'message' => t("We can't find the page you are looking for. You may find what you need on the home page:"),
+        'button_home' => t('Back to home'),
+        'button_search' => NULL,
+      ],
+    ],
+  ];
+}
