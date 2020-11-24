@@ -3,7 +3,7 @@
  * Pa11y config.
  */
 
-const baseURL = 'http://127.0.0.1:8080';
+const baseURL = 'http://9a203c23-1b8c-4126-8956-de713daba0a6.web.ahdev.cloud/home?share=2e61964f-715c-4349-8cc8-f618c669aa6a';
 
 // Add urls for a11y testing here.
 const urls = [
@@ -17,7 +17,8 @@ module.exports = {
     ignore: ['notice', 'warning'],
     chromeLaunchConfig: {
       args: ['--no-sandbox']
-    }
+    },
+    hideElements: ['button.mobile-menu-button']
   },
-  urls: urls.map(url => `${baseURL}${url}`)
+  urls: urls.map(url => `${baseURL}`)
 };
