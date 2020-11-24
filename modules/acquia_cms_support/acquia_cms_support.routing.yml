@@ -1,0 +1,15 @@
+acquia_cms_support.config_sync:
+  path: '/admin/config/development/acquia_cms_configuration_inspector'
+  defaults:
+    _controller: '\Drupal\acquia_cms_support\Controller\AcquiaCmsConfigSync::build'
+    _title: 'Acquia CMS - Configuration Inspector'
+  requirements:
+    _permission: 'administer site configuration'
+
+acquia_cms_support.config_diff:
+  path: '/admin/config/development/acquia_cms_configuration_inspector/sync/diff/{name}/{type}/{storage}/{source_name}/{target_name}'
+  defaults:
+    _controller: '\Drupal\acquia_cms_support\Controller\AcquiaCmsConfigDiff::diff'
+    target_name: NULL
+  requirements:
+    _permission: 'administer site configuration'
