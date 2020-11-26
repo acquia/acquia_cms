@@ -1,0 +1,6 @@
+services:
+  acquia_cms_request_subscriber:
+    class: '\Drupal\acquia_cms\EventSubscriber\HttpsRedirectSubscriber'
+    arguments: ['@config.factory', '@cache.config']
+    tags:
+      - { name: 'event_subscriber' }
