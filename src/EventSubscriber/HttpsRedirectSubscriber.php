@@ -48,10 +48,7 @@ class HttpsRedirectSubscriber implements EventSubscriberInterface {
    */
   public function onRequest(RequestEvent $event) {
     // Get the config value from cache if available.
-    $https_status = $this->cache->get('acquia_cms.settings')->data;
-    if (!$https_status['acquia_cms_https']) {
-      $https_status = $this->config->get('acquia_cms.settings')->get('acquia_cms_https');
-    }
+    $https_status = $this->config->get('acquia_cms.settings')->get('acquia_cms_https');
     if ($https_status) {
       $request = $event->getRequest();
       // Do not redirect from HTTPS requests.
