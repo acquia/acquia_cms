@@ -1,0 +1,7 @@
+acquia_cms.https_config_form:
+  path: '/admin/config/system/https'
+  defaults:
+    _form: '\Drupal\acquia_cms\Form\HttpsRedirectForm'
+    _title: 'Https Configuration form'
+  requirements:
+    _permission: 'administer site configuration'
