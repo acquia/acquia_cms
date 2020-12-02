@@ -196,6 +196,11 @@ Then, install Acquia CMS as detailed in the "Installing Acquia CMS" section abov
 
 Once you've installed Acquia CMS, how you serve it is up to you. For local development, the most convenient option is PHP's built-in web server: `drush runserver 8080`.
 
+### Updating Acquia Claro theming
+* Update SCSS as per requirement in Acquia Claro theme.
+* Use `composer install:frontend` and `composer build:frontend` to compile SCSS into CSS.
+* Commit both CSS and SCSS files.
+
 ### Contributing
 Contributing to Acquia CMS requires the ability to push branches to the repository, since we do not use forks. If you need access, ask your manager or technical architect.
 
