@@ -194,9 +194,7 @@
             "ln -s -f $PWD/src $PROFILE_DIR",
             "ln -s -f $PWD/tests $PROFILE_DIR",
             "find ./docroot/modules -type d -name tests -prune -exec rm -r -f '{}' ';'",
-            "cp -f phpunit.xml ./docroot/core",
-            "composer install:frontend",
-            "composer build:frontend"
+            "cp -f phpunit.xml ./docroot/core"
         ],
         "cohesion:fixture": [
             "@putenv FILES_DIR=./docroot/sites/default/files",
