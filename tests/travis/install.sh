@@ -17,6 +17,8 @@ source ../../../orca/bin/travis/_includes.sh
 # Run ORCA's standard installation script.
 ../../../orca/bin/travis/install.sh
 
+printenv | grep ACMS_ | sort
+
 # If there is no fixture, there's nothing else for us to do.
 [[ -d "$ORCA_FIXTURE_DIR" ]] || exit 0
 
@@ -30,6 +32,15 @@ composer require --dev weitzman/drupal-test-traits
 if [ ! -z $COHESION_ARTIFACT ] && [ -f $COHESION_ARTIFACT ]; then
   tar -x -z -v -f $COHESION_ARTIFACT --directory docroot/sites/default/files
   drush config:import --yes --partial --source sites/default/files/cohesion/config
+fi
+
+if [[ "$ACMS_JOB" == "base" ]] && [[ "$ACMS_DB_ARTIFACT" && "$ACMS_FILES_ARTIFACT" ]] && [[ -f "$ACMS_DB_ARTIFACT" ]] && [[ -f "$ACMS_FILES_ARTIFACT" ]]; then
+    cd "$ORCA_FIXTURE_DIR"
+    echo "Installing From Artifacts"
+    tar -x -z -v -f $ACMS_FILES_ARTIFACT --directory docroot/sites/default/files
+    DB="$TRAVIS_BUiLD_DIR/tests/$ACMS_DB_ARTIFACT"
+    php docroot/core/scripts/db-tools.php import ${DB}
+    drush updatedb --yes
 fi
 
 # In order for PHPUnit tests belonging to profile modules to even be
@@ -46,18 +57,22 @@ find ../../../profiles/contrib/acquia_cms/modules -maxdepth 1 -mindepth 1 -type 
 git add .
 
 # Enable Starter or Pubsec Demo if Appropriate
-if [ "$TRAVIS_JOB_NAME" == "Starter" ]; then
-    echo "Installing Starter Kit"
-    drush en acquia_cms_development -y
-    drush pmu shield -y
-    drush en acquia_cms_starter -y
+if [[ "$ACMS_JOB" == "starter" ]] && [[ "$ACMS_STARTER_DB_ARTIFACT" && "$ACMS_STARTER_FILES_ARTIFACT" ]] && [[ -f "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ -f "$ACMS_STARTER_FILES_ARTIFACT" ]]; then
+    cd "$ORCA_FIXTURE_DIR"
+    echo "Installing Starter From Artifacts"
+    tar -x -z -v -f $ACMS_STARTER_FILES_ARTIFACT --directory docroot/sites/default/files
+    DB="$TRAVIS_BUILD_DIR/tests/$ACMS_STARTER_DB_ARTIFACT"
+    php docroot/core/scripts/db-tools.php import ${DB}
+    drush updatedb --yes
 fi
 
-if [ "$TRAVIS_JOB_NAME" == "PubSec Demo" ]; then
-    echo "Installing PubSec Demo"
-    drush en acquia_cms_development -y
-    drush pmu shield -y
-    drush en acquia_cms_demo_pubsec -y
+if [[ "$ACMS_JOB" == "pubsec" ]] && [[ "$ACMS_PUBSEC_DB_ARTIFACT" && "$ACMS_PUBSEC_FILES_ARTIFACT" ]] && [[ -f "$ACMS_PUBSEC_DB_ARTIFACT" ]] && [[ -f "$ACMS_PUBSEC_FILES_ARTIFACT" ]]; then
+    cd "$ORCA_FIXTURE_DIR"
+    echo "Installing PubSec Demo From Artifacts"
+    tar -x -z -v -f $ACMS_PUBSEC_FILES_ARTIFACT --directory docroot/sites/default/files
+    DB="$TRAVIS_BUILD_DIR/tests/$ACMS_PUBSEC_DB_ARTIFACT"
+    php docroot/core/scripts/db-tools.php import ${DB}
+    drush updatedb --yes
 fi
 
 # Set the fixture state to reset to between tests.
