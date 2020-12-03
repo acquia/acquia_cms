@@ -61,9 +61,9 @@ matrix:
     # @see https://github.com/acquia/orca/blob/master/docs/understanding-orca.md#continuous-integration
     - { name: "Static code analysis", env: ORCA_JOB=STATIC_CODE_ANALYSIS }
     - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_SUT }
-    - { name: "Isolated test w/ dev package versions", env: ACMS_JOB=base ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
-    - { name: "Starter", env: ACMS_JOB=starter ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
-    - { name: "PubSec Demo", env: ACMS_JOB=pubsec ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
+    - { name: "Isolated test w/ dev package versions", env: ACMS_JOB=base ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9.0.8 --dev --sut-only --no-sqlite --no-site-install"}
+    - { name: "Starter", env: ACMS_JOB=starter ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9.0.8 --dev --sut-only --no-sqlite --no-site-install"}
+    - { name: "PubSec Demo", env: ACMS_JOB=pubsec ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9.0.8 --dev --sut-only --no-sqlite --no-site-install"}
 
 # Install ORCA and prepare the environment.
 before_install:
