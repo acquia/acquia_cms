@@ -34,7 +34,7 @@ if [ ! -z $COHESION_ARTIFACT ] && [ -f $COHESION_ARTIFACT ]; then
   drush config:import --yes --partial --source sites/default/files/cohesion/config
 fi
 
-if [[ "$ACMS_JOB" == "base" ]]; then
+if [[ "$ACMS_JOB" == "base" ]] && [[ -n "$ACMS_DB_ARTIFACT" ]] && [[ -n "$ACMS_FILES_ARTIFACT" ]] && [[ -f "$ACMS_DB_ARTIFACT" ]] && [[ -f "$ACMS_FILES_ARTIFACT" ]]; then
     cd "$ORCA_FIXTURE_DIR"
     echo "Installing From Artifacts"
     tar -x -z -v -f $TRAVIS_BUiLD_DIR/tests/$ACMS_FILES_ARTIFACT --directory docroot/sites/default/files
