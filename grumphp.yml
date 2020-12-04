@@ -27,9 +27,11 @@ parameters:
       ignore_patterns:
         - .github
         - .gitlab
+        - .css
         - bower_components
         - node_modules
         - vendor
+        - css
       triggered_by:
         - php
         - module
@@ -38,7 +40,6 @@ parameters:
         - test
         - profile
         - theme
-        - css
         - info
         - txt
         - md
