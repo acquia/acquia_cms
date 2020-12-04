@@ -25,7 +25,7 @@ printenv | grep ACMS_ | sort
 cd $ORCA_FIXTURE_DIR
 
 # Install dev dependencies.
-composer require --dev weitzman/drupal-test-traits
+composer require --dev weitzman/drupal-test-traits  phpspec/prophecy-phpunit:^2
 
 # If there is a pre-built archive of code, assets, and templates for
 # Cohesion, import that instead of calling out to Cohesion's API.
@@ -57,7 +57,7 @@ find ../../../profiles/contrib/acquia_cms/modules -maxdepth 1 -mindepth 1 -type 
 git add .
 
 # Enable Starter or Pubsec Demo if Appropriate
-if [[ "$ACMS_JOB" == "starter" ]] && [[ "$ACMS_STARTER_DB_ARTIFACT" && "$ACMS_STARTER_FILES_ARTIFACT" ]] && [[ -f "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ -f "$ACMS_STARTER_FILES_ARTIFACT" ]]; then
+if [[ "$ACMS_JOB" == "starter" ]] && [[ -n "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ -n "$ACMS_STARTER_FILES_ARTIFACT" ]] && [[ -f "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ -f "$ACMS_STARTER_FILES_ARTIFACT" ]]; then
     cd "$ORCA_FIXTURE_DIR"
     echo "Installing Starter From Artifacts"
     tar -x -z -v -f $TRAVIS_BUiLD_DIR/tests/$ACMS_STARTER_FILES_ARTIFACT --directory docroot/sites/default/files
