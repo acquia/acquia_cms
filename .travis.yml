@@ -64,7 +64,7 @@ before_install:
   - composer self-update 1.10.7
   - mysql -u root < ./tests/travis/install.sql
   - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
-  - composer self-update --rollback
+  - composer self-update
   - ../orca/bin/travis/before_install.sh
 
 # Create the test fixture and place the SUT.
