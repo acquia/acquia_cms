@@ -14,10 +14,6 @@ cd "$(dirname "$0")"
 # Reuse ORCA's own includes.
 source ../../../orca/bin/travis/_includes.sh
 
-# ORCA can't see patches directory for local patches until after ACMS
-# has been required and installed. Manually copy it into ORCA's SUT directory
-cp -r ./patches $ORCA_FIXTURE_DIR/.
-
 # Run ORCA's standard installation script.
 ../../../orca/bin/travis/install.sh
 
