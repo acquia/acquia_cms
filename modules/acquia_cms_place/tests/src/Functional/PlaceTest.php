@@ -209,7 +209,7 @@ class PlaceTest extends ContentTypeTestBase {
           '@type' => 'Place',
           'name' => 'Living with video',
           'telephone' => '9829838487',
-          'description' => 'This is an awesome remix!',
+          'description' => '<p>This is an awesome remix!</p>',
           'address' => [
             '@type' => 'PostalAddress',
             'streetAddress' => '12, block b,',
