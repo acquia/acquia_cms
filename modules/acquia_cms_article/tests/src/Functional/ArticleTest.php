@@ -176,7 +176,7 @@ class ArticleTest extends ContentTypeTestBase {
           ],
           "author" => [
             "@type" => "Person",
-            "name" => "Example person",
+            "name" => '<a href="/person/example-person" hreflang="en">Example person</a>',
           ],
         ],
       ],
