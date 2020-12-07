@@ -34,7 +34,7 @@ if [ ! -z $COHESION_ARTIFACT ] && [ -f $COHESION_ARTIFACT ]; then
   drush config:import --yes --partial --source sites/default/files/cohesion/config
 fi
 
-if [[ "$ACMS_JOB" == "base" ]] && [[ -n "$ACMS_DB_ARTIFACT" ]] && [[ -n "$ACMS_FILES_ARTIFACT" ]] && [[ -f "$ACMS_DB_ARTIFACT" ]] && [[ -f "$ACMS_FILES_ARTIFACT" ]]; then
+if [[ "$ACMS_JOB" == "base" ]] && [[ -n "$ACMS_DB_ARTIFACT" ]] && [[ -n "$ACMS_FILES_ARTIFACT" ]]; then
     cd "$ORCA_FIXTURE_DIR"
     echo "Installing From Artifacts"
     tar -x -z -v -f $ACMS_FILES_ARTIFACT
@@ -62,7 +62,7 @@ if [[ "$ACMS_JOB" == "starter" ]] && [[ -n "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ 
     cd "$ORCA_FIXTURE_DIR"
     echo "Installing Starter From Artifacts"
     tar -x -z -v -f $ACMS_STARTER_FILES_ARTIFACT --directory docroot/sites/default/files
-    DB="$ACMS_STARTER_DB_ARTIFACT"
+    DB="$TRAVIS_BUILD_DIR/tests/$ACMS_STARTER_DB_ARTIFACT"
     php docroot/core/scripts/db-tools.php import ${DB}
     drush updatedb --yes
 fi
