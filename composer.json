@@ -91,7 +91,6 @@
             "file-mapping": {
                 "[project-root]/.gitattributes": false,
                 "[project-root]/.editorconfig": false,
-                "[project-root]/patches": "./patches",
                 "[web-root]/sites/default/default.settings.php": {
                     "append": "./patches/d9-acms-settings.patch"
                 },
@@ -156,7 +155,7 @@
                 "Core version needs removing from info file": "https://www.drupal.org/files/issues/2020-11-17/reroute_email-remove-core-version-3182079-5.patch"
             },
             "acquia/cohesion": {
-                "Fix for trailing space in yaml file": "./patches/cohesion-custom-styles-fix-new.patch"
+                "Fix for trailing space in yaml file": "./docroot/profiles/acquia_cms/patches/cohesion-custom-styles-fix-new.patch"
             }
         }
     },
@@ -196,6 +195,7 @@
             "ln -s -f $PWD/misc $PROFILE_DIR",
             "ln -s -f $PWD/modules $MODULES_DIR",
             "ln -s -f $PWD/modules $PROFILE_DIR",
+            "ln -s -f $PWD/patches $PROFILE_DIR",
             "ln -s -f $PWD/themes $PROFILE_DIR",
             "ln -s -f $PWD/src $PROFILE_DIR",
             "ln -s -f $PWD/tests $PROFILE_DIR",
