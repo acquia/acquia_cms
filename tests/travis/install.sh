@@ -38,8 +38,7 @@ if [[ "$ACMS_JOB" == "base" ]] && [[ -n "$ACMS_DB_ARTIFACT" ]] && [[ -n "$ACMS_F
     cd "$ORCA_FIXTURE_DIR"
     echo "Installing From Artifacts"
     tar -x -z -v -f $ACMS_FILES_ARTIFACT
-    cd "$ORCA_FIXTURE_DIR/docroot"
-    DB="$ACMS_DB_ARTIFACT"
+    DB="$TRAVIS_BUILD_DIR/tests/$ACMS_DB_ARTIFACT"
     php docroot/core/scripts/db-tools.php import ${DB}
     drush updatedb --yes
 fi
