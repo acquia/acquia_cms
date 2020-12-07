@@ -204,7 +204,7 @@ class EventTest extends ContentTypeTestBase {
         [
           '@type' => 'Event',
           'name' => 'Science fiction meetup',
-          'description' => 'A thrilling meetup',
+          'description' => '<p>A thrilling meetup</p>',
           'image' => [
             '@type' => 'ImageObject',
             'url' => $image_url,
@@ -214,7 +214,7 @@ class EventTest extends ContentTypeTestBase {
           'endDate' => $expected_date,
           'location' => [
             '@type' => 'Place',
-            'name' => 'A great place',
+            'name' => '<a href="/place/great-place" hreflang="en">A great place</a>',
           ],
         ],
       ],

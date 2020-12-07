@@ -85,7 +85,8 @@
                 "drupal/core"
             ],
             "locations": {
-                "web-root": "./docroot"
+                "web-root": "./docroot",
+                "project-root": "."
             },
             "file-mapping": {
                 "[project-root]/.gitattributes": false,
@@ -152,6 +153,9 @@
             },
             "drupal/reroute_email": {
                 "Core version needs removing from info file": "https://www.drupal.org/files/issues/2020-11-17/reroute_email-remove-core-version-3182079-5.patch"
+            },
+            "acquia/cohesion": {
+                "Fix for trailing space in yaml file": "https://gist.githubusercontent.com/msherron/ac1ef0b0c1c7183f2cc833cb3244d458/raw/216c686488b6c46cf7bc378b3b0191ddb227b769/gistfile1.txt"
             }
         }
     },
