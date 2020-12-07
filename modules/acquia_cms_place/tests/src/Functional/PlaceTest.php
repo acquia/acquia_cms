@@ -209,7 +209,6 @@ class PlaceTest extends ContentTypeTestBase {
           '@type' => 'Place',
           'name' => 'Living with video',
           'telephone' => '9829838487',
-          'description' => 'This is an awesome remix!',
           'address' => [
             '@type' => 'PostalAddress',
             'streetAddress' => '12, block b,',
@@ -218,6 +217,7 @@ class PlaceTest extends ContentTypeTestBase {
             'postalCode' => '94050',
             'addressCountry' => 'United States',
           ],
+          'description' => '<p>This is an awesome remix!</p>',
           'image' => [
             '@type' => 'ImageObject',
             'url' => $image_url,
