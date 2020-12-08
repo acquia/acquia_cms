@@ -37,8 +37,7 @@ fi
 if [[ "$ACMS_JOB" == "base" ]] && [[ -n "$ACMS_DB_ARTIFACT" ]] && [[ -n "$ACMS_FILES_ARTIFACT" ]] && [[ -f "$ACMS_DB_ARTIFACT" ]] && [[ -f "$ACMS_FILES_ARTIFACT" ]]; then
     echo "Installing From Artifacts"
     tar -xzvf $ACMS_FILES_ARTIFACT
-    DB="$ACMS_DB_ARTIFACT"
-    tar -xzv $db
+    tar -xzvf $ACMS_DB_ARTIFACT
     drush sql:cli < acms.sql
     drush updatedb --yes -vvv
 fi
