@@ -36,12 +36,11 @@ fi
 
 if [[ "$ACMS_JOB" == "base" ]] && [[ -n "$ACMS_DB_ARTIFACT" ]] && [[ -n "$ACMS_FILES_ARTIFACT" ]] && [[ -f "$ACMS_DB_ARTIFACT" ]] && [[ -f "$ACMS_FILES_ARTIFACT" ]]; then
     echo "Installing From Artifacts"
-    cd "$ORCA_FIXTURE_DIR/docroot"
+    tar -xzvf $ACMS_FILES_ARTIFACT
     DB="$ACMS_DB_ARTIFACT"
-    php core/scripts/db-tools.php import ${DB}
+    tar -xzvf $db
+    drush sql:cli < acms.sql
     drush updatedb --yes -vvv
-    cd $ORCA_FIXTURE_DIR
-    tar -x -z -v -f $ACMS_FILES_ARTIFACT
 fi
 
 # In order for PHPUnit tests belonging to profile modules to even be
