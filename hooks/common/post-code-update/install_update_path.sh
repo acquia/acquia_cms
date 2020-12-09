@@ -18,8 +18,10 @@ echo "$site"
 # enabled, else there will be a collision on site install.
 /usr/local/bin/drush9 @$site.$target_env cr
 if [ "$target_env" = "ode4" ]; then
+    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_development --yes
     /usr/local/bin/drush9 @$site.$target_env updatedb --no-interaction
 else
     /usr/local/bin/drush9 @$site.$target_env site-install acquia_cms --account-pass=admin --yes --account-mail=no-reply@acquia.com --site-mail=no-reply@acquia.com
+    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_development --yes
 fi
-/usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_development --yes
+
