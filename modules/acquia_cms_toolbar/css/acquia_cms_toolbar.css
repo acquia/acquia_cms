@@ -353,7 +353,7 @@
   background-image: none;
 }
 
-.acquia-cms-toolbar .toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded:after {
+.acquia-cms-toolbar .toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded > a:after {
   position: absolute;
   top: 50%;
   right: 5px;
@@ -367,7 +367,7 @@
   pointer-events: none;
 }
 
-.acquia-cms-toolbar .toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded:hover:after {
+.acquia-cms-toolbar .toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded > a:hover:after {
   -webkit-transform: translate(6px, -8px);
   transform: translate(6px, -8px);
   content: url(../images/0084d7/chevron-right.svg);
