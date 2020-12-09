@@ -9,11 +9,6 @@ drush --version
 
 site="$1"
 target_env="$2"
-echo $target_env
-echo $site
-echo "###########"
-echo "$target_env"
-echo "$site"
 
 # Fresh install of Acquia CMS. We need to clear cache first in case memcache is
 # enabled, else there will be a collision on site install.
