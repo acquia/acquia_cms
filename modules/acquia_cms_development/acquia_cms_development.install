@@ -47,6 +47,15 @@ function acquia_cms_development_install() {
 }
 
 /**
+ * Implements hook_update_N().
+ */
+function acquia_cms_development_update_8001() {
+  $config = \Drupal::service('config.factory')->getEditable('system.site');
+  $config->set('name', "Acquia CMS Development");
+  $config->save();
+}
+
+/**
  * Pre-configures the Acquia Connector for development use.
  *
  * @param string $key
