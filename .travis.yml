@@ -16,7 +16,7 @@ cache:
   directories:
     - "$HOME/.composer/cache"
     - "$HOME/.drush/cache"
-    - "{$TMPDIR:-/tmp}/phpstan/cache"
+    - "${TMPDIR:-/tmp}/phpstan/cache"
 
 env:
   # Change the following values for your implementation.
@@ -70,6 +70,7 @@ before_install:
   - composer self-update 1.10.7
   - mysql -u root < ./tests/travis/install.sql
   - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
+  - composer self-update
   - ../orca/bin/travis/before_install.sh
 
 # Create the test fixture and place the SUT.

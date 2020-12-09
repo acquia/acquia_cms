@@ -25,7 +25,7 @@ printenv | grep ACMS_ | sort
 cd $ORCA_FIXTURE_DIR
 
 # Install dev dependencies.
-composer require --dev weitzman/drupal-test-traits  phpspec/prophecy-phpunit:^2
+composer require --dev weitzman/drupal-test-traits phpspec/prophecy-phpunit:^2
 
 # If there is a pre-built archive of code, assets, and templates for
 # Cohesion, import that instead of calling out to Cohesion's API.

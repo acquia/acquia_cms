@@ -128,7 +128,7 @@ class PageTest extends ContentTypeTestBase {
         [
           '@type' => 'Article',
           'name' => 'Living with video',
-          'description' => 'This is an awesome remix!',
+          'description' => '<p>This is an awesome remix!</p>',
           'image' => [
             '@type' => 'ImageObject',
             'url' => $image_url,
