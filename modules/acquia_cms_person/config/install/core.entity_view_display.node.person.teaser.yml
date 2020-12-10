@@ -14,7 +14,7 @@ dependencies:
     - field.field.node.person.field_tags
     - node.type.person
   module:
-    - text
+    - smart_trim
     - user
 id: node.person.teaser
 targetEntityType: node
@@ -22,12 +22,23 @@ bundle: person
 mode: teaser
 content:
   body:
-    type: text_summary_or_trimmed
+    type: smart_trim
     weight: 3
     region: content
     label: hidden
     settings:
-      trim_length: 200
+      trim_length: 128
+      trim_type: chars
+      trim_suffix: ...
+      wrap_class: trimmed
+      more_text: More
+      more_class: more-link
+      summary_handler: trim
+      wrap_output: false
+      more_link: false
+      trim_options:
+        text: false
+        trim_zero: false
     third_party_settings: {  }
   content_moderation_control:
     weight: 4
