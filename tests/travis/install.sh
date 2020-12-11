@@ -42,6 +42,24 @@ if [[ "$ACMS_JOB" == "base" ]] && [[ -n "$ACMS_DB_ARTIFACT" ]] && [[ -n "$ACMS_F
     drush updatedb --yes -vvv
 fi
 
+# Enable Starter or Pubsec Demo if Appropriate
+if [[ "$ACMS_JOB" == "starter" ]] && [[ -n "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ -n "$ACMS_STARTER_FILES_ARTIFACT" ]] && [[ -f "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ -f "$ACMS_STARTER_FILES_ARTIFACT" ]]; then
+    echo "Installing Starter From Artifacts"
+    tar -xzf $ACMS_STARTER_FILES_ARTIFACT
+    gunzip $ACMS_STARTER_DB_ARTIFACT
+    drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms.sql
+    drush updatedb --yes -vvv
+fi
+
+if [[ "$ACMS_JOB" == "pubsec" ]] && [[ "$ACMS_PUBSEC_DB_ARTIFACT" && "$ACMS_PUBSEC_FILES_ARTIFACT" ]] && [[ -f "$ACMS_PUBSEC_DB_ARTIFACT" ]] && [[ -f "$ACMS_PUBSEC_FILES_ARTIFACT" ]]; then
+    cd "$ORCA_FIXTURE_DIR"
+    echo "Installing PubSec Demo From Artifacts"
+    tar -xzf $ACMS_PUBSEC_FILES_ARTIFACT
+    gunzip $ACMS_PUBSEC_DB_ARTIFACT
+    drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms.sql
+    drush updatedb --yes -vvv
+fi
+
 # In order for PHPUnit tests belonging to profile modules to even be
 # runnable, the profile's modules need to be symlinked into the
 # sites/all/modules directory. This is a long-standing limitation of
@@ -54,25 +72,6 @@ cd ./all/modules
 find ../../../profiles/contrib/acquia_cms/modules -maxdepth 1 -mindepth 1 -type d -exec ln -s -f '{}' ';'
 # Ensure the symlinks are included in the ORCA fixture snapshot.
 git add .
-
-# Enable Starter or Pubsec Demo if Appropriate
-if [[ "$ACMS_JOB" == "starter" ]] && [[ -n "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ -n "$ACMS_STARTER_FILES_ARTIFACT" ]] && [[ -f "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ -f "$ACMS_STARTER_FILES_ARTIFACT" ]]; then
-    cd "$ORCA_FIXTURE_DIR"
-    echo "Installing Starter From Artifacts"
-    tar -x -z -v -f $ACMS_STARTER_FILES_ARTIFACT --directory docroot/sites/default/files
-    DB="$ACMS_STARTER_DB_ARTIFACT"
-    php docroot/core/scripts/db-tools.php import ${DB}
-    drush updatedb --yes
-fi
-
-if [[ "$ACMS_JOB" == "pubsec" ]] && [[ "$ACMS_PUBSEC_DB_ARTIFACT" && "$ACMS_PUBSEC_FILES_ARTIFACT" ]] && [[ -f "$ACMS_PUBSEC_DB_ARTIFACT" ]] && [[ -f "$ACMS_PUBSEC_FILES_ARTIFACT" ]]; then
-    cd "$ORCA_FIXTURE_DIR"
-    echo "Installing PubSec Demo From Artifacts"
-    tar -x -z -v -f $ACMS_PUBSEC_FILES_ARTIFACT --directory docroot/sites/default/files
-    DB="$ACMS_PUBSEC_DB_ARTIFACT"
-    php docroot/core/scripts/db-tools.php import ${DB}
-    drush updatedb --yes
-fi
 
 # Set the fixture state to reset to between tests.
 orca fixture:backup --force
