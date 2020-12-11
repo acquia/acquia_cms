@@ -36,7 +36,7 @@ fi
 
 if [[ "$ACMS_JOB" == "base" ]] && [[ -n "$ACMS_DB_ARTIFACT" ]] && [[ -n "$ACMS_FILES_ARTIFACT" ]] && [[ -f "$ACMS_DB_ARTIFACT" ]] && [[ -f "$ACMS_FILES_ARTIFACT" ]]; then
     echo "Installing From Artifacts"
-    tar -xzvf $ACMS_FILES_ARTIFACT
+    tar -xzf $ACMS_FILES_ARTIFACT
     gunzip $ACMS_DB_ARTIFACT
     drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms.sql
     mkdir -p config/default
