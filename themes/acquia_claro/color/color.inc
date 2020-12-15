@@ -5,7 +5,7 @@
  * Lists available colors and color schemes for the Acquia Claro theme.
  */
 
-$info = [
+[
   // Available colors and color labels used in theme.
   'fields' => [
     'contentheader' => t('Header background'),
