@@ -36,9 +36,7 @@ fi
 
 # We need a symlink to the profile directory because BLT places the profile in a contrib directory under profiles.
 cd docroot/profiles
-mkdir ./acquia_cms
-cd ./acquia_cms
-find ../profiles/contrib/acquia_cms -type d -exec ln -s -f '{}' ';'
+ln -s -r contrib/acquia_cms
 # Ensure the symlinks are included in the ORCA fixture snapshot.
 git add .
 
@@ -77,7 +75,7 @@ fi
 cd docroot/sites
 mkdir -p ./all/modules
 cd ./all/modules
-find -H ../../../profiles/acquia_cms/modules -maxdepth 1 -mindepth 1 -type d -exec ln -s -f '{}' ';'
+find ../../../profiles/contrib/acquia_cms/modules -maxdepth 1 -mindepth 1 -type d -exec ln -s -f '{}' ';'
 # Ensure the symlinks are included in the ORCA fixture snapshot.
 git add .
 
