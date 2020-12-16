@@ -77,7 +77,7 @@ fi
 cd docroot/sites
 mkdir -p ./all/modules
 cd ./all/modules
-find ../../../profiles/contrib/acquia_cms/modules -maxdepth 1 -mindepth 1 -type d -exec ln -s -f '{}' ';'
+find ../../../profiles/acquia_cms/modules -maxdepth 1 -mindepth 1 -type d -exec ln -s -f '{}' ';'
 # Ensure the symlinks are included in the ORCA fixture snapshot.
 git add .
 
