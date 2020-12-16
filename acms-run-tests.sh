@@ -18,21 +18,21 @@ installchromedriver(){
     "linux-gnu"*)
       # Installs chromedriver for Linux 64 bit systems.
       [ -z "$CHROMEDRIVER_VERSION" ] && CHROMEDRIVER_VERSION=$(wget -q -O - http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
-      wget -N https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
+      curl https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip -o chromedriver_linux64.zip -s
       unzip chromedriver_linux64.zip
       chmod +x chromedriver
-      mv -f chromedriver /usr/local/bin
+      mv -f chromedriver ./vendor/bin
       rm chromedriver_linux64.zip
       ;;
     "darwin"*)
       # Install wget if not already installed.
-      brew install wget
+      #brew install wget
       # Installs chromedriver for MacOS 64 bit systems.
       [ -z "$CHROMEDRIVER_VERSION" ] && CHROMEDRIVER_VERSION=$(wget -q -O - http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
-      wget -N https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_mac64.zip
+      curl https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_mac64.zip -o chromedriver_mac64.zip -s
       unzip chromedriver_mac64.zip
       chmod +x chromedriver
-      mv -f chromedriver /usr/local/bin
+      mv -f chromedriver ./vendor/bin
       rm chromedriver_mac64.zip
       ;;
   esac
