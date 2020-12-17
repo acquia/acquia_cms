@@ -34,12 +34,6 @@ if [ ! -z $COHESION_ARTIFACT ] && [ -f $COHESION_ARTIFACT ]; then
   drush config:import --yes --partial --source sites/default/files/cohesion/config
 fi
 
-# We need a symlink to the profile directory because BLT places the profile in a contrib directory under profiles.
-cd docroot/profiles
-ln -s -r contrib/acquia_cms
-# Ensure the symlinks are included in the ORCA fixture snapshot.
-git add .
-
 if [[ "$ACMS_JOB" == "base" ]] && [[ -n "$ACMS_DB_ARTIFACT" ]] && [[ -n "$ACMS_FILES_ARTIFACT" ]] && [[ -f "$ACMS_DB_ARTIFACT" ]] && [[ -f "$ACMS_FILES_ARTIFACT" ]]; then
     echo "Installing From Artifacts"
     tar -xzf $ACMS_FILES_ARTIFACT
