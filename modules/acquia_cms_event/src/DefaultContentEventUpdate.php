@@ -16,16 +16,13 @@ class DefaultContentEventUpdate {
    *   Array contains event date and timing information.
    */
   public function getUpdatedDates(array $date_time) : array {
-    if (strtotime($date_time['start_date']) < strtotime('+30 days') ||
-      (!empty($date_time['end_date']) && strtotime($date_time['start_date']) > strtotime($date_time['end_date']))) {
+    // Check if events that are getting imported,
+    // have start date less than current date plus 2 days.
+    if (strtotime($date_time['start_date']) < strtotime('+2 days')) {
+      // Update new start date to current start date plus 30 days.
       $date_time['start_date'] = date('Y-m-d', strtotime('+30 days'));
-    }
-
-    if (!empty($date_time['end_date'])) {
-      if (strtotime($date_time['end_date']) < strtotime('+30 days') ||
-        strtotime($date_time['end_date']) < strtotime($date_time['start_date'])) {
-        $date_time['end_date'] = date('Y-m-d', strtotime('+31 days'));
-      }
+      // Update new end date to new start date plus 1 day.
+      $date_time['end_date'] = date('Y-m-d', strtotime($date_time['start_date'] . '+1 day'));
     }
     // Door time will always be same as start_date.
     $date_time['door_time'] = $date_time['start_date'];
