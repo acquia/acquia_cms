@@ -20,7 +20,7 @@ class DefaultContentEventUpdate {
     // have start date less than current date plus 2 days.
     if (strtotime($date_time['start_date']) < strtotime('+2 days')) {
       // Update new start date to current start date plus 30 days.
-      $date_time['start_date'] = date('Y-m-d', strtotime($date_time['start_date'] . '+30 days'));
+      $date_time['start_date'] = date('Y-m-d', strtotime('+30 days'));
       // Update new end date to new start date plus 1 day.
       $date_time['end_date'] = date('Y-m-d', strtotime($date_time['start_date'] . '+1 day'));
     }

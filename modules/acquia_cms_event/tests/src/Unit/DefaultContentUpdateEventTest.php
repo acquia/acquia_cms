@@ -40,9 +40,9 @@ class DefaultContentUpdateEventTest extends UnitTestCase {
       'door_time' => date('Y-m-d', strtotime('-15 days')),
     ];
     $updated_event = $this->updateEvent->getUpdatedDates($pastEvent);
-    $this->assertEquals(date('Y-m-d', strtotime($pastEvent['start_date'] . '+30 days')), $updated_event['start_date']);
-    $this->assertEquals(date('Y-m-d', strtotime($pastEvent['start_date'] . '+31 days')), $updated_event['end_date']);
-    $this->assertEquals(date('Y-m-d', strtotime($pastEvent['start_date'] . '+30 days')), $updated_event['door_time']);
+    $this->assertEquals(date('Y-m-d', strtotime("30 days")), $updated_event['start_date']);
+    $this->assertEquals(date('Y-m-d', strtotime($updated_event['start_date'] . '+1 day')), $updated_event['end_date']);
+    $this->assertEquals(date('Y-m-d', strtotime("30 days")), $updated_event['door_time']);
     // Asserting when event in past and door time greater than event end time.
     $pastEvent = [
       'start_date' => date('Y-m-d', strtotime('-15 days')),
@@ -50,9 +50,9 @@ class DefaultContentUpdateEventTest extends UnitTestCase {
       'door_time' => date('Y-m-d', strtotime('+15 days')),
     ];
     $updated_event = $this->updateEvent->getUpdatedDates($pastEvent);
-    $this->assertEquals(date('Y-m-d', strtotime($pastEvent['start_date'] . '+30 days')), $updated_event['start_date']);
-    $this->assertEquals(date('Y-m-d', strtotime($pastEvent['start_date'] . '+31 days')), $updated_event['end_date']);
-    $this->assertEquals(date('Y-m-d', strtotime($pastEvent['start_date'] . '+30 days')), $updated_event['door_time']);
+    $this->assertEquals(date('Y-m-d', strtotime("30 days")), $updated_event['start_date']);
+    $this->assertEquals(date('Y-m-d', strtotime($updated_event['start_date'] . '+1 day')), $updated_event['end_date']);
+    $this->assertEquals(date('Y-m-d', strtotime("30 days")), $updated_event['door_time']);
 
     // Asserting when event is in future.
     $pastEvent = [
