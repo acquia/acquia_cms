@@ -13,27 +13,32 @@ echo -e "${GREEN}Running on ${OSTYPE}${NOCOLOR}"
 # This script can be executed by running ./acms-run-tests.sh from project folder. It will execute all Acquia CMS tests and quality checks for you.
 
 # Install ChromeDriver based on OS.
-installchromedriver(){
-  case $OSTYPE in
-    "linux-gnu"*)
-      # Installs chromedriver for Linux 64 bit systems.
-      [ -z "$CHROMEDRIVER_VERSION" ] && CHROMEDRIVER_VERSION=$(curl -q -s http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
-      curl https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip -o chromedriver_linux64.zip -s
-      unzip chromedriver_linux64.zip
-      chmod +x chromedriver
-      mv -f chromedriver ./vendor/bin
-      rm chromedriver_linux64.zip
-      ;;
-    "darwin"*)
-      # Installs chromedriver for MacOS 64 bit systems.
-      [ -z "$CHROMEDRIVER_VERSION" ] && CHROMEDRIVER_VERSION=$(curl -q -s http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
-      curl https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_mac64.zip -o chromedriver_mac64.zip -s
-      unzip chromedriver_mac64.zip
-      chmod +x chromedriver
-      mv -f chromedriver ./vendor/bin
-      rm chromedriver_mac64.zip
-      ;;
-  esac
+installchromedriver() {
+  CHROMEDRIVER=./vendor/bin/chromedriver
+  if [ -f "$CHROMEDRIVER" ]; then
+    VERSION=$("${CHROMEDRIVER}" --version | awk '{ print $2 } ')
+  fi
+  CHROMEDRIVER_VERSION=$(curl -q -O - http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+
+  if [[ ${VERSION} == ${CHROMEDRIVER_VERSION} ]]; then
+    echo -e "${GREEN}ChromeDriver ${VERSION} available.${NOCOLOR}"
+  else
+    echo -e "${YELLOW}Installing ChromeDriver...${NOCOLOR}"
+    case $OSTYPE in
+      "linux-gnu"*)
+        # Installs chromedriver for Linux 64 bit systems.
+        curl https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip -o chromedriver_linux64.zip -s
+        ;;
+      "darwin"*)
+        # Installs chromedriver for MacOS 64 bit systems.
+        curl https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_mac64.zip -o chromedriver_mac64.zip -s
+        ;;
+    esac
+    unzip chromedriver_mac64.zip
+    chmod +x chromedriver
+    mv -f chromedriver ./vendor/bin
+    rm chromedriver_mac64.zip
+  fi
 }
 
 # Start PHP's built-in http server on port "${WEBSERVER_PORT}".
