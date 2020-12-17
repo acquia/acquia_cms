@@ -18,7 +18,7 @@ installchromedriver() {
   if [ -f "$CHROMEDRIVER" ]; then
     VERSION=$("${CHROMEDRIVER}" --version | awk '{ print $2 } ')
   fi
-  CHROMEDRIVER_VERSION=$(curl -q -O - http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+  CHROMEDRIVER_VERSION=$(curl -q -s http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
 
   if [[ ${VERSION} == ${CHROMEDRIVER_VERSION} ]]; then
     echo -e "${GREEN}ChromeDriver ${VERSION} available.${NOCOLOR}"
