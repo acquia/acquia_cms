@@ -39,7 +39,7 @@ if [[ "$ACMS_JOB" == "base" ]] && [[ -n "$ACMS_DB_ARTIFACT" ]] && [[ -n "$ACMS_F
     tar -xzf $ACMS_FILES_ARTIFACT
     gunzip $ACMS_DB_ARTIFACT
     drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms.sql
-    drush updatedb --yes -vvv
+    drush updatedb --cache-clear --yes -vvv
 fi
 
 # Enable Starter or Pubsec Demo if Appropriate
