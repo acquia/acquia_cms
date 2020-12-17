@@ -5,6 +5,7 @@ dependencies:
     - core.entity_view_mode.node.teaser
     - field.field.node.place.body
     - field.field.node.place.field_categories
+    - field.field.node.place.field_geofield
     - field.field.node.place.field_place_address
     - field.field.node.place.field_place_image
     - field.field.node.place.field_place_telephone
@@ -13,6 +14,7 @@ dependencies:
     - node.type.place
   module:
     - address
+    - smart_trim
     - user
 id: node.place.teaser
 targetEntityType: node
@@ -20,12 +22,23 @@ bundle: place
 mode: teaser
 content:
   body:
-    type: text_summary_or_trimmed
+    type: smart_trim
     weight: 0
     region: content
     label: hidden
     settings:
-      trim_length: 600
+      trim_length: 128
+      trim_type: chars
+      trim_suffix: ..
+      wrap_class: trimmed
+      more_text: More
+      more_class: more-link
+      summary_handler: trim
+      wrap_output: false
+      more_link: false
+      trim_options:
+        text: false
+        trim_zero: false
     third_party_settings: {  }
   field_place_address:
     type: address_default
