@@ -48,7 +48,7 @@ if [[ "$ACMS_JOB" == "starter" ]] && [[ -n "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ 
     tar -xzf $ACMS_STARTER_FILES_ARTIFACT
     gunzip $ACMS_STARTER_DB_ARTIFACT
     drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms-starter.sql
-    drush updatedb --yes -vvv
+    drush updatedb --cache-clear --yes -vvv
 fi
 
 if [[ "$ACMS_JOB" == "pubsec" ]] && [[ "$ACMS_PUBSEC_DB_ARTIFACT" && "$ACMS_PUBSEC_FILES_ARTIFACT" ]] && [[ -f "$ACMS_PUBSEC_DB_ARTIFACT" ]] && [[ -f "$ACMS_PUBSEC_FILES_ARTIFACT" ]]; then
