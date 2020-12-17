@@ -62,7 +62,7 @@ function _acquia_connector_config(string $key, string $identifier) {
   $storage->setKey($key);
   $storage->setIdentifier($identifier);
 
-  // @todo: This code was copied verbatim from the Acquia Connector module, but
+  // @todo This code was copied verbatim from the Acquia Connector module, but
   // it's not at all clear why it uses this face-melter of a cache clear. (My
   // guess is that the original authors were flailing.) Replace this with a more
   // precise and lightweight cache invalidation or similar ASAP.
@@ -93,7 +93,7 @@ function _acquia_search_solr_config(string $key, string $identifier) {
   $storage->setApiKey($key);
   $storage->setIdentifier($identifier);
 
-  // @todo: This code was copied verbatim from the Acquia Search Solr module,
+  // @todo This code was copied verbatim from the Acquia Search Solr module,
   // but it's not at all clear why it uses this face-melter of a cache clear.
   // (My guess is that the original authors were flailing.) Replace this with a
   // more precise and lightweight cache invalidation or similar ASAP.

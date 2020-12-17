@@ -12,6 +12,35 @@ echo -e "${GREEN}Running on ${OSTYPE}${NOCOLOR}"
 
 # This script can be executed by running ./acms-run-tests.sh from project folder. It will execute all Acquia CMS tests and quality checks for you.
 
+# Install ChromeDriver based on OS.
+installchromedriver() {
+  CHROMEDRIVER=./vendor/bin/chromedriver
+  if [ -f "$CHROMEDRIVER" ]; then
+    VERSION=$("${CHROMEDRIVER}" --version | awk '{ print $2 } ')
+  fi
+  CHROMEDRIVER_VERSION=$(curl -q -s http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+
+  if [[ ${VERSION} == ${CHROMEDRIVER_VERSION} ]]; then
+    echo -e "${GREEN}ChromeDriver ${VERSION} available.${NOCOLOR}"
+  else
+    echo -e "${YELLOW}Installing ChromeDriver...${NOCOLOR}"
+    case $OSTYPE in
+      "linux-gnu"*)
+        # Installs chromedriver for Linux 64 bit systems.
+        curl https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip -o chromedriver_linux64.zip -s
+        ;;
+      "darwin"*)
+        # Installs chromedriver for MacOS 64 bit systems.
+        curl https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_mac64.zip -o chromedriver_mac64.zip -s
+        ;;
+    esac
+    unzip chromedriver_mac64.zip
+    chmod +x chromedriver
+    mv -f chromedriver ./vendor/bin
+    rm chromedriver_mac64.zip
+  fi
+}
+
 # Start PHP's built-in http server on port "${WEBSERVER_PORT}".
 runwebserver() {
   echo -e "${YELLOW}Starting PHP's built-in http server on "${WEBSERVER_PORT}".${NOCOLOR}"
@@ -84,6 +113,7 @@ case $OSTYPE in
       for port in ${array[@]}; do echo $((0x$port)); done | grep "${CHROMEDRIVER_PORT}" ; then
         echo -e "${RED}Port "${CHROMEDRIVER_PORT}" is already occupied. ChromeDriver cannot run on port "${CHROMEDRIVER_PORT}". ${NOCOLOR}"
       else
+        installchromedriver
         runchromedriver
     fi
       ;;
@@ -94,6 +124,7 @@ case $OSTYPE in
         echo -e "${RED}Port "${WEBSERVER_PORT}" is already occupied. Web server cannot start on port "${WEBSERVER_PORT}". ${NOCOLOR}"
       fi
       if [ -z "$(lsof -t -i:"${CHROMEDRIVER_PORT}")" ] ; then
+        installchromedriver
         runchromedriver
       else
         echo -e "${RED}Port "${CHROMEDRIVER_PORT}" is already occupied. ChromeDriver cannot run on port "${CHROMEDRIVER_PORT}". ${NOCOLOR}"

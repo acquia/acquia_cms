@@ -87,7 +87,7 @@ final class RedirectHandler implements ContainerInjectionInterface {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    */
-  private function handleRedirect(FormStateInterface $form_state) {
+  protected function handleRedirect(FormStateInterface $form_state) {
     // This is set by the user login form.
     // @see \Drupal\user\Form\UserLoginForm::validateAuthentication()
     $user = $this->userStorage->load($form_state->get('uid'));
