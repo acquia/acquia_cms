@@ -42,7 +42,7 @@
         "drupal/moderation_dashboard": "^1.0@beta",
         "drupal/moderation_sidebar": "^1.4",
         "drupal/mysql56": "^1.0",
-        "drupal/password_policy": "^3.0-beta1",
+        "drupal/password_policy": "3.0-beta1",
         "drupal/pathauto": "^1",
         "drupal/recaptcha": "^3",
         "drupal/redirect": "^1",
@@ -159,6 +159,9 @@
             },
             "acquia/cohesion": {
                 "Fix for trailing space in yaml file": "https://gist.githubusercontent.com/msherron/ac1ef0b0c1c7183f2cc833cb3244d458/raw/216c686488b6c46cf7bc378b3b0191ddb227b769/gistfile1.txt"
+            },
+            "drupal/password_policy": {
+                "Register account anonymously, does not validate constraint 'password_username'.": "https://www.drupal.org/files/issues/2020-09-24/password-username-validate--3161012-4.patch"
             }
         }
     },
