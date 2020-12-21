@@ -135,7 +135,7 @@ esac
 # Compile scss and run css analysis tests.
 echo -e "${GREEN} analysing css ${NOCOLOR}"
 # Run front end gulp task test.
-cd docroot/themes/acquia_claro && npm run test && cd -
+cd themes/acquia_claro && npm run test && cd -
 
 # Run code quality checks.
 vendor/bin/grumphp run
