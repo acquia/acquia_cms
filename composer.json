@@ -4,8 +4,8 @@
     "description": "An implementation of Drupal 9 for running custom, low code websites on the Acquia platform.",
     "license": "GPL-2.0-or-later",
     "require": {
-        "acquia/cohesion": "^6.3",
-        "acquia/cohesion-theme": "^6.3",
+        "acquia/cohesion": "6.4",
+        "acquia/cohesion-theme": "6.4",
         "acquia/drupal-environment-detector": "^1",
         "acquia/memcache-settings": "^1",
         "cweagans/composer-patches": "^1.7",
@@ -158,7 +158,8 @@
                 "Core version needs removing from info file": "https://www.drupal.org/files/issues/2020-11-17/reroute_email-remove-core-version-3182079-5.patch"
             },
             "acquia/cohesion": {
-                "Fix for trailing space in yaml file": "https://gist.githubusercontent.com/msherron/ac1ef0b0c1c7183f2cc833cb3244d458/raw/216c686488b6c46cf7bc378b3b0191ddb227b769/gistfile1.txt"
+                "Fix for trailing space in yaml file": "https://gist.githubusercontent.com/msherron/ac1ef0b0c1c7183f2cc833cb3244d458/raw/216c686488b6c46cf7bc378b3b0191ddb227b769/gistfile1.txt",
+                "ACO-704 - Saving a translated node results in stream wrapper logic exception": "https://gist.githubusercontent.com/kdruckman/41b56d7ccff271d2aec59d980f0cfbd9/raw/41f4a59ebf1ec4f884cfb98472e9b8506f100a6e/cohesion-pull-263.patch"
             },
             "drupal/password_policy": {
                 "Register account anonymously, does not validate constraint 'password_username'.": "https://www.drupal.org/files/issues/2020-09-24/password-username-validate--3161012-4.patch"
