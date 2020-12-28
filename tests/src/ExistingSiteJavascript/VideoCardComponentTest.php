@@ -51,7 +51,7 @@ class VideoCardComponentTest extends CohesionComponentTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('General components', 'Card - Video');
+    $this->editDefinition('Card components', 'Card - Video');
   }
 
 }

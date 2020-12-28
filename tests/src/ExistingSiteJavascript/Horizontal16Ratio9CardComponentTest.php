@@ -53,7 +53,7 @@ class Horizontal16Ratio9CardComponentTest extends CohesionComponentTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('General components', 'Card - Horizontal (16:9)');
+    $this->editDefinition('Card components', 'Card - Horizontal (16:9)');
   }
 
 }
