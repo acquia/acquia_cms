@@ -57,7 +57,7 @@
         "drupal/simple_sitemap": "^3",
         "drupal/smart_trim": "^1.3",
         "drupal/social_media_links": "^2.7",
-        "drupal/username_enumeration_prevention": "1.x-dev@dev",
+        "drupal/username_enumeration_prevention": "1.1",
         "drupal/webform": "^6.0",
         "drupal/workbench_email": "^1.7",
         "ergebnis/composer-normalize": "^2.9",
@@ -163,6 +163,9 @@
             },
             "drupal/password_policy": {
                 "Register account anonymously, does not validate constraint 'password_username'.": "https://www.drupal.org/files/issues/2020-09-24/password-username-validate--3161012-4.patch"
+            },
+            "drupal/username_enumeration_prevention": {
+                "Deprecated function User::getUsername": "https://www.drupal.org/files/issues/2020-09-01/fix-deprecated-getusername-3167106-2.patch"
             }
         }
     },
