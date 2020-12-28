@@ -63,7 +63,7 @@ class DrupalBlockComponentTest extends CohesionComponentTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('General components', 'Drupal Blocks');
+    $this->editDefinition('Basic components', 'Drupal Blocks');
   }
 
 }

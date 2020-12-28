@@ -52,7 +52,7 @@ class ButtonComponentTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('General components', 'Button');
+    $this->editDefinition('Basic components', 'Button');
   }
 
 }
