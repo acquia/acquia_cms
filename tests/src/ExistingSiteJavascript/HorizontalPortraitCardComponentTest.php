@@ -52,7 +52,7 @@ class HorizontalPortraitCardComponentTest extends CohesionComponentTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('General components', 'Card - Horizontal (Portrait)');
+    $this->editDefinition('Card components', 'Card - Horizontal (Portrait)');
   }
 
 }

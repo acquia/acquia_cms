@@ -42,7 +42,7 @@ class EntityReferenceCardComponentTest extends CohesionComponentTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('General components', 'Card - Entity Reference');
+    $this->editDefinition('Card components', 'Card - Entity Reference');
   }
 
 }
