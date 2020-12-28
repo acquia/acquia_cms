@@ -42,9 +42,9 @@ class AccordionComponentTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('Interactive components', 'Accordion container');
+    $this->editDefinition('Accordion Components', 'Accordion container');
     $this->getSession()->back();
-    $this->editDefinition('Interactive components', 'Accordion item');
+    $this->editDefinition('Accordion Components', 'Accordion item');
   }
 
 }
