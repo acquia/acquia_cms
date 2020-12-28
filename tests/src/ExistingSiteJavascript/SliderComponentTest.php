@@ -42,9 +42,9 @@ class SliderComponentTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('Interactive components', 'Slide container');
+    $this->editDefinition('Slider components', 'Slide container');
     $this->getSession()->back();
-    $this->editDefinition('Interactive components', 'Slide item');
+    $this->editDefinition('Slider components', 'Slide item');
   }
 
 }
