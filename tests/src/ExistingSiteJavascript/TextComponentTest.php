@@ -39,7 +39,7 @@ class TextComponentTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('General components', 'Text');
+    $this->editDefinition('Basic components', 'Text');
   }
 
 }
