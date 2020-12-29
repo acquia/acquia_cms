@@ -1,0 +1,67 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_results
+    - field.field.node.place.body
+    - field.field.node.place.field_categories
+    - field.field.node.place.field_geofield
+    - field.field.node.place.field_place_address
+    - field.field.node.place.field_place_image
+    - field.field.node.place.field_place_telephone
+    - field.field.node.place.field_place_type
+    - field.field.node.place.field_tags
+    - node.type.place
+  module:
+    - address
+    - smart_trim
+    - user
+id: node.place.search_results
+targetEntityType: node
+bundle: place
+mode: search_results
+content:
+  body:
+    type: smart_trim
+    weight: 0
+    region: content
+    label: hidden
+    settings:
+      trim_length: 128
+      trim_type: chars
+      trim_suffix: ...
+      wrap_class: trimmed
+      more_text: More
+      more_class: more-link
+      summary_handler: trim
+      wrap_output: false
+      more_link: false
+      trim_options:
+        text: false
+        trim_zero: false
+    third_party_settings: {  }
+  field_place_address:
+    type: address_default
+    weight: 1
+    region: content
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+  field_place_telephone:
+    type: string
+    weight: 2
+    region: content
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+hidden:
+  content_moderation_control: true
+  field_categories: true
+  field_geofield: true
+  field_place_image: true
+  field_place_type: true
+  field_tags: true
+  langcode: true
+  links: true
+  search_api_excerpt: true
