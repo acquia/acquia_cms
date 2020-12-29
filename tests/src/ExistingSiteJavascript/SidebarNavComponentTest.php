@@ -40,7 +40,7 @@ class SidebarNavComponentTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('Template components', 'Template - Sidebar nav');
+    $this->editDefinition('Header and footer components', 'Template - Sidebar nav');
   }
 
 }
