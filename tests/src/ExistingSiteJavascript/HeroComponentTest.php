@@ -122,7 +122,7 @@ class HeroComponentTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('Hero components', 'Hero');
+    $this->editDefinition('Feature sections', 'Hero');
   }
 
 }
