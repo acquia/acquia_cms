@@ -52,7 +52,7 @@ class ContactInformationComponentTest extends CohesionComponentTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('General components', 'Contact information');
+    $this->editDefinition('Basic components', 'Contact information');
   }
 
 }

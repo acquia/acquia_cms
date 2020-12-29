@@ -438,23 +438,24 @@
           li.menu-item--expanded {
             position: relative;
             background-image: none;
-
-            &:after {
-              position: absolute;
-              top: 50%;
-              right: 5px;
-              color: #8eacc0;
-              font-size: 16px;
-              transform: translateY(-8px);
-              transition: all .2s;
-              content: url(../images/0084d7/chevron-right.svg);
-              pointer-events: none;
-            }
-
-            &:hover {
+           > a {
               &:after {
-                transform: translate(6px, -8px);
+                position: absolute;
+                top: 50%;
+                right: 5px;
+                color: #8eacc0;
+                font-size: 16px;
+                transform: translateY(-8px);
+                transition: all .2s;
                 content: url(../images/0084d7/chevron-right.svg);
+                pointer-events: none;
+              }
+              
+              &:hover {
+                &:after {
+                  transform: translate(6px, -8px);
+                  content: url(../images/0084d7/chevron-right.svg);
+                }
               }
             }
           }

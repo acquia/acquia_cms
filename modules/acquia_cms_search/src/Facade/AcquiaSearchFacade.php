@@ -113,7 +113,7 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
   /**
    * Configures the content index to use the Acquia Search server.
    */
-  private function switchIndexToSolrServer() : void {
+  protected function switchIndexToSolrServer() : void {
     /** @var \Drupal\search_api\IndexInterface $index */
     $index = $this->indexStorage->load('content');
     /** @var \Drupal\search_api\ServerInterface $server */

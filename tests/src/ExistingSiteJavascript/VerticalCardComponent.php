@@ -70,7 +70,7 @@ class VerticalCardComponent extends CohesionComponentTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('General components', 'Card - Vertical');
+    $this->editDefinition('Card components', 'Card - Vertical');
   }
 
 }

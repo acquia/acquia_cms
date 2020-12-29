@@ -43,9 +43,9 @@ class TabsComponentTest extends CohesionComponentTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('Interactive components', 'Tabs container - horizontal tabs');
+    $this->editDefinition('Tab components', 'Tabs container - horizontal tabs');
     $this->getSession()->back();
-    $this->editDefinition('Interactive components', 'Tab item');
+    $this->editDefinition('Tab components', 'Tab item');
   }
 
 }
