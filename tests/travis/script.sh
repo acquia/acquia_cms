@@ -23,8 +23,6 @@ if [ "$ACMS_JOB" = "base" ]; then
   cd $TRAVIS_BUILD_DIR
 
   [[ ! -d "$ORCA_FIXTURE_DIR" ]] || orca fixture:status
-  '/usr/bin/git' 'checkout' '--force' 'fresh-fixture'
-  '/usr/bin/git' 'clean' '--force' '-d'
   '/home/travis/build/acquia/orca-build/vendor/bin/phpunit' '--verbose' '--colors=always' '--debug' '--configuration=/home/travis/build/acquia/orca-build/docroot/core/phpunit.xml' '--exclude-group=orca_ignore,site_studio' '--testsuite=orca'
 fi
 
