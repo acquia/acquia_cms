@@ -20,6 +20,15 @@ if [ "$TRAVIS_JOB_NAME" != "Starter" ] && [ "$TRAVIS_JOB_NAME" != "PubSec Demo" 
 fi
 
 if [ "$ACMS_JOB" = "base" ]; then
+
+  # Copied from Orca's script.sh
+  cd "$(dirname "$0")" || exit; source _includes.sh
+  [[ ! -d "$ORCA_FIXTURE_DIR" ]] || orca fixture:status
+  # The Drupal installation profile is such a fundamental aspect of the fixture
+  # that it cannot be changed and other packages' tests still be expected to pass.
+  # Thus if the SUT changes it, only its own tests are run.
+  [[ "$ORCA_FIXTURE_PROFILE" = "orca" ]] || SUT_ONLY="--sut-only"
+
   '/usr/bin/git' 'checkout' '--force' 'fresh-fixture'
   '/usr/bin/git' 'clean' '--force' '-d'
   '/home/travis/build/acquia/orca-build/vendor/bin/phpunit' '--verbose' '--colors=always' '--debug' '--configuration=/home/travis/build/acquia/orca-build/docroot/core/phpunit.xml' '--exclude-group=orca_ignore,site_studio' '--testsuite=orca'
