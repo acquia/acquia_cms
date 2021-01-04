@@ -6,6 +6,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * Tests the "Slider container and Slider item" components.
  *
  * @group acquia_cms
+ * @group site_studio
  */
 class SliderComponentTest extends CohesionComponentTestBase {
 

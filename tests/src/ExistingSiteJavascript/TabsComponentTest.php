@@ -6,6 +6,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * Tests the "Tab container horizontal" and "Tab item" components.
  *
  * @group acquia_cms
+ * @group site_studio
  */
 class TabsComponentTest extends CohesionComponentTestBase {
 

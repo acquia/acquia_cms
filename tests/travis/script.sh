@@ -14,9 +14,18 @@ cd "$(dirname "$0")"
 # Reuse ORCA's own includes.
 source ../../../orca/bin/travis/_includes.sh
 
-if [ "$TRAVIS_JOB_NAME" != "Starter" ] && [ "$TRAVIS_JOB_NAME" != "PubSec Demo" ]; then
+if [ "$TRAVIS_JOB_NAME" != "Starter" ] && [ "$TRAVIS_JOB_NAME" != "PubSec Demo" ] && [ "$ACMS_JOB" != "base" ]; then
   # Run ORCA's standard script.
   ../../../orca/bin/travis/script.sh
+fi
+
+if [ "$ACMS_JOB" = "base" ]; then
+  cd "$(dirname "$0")" || exit; source _includes.sh
+
+  [[ ! -d "$ORCA_FIXTURE_DIR" ]] || orca fixture:status
+  '/usr/bin/git' 'checkout' '--force' 'fresh-fixture'
+  '/usr/bin/git' 'clean' '--force' '-d'
+  '/home/travis/build/acquia/orca-build/vendor/bin/phpunit' '--verbose' '--colors=always' '--debug' '--configuration=/home/travis/build/acquia/orca-build/docroot/core/phpunit.xml' '--exclude-group=orca_ignore,site_studio' '--testsuite=orca'
 fi
 
 # If there is no fixture, there's nothing else for us to do.

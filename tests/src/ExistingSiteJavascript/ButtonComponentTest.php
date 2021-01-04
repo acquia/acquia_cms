@@ -6,6 +6,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * Tests the "Button" components.
  *
  * @group acquia_cms
+ * @group site_studio
  */
 class ButtonComponentTest extends CohesionComponentTestBase {
 

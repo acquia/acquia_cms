@@ -17,6 +17,8 @@ source ../../../orca/bin/travis/_includes.sh
 # Run ORCA's standard installation script.
 ../../../orca/bin/travis/install.sh
 
+printenv | grep ACMS_ | sort
+
 # If there is no fixture, there's nothing else for us to do.
 [[ -d "$ORCA_FIXTURE_DIR" ]] || exit 0
 
@@ -32,6 +34,33 @@ if [ ! -z $COHESION_ARTIFACT ] && [ -f $COHESION_ARTIFACT ]; then
   drush config:import --yes --partial --source sites/default/files/cohesion/config
 fi
 
+if [[ "$ACMS_JOB" == "base" ]] && [[ -n "$ACMS_DB_ARTIFACT" ]] && [[ -n "$ACMS_FILES_ARTIFACT" ]] && [[ -f "$ACMS_DB_ARTIFACT" ]] && [[ -f "$ACMS_FILES_ARTIFACT" ]]; then
+    echo "Installing From Artifacts"
+    tar -xzf $ACMS_FILES_ARTIFACT
+    gunzip $ACMS_DB_ARTIFACT
+    drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms.sql
+    drush updatedb --cache-clear --yes -vvv
+    drush cr
+fi
+
+# Enable Starter or Pubsec Demo if Appropriate
+if [[ "$ACMS_JOB" == "starter" ]] && [[ -n "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ -n "$ACMS_STARTER_FILES_ARTIFACT" ]] && [[ -f "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ -f "$ACMS_STARTER_FILES_ARTIFACT" ]]; then
+    echo "Installing Starter From Artifacts"
+    tar -xzf $ACMS_STARTER_FILES_ARTIFACT
+    gunzip $ACMS_STARTER_DB_ARTIFACT
+    drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms-starter.sql
+    drush updatedb --cache-clear --yes -vvv
+fi
+
+if [[ "$ACMS_JOB" == "pubsec" ]] && [[ "$ACMS_PUBSEC_DB_ARTIFACT" && "$ACMS_PUBSEC_FILES_ARTIFACT" ]] && [[ -f "$ACMS_PUBSEC_DB_ARTIFACT" ]] && [[ -f "$ACMS_PUBSEC_FILES_ARTIFACT" ]]; then
+    cd "$ORCA_FIXTURE_DIR"
+    echo "Installing PubSec Demo From Artifacts"
+    tar -xzf $ACMS_PUBSEC_FILES_ARTIFACT
+    gunzip $ACMS_PUBSEC_DB_ARTIFACT
+    drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms-pubsec.sql
+    drush updatedb --yes -vvv
+fi
+
 # In order for PHPUnit tests belonging to profile modules to even be
 # runnable, the profile's modules need to be symlinked into the
 # sites/all/modules directory. This is a long-standing limitation of
@@ -44,21 +73,6 @@ cd ./all/modules
 find ../../../profiles/contrib/acquia_cms/modules -maxdepth 1 -mindepth 1 -type d -exec ln -s -f '{}' ';'
 # Ensure the symlinks are included in the ORCA fixture snapshot.
 git add .
-
-# Enable Starter or Pubsec Demo if Appropriate
-if [ "$TRAVIS_JOB_NAME" == "Starter" ]; then
-    echo "Installing Starter Kit"
-    drush en acquia_cms_development -y
-    drush pmu shield -y
-    drush en acquia_cms_starter -y
-fi
-
-if [ "$TRAVIS_JOB_NAME" == "PubSec Demo" ]; then
-    echo "Installing PubSec Demo"
-    drush en acquia_cms_development -y
-    drush pmu shield -y
-    drush en acquia_cms_demo_pubsec -y
-fi
 
 # Set the fixture state to reset to between tests.
 orca fixture:backup --force

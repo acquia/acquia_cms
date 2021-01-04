@@ -8,6 +8,7 @@ use Drupal\node\Entity\Node;
  * Tests Cohesion's integration with Entity Clone.
  *
  * @group acquia_cms
+ * @group site_studio
  */
 class EntityCloneIntegrationTest extends CohesionComponentTestBase {
 
