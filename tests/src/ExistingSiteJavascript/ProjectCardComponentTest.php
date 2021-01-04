@@ -6,6 +6,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * Tests that "Card - project" component is installed and operating correctly.
  *
  * @group acquia_cms
+ * @group site_studio
  */
 class ProjectCardComponentTest extends CohesionComponentTestBase {
 

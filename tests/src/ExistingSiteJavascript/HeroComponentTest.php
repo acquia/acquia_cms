@@ -6,6 +6,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * Tests the Hero component.
  *
  * @group acquia_cms
+ * @group site_studio
  */
 class HeroComponentTest extends CohesionComponentTestBase {
 
@@ -122,7 +123,7 @@ class HeroComponentTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('Hero components', 'Hero');
+    $this->editDefinition('Feature sections', 'Hero');
   }
 
 }

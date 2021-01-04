@@ -6,6 +6,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * Tests 'Card - Entity Reference' cohesion component.
  *
  * @group acquia_cms
+ * @group site_studio
  */
 class EntityReferenceCardComponentTest extends CohesionComponentTestBase {
 

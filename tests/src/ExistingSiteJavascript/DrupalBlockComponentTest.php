@@ -13,6 +13,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * - User Login.
  *
  * @group acquia_cms
+ * @group site_studio
  */
 class DrupalBlockComponentTest extends CohesionComponentTestBase {
 

@@ -64,6 +64,10 @@ matrix:
     - { name: "Isolated test w/ dev package versions", env: ACMS_JOB=base ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
     - { name: "Starter", env: ACMS_JOB=starter ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
     - { name: "PubSec Demo", env: ACMS_JOB=pubsec ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
+    # The following jobs run only during cron runs, and fully install the site before running tests.
+    - { name: "Isolated test w/ dev package versions - Full Install", if: type = cron, env: ACMS_JOB=base_full ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite"}
+    - { name: "Starter - Full Install", if: type = cron, env: ACMS_JOB=starter_full ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite"}
+    - { name: "PubSec Demo - Full Install", if: type = cron, env: ACMS_JOB=pubsec_full ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite"}
 
 # Install ORCA and prepare the environment.
 before_install:
