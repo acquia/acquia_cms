@@ -87,26 +87,26 @@
             "allowed-packages": [
                 "drupal/core"
             ],
-            "locations": {
-                "web-root": "./docroot",
-                "project-root": "."
-            },
             "file-mapping": {
-                "[project-root]/.gitattributes": false,
                 "[project-root]/.editorconfig": false,
+                "[project-root]/.gitattributes": false,
+                "[web-root]/.csslintrc": false,
+                "[web-root]/INSTALL.txt": false,
+                "[web-root]/drush/drush.yml": "drush/drush.yml",
+                "[web-root]/example.gitignore": false,
+                "[web-root]/modules/README.txt": false,
+                "[web-root]/profiles/README.txt": false,
+                "[web-root]/robots.txt": false,
+                "[web-root]/sites/README.txt": false,
                 "[web-root]/sites/default/default.settings.php": {
                     "append": "./patches/d9-acms-settings.patch"
                 },
-                "[web-root]/example.gitignore": false,
-                "[web-root]/.csslintrc": false,
-                "[web-root]/modules/README.txt": false,
-                "[web-root]/profiles/README.txt": false,
-                "[web-root]/sites/README.txt": false,
                 "[web-root]/themes/README.txt": false,
-                "[web-root]/INSTALL.txt": false,
-                "[web-root]/robots.txt": false,
-                "[web-root]/web.config": false,
-                "[web-root]/drush/drush.yml": "drush/drush.yml"
+                "[web-root]/web.config": false
+            },
+            "locations": {
+                "project-root": ".",
+                "web-root": "./docroot"
             }
         },
         "enable-patching": true,
@@ -137,32 +137,32 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/focal_point": {
-                "3162210 - Preview link accidentally closes the media library": "https://www.drupal.org/files/issues/2020-10-06/3162210-17.patch"
-            },
-            "drupal/core": {
-                "SQLite database locking errors cause fatal errors": "https://www.drupal.org/files/issues/1120020-59.patch",
-                "Media Library widget produces error this value should not be null when field is required": "https://www.drupal.org/files/issues/2020-10-08/3160238-25.patch",
-                "It is possible to overflow the number of items allowed in Media Library": "https://www.drupal.org/files/issues/2019-12-28/3082690-80.patch"
+            "acquia/cohesion": {
+                "ACO-704 - Saving a translated node results in stream wrapper logic exception": "https://gist.githubusercontent.com/kdruckman/41b56d7ccff271d2aec59d980f0cfbd9/raw/41f4a59ebf1ec4f884cfb98472e9b8506f100a6e/cohesion-pull-263.patch",
+                "Fix for trailing space in yaml file": "https://gist.githubusercontent.com/msherron/ac1ef0b0c1c7183f2cc833cb3244d458/raw/216c686488b6c46cf7bc378b3b0191ddb227b769/gistfile1.txt"
             },
             "drupal/acquia_telemetry-acquia_telemetry": {
                 "Add check for core index": "https://www.drupal.org/files/issues/2020-08-18/3165473-27.patch"
             },
-            "drupal/entity_clone": {
-                "Allow fields implementing EntityReferenceFieldItemListInterface to clone their referenced entities": "https://www.drupal.org/files/issues/2019-02-22/3013286-8.patch"
-            },
             "drupal/config_rewrite": {
                 "Make config_rewrite/tests/modules compatible with Drupal 9": "https://www.drupal.org/files/issues/2020-08-22/3166694-2.patch"
             },
-            "drupal/reroute_email": {
-                "Core version needs removing from info file": "https://www.drupal.org/files/issues/2020-11-17/reroute_email-remove-core-version-3182079-5.patch"
+            "drupal/core": {
+                "It is possible to overflow the number of items allowed in Media Library": "https://www.drupal.org/files/issues/2019-12-28/3082690-80.patch",
+                "Media Library widget produces error this value should not be null when field is required": "https://www.drupal.org/files/issues/2020-10-08/3160238-25.patch",
+                "SQLite database locking errors cause fatal errors": "https://www.drupal.org/files/issues/1120020-59.patch"
             },
-            "acquia/cohesion": {
-                "Fix for trailing space in yaml file": "https://gist.githubusercontent.com/msherron/ac1ef0b0c1c7183f2cc833cb3244d458/raw/216c686488b6c46cf7bc378b3b0191ddb227b769/gistfile1.txt",
-                "ACO-704 - Saving a translated node results in stream wrapper logic exception": "https://gist.githubusercontent.com/kdruckman/41b56d7ccff271d2aec59d980f0cfbd9/raw/41f4a59ebf1ec4f884cfb98472e9b8506f100a6e/cohesion-pull-263.patch"
+            "drupal/entity_clone": {
+                "Allow fields implementing EntityReferenceFieldItemListInterface to clone their referenced entities": "https://www.drupal.org/files/issues/2019-02-22/3013286-8.patch"
+            },
+            "drupal/focal_point": {
+                "3162210 - Preview link accidentally closes the media library": "https://www.drupal.org/files/issues/2020-10-06/3162210-17.patch"
             },
             "drupal/password_policy": {
                 "Register account anonymously, does not validate constraint 'password_username'.": "https://www.drupal.org/files/issues/2020-09-24/password-username-validate--3161012-4.patch"
+            },
+            "drupal/reroute_email": {
+                "Core version needs removing from info file": "https://www.drupal.org/files/issues/2020-11-17/reroute_email-remove-core-version-3182079-5.patch"
             },
             "drupal/username_enumeration_prevention": {
                 "Deprecated function User::getUsername": "https://www.drupal.org/files/issues/2020-09-01/fix-deprecated-getusername-3167106-2.patch"
