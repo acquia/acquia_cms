@@ -28,7 +28,7 @@ if [ "$ACMS_JOB" = "base" ]; then
   # Thus if the SUT changes it, only its own tests are run.
   [[ "$ORCA_FIXTURE_PROFILE" = "orca" ]] || SUT_ONLY="--sut-only"
 
-  '/home/travis/build/acquia/orca-build/vendor/bin/phpunit' '--verbose' '--colors=always' '--debug' '--configuration=/home/travis/build/acquia/orca-build/docroot/core/phpunit.xml' '--exclude-group=orca_ignore,site_studio' '--testsuite=orca'
+  '/home/travis/build/acquia/orca-build/vendor/bin/phpunit' '--verbose' '--colors=always' '--debug' '--configuration=/home/travis/build/acquia/orca-build/docroot/core/phpunit.xml.dist' '--exclude-group=orca_ignore,site_studio' '--testsuite=orca'
 fi
 
 # If there is no fixture, there's nothing else for us to do.
