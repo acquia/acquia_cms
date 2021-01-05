@@ -1,0 +1,65 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_results
+    - field.field.node.event.body
+    - field.field.node.event.field_categories
+    - field.field.node.event.field_door_time
+    - field.field.node.event.field_event_duration
+    - field.field.node.event.field_event_end
+    - field.field.node.event.field_event_image
+    - field.field.node.event.field_event_place
+    - field.field.node.event.field_event_start
+    - field.field.node.event.field_event_type
+    - field.field.node.event.field_tags
+    - node.type.event
+  module:
+    - smart_trim
+    - user
+id: node.event.search_results
+targetEntityType: node
+bundle: event
+mode: search_results
+content:
+  body:
+    type: smart_trim
+    weight: 2
+    region: content
+    label: hidden
+    settings:
+      trim_length: 128
+      trim_type: chars
+      trim_suffix: ...
+      wrap_class: trimmed
+      more_text: More
+      more_class: more-link
+      summary_handler: trim
+      wrap_output: false
+      more_link: false
+      trim_options:
+        text: false
+        trim_zero: false
+    third_party_settings: {  }
+  content_moderation_control:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  links:
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_categories: true
+  field_door_time: true
+  field_event_duration: true
+  field_event_end: true
+  field_event_image: true
+  field_event_place: true
+  field_event_start: true
+  field_event_type: true
+  field_tags: true
+  langcode: true
+  search_api_excerpt: true
