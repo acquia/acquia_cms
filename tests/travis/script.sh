@@ -14,21 +14,9 @@ cd "$(dirname "$0")"
 # Reuse ORCA's own includes.
 source ../../../orca/bin/travis/_includes.sh
 
-if [ "$TRAVIS_JOB_NAME" != "Starter" ] && [ "$TRAVIS_JOB_NAME" != "PubSec Demo" ] && [ "$ACMS_JOB" != "base" ]; then
+if [ "$TRAVIS_JOB_NAME" != "Starter" ] && [ "$TRAVIS_JOB_NAME" != "PubSec Demo" ]; then
   # Run ORCA's standard script.
   ../../../orca/bin/travis/script.sh
-fi
-
-if [ "$ACMS_JOB" = "base" ]; then
-
-  # Copied from Orca's script.sh
-  [[ ! -d "$ORCA_FIXTURE_DIR" ]] || orca fixture:status
-  # The Drupal installation profile is such a fundamental aspect of the fixture
-  # that it cannot be changed and other packages' tests still be expected to pass.
-  # Thus if the SUT changes it, only its own tests are run.
-  [[ "$ORCA_FIXTURE_PROFILE" = "orca" ]] || SUT_ONLY="--sut-only"
-
-  '/home/travis/build/acquia/orca-build/vendor/bin/phpunit' '--verbose' '--colors=always' '--debug' '--configuration=/home/travis/build/acquia/orca-build/docroot/core/phpunit.xml' '--exclude-group=orca_ignore,site_studio' '--testsuite=orca'
 fi
 
 # If there is no fixture, there's nothing else for us to do.

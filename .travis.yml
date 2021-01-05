@@ -29,6 +29,8 @@ env:
     - ACMS_STARTER_FILES_ARTIFACT=$TRAVIS_BUILD_DIR/tests/acms-files-starter.tar.gz
     - ACMS_PUBSEC_DB_ARTIFACT=$TRAVIS_BUILD_DIR/tests/acms-pubsec.sql.gz
     - ACMS_PUBSEC_FILES_ARTIFACT=$TRAVIS_BUILD_DIR/tests/acms-files-pubsec.tar.gz
+    # By default, no PHPUnit test groups are excluded.
+    - ACMS_JOB_EXCLUDE_PHPUNIT_TEST_GROUP=
     # Provide your package's name.
     - ORCA_SUT_NAME=acquia/acquia_cms
     # Specify the name of the nearest Git version branch, e.g., 1.x or 8.x-1.x.
@@ -61,7 +63,8 @@ matrix:
     # @see https://github.com/acquia/orca/blob/master/docs/understanding-orca.md#continuous-integration
     - { name: "Static code analysis", env: ORCA_JOB=STATIC_CODE_ANALYSIS }
     - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_SUT }
-    - { name: "Isolated test w/ dev package versions", env: ACMS_JOB=base ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
+    # Exclude site_studio tests on tis job because we only run them during cron builds.
+    - { name: "Isolated test w/ dev package versions", env: ACMS_JOB=base ACMS_JOB_EXCLUDE_PHPUNIT_TEST_GROUP="site_studio" ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
     - { name: "Starter", env: ACMS_JOB=starter ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
     - { name: "PubSec Demo", env: ACMS_JOB=pubsec ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
     # The following jobs run only during cron runs, and fully install the site before running tests.
@@ -75,6 +78,8 @@ before_install:
   - mysql -u root < ./tests/travis/install.sql
   - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
   - composer self-update
+  # Optionally, remove SUT-provided tests with a particular PHPUnit test group.
+  - if [ ! -z $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP ]; then find ./tests -type f | xargs grep -l "@group $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP$" | xargs rm; fi
   - ../orca/bin/travis/before_install.sh
 
 # Create the test fixture and place the SUT.
