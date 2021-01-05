@@ -63,7 +63,7 @@ matrix:
     # @see https://github.com/acquia/orca/blob/master/docs/understanding-orca.md#continuous-integration
     - { name: "Static code analysis", env: ORCA_JOB=STATIC_CODE_ANALYSIS }
     - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_SUT }
-    # Exclude site_studio tests on tis job because we only run them during cron builds.
+    # Exclude site_studio tests on this job because we only run them during cron builds.
     - { name: "Isolated test w/ dev package versions", env: ACMS_JOB=base ACMS_JOB_EXCLUDE_PHPUNIT_TEST_GROUP="site_studio" ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
     - { name: "Starter", env: ACMS_JOB=starter ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
     - { name: "PubSec Demo", env: ACMS_JOB=pubsec ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
@@ -79,7 +79,7 @@ before_install:
   - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
   - composer self-update
   # Optionally, remove SUT-provided tests with a particular PHPUnit test group.
-  - if [ ! -z $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP ]; then find ./tests -type f | xargs grep -l "@group $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP$" | xargs rm; fi
+  - if [ ! -z $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP ]; then find ./tests -type f | xargs grep -l "@group $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP$" | xargs rm -v; fi
   - ../orca/bin/travis/before_install.sh
 
 # Create the test fixture and place the SUT.
