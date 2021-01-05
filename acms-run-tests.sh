@@ -28,16 +28,20 @@ installchromedriver() {
       "linux-gnu"*)
         # Installs chromedriver for Linux 64 bit systems.
         curl https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip -o chromedriver_linux64.zip -s
+        unzip chromedriver_linux64.zip
+        chmod +x chromedriver
+        mv -f chromedriver ./vendor/bin
+        rm chromedriver_linux64.zip
         ;;
       "darwin"*)
         # Installs chromedriver for MacOS 64 bit systems.
         curl https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_mac64.zip -o chromedriver_mac64.zip -s
+        unzip chromedriver_mac64.zip
+        chmod +x chromedriver
+        mv -f chromedriver ./vendor/bin
+        rm chromedriver_mac64.zip
         ;;
     esac
-    unzip chromedriver_mac64.zip
-    chmod +x chromedriver
-    mv -f chromedriver ./vendor/bin
-    rm chromedriver_mac64.zip
   fi
 }
 
