@@ -30,7 +30,7 @@ env:
     - ACMS_PUBSEC_DB_ARTIFACT=$TRAVIS_BUILD_DIR/tests/acms-pubsec.sql.gz
     - ACMS_PUBSEC_FILES_ARTIFACT=$TRAVIS_BUILD_DIR/tests/acms-files-pubsec.tar.gz
     # By default, no PHPUnit test groups are excluded.
-    - ACMS_JOB_EXCLUDE_PHPUNIT_TEST_GROUP=
+    - ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP=
     # Provide your package's name.
     - ORCA_SUT_NAME=acquia/acquia_cms
     # Specify the name of the nearest Git version branch, e.g., 1.x or 8.x-1.x.
@@ -78,8 +78,8 @@ before_install:
   - mysql -u root < ./tests/travis/install.sql
   - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
   - composer self-update
-  # Optionally, remove SUT-provided tests with a particular PHPUnit test group.
-  - if [ ! -z $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP ]; then find ./tests -type f | xargs grep -l "@group $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP" | xargs rm -v; fi
+  # Optionally, remove SUT-provided tests with a specific PHPUnit test group.
+  - if [ ! -z $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP ]; then find ./tests -type f | xargs grep -l "@group $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP$" | xargs rm -v; fi
   - ../orca/bin/travis/before_install.sh
 
 # Create the test fixture and place the SUT.
