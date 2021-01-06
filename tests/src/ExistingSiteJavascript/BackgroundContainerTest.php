@@ -6,6 +6,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * Tests "Background container" component.
  *
  * @group acquia_cms
+ * @group site_studio
  */
 class BackgroundContainerTest extends CohesionComponentTestBase {
 

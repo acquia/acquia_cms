@@ -6,6 +6,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * Tests the "Sidebar nav component.
  *
  * @group acquia_cms
+ * @group site_studio
  */
 class SidebarNavComponentTest extends CohesionComponentTestBase {
 

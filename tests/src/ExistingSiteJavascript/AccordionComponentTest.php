@@ -6,6 +6,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * Tests the "Accordion container and Accordion item" components.
  *
  * @group acquia_cms
+ * @group site_studio
  */
 class AccordionComponentTest extends CohesionComponentTestBase {
 

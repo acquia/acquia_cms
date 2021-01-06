@@ -16,6 +16,7 @@ use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
  *
  * @group acquia_cms_search
  * @group acquia_cms
+ * @group site_studio
  */
 class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
