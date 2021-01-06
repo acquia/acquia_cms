@@ -6,6 +6,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * Tests the "Image Background Hero" helper.
  *
  * @group acquia_cms
+ * @group site_studio
  */
 class ImageBackgroundHeroHelperTest extends CohesionHelperTestBase {
 

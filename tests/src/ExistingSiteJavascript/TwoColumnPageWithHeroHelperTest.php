@@ -6,6 +6,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * Tests the "Two column page with hero helpers".
  *
  * @group acquia_cms
+ * @group site_studio
  */
 class TwoColumnPageWithHeroHelperTest extends CohesionHelperTestBase {
 

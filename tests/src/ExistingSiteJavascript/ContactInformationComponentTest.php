@@ -6,6 +6,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * Tests 'Contact Information' cohesion component.
  *
  * @group acquia_cms
+ * @group site_studio
  */
 class ContactInformationComponentTest extends CohesionComponentTestBase {
 

@@ -23,6 +23,14 @@ env:
   global:
     - secure: "m+1H1ZD749fNdcwM8P5NrTr1jWIvd5J0EPDM88eNfXHB6tJBfL9C/Xe9OhHQC5gmYJE7fnFJhBOoSBWakVTme2Vn6XqlGluiLfpbPANgxYC3Wsli8QcyZKPSGvpWsdAvm5ai74T2DkwQUiFhPFSCPpt/0h3nWdjSkHCeoPvX6Qsrv5SiGboZKAiVZPks+mwBg+mIw9yx4w/SAIpmJceDuHNWOofD/Poq0W8SC2/pbbv85Xgt5mxDn+IrM1TSvDX9T+BQYc3Pu1M1Qak6BvuT5tbAlGSyxXl7Jt+uFrnqMI+bvhNgsJVUV1q10QwQI/wFHL/dnq3jtlQMyowdhtYBkwrYPsDXofuZPbC1Pi0sJ0c8yN5lpBvh/GxquoI3c/wCfLetqUI4mzxVWt8aYr0T4KzLg0dxI+do5pkaJAsQNVFjmzD7WLYcJJbgbzxnDZ12uzyGZfbSYuxVdO4g/XrDJaBSjfIpTuo0xFedm+P6DxfixklJ+Ufcvu+MhvqCN+bzrIw33b6Uaochv3gScsF1hQt7XyOe2vb7yqu9o5KnN2sfOk7YEMawTGBZwreusZP/9TmEyeqxIMs6JheApsbalnJvTkSxaxD3IXGQXxdfxkuPNppw7A/jirN6l7qkbQ2bZhL3+r9MT2wGdnDrUfxwwakqQvJuBB7HdFFJqzJw04E="
     # - COHESION_ARTIFACT=$TRAVIS_BUILD_DIR/tests/cohesion.tar.gz
+    - ACMS_DB_ARTIFACT=$TRAVIS_BUILD_DIR/tests/acms.sql.gz
+    - ACMS_FILES_ARTIFACT=$TRAVIS_BUILD_DIR/tests/acms-files.tar.gz
+    - ACMS_STARTER_DB_ARTIFACT=$TRAVIS_BUILD_DIR/tests/acms-starter.sql.gz
+    - ACMS_STARTER_FILES_ARTIFACT=$TRAVIS_BUILD_DIR/tests/acms-files-starter.tar.gz
+    - ACMS_PUBSEC_DB_ARTIFACT=$TRAVIS_BUILD_DIR/tests/acms-pubsec.sql.gz
+    - ACMS_PUBSEC_FILES_ARTIFACT=$TRAVIS_BUILD_DIR/tests/acms-files-pubsec.tar.gz
+    # By default, no PHPUnit test groups are excluded.
+    - ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP=
     # Provide your package's name.
     - ORCA_SUT_NAME=acquia/acquia_cms
     # Specify the name of the nearest Git version branch, e.g., 1.x or 8.x-1.x.
@@ -55,9 +63,14 @@ matrix:
     # @see https://github.com/acquia/orca/blob/master/docs/understanding-orca.md#continuous-integration
     - { name: "Static code analysis", env: ORCA_JOB=STATIC_CODE_ANALYSIS }
     - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_SUT }
-    - { name: "Isolated test w/ dev package versions", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite" }
-    - { name: "Starter", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite"}
-    - { name: "PubSec Demo", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite"}
+    # Exclude site_studio tests on this job because we only run them during cron builds.
+    - { name: "Isolated test w/ dev package versions", env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="site_studio" ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
+    - { name: "Starter", env: ACMS_JOB=starter ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
+    - { name: "PubSec Demo", env: ACMS_JOB=pubsec ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
+    # The following jobs run only during cron runs, and fully install the site before running tests.
+    - { name: "Isolated test w/ dev package versions - Full Install", if: type = cron, env: ACMS_JOB=base_full ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite"}
+    - { name: "Starter - Full Install", if: type = cron, env: ACMS_JOB=starter_full ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite"}
+    - { name: "PubSec Demo - Full Install", if: type = cron, env: ACMS_JOB=pubsec_full ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite"}
 
 # Install ORCA and prepare the environment.
 before_install:
@@ -65,6 +78,8 @@ before_install:
   - mysql -u root < ./tests/travis/install.sql
   - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
   - composer self-update
+  # Optionally, remove SUT-provided tests with a specific PHPUnit test group.
+  - if [ ! -z $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP ]; then find ./tests -type f | xargs grep -l "@group $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP$" | xargs rm -v; fi
   - ../orca/bin/travis/before_install.sh
 
 # Create the test fixture and place the SUT.

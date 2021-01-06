@@ -6,6 +6,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * Tests 'Card - Horizontal (16:9)' cohesion component.
  *
  * @group acquia_cms
+ * @group site_studio
  */
 class Horizontal16Ratio9CardComponentTest extends CohesionComponentTestBase {
 

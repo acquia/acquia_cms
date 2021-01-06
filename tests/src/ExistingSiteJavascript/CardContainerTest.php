@@ -6,6 +6,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * Test that "Card container" component is installed and operating correctly.
  *
  * @group acquia_cms
+ * @group site_studio
  */
 class CardContainerTest extends CohesionComponentTestBase {
 
