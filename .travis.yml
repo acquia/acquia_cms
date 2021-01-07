@@ -66,6 +66,12 @@ before_install:
   - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
   - composer self-update
   - ../orca/bin/travis/before_install.sh
+  - sudo apt-get autoremove sqlite3
+  - sudo apt-add-repository -y ppa:travis-ci/sqlite3
+  - sudo apt-get -y update
+  - sudo apt-cache show sqlite3
+  - sudo apt-get install sqlite3=3.26~travis1
+  - sudo sqlite3 -version
 
 # Create the test fixture and place the SUT.
 install: ./tests/travis/install.sh
