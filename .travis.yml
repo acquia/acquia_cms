@@ -68,16 +68,14 @@ matrix:
     # The following six jobs are custom ACMS jobs based on the standard isolated
     # current dev test.
     # Exclude site_studio tests on this job because we only run them during cron builds.
-    - { name: "Isolated test on current dev Drupal core version", env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="site_studio" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
-    - { name: "Starter", env: ACMS_JOB=starter ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
-    - { name: "PubSec Demo", env: ACMS_JOB=pubsec ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
+    - { name: "Isolated test on current dev Drupal core version", env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="site_studio" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    - { name: "Starter", env: ACMS_JOB=starter ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    - { name: "PubSec Demo", env: ACMS_JOB=pubsec ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     # The following jobs run only during cron runs, and fully install the site before
     # running tests.
-    - { name: "Isolated test on current dev Drupal core version - Full Install", if: type = cron, env: ACMS_JOB=base_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite"}
-    - { name: "Starter - Full Install", if: type = cron, env: ACMS_JOB=starter_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite"}
-    - { name: "PubSec Demo - Full Install", if: type = cron, env: ACMS_JOB=pubsec_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite"}
-    - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MINOR ORCA_CUSTOM_FIXTURE_INIT_ARGS="--no-sqlite", if: type = cron, name: "Isolated test on next minor Drupal core version" }
-    - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MINOR_DEV ORCA_CUSTOM_FIXTURE_INIT_ARGS="--no-sqlite", if: type = cron, name: "Isolated test on next minor dev Drupal core version" }
+    - { name: "Isolated test on current dev Drupal core version - Full Install", if: type = cron, env: ACMS_JOB=base_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    - { name: "Starter - Full Install", if: type = cron, env: ACMS_JOB=starter_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    - { name: "PubSec Demo - Full Install", if: type = cron, env: ACMS_JOB=pubsec_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     # Uncomment the following four lines to enable the corresponding tests once
     # the next major version of Drupal core has an alpha release or earlier.
     # Until then it's wasteful to use CI jobs on them, even if they exit early.
