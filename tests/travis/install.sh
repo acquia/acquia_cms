@@ -14,19 +14,17 @@ cd "$(dirname "$0")"
 # Reuse ORCA's own includes.
 source ../../../orca/bin/travis/_includes.sh
 
-if [[ "$ORCA_JOB" != "ISOLATED_TEST_ON_CURRENT_DEV" ]]; then
-  # Run ORCA's standard installation script.
-  ../../../orca/bin/travis/install.sh
-fi
-
+# If running our custom jobs, initialize the fixture. Otherwise, use Orca's
+# installation script.
 if [[ "$ACMS_JOB" == "base" ]] || [[ "$ACMS_JOB" == "starter" ]] || [[ "$ACMS_JOB" == "pubsec" ]]; then
   orca debug:packages CURRENT_DEV
   orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=acquia_cms --no-sqlite --no-site-install
-fi
-
-if [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]] || [[ "$ACMS_JOB" == "pubsec_full" ]]; then
+elif [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]] || [[ "$ACMS_JOB" == "pubsec_full" ]]; then
   orca debug:packages CURRENT_DEV
   orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=acquia_cms --no-sqlite
+else
+  # Run ORCA's standard installation script.
+  ../../../orca/bin/travis/install.sh
 fi
 
 printenv | grep ACMS_ | sort
@@ -57,7 +55,7 @@ if [[ "$ACMS_JOB" == "base" ]] && [[ -n "$ACMS_DB_ARTIFACT" ]] && [[ -n "$ACMS_F
   drush cr
 fi
 
-# Enable Starter or Pubsec Demo if Appropriate
+# Use Starter or Pubsec Demo artifacts if Appropriate.
 if [[ "$ACMS_JOB" == "starter" ]] && [[ -n "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ -n "$ACMS_STARTER_FILES_ARTIFACT" ]] && [[ -f "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ -f "$ACMS_STARTER_FILES_ARTIFACT" ]]; then
   echo "Installing Starter From Artifacts"
   tar -xzf $ACMS_STARTER_FILES_ARTIFACT
@@ -88,7 +86,7 @@ find ../../../profiles/contrib/acquia_cms/modules -maxdepth 1 -mindepth 1 -type 
 # Ensure the symlinks are included in the ORCA fixture snapshot.
 git add .
 
-# Enable Starter or Pubsec Demo if Appropriate
+# Enable Starter or Pubsec Demo on full installs if Appropriate.
 if [[ "$ACMS_JOB" == "starter_full" ]]; then
     echo "Installing Starter Kit"
     drush en acquia_cms_development -y
