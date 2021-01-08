@@ -52,6 +52,11 @@ env:
     # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_FIXTURE_PROFILE
     - ORCA_FIXTURE_PROFILE=acquia_cms
     - ORCA_TELEMETRY_ENABLE=TRUE
+    # Change the PHP Code Sniffer standard used for static analysis. Acceptable
+    # values are "AcquiaPHP", "AcquiaDrupalStrict", and
+    # "AcquiaDrupalTransitional". Defaults to "AcquiaDrupalTransitional".
+    # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_PHPCS_STANDARD
+    - ORCA_PHPCS_STANDARD=AcquiaDrupalStrict
 
 # Execution time is drastically reduced by splitting the build into multiple
 # concurrent jobs.
@@ -62,9 +67,7 @@ matrix:
     # The standard ORCA jobs provide broad out-of-the-box coverage.
     # @see https://github.com/acquia/orca/blob/master/docs/understanding-orca.md#continuous-integration
     - { env: ORCA_JOB=STATIC_CODE_ANALYSIS, name: "Static code analysis" }
-    - { env: ORCA_JOB=LOOSE_DEPRECATED_CODE_SCAN, name: "Loose deprecated code scan" }
     - { env: ORCA_JOB=STRICT_DEPRECATED_CODE_SCAN, name: "Strict deprecated code scan" }
-    - { env: ORCA_JOB=DEPRECATED_CODE_SCAN_W_CONTRIB, name: "Deprecated code scan w/ contrib" }
     # The following six jobs are custom ACMS jobs based on the standard isolated
     # current dev test.
     # Exclude site_studio tests on this job because we only run them during cron builds.
@@ -84,6 +87,9 @@ matrix:
     # - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV, name: "Isolated test on next major, latest minor dev Drupal core version" }
     # - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV, name: "Integrated test on next major, latest minor dev Drupal core version" }
     - { env: ORCA_JOB=ISOLATED_UPGRADE_TEST_TO_NEXT_MAJOR_DEV, if: type = cron, name: "Isolated upgrade test to next major dev Drupal core version" }
+    - { env: ORCA_JOB=LOOSE_DEPRECATED_CODE_SCAN, if: type = cron, name: "Loose deprecated code scan" }
+    - { env: ORCA_JOB=DEPRECATED_CODE_SCAN_W_CONTRIB, if: type = cron, name: "Deprecated code scan w/ contrib" }
+
     # For various reasons, some jobs are allowed to fail without failing the whole
     # build. They should still be watched for advance notice of future problems.
     # @see https://docs.travis-ci.com/user/customizing-the-build#rows-that-are-allowed-to-fail
