@@ -9,6 +9,38 @@ body,
   background-color: $df-bright-blue;
 
   .is-horizontal {
+    &.tabs-wrapper {
+      ul {
+        &.tabs--primary {
+          .tabs__tab {
+            .toolbar-vertical & {
+              &.is-active {
+                &::before {
+                  border-left-color: $df-blue;
+                }
+
+                a {
+                  &.is-active {
+                    color: $df-blue;
+
+                    + button {
+                      path {
+                        fill: $df-blue;
+                      }
+                    }
+                  }
+                }
+              }
+
+              .tabs__link {
+                color: $df-bright-grey;
+              }
+            }
+          }
+        }
+      }
+    }
+
     .tabs__link {
       color: $df-light-grey;
 
@@ -22,6 +54,18 @@ body,
         color: $df-blue;
       }
     }
+  }
+}
+
+.region-pre-content {
+  .tabs--secondary {
+      .tabs__tab {
+        &.is-active {
+          &::before {
+            border-left: 3px solid $df-blue;
+          }
+        }
+     }
   }
 }
 

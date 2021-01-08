@@ -24,6 +24,22 @@
   }
 }
 
+.is-horizontal {
+  &.tabs-wrapper {
+    ul {
+      &.tabs--primary {
+        padding-left: 0;
+      }
+    }
+  }
+}
+
+.region-pre-content {
+  .tabs--secondary {
+    padding-left: 0;
+  }
+}
+
 @media only screen and (max-width: 768px) {
   .grid-cell.logo {
     display: none;
