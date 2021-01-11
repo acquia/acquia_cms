@@ -1,43 +1,27 @@
-<?xml version="1.0"?>
-<!--
-   To override this file, copy it to phpcs.xml and then modify.
-   @see https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml#the-annotated-sample-file
--->
-<ruleset name="blt">
-  <description>BLT PHP_CodeSniffer standards overrides.</description>
+<?xml version="1.0" encoding="UTF-8"?>
 
-  <!-- By default, warnings and errors cause an exception. -->
-  <config name="ignore_warnings_on_exit" value="0" />
-  <config name="ignore_errors_on_exit" value="0" />
+<!-- https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-Ruleset -->
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../vendor/squizlabs/php_codesniffer/phpcs.xsd"
+>
 
-  <!-- Set ignore extensions. -->
-  <!-- @see https://www.drupal.org/node/2867601#comment-12075633 -->
-  <!-- This can probably be removed by setting a dependency on Coder 8.3.7 -->
-  <arg name="ignore" value="*.css,*.md,*.txt,*.png,*.gif,*.jpeg,*.jpg,*.svg"/>
+  <description>PHP CodeSniffer configuration ORCA uses for packages analysis.</description>
 
-  <!-- Set extensions to scan (taken from Coder 8.3.6). -->
-  <!-- @see https://git.drupalcode.org/project/coder/blob/8.3.6/coder_sniffer/Drupal/ruleset.xml#L8 -->
-  <arg name="extensions" value="php,module,inc,install,test,profile,theme,info,yml"/>
+  <!-- Set extensions to scan. -->
+  <!-- @see https://git.drupalcode.org/project/coder/-/tree/8.3.7#store-settings-in-a-phpcsxmldist-file -->
+  <arg name="extensions" value="php,module,inc,install,test,profile,theme,css,info,txt,md,yml"/>
 
-  <!-- Use colors in output. -->
   <arg name="colors"/>
-  <!-- Show progress. -->
-  <arg value="p"/>
+  <arg name="parallel" value="10"/>
 
-  <!-- Include existing standards. -->
-  <rule ref="Drupal"/>
-  <rule ref="DrupalPractice">
-    <!-- Ignore specific sniffs. -->
-    <exclude name="DrupalPractice.InfoFiles.NamespacedDependency"/>
-  </rule>
+  <file>.</file>
 
-  <file>docroot/modules/custom</file>
-  <file>docroot/themes/custom</file>
-  <file>tests</file>
+  <exclude-pattern>.idea/</exclude-pattern>
+  <exclude-pattern>docroot/</exclude-pattern>
+  <exclude-pattern>vendor/</exclude-pattern>
+  <exclude-pattern>var/</exclude-pattern>
 
-  <exclude-pattern>*/behat</exclude-pattern>
-  <exclude-pattern>*/node_modules</exclude-pattern>
-  <exclude-pattern>*/vendor</exclude-pattern>
-  <exclude-pattern>*/css</exclude-pattern>
+  <!-- This value should be the same as the value set in .travis.yml -->
+  <rule ref="AcquiaDrupalStrict"/>
 
 </ruleset>
