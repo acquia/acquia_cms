@@ -11,7 +11,6 @@ use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Diff\DiffFormatter;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -156,18 +155,6 @@ class AcquiaCmsConfigDiff implements ContainerInjectionInterface {
       ],
       '#rows' => $this->diffFormatter->format($diff),
     ];
-
-    $build['back'] = [
-      '#type' => 'link',
-      '#attributes' => [
-        'class' => [
-          'dialog-cancel',
-        ],
-      ],
-      '#title' => "Back to configuration inspector",
-      '#url' => Url::fromRoute('acquia_cms_support.config_sync'),
-    ];
-
     return $build;
   }
 
