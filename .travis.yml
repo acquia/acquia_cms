@@ -4,7 +4,7 @@ language: php
 # The lowest version of PHP supported by all of Drupal, Acquia, and ORCA itself.
 # @see https://www.drupal.org/docs/8/system-requirements/php-requirements
 # @see https://docs.acquia.com/acquia-cloud/arch/tech-platform/
-php: "7.3"
+php: "7.4"
 
 services:
   - mysql
@@ -72,8 +72,13 @@ matrix:
     - { name: "Starter - Full Install", if: type = cron, env: ACMS_JOB=starter_full ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite"}
     - { name: "PubSec Demo - Full Install", if: type = cron, env: ACMS_JOB=pubsec_full ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite"}
 
+dist: bionic
+
 # Install ORCA and prepare the environment.
 before_install:
+  - sudo echo "deb http://archive.ubuntu.com/ubuntu focal main restricted universe multiverse" >> /etc/apt/sources.list
+  - sudo apt-get update
+  - sudo apt-get -y install sqlite3/focal
   - composer self-update 1.10.7
   - mysql -u root < ./tests/travis/install.sql
   - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"

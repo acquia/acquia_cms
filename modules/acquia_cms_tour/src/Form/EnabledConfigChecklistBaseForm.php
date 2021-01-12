@@ -124,7 +124,7 @@ abstract class EnabledConfigChecklistBaseForm extends FormBase {
         $form['items'][$module] = [
           'check' => [
             '#type' => 'checkbox',
-            '#default_value' => $config_state[$module],
+            '#default_value' => isset($config_state[$module]) ? $config_state[$module] : '',
             '#title' => $module_info['name'],
             '#description' => $module_info['description'],
             '#ajax' => [
