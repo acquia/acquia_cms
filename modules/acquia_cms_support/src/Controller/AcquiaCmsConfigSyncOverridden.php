@@ -110,6 +110,9 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
       '#type' => 'table',
       '#header' => $header,
       '#rows' => $rows,
+      '#attached' => [
+        'library' => ['acquia_cms_support/diff-modal'],
+      ],
     ];
   }
 
@@ -145,13 +148,6 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
         'data-dialog-type' => 'modal',
         'data-dialog-options' => json_encode([
           'width' => 700,
-          'buttons' => [
-            [
-              'text' => 'OK',
-              'class' => 'button button--primary',
-              'click' => "function() { $(this).dialog('close'); }",
-            ],
-          ],
         ]),
       ],
     ];

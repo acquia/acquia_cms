@@ -11,6 +11,7 @@ use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Diff\DiffFormatter;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -143,6 +144,7 @@ class AcquiaCmsConfigDiff implements ContainerInjectionInterface {
     $build['#title'] = $this->t('View changes of @config_file', ['@config_file' => $source_name]);
     // Add the CSS for the inline diff.
     $build['#attached']['library'][] = 'system/diff';
+    $build['#attached']['library'][] = 'acquia_cms_support/diff-modal';
 
     $build['diff'] = [
       '#type' => 'table',
@@ -154,6 +156,26 @@ class AcquiaCmsConfigDiff implements ContainerInjectionInterface {
         ['data' => $this->t('Staged'), 'colspan' => '2'],
       ],
       '#rows' => $this->diffFormatter->format($diff),
+    ];
+
+    $build['wrapper-buttonset'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => [
+          'acms-dialog-buttonset',
+        ],
+      ],
+    ];
+
+    $build['wrapper-buttonset']['ok'] = [
+      '#type' => 'link',
+      '#attributes' => [
+        'class' => [
+          'dialog-cancel dialog-ok-button button button--primary',
+        ],
+      ],
+      '#title' => "OK",
+      '#url' => Url::fromRoute('acquia_cms_support.config_sync'),
     ];
     return $build;
   }

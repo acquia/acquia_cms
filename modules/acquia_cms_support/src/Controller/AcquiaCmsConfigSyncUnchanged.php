@@ -91,6 +91,9 @@ class AcquiaCmsConfigSyncUnchanged extends ControllerBase implements ContainerIn
       '#type' => 'table',
       '#header' => $header,
       '#rows' => $rows,
+      '#attached' => [
+        'library' => ['acquia_cms_support/diff-modal'],
+      ],
     ];
   }
 
