@@ -91,7 +91,6 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
         if ($delta != '100') {
           $rows[] = [
             'name' => $config_file,
-            'last_modified' => '12/01/2020',
             'config' => [
               'class' => $class_name,
               'data' => ['#markup' => "<span>$delta  %</span>"],

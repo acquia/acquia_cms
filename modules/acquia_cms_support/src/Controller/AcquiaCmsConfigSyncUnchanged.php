@@ -82,7 +82,6 @@ class AcquiaCmsConfigSyncUnchanged extends ControllerBase implements ContainerIn
         if ($delta == '100') {
           $rows[] = [
             'name' => $config_file,
-            'last_modified' => '12/01/2020',
           ];
         }
       }
