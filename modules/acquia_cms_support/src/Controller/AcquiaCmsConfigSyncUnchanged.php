@@ -50,7 +50,6 @@ class AcquiaCmsConfigSyncUnchanged extends ControllerBase implements ContainerIn
   public function build() {
     $header = [
       $this->t('Name'),
-      $this->t('Last modified'),
     ];
     $rows = [];
     $acquia_cms_profile_modules = $this->acmsConfigSync->getAcquiaCmsProfileModuleList();

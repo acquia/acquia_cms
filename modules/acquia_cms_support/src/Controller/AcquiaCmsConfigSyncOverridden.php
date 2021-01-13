@@ -46,7 +46,6 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
   public function build() {
     $header = [
       $this->t('Name'),
-      $this->t('Last modified'),
       $this->t('Default parity'),
       $this->t('Operations'),
     ];

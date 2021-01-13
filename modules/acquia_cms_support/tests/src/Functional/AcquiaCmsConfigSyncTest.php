@@ -41,6 +41,19 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
   ];
 
   /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setUp();
+    // Update configuration to cover a simulated
+    // config delta calculation test.
+    $this->container->get('config.factory')
+      ->getEditable('user.role.content_author')
+      ->set('label', 'Content creator')
+      ->save();
+  }
+
+  /**
    * Tests acquia config sync pages with administrator role.
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
@@ -80,14 +93,15 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
     $this->drupalLogin($account);
     $this->drupalGet('/admin/config/development/acquia_cms_configuration_inspector/overridden');
 
-    $assert_session = $this->assertSession();
-    $assert_session->statusCodeEquals(200);
+    $this->assertSession()->statusCodeEquals(200);
 
-    // Check that both tabs link are available.
+    // Verify simulated config delta % is expected.
     $page = $this->getSession()->getPage();
-    $page->findLink('Overridden Configurations');
-    $page->findLink('Unchanged Configurations');
-
+    $td = $page->find('xpath', "//table/tbody/tr/td[contains(text(),'user.role.content_author')]");
+    if ($td) {
+      $tr = $td->getParent();
+      $this->assertTrue($tr->find('xpath', 'td[2]')->getText() == '98 %');
+    }
   }
 
   /**
