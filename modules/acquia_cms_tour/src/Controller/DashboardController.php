@@ -2,10 +2,14 @@
 
 namespace Drupal\acquia_cms_tour\Controller;
 
-use Drupal\acquia_cms_tour\Form\AcquiaCmsToolChecklistForm;
+use Drupal\acquia_cms_tour\Form\AcquiaConnectorForm;
 use Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm;
+use Drupal\acquia_cms_tour\Form\AcquiaSearchSolrForm;
 use Drupal\acquia_cms_tour\Form\AcquiaTelemetryForm;
-use Drupal\acquia_cms_tour\Form\GoogleApiChecklistForm;
+use Drupal\acquia_cms_tour\Form\GoogleAnalyticsForm;
+use Drupal\acquia_cms_tour\Form\GoogleTagManagerForm;
+use Drupal\acquia_cms_tour\Form\RecaptchaForm;
+use Drupal\acquia_cms_tour\Form\SiteStudioCoreForm;
 use Drupal\Core\Controller\ControllerBase;
 
 /**
@@ -26,8 +30,12 @@ final class DashboardController extends ControllerBase {
   private const SECTIONS = [
     'acquia_telemetry' => AcquiaTelemetryForm::class,
     'acquia_google_maps_api' => AcquiaGoogleMapsAPIForm::class,
-    'acquia_cms_tool_checklist' => AcquiaCmsToolChecklistForm::class,
-    'google_api_checklist' => GoogleApiChecklistForm::class,
+    'acquia_solr_search_form' => AcquiaSearchSolrForm::class,
+    'google_analytics_form' => GoogleAnalyticsForm::class,
+    'google_tag_manager_form' => GoogleTagManagerForm::class,
+    'recaptcha_form' => RecaptchaForm::class,
+    'acquia_connector_form' => AcquiaConnectorForm::class,
+    'site_studio_core_form' => SiteStudioCoreForm::class,
   ];
 
   /**

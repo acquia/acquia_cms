@@ -13,11 +13,3 @@ acquia_cms_tour.enabled_modules:
     _title: 'CMS Dashboard'
   requirements:
     _permission: 'access acquia cms tour dashboard'
-
-acquia_cms_tour.disabled_modules:
-  path: '/admin/tour/dashboard/disabled'
-  defaults:
-    _controller: '\Drupal\acquia_cms_tour\Controller\DashboardDisabledController::content'
-    _title: 'CMS Dashboard'
-  requirements:
-    _permission: 'access acquia cms tour dashboard'
