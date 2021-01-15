@@ -24,15 +24,13 @@ grumphp:
     phpcpd:
       directory: ['./src']
     phpcs:
-      standard: AcquiaDrupalStrict
+      standard: ['phpcs.xml.dist']
       ignore_patterns:
         - .github
         - .gitlab
-        - .css
         - bower_components
         - node_modules
         - vendor
-        - css
       triggered_by:
         - php
         - module
@@ -44,3 +42,5 @@ grumphp:
         - info
         - txt
         - md
+        - yml
+        - css

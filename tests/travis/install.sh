@@ -14,8 +14,18 @@ cd "$(dirname "$0")"
 # Reuse ORCA's own includes.
 source ../../../orca/bin/travis/_includes.sh
 
-# Run ORCA's standard installation script.
-../../../orca/bin/travis/install.sh
+# If running our custom jobs, initialize the fixture. Otherwise, use Orca's
+# installation script.
+if [[ "$ACMS_JOB" == "base" ]] || [[ "$ACMS_JOB" == "starter" ]] || [[ "$ACMS_JOB" == "pubsec" ]]; then
+  orca debug:packages CURRENT_DEV
+  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=acquia_cms --no-sqlite --no-site-install
+elif [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]] || [[ "$ACMS_JOB" == "pubsec_full" ]]; then
+  orca debug:packages CURRENT_DEV
+  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=acquia_cms --no-sqlite
+else
+  # Run ORCA's standard installation script.
+  ../../../orca/bin/travis/install.sh
+fi
 
 printenv | grep ACMS_ | sort
 
@@ -37,30 +47,30 @@ fi
 # Base, Starter, and PubSec jobs should test against sites installed from
 # artifacts to save build time.
 if [[ "$ACMS_JOB" == "base" ]] && [[ -n "$ACMS_DB_ARTIFACT" ]] && [[ -n "$ACMS_FILES_ARTIFACT" ]] && [[ -f "$ACMS_DB_ARTIFACT" ]] && [[ -f "$ACMS_FILES_ARTIFACT" ]]; then
-    echo "Installing From Artifacts"
-    tar -xzf $ACMS_FILES_ARTIFACT
-    gunzip $ACMS_DB_ARTIFACT
-    drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms.sql
-    drush updatedb --cache-clear --yes -vvv
-    drush cr
+  echo "Installing From Artifacts"
+  tar -xzf $ACMS_FILES_ARTIFACT
+  gunzip $ACMS_DB_ARTIFACT
+  drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms.sql
+  drush updatedb --cache-clear --yes -vvv
+  drush cr
 fi
 
-# Enable Starter or Pubsec Demo if Appropriate
+# Use Starter or Pubsec Demo artifacts if Appropriate.
 if [[ "$ACMS_JOB" == "starter" ]] && [[ -n "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ -n "$ACMS_STARTER_FILES_ARTIFACT" ]] && [[ -f "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ -f "$ACMS_STARTER_FILES_ARTIFACT" ]]; then
-    echo "Installing Starter From Artifacts"
-    tar -xzf $ACMS_STARTER_FILES_ARTIFACT
-    gunzip $ACMS_STARTER_DB_ARTIFACT
-    drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms-starter.sql
-    drush updatedb --cache-clear --yes -vvv
+  echo "Installing Starter From Artifacts"
+  tar -xzf $ACMS_STARTER_FILES_ARTIFACT
+  gunzip $ACMS_STARTER_DB_ARTIFACT
+  drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms-starter.sql
+  drush updatedb --cache-clear --yes -vvv
 fi
 
 if [[ "$ACMS_JOB" == "pubsec" ]] && [[ "$ACMS_PUBSEC_DB_ARTIFACT" && "$ACMS_PUBSEC_FILES_ARTIFACT" ]] && [[ -f "$ACMS_PUBSEC_DB_ARTIFACT" ]] && [[ -f "$ACMS_PUBSEC_FILES_ARTIFACT" ]]; then
-    cd "$ORCA_FIXTURE_DIR"
-    echo "Installing PubSec Demo From Artifacts"
-    tar -xzf $ACMS_PUBSEC_FILES_ARTIFACT
-    gunzip $ACMS_PUBSEC_DB_ARTIFACT
-    drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms-pubsec.sql
-    drush updatedb --yes -vvv
+  cd "$ORCA_FIXTURE_DIR"
+  echo "Installing PubSec Demo From Artifacts"
+  tar -xzf $ACMS_PUBSEC_FILES_ARTIFACT
+  gunzip $ACMS_PUBSEC_DB_ARTIFACT
+  drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms-pubsec.sql
+  drush updatedb --yes -vvv
 fi
 
 # In order for PHPUnit tests belonging to profile modules to even be
@@ -76,15 +86,15 @@ find ../../../profiles/contrib/acquia_cms/modules -maxdepth 1 -mindepth 1 -type 
 # Ensure the symlinks are included in the ORCA fixture snapshot.
 git add .
 
-# Enable Starter or Pubsec Demo if Appropriate
-if [ "$ACMS_JOB" == "starter_full" ]; then
+# Enable Starter or Pubsec Demo on full installs if Appropriate.
+if [[ "$ACMS_JOB" == "starter_full" ]]; then
     echo "Installing Starter Kit"
     drush en acquia_cms_development -y
     drush pmu shield -y
     drush en acquia_cms_starter -y
 fi
 
-if [ "$ACMS_JOB" == "pubsec_full" ]; then
+if [[ "$ACMS_JOB" == "pubsec_full" ]]; then
     echo "Installing PubSec Demo"
     drush en acquia_cms_development -y
     drush pmu shield -y
