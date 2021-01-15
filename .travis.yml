@@ -41,7 +41,7 @@ env:
     # release, dev-develop to track Dev/HEAD, or any other Composer version
     # string.
     # @see https://getcomposer.org/doc/articles/versions.md
-    - ORCA_VERSION=^2
+    - ORCA_VERSION=^3
     # If your package isn't in in ORCA's packages.yml or conflicts with details
     # that are, you can modify the active packages configuration at runtime by
     # uncommenting the following line and specifying your own alter file.
@@ -52,6 +52,11 @@ env:
     # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_FIXTURE_PROFILE
     - ORCA_FIXTURE_PROFILE=acquia_cms
     - ORCA_TELEMETRY_ENABLE=TRUE
+    # Change the PHP Code Sniffer standard used for static analysis. Acceptable
+    # values are "AcquiaPHP", "AcquiaDrupalStrict", and
+    # "AcquiaDrupalTransitional". Defaults to "AcquiaDrupalTransitional".
+    # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_PHPCS_STANDARD
+    - ORCA_PHPCS_STANDARD=AcquiaDrupalStrict
 
 # Execution time is drastically reduced by splitting the build into multiple
 # concurrent jobs.
@@ -61,16 +66,42 @@ matrix:
   include:
     # The standard ORCA jobs provide broad out-of-the-box coverage.
     # @see https://github.com/acquia/orca/blob/master/docs/understanding-orca.md#continuous-integration
-    - { name: "Static code analysis", env: ORCA_JOB=STATIC_CODE_ANALYSIS }
-    - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_SUT }
+    - { env: ORCA_JOB=STATIC_CODE_ANALYSIS, name: "Static code analysis" }
+    - { env: ORCA_JOB=STRICT_DEPRECATED_CODE_SCAN, name: "Strict deprecated code scan" }
+    # The following six jobs are custom ACMS jobs based on the standard isolated
+    # current dev test.
     # Exclude site_studio tests on this job because we only run them during cron builds.
-    - { name: "Isolated test w/ dev package versions", env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="site_studio" ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
-    - { name: "Starter", env: ACMS_JOB=starter ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
-    - { name: "PubSec Demo", env: ACMS_JOB=pubsec ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite --no-site-install"}
-    # The following jobs run only during cron runs, and fully install the site before running tests.
-    - { name: "Isolated test w/ dev package versions - Full Install", if: type = cron, env: ACMS_JOB=base_full ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite"}
-    - { name: "Starter - Full Install", if: type = cron, env: ACMS_JOB=starter_full ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite"}
-    - { name: "PubSec Demo - Full Install", if: type = cron, env: ACMS_JOB=pubsec_full ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core=^9 --dev --sut-only --no-sqlite"}
+    - { name: "Isolated test on current dev Drupal core version", env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="site_studio" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    - { name: "Starter", env: ACMS_JOB=starter ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    - { name: "PubSec Demo", env: ACMS_JOB=pubsec ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    # The following jobs run only during cron runs, and fully install the site before
+    # running tests.
+    - { name: "Isolated test on current dev Drupal core version - Full Install", if: type = cron, env: ACMS_JOB=base_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    - { name: "Starter - Full Install", if: type = cron, env: ACMS_JOB=starter_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    - { name: "PubSec Demo - Full Install", if: type = cron, env: ACMS_JOB=pubsec_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    # Uncomment the following four lines to enable the corresponding tests once
+    # the next major version of Drupal core has an alpha release or earlier.
+    # Until then it's wasteful to use CI jobs on them, even if they exit early.
+    # - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_BETA_OR_LATER, name: "Isolated test on next major, latest minor beta-or-later Drupal core version" }
+    # - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_BETA_OR_LATER, name: "Integrated test on next major, latest minor beta-or-later Drupal core version" }
+    # - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV, name: "Isolated test on next major, latest minor dev Drupal core version" }
+    # - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV, name: "Integrated test on next major, latest minor dev Drupal core version" }
+    - { env: ORCA_JOB=ISOLATED_UPGRADE_TEST_TO_NEXT_MAJOR_DEV, if: type = cron, name: "Isolated upgrade test to next major dev Drupal core version" }
+    - { env: ORCA_JOB=LOOSE_DEPRECATED_CODE_SCAN, if: type = cron, name: "Loose deprecated code scan" }
+    - { env: ORCA_JOB=DEPRECATED_CODE_SCAN_W_CONTRIB, if: type = cron, name: "Deprecated code scan w/ contrib" }
+
+    # For various reasons, some jobs are allowed to fail without failing the whole
+    # build. They should still be watched for advance notice of future problems.
+    # @see https://docs.travis-ci.com/user/customizing-the-build#rows-that-are-allowed-to-fail
+  allow_failures:
+    - env: ORCA_JOB=INTEGRATED_UPGRADE_TEST_TO_NEXT_MINOR_DEV
+    - env: ORCA_JOB=LOOSE_DEPRECATED_CODE_SCAN
+    - env: ORCA_JOB=DEPRECATED_CODE_SCAN_W_CONTRIB
+    - env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MINOR_DEV
+    - env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR_DEV
+    - env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV
+    - env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV
+    - env: ORCA_JOB=ISOLATED_UPGRADE_TEST_TO_NEXT_MAJOR_DEV
 
 dist: bionic
 
