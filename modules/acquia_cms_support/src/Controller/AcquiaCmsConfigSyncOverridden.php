@@ -3,7 +3,6 @@
 namespace Drupal\acquia_cms_support\Controller;
 
 use Drupal\acquia_cms_support\Service\AcquiaCmsConfigSyncService;
-use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Url;
@@ -42,66 +41,50 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
 
   /**
    * Returns a renderable array for a configuration page.
+   *
+   * @throws \Drupal\Core\Config\StorageTransformerException
    */
   public function build() {
     $header = [
       $this->t('Name'),
+      $this->t('Module'),
       $this->t('Default parity'),
       $this->t('Operations'),
     ];
     $rows = [];
-    $acquia_cms_profile_modules = $this->acmsConfigSync->getAcquiaCmsProfileModuleList();
+    $acquia_cms_config_lists = $this->acmsConfigSync->getAcquiaCmsConfigList();
+    foreach ($acquia_cms_config_lists as $config) {
+      $key = key($config);
+      $delta = $config[$key]['delta'];
+      $config_name = $config[$key]['name'];
+      $storage = $config[$key]['storage'];
+      $type = $config[$key]['type'];
 
-    foreach ($acquia_cms_profile_modules as $key => $value) {
-      $type = $value->getType();
-      $config_path = ($type === 'profile') ? '../' : '../modules/' . $key;
-
-      if (!is_dir($config_path . '/config')) {
-        // No config directory move to next module.
-        continue;
+      if ($delta <= 30) {
+        $class_name = 'color-parity-30';
       }
-      $config_install_dir = $config_path . '/' . InstallStorage::CONFIG_INSTALL_DIRECTORY;
-      $config_optional_dir = $config_path . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY;
-
-      if (!$config_install_dir && !$config_optional_dir) {
-        // No install or optional directory, move to next module.
-        continue;
+      elseif ($delta > 30 && $delta <= 75) {
+        $class_name = 'color-parity-75';
       }
-
-      $installed_list = $this->acmsConfigSync->getConfigList($config_install_dir, 'install');
-      $optional_list = $this->acmsConfigSync->getConfigList($config_optional_dir, 'optional');
-      $config_files_list = array_merge($installed_list, $optional_list);
-
-      foreach ($config_files_list as $config_file => $storage) {
-        $storage_config_path = ($type === 'profile') ? '../config/' . $storage : '../modules/' . $key . '/config/' . $storage;
-        $sync_storage = $this->acmsConfigSync->getFileStorage($storage_config_path);
-        $delta = $this->acmsConfigSync->getDelta($config_file, $sync_storage);
-        $links = $this->getViewDifference($key, $value->getType(), $storage, $config_file);
-
-        if ($delta <= 30) {
-          $class_name = 'color-parity-30';
-        }
-        elseif ($delta > 30 && $delta <= 75) {
-          $class_name = 'color-parity-75';
-        }
-        else {
-          $class_name = 'color-parity-above-75';
-        }
-        if ($delta != '100') {
-          $rows[] = [
-            'name' => $config_file,
-            'config' => [
-              'class' => $class_name,
-              'data' => ['#markup' => "<span>$delta  %</span>"],
+      else {
+        $class_name = 'color-parity-above-75';
+      }
+      if ($delta != '100') {
+        $links = $this->getViewDifference($key, $type, $storage, $config_name);
+        $rows[] = [
+          'name' => $config_name,
+          'module' => $key,
+          'config' => [
+            'class' => $class_name,
+            'data' => ['#markup' => "<span>$delta  %</span>"],
+          ],
+          'operations' => [
+            'data' => [
+              '#type' => 'operations',
+              '#links' => $links,
             ],
-            'operations' => [
-              'data' => [
-                '#type' => 'operations',
-                '#links' => $links,
-              ],
-            ],
-          ];
-        }
+          ],
+        ];
       }
     }
     asort($rows);

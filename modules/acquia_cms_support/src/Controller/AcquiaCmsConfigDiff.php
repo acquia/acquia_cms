@@ -97,6 +97,8 @@ class AcquiaCmsConfigDiff implements ContainerInjectionInterface {
    *
    * @return array
    *   Table showing a two-way diff between the active and staged configuration.
+   *
+   * @throws \Drupal\Core\Config\StorageTransformerException
    */
   public function diff($name, $type, $storage, $source_name, $target_name = NULL) {
     $path = ($type === 'profile') ? '../config/' . $storage : '../modules/' . $name . '/config/' . $storage;

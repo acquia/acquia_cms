@@ -3,7 +3,6 @@
 namespace Drupal\acquia_cms_support\Controller;
 
 use Drupal\acquia_cms_support\Service\AcquiaCmsConfigSyncService;
-use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -46,43 +45,25 @@ class AcquiaCmsConfigSyncUnchanged extends ControllerBase implements ContainerIn
 
   /**
    * Returns a renderable array for a configuration page.
+   *
+   * @throws \Drupal\Core\Config\StorageTransformerException
    */
   public function build() {
     $header = [
       $this->t('Name'),
+      $this->t('Module'),
     ];
     $rows = [];
-    $acquia_cms_profile_modules = $this->acmsConfigSync->getAcquiaCmsProfileModuleList();
-
-    foreach ($acquia_cms_profile_modules as $key => $value) {
-      $type = $value->getType();
-      $config_path = ($type === 'profile') ? '../' : '../modules/' . $key;
-
-      if (!is_dir($config_path . '/config')) {
-        // No config directory move to next module.
-        continue;
-      }
-      $config_install_dir = $config_path . '/' . InstallStorage::CONFIG_INSTALL_DIRECTORY;
-      $config_optional_dir = $config_path . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY;
-
-      if (!$config_install_dir && !$config_optional_dir) {
-        // No install or optional directory, move to next module.
-        continue;
-      }
-
-      $installed_list = $this->acmsConfigSync->getConfigList($config_install_dir, 'install');
-      $optional_list = $this->acmsConfigSync->getConfigList($config_optional_dir, 'optional');
-      $config_files_list = array_merge($installed_list, $optional_list);
-      foreach ($config_files_list as $config_file => $storage) {
-        $storage_config_path = ($type === 'profile') ? '../config/' . $storage : '../modules/' . $key . '/config/' . $storage;
-        $sync_storage = $this->acmsConfigSync->getFileStorage($storage_config_path);
-        $delta = $this->acmsConfigSync->getDelta($config_file, $sync_storage);
-
-        if ($delta == '100') {
-          $rows[] = [
-            'name' => $config_file,
-          ];
-        }
+    $acquia_cms_config_lists = $this->acmsConfigSync->getAcquiaCmsConfigList();
+    foreach ($acquia_cms_config_lists as $config) {
+      $key = key($config);
+      $delta = $config[$key]['delta'];
+      $config_name = $config[$key]['name'];
+      if ($delta == '100') {
+        $rows[] = [
+          'name' => $config_name,
+          'module' => $key,
+        ];
       }
     }
     asort($rows);

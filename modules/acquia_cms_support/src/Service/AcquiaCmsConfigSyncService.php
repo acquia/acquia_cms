@@ -5,6 +5,7 @@ namespace Drupal\acquia_cms_support\Service;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\ImportStorageTransformer;
+use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Serialization\Yaml;
@@ -69,6 +70,52 @@ class AcquiaCmsConfigSyncService {
     $this->targetStorage = $target_storage;
     $this->importTransformer = $import_transformer;
     $this->moduleHandler = $module_handler;
+  }
+
+  /**
+   * Get list of acquia CMS configurations.
+   *
+   * @return array
+   *   The list of ACMS configurations.
+   *
+   * @throws \Drupal\Core\Config\StorageTransformerException
+   */
+  public function getAcquiaCmsConfigList() {
+    $acquia_cms_profile_modules = $this->getAcquiaCmsProfileModuleList();
+    $configurations = [];
+    foreach ($acquia_cms_profile_modules as $key => $value) {
+      $type = $value->getType();
+      $config_path = ($type === 'profile') ? '../' : '../modules/' . $key;
+
+      if (!is_dir($config_path . '/config')) {
+        // No config directory move to next module.
+        continue;
+      }
+      $config_install_dir = $config_path . '/' . InstallStorage::CONFIG_INSTALL_DIRECTORY;
+      $config_optional_dir = $config_path . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY;
+
+      if (!$config_install_dir && !$config_optional_dir) {
+        // No install or optional directory, move to next module.
+        continue;
+      }
+
+      $installed_list = $this->getConfigList($config_install_dir, 'install');
+      $optional_list = $this->getConfigList($config_optional_dir, 'optional');
+      $config_files_list = array_merge($installed_list, $optional_list);
+
+      foreach ($config_files_list as $config_file => $storage) {
+        $storage_config_path = ($type === 'profile') ? '../config/' . $storage : '../modules/' . $key . '/config/' . $storage;
+        $sync_storage = $this->getFileStorage($storage_config_path);
+        $delta = $this->getDelta($config_file, $sync_storage);
+        $configurations[][$key] = [
+          'name' => $config_file,
+          'type' => $type,
+          'delta' => $delta,
+          'storage' => $storage,
+        ];
+      }
+    }
+    return $configurations;
   }
 
   /**

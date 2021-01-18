@@ -63,23 +63,26 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
   public function testAcquiaConfigSyncPages() {
     $account = $this->drupalCreateUser(['administer site configuration']);
     $this->drupalLogin($account);
-    $this->drupalGet('/admin/config/development/acquia_cms_configuration_inspector');
+    $this->drupalGet('/admin/config/development/acquia-cms-support');
 
-    $this->assertSession()->statusCodeEquals(200);
+    $assert_session = $this->assertSession();
+    $assert_session->statusCodeEquals(200);
 
-    // Check that both tabs link are available.
+    // Assert that overridden configurations link is available.
+    $assert_session->linkExists('Overridden Configurations');
+
+    // Assert that unchanged configurations link is available.
+    $assert_session->linkExists('Unchanged Configurations');
+
+    // Check that 'Overridden Configurations' link is accessible.
     $page = $this->getSession()->getPage();
-    $page->findLink('Overridden Configurations');
-    $page->findLink('Unchanged Configurations');
-
-    // Check that 'Overridden Configurations' link is accessible.
     $page->clickLink('Overridden Configurations');
-    $this->assertSession()->statusCodeEquals(200);
+    $assert_session->statusCodeEquals(200);
 
-    $this->drupalGet('/admin/config/development/acquia_cms_configuration_inspector');
     // Check that 'Overridden Configurations' link is accessible.
+    $this->drupalGet('/admin/config/development/acquia-cms-support');
     $page->clickLink('Unchanged Configurations');
-    $this->assertSession()->statusCodeEquals(200);
+    $assert_session->statusCodeEquals(200);
   }
 
   /**
@@ -91,7 +94,7 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
   public function testAcquiaConfigSyncOverriddenPage() {
     $account = $this->drupalCreateUser(['administer site configuration']);
     $this->drupalLogin($account);
-    $this->drupalGet('/admin/config/development/acquia_cms_configuration_inspector/overridden');
+    $this->drupalGet('/admin/config/development/acquia-cms-support/overridden-config');
 
     $this->assertSession()->statusCodeEquals(200);
 
@@ -100,7 +103,7 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
     $td = $page->find('xpath', "//table/tbody/tr/td[contains(text(),'user.role.content_author')]");
     if ($td) {
       $tr = $td->getParent();
-      $this->assertTrue($tr->find('xpath', 'td[2]')->getText() == '98 %');
+      $this->assertTrue($tr->find('xpath', 'td[3]')->getText() == '98 %');
     }
   }
 
@@ -125,13 +128,13 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
       $this->drupalLogin($account);
     }
 
-    $this->drupalGet('/admin/config/development/acquia_cms_configuration_inspector');
+    $this->drupalGet('/admin/config/development/acquia-cms-support');
     $this->assertSession()->statusCodeEquals(403);
 
-    $this->drupalGet('/admin/config/development/acquia_cms_configuration_inspector/overridden');
+    $this->drupalGet('/admin/config/development/acquia-cms-support/overridden-config');
     $this->assertSession()->statusCodeEquals(403);
 
-    $this->drupalGet('/admin/config/development/acquia_cms_configuration_inspector/unchanged');
+    $this->drupalGet('/admin/config/development/acquia-cms-support/unchanged-config');
     $this->assertSession()->statusCodeEquals(403);
   }
 

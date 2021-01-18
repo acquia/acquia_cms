@@ -1,5 +1,5 @@
 acquia_cms_support.config_sync:
-  path: '/admin/config/development/acquia_cms_configuration_inspector'
+  path: '/admin/config/development/acquia-cms-support'
   defaults:
     _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
     _title: 'Acquia CMS - Configuration Inspector'
@@ -7,7 +7,7 @@ acquia_cms_support.config_sync:
     _permission: 'administer site configuration'
 
 acquia_cms_support.config_overridden:
-  path: '/admin/config/development/acquia_cms_configuration_inspector/overridden'
+  path: '/admin/config/development/acquia-cms-support/overridden-config'
   defaults:
     _controller: '\Drupal\acquia_cms_support\Controller\AcquiaCmsConfigSyncOverridden::build'
     _title: 'Overridden Configurations'
@@ -15,7 +15,7 @@ acquia_cms_support.config_overridden:
     _permission: 'administer site configuration'
 
 acquia_cms_support.config_unchanged:
-  path: '/admin/config/development/acquia_cms_configuration_inspector/unchanged'
+  path: '/admin/config/development/acquia-cms-support/unchanged-config'
   defaults:
     _controller: '\Drupal\acquia_cms_support\Controller\AcquiaCmsConfigSyncUnchanged::build'
     _title: 'Unchanged Configurations'
@@ -23,7 +23,7 @@ acquia_cms_support.config_unchanged:
     _permission: 'administer site configuration'
 
 acquia_cms_support.config_diff:
-  path: '/admin/config/development/acquia_cms_configuration_inspector/sync/diff/{name}/{type}/{storage}/{source_name}/{target_name}'
+  path: '/admin/config/development/acquia-cms-support/diff/{name}/{type}/{storage}/{source_name}/{target_name}'
   defaults:
     _controller: '\Drupal\acquia_cms_support\Controller\AcquiaCmsConfigDiff::diff'
     target_name: NULL
