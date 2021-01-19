@@ -71,20 +71,11 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
             continue;
           }
 
-          if ($delta <= 30) {
-            $className = 'color-parity-30';
-          }
-          elseif ($delta > 30 && $delta <= 75) {
-            $className = 'color-parity-75';
-          }
-          else {
-            $className = 'color-parity-above-75';
-          }
           $changedConfigList[] = [
             'name' => $config,
             'module' => $module->getName(),
             'config' => [
-              'class' => $className,
+              'class' => $this->getDeltaClass($delta),
               'data' => ['#markup' => "<span>$delta  %</span>"],
             ],
             'operations' => [
@@ -108,6 +99,29 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
         'library' => ['acquia_cms_support/diff-modal'],
       ],
     ];
+  }
+
+  /**
+   * Get classname for colour code based on delta value.
+   *
+   * @param int $delta
+   *   Delta value.
+   *
+   * @return string
+   *   Class.
+   */
+  private function getDeltaClass($delta) {
+    $className = '';
+    if ($delta <= 30) {
+      $className = 'color-parity-30';
+    }
+    elseif ($delta > 30 && $delta <= 75) {
+      $className = 'color-parity-75';
+    }
+    else {
+      $className = 'color-parity-above-75';
+    }
+    return $className;
   }
 
   /**
