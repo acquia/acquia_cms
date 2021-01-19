@@ -6,6 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\ImportStorageTransformer;
 use Drupal\Core\Config\InstallStorage;
+use Drupal\Core\Config\StorageComparer;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Serialization\Yaml;
@@ -73,52 +74,6 @@ class AcquiaCmsConfigSyncService {
   }
 
   /**
-   * Get list of acquia CMS configurations.
-   *
-   * @return array
-   *   The list of ACMS configurations.
-   *
-   * @throws \Drupal\Core\Config\StorageTransformerException
-   */
-  public function getAcquiaCmsConfigList() {
-    $acquia_cms_profile_modules = $this->getAcquiaCmsProfileModuleList();
-    $configurations = [];
-    foreach ($acquia_cms_profile_modules as $key => $value) {
-      $type = $value->getType();
-      $config_path = ($type === 'profile') ? '../' : '../modules/' . $key;
-
-      if (!is_dir($config_path . '/config')) {
-        // No config directory move to next module.
-        continue;
-      }
-      $config_install_dir = $config_path . '/' . InstallStorage::CONFIG_INSTALL_DIRECTORY;
-      $config_optional_dir = $config_path . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY;
-
-      if (!$config_install_dir && !$config_optional_dir) {
-        // No install or optional directory, move to next module.
-        continue;
-      }
-
-      $installed_list = $this->getConfigList($config_install_dir, 'install');
-      $optional_list = $this->getConfigList($config_optional_dir, 'optional');
-      $config_files_list = array_merge($installed_list, $optional_list);
-
-      foreach ($config_files_list as $config_file => $storage) {
-        $storage_config_path = ($type === 'profile') ? '../config/' . $storage : '../modules/' . $key . '/config/' . $storage;
-        $sync_storage = $this->getFileStorage($storage_config_path);
-        $delta = $this->getDelta($config_file, $sync_storage);
-        $configurations[][$key] = [
-          'name' => $config_file,
-          'type' => $type,
-          'delta' => $delta,
-          'storage' => $storage,
-        ];
-      }
-    }
-    return $configurations;
-  }
-
-  /**
    * Fetch the acquia cms profile with list of enabled modules of ACMS.
    */
   public function getAcquiaCmsProfileModuleList() {
@@ -126,43 +81,6 @@ class AcquiaCmsConfigSyncService {
     return array_filter($profile_modules, function ($key) {
       return str_starts_with($key, 'acquia_cms');
     }, ARRAY_FILTER_USE_KEY);
-  }
-
-  /**
-   * Get the install/optional folder configuration.
-   *
-   * @param string $path
-   *   The path.
-   * @param string $config_dir
-   *   The configuration directory.
-   *
-   * @return array
-   *   The list of configurations
-   *
-   * @throws \Drupal\Core\Config\StorageTransformerException
-   */
-  public function getConfigList($path, $config_dir = 'install') {
-    $storage = $this->getFileStorage($path);
-    $config_list = $storage->listAll();
-    $config_list = array_fill_keys($config_list, $config_dir);
-    return $config_list;
-  }
-
-  /**
-   * Get the file storage.
-   *
-   * @param string $path
-   *   The path.
-   *
-   * @return \Drupal\Core\Config\DatabaseStorage|StorageInterface
-   *   The file transform
-   *
-   * @throws \Drupal\Core\Config\StorageTransformerException
-   *   The StorageTransformerException.
-   */
-  public function getFileStorage(string $path) {
-    $file = new FileStorage($path);
-    return $this->importTransformer->transform($file);
   }
 
   /**
@@ -194,6 +112,66 @@ class AcquiaCmsConfigSyncService {
     // configuration.
     // Active configuration have matches with Staged configuration.
     return round(count($diff) / count($active_configuration) * 100, 0);
+  }
+
+  /**
+   * Get install config directory storage.
+   *
+   * @param string $path
+   *   Path to use for install filestorage.
+   *
+   * @return object
+   *   File Storage Object.
+   */
+  public function getInstallStorage($path) {
+    return $this->getFileStorage($path . '/' . InstallStorage::CONFIG_INSTALL_DIRECTORY);
+  }
+
+  /**
+   * Get optional config directory storage.
+   *
+   * @param string $path
+   *   Path to use for optional filestorage.
+   *
+   * @return object
+   *   File Storage Object.
+   */
+  public function getOptionalStorage($path) {
+    return $this->getFileStorage($path . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY);
+  }
+
+  /**
+   * Get the storage for a given path.
+   *
+   * @param string $path
+   *   Path to use for filestorage.
+   *
+   * @return object
+   *   FileStorage Object.
+   */
+  private function getFileStorage($path) {
+    return new FileStorage($path);
+  }
+
+  /**
+   * List all the changed (create and update) config from a storage.
+   *
+   * @param \Drupal\Core\Config\StorageInterface $syncStorage
+   *   The storage to use as sync storage for compairing changes.
+   *
+   * @return array
+   *   List of the chaged config.
+   */
+  public function getChangedConfig(StorageInterface $syncStorage) {
+    $changedConfig = [];
+    $storageComparer = new StorageComparer($syncStorage, $this->targetStorage);
+    $storageComparer->createChangelist();
+    if ($storageComparer->hasChanges()) {
+      $createdConfig = $storageComparer->getChangelist('create');
+      $updatedConfig = $storageComparer->getChangelist('update');
+      $changedConfig = \array_merge($changedConfig, $createdConfig, $updatedConfig);
+    }
+    return $changedConfig;
   }
 
 }

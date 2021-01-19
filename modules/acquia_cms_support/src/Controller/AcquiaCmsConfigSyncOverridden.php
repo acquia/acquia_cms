@@ -51,48 +51,59 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
       $this->t('Default parity'),
       $this->t('Operations'),
     ];
-    $rows = [];
-    $acquia_cms_config_lists = $this->acmsConfigSync->getAcquiaCmsConfigList();
-    foreach ($acquia_cms_config_lists as $config) {
-      $key = key($config);
-      $delta = $config[$key]['delta'];
-      $config_name = $config[$key]['name'];
-      $storage = $config[$key]['storage'];
-      $type = $config[$key]['type'];
+    $acquiaCmsModules = $this->acmsConfigSync->getAcquiaCmsProfileModuleList();
+    $changedConfigList = [];
+    foreach ($acquiaCmsModules as $module) {
+      $path = $module->getPath();
+      $multipleStorage = [
+        'install' => $this->acmsConfigSync->getInstallStorage($path),
+        'optional' => $this->acmsConfigSync->getOptionalStorage($path),
+      ];
 
-      if ($delta <= 30) {
-        $class_name = 'color-parity-30';
-      }
-      elseif ($delta > 30 && $delta <= 75) {
-        $class_name = 'color-parity-75';
-      }
-      else {
-        $class_name = 'color-parity-above-75';
-      }
-      if ($delta != '100') {
-        $links = $this->getViewDifference($key, $type, $storage, $config_name);
-        $rows[] = [
-          'name' => $config_name,
-          'module' => $key,
-          'config' => [
-            'class' => $class_name,
-            'data' => ['#markup' => "<span>$delta  %</span>"],
-          ],
-          'operations' => [
-            'data' => [
-              '#type' => 'operations',
-              '#links' => $links,
+      foreach ($multipleStorage as $storageType => $storage) {
+        $configChangeList = $this->acmsConfigSync->getChangedConfig($storage);
+        if (empty($configChangeList)) {
+          continue;
+        }
+        foreach ($configChangeList as $config) {
+          $delta = (int) $this->acmsConfigSync->getDelta($config, $storage);
+          if ($delta === 100) {
+            continue;
+          }
+
+          if ($delta <= 30) {
+            $className = 'color-parity-30';
+          }
+          elseif ($delta > 30 && $delta <= 75) {
+            $className = 'color-parity-75';
+          }
+          else {
+            $className = 'color-parity-above-75';
+          }
+          $changedConfigList[] = [
+            'name' => $config,
+            'module' => $module->getName(),
+            'config' => [
+              'class' => $className,
+              'data' => ['#markup' => "<span>$delta  %</span>"],
             ],
-          ],
-        ];
+            'operations' => [
+              'data' => [
+                '#type' => 'operations',
+                '#links' => $this->getViewDifference($module->getName(), $module->getType(), $storageType, $config),
+              ],
+            ],
+          ];
+        }
       }
     }
-    asort($rows);
+
+    asort($changedConfigList);
 
     return [
       '#type' => 'table',
       '#header' => $header,
-      '#rows' => $rows,
+      '#rows' => $changedConfigList,
       '#attached' => [
         'library' => ['acquia_cms_support/diff-modal'],
       ],
