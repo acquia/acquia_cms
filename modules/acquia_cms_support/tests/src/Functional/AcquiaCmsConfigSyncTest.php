@@ -98,10 +98,12 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
 
     $this->assertSession()->statusCodeEquals(200);
 
-    // Verify simulated config delta % is expected.
     $page = $this->getSession()->getPage();
     $td = $page->find('xpath', "//table/tbody/tr/td[contains(text(),'user.role.content_author')]");
     if ($td) {
+      // Asset that expected configuration is changed.
+      $this->assertTrue($page->find('xpath', "//table/tbody/tr/td[contains(text(),'user.role.content_author')]")->getText() == 'user.role.content_author');
+      // Verify simulated config delta % is expected.
       $tr = $td->getParent();
       $this->assertTrue($tr->find('xpath', 'td[3]')->getText() == '98 %');
     }
