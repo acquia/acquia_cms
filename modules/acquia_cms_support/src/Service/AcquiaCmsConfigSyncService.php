@@ -164,13 +164,9 @@ class AcquiaCmsConfigSyncService {
    */
   public function getOverriddenConfig(StorageInterface $syncStorage) {
     $overriddenConfig = [];
-    $storageComparer = new StorageComparer($syncStorage, $this->targetStorage);
-    $storageComparer->createChangelist();
+    $storageComparer = $this->getStoragecomparer($syncStorage)->createChangelist();
     if ($storageComparer->hasChanges()) {
-      $changedConfig = [];
-      $createdConfig = $storageComparer->getChangelist('create');
-      $updatedConfig = $storageComparer->getChangelist('update');
-      $changedConfig = \array_merge($changedConfig, $createdConfig, $updatedConfig);
+      $changedConfig = $this->getCreateAndUpdateChangeList($storageComparer);
       foreach ($changedConfig as $config) {
         $delta = $this->getDelta($config, $syncStorage);
         if ($delta === 100) {
@@ -183,6 +179,64 @@ class AcquiaCmsConfigSyncService {
       }
     }
     return $overriddenConfig;
+  }
+
+  /**
+   * Get Unchanged config list.
+   *
+   * @param \Drupal\Core\Config\StorageInterface $syncStorage
+   *   The storage to use as sync storage for compairing changes.
+   *
+   * @return \Drupal\Core\Config\StorageComparer
+   *   Storage Comparer object.
+   */
+  private function getStoragecomparer(StorageInterface $syncStorage) {
+    return new StorageComparer($syncStorage, $this->targetStorage);
+  }
+
+  /**
+   * Get changed config list.
+   *
+   * @param \Drupal\Core\Config\StorageComparer $storageComparer
+   *   The storage to use as sync storage for compairing changes.
+   *
+   * @return array
+   *   Array of changed configurations.
+   */
+  private function getCreateAndUpdateChangeList(StorageComparer $storageComparer) {
+    $changedConfig = [];
+    $createdConfig = $storageComparer->getChangelist('create');
+    $updatedConfig = $storageComparer->getChangelist('update');
+    $changedConfig = \array_merge($changedConfig, $createdConfig, $updatedConfig);
+    return $changedConfig;
+  }
+
+  /**
+   * Get Unchanged config list.
+   *
+   * @param \Drupal\Core\Config\StorageInterface $syncStorage
+   *   The storage to use as sync storage for compairing changes.
+   *
+   * @return array
+   *   Array of unchanged configurations.
+   */
+  public function getUnChangedConfig(StorageInterface $syncStorage) {
+    $unChangedConfigList = [];
+    $storageComparer = $this->getStoragecomparer($syncStorage)->createChangelist();
+    if ($storageComparer->hasChanges()) {
+      $changeList = $this->getCreateAndUpdateChangeList($storageComparer);
+      foreach ($changeList as $config) {
+        $delta = $this->getDelta($config, $syncStorage);
+        if ($delta !== 100) {
+          continue;
+        }
+        \array_push($unChangedConfigList, $config);
+      }
+    }
+    else {
+      $unChangedConfigList = $syncStorage->listAll();
+    }
+    return $unChangedConfigList;
   }
 
 }

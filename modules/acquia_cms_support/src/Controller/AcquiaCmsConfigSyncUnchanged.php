@@ -64,16 +64,11 @@ class AcquiaCmsConfigSyncUnchanged extends ControllerBase implements ContainerIn
         'optional' => $this->acmsConfigSync->getOptionalStorage($path),
       ];
       foreach ($multipleStorage as $storage) {
-        $configChangeList = $this->acmsConfigSync->getOverriddenConfig($storage);
-        if (empty($configChangeList)) {
+        $unChangedList = $this->acmsConfigSync->getUnChangedConfig($storage);
+        if (empty($unChangedList)) {
           continue;
         }
-        foreach ($configChangeList as $config) {
-          $delta = (int) $this->acmsConfigSync->getDelta($config, $storage);
-          if ($delta !== 100) {
-            continue;
-          }
-
+        foreach ($unChangedList as $config) {
           $unChangedConfigList[] = [
             'name' => $config,
             'module' => $module->getName(),
