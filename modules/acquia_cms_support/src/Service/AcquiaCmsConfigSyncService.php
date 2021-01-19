@@ -111,7 +111,7 @@ class AcquiaCmsConfigSyncService {
     // Count of config which present in both places vs count of database
     // configuration.
     // Active configuration have matches with Staged configuration.
-    return round(count($diff) / count($active_configuration) * 100, 0);
+    return (int) round(count($diff) / count($active_configuration) * 100, 0);
   }
 
   /**
@@ -162,16 +162,27 @@ class AcquiaCmsConfigSyncService {
    * @return array
    *   List of the chaged config.
    */
-  public function getChangedConfig(StorageInterface $syncStorage) {
-    $changedConfig = [];
+  public function getOverriddenConfig(StorageInterface $syncStorage) {
+    $overriddenConfig = [];
     $storageComparer = new StorageComparer($syncStorage, $this->targetStorage);
     $storageComparer->createChangelist();
     if ($storageComparer->hasChanges()) {
+      $changedConfig = [];
       $createdConfig = $storageComparer->getChangelist('create');
       $updatedConfig = $storageComparer->getChangelist('update');
       $changedConfig = \array_merge($changedConfig, $createdConfig, $updatedConfig);
+      foreach ($changedConfig as $config) {
+        $delta = $this->getDelta($config, $syncStorage);
+        if ($delta === 100) {
+          continue;
+        }
+        $overriddenConfig[] = [
+          'name' => $config,
+          'delta' => $delta,
+        ];
+      }
     }
-    return $changedConfig;
+    return $overriddenConfig;
   }
 
 }

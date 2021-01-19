@@ -52,7 +52,7 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
       $this->t('Operations'),
     ];
     $acquiaCmsModules = $this->acmsConfigSync->getAcquiaCmsProfileModuleList();
-    $changedConfigList = [];
+    $overriddenConfig = [];
     foreach ($acquiaCmsModules as $module) {
       $path = $module->getPath();
       $multipleStorage = [
@@ -61,18 +61,16 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
       ];
 
       foreach ($multipleStorage as $storageType => $storage) {
-        $configChangeList = $this->acmsConfigSync->getChangedConfig($storage);
+        $configChangeList = $this->acmsConfigSync->getOverriddenConfig($storage);
         if (empty($configChangeList)) {
           continue;
         }
-        foreach ($configChangeList as $config) {
-          $delta = (int) $this->acmsConfigSync->getDelta($config, $storage);
-          if ($delta === 100) {
-            continue;
-          }
 
-          $changedConfigList[] = [
-            'name' => $config,
+        foreach ($configChangeList as $config) {
+          $delta = $config['delta'];
+          $configName = $config['name'];
+          $overriddenConfig[] = [
+            'name' => $configName,
             'module' => $module->getName(),
             'config' => [
               'class' => $this->getDeltaClass($delta),
@@ -81,7 +79,7 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
             'operations' => [
               'data' => [
                 '#type' => 'operations',
-                '#links' => $this->getViewDifference($module->getName(), $module->getType(), $storageType, $config),
+                '#links' => $this->getViewDifference($module->getName(), $module->getType(), $storageType, $configName),
               ],
             ],
           ];
@@ -89,12 +87,12 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
       }
     }
 
-    asort($changedConfigList);
+    asort($overriddenConfig);
 
     return [
       '#type' => 'table',
       '#header' => $header,
-      '#rows' => $changedConfigList,
+      '#rows' => $overriddenConfig,
       '#attached' => [
         'library' => ['acquia_cms_support/diff-modal'],
       ],

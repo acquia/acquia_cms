@@ -53,25 +53,41 @@ class AcquiaCmsConfigSyncUnchanged extends ControllerBase implements ContainerIn
       $this->t('Name'),
       $this->t('Module'),
     ];
-    $rows = [];
-    $acquia_cms_config_lists = $this->acmsConfigSync->getAcquiaCmsConfigList();
-    foreach ($acquia_cms_config_lists as $config) {
-      $key = key($config);
-      $delta = $config[$key]['delta'];
-      $config_name = $config[$key]['name'];
-      if ($delta == '100') {
-        $rows[] = [
-          'name' => $config_name,
-          'module' => $key,
-        ];
+
+    $acquiaCmsModules = $this->acmsConfigSync->getAcquiaCmsProfileModuleList();
+    $unChangedConfigList = [];
+
+    foreach ($acquiaCmsModules as $module) {
+      $path = $module->getPath();
+      $multipleStorage = [
+        'install' => $this->acmsConfigSync->getInstallStorage($path),
+        'optional' => $this->acmsConfigSync->getOptionalStorage($path),
+      ];
+      foreach ($multipleStorage as $storage) {
+        $configChangeList = $this->acmsConfigSync->getOverriddenConfig($storage);
+        if (empty($configChangeList)) {
+          continue;
+        }
+        foreach ($configChangeList as $config) {
+          $delta = (int) $this->acmsConfigSync->getDelta($config, $storage);
+          if ($delta !== 100) {
+            continue;
+          }
+
+          $unChangedConfigList[] = [
+            'name' => $config,
+            'module' => $module->getName(),
+          ];
+        }
       }
     }
-    asort($rows);
+
+    asort($unChangedConfigList);
 
     return [
       '#type' => 'table',
       '#header' => $header,
-      '#rows' => $rows,
+      '#rows' => $unChangedConfigList,
       '#attached' => [
         'library' => ['acquia_cms_support/diff-modal'],
       ],
