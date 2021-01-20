@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_support\Service;
 
+use Drupal\Component\Diff\Diff;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\ImportStorageTransformer;
@@ -84,34 +85,54 @@ class AcquiaCmsConfigSyncService {
   }
 
   /**
-   * Get the delta between Acquia CMS vs Active configuration.
+   * Get the parity between Acquia CMS vs Active configuration.
    *
-   * @param string $config_file
+   * @param string $configFile
    *   Configuration file.
-   * @param string $original_configuration_storage
-   *   Original configuration storage.
+   * @param \Drupal\Core\Config\StorageInterface $syncStorage
+   *   The storage to use as sync storage for compairing changes.
    *
    * @return float
-   *   Delta between configuration.
+   *   parity between configuration.
    */
-  public function getDelta($config_file, $original_configuration_storage) {
+  public function getParity($configFile, StorageInterface $syncStorage) {
     // Database configuration.
-    $active_configuration = explode("\n", Yaml::encode($this->targetStorage->read($config_file)));
+    $active_configuration = explode("\n", Yaml::encode($this->targetStorage->read($configFile)));
     // Configuration in files.
-    $original_configuration = explode("\n", Yaml::encode($original_configuration_storage->read($config_file)));
-    $active_configuration = array_values(array_filter(
-      $active_configuration,
-      function ($val, $key) use (&$active_configuration) {
+    $original_configuration = explode("\n", Yaml::encode($syncStorage->read($configFile)));
+    $active_configuration = $this->removeNonRequiredKeys($active_configuration);
+    $diff = new Diff($original_configuration, $active_configuration);
+    $totalLines = count($active_configuration);
+    $editedLines = 0;
+    if (!$diff->isEmpty()) {
+      foreach ($diff->getEdits() as $diffOp) {
+        if ($diffOp->type !== 'copy') {
+          $editedLines += $diffOp->nclosing();
+        }
+      }
+    }
+    return 100 - (int) round($editedLines / $totalLines * 100, 0);
+  }
+
+  /**
+   * Remove _core, uuid, default_config_hash from configurations.
+   *
+   * @param array $data
+   *   Configuration data.
+   *
+   * @return array
+   *   Array of configurations after removing keys.
+   */
+  public function removeNonRequiredKeys(array $data) {
+    // Remove the _core, uuid, default_config_hash from the configuration.
+    $data = array_values(array_filter(
+      $data,
+      function ($val) use (&$data) {
         return (strpos($val, '_core') !== 0) && (strpos(trim($val), 'default_config_hash:') !== 0) && (strpos($val, 'uuid:') !== 0);
       },
       ARRAY_FILTER_USE_BOTH
     ));
-    // Show configuration which present in both places.
-    $diff = array_intersect($active_configuration, $original_configuration);
-    // Count of config which present in both places vs count of database
-    // configuration.
-    // Active configuration have matches with Staged configuration.
-    return (int) round(count($diff) / count($active_configuration) * 100, 0);
+    return $data;
   }
 
   /**
@@ -168,13 +189,13 @@ class AcquiaCmsConfigSyncService {
     if ($storageComparer->hasChanges()) {
       $changedConfig = $this->getCreateAndUpdateChangeList($storageComparer);
       foreach ($changedConfig as $config) {
-        $delta = $this->getDelta($config, $syncStorage);
-        if ($delta === 100) {
+        $parity = $this->getParity($config, $syncStorage);
+        if ($parity === 100) {
           continue;
         }
         $overriddenConfig[] = [
           'name' => $config,
-          'delta' => $delta,
+          'parity' => $parity,
         ];
       }
     }
@@ -226,8 +247,8 @@ class AcquiaCmsConfigSyncService {
     if ($storageComparer->hasChanges()) {
       $changeList = $this->getCreateAndUpdateChangeList($storageComparer);
       foreach ($changeList as $config) {
-        $delta = $this->getDelta($config, $syncStorage);
-        if ($delta !== 100) {
+        $parity = $this->getParity($config, $syncStorage);
+        if ($parity !== 100) {
           continue;
         }
         \array_push($unChangedConfigList, $config);

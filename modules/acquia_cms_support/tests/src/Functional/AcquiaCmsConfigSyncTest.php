@@ -46,10 +46,10 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
   protected function setUp() {
     parent::setUp();
     // Update configuration to cover a simulated
-    // config delta calculation test.
+    // config parity calculation test.
     $this->container->get('config.factory')
-      ->getEditable('user.role.content_author')
-      ->set('label', 'Content creator')
+      ->getEditable('taxonomy.vocabulary.tags')
+      ->set('name', 'Tags Test')
       ->save();
   }
 
@@ -96,17 +96,12 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
     $this->drupalLogin($account);
     $this->drupalGet('/admin/config/development/acquia-cms-support/overridden-config');
 
-    $this->assertSession()->statusCodeEquals(200);
+    $assert_session = $this->assertSession();
 
-    $page = $this->getSession()->getPage();
-    $td = $page->find('xpath', "//table/tbody/tr/td[contains(text(),'user.role.content_author')]");
-    if ($td) {
-      // Asset that expected configuration is changed.
-      $this->assertTrue($page->find('xpath', "//table/tbody/tr/td[contains(text(),'user.role.content_author')]")->getText() == 'user.role.content_author');
-      // Verify simulated config delta % is expected.
-      $tr = $td->getParent();
-      $this->assertTrue($tr->find('xpath', 'td[3]')->getText() == '98 %');
-    }
+    $assert_session->statusCodeEquals(200);
+
+    $assert_session->elementTextContains('xpath', "//table/tbody/tr[11]/td[1]", 'taxonomy.vocabulary.tags');
+    $assert_session->elementTextContains('xpath', "//table/tbody/tr[11]/td[3]", '87 %');
   }
 
   /**

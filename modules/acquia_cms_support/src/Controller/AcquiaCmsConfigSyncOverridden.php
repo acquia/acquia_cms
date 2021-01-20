@@ -48,7 +48,7 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
     $header = [
       $this->t('Name'),
       $this->t('Module'),
-      $this->t('Default parity'),
+      $this->t('Default Parity'),
       $this->t('Operations'),
     ];
     $acquiaCmsModules = $this->acmsConfigSync->getAcquiaCmsProfileModuleList();
@@ -67,14 +67,14 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
         }
 
         foreach ($configChangeList as $config) {
-          $delta = $config['delta'];
+          $parity = $config['parity'];
           $configName = $config['name'];
           $overriddenConfig[] = [
             'name' => $configName,
             'module' => $module->getName(),
             'config' => [
-              'class' => $this->getDeltaClass($delta),
-              'data' => ['#markup' => "<span>$delta  %</span>"],
+              'class' => $this->getParityClass($parity),
+              'data' => ['#markup' => "<span>$parity  %</span>"],
             ],
             'operations' => [
               'data' => [
@@ -100,20 +100,20 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
   }
 
   /**
-   * Get classname for colour code based on delta value.
+   * Get classname for colour code based on parity value.
    *
-   * @param int $delta
-   *   Delta value.
+   * @param int $parity
+   *   Parity value.
    *
    * @return string
    *   Class.
    */
-  private function getDeltaClass($delta) {
+  private function getParityClass($parity) {
     $className = '';
-    if ($delta <= 30) {
+    if ($parity <= 30) {
       $className = 'color-parity-30';
     }
-    elseif ($delta > 30 && $delta <= 75) {
+    elseif ($parity > 30 && $parity <= 75) {
       $className = 'color-parity-75';
     }
     else {
