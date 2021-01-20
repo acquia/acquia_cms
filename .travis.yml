@@ -74,6 +74,12 @@ matrix:
     - { name: "Isolated test on current dev Drupal core version", env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="site_studio" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     - { name: "Starter", env: ACMS_JOB=starter ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     - { name: "PubSec Demo", env: ACMS_JOB=pubsec ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+
+    # Run the following jobs on php 7.3 during cron runs.
+    - { php: "7.3", name: "Isolated test on current dev Drupal core version", env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="site_studio" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    - { php: "7.3", name: "Starter", env: ACMS_JOB=starter ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    - { php: "7.3", name: "PubSec Demo", env: ACMS_JOB=pubsec ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+
     # The following jobs run only during cron runs, and fully install the site before
     # running tests.
     - { name: "Isolated test on current dev Drupal core version - Full Install", if: type = cron, env: ACMS_JOB=base_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
