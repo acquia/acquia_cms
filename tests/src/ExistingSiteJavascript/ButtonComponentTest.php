@@ -24,7 +24,7 @@ class ButtonComponentTest extends CohesionComponentTestBase {
     // Add the component to the layout canvas.
     $edit_form = $this->getLayoutCanvas()->add('Button')->edit();
 
-    $edit_form->clickLink('Style');
+    $edit_form->clickLink('Layout and style');
     // Check if all the button styles are there in the select list.
     $styles = [
       'Button CTA',
