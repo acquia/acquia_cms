@@ -3,3 +3,13 @@ acquia_cms_support.config_sync:
   parent: system.admin_config_development
   route_name: acquia_cms_support.config_sync
   weight: 100
+acquia_cms_support.config_overridden:
+  title: 'Overridden Configurations'
+  description: 'List configurations overridden status from acquia cms modules'
+  parent: acquia_cms_support.config_sync
+  route_name: acquia_cms_support.config_overridden
+acquia_cms_support.config_unchanged:
+  title: 'Unchanged Configurations'
+  description: 'List configurations unchanged status from acquia cms modules'
+  parent: acquia_cms_support.config_sync
+  route_name: acquia_cms_support.config_unchanged
