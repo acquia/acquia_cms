@@ -97,10 +97,13 @@ class AcquiaCmsConfigDiff implements ContainerInjectionInterface {
    *
    * @return array
    *   Table showing a two-way diff between the active and staged configuration.
+   *
+   * @throws \Drupal\Core\Config\StorageTransformerException
    */
   public function diff($name, $type, $storage, $source_name, $target_name = NULL) {
-    $path = ($type === 'profile') ? '../config/' . $storage : '../modules/' . $name . '/config/' . $storage;
 
+    $module_path = \drupal_get_path($type, $name);
+    $path = $module_path . '/config/' . $storage;
     $file = new FileStorage($path);
     $sync_storage = $this->importTransformer->transform($file);
 
@@ -111,17 +114,10 @@ class AcquiaCmsConfigDiff implements ContainerInjectionInterface {
     // YAML. But the configuration is not necessarily stored in files.
     // Therefore, they need to be read and parsed, and lastly, dumped into
     // YAML strings.
-    $source_data = explode("\n", Yaml::encode($this->targetStorage->read($source_name)));
-    $target_data = explode("\n", Yaml::encode($sync_storage->read($target_name)));
+    $target_data = explode("\n", Yaml::encode($this->targetStorage->read($source_name)));
+    $source_data = explode("\n", Yaml::encode($sync_storage->read($target_name)));
 
-    // Remove the _core, uuid, default_config_hash from the configuration.
-    $source_data = array_values(array_filter(
-      $source_data,
-      function ($val, $key) use (&$source_data) {
-        return (strpos($val, '_core') !== 0) && (strpos(trim($val), 'default_config_hash:') !== 0) && (strpos($val, 'uuid:') !== 0);
-      },
-      ARRAY_FILTER_USE_BOTH
-    ));
+    $target_data = $this->removeNonRequiredKeys($target_data);
 
     // Check for new or removed files.
     if ($source_data === ['false']) {
@@ -144,6 +140,7 @@ class AcquiaCmsConfigDiff implements ContainerInjectionInterface {
     $build['#title'] = $this->t('View changes of @config_file', ['@config_file' => $source_name]);
     // Add the CSS for the inline diff.
     $build['#attached']['library'][] = 'system/diff';
+    $build['#attached']['library'][] = 'acquia_cms_support/diff-modal';
 
     $build['diff'] = [
       '#type' => 'table',
@@ -151,24 +148,53 @@ class AcquiaCmsConfigDiff implements ContainerInjectionInterface {
         'class' => ['diff'],
       ],
       '#header' => [
-        ['data' => $this->t('Active'), 'colspan' => '2'],
         ['data' => $this->t('Staged'), 'colspan' => '2'],
+        ['data' => $this->t('Active'), 'colspan' => '2'],
       ],
       '#rows' => $this->diffFormatter->format($diff),
     ];
 
-    $build['back'] = [
+    $build['wrapper-buttonset'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => [
+          'acms-dialog-buttonset',
+        ],
+      ],
+    ];
+
+    $build['wrapper-buttonset']['ok'] = [
       '#type' => 'link',
       '#attributes' => [
         'class' => [
-          'dialog-cancel',
+          'dialog-cancel dialog-ok-button button button--primary',
         ],
       ],
-      '#title' => "Back to configuration inspector",
+      '#title' => "OK",
       '#url' => Url::fromRoute('acquia_cms_support.config_sync'),
     ];
-
     return $build;
+  }
+
+  /**
+   * Remove _core, uuid, default_config_hash from configurations.
+   *
+   * @param array $data
+   *   Configuration data.
+   *
+   * @return array
+   *   Array of configurations after removing keys.
+   */
+  private function removeNonRequiredKeys(array $data) {
+    // Remove the _core, uuid, default_config_hash from the configuration.
+    $data = array_values(array_filter(
+      $data,
+      function ($val) use (&$data) {
+        return (strpos($val, '_core') !== 0) && (strpos(trim($val), 'default_config_hash:') !== 0) && (strpos($val, 'uuid:') !== 0);
+      },
+      ARRAY_FILTER_USE_BOTH
+    ));
+    return $data;
   }
 
 }
