@@ -10,11 +10,11 @@ module.exports = function (gulp, plugins, options) {
   gulp.task('build', gulp.series(function building(cb) {
     plugins.runSequence(
       'compile:sass',
-      ['minify:css'],
+      'compile:js',
       ['lint:js-gulp',
         'lint:js-with-fail',
         'lint:css-with-fail'],
-      'compile:js',
+      'cssbeautify',
       cb);
   }));
 
