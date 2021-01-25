@@ -10,6 +10,7 @@ use Drupal\Tests\UnitTestCase;
  *
  * @group acquia_cms_event
  * @group acquia_cms
+ * @group risky
  */
 class DefaultContentUpdateEventTest extends UnitTestCase {
 

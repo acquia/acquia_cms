@@ -12,6 +12,7 @@ use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
  *
  * @group acquia_cms_event
  * @group acquia_cms
+ * @group risky
  */
 class EventTest extends ContentTypeTestBase {
 

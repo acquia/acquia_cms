@@ -9,6 +9,7 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * Tests search functionality that ships with Acquia CMS.
  *
  * @group acquia_cms
+ * @group profile
  */
 class SearchTest extends ExistingSiteBase {
 
