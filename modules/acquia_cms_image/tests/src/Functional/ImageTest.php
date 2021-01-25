@@ -10,6 +10,7 @@ use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
  *
  * @group acquia_cms_image
  * @group acquia_cms
+ * @group risky
  */
 class ImageTest extends MediaTypeTestBase {
 

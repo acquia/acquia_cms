@@ -11,6 +11,7 @@ use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
  *
  * @group acquia_cms_article
  * @group acquia_cms
+ * @group risky
  */
 class ArticleTest extends ContentTypeTestBase {
 

@@ -9,6 +9,7 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  *
  * @group acquia_cms_common
  * @group acquia_cms
+ * @group risky
  */
 class TabsBlockTest extends ExistingSiteBase {
 
