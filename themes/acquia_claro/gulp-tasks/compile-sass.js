@@ -13,7 +13,6 @@ module.exports = function (gulp, plugins, options) {
       options.sass.files
     ])
       .pipe(plugins.plumber())
-      .pipe(plugins.sourcemaps.init())
       .pipe(plugins.sassGlob())
       .pipe(plugins.sass({
         errLogToConsole: true,
@@ -23,7 +22,6 @@ module.exports = function (gulp, plugins, options) {
         browsers: ['last 2 versions'],
         cascade: false
       }))
-      .pipe(plugins.sourcemaps.write())
       .pipe(gulp.dest(options.sass.destination));
   }));
 };

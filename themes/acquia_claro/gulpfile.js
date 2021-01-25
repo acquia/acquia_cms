@@ -59,6 +59,7 @@ var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')({
   pattern: '*',
   rename: {
+    'gulp-beautify-code': 'beautifyCode',
     'node-sass-import-once': 'importOnce',
     'gulp-sass-glob': 'sassGlob',
     'gulp4-run-sequence': 'runSequence',
@@ -136,6 +137,7 @@ require('./gulp-tasks/lint-css')(gulp, plugins, options);
 require('./gulp-tasks/minify-css')(gulp, plugins, options);
 require('./gulp-tasks/watch')(gulp, plugins, options);
 require('./gulp-tasks/test-css')(gulp, plugins, options);
+require('./gulp-tasks/cssbeautify')(gulp, plugins, options);
 
 // Credits:
 //
