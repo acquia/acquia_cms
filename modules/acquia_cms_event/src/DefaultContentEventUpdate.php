@@ -22,7 +22,9 @@ class DefaultContentEventUpdate {
       // Update new start date to current start date plus 30 days.
       $date_time['start_date'] = date('Y-m-d', strtotime('+30 days'));
       // Update new end date to new start date plus 1 day.
-      $date_time['end_date'] = date('Y-m-d', strtotime($date_time['start_date'] . '+1 day'));
+      if (!empty($date_time['end_date'])) {
+        $date_time['end_date'] = date('Y-m-d', strtotime($date_time['start_date'] . '+1 day'));
+      }
     }
     // Door time will always be same as start_date.
     $date_time['door_time'] = $date_time['start_date'];
