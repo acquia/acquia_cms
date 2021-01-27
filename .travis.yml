@@ -77,9 +77,9 @@ matrix:
     # Acquia CMS is going to support both PHP 7.3 and PHP 7.4 until Acquia Cloud
     # officially stop support for PHP 7.3.
     # Run the following jobs on PHP 7.3 to make sure it works fine, during cron run.
-    - { php: "7.3", name: "Isolated test on current dev Drupal core version", if: type = cron, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="site_studio" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
-    - { php: "7.3", name: "Starter", if: type = cron, env: ACMS_JOB=starter ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
-    - { php: "7.3", name: "PubSec Demo", if: type = cron, env: ACMS_JOB=pubsec ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    - { php: "7.3", name: "[PHP 7.3] - Isolated test on current dev Drupal core version - Full Install", if: type = cron, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="site_studio" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV }
+    - { php: "7.3", name: "[PHP 7.3] - Starter - Full Install", if: type = cron, env: ACMS_JOB=starter ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV }
+    - { php: "7.3", name: "[PHP 7.3] - PubSec Demo - Full Install", if: type = cron, env: ACMS_JOB=pubsec ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV }
     # The following jobs run only during cron runs, and fully install the site before
     # running tests.
     - { name: "Isolated test on current dev Drupal core version - Full Install", if: type = cron, env: ACMS_JOB=base_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
