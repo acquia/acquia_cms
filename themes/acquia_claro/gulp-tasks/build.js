@@ -14,7 +14,6 @@ module.exports = function (gulp, plugins, options) {
       ['lint:js-gulp',
         'lint:js-with-fail',
         'lint:css-with-fail'],
-      'cssbeautify',
       cb);
   }));
 
