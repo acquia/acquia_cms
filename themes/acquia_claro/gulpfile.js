@@ -59,6 +59,7 @@ var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')({
   pattern: '*',
   rename: {
+    'gulp-beautify-code': 'beautifyCode',
     'node-sass-import-once': 'importOnce',
     'gulp-sass-glob': 'sassGlob',
     'gulp4-run-sequence': 'runSequence',
