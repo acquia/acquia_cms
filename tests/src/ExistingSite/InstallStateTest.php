@@ -13,6 +13,7 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  *
  * @group acquia_cms
  * @group profile
+ * @group risky
  */
 class InstallStateTest extends ExistingSiteBase {
 
