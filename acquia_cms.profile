@@ -12,7 +12,6 @@ use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
 use Drupal\Core\Ajax\CloseDialogCommand;
-use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\media_library\MediaLibraryState;
@@ -39,7 +38,7 @@ function acquia_cms_form_cohesion_account_settings_form_alter(array &$form) {
     // Here we have added a separate submit handler to import UI kit because the
     // YAML validation is taking a lot of time and hence resulting into memory
     // limit.
-    $form['#submit'][] = 'acquia_cms_import_ui_kit';
+    $form['#submit'][] = 'acquia_cms_install_ui_kit';
     // Here we are adding a separate submit handler to rebuild the cohesion
     // styles. Now the reason why we are doing this is because the rebuild is
     // expecting that all the entities of cohesion are in place but as the
@@ -66,7 +65,7 @@ function acquia_cms_install_tasks_alter(array &$tasks) {
 /**
  * Implements hook_install_tasks().
  */
-function acquia_cms_install_tasks() {
+function acquia_cms_install_tasks(): array {
   $tasks = [];
 
   // Set default logo for ACMS.
@@ -120,7 +119,7 @@ function acquia_cms_send_heartbeat_event() {
  * @return array
  *   The batch job definition.
  */
-function acquia_cms_initialize_cohesion() {
+function acquia_cms_initialize_cohesion(): array {
   // Build and run the batch job for the initial import of Cohesion elements and
   // assets.
   // @todo When Cohesion provides a service to generate this batch job, use
@@ -200,7 +199,7 @@ function acquia_cms_module_cohesion_config_import(array $modules) {
     $packages = $facade->getPackagesFromExtension($module);
     foreach ($packages as $package) {
       try {
-        $facade->importPackage($package, TRUE);
+        $facade->importPackage($package);
       }
       catch (Throwable $e) {
         Drupal::messenger()->addError($e->getMessage());
@@ -221,13 +220,12 @@ function acquia_cms_modules_uninstalled(array $modules) {
 /**
  * Imports the Cohesion UI kit that ships with this profile.
  *
- * @param array $install_state
- *   The current state of the installation.
- *
  * @return array
  *   The batch job definition.
+ *
+ * @throws Exception
  */
-function acquia_cms_install_ui_kit(array &$install_state) {
+function acquia_cms_install_ui_kit() {
   // During testing, we don't import the UI kit, because it takes forever.
   // Instead, we swap in a pre-built directory of Cohesion templates and assets.
   if (getenv('COHESION_ARTIFACT')) {
@@ -236,47 +234,31 @@ function acquia_cms_install_ui_kit(array &$install_state) {
 
   /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
   $facade = Drupal::classResolver(CohesionFacade::class);
-
-  if ($install_state['interactive']) {
-    $batch = new BatchBuilder();
-  }
-
+  $operations = [];
   foreach ($facade->getAllPackages() as $package) {
-    if (isset($batch)) {
-      $batch->addOperation('_acquia_cms_install_ui_kit_package', [$package]);
+    try {
+      $operations = array_merge($operations, $facade->importPackage($package));
     }
-    else {
-      _acquia_cms_install_ui_kit_package($package);
+    catch (Throwable $e) {
+      Drupal::messenger()->addError($e->getMessage());
     }
   }
-
-  if (isset($batch)) {
-    return [
-      $batch->toArray(),
-    ];
-  }
-  else {
-    // We already imported the packages, so there's nothing else to do.
-    return [];
-  }
+  return [
+    'title' => t('Importing configuration.'),
+    'finished' => '\Drupal\cohesion_sync\Controller\BatchImportController::batchFinishedCallback',
+    'operations' => $operations,
+  ];
 }
 
 /**
- * Imports a single sync package during site installation.
+ * Display package import report while importing package through drush.
  *
  * @param string $package
  *   The path to the sync package, relative to the Drupal root.
  */
-function _acquia_cms_install_ui_kit_package(string $package) : void {
-  /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
-  $facade = Drupal::classResolver(CohesionFacade::class);
-
-  try {
-    $facade->importPackage($package, FALSE);
-  }
-  catch (Throwable $e) {
-    Drupal::messenger()->addError($e->getMessage());
-  }
+function _acquia_cms_install_ui_kit_report_callback(string $package) {
+  $message = t('Importing package: @package', ['@package' => $package]);
+  \Drupal::logger('acquia_cms')->notice($message);
 }
 
 /**
@@ -310,23 +292,7 @@ function acquia_cms_cohesion_init() {
 }
 
 /**
- * Imports cohesion ui kit, on submitting account settings form.
- */
-function acquia_cms_import_ui_kit() {
-  /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
-  $facade = Drupal::classResolver(CohesionFacade::class);
-  foreach ($facade->getAllPackages() as $package) {
-    try {
-      $facade->importPackage($package, TRUE);
-    }
-    catch (Throwable $e) {
-      Drupal::messenger()->addError($e->getMessage());
-    }
-  }
-}
-
-/**
- * Rebuilds the cohesion componenets.
+ * Rebuilds the cohesion components.
  */
 function acquia_cms_rebuild_cohesion() {
   // Get the batch array filled with operations that should be performed during
