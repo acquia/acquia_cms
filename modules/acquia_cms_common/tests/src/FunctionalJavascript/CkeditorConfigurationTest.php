@@ -12,7 +12,7 @@ use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
  *
  * @group acquia_cms
  * @group acquia_cms_video
- * @group risky
+ * @group low_risk
  */
 class CkeditorConfigurationTest extends WebDriverTestBase {
 

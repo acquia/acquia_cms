@@ -11,6 +11,7 @@ use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
  *
  * @group acquia_cms_person
  * @group acquia_cms
+ * @group person
  */
 class PersonTest extends ContentTypeTestBase {
 
