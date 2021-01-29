@@ -21,8 +21,7 @@ fi
 
 if [ "$ACMS_JOB" == "base" ]; then
 /home/travis/build/acquia/orca/bin/orca fixture:status
-eval './vendor/bin/phpunit --coverage-clover="$ORCA_SELF_TEST_COVERAGE_CLOVER"'
-./vendor/bin/phpunit --verbose --colors=always --debug --configuration=/home/travis/build/acquia/orca-build/docroot/core/phpunit.xml --exclude-group=orca_ignore,low_risk --testsuite=orca
+/home/travis/build/acquia/orca-build/vendor/bin/phpunit --verbose --colors=always --debug --configuration=/home/travis/build/acquia/orca-build/docroot/core/phpunit.xml --exclude-group=orca_ignore,low_risk --testsuite=orca
 fi
 
 # If there is no fixture, there's nothing else for us to do.
