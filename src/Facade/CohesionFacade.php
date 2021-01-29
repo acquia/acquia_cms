@@ -61,11 +61,13 @@ final class CohesionFacade implements ContainerInjectionInterface {
    *
    * @param string $package
    *   The path to the sync package, relative to the Drupal root.
-   * @param bool $batch
-   *   If TRUE, the package is imported as a batch operation; otherwise, the
-   *   package is imported immediately.
+   *
+   * @return array
+   *   The batch operations.
+   *
+   * @throws \Exception
    */
-  public function importPackage(string $package, bool $batch) : void {
+  public function importPackage(string $package): array {
     // Prepare to import the package. This code is delicate because it was
     // basically written by rooting around in Cohesion's internals. So be
     // extremely careful when changing it.
@@ -80,12 +82,14 @@ final class CohesionFacade implements ContainerInjectionInterface {
       $action['entry_action_state'] = ENTRY_EXISTING_OVERWRITTEN;
     }
 
-    if ($batch) {
-      $this->packager->applyBatchYamlPackageStream($package, $action_data);
-    }
-    else {
-      $this->packager->applyYamlPackageStream($package, $action_data);
-    }
+    // Get the batch operations for the sync import.
+    $batch_operations = [];
+    $batch_operations = array_merge($batch_operations, $this->packager->applyBatchYamlPackageStream($package, $action_data));
+    $batch_operations[] = [
+      '_acquia_cms_install_ui_kit_report_callback',
+      [$package],
+    ];
+    return $batch_operations;
   }
 
   /**
