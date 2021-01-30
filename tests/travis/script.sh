@@ -21,7 +21,7 @@ fi
 
 if [ "$ACMS_JOB" == "base" ]; then
 /home/travis/build/acquia/orca/bin/orca fixture:status
-vendor/bin/phpunit --exclude-group orca_ignore,low_risk --testsuite=orca
+/home/travis/build/acquia/orca-build/vendor/bin/phpunit --exclude-group orca_ignore,low_risk
 fi
 
 # If there is no fixture, there's nothing else for us to do.
