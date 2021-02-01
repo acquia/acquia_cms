@@ -12,7 +12,7 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  *
  * @group acquia_cms
  * @group acquia_cms_event
- * @group risky
+ * @group low_risk
  */
 class PastEventsBlockTest extends ExistingSiteBase {
 

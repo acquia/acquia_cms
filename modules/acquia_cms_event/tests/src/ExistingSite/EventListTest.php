@@ -12,7 +12,7 @@ use Drupal\views\Entity\View;
  *
  * @group acquia_cms
  * @group acquia_cms_event
- * @group risky
+ * @group low_risk
  */
 class EventListTest extends ContentTypeListTestBase {
 
