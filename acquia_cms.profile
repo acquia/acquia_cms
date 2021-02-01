@@ -38,7 +38,7 @@ function acquia_cms_form_cohesion_account_settings_form_alter(array &$form) {
     // Here we have added a separate submit handler to import UI kit because the
     // YAML validation is taking a lot of time and hence resulting into memory
     // limit.
-    $form['#submit'][] = 'acquia_cms_install_ui_kit';
+    $form['#submit'][] = 'acquia_cms_import_ui_kit';
     // Here we are adding a separate submit handler to rebuild the cohesion
     // styles. Now the reason why we are doing this is because the rebuild is
     // expecting that all the entities of cohesion are in place but as the
@@ -199,11 +199,27 @@ function acquia_cms_module_cohesion_config_import(array $modules) {
     $packages = $facade->getPackagesFromExtension($module);
     foreach ($packages as $package) {
       try {
-        $facade->importPackage($package);
+        $facade->importPackage($package, TRUE);
       }
       catch (Throwable $e) {
         Drupal::messenger()->addError($e->getMessage());
       }
+    }
+  }
+}
+
+/**
+ * Imports cohesion ui kit, on submitting account settings form.
+ */
+function acquia_cms_import_ui_kit() {
+  /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
+  $facade = Drupal::classResolver(CohesionFacade::class);
+  foreach ($facade->getAllPackages() as $package) {
+    try {
+      $facade->importPackage($package, TRUE);
+    }
+    catch (Throwable $e) {
+      Drupal::messenger()->addError($e->getMessage());
     }
   }
 }
@@ -243,6 +259,7 @@ function acquia_cms_install_ui_kit() {
       Drupal::messenger()->addError($e->getMessage());
     }
   }
+  // @todo Need to trigger site studio component rebuild.
   return [
     'title' => t('Importing configuration.'),
     'finished' => '\Drupal\cohesion_sync\Controller\BatchImportController::batchFinishedCallback',
