@@ -121,7 +121,7 @@ before_install:
   - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
   - composer self-update
   # Optionally, remove SUT-provided tests with a specific PHPUnit test group.
-  - if [ ! -z $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP ]; then find ./tests -type f | xargs grep -l "@group $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP$" | xargs rm -v; fi
+  - if [ ! -z $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP ]; then find ./ -type f | xargs grep -l "@group $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP$" | xargs rm -v; fi
   - ../orca/bin/travis/before_install.sh
 
 # Create the test fixture and place the SUT.
