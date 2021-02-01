@@ -9,6 +9,7 @@ use Drupal\node\Entity\Node;
  *
  * @group acquia_cms
  * @group site_studio
+ * @group low_risk
  */
 class EntityCloneIntegrationTest extends CohesionComponentTestBase {
 

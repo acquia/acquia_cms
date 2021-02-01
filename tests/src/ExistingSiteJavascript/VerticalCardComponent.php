@@ -7,6 +7,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  *
  * @group acquia_cms
  * @group site_studio
+ * @group low_risk
  */
 class VerticalCardComponent extends CohesionComponentTestBase {
 
