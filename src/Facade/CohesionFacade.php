@@ -61,13 +61,16 @@ final class CohesionFacade implements ContainerInjectionInterface {
    *
    * @param string $package
    *   The path to the sync package, relative to the Drupal root.
+   * @param bool $set_batch
+   *   If TRUE,  batch will be created and set immediately; otherwise;
+   *   operations for the batch will be return.
    *
    * @return array
    *   The batch operations.
    *
    * @throws \Exception
    */
-  public function importPackage(string $package): array {
+  public function importPackage(string $package, bool $set_batch = FALSE): array {
     // Prepare to import the package. This code is delicate because it was
     // basically written by rooting around in Cohesion's internals. So be
     // extremely careful when changing it.
@@ -83,13 +86,25 @@ final class CohesionFacade implements ContainerInjectionInterface {
     }
 
     // Get the batch operations for the sync import.
-    $batch_operations = [];
-    $batch_operations = array_merge($batch_operations, $this->packager->applyBatchYamlPackageStream($package, $action_data));
-    $batch_operations[] = [
-      '_acquia_cms_install_ui_kit_report_callback',
-      [$package],
-    ];
-    return $batch_operations;
+    if ($set_batch) {
+      $operations = $this->packager->applyBatchYamlPackageStream($package, $action_data);
+      $batch = [
+        'title' => $this->t('Importing configuration.'),
+        'finished' => '\Drupal\cohesion_sync\Controller\BatchImportController::batchFinishedCallback',
+        'operations' => $operations,
+      ];
+      batch_set($batch);
+    }
+    else {
+      $batch_operations = [];
+      $batch_operations = array_merge($batch_operations, $this->packager->applyBatchYamlPackageStream($package, $action_data));
+      $batch_operations[] = [
+        '_acquia_cms_install_ui_kit_report_callback',
+        [$package],
+      ];
+      return $batch_operations;
+    }
+
   }
 
   /**
