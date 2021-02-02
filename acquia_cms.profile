@@ -78,6 +78,12 @@ function acquia_cms_install_tasks(): array {
     'type' => 'batch',
     'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
   ];
+  $tasks['acquia_cms_rebuild_site_studio'] = [
+    'display_name' => t('Rebuild Site Studio components'),
+    'display' => $cohesion_configured,
+    'type' => 'batch',
+    'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+  ];
   $tasks['acquia_cms_install_additional_modules'] = [];
 
   // If the user has opted in for Acquia Telemetry, send heartbeat event.
@@ -288,6 +294,22 @@ function acquia_cms_rebuild_cohesion() {
     Drupal::messenger()->addError($batch['error']);
   }
   batch_set($batch);
+}
+
+/**
+ * Rebuilds the site studio from installation.
+ *
+ * @return array
+ *   Batch for rebuild operation.
+ */
+function acquia_cms_rebuild_site_studio() {
+  // Get the batch array filled with operations that should be performed during
+  // rebuild.
+  $batch = WebsiteSettingsController::batch(TRUE);
+  if (isset($batch['error'])) {
+    Drupal::messenger()->addError($batch['error']);
+  }
+  return $batch;
 }
 
 /**
