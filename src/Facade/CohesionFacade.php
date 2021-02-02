@@ -172,19 +172,4 @@ final class CohesionFacade implements ContainerInjectionInterface {
     }
   }
 
-  /**
-   * Batch drush finished callback.
-   *
-   * @param array $context
-   *   Context of the batch process.
-   */
-  public static function batchDrushFinishedCallback(array &$context) {
-    if (!isset($context['results']['error'])) {
-      $context['message'] = t('The import succeeded. @count tasks completed.', ['@count' => count($context['results'])]);
-    }
-    else {
-      \Drupal::messenger()->addMessage(t('Finished with an error.'));
-    }
-  }
-
 }
