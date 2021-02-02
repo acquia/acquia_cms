@@ -289,11 +289,7 @@ function acquia_cms_cohesion_init() {
 function acquia_cms_rebuild_cohesion() {
   // Get the batch array filled with operations that should be performed during
   // rebuild.
-  $batch = WebsiteSettingsController::batch(TRUE);
-  if (isset($batch['error'])) {
-    Drupal::messenger()->addError($batch['error']);
-  }
-  batch_set($batch);
+  batch_set(acquia_cms_rebuild_site_studio());
 }
 
 /**
