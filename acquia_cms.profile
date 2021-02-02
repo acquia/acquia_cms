@@ -35,6 +35,9 @@ function acquia_cms_form_cohesion_account_settings_form_alter(array &$form) {
   // We should add submit handler, only if cohesion keys are not already set.
   if (!$cohesion_configured) {
     $form['#submit'][] = 'acquia_cms_cohesion_init';
+
+    // Rebuild site studio styles.
+    $form['#submit'][] = 'acquia_cms_rebuild_cohesion';
   }
 }
 
@@ -220,19 +223,10 @@ function acquia_cms_install_ui_kit(array &$install_state) {
 
   /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
   $facade = Drupal::classResolver(CohesionFacade::class);
-  $operations = [];
-  foreach ($facade->getAllPackages() as $package) {
-    try {
-      $operations = array_merge($operations, $facade->importPackage($package));
-    }
-    catch (Throwable $e) {
-      Drupal::messenger()->addError($e->getMessage());
-    }
-  }
 
   $batch = [
     'title' => t('Importing configuration.'),
-    'operations' => $operations,
+    'operations' => $facade->getAllOperations(),
     'finished' => '\Drupal\acquia_cms\Facade\CohesionFacade::batchFinishedCallback',
   ];
 
@@ -275,21 +269,12 @@ function acquia_cms_install_additional_modules() {
 function acquia_cms_cohesion_init() {
   /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
   $facade = Drupal::classResolver(CohesionFacade::class);
-  $operations = [];
-  foreach ($facade->getAllPackages() as $package) {
-    try {
-      $operations = array_merge($operations, $facade->importPackage($package));
-    }
-    catch (Throwable $e) {
-      Drupal::messenger()->addError($e->getMessage());
-    }
-  }
+  $operations = $facade->getAllOperations();
   // Instead of returning the batch array, we are just executing the batch here.
   $batch = acquia_cms_initialize_cohesion();
   $operations = array_merge($batch['operations'], $operations);
   $batch['operations'] = $operations;
   batch_set($batch);
-
 }
 
 /**
