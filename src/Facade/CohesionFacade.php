@@ -61,13 +61,15 @@ final class CohesionFacade implements ContainerInjectionInterface {
    *
    * @param string $package
    *   The path to the sync package, relative to the Drupal root.
+   * @param bool $no_rebuild
+   *   Whether rebuild operation should execute or not.
    *
    * @return array
    *   The batch operations.
    *
    * @throws \Exception
    */
-  public function importPackage(string $package): array {
+  public function importPackage(string $package, $no_rebuild = FALSE): array {
     // Prepare to import the package. This code is delicate because it was
     // basically written by rooting around in Cohesion's internals. So be
     // extremely careful when changing it.
@@ -83,7 +85,7 @@ final class CohesionFacade implements ContainerInjectionInterface {
     }
 
     $batch_operations = [];
-    $operations = $this->packager->applyBatchYamlPackageStream($package, $action_data, TRUE);
+    $operations = $this->packager->applyBatchYamlPackageStream($package, $action_data, $no_rebuild);
     $batch_operations = \array_merge($batch_operations, $operations);
 
     return $batch_operations;
@@ -181,7 +183,7 @@ final class CohesionFacade implements ContainerInjectionInterface {
   public function getAllOperations() : array {
     $operations = [];
     foreach ($this->getAllPackages() as $package) {
-      $operations = array_merge($operations, $this->importPackage($package));
+      $operations = array_merge($operations, $this->importPackage($package, TRUE));
     }
     return $operations;
   }
