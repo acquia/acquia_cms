@@ -35,21 +35,6 @@ function acquia_cms_form_cohesion_account_settings_form_alter(array &$form) {
   // We should add submit handler, only if cohesion keys are not already set.
   if (!$cohesion_configured) {
     $form['#submit'][] = 'acquia_cms_cohesion_init';
-    // Here we have added a separate submit handler to import UI kit because the
-    // YAML validation is taking a lot of time and hence resulting into memory
-    // limit.
-    $form['#submit'][] = 'acquia_cms_import_ui_kit';
-    // Here we are adding a separate submit handler to rebuild the cohesion
-    // styles. Now the reason why we are doing this is because the rebuild is
-    // expecting that all the entities of cohesion are in place but as the
-    // cohesion is getting build for the first time and
-    // acquia_cms_initialize_cohesion is responsible for importing the entities.
-    // So we cannot execute both the batch process in a single function, Hence
-    // to achieve the synchronous behaviour we have separated cohesion
-    // configuration import and cohesion style rebuild functionality into
-    // separate submit handlers.
-    // @see \Drupal\cohesion_website_settings\Controller\WebsiteSettingsController::batch
-    $form['#submit'][] = 'acquia_cms_rebuild_cohesion';
   }
 }
 
@@ -209,15 +194,6 @@ function acquia_cms_module_cohesion_config_import(array $modules) {
 }
 
 /**
- * Imports cohesion ui kit, on submitting account settings form.
- */
-function acquia_cms_import_ui_kit() {
-  /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
-  $install_state['interactive'] = TRUE;
-  batch_set(acquia_cms_install_ui_kit($install_state));
-}
-
-/**
  * Implements hook_modules_uninstalled().
  */
 function acquia_cms_modules_uninstalled(array $modules) {
@@ -297,8 +273,23 @@ function acquia_cms_install_additional_modules() {
  * Imports all Cohesion elements immediately in a batch process.
  */
 function acquia_cms_cohesion_init() {
+  /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
+  $facade = Drupal::classResolver(CohesionFacade::class);
+  $operations = [];
+  foreach ($facade->getAllPackages() as $package) {
+    try {
+      $operations = array_merge($operations, $facade->importPackage($package));
+    }
+    catch (Throwable $e) {
+      Drupal::messenger()->addError($e->getMessage());
+    }
+  }
   // Instead of returning the batch array, we are just executing the batch here.
-  batch_set(acquia_cms_initialize_cohesion());
+  $batch = acquia_cms_initialize_cohesion();
+  $operations = array_merge($batch['operations'], $operations);
+  $batch['operations'] = $operations;
+  batch_set($batch);
+
 }
 
 /**
