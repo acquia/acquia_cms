@@ -2,16 +2,15 @@
 
 namespace Drupal\Tests\acquia_cms_tour\Functional;
 
-use Drupal\geocoder\Entity\GeocoderProvider;
 use Drupal\Tests\BrowserTestBase;
 
 /**
- * Tests the Acquia CMS Tour module's integration with Google Maps.
+ * Tests the Google Tag Manager Form.
  *
  * @group acquia_cms
  * @group acquia_cms_tour
  */
-class AcquiaGoogleMapsTest extends BrowserTestBase {
+class GoogleTagManager extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
@@ -23,7 +22,7 @@ class AcquiaGoogleMapsTest extends BrowserTestBase {
    */
   protected static $modules = [
     'acquia_cms_tour',
-    'acquia_cms_place',
+    'google_tag',
   ];
 
   /**
@@ -42,9 +41,9 @@ class AcquiaGoogleMapsTest extends BrowserTestBase {
   // @codingStandardsIgnoreEnd
 
   /**
-   * Tests that the Google Maps API key can be set on the tour page.
+   * Tests the Google Tag Manager Form.
    */
-  public function testAcquiaGoogleMaps() {
+  public function testGoogleTagManager() {
     $assert_session = $this->assertSession();
 
     $account = $this->drupalCreateUser(['access acquia cms tour dashboard']);
@@ -53,25 +52,20 @@ class AcquiaGoogleMapsTest extends BrowserTestBase {
     // Visit the tour page.
     $this->drupalGet('/admin/tour/dashboard');
     $assert_session->statusCodeEquals(200);
-
-    $container = $assert_session->elementExists('css', '[data-drupal-selector="edit-acquia-google-maps-api"]');
-    // API key should be blank to start.
-    $assert_session->fieldValueEquals('maps_api_key', '', $container);
+    $container = $assert_session->elementExists('css', '.acquia-cms-google-tag-manager-form');
+    // Assert that save and advanced buttons are present on form.
+    $assert_session->buttonExists('Save');
+    $assert_session->elementExists('css', '.advanced-button');
+    // Assert that the expected fields show up.
+    $assert_session->fieldExists('Snippet parent URI');
+    // Save Snippet parent URI.
+    $dummy_uri = 'public://tempdir';
+    $container->fillField('edit-snippet-parent-uri', $dummy_uri);
     $container->pressButton('Save');
-    $assert_session->pageTextContains('Maps API key field is required.');
-
-    // Save a dummmy API key.
-    $dummy_key = 'keykeykey123';
-    $container->fillField('edit-maps-api-key', $dummy_key);
-    $container->pressButton('Save');
-    $assert_session->pageTextContains('The Google Maps API key has been set.');
-
-    // Now test that the config values we expect are set correctly.
-    $cohesion_map_key = $this->config('cohesion.settings')->get('google_map_api_key');
-    $this->assertSame($cohesion_map_key, $dummy_key);
-
-    $configuration = GeocoderProvider::load('googlemaps')->get('configuration');
-    $this->assertSame($configuration['apiKey'], $dummy_key);
+    $assert_session->pageTextContains('The configuration options have been saved.');
+    // Test that the config values we expect are set correctly.
+    $google_tag_uri = $this->config('google_tag.settings')->get('uri');
+    $this->assertSame($google_tag_uri, $dummy_uri);
   }
 
 }
