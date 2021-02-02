@@ -291,16 +291,12 @@ class InstallStateTest extends ExistingSiteBase {
     $this->drupalLogin($account);
     $this->drupalGet('/admin/tour/dashboard');
     $assert_session->statusCodeEquals(200);
-    $this->drupalGet('/admin/tour/dashboard/disabled');
-    $assert_session->statusCodeEquals(200);
 
     // Regular authenticated users should not be able to access the dashboard
     // and tour page.
     $account = $this->createUser();
     $this->drupalLogin($account);
     $this->drupalGet('/admin/tour/dashboard');
-    $assert_session->statusCodeEquals(403);
-    $this->drupalGet('/admin/tour/dashboard/disabled');
     $assert_session->statusCodeEquals(403);
     $this->drupalGet('/admin/tour');
     $assert_session->statusCodeEquals(403);
