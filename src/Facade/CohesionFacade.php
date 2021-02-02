@@ -61,16 +61,13 @@ final class CohesionFacade implements ContainerInjectionInterface {
    *
    * @param string $package
    *   The path to the sync package, relative to the Drupal root.
-   * @param bool $set_batch
-   *   If TRUE,  batch will be created and set immediately; otherwise;
-   *   operations for the batch will be return.
    *
    * @return array
    *   The batch operations.
    *
    * @throws \Exception
    */
-  public function importPackage(string $package, bool $set_batch = FALSE): array {
+  public function importPackage(string $package): array {
     // Prepare to import the package. This code is delicate because it was
     // basically written by rooting around in Cohesion's internals. So be
     // extremely careful when changing it.
@@ -85,26 +82,11 @@ final class CohesionFacade implements ContainerInjectionInterface {
       $action['entry_action_state'] = ENTRY_EXISTING_OVERWRITTEN;
     }
 
-    // Get the batch operations for the sync import.
-    if ($set_batch) {
-      $operations = $this->packager->applyBatchYamlPackageStream($package, $action_data);
-      $batch = [
-        'title' => $this->t('Importing configuration.'),
-        'finished' => '\Drupal\cohesion_sync\Controller\BatchImportController::batchFinishedCallback',
-        'operations' => $operations,
-      ];
-      batch_set($batch);
-    }
-    else {
-      $batch_operations = [];
-      $batch_operations = array_merge($batch_operations, $this->packager->applyBatchYamlPackageStream($package, $action_data));
-      $batch_operations[] = [
-        '_acquia_cms_install_ui_kit_report_callback',
-        [$package],
-      ];
-      return $batch_operations;
-    }
+    $batch_operations = [];
+    $operations = $this->packager->applyBatchYamlPackageStream($package, $action_data);
+    $batch_operations = \array_merge($batch_operations, $operations);
 
+    return $batch_operations;
   }
 
   /**
@@ -167,6 +149,42 @@ final class CohesionFacade implements ContainerInjectionInterface {
     $modules['acquia_cms'] = $profile;
 
     return $modules;
+  }
+
+  /**
+   * Batch finished callback.
+   *
+   * @param bool $success
+   *   Status of batch process.
+   * @param array $results
+   *   Result of the operations performed.
+   * @param array $operations
+   *   Operations performed in the batch process.
+   */
+  public static function batchFinishedCallback($success, array $results, array $operations) {
+    // The 'success' parameter means no fatal PHP errors were detected. All
+    // other error management should be handled using 'results'.
+    if ($success) {
+      \Drupal::messenger()->addMessage(t('The import succeeded. @count tasks completed.', ['@count' => count($results)]));
+    }
+    else {
+      \Drupal::messenger()->addMessage(t('Finished with an error.'));
+    }
+  }
+
+  /**
+   * Batch drush finished callback.
+   *
+   * @param array $context
+   *   Context of the batch process.
+   */
+  public static function batchDrushFinishedCallback(array &$context) {
+    if (!isset($context['results']['error'])) {
+      $context['message'] = t('The import succeeded. @count tasks completed.', ['@count' => count($context['results'])]);
+    }
+    else {
+      \Drupal::messenger()->addMessage(t('Finished with an error.'));
+    }
   }
 
 }

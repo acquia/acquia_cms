@@ -213,15 +213,8 @@ function acquia_cms_module_cohesion_config_import(array $modules) {
  */
 function acquia_cms_import_ui_kit() {
   /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
-  $facade = Drupal::classResolver(CohesionFacade::class);
-  foreach ($facade->getAllPackages() as $package) {
-    try {
-      $facade->importPackage($package, TRUE);
-    }
-    catch (Throwable $e) {
-      Drupal::messenger()->addError($e->getMessage());
-    }
-  }
+  $install_state['interactive'] = TRUE;
+  batch_set(acquia_cms_install_ui_kit($install_state));
 }
 
 /**
@@ -236,12 +229,13 @@ function acquia_cms_modules_uninstalled(array $modules) {
 /**
  * Imports the Cohesion UI kit that ships with this profile.
  *
+ * @param array $install_state
+ *   The current state of the installation.
+ *
  * @return array
  *   The batch job definition.
- *
- * @throws Exception
  */
-function acquia_cms_install_ui_kit() {
+function acquia_cms_install_ui_kit(array &$install_state) {
   // During testing, we don't import the UI kit, because it takes forever.
   // Instead, we swap in a pre-built directory of Cohesion templates and assets.
   if (getenv('COHESION_ARTIFACT')) {
@@ -259,23 +253,22 @@ function acquia_cms_install_ui_kit() {
       Drupal::messenger()->addError($e->getMessage());
     }
   }
-  // @todo Need to trigger site studio component rebuild.
-  return [
-    'title' => t('Importing configuration.'),
-    'finished' => '\Drupal\cohesion_sync\Controller\BatchImportController::batchFinishedCallback',
-    'operations' => $operations,
-  ];
-}
 
-/**
- * Display package import report while importing package through drush.
- *
- * @param string $package
- *   The path to the sync package, relative to the Drupal root.
- */
-function _acquia_cms_install_ui_kit_report_callback(string $package) {
-  $message = t('Importing package: @package', ['@package' => $package]);
-  \Drupal::logger('acquia_cms')->notice($message);
+  $batch = [
+    'title' => t('Importing configuration.'),
+    'operations' => $operations,
+    'finished' => '\Drupal\acquia_cms\Facade\CohesionFacade::batchFinishedCallback',
+  ];
+
+  if ($install_state['interactive']) {
+    return $batch;
+  }
+  else {
+    batch_set($batch);
+    $batch = &batch_get();
+    $batch['progress'] = FALSE;
+    drush_backend_batch_process();
+  }
 }
 
 /**
