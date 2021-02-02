@@ -83,7 +83,7 @@ final class CohesionFacade implements ContainerInjectionInterface {
     }
 
     $batch_operations = [];
-    $operations = $this->packager->applyBatchYamlPackageStream($package, $action_data);
+    $operations = $this->packager->applyBatchYamlPackageStream($package, $action_data, TRUE);
     $batch_operations = \array_merge($batch_operations, $operations);
 
     return $batch_operations;
@@ -170,6 +170,20 @@ final class CohesionFacade implements ContainerInjectionInterface {
     else {
       \Drupal::messenger()->addMessage(t('Finished with an error.'));
     }
+  }
+
+  /**
+   * Get all required operations to import site studio packages of Acquia CMS.
+   *
+   * @return array
+   *   All the operations.
+   */
+  public function getAllOperations() : array {
+    $operations = [];
+    foreach ($this->getAllPackages() as $package) {
+      $operations = array_merge($operations, $this->importPackage($package));
+    }
+    return $operations;
   }
 
 }
