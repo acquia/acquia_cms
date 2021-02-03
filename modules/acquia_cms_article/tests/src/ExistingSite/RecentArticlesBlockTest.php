@@ -13,6 +13,8 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * @group acquia_cms
  * @group acquia_cms_article
  * @group low_risk
+ * @group pr
+ * @group push
  */
 class RecentArticlesBlockTest extends ExistingSiteBase {
 

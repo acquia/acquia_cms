@@ -10,7 +10,7 @@ use Drupal\user\Entity\Role;
  *
  * @group acquia_cms_common
  * @group acquia_cms
- * @group low_risk
+ * @group risky
  */
 class BasicPermissionsTest extends BrowserTestBase {
 
