@@ -166,37 +166,31 @@ function acquia_cms_modules_installed(array $modules) : void {
       // etc.
       // @see \Drupal\cohesion_sync\PackagerManager::getConfigImporter()
       $batch = batch_get();
+      $operations = [];
+      $facade = Drupal::classResolver(CohesionFacade::class);
+      foreach ($modules as $module) {
+        $packages = $facade->getPackagesFromExtension($module);
+        foreach ($packages as $package) {
+          try {
+            $operations = array_merge($operations, $facade->importPackage($package));
+          }
+          catch (Throwable $e) {
+            Drupal::messenger()->addError($e->getMessage());
+          }
+        }
+      }
       if (empty($batch['id'])) {
-        $batch['operations'][] = [
-          'acquia_cms_module_cohesion_config_import', [$modules],
+        $batch = [
+          'title' => t('Importing configuration.'),
+          'operations' => $operations,
+          'finished' => '\Drupal\acquia_cms\Facade\CohesionFacade::batchFinishedCallback',
         ];
         batch_set($batch);
       }
       else {
         $batch['current_set'] = 'cohesion_config_import';
-        $batch['sets']['cohesion_config_import']['operations'][] = [
-          'acquia_cms_module_cohesion_config_import', [$modules],
-        ];
+        $batch['sets']['cohesion_config_import']['operations'] = $operations;
         _batch_append_set($batch, []);
-      }
-    }
-  }
-}
-
-/**
- * Imports the module cohesion configuration via batch.
- */
-function acquia_cms_module_cohesion_config_import(array $modules) {
-  /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
-  $facade = Drupal::classResolver(CohesionFacade::class);
-  foreach ($modules as $module) {
-    $packages = $facade->getPackagesFromExtension($module);
-    foreach ($packages as $package) {
-      try {
-        $facade->importPackage($package, TRUE);
-      }
-      catch (Throwable $e) {
-        Drupal::messenger()->addError($e->getMessage());
       }
     }
   }
