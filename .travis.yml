@@ -75,7 +75,7 @@ matrix:
     - { name: "Starter", env: ACMS_JOB=starter ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     - { name: "PubSec Demo", env: ACMS_JOB=pubsec ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     # Exclude pr group tests to exclude only low-risk tests during PR builds.
-    - { name: "Isolated test on current dev Drupal core version - PR Tests", if: type = pr, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="pr" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    - { name: "Isolated test on current dev Drupal core version - PR Tests", if: type = pull_request, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="pr" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     # The following jobs run only during cron runs, and fully install the site before
     # running tests.
     - { name: "Isolated test on current dev Drupal core version - Full Install", if: type = cron, env: ACMS_JOB=base_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
