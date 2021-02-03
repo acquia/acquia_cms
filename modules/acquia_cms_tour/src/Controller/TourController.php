@@ -22,7 +22,6 @@ final class TourController extends ControllerBase {
       '#theme' => 'acquia_cms_tour',
       '#attached' => [
         'library' => [
-          'node/drupal.node',
           'acquia_cms_tour/styling',
         ],
       ],
