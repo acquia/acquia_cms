@@ -177,13 +177,16 @@ final class CohesionFacade implements ContainerInjectionInterface {
   /**
    * Get all required operations to import site studio packages of Acquia CMS.
    *
+   * @param bool $no_rebuild
+   *   Whether rebuild operation should execute or not.
+   *
    * @return array
    *   All the operations.
    */
-  public function getAllOperations() : array {
+  public function getAllOperations(bool $no_rebuild = FALSE) : array {
     $operations = [];
     foreach ($this->getAllPackages() as $package) {
-      $operations = array_merge($operations, $this->importPackage($package, TRUE));
+      $operations = array_merge($operations, $this->importPackage($package, $no_rebuild));
     }
     return $operations;
   }

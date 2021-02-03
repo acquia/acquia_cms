@@ -220,7 +220,7 @@ function acquia_cms_modules_uninstalled(array $modules) {
  * @return array
  *   The batch job definition.
  */
-function acquia_cms_install_ui_kit(array &$install_state) {
+function acquia_cms_install_ui_kit(array $install_state) {
   // During testing, we don't import the UI kit, because it takes forever.
   // Instead, we swap in a pre-built directory of Cohesion templates and assets.
   if (getenv('COHESION_ARTIFACT')) {
@@ -230,21 +230,14 @@ function acquia_cms_install_ui_kit(array &$install_state) {
   /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
   $facade = Drupal::classResolver(CohesionFacade::class);
 
+  $operations = ($install_state['interactive']) ? $facade->getAllOperations(TRUE) : $facade->getAllOperations();
   $batch = [
     'title' => t('Importing configuration.'),
-    'operations' => $facade->getAllOperations(),
+    'operations' => $operations,
     'finished' => '\Drupal\acquia_cms\Facade\CohesionFacade::batchFinishedCallback',
   ];
 
-  if ($install_state['interactive']) {
-    return $batch;
-  }
-  else {
-    batch_set($batch);
-    $batch = &batch_get();
-    $batch['progress'] = FALSE;
-    drush_backend_batch_process();
-  }
+  return $batch;
 }
 
 /**
@@ -275,7 +268,7 @@ function acquia_cms_install_additional_modules() {
 function acquia_cms_cohesion_init() {
   /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
   $facade = Drupal::classResolver(CohesionFacade::class);
-  $operations = $facade->getAllOperations();
+  $operations = $facade->getAllOperations(TRUE);
   // Instead of returning the batch array, we are just executing the batch here.
   $batch = acquia_cms_initialize_cohesion();
   $operations = array_merge($batch['operations'], $operations);
@@ -305,6 +298,7 @@ function acquia_cms_rebuild_site_studio() {
   if (isset($batch['error'])) {
     Drupal::messenger()->addError($batch['error']);
   }
+
   return $batch;
 }
 
