@@ -283,37 +283,8 @@ function _acquia_cms_install_ui_kit_package(string $package) : void {
  * Installs additional required modules, depending on the environment.
  */
 function acquia_cms_install_additional_modules() {
-  $module_installer = Drupal::service('module_installer');
-
-  $is_dev = Environment::isAhIdeEnv() || Environment::isLocalEnv();
-  $is_prod = Environment::isAhProdEnv();
-
-  if (Environment::isAhOdeEnv() || $is_dev) {
-    $module_installer->install(['dblog', 'jsonapi_extras']);
-  }
-  else {
-    $module_installer->install(['syslog']);
-  }
-
-  if (!$is_dev) {
-    $module_installer->install(['autologout']);
-  }
-
-  if (!$is_prod) {
-    $module_installer->install(['reroute_email']);
-  }
-  // @todo once PF-3025 has been resolved, update this to work on IDEs too.
-  if (Environment::isAhEnv() && !Environment::isAhIdeEnv()) {
-    $module_installer->install(['imagemagick']);
-    Drupal::configFactory()
-      ->getEditable('imagemagick.settings')
-      ->set('path_to_binaries', '/usr/bin/')
-      ->save();
-    Drupal::configFactory()
-      ->getEditable('system.image')
-      ->set('toolkit', 'imagemagick')
-      ->save();
-  }
+  // Call ToggleModules Service.
+  \Drupal::service('acquia_cms_toggle_modules')->ToggleModules();
 }
 
 /**
