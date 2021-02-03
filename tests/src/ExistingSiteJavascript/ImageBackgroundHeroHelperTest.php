@@ -51,7 +51,7 @@ class ImageBackgroundHeroHelperTest extends CohesionHelperTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/helpers/helpers');
-    $this->editDefinition('Layout helpers', 'Image Background Hero');
+    $this->editDefinition('Page Layouts', 'Image Background Hero');
   }
 
 }

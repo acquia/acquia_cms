@@ -22,7 +22,9 @@ class DefaultContentEventUpdate {
       // Update new start date to current start date plus 30 days.
       $date_time['start_date'] = date('Y-m-d', strtotime('+30 days'));
       // Update new end date to new start date plus 1 day.
-      $date_time['end_date'] = date('Y-m-d', strtotime($date_time['start_date'] . '+1 day'));
+      if (!empty($date_time['end_date'])) {
+        $date_time['end_date'] = date('Y-m-d', strtotime($date_time['start_date'] . '+1 day'));
+      }
     }
     // Door time will always be same as start_date.
     $date_time['door_time'] = $date_time['start_date'];
@@ -41,7 +43,7 @@ class DefaultContentEventUpdate {
    */
   public function updateEventNode(NodeInterface $entity, array $updated_data) {
     $entity->set('field_event_start', date('Y-m-d\T' . $entity->get('field_event_start')->date->format('H:i:s'), strtotime($updated_data['start_date'])));
-    if (!empty($updated_data['end_date'])) {
+    if (!empty($updated_data['end_date']) && !empty($entity->get('field_event_end')->date)) {
       $entity->set('field_event_end', date('Y-m-d\T' . $entity->get('field_event_end')->date->format('H:i:s'), strtotime($updated_data['end_date'])));
       // Updating the duration field based on start and end date of event.
       $time_diff = date_diff(

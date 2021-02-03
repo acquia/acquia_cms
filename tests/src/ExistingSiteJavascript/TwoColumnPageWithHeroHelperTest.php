@@ -52,7 +52,7 @@ class TwoColumnPageWithHeroHelperTest extends CohesionHelperTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/helpers/helpers');
-    $this->editDefinition('Layout helpers', 'Two column page with hero');
+    $this->editDefinition('Page Layouts', 'Two column page with hero');
   }
 
 }

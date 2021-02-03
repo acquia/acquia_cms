@@ -100,8 +100,6 @@ class HeroComponentTest extends CohesionComponentTestBase {
       'Center',
     ]);
 
-    $edit_form->clickLink('Style');
-
     // Check if all the button styles are there in the select list.
     $assert_styles('Button style', [
       'Button light',

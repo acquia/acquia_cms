@@ -68,8 +68,7 @@ class AcquiaGoogleMapsTest extends BrowserTestBase {
     $assert_session->pageTextContains('The Google Maps API key has been set.');
 
     // Now test that the config values we expect are set correctly.
-    $cohesion_map_key = $this->config('cohesion.settings')
-      ->get('google_map_api_key');
+    $cohesion_map_key = $this->config('cohesion.settings')->get('google_map_api_key');
     $this->assertSame($cohesion_map_key, $dummy_key);
 
     $configuration = GeocoderProvider::load('googlemaps')->get('configuration');
