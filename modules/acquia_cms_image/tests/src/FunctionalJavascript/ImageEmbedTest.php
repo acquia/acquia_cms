@@ -10,7 +10,8 @@ use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
  *
  * @group acquia_cms
  * @group acquia_cms_image
- * @group low_risk
+ * @group medium_risk
+ * @group push
  */
 class ImageEmbedTest extends MediaEmbedTestBase {
 

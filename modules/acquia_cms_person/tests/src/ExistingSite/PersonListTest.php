@@ -11,7 +11,9 @@ use Drupal\views\Entity\View;
  *
  * @group acquia_cms_person
  * @group acquia_cms
- * @group risky
+ * @group low_risk
+ * @group pr
+ * @group push
  */
 class PersonListTest extends ContentTypeListTestBase {
 

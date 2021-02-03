@@ -10,7 +10,8 @@ use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
  *
  * @group acquia_cms_page
  * @group acquia_cms
- * @group risky
+ * @group medium_risk
+ * @group push
  */
 class PageTest extends ContentTypeTestBase {
 

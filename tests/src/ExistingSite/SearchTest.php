@@ -10,7 +10,8 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  *
  * @group acquia_cms
  * @group profile
- * @group low_risk
+ * @group medium_risk
+ * @group push
  */
 class SearchTest extends ExistingSiteBase {
 
