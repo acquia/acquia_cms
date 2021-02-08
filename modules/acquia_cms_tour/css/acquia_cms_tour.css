@@ -1,199 +1,99 @@
-.tour-checklist,
-form > .fieldset {
-  border: 1px solid #bbbec4;
-  padding: 16px 16px 24px 16px;
-  border-radius: 8px;
-  margin-bottom: 28px;
-  box-shadow: none;
+.tour-page {
+  color: #222330;
 }
-.tour-checklist .progress__track {
-  border: 1px #bbbec5 solid;
-  height: .5em;
-  margin-bottom: 20px;
-}
-.tour-checklist .progress__bar {
-  background: #28aae0;
-  border: 1px #28aae0 solid;
-  height: .5em;
-  min-width: 8px;
-}
-.checklist-body {
-  padding: 0 24px 0 16px;
-}
-.checklist-heading,
-.fieldset__label {
-  font-size: 20px;
-  font-weight: 500;
-  margin-top: 8px;
+.tour-page .section-hero .row {
   display: flex;
-  color: black;
 }
-.checklist-heading .checklist-title {
-  flex: 0 0 85%;
+.tour-page .section-hero {
+  background: #d7ebf5;
+  padding: 30px 18px 50px 50px;
 }
-.checklist-heading .progess-info-configured {
-  font-size: 14px;
+.tour-page .section-hero h2,
+.tour-page .section-hero .button-section p {
+  opacity: 0.7;
 }
-.tour-checklist .form-item__description {
-  margin-top: 20px;
-  font-weight: normal;
+.tour-page .section-hero .button--primary {
+  background-color: #003cc5;
 }
-.tour-checklist.disabled .form-item__description {
-  margin-top: 20px;
-  margin-bottom: 32px;
-  width: 90%;
+.tour-page .section-hero .text-section {
+  width: 75%;
+  opacity: 0.7;
+  margin-right: 5%;
 }
-.tour-checklist .list-items .form-item__description {
-  margin-top: 8px;
-  margin-bottom: 24px;
+.tour-page .section-content {
+  display: flex;
+  margin-top: 60px;
+  opacity: 0.7;
 }
-.tour-checklist .list-items label,
-form .fieldset .form-item label {
+.tour-page .section-content .sidenav {
+  width: 24%;
+  margin-right: 6%;
+}
+.tour-page .sidenav ul {
+  margin-left: 0;
+}
+.tour-page .sidenav p {
+  font-weight: 500;
   font-size: 16px;
-  font-weight: 500;
-  width: 90%;
 }
-.list-items > div:not(:last-child) {
-  border-bottom: 1px solid #e6e6e6;
+.tour-page .sidenav ul li {
+  padding-bottom: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #aba8a8;
 }
-.disabled .list-items > div:not(:last-child) {
-  margin-bottom: 20px;
-}
-.checklist-item-wrapper {
-  display: flex;
-}
-.checklist-item-wrapper .checklist-checkbox {
-  flex: 0 0 94%;
-}
-.checklist-item-wrapper .checklist-config {
-  padding-top: 24px;
-}
-.checklist-item-wrapper .checklist-config a {
-  font-weight: 500;
+.tour-page .sidenav ul li a {
   text-decoration: none;
-  font-size: 14px;
-}
-.checklist-progess {
-  text-align: right;
-  width: 100%;
-}
-form .fieldset__wrapper {
-  margin-bottom: 0;
-}
-@media only screen and (max-width: 767px) {
-  .tour-checklist {
-    padding: 12px 12px 20px 12px;
-  }
-  .tour-checklist .form-item__description {
-    margin-top: 8px;
-  }
-  .tour-checklist .checklist-progess {
-    margin-top: 8px;
-  }
-  .checklist-body {
-    padding: 0;
-  }
-  .checklist-heading {
-    flex-direction: column;
-  }
-  .checklist-progess {
-    text-align: left;
-  }
-  .checklist-item-wrapper {
-    flex-direction: column;
-  }
-  .checklist-item-wrapper div.checklist-config {
-    margin-top: -12px;
-    padding-left: 28px;
-    padding-top: 0px;
-  }
-  .list-items > div:not(:last-child) {
-    padding-bottom: 16px;
-  }
-  .disabled .list-items > div:not(:last-child) {
-    padding-bottom: 0px;
-  }
-}
-
-@media only screen and (min-width: 768px) and (max-width: 1024px) {
-  .checklist-body {
-    padding: 0 8px 0 16px;
-  }
-  .checklist-heading .checklist-title {
-    flex: 0 0 70%;
-  }
-  .checklist-item-wrapper {
-    flex-direction: column;
-  }
-  .checklist-item-wrapper div.checklist-config {
-    margin-top: -12px;
-    padding-left: 28px;
-    padding-top: 0px;
-  }
-  .list-items > div:not(:last-child) {
-    padding-bottom: 16px;
-  }
-  .disabled .list-items > div:not(:last-child) {
-    padding-bottom: 0px;
-  }
-}
-
-/* layout */
-.tour .layout-region-node-main {
-  float: right;
-  padding-right: 0;
-  width: 80%;
-}
-.tour {
-  display: flex;
-  width: 100%;
-}
-.tour .layout-region-node-secondary {
-  background: #e6e8ee;
-  width: 20%;
-  margin-right: 2em;
-  flex: 0 0 20%;
-}
-.tour .layout-region-node-main {
-  flex: 1;
-}
-.tour .layout-region-node-secondary .menu {
-  padding: 1rem 0.5rem;
-}
-.tour .layout-region-node-secondary .menu li {
-  padding-bottom: 1rem;
-  list-style-type: none;
-  font-size: 18px;
-}
-.tour h1 {
-  font-style: italic;
-  color: #168ec4;
-}
-.tour h4 {
-  font-style: italic;
-  color: #168ec4;
-}
-.tour li {
+  color: #222330;
+  font-weight: 500;
   font-size: 16px;
 }
-@media only screen and (max-width: 768px) {
-  .tour {
-    flex-direction: column;
+.tour-page .section-content .content-start h2 {
+  margin-top: 0;
+}
+.tour-page .section-content .content-leaf {
+  margin-top: 60px;
+}
+.tour-page .content-main h2 > a {
+  color: #222330;
+}
+.tour-page .section-hero .button-section {
+  text-align: center;
+}
+.tour-content-header {
+  overflow: hidden;
+  padding: 1.5rem 0 0;
+  background: #f5f3f3;
+}
+.tour-content-header .block-page-title-block,
+.tour-content-header .page-title,
+.tour-content-header .breadcrumb__link,
+.tour-content-header .breadcrumb__item + .breadcrumb__item::before {
+  color: #222330;
+  opacity: 0.9;
+}
+
+/* Small Devices, Tablets */
+@media only screen and (max-width : 768px) {
+  .tour-page .section-hero .row,
+  .tour-page .section-content {
+    display: block;
   }
-  .tour .layout-region-node-secondary {
-    width: 100%;
+  .tour-page .section-hero {
+    padding: 20px;
   }
-  .tour .layout-region-node-main {
-    width: 100%;
+  .tour-page .section-content .sidenav {
+    width: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+  }
+  .tour-page .section-hero .text-section {
+    width: auto;
+    margin-right: auto;
   }
 }
-.toolbar-fixed :target:before {
-  content: "";
-  display: block;
-  height: 39px; /* Amount of padding toolbar gives to body */
-  margin-top: -39px;
-}
-.toolbar-horizontal.toolbar-tray-open :target:before {
-  height: 99px; /* Amount of padding toolbar gives to body when the tray is open horizontally */
-  margin-top: -99px;
+
+@media screen and (max-width: 1024px) and (min-width: 769px) {
+  .tour-page .section-content .sidenav {
+    width: 54%;
+  }
 }
