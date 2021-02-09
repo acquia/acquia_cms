@@ -3,3 +3,5 @@ services:
     class: Drupal\acquia_cms_common\Routing\RouteSubscriber
     tags:
       - { name: event_subscriber }
+  acquia_cms_toggle_modules:
+    class:  Drupal\acquia_cms_common\ToggleModulesService
