@@ -13,13 +13,12 @@ target_env="$2"
 
 # Only run update hooks on ode4. ode4 is used to test update path.
 if [ "$target_env" = "ode4" ]; then
-    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_development --yes
     /usr/local/bin/drush9 @$site.$target_env updatedb --no-interaction
 # Install Acquia CMS.
 else
     /usr/local/bin/drush9 @$site.$target_env site-install acquia_cms --account-pass=admin --yes --account-mail=no-reply@acquia.com --site-mail=no-reply@acquia.com
-    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_development --yes
 fi
 
+/usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_development --yes
 # Toggle Modules based on the environment.
 /usr/local/bin/drush9 @$site.$target_env acms:toggle:modules
