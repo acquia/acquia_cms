@@ -285,6 +285,22 @@ function _acquia_cms_install_ui_kit_package(string $package) : void {
 function acquia_cms_install_additional_modules() {
   // Call ToggleModules Service.
   \Drupal::service('acquia_cms_toggle_modules')->ToggleModules();
+  $module_installer = \Drupal::service('module_installer');
+  $moduleHandler = \Drupal::service('module_handler');
+  // @todo once PF-3025 has been resolved, update this to work on IDEs too.
+  if ($moduleHandler->moduleExists('imagemagick')) {
+    if (Environment::isAhEnv() && !Environment::isAhIdeEnv()) {
+      $module_installer->install(['imagemagick']);
+      \Drupal::configFactory()
+        ->getEditable('imagemagick.settings')
+        ->set('path_to_binaries', '/usr/bin/')
+        ->save();
+      \Drupal::configFactory()
+        ->getEditable('system.image')
+        ->set('toolkit', 'imagemagick')
+        ->save();
+    }
+  }
 }
 
 /**
