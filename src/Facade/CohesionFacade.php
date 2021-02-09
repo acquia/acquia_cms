@@ -85,6 +85,11 @@ final class CohesionFacade implements ContainerInjectionInterface {
     }
 
     $batch_operations = [];
+
+    $batch_operations[] = [
+      '_display_package_import_operation',
+      [$package],
+    ];
     $operations = $this->packager->applyBatchYamlPackageStream($package, $action_data, $no_rebuild);
     $batch_operations = \array_merge($batch_operations, $operations);
 
