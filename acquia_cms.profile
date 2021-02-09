@@ -388,3 +388,14 @@ function acquia_cms_set_favicon() {
     ])
     ->save(TRUE);
 }
+
+/**
+ * Display which package is being imported.
+ *
+ * @param string $package
+ *   Name of the package.
+ */
+function _display_package_import_operation(string $package) {
+  $message = t('Importing package: @package', ['@package' => $package]);
+  \Drupal::logger('acquia_cms')->notice($message);
+}
