@@ -19,7 +19,8 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  *
  * @group acquia_cms
  * @group profile
- * @group medium_risk
+ * @group low_risk
+ * @group pr
  * @group push
  */
 class DecoupledTest extends ExistingSiteBase {
