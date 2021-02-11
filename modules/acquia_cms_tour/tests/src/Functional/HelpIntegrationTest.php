@@ -9,6 +9,7 @@ use Drupal\Tests\BrowserTestBase;
  *
  * @group acquia_cms
  * @group acquia_cms_tour
+ * @group risky
  */
 class HelpIntegrationTest extends BrowserTestBase {
 

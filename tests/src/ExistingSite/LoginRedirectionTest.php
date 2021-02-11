@@ -8,6 +8,9 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * Tests redirection upon user login.
  *
  * @group acquia_cms
+ * @group profile
+ * @group medium_risk
+ * @group push
  */
 class LoginRedirectionTest extends ExistingSiteBase {
 

@@ -12,6 +12,9 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  *
  * @group acquia_cms_common
  * @group acquia_cms
+ * @group low_risk
+ * @group pr
+ * @group push
  */
 class BreadcrumbTest extends ExistingSiteBase {
 
