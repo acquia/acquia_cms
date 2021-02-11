@@ -97,3 +97,62 @@
     width: 54%;
   }
 }
+
+.tour-checklist,
+form > .fieldset {
+  margin-bottom: 28px;
+  box-shadow: none;
+}
+.tour-checklist .progress__track {
+  border: 1px #bbbec5 solid;
+  height: .5em;
+  margin-bottom: 20px;
+}
+.tour-checklist .progress__bar {
+  background: #28a9e0;
+  border: 1px #28a9e0 solid;
+  height: .5em;
+  min-width: 8px;
+}
+
+.acms-dashboard-form-wrapper .claro-details__summary::before {
+  right: 0.75rem;
+  left: unset;
+}
+
+.acms-dashboard-form-wrapper  .dashboard-check-icon {
+  height: 23px;
+  width: 22px;
+  background-image: url(../assets/images/check.svg);
+  display: inline-block;
+  float: right;
+  right: 100px;
+  position: absolute;
+  margin-top: 14px;
+  z-index: 1;
+}
+.acms-dashboard-form-wrapper .details-wrapper {
+  display: flex;
+}
+.dashboard-fields-wrapper {
+  width: 90%;
+}
+.dashboard-buttons-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.dashboard-buttons-wrapper a {
+  padding-left: 10px;
+}
+
+.acms-dashboard-form-wrapper .claro-details__summary[aria-expanded='true'] {
+  border-bottom: 1px solid #808080;
+}
+.acms-dashboard-form-wrapper  .js-form-wrapper {
+  border: 1px solid #808080;
+}
+.acms-dashboard-form-wrapper .button {
+  background-color: white;
+  border: 1px solid #808080!important;
+  margin-top: 0;
+}
