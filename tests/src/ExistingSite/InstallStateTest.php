@@ -12,6 +12,8 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * Tests config values that are set at install.
  *
  * @group acquia_cms
+ * @group profile
+ * @group risky
  */
 class InstallStateTest extends ExistingSiteBase {
 

@@ -12,6 +12,8 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  *
  * @group acquia_cms
  * @group acquia_cms_event
+ * @group medium_risk
+ * @group push
  */
 class UpcomingEventsBlockTest extends ExistingSiteBase {
 

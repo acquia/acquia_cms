@@ -18,6 +18,10 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * Tests access to JSON:API endpoints.
  *
  * @group acquia_cms
+ * @group profile
+ * @group low_risk
+ * @group pr
+ * @group push
  */
 class DecoupledTest extends ExistingSiteBase {
 

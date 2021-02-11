@@ -13,6 +13,9 @@ use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
  *
  * @group acquia_cms_place
  * @group acquia_cms
+ * @group low_risk
+ * @group pr
+ * @group push
  */
 class PlaceTest extends ContentTypeTestBase {
 

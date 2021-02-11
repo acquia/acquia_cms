@@ -11,6 +11,9 @@ use Drupal\views\Entity\View;
  *
  * @group acquia_cms
  * @group acquia_cms_search
+ * @group low_risk
+ * @group pr
+ * @group push
  */
 class AcquiaSearchSolrIntegrationTest extends BrowserTestBase {
 

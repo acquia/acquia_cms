@@ -10,6 +10,8 @@ use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
  *
  * @group acquia_cms_document
  * @group acquia_cms
+ * @group medium_risk
+ * @group push
  */
 class DocumentTest extends MediaTypeTestBase {
 
