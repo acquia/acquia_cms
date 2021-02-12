@@ -216,6 +216,7 @@
             "tar -c -z -f ./tests/cohesion.tar.gz --directory $FILES_DIR cohesion",
             "rm -rf $TMPDIR/cex"
         ],
+        "configure-tarball": "Acquia\\Lightning\\Composer\\ConfigureProject::execute",
         "install:frontend": [
             "Composer\\Config::disableProcessTimeout",
             "cd themes/acquia_claro && npm install"
