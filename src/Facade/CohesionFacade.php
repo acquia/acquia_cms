@@ -61,15 +61,11 @@ final class CohesionFacade implements ContainerInjectionInterface {
    *
    * @param string $package
    *   The path to the sync package, relative to the Drupal root.
-   * @param bool $no_rebuild
-   *   Whether rebuild operation should execute or not.
-   *
-   * @return array
-   *   The batch operations.
-   *
-   * @throws \Exception
+   * @param bool $batch
+   *   If TRUE, the package is imported as a batch operation; otherwise, the
+   *   package is imported immediately.
    */
-  public function importPackage(string $package, $no_rebuild = FALSE): array {
+  public function importPackage(string $package, bool $batch) : void {
     // Prepare to import the package. This code is delicate because it was
     // basically written by rooting around in Cohesion's internals. So be
     // extremely careful when changing it.
@@ -84,16 +80,12 @@ final class CohesionFacade implements ContainerInjectionInterface {
       $action['entry_action_state'] = ENTRY_EXISTING_OVERWRITTEN;
     }
 
-    $batch_operations = [];
-
-    $batch_operations[] = [
-      '_display_package_import_operation',
-      [$package],
-    ];
-    $operations = $this->packager->applyBatchYamlPackageStream($package, $action_data, $no_rebuild);
-    $batch_operations = \array_merge($batch_operations, $operations);
-
-    return $batch_operations;
+    if ($batch) {
+      $this->packager->applyBatchYamlPackageStream($package, $action_data);
+    }
+    else {
+      $this->packager->applyYamlPackageStream($package, $action_data);
+    }
   }
 
   /**
@@ -156,44 +148,6 @@ final class CohesionFacade implements ContainerInjectionInterface {
     $modules['acquia_cms'] = $profile;
 
     return $modules;
-  }
-
-  /**
-   * Batch finished callback.
-   *
-   * @param bool $success
-   *   Status of batch process.
-   * @param array $results
-   *   Result of the operations performed.
-   * @param array $operations
-   *   Operations performed in the batch process.
-   */
-  public static function batchFinishedCallback($success, array $results, array $operations) {
-    // The 'success' parameter means no fatal PHP errors were detected. All
-    // other error management should be handled using 'results'.
-    if ($success) {
-      \Drupal::messenger()->addMessage(t('The import succeeded. @count tasks completed.', ['@count' => count($results)]));
-    }
-    else {
-      \Drupal::messenger()->addMessage(t('Finished with an error.'));
-    }
-  }
-
-  /**
-   * Get all required operations to import site studio packages of Acquia CMS.
-   *
-   * @param bool $no_rebuild
-   *   Whether rebuild operation should execute or not.
-   *
-   * @return array
-   *   All the operations.
-   */
-  public function getAllOperations(bool $no_rebuild = FALSE) : array {
-    $operations = [];
-    foreach ($this->getAllPackages() as $package) {
-      $operations = array_merge($operations, $this->importPackage($package, $no_rebuild));
-    }
-    return $operations;
   }
 
 }
