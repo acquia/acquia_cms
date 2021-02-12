@@ -147,8 +147,6 @@ function acquia_cms_modules_installed(array $modules) : void {
     return;
   }
 
-  // @todo The below code needs to be updated, or possibly removed outright,
-  // once Site Studio's imports no longer cause memory exhaustion.
   $module_handler = Drupal::moduleHandler();
 
   if ($module_handler->moduleExists('acquia_telemetry')) {
@@ -156,52 +154,7 @@ function acquia_cms_modules_installed(array $modules) : void {
   }
 
   if ($module_handler->moduleExists('cohesion_sync')) {
-    if (PHP_SAPI === 'cli') {
-      $module_handler->invoke('cohesion_sync', 'modules_installed', [$modules]);
-    }
-    else {
-      $modules = array_map([$module_handler, 'getModule'], $modules);
-      // Instead of just adding the package import code we have used the batch
-      // process here to overcome the memory limit exausted error.
-      // To reproduce this issue just remove the below code and replace it with
-      // the acquia_cms_module_cohesion_config_import function code. And this
-      // memory limit exausted error occurs because cohesion is doing an
-      // incredibly heavy operation while importing the cohesion configuration.
-      //
-      // Here we are checking if a batch is already running, if yes then it
-      // appending a new batch set else creating a new batch to import cohesion
-      // configurations. This is done because when we install the site via UI,
-      // a batch process executes to install the site configuration, modules,
-      // etc.
-      // @see \Drupal\cohesion_sync\PackagerManager::getConfigImporter()
-      $batch = batch_get();
-      $operations = [];
-      $facade = Drupal::classResolver(CohesionFacade::class);
-      foreach ($modules as $module) {
-        $packages = $facade->getPackagesFromExtension($module);
-        foreach ($packages as $package) {
-          try {
-            $operations = array_merge($operations, $facade->importPackage($package));
-          }
-          catch (Throwable $e) {
-            Drupal::messenger()->addError($e->getMessage());
-          }
-        }
-      }
-      if (empty($batch['id'])) {
-        $batch = [
-          'title' => t('Importing configuration.'),
-          'operations' => $operations,
-          'finished' => '\Drupal\acquia_cms\Facade\CohesionFacade::batchFinishedCallback',
-        ];
-        batch_set($batch);
-      }
-      else {
-        $batch['current_set'] = 'cohesion_config_import';
-        $batch['sets']['cohesion_config_import']['operations'] = $operations;
-        _batch_append_set($batch, []);
-      }
-    }
+    $module_handler->invoke('cohesion_sync', 'modules_installed', [$modules]);
   }
 }
 
