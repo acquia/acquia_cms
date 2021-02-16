@@ -100,41 +100,59 @@ final class AcquiaSearchSolrForm extends ConfigFormBase {
     if ($this->module_handler->moduleExists($module)) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $form['acquia_connector']['description'] = [
-        '#type' => 'markup',
-        '#markup' => '',
-        '#prefix' => $module_info['name'],
-        '#description' => $module_info['description'],
+      if ($this->getProgressState()) {
+        $form['acquia_telemetry']['check_icon'] = [
+          '#prefix' => '<span class= "dashboard-check-icon">',
+          '#suffix' => "</span>",
+        ];
+      }
+      $form[$module] = [
+        '#type' => 'details',
+        '#title' => $module_info['name'],
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
       ];
 
-      $form['acquia_search_solr']['identifier'] = [
+      $form[$module]['identifier'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Acquia Subscription identifier'),
+        '#placeholder' => 'ABCD-1234',
         '#default_value' => $this->state->get('acquia_search_solr.identifier'),
+        '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
       ];
-      $form['acquia_search_solr']['api_host'] = [
+      $form[$module]['api_host'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Acquia Search API hostname'),
+        '#placeholder' => 'https://api.example.com',
         '#default_value' => $this->config('acquia_search_solr.settings')->get('api_host'),
       ];
-      $form['acquia_search_solr']['uuid'] = [
+      $form[$module]['uuid'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Acquia Application UUID'),
+        '#placeholder' => 'abcd-1234',
         '#default_value' => $this->state->get('acquia_search_solr.uuid'),
+        '#suffix' => "</div>",
       ];
-      $form['acquia_search_solr']['actions']['submit'] = [
+      $form[$module]['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => 'Save',
-        '#button_type' => 'primary',
+        '#submit' => ['::saveConfig'],
+        '#prefix' => '<div class= "dashboard-buttons-wrapper">',
       ];
-      $form['acquia_search_solr']['actions']['advanced'] = [
-        '#markup' => $this->linkGenerator->generate(
-          'Advanced',
-          Url::fromRoute($module_info['configure'])
-        ),
-        '#prefix' => '<span class= "button advanced-button">',
-        '#suffix' => "</span>",
+      $form[$module]['actions']['ignore'] = [
+        '#type' => 'submit',
+        '#value' => 'Ignore',
+        '#submit' => ['::ignoreConfig'],
       ];
+      if (isset($module_info['configure'])) {
+        $form[$module]['actions']['advanced'] = [
+          '#markup' => $this->linkGenerator->generate(
+            'Advanced',
+            Url::fromRoute($module_info['configure'])
+          ),
+          '#suffix' => "</div>",
+        ];
+      }
       return $form;
     }
   }
@@ -142,14 +160,29 @@ final class AcquiaSearchSolrForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function saveConfig(array &$form, FormStateInterface $form_state) {
     $solr_identifier = $form_state->getValue(['identifier']);
     $solr_api_host = $form_state->getValue(['api_host']);
     $solr_api_uuid = $form_state->getValue(['uuid']);
     $this->config('acquia_search_solr.settings')->set('api_host', $solr_api_host)->save(TRUE);
     $this->state->set('acquia_search_solr.identifier', $solr_identifier);
     $this->state->set('acquia_search_solr.uuid', $solr_api_uuid);
+    $this->state->set('acquia_search_solr_progress', TRUE);
     $this->messenger()->addStatus('The configuration options have been saved.');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function ignoreConfig(array &$form, FormStateInterface $form_state) {
+    $this->state->set('acquia_search_solr_progress', TRUE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getProgressState() {
+    return($this->state->get('acquia_search_solr_progress'));
   }
 
 }

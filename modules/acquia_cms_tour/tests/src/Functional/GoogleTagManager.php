@@ -55,7 +55,6 @@ class GoogleTagManager extends BrowserTestBase {
     $container = $assert_session->elementExists('css', '.acquia-cms-google-tag-manager-form');
     // Assert that save and advanced buttons are present on form.
     $assert_session->buttonExists('Save');
-    $assert_session->elementExists('css', '.advanced-button');
     // Assert that the expected fields show up.
     $assert_session->fieldExists('Snippet parent URI');
     // Save Snippet parent URI.
