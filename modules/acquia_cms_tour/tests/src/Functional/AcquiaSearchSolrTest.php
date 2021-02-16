@@ -56,7 +56,6 @@ class AcquiaSearchSolrTest extends BrowserTestBase {
     $container = $assert_session->elementExists('css', '.acquia-cms-solr-search-form');
     // Assert that save and advanced buttons are present on form.
     $assert_session->buttonExists('Save');
-    $assert_session->elementExists('css', '.advanced-button');
     // Assert that the expected fields show up.
     $assert_session->fieldExists('Acquia Subscription identifier');
     $assert_session->fieldExists('Acquia Search API hostname');

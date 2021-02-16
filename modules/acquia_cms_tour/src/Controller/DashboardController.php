@@ -11,6 +11,9 @@ use Drupal\acquia_cms_tour\Form\GoogleTagManagerForm;
 use Drupal\acquia_cms_tour\Form\RecaptchaForm;
 use Drupal\acquia_cms_tour\Form\SiteStudioCoreForm;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\DependencyInjection\ClassResolverInterface;
+use Drupal\Core\State\StateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines a route controller providing a simple tour dashboard of Acquia CMS.
@@ -23,20 +26,47 @@ use Drupal\Core\Controller\ControllerBase;
 final class DashboardController extends ControllerBase {
 
   /**
+   * The class resolver.
+   *
+   * @var \Drupal\Core\DependencyInjection\ClassResolverInterface
+   */
+  protected $classResolver;
+
+  /**
+   * The state service.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
+
+  /**
    * The sub-controllers to invoke in order to build the tour page.
    *
    * @var array
    */
   private const SECTIONS = [
-    'acquia_telemetry' => AcquiaTelemetryForm::class,
-    'acquia_google_maps_api' => AcquiaGoogleMapsAPIForm::class,
+    'site_studio_core_form' => SiteStudioCoreForm::class,
+    'acquia_connector_form' => AcquiaConnectorForm::class,
     'acquia_solr_search_form' => AcquiaSearchSolrForm::class,
     'google_analytics_form' => GoogleAnalyticsForm::class,
-    'google_tag_manager_form' => GoogleTagManagerForm::class,
+    'acquia_google_maps_api' => AcquiaGoogleMapsAPIForm::class,
     'recaptcha_form' => RecaptchaForm::class,
-    'acquia_connector_form' => AcquiaConnectorForm::class,
-    'site_studio_core_form' => SiteStudioCoreForm::class,
+    'google_tag_manager_form' => GoogleTagManagerForm::class,
+    'acquia_telemetry' => AcquiaTelemetryForm::class,
   ];
+
+  /**
+   * Constructs a new ProgressBarForm.
+   *
+   * @param \Drupal\Core\State\StateInterface $state
+   *   The state service.
+   * @param \Drupal\Core\DependencyInjection\ClassResolverInterface $class_resolver
+   *   The class resolver.
+   */
+  public function __construct(StateInterface $state, ClassResolverInterface $class_resolver) {
+    $this->state = $state;
+    $this->classResolver = $class_resolver;
+  }
 
   /**
    * Invokes a sub-controller and returns its output.
@@ -56,17 +86,58 @@ final class DashboardController extends ControllerBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('state'),
+      $container->get('class_resolver')
+    );
+  }
+
+  /**
    * Returns a renderable array for a tour dashboard page.
    */
   public function content() {
     $build = [];
-
-    // Delegate building each section to sub-controllers, in order to keep all
-    // extension-specific logic cleanly encapsulated.
+    $build['wrapper'] = [
+      '#markup' => '',
+      '#prefix' => '<div class = "acms-dashboard-form-wrapper">',
+    ];
+    $form = [];
+    $form['#theme'] = 'acquia_cms_tour_checklist_form';
+    $form['#attached']['library'][] = 'acquia_cms_tour/styling';
+    $form['#tree'] = TRUE;
+    // Set initial state of the checklist progress.
+    $form['check_count'] = [
+      '#type' => 'value',
+      '#value' => 0,
+    ];
+    $form['check_total'] = [
+      '#type' => 'value',
+      '#value' => 0,
+    ];
+    $form['show_progress'] = [
+      '#type' => 'value',
+      '#value' => TRUE,
+    ];
+    $count = 0;
+    $item_count = 0;
     foreach (static::SECTIONS as $key => $controller) {
+      $count++;
       $build[$key] = $this->getSectionOutput($key, $controller);
+      $state_var = $this->classResolver->getInstanceFromDefinition($controller)->getProgressState();
+      if ($state_var) {
+        $item_count++;
+      }
     }
-
+    $form['check_total']['#value'] = $count;
+    $form['check_count']['#value'] = $item_count;
+    array_unshift($build, $form);
+    $build['wrapper_end'] = [
+      '#markup' => '',
+      '#suffix' => "</div>",
+    ];
     return $build;
   }
 
