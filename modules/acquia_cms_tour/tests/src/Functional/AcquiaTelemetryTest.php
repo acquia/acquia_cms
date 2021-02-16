@@ -23,6 +23,7 @@ class AcquiaTelemetryTest extends BrowserTestBase {
    */
   protected static $modules = [
     'acquia_cms_tour',
+    'acquia_telemetry',
   ];
 
   /**
@@ -40,9 +41,6 @@ class AcquiaTelemetryTest extends BrowserTestBase {
     // Visit the tour page.
     $this->drupalGet('/admin/tour/dashboard');
     $assert_session->statusCodeEquals(200);
-
-    // Initially the checkbox should be turned off.
-    $assert_session->checkboxNotChecked('Send anonymous data about Acquia product usage');
     // Ensure we can enable the Acquia Telemetry module.
     $page->checkField('Send anonymous data about Acquia product usage');
     $page->pressButton('Save');

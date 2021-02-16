@@ -55,7 +55,6 @@ class GoogleAnalyticsTest extends BrowserTestBase {
     $container = $assert_session->elementExists('css', '.acquia-cms-google-analytics-form');
     // Assert that save and advanced buttons are present on form.
     $assert_session->buttonExists('Save');
-    $assert_session->elementExists('css', '.advanced-button');
     // Assert that the expected fields show up.
     $assert_session->fieldExists('Web Property ID');
     // Save Web Property ID.
