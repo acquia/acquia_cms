@@ -27,30 +27,6 @@ function acquia_cms_form_user_login_form_alter(array &$form) {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
- */
-function acquia_cms_form_cohesion_account_settings_form_alter(array &$form) {
-  $config = Drupal::config('cohesion.settings');
-  $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
-  // We should add submit handler, only if cohesion keys are not already set.
-  if (!$cohesion_configured) {
-    $form['#submit'][] = 'acquia_cms_cohesion_init';
-
-    // Here we are adding a separate submit handler to rebuild the cohesion
-    // styles. Now the reason why we are doing this is because the rebuild is
-    // expecting that all the entities of cohesion are in place but as the
-    // cohesion is getting build for the first time and
-    // acquia_cms_initialize_cohesion is responsible for importing the entities.
-    // So we cannot execute both the batch process in a single function, Hence
-    // to achieve the synchronous behaviour we have separated cohesion
-    // configuration import and cohesion style rebuild functionality into
-    // separate submit handlers.
-    // @see \Drupal\cohesion_website_settings\Controller\WebsiteSettingsController::batch
-    $form['#submit'][] = 'acquia_cms_rebuild_cohesion';
-  }
-}
-
-/**
  * Implements hook_install_tasks_alter().
  */
 function acquia_cms_install_tasks_alter(array &$tasks) {
@@ -297,6 +273,33 @@ function acquia_cms_form_alter(array &$form, FormStateInterface $form_state, $fo
     $state = MediaLibraryState::fromRequest($request);
     if ($state->getOpenerId() === 'media_library.opener.cohesion') {
       $form['actions']['submit']['#ajax']['callback'] = 'alter_update_widget';
+    }
+  }
+  // Trigger site studio config import and rebuild whenever user
+  // try to save site studio account settings or the site studio core
+  // form from tour dashboard page.
+  $allowed_form_ids = [
+    'cohesion_account_settings_form',
+    'acquia_cms_site_studio_core_form',
+  ];
+  if (in_array($form_id, $allowed_form_ids)) {
+    $config = Drupal::config('cohesion.settings');
+    $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
+    // We should add submit handler, only if cohesion keys are not already set.
+    if (!$cohesion_configured) {
+      $form['#submit'][] = 'acquia_cms_cohesion_init';
+
+      // Here we are adding a separate submit handler to rebuild the cohesion
+      // styles. Now the reason why we are doing this is because the rebuild is
+      // expecting that all the entities of cohesion are in place but as the
+      // cohesion is getting build for the first time and
+      // acquia_cms_initialize_cohesion is responsible for importing the
+      // entities. So we cannot execute both the batch process in a single
+      // function, Hence to achieve the synchronous behaviour we have separated
+      // cohesion configuration import and cohesion style rebuild functionality
+      // into separate submit handlers.
+      // @see \Drupal\cohesion_website_settings\Controller\WebsiteSettingsController::batch
+      $form['#submit'][] = 'acquia_cms_rebuild_cohesion';
     }
   }
 }
