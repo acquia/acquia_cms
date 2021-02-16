@@ -6,6 +6,7 @@ use Drupal\Core\Extension\InfoParserInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGeneratorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -14,6 +15,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a form to configure SiteStudioCore.
  */
 final class SiteStudioCoreForm extends ConfigFormBase {
+
+  /**
+   * The state service.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
 
   /**
    * The module handler.
@@ -45,11 +53,14 @@ final class SiteStudioCoreForm extends ConfigFormBase {
    *   The link generator.
    * @param \Drupal\Core\Extension\InfoParserInterface $info_parser
    *   The info file parser.
+   * @param \Drupal\Core\State\StateInterface $state
+   *   The state service.
    */
-  public function __construct(ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser) {
+  public function __construct(ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser, StateInterface $state) {
     $this->module_handler = $module_handler;
     $this->linkGenerator = $link_generator;
     $this->infoParser = $info_parser;
+    $this->state = $state;
   }
 
   /**
@@ -59,7 +70,8 @@ final class SiteStudioCoreForm extends ConfigFormBase {
     return new static(
       $container->get('module_handler'),
       $container->get('link_generator'),
-      $container->get('info_parser')
+      $container->get('info_parser'),
+      $container->get('state')
     );
   }
 
@@ -88,36 +100,45 @@ final class SiteStudioCoreForm extends ConfigFormBase {
     if ($this->module_handler->moduleExists($module)) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $form['cohesion'] = [
-        '#type' => 'fieldset',
+      $form[$module] = [
+        '#type' => 'details',
         '#title' => $module_info['name'],
-        '#description' => $module_info['description'],
-        '#open' => TRUE,
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
       ];
-      $form['cohesion']['api_key'] = [
+      $form[$module]['api_key'] = [
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('API key'),
+        '#placeholder' => '1234abcd',
         '#default_value' => $this->config('cohesion.settings')->get('api_key'),
+        '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
       ];
-      $form['cohesion']['agency_key'] = [
+      $form[$module]['agency_key'] = [
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Agency key'),
+        '#placeholder' => '1234abcd',
         '#default_value' => $this->config('cohesion.settings')->get('organization_key'),
+        '#suffix' => "</div>",
       ];
-      $form['cohesion']['actions']['submit'] = [
+      $form[$module]['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => 'Save',
-        '#button_type' => 'primary',
+        '#submit' => ['::saveConfig'],
+        '#prefix' => '<div class= "dashboard-buttons-wrapper">',
       ];
-      $form['cohesion']['actions']['advanced'] = [
+      $form[$module]['actions']['ignore'] = [
+        '#type' => 'submit',
+        '#value' => 'Ignore',
+        '#submit' => ['::ignoreConfig'],
+      ];
+      $form[$module]['actions']['advanced'] = [
         '#markup' => $this->linkGenerator->generate(
-          'Advanced',
-          Url::fromRoute('cohesion.configuration.account_settings')
+            'Advanced',
+            Url::fromRoute('cohesion.configuration.account_settings')
         ),
-        '#prefix' => '<span class= "button advanced-button">',
-        '#suffix' => "</span>",
+        '#suffix' => "</div>",
       ];
 
       return $form;
@@ -127,12 +148,27 @@ final class SiteStudioCoreForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function saveConfig(array &$form, FormStateInterface $form_state) {
     $cohesion_api_key = $form_state->getValue(['api_key']);
     $cohesion_agency_key = $form_state->getValue(['agency_key']);
     $this->configFactory->getEditable('cohesion.settings')->set('api_key', $cohesion_api_key)->save();
     $this->configFactory->getEditable('cohesion.settings')->set('organization_key', $cohesion_agency_key)->save();
+    $this->state->set('site_studio_progress', TRUE);
     $this->messenger()->addStatus('The configuration options have been saved.');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function ignoreConfig(array &$form, FormStateInterface $form_state) {
+    $this->state->set('site_studio_progress', TRUE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getProgressState() {
+    return($this->state->get('site_studio_progress'));
   }
 
 }

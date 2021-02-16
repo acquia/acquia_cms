@@ -100,51 +100,64 @@ final class AcquiaSearchForm extends ConfigFormBase {
     if ($this->module_handler->moduleExists($module)) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $form['acquia_search'] = [
-        '#type' => 'fieldset',
+      if ($this->getProgressState()) {
+        $form['acquia_telemetry']['check_icon'] = [
+          '#prefix' => '<span class= "dashboard-check-icon">',
+          '#suffix' => "</span>",
+        ];
+      }
+      $form[$module] = [
+        '#type' => 'details',
         '#title' => $module_info['name'],
-        '#description' => $module_info['description'],
-        '#open' => TRUE,
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
       ];
-      $form['acquia_search']['identifier'] = [
+      $form[$module]['identifier'] = [
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Acquia Subscription identifier'),
         '#default_value' => $this->state->get('acquia_search.identifier'),
         '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI. Example: ABCD-12345'),
       ];
-      $form['acquia_search']['api_key'] = [
+      $form[$module]['api_key'] = [
         '#type' => 'password',
         '#title' => $this->t('Acquia Connector key'),
         '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI.'),
       ];
-      $form['acquia_search']['api_host'] = [
+      $form[$module]['api_host'] = [
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Acquia Search API hostname'),
         '#default_value' => $this->config('acquia_search.settings')->get('api_host'),
         '#description' => $this->t('API endpoint domain or URL. Default value is "https://api.sr-prod02.acquia.com".'),
       ];
-      $form['acquia_search']['uuid'] = [
+      $form[$module]['uuid'] = [
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Acquia Application UUID'),
         '#default_value' => $this->state->get('acquia_search.uuid'),
         '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI.'),
       ];
-      $form['acquia_search']['actions']['submit'] = [
+      $form[$module]['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => 'Save',
-        '#button_type' => 'primary',
+        '#submit' => ['::saveConfig'],
+        '#prefix' => '<div class= "dashboard-buttons-wrapper">',
       ];
-      $form['acquia_search']['actions']['advanced'] = [
-        '#markup' => $this->linkGenerator->generate(
-          'Advanced',
-          Url::fromRoute('entity.search_api_server.edit_form', ['search_api_server' => 'acquia_search_server'])
-        ),
-        '#prefix' => '<span class= "button advanced-button">',
-        '#suffix' => "</span>",
+      $form[$module]['actions']['ignore'] = [
+        '#type' => 'submit',
+        '#value' => 'Ignore',
+        '#submit' => ['::ignoreConfig'],
       ];
+      if (isset($module_info['configure'])) {
+        $form[$module]['actions']['advanced'] = [
+          '#markup' => $this->linkGenerator->generate(
+            'Advanced',
+            Url::fromRoute($module_info['configure'])
+          ),
+          '#suffix' => "</div>",
+        ];
+      }
       return $form;
     }
   }
@@ -152,16 +165,31 @@ final class AcquiaSearchForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function saveConfig(array &$form, FormStateInterface $form_state) {
     $solr_identifier = $form_state->getValue(['identifier']);
     $solr_api_key = $form_state->getValue(['api_key']);
     $solr_api_host = $form_state->getValue(['api_host']);
     $solr_api_uuid = $form_state->getValue(['uuid']);
-    $this->config('acquia_search.settings')->set('api_host', $solr_api_host)->save(TRUE);
-    $this->state->set('acquia_search.identifier', $solr_identifier);
+    $this->config('acquia_search_solr.settings')->set('api_host', $solr_api_host)->save(TRUE);
+    $this->state->set('acquia_search_solr.identifier', $solr_identifier);
     $this->state->set('acquia_search.api_key', $solr_api_key);
-    $this->state->set('acquia_search.uuid', $solr_api_uuid);
+    $this->state->set('acquia_search_solr.uuid', $solr_api_uuid);
+    $this->state->set('acquia_search_solr_progress', TRUE);
     $this->messenger()->addStatus('The configuration options have been saved.');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function ignoreConfig(array &$form, FormStateInterface $form_state) {
+    $this->state->set('acquia_search_solr_progress', TRUE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getProgressState() {
+    return($this->state->get('acquia_search_solr_progress'));
   }
 
 }
