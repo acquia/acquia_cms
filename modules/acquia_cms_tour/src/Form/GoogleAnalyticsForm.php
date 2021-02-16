@@ -6,6 +6,7 @@ use Drupal\Core\Extension\InfoParserInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGeneratorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -14,6 +15,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a form to configure the Google Analytics module.
  */
 final class GoogleAnalyticsForm extends ConfigFormBase {
+
+  /**
+   * The state service.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
 
   /**
    * The module handler.
@@ -45,11 +53,14 @@ final class GoogleAnalyticsForm extends ConfigFormBase {
    *   The link generator.
    * @param \Drupal\Core\Extension\InfoParserInterface $info_parser
    *   The info file parser.
+   * @param \Drupal\Core\State\StateInterface $state
+   *   The state service.
    */
-  public function __construct(ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser) {
+  public function __construct(ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser, StateInterface $state) {
     $this->module_handler = $module_handler;
     $this->linkGenerator = $link_generator;
     $this->infoParser = $info_parser;
+    $this->state = $state;
   }
 
   /**
@@ -60,6 +71,7 @@ final class GoogleAnalyticsForm extends ConfigFormBase {
       $container->get('module_handler'),
       $container->get('link_generator'),
       $container->get('info_parser'),
+      $container->get('state')
     );
   }
 
@@ -85,34 +97,50 @@ final class GoogleAnalyticsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
     $module = 'google_analytics';
+    if ($this->getProgressState()) {
+      $form['acquia_telemetry']['check_icon'] = [
+        '#prefix' => '<span class= "dashboard-check-icon">',
+        '#suffix' => "</span>",
+      ];
+    }
     if ($this->module_handler->moduleExists($module)) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $form['google_analytics']['description'] = [
-        '#type' => 'markup',
-        '#markup' => '',
-        '#prefix' => $module_info['name'],
-        '#description' => $module_info['description'],
+      $form[$module] = [
+        '#type' => 'details',
+        '#title' => $module_info['name'],
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
       ];
 
-      $form['google_analytics']['web_property_id'] = [
+      $form[$module]['web_property_id'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Web Property ID'),
+        '#placeholder' => 'UA-',
         '#default_value' => $this->config('google_analytics.settings')->get('account'),
+        '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
+        '#suffix' => "</div>",
       ];
-      $form['google_analytics']['actions']['submit'] = [
+      $form[$module]['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => 'Save',
-        '#button_type' => 'primary',
+        '#submit' => ['::saveConfig'],
+        '#prefix' => '<div class= "dashboard-buttons-wrapper">',
       ];
-      $form['acquia_search_solr']['actions']['advanced'] = [
-        '#markup' => $this->linkGenerator->generate(
-          'Advanced',
-          Url::fromRoute($module_info['configure'])
-        ),
-        '#prefix' => '<span class= "button advanced-button">',
-        '#suffix' => "</span>",
+      $form[$module]['actions']['ignore'] = [
+        '#type' => 'submit',
+        '#value' => 'Ignore',
+        '#submit' => ['::ignoreConfig'],
       ];
+      if (isset($module_info['configure'])) {
+        $form[$module]['acquia_search_solr']['actions']['advanced'] = [
+          '#markup' => $this->linkGenerator->generate(
+            'Advanced',
+            Url::fromRoute($module_info['configure'])
+          ),
+          '#suffix' => "</div>",
+        ];
+      }
       return $form;
     }
   }
@@ -120,10 +148,25 @@ final class GoogleAnalyticsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function saveConfig(array &$form, FormStateInterface $form_state) {
     $property_id = $form_state->getValue(['web_property_id']);
     $this->config('google_analytics.settings')->set('account', $property_id)->save();
+    $this->state->set('google_analytics_progress', TRUE);
     $this->messenger()->addStatus('The configuration options have been saved.');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function ignoreConfig(array &$form, FormStateInterface $form_state) {
+    $this->state->set('google_analytics_progress', TRUE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getProgressState() {
+    return($this->state->get('google_analytics_progress'));
   }
 
 }

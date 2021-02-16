@@ -72,7 +72,7 @@ final class AcquiaConnectorForm extends ConfigFormBase {
       $container->get('state'),
       $container->get('module_handler'),
       $container->get('link_generator'),
-      $container->get('info_parser'),
+      $container->get('info_parser')
     );
   }
 
@@ -96,35 +96,53 @@ final class AcquiaConnectorForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
     $module = 'acquia_connector';
+    if ($this->getProgressState()) {
+      $form['acquia_telemetry']['check_icon'] = [
+        '#prefix' => '<span class= "dashboard-check-icon">',
+        '#suffix' => "</span>",
+      ];
+    }
     if ($this->module_handler->moduleExists($module)) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $form['acquia_connector']['description'] = [
-        '#type' => 'markup',
-        '#markup' => '',
-        '#prefix' => $module_info['name'],
-        '#description' => $module_info['description'],
+      $form[$module] = [
+        '#type' => 'details',
+        '#title' => $module_info['name'],
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
       ];
-      $form['acquia_connector']['site_name'] = [
+      $form[$module]['site_name'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Name'),
+        '#placeholder' => 'Dev',
         '#maxlength' => 255,
         '#required' => TRUE,
+        '#disabled' => TRUE,
         '#default_value' => $this->state->get('spi.site_name'),
+        '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
+        '#suffix' => "</div>",
       ];
-      $form['acquia_connector']['actions']['submit'] = [
+
+      $form[$module]['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => 'Save',
-        '#button_type' => 'primary',
+        '#submit' => ['::saveConfig'],
+        '#prefix' => '<div class= "dashboard-buttons-wrapper">',
       ];
-      $form['acquia_connector']['actions']['advanced'] = [
-        '#markup' => $this->linkGenerator->generate(
-          'Advanced',
-          Url::fromRoute($module_info['configure'])
-        ),
-        '#prefix' => '<span class= "button advanced-button">',
-        '#suffix' => "</span>",
+      $form[$module]['actions']['ignore'] = [
+        '#type' => 'submit',
+        '#value' => 'Ignore',
+        '#submit' => ['::ignoreConfig'],
       ];
+      if (isset($module_info['configure'])) {
+        $form[$module]['actions']['advanced'] = [
+          '#markup' => $this->linkGenerator->generate(
+            'Advanced',
+            Url::fromRoute($module_info['configure'])
+          ),
+          '#suffix' => "</div>",
+        ];
+      }
 
       return $form;
     }
@@ -133,10 +151,25 @@ final class AcquiaConnectorForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function saveConfig(array &$form, FormStateInterface $form_state) {
     $acquia_connector_site_name = $form_state->getValue(['site_name']);
     $this->state->set('spi.site_name', $acquia_connector_site_name);
+    $this->state->set('acquia_connector_progress', TRUE);
     $this->messenger()->addStatus('The configuration options have been saved.');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function ignoreConfig(array &$form, FormStateInterface $form_state) {
+    $this->state->set('acquia_connector_progress', TRUE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getProgressState() {
+    return($this->state->get('acquia_connector_progress'));
   }
 
 }
