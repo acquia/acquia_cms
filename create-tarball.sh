@@ -12,8 +12,7 @@ composer config prefer-stable true
 composer config repositories.assets composer https://asset-packagist.org
 
 composer config repositories.acms vcs git@github.com:acquia/acquia_cms.git
-composer remove --no-update composer/installers
-composer require --no-update "ext-dom:*" "acquia/acquia_cms:~1.0.0-beta8" cweagans/composer-patches
+composer require --no-update "ext-dom:*" "acquia/acquia_cms" cweagans/composer-patches
 composer update
 
 # Add the version number to the info file.

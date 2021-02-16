@@ -22,15 +22,6 @@ final class ConfigureProject {
     $target = new JsonFile($arguments[0] . '/composer.json');
     $project = $target->read();
 
-    $project['repositories']['acms'] = [
-      'type' => 'vcs',
-      'url' => 'git@github.com:acquia/acquia_cms.git',
-    ];
-    $project['repositories']['acms-project'] = [
-      'type' => 'vcs',
-      'url' => 'git@github.com:acquia/acquia-cms-project.git',
-    ];
-
     $project['extra']['installer-paths']['libraries/{$name}'] = [
       'type:drupal-library',
       'type:bower-asset',
