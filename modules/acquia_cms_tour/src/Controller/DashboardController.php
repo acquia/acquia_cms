@@ -12,6 +12,7 @@ use Drupal\acquia_cms_tour\Form\RecaptchaForm;
 use Drupal\acquia_cms_tour\Form\SiteStudioCoreForm;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\State\StateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -40,6 +41,13 @@ final class DashboardController extends ControllerBase {
   protected $state;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * The sub-controllers to invoke in order to build the tour page.
    *
    * @var array
@@ -60,11 +68,14 @@ final class DashboardController extends ControllerBase {
    *
    * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler service.
    * @param \Drupal\Core\DependencyInjection\ClassResolverInterface $class_resolver
    *   The class resolver.
    */
-  public function __construct(StateInterface $state, ClassResolverInterface $class_resolver) {
+  public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, ClassResolverInterface $class_resolver) {
     $this->state = $state;
+    $this->module_handler = $module_handler;
     $this->classResolver = $class_resolver;
   }
 
@@ -91,6 +102,7 @@ final class DashboardController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('state'),
+      $container->get('module_handler'),
       $container->get('class_resolver')
     );
   }
@@ -124,10 +136,12 @@ final class DashboardController extends ControllerBase {
     $count = 0;
     $item_count = 0;
     foreach (static::SECTIONS as $key => $controller) {
-      $count++;
       $build[$key] = $this->getSectionOutput($key, $controller);
       $state_var = $this->classResolver->getInstanceFromDefinition($controller)->getProgressState();
-      if ($state_var) {
+      if (isset($state_var['total'])) {
+        $count++;
+      }
+      if (isset($state_var['count']) && $state_var['count']) {
         $item_count++;
       }
     }

@@ -228,7 +228,12 @@ final class AcquiaGoogleMapsApiDashboardForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getProgressState() {
-    return($this->state->get('acquia_google_maps_progress'));
+    if ($this->module_handler->moduleExists('geocoder')) {
+      return [
+        'total' => 1,
+        'count' => $this->state->get('acquia_google_maps_progress'),
+      ];
+    }
   }
 
 }
