@@ -6,6 +6,8 @@ use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drush\Commands\DrushCommands;
+use Drush\Exceptions\UserAbortException;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 
 /**
  * A Drush command file.
@@ -40,13 +42,18 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
    * A command to quickly get the installed schema versions of
    * one, some, or all active modules.
    *
+   * @param array $options
+   *   The options array.
+   *
+   * @option module
+   *   The module whose schema version has to be display.
    * @command acms:get-schema
    * @option module  A comma-separated list of module name to get schema version.
    * @aliases ags
    * @usage acms:get-schema --module=acquia_cms_article,acquia_cms_common
    *   Display install schema version of given module.
    */
-  public function getSchema($options = ['module' => NULL]) {
+  public function getSchema(array $options = ['module' => NULL]) {
     if ($options['module']) {
       $modules = explode(',', $options['module']);
       foreach ($modules as $module_name) {
@@ -151,19 +158,118 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
    * Command to reset configuration for ACMS modules
    * to the default canonical config, as exported in code.
    *
-   * @param string $modules
-   *   The name of modules as array of string.
-   * @param array $scope
-   *   Argument provided to the drush command.
+   * @param array $package
+   *   The name of modules separated by space.
+   * @param array $options
+   *   The options array.
    *
+   * @throws \Drush\Exceptions\UserAbortException
+   *
+   * @option scope
+   *   The scope for particular package to be imported.
    * @command acms:config-reset
    * @aliases acr
    * @usage acms:config-reset
    *   Reset the configuration to the default.
+   * @usage acms:config-reset acquia_cms_article acquia_cms_common --scope=all
+   *   Reset the configuration to the default.
    */
-  public function resetConfigurations(string $modules, array $scope) {
-    // @todo Logic to import sets of configurations.
-    $this->output()->writeln('Reset configuration command');
+  public function resetConfigurations(array $package, array $options = ['scope' => NULL]) {
+    $this->io()->text(["Welcome to Acquia CMS's Config reset wizard.",
+      "This should only be used in case of emergencies and can lead to unexpected impacts on the site.",
+    ]);
+    // Get the acquia cms module list.
+    $scope_allowed = ['config', 'site-studio', 'all'];
+    $modules = $this->moduleHandler->getModuleList();
+    $modules_array = [];
+    foreach ($modules as $module => $module_obj) {
+      if ($module_obj->getType() === 'module' && str_starts_with($module_obj->getName(), 'acquia_cms')) {
+        $modules_array[] = $module;
+      }
+    }
+
+    // Lets get input from user if not provided package with command.
+    if (empty($package)) {
+      if (!empty($modules_array)) {
+        $question_string = 'Choose a Module to reset. Separate multiple choices with commas, e.g. "1,2,4".';
+        $choices = array_merge(['Cancel'], $modules_array);
+        array_push($choices, 'All');
+        $question = new ChoiceQuestion(dt($question_string), $choices, NULL);
+        $question->setMultiselect(TRUE);
+        $types = $this->io()->askQuestion($question);
+        if (in_array('Cancel', $types)) {
+          throw new UserAbortException();
+        }
+        elseif (in_array('All', $types)) {
+          $package = $modules_array;
+        }
+        else {
+          $package = $types;
+        }
+        // Lets ask for scope if not already provided.
+        if (!$options['scope']) {
+          $scope = $this->io()->choice(dt('Choose a scope.'), $scope_allowed, NULL);
+          $options['scope'] = $scope_allowed[$scope];
+        }
+        elseif ($options['scope'] && !in_array($options['scope'], $scope_allowed)) {
+          throw new \InvalidArgumentException('Invalid scope, allowed values are [config, site-studio, all]');
+        }
+        // @todo Logic to import sets of configurations.
+        foreach ($package as $module) {
+          $this->importConfig($module, $options['scope']);
+        }
+      }
+    }
+    // Lets check provided package & scope are valid.
+    else {
+      foreach ($package as $module) {
+        if (!in_array($module, $modules_array)) {
+          throw new \InvalidArgumentException('Invalid module name:' . $module);
+        }
+      }
+      if (!isset($options['scope'])) {
+        throw new \InvalidArgumentException('Missing argument scope');
+      }
+      if ($options['scope'] && !in_array($options['scope'], $scope_allowed)) {
+        throw new \InvalidArgumentException('Invalid scope, allowed values are [config, site-studio, all]');
+      }
+      // @todo Logic to import sets of configurations.
+      foreach ($package as $module) {
+        $this->importConfig($module, $options['scope']);
+      }
+    }
+  }
+
+  /**
+   * Import configurations for the given module & its scope.
+   *
+   * @param string $module
+   *   The name of module.
+   * @param string $scope
+   *   Scope for configuration to import.
+   */
+  protected function importConfig(string $module, string $scope) {
+
+    if ($scope == 'All') {
+      // @todo Need to pass install, optional, schema along with dx8 folder.
+      $source = drupal_get_path('module', $module) . '/config/install';
+    }
+    elseif ($scope == 'config') {
+      // @todo Need to pass install, optional & schema folder.
+      $source = drupal_get_path('module', $module) . '/config/optional';
+    }
+    elseif ($scope == 'site-studio') {
+      // $source = drupal_get_path('module', $module) . '/config/dx8';
+      // @todo Logic to check site studio key and import sets of configurations.
+    }
+
+    $selfAlias = $this->siteAliasManager()->getSelf();
+    $options = ['partial' => TRUE];
+    if (isset($source)) {
+      $options['source'] = $source;
+    }
+    $process = $this->processManager()->drush($selfAlias, 'config:import', [], $options);
+    $process->mustRun($process->showRealtime());
   }
 
 }
