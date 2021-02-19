@@ -172,7 +172,12 @@ final class SiteStudioCoreForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getProgressState() {
-    return($this->state->get('site_studio_progress'));
+    if ($this->module_handler->moduleExists('cohesion')) {
+      return [
+        'total' => 1,
+        'count' => $this->state->get('site_studio_progress'),
+      ];
+    }
   }
 
 }
