@@ -189,7 +189,12 @@ final class AcquiaSearchForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getProgressState() {
-    return($this->state->get('acquia_search_solr_progress'));
+    if ($this->module_handler->moduleExists('acquia_search_solr')) {
+      return [
+        'total' => 1,
+        'count' => $this->state->get('acquia_search_solr_progress'),
+      ];
+    }
   }
 
 }
