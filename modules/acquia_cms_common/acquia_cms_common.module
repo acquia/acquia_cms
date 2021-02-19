@@ -10,6 +10,7 @@ use Drupal\acquia_cms_common\Facade\SitemapFacade;
 use Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade;
 use Drupal\acquia_cms_common\Facade\WorkflowFacade;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\imce\Imce;
 use Drupal\node\NodeTypeInterface;
 use Drupal\workbench_email\TemplateInterface;
@@ -100,4 +101,65 @@ function acquia_cms_common_theme($existing, $type, $theme, $path) {
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_ckeditor_css_alter().
+ */
+function acquia_cms_common_ckeditor_css_alter(&$css, $editor) {
+  // Attach reset, plugin, base, theme, icon and fonts css files to ckeditor.
+  $base_styles_edit_route = \Drupal::service('router.route_provider')
+    ->getRoutesByNames(['entity.cohesion_base_styles.edit_form']);
+  if (!(count($base_styles_edit_route) === 1)) {
+    return;
+  }
+
+  $body_route = Url::fromRoute('entity.cohesion_base_styles.edit_form', ['cohesion_base_styles' => 'body']);
+  $current_path = $body_route->isRouted() ? Url::fromRoute('<current>') : NULL;
+
+  // If paths don't match.
+  if ($current_path->getInternalPath() != $body_route->getInternalPath()) {
+
+    try {
+      // For "Filtered HTML" text format, set same styles as site studio format.
+      if ($editor->getFilterFormat() &&  $editor->getFilterFormat()->get('format') == 'filtered_html') {
+        $wysiwyg_cache_token = \Drupal::keyValue('cohesion.wysiwyg_cache_token');
+        $wysiwyg_cache_buster = $wysiwyg_cache_token->get('cache_token') ? '?_t=' . $wysiwyg_cache_token->get('cache_token') : '';
+        // Reset and ckeditor specific styles.
+        $css[] = drupal_get_path('module', 'cohesion') . '/css/reset.css' . $wysiwyg_cache_buster;
+        $css[] = drupal_get_path('module', 'cohesion') . '/css/plugin-styles.css' . $wysiwyg_cache_buster;
+
+        $default_theme_id = \Drupal::service('theme_handler')->getDefault();
+
+        if (\Drupal::service('cohesion.utils')->themeHasCohesionEnabled($default_theme_id)) {
+          $css_base_filename = \Drupal::service('cohesion.local_files_manager')
+            ->getStyleSheetFilename('base', $default_theme_id, TRUE);
+          $css_theme_filename = \Drupal::service('cohesion.local_files_manager')
+            ->getStyleSheetFilename('theme', $default_theme_id, TRUE);
+          // Generated stylsheets.
+          $css[] = file_create_url($css_base_filename) . $wysiwyg_cache_buster;
+          $css[] = file_create_url($css_theme_filename) . $wysiwyg_cache_buster;
+
+        }
+        // Add the body reset stylesheet.
+        $css[] = drupal_get_path('module', 'cohesion') . '/css/cohesion-body-reset.css' . $wysiwyg_cache_buster;
+      }
+    }
+    catch (\Exception $e) {
+
+    }
+  }
+
+  // Icons and font libraries.
+  if (($font_libraries = \Drupal::service('settings.endpoint.utils')
+    ->siteLibraries('font_libraries'))) {
+    $css = array_merge($css, $font_libraries);
+  }
+
+  if (($icon_libraries = \Drupal::service('settings.endpoint.utils')
+    ->siteLibraries('icon_libraries'))) {
+    $css = array_merge($css, $icon_libraries);
+  }
+  $css = array_filter($css);
+  \Drupal::service('router.builder')->rebuildIfNeeded();
 }
