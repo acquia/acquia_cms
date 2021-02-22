@@ -98,7 +98,8 @@ final class GoogleTagManagerForm extends ConfigFormBase {
     $form['#tree'] = FALSE;
     $module = 'google_tag';
     if ($this->module_handler->moduleExists($module)) {
-      if ($this->getProgressState()) {
+      $state_var = $this->getProgressState();
+      if (isset($state_var['count']) && $state_var['count']) {
         $form['acquia_telemetry']['check_icon'] = [
           '#prefix' => '<span class= "dashboard-check-icon">',
           '#suffix' => "</span>",
