@@ -124,7 +124,8 @@ final class AcquiaGoogleMapsApiDashboardForm extends ConfigFormBase {
     // different features (Site Studio and Place nodes). Site Studio is always
     // enabled in ACMS, but Place may not.
     $module = 'geocoder';
-    if ($this->getProgressState()) {
+    $state_var = $this->getProgressState();
+    if (isset($state_var['count']) && $state_var['count']) {
       $form['acquia_telemetry']['check_icon'] = [
         '#prefix' => '<span class= "dashboard-check-icon">',
         '#suffix' => "</span>",
