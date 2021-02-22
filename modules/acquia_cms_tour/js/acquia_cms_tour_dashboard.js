@@ -9,7 +9,7 @@
   Drupal.theme.ajaxProgressThrobber = function () { return ""; };
   Drupal.behaviors.acquiaCmsWelcomeDialog = {
     attach: function () {
-      // Open modal.
+      // @todo: Open modal only if show_wizard_modal is TRUE and its not an AJAX call
       if (drupalSettings.show_wizard_modal){
         $('.welcome-modal-form').click();
       }

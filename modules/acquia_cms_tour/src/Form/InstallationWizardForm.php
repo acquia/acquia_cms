@@ -3,6 +3,7 @@
 namespace Drupal\acquia_cms_tour\Form;
 
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
@@ -60,13 +61,23 @@ class InstallationWizardForm extends FormBase {
   }
 
   /**
-   * Constructs a new ProgressBarForm.
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * Constructs a new InstallationWizardForm.
    *
    * @param \Drupal\Core\DependencyInjection\ClassResolverInterface $class_resolver
    *   The class resolver.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler service.
    */
-  public function __construct(ClassResolverInterface $class_resolver) {
+  public function __construct(ClassResolverInterface $class_resolver, ModuleHandlerInterface $module_handler) {
     $this->classResolver = $class_resolver;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -74,7 +85,8 @@ class InstallationWizardForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('class_resolver')
+      $container->get('class_resolver'),
+      $container->get('module_handler')
     );
   }
 
@@ -94,7 +106,7 @@ class InstallationWizardForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    if (is_null($this->current_step)) {
+    if (is_null($this->currentStep)) {
       // Initialize multistep form.
       $this->initMultistepForm($form, $form_state);
     }
@@ -155,16 +167,27 @@ class InstallationWizardForm extends FormBase {
     if (!$this->isCurrentStepFirst()) {
       $actions['back'] = [
         '#type' => 'submit',
-        '#value' => $this->t('Previous step'),
+        '#value' => $this->t('< Back'),
         '#submit' => ['::previousStepSubmit'],
       ];
     }
+
+    // Show skip this step button.
+    $actions['skip'] = [
+      '#type' => 'submit',
+      '#value' => $this->t("Skip this step"),
+      '#limit_validation_errors' => [],
+      '#attributes' => [
+        'class' => ['skip-button'],
+      ],
+      '#submit' => ['::skipStepSubmit'],
+    ];
 
     // Do not show 'next' button on the last step.
     if (!$this->isCurrentStepLast()) {
       $actions['next'] = [
         '#type' => 'submit',
-        '#value' => $this->t('Next step'),
+        '#value' => $this->t('Next >'),
         '#submit' => ['::nextStepSubmit'],
       ];
     }
@@ -176,7 +199,6 @@ class InstallationWizardForm extends FormBase {
         '#value' => $this->t("Submit information"),
       ];
     }
-
     return $actions;
   }
 
@@ -185,9 +207,8 @@ class InstallationWizardForm extends FormBase {
    */
   public function previousStepSubmit(array &$form, FormStateInterface $form_state) {
     $this->copyFormValuesToStorage($form, $form_state);
-    $this->current_step -= 1;
-    $form_state
-      ->setRebuild(TRUE);
+    $this->currentStep -= 1;
+    $form_state->setRebuild(TRUE);
   }
 
   /**
@@ -195,23 +216,31 @@ class InstallationWizardForm extends FormBase {
    */
   public function nextStepSubmit(array &$form, FormStateInterface $form_state) {
     $this->copyFormValuesToStorage($form, $form_state);
-    $this->current_step += 1;
-    $form_state
-      ->setRebuild(TRUE);
+    $this->currentStep += 1;
+    $form_state->setRebuild(TRUE);
+  }
+
+  /**
+   * Skip the current state and mark it as completed.
+   */
+  public function skipStepSubmit(array &$form, FormStateInterface $form_state) {
+    $this->currentStep += 1;
+    $form_state->setRebuild(TRUE);
+    $form_state->clearErrors();
   }
 
   /**
    * Checks if the current step is the first step.
    */
   protected function isCurrentStepFirst() {
-    return $this->current_step == 0 ? TRUE : FALSE;
+    return $this->currentStep == 0 ? TRUE : FALSE;
   }
 
   /**
    * Checks if the current step is the last step.
    */
   protected function isCurrentStepLast() {
-    return $this->current_step == $this->amountSteps() ? TRUE : FALSE;
+    return $this->currentStep == $this->amountSteps() ? TRUE : FALSE;
   }
 
   /**
@@ -225,7 +254,7 @@ class InstallationWizardForm extends FormBase {
    * Returns current step.
    */
   protected function getCurrentStep() {
-    return $this->current_step;
+    return $this->currentStep;
   }
 
   /**
@@ -292,7 +321,7 @@ class InstallationWizardForm extends FormBase {
    *   The current state of the form.
    */
   protected function initMultistepForm(array $form, FormStateInterface $form_state) {
-    $this->current_step = 0;
+    $this->currentStep = 0;
     $this->steps = $this->getSteps();
     $this->storage = [];
   }
@@ -315,8 +344,10 @@ class InstallationWizardForm extends FormBase {
    */
   public function getSteps() {
     $steps = [];
-    foreach (static::SECTIONS as $controller) {
-      $steps[] = $controller;
+    foreach (static::SECTIONS as $module => $controller) {
+      if ($this->moduleHandler->moduleExists($module)) {
+        $steps[] = $controller;
+      }
     }
     return $steps;
   }
@@ -333,11 +364,14 @@ class InstallationWizardForm extends FormBase {
    *   The render array defining the elements of the form.
    */
   public function stepForm(array &$form, FormStateInterface $form_state) {
-    $formController = $this->steps[$this->current_step];
+    $formController = $this->steps[$this->currentStep];
     $sections = \array_flip(self::SECTIONS);
     $key = $sections[$formController];
     $form = $this->classResolver->getInstanceFromDefinition($formController)->buildForm($form, $form_state);
-    unset($form[$key]['actions']['submit']);
+    // Change details to fieldset.
+    $form[$key]['#type'] = 'fieldset';
+    // Unset all actions & submit.
+    unset($form[$key]['actions']);
     unset($form[$key]['submit']);
     return $form;
   }
