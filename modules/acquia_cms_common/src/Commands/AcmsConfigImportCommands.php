@@ -23,7 +23,6 @@ use Drush\Commands\DrushCommands;
 use Drush\Drupal\Commands\config\ConfigCommands;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\Console\Question\ChoiceQuestion;
-use Webmozart\PathUtil\Path;
 
 /**
  *
@@ -219,21 +218,196 @@ class AcmsConfigImportCommands extends DrushCommands {
   }
 
   /**
+   * Reset configurations to default.
    *
+   * Command to reset configuration for ACMS modules
+   * to the default canonical config, as exported in code.
+   *
+   * @param array $package
+   *   The name of modules separated by space.
+   * @param array $options
+   *   The options array.
+   *
+   * @throws \Drush\Exceptions\UserAbortException
+   *
+   * @option scope
+   *   The scope for particular package to be imported.
+   * @command acms:config-reset
+   * @aliases acr
+   * @usage acms:config-reset
+   *   Reset the configuration to the default.
+   * @usage acms:config-reset acquia_cms_article acquia_cms_common --scope=all
+   *   Reset the configuration to the default.
+   */
+  public function resetConfigurations(array $package, array $options = ['scope' => NULL]) {
+    $this->io()->text(["Welcome to Acquia CMS's Config reset wizard.",
+      "This should only be used in case of emergencies and can lead to unexpected impacts on the site.",
+    ]);
+    // Get the acquia cms module list.
+    $scope_allowed = ['config', 'site-studio', 'all'];
+    $modules = $this->moduleHandler->getModuleList();
+    $modules_array = [];
+    foreach ($modules as $module => $module_obj) {
+      if ($module_obj->getType() === 'module' && str_starts_with($module_obj->getName(), 'acquia_cms')) {
+        $modules_array[] = $module;
+      }
+    }
+
+    // Lets get input from user if not provided package with command.
+    if (empty($package)) {
+      if (!empty($modules_array)) {
+        $question_string = 'Choose a Module to reset its configurations. Separate multiple choices with commas, e.g. "1,2,4".';
+        $choices = array_merge(['Cancel'], $modules_array);
+        array_push($choices, 'All');
+        $question = new ChoiceQuestion(dt($question_string), $choices, NULL);
+        $question->setMultiselect(TRUE);
+        $types = $this->io()->askQuestion($question);
+        if (in_array('Cancel', $types)) {
+          throw new UserAbortException();
+        }
+        elseif (in_array('All', $types)) {
+          $package = $modules_array;
+        }
+        else {
+          $package = $types;
+        }
+        // Lets ask for scope if not already provided.
+        if (!$options['scope']) {
+          $scope = $this->io()->choice(dt('Choose a scope.'), $scope_allowed, NULL);
+          $options['scope'] = $scope_allowed[$scope];
+        }
+        elseif ($options['scope'] && !in_array($options['scope'], $scope_allowed)) {
+          throw new \InvalidArgumentException('Invalid scope, allowed values are [config, site-studio, all]');
+        }
+        // @todo Logic to import site studio packages.
+        $config_files = [];
+        foreach ($package as $module) {
+          $config_files = array_merge($config_files, $this->getConfigPath($module, $options['scope']));
+        }
+        $this->importConfig($config_files);
+      }
+    }
+    // Lets check provided package & scope are valid.
+    else {
+      foreach ($package as $module) {
+        if (!in_array($module, $modules_array)) {
+          throw new \InvalidArgumentException('Invalid module name:' . $module);
+        }
+      }
+      if (!isset($options['scope'])) {
+        throw new \InvalidArgumentException('Missing argument scope');
+      }
+      if ($options['scope'] && !in_array($options['scope'], $scope_allowed)) {
+        throw new \InvalidArgumentException('Invalid scope, allowed values are [config, site-studio, all]');
+      }
+      if ($options['scope'] == 'site-studio') {
+        $this->io()->warning([
+          "This can have unintended side effects for existing pages built using previous versions of components,",
+          "it might literally break them, and should be tested in a non-production environment first.",
+        ]);
+      }
+      // @todo Logic to import site studio packages.
+      $config_files = [];
+      foreach ($package as $module) {
+        $config_files = array_merge($config_files, $this->getConfigPath($module, $options['scope']));
+      }
+      $this->importConfig($config_files);
+    }
+  }
+
+  /**
+   * Import configurations for the given module & its scope.
+   *
+   * @param string $module
+   *   The name of module.
+   * @param string $scope
+   *   Scope for configuration to import.
+   *
+   * @return bool|mixed|void
+   */
+  protected function getConfigPath(string $module, string $scope) {
+    $sources = [];
+    if ($scope == 'All') {
+      $sources[] = drupal_get_path('module', $module) . '/config/install';
+      $sources[] = drupal_get_path('module', $module) . '/config/optional';
+      // $source = drupal_get_path('module', $module) . '/config/dx8';
+    }
+    elseif ($scope == 'config') {
+      $sources[] = drupal_get_path('module', $module) . '/config/install';
+      $sources[] = drupal_get_path('module', $module) . '/config/optional';
+    }
+    elseif ($scope == 'site-studio') {
+      // $sources[] = drupal_get_path('module', $module) . '/config/dx8';
+    }
+    $config_files = [];
+    foreach ($sources as $source) {
+      $source_storage_dir = ConfigCommands::getDirectory(NULL, $source);
+      $source_storage = new FileStorage($source_storage_dir);
+
+      foreach ($source_storage->listAll() as $name) {
+        $config_files[$name] = $source_storage->read($name);
+      }
+    }
+    return $config_files;
+  }
+
+  /**
+   * Import configurations for the given sources.
+   *
+   * @param array $sources
+   *
+   * @return bool|mixed|void
+   *
+   * @throws \Drush\Exceptions\UserAbortException
+   */
+  protected function importConfig(array $sources) {
+
+    // Determine $source_storage in partial case.
+    $active_storage = $this->getConfigStorage();
+
+    $replacement_storage = new StorageReplaceDataWrapper($active_storage);
+    foreach ($sources as $name => $data) {
+      $replacement_storage->replaceData($name, $data);
+    }
+    $source_storage = $replacement_storage;
+
+    $config_manager = $this->getConfigManager();
+    $storage_comparer = new StorageComparer($source_storage, $active_storage, $config_manager);
+    if (!$storage_comparer->createChangelist()->hasChanges()) {
+      $this->logger()->notice(('There are no changes to import.'));
+      return;
+    }
+
+    // List the changes in table format.
+    $change_list = [];
+    foreach ($storage_comparer->getAllCollectionNames() as $collection) {
+      $change_list[$collection] = $storage_comparer->getChangelist(NULL, $collection);
+    }
+    $table = ConfigCommands::configChangesTable($change_list, $this->output());
+    $table->render();
+
+    if (!$this->io()->confirm(dt('Import the listed configuration changes?'))) {
+      throw new UserAbortException();
+    }
+    return drush_op([$this, 'runImport'], $storage_comparer);
+  }
+
+  /**
+   * Run the import process for configurations.
    */
   public function runImport($storage_comparer) {
     $config_importer = new ConfigImporter(
-          $storage_comparer,
-          $this->getEventDispatcher(),
-          $this->getConfigManager(),
-          $this->getLock(),
-          $this->getConfigTyped(),
-          $this->getModuleHandler(),
-          $this->getModuleInstaller(),
-          $this->getThemeHandler(),
-          $this->getStringTranslation(),
-          $this->getModuleExtensionList()
-      );
+      $storage_comparer,
+      $this->getEventDispatcher(),
+      $this->getConfigManager(),
+      $this->getLock(),
+      $this->getConfigTyped(),
+      $this->getModuleHandler(),
+      $this->getModuleInstaller(),
+      $this->getThemeHandler(),
+      $this->getStringTranslation(),
+      $this->getModuleExtensionList()
+    );
     if ($config_importer->alreadyImporting()) {
       $this->logger()->warning('Another request may be synchronizing configuration already.');
     }
@@ -300,163 +474,6 @@ class AcmsConfigImportCommands extends DrushCommands {
     if ($msgs) {
       return new CommandError(implode(' ', $msgs));
     }
-  }
-
-  /**
-   * Reset configurations to default.
-   *
-   * Command to reset configuration for ACMS modules
-   * to the default canonical config, as exported in code.
-   *
-   * @param array $package
-   *   The name of modules separated by space.
-   * @param array $options
-   *   The options array.
-   *
-   * @throws \Drush\Exceptions\UserAbortException
-   *
-   * @option scope
-   *   The scope for particular package to be imported.
-   * @command acms:config-reset
-   * @aliases acr
-   * @usage acms:config-reset
-   *   Reset the configuration to the default.
-   * @usage acms:config-reset acquia_cms_article acquia_cms_common --scope=all
-   *   Reset the configuration to the default.
-   */
-  public function resetConfigurations(array $package, array $options = ['scope' => NULL]) {
-    $this->io()->text(["Welcome to Acquia CMS's Config reset wizard.",
-      "This should only be used in case of emergencies and can lead to unexpected impacts on the site.",
-    ]);
-    // Get the acquia cms module list.
-    $scope_allowed = ['config', 'site-studio', 'all'];
-    $modules = $this->moduleHandler->getModuleList();
-    $modules_array = [];
-    foreach ($modules as $module => $module_obj) {
-      if ($module_obj->getType() === 'module' && str_starts_with($module_obj->getName(), 'acquia_cms')) {
-        $modules_array[] = $module;
-      }
-    }
-
-    // Lets get input from user if not provided package with command.
-    if (empty($package)) {
-      if (!empty($modules_array)) {
-        $question_string = 'Choose a Module to reset its configurations. Separate multiple choices with commas, e.g. "1,2,4".';
-        $choices = array_merge(['Cancel'], $modules_array);
-        array_push($choices, 'All');
-        $question = new ChoiceQuestion(dt($question_string), $choices, NULL);
-        $question->setMultiselect(TRUE);
-        $types = $this->io()->askQuestion($question);
-        if (in_array('Cancel', $types)) {
-          throw new UserAbortException();
-        }
-        elseif (in_array('All', $types)) {
-          $package = $modules_array;
-        }
-        else {
-          $package = $types;
-        }
-        // Lets ask for scope if not already provided.
-        if (!$options['scope']) {
-          $scope = $this->io()->choice(dt('Choose a scope.'), $scope_allowed, NULL);
-          $options['scope'] = $scope_allowed[$scope];
-        }
-        elseif ($options['scope'] && !in_array($options['scope'], $scope_allowed)) {
-          throw new \InvalidArgumentException('Invalid scope, allowed values are [config, site-studio, all]');
-        }
-        // @todo Logic to import sets of configurations.
-        foreach ($package as $module) {
-          $this->importConfig($module, $options['scope']);
-        }
-      }
-    }
-    // Lets check provided package & scope are valid.
-    else {
-      foreach ($package as $module) {
-        if (!in_array($module, $modules_array)) {
-          throw new \InvalidArgumentException('Invalid module name:' . $module);
-        }
-      }
-      if (!isset($options['scope'])) {
-        throw new \InvalidArgumentException('Missing argument scope');
-      }
-      if ($options['scope'] && !in_array($options['scope'], $scope_allowed)) {
-        throw new \InvalidArgumentException('Invalid scope, allowed values are [config, site-studio, all]');
-      }
-      // @todo Logic to import sets of configurations.
-      foreach ($package as $module) {
-        $this->importConfig($module, $options['scope']);
-      }
-    }
-  }
-
-  /**
-   * Import configurations for the given module & its scope.
-   *
-   * @param string $module
-   *   The name of module.
-   * @param string $scope
-   *   Scope for configuration to import.
-   *
-   * @return bool|mixed|void
-   */
-  protected function importConfig(string $module, string $scope) {
-
-    if ($scope == 'All') {
-      // @todo Need to pass install, optional, schema along with dx8 folder.
-      $source = drupal_get_path('module', $module) . '/config/install';
-    }
-    elseif ($scope == 'config') {
-      // @todo Need to pass install, optional & schema folder.
-      $source = drupal_get_path('module', $module) . '/config/optional';
-    }
-    elseif ($scope == 'site-studio') {
-      // $source = drupal_get_path('module', $module) . '/config/dx8';
-      $this->io()->warning([
-        "This can have unintended side effects for existing pages built using previous versions of components,",
-        "it might literally break them, and should be tested in a non-production environment first.",
-      ]);
-      // @todo Logic to check site studio key and import sets of configurations.
-    }
-
-    // $selfAlias = $this->siteAliasManager()->getSelf();
-    $options = ['partial' => TRUE];
-    if (isset($source)) {
-      $options['source'] = $source;
-    }
-    // $process = $this->processManager()->drush($selfAlias, 'config:import', [], $options);
-    //    $process->mustRun($process->showRealtime());
-    // Determine source directory.
-    $source_storage_dir = ConfigCommands::getDirectory(NULL, $options['source']);
-
-    // Prepare the configuration storage for the import.
-    if ($source_storage_dir == Path::canonicalize(\drush_config_get_config_directory())) {
-      $source_storage = $this->getConfigStorageSync();
-    }
-    else {
-      $source_storage = new FileStorage($source_storage_dir);
-    }
-
-    // Determine $source_storage in partial case.
-    $active_storage = $this->getConfigStorage();
-    if ($options['partial']) {
-      $replacement_storage = new StorageReplaceDataWrapper($active_storage);
-      foreach ($source_storage->listAll() as $name) {
-        $data = $source_storage->read($name);
-        $replacement_storage->replaceData($name, $data);
-      }
-      $source_storage = $replacement_storage;
-    }
-    $config_manager = $this->getConfigManager();
-    $storage_comparer = new StorageComparer($source_storage, $active_storage, $config_manager);
-    if (!$storage_comparer->createChangelist()->hasChanges()) {
-      $this->logger()->notice(('There are no changes to import.'));
-      return;
-    }
-    if (!$this->io()->confirm(dt('Import the listed configuration changes?'))) {
-      throw new UserAbortException();
-    }
-    return drush_op([$this, 'runImport'], $storage_comparer);
   }
 
 }
