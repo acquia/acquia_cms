@@ -97,7 +97,8 @@ final class GoogleAnalyticsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
     $module = 'google_analytics';
-    if ($this->getProgressState()) {
+    $state_var = $this->getProgressState();
+    if (isset($state_var['count']) && $state_var['count']) {
       $form['acquia_telemetry']['check_icon'] = [
         '#prefix' => '<span class= "dashboard-check-icon">',
         '#suffix' => "</span>",

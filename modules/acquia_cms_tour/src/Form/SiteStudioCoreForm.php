@@ -100,6 +100,13 @@ final class SiteStudioCoreForm extends ConfigFormBase {
     if ($this->module_handler->moduleExists($module)) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
+      $state_var = $this->getProgressState();
+      if (isset($state_var['count']) && $state_var['count']) {
+        $form['acquia_telemetry']['check_icon'] = [
+          '#prefix' => '<span class= "dashboard-check-icon">',
+          '#suffix' => "</span>",
+        ];
+      }
       $form[$module] = [
         '#type' => 'details',
         '#title' => $module_info['name'],
