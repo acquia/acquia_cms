@@ -15,3 +15,20 @@ services:
     arguments: ['@module_handler']
     tags:
       - { name: drush.command }
+  acquia_cms_common.config_commands:
+    class: 'Drupal\acquia_cms_common\Commands\AcmsConfigImportCommands'
+    arguments:
+      - '@config.manager'
+      - '@config.storage'
+      - '@config.storage.sync'
+      - '@cache.config'
+      - '@module_handler'
+      - '@event_dispatcher'
+      - '@lock'
+      - '@config.typed'
+      - '@module_installer'
+      - '@theme_handler'
+      - '@string_translation'
+      - '@extension.list.module'
+    tags:
+      - { name: drush.command }
