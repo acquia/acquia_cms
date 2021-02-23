@@ -26,11 +26,17 @@ use Drush\Exceptions\UserAbortException;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
 /**
+ * A Drush command file.
  *
+ * This files contains custom drush command to provide a way to import
+ * standard configuration with partial option along with site studio package
+ * for particular some or all given modules.
  */
 class AcmsConfigImportCommands extends DrushCommands {
 
   /**
+   * The ConfigManagerInterface.
+   *
    * @var \Drupal\Core\Config\ConfigManagerInterface
    */
   protected $configManager;
