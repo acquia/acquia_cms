@@ -129,7 +129,9 @@ final class CohesionFacade implements ContainerInjectionInterface {
   public function getPackagesFromExtension(Extension $extension) : array {
     $dir = $extension->getPath();
 
-    $list = "$dir/config/dx8/packages.yml";
+    // Setting non-existent file "nofile.yml". Change back to "packages.yml"
+    // when yml values are added back in.
+    $list = "$dir/config/site_studio/nofile.yml";
     if (file_exists($list)) {
       $list = file_get_contents($list);
 
