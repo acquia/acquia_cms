@@ -166,7 +166,11 @@
             }
         }
     },
-    "autoload": {},
+    "autoload": {
+        "classmap": [
+            "src/Composer/ConfigureProject.php"
+        ]
+    },
     "repositories": {
         "drupal": {
             "type": "composer",
@@ -216,7 +220,7 @@
             "tar -c -z -f ./tests/cohesion.tar.gz --directory $FILES_DIR cohesion",
             "rm -rf $TMPDIR/cex"
         ],
-        "configure-tarball": "Acquia\\acquia_cms\\Composer\\ConfigureProject::execute",
+        "configure-tarball": "Drupal\\acquia_cms\\Composer\\ConfigureProject::execute",
         "install:frontend": [
             "Composer\\Config::disableProcessTimeout",
             "cd themes/acquia_claro && npm install"

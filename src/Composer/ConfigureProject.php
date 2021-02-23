@@ -1,6 +1,6 @@
 <?php
 
-namespace Acquia\acquia_cms\Composer;
+namespace Drupal\acquia_cms\Composer;
 
 use Composer\Json\JsonFile;
 use Composer\Script\Event;
