@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides a form to configure the API key for Google Maps.
  */
-final class AcquiaGoogleMapsApiDashboardForm extends ConfigFormBase {
+final class AcquiaGoogleMapsApiDashboardForm extends ConfigFormBase implements AcquiaDashboardInterface {
 
   /**
    * The entity type manager.
@@ -32,6 +32,13 @@ final class AcquiaGoogleMapsApiDashboardForm extends ConfigFormBase {
    * @var \Drupal\Core\State\StateInterface
    */
   protected $state;
+
+  /**
+   * Provides module name.
+   *
+   * @var string
+   */
+  protected $module = 'geocoder';
 
   /**
    * The module handler.
@@ -123,14 +130,7 @@ final class AcquiaGoogleMapsApiDashboardForm extends ConfigFormBase {
     // Text input for Google Maps. ACMS can use the Gmaps API in two totally
     // different features (Site Studio and Place nodes). Site Studio is always
     // enabled in ACMS, but Place may not.
-    $module = 'geocoder';
-    $state_var = $this->getProgressState();
-    if (isset($state_var['count']) && $state_var['count']) {
-      $form['acquia_telemetry']['check_icon'] = [
-        '#prefix' => '<span class= "dashboard-check-icon">',
-        '#suffix' => "</span>",
-      ];
-    }
+    $module = $this->module;
     if ($this->module_handler->moduleExists($module)) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
@@ -140,6 +140,15 @@ final class AcquiaGoogleMapsApiDashboardForm extends ConfigFormBase {
       if ($provider) {
         $configuration = $provider->get('configuration');
         $maps_api_key = $configuration['apiKey'];
+      }
+      if (!empty($maps_api_key)) {
+        $this->state->set('acquia_google_maps_progress', TRUE);
+      }
+      if ($this->state->get('acquia_google_maps_progress')) {
+        $form['check_icon'] = [
+          '#prefix' => '<span class= "dashboard-check-icon">',
+          '#suffix' => "</span>",
+        ];
       }
       $form['acquia_google_maps_api_wrapper'] = [
         '#type' => 'details',
@@ -154,7 +163,6 @@ final class AcquiaGoogleMapsApiDashboardForm extends ConfigFormBase {
           '#placeholder' => '1234abcd',
           '#description' => $this->t('Enter your Google Maps API Key to automatically generate maps for Place content in Acquia CMS.'),
           '#default_value' => $maps_api_key,
-          '#required' => TRUE,
           '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
           '#suffix' => "</div>",
         ],
@@ -198,6 +206,19 @@ final class AcquiaGoogleMapsApiDashboardForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    $triggering_element = $form_state->getTriggeringElement();
+    if ($triggering_element['#value'] == 'Save') {
+      $maps_api_key = $form_state->getValue('maps_api_key');
+      if (empty($maps_api_key)) {
+        $form_state->setErrorByName('maps_api_key', $this->t('Maps API key is required.'));
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function saveConfig(array &$form, FormStateInterface $form_state) {
     $maps_api_key = $form_state->getValue('maps_api_key');
 
@@ -228,12 +249,18 @@ final class AcquiaGoogleMapsApiDashboardForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function getModuleStatus() {
+    if ($this->module_handler->moduleExists($this->module)) {
+      return TRUE;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getProgressState() {
-    if ($this->module_handler->moduleExists('geocoder')) {
-      return [
-        'total' => 1,
-        'count' => $this->state->get('acquia_google_maps_progress'),
-      ];
+    if ($this->module_handler->moduleExists($this->module)) {
+      return $this->state->get('acquia_google_maps_progress');
     }
   }
 

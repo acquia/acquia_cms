@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides a form to configure SiteStudioCore.
  */
-final class SiteStudioCoreForm extends ConfigFormBase {
+final class SiteStudioCoreForm extends ConfigFormBase implements AcquiaDashboardInterface {
 
   /**
    * The state service.
@@ -22,6 +22,13 @@ final class SiteStudioCoreForm extends ConfigFormBase {
    * @var \Drupal\Core\State\StateInterface
    */
   protected $state;
+
+  /**
+   * Provides module name.
+   *
+   * @var string
+   */
+  protected $module = 'cohesion';
 
   /**
    * The module handler.
@@ -96,13 +103,17 @@ final class SiteStudioCoreForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
-    $module = 'cohesion';
+    $module = $this->module;
     if ($this->module_handler->moduleExists($module)) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $state_var = $this->getProgressState();
-      if (isset($state_var['count']) && $state_var['count']) {
-        $form['acquia_telemetry']['check_icon'] = [
+      $api_key = $this->config('cohesion.settings')->get('api_key');
+      $agency_key = $this->config('cohesion.settings')->get('organization_key');
+      if (!empty($api_key && $agency_key)) {
+        $this->state->set('site_studio_progress', TRUE);
+      }
+      if ($this->state->get('site_studio_progress')) {
+        $form['check_icon'] = [
           '#prefix' => '<span class= "dashboard-check-icon">',
           '#suffix' => "</span>",
         ];
@@ -153,6 +164,23 @@ final class SiteStudioCoreForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    $triggering_element = $form_state->getTriggeringElement();
+    if ($triggering_element['#value'] == 'Save') {
+      $cohesion_api_key = $form_state->getValue(['api_key']);
+      $cohesion_agency_key = $form_state->getValue(['agency_key']);
+      if (empty($cohesion_api_key)) {
+        $form_state->setErrorByName('api_key', $this->t('API key is required.'));
+      }
+      if (empty($cohesion_agency_key)) {
+        $form_state->setErrorByName('agency_key', $this->t('Agency key is required.'));
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $cohesion_api_key = $form_state->getValue(['api_key']);
     $cohesion_agency_key = $form_state->getValue(['agency_key']);
@@ -172,12 +200,18 @@ final class SiteStudioCoreForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function getModuleStatus() {
+    if ($this->module_handler->moduleExists($this->module)) {
+      return TRUE;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getProgressState() {
-    if ($this->module_handler->moduleExists('cohesion')) {
-      return [
-        'total' => 1,
-        'count' => $this->state->get('site_studio_progress'),
-      ];
+    if ($this->module_handler->moduleExists($this->module)) {
+      return $this->state->get('site_studio_progress');
     }
   }
 

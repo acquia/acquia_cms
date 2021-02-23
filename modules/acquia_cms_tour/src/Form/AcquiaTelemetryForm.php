@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides a form to toggle the Acquia Telemetry module.
  */
-final class AcquiaTelemetryForm extends ConfigFormBase {
+final class AcquiaTelemetryForm extends ConfigFormBase implements AcquiaDashboardInterface {
   /**
    * The module installer.
    *
@@ -28,6 +28,13 @@ final class AcquiaTelemetryForm extends ConfigFormBase {
    * @var \Drupal\Core\State\StateInterface
    */
   protected $state;
+
+  /**
+   * Provides module name.
+   *
+   * @var string
+   */
+  protected $module = 'acquia_telemetry';
 
   /**
    * The module handler.
@@ -106,13 +113,13 @@ final class AcquiaTelemetryForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
-    $module = 'acquia_telemetry';
+    $module = $this->module;
     if ($this->module_handler->moduleExists($module)) {
+      $this->state->set('acquia_telemetry_progress', TRUE);
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $state_var = $this->getProgressState();
-      if (isset($state_var['count']) && $state_var['count']) {
-        $form['acquia_telemetry']['check_icon'] = [
+      if ($this->state->get('acquia_telemetry_progress')) {
+        $form['check_icon'] = [
           '#prefix' => '<span class= "dashboard-check-icon">',
           '#suffix' => "</span>",
         ];
@@ -193,12 +200,18 @@ final class AcquiaTelemetryForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function getModuleStatus() {
+    if ($this->module_handler->moduleExists($this->module)) {
+      return TRUE;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getProgressState() {
-    if ($this->module_handler->moduleExists('acquia_telemetry')) {
-      return [
-        'total' => 1,
-        'count' => $this->state->get('acquia_telemetry_progress'),
-      ];
+    if ($this->module_handler->moduleExists($this->module)) {
+      return $this->state->get('acquia_telemetry_progress');
     }
   }
 

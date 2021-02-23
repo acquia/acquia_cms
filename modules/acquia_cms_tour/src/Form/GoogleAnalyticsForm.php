@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides a form to configure the Google Analytics module.
  */
-final class GoogleAnalyticsForm extends ConfigFormBase {
+final class GoogleAnalyticsForm extends ConfigFormBase implements AcquiaDashboardInterface {
 
   /**
    * The state service.
@@ -22,6 +22,13 @@ final class GoogleAnalyticsForm extends ConfigFormBase {
    * @var \Drupal\Core\State\StateInterface
    */
   protected $state;
+
+  /**
+   * Provides module name.
+   *
+   * @var string
+   */
+  protected $module = 'google_analytics';
 
   /**
    * The module handler.
@@ -96,13 +103,18 @@ final class GoogleAnalyticsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
-    $module = 'google_analytics';
-    $state_var = $this->getProgressState();
-    if (isset($state_var['count']) && $state_var['count']) {
-      $form['acquia_telemetry']['check_icon'] = [
-        '#prefix' => '<span class= "dashboard-check-icon">',
-        '#suffix' => "</span>",
-      ];
+    $module = $this->module;
+    if ($this->module_handler->moduleExists('google_analytics')) {
+      $account = $this->config('google_analytics.settings')->get('account');
+      if (!empty($account)) {
+        $this->state->set('google_analytics_progress', TRUE);
+      }
+      if ($this->state->get('google_analytics_progress')) {
+        $form['check_icon'] = [
+          '#prefix' => '<span class= "dashboard-check-icon">',
+          '#suffix' => "</span>",
+        ];
+      }
     }
     if ($this->module_handler->moduleExists($module)) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
@@ -149,6 +161,19 @@ final class GoogleAnalyticsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    $triggering_element = $form_state->getTriggeringElement();
+    if ($triggering_element['#value'] == 'Save') {
+      $property_id = $form_state->getValue(['web_property_id']);
+      if (empty($property_id)) {
+        $form_state->setErrorByName('web_property_id', $this->t('Web Property ID is required.'));
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function saveConfig(array &$form, FormStateInterface $form_state) {
     $property_id = $form_state->getValue(['web_property_id']);
     $this->config('google_analytics.settings')->set('account', $property_id)->save();
@@ -166,12 +191,18 @@ final class GoogleAnalyticsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function getModuleStatus() {
+    if ($this->module_handler->moduleExists($this->module)) {
+      return TRUE;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getProgressState() {
-    if ($this->module_handler->moduleExists('google_analytics')) {
-      return [
-        'total' => 1,
-        'count' => $this->state->get('google_analytics_progress'),
-      ];
+    if ($this->module_handler->moduleExists($this->module)) {
+      return $this->state->get('google_analytics_progress');
     }
   }
 
