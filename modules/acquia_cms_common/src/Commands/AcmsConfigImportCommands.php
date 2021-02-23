@@ -2,8 +2,9 @@
 
 namespace Drupal\acquia_cms_common\Commands;
 
-use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\CommandError;
+use Drupal\acquia_cms\Facade\CohesionFacade;
+use Drupal\Component\Serialization\Yaml;
 use Drupal\config\StorageReplaceDataWrapper;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigException;
@@ -279,12 +280,8 @@ class AcmsConfigImportCommands extends DrushCommands {
         elseif ($options['scope'] && !in_array($options['scope'], $scope_allowed)) {
           throw new \InvalidArgumentException('Invalid scope, allowed values are [config, site-studio, all]');
         }
-        // @todo Logic to import site studio packages.
-        $config_files = [];
-        foreach ($package as $module) {
-          $config_files = array_merge($config_files, $this->getConfigPath($module, $options['scope']));
-        }
-        $this->importConfig($config_files);
+        // Lets import the configurations.
+        $this->doImport($package, $options['scope']);
       }
     }
     // Lets check provided package & scope are valid.
@@ -300,18 +297,39 @@ class AcmsConfigImportCommands extends DrushCommands {
       if ($options['scope'] && !in_array($options['scope'], $scope_allowed)) {
         throw new \InvalidArgumentException('Invalid scope, allowed values are [config, site-studio, all]');
       }
-      if ($options['scope'] == 'site-studio') {
-        $this->io()->warning([
-          "This can have unintended side effects for existing pages built using previous versions of components,",
-          "it might literally break them, and should be tested in a non-production environment first.",
-        ]);
-      }
-      // @todo Logic to import site studio packages.
-      $config_files = [];
+
+      // Lets import the configurations.
+      $this->doImport($package, $options['scope']);
+    }
+  }
+
+  /**
+   * Import configuration based on scope.
+   *
+   * @param array $package
+   *   The array of modules.
+   * @param string $scope
+   *   The scope.
+   *
+   * @throws \Drush\Exceptions\UserAbortException
+   * @throws \Exception
+   */
+  protected function doImport(array $package, string $scope) {
+    $config_files = $ss_config_files = [];
+    if (in_array($scope, ['config', 'all'])) {
       foreach ($package as $module) {
-        $config_files = array_merge($config_files, $this->getConfigPath($module, $options['scope']));
+        $config_files = array_merge($config_files, $this->getConfigFiles($module));
       }
-      $this->importConfig($config_files);
+      $this->importPartialConfig($config_files);
+    }
+    // Import the site studio configurations.
+    if (in_array($scope, ['site-studio', 'all'])) {
+      // Show big warning if site-studio is in scope.
+      $this->io()->warning("This can have unintended side effects for existing pages built using previous versions of components, it might literally break them, and should be tested in a non-production environment first.");
+      foreach ($package as $module) {
+        $ss_config_files = array_merge($ss_config_files, $this->getSiteStudioPackage($module));
+      }
+      $this->importSiteStudioPackage($ss_config_files);
     }
   }
 
@@ -320,26 +338,13 @@ class AcmsConfigImportCommands extends DrushCommands {
    *
    * @param string $module
    *   The name of module.
-   * @param string $scope
-   *   Scope for configuration to import.
    *
-   * @return bool|mixed|void
+   * @return array
    */
-  protected function getConfigPath(string $module, string $scope) {
-    $sources = [];
-    if ($scope == 'All') {
-      $sources[] = drupal_get_path('module', $module) . '/config/install';
-      $sources[] = drupal_get_path('module', $module) . '/config/optional';
-      // $source = drupal_get_path('module', $module) . '/config/dx8';
-    }
-    elseif ($scope == 'config') {
-      $sources[] = drupal_get_path('module', $module) . '/config/install';
-      $sources[] = drupal_get_path('module', $module) . '/config/optional';
-    }
-    elseif ($scope == 'site-studio') {
-      // $sources[] = drupal_get_path('module', $module) . '/config/dx8';
-    }
+  protected function getConfigFiles(string $module) {
     $config_files = [];
+    $sources[] = drupal_get_path('module', $module) . '/config/install';
+    $sources[] = drupal_get_path('module', $module) . '/config/optional';
     foreach ($sources as $source) {
       $source_storage_dir = ConfigCommands::getDirectory(NULL, $source);
       $source_storage = new FileStorage($source_storage_dir);
@@ -352,21 +357,69 @@ class AcmsConfigImportCommands extends DrushCommands {
   }
 
   /**
+   * Get the site studio package for given module.
+   *
+   * @param string $module
+   *   The name of module.
+   *
+   * @return array|string[]
+   */
+  protected function getSiteStudioPackage(string $module) {
+    $dir = drupal_get_path('module', $module);
+    $list = "$dir/config/dx8/packages.yml";
+    if (file_exists($list)) {
+      $list = file_get_contents($list);
+
+      $map = function (string $package) use ($dir) {
+        return "$dir/$package";
+      };
+      return array_map($map, Yaml::decode($list));
+    }
+    return [];
+  }
+
+  /**
+   * Get all required operations to import site studio packages.
+   *
+   * @param array $packages
+   *   The packages to import.
+   */
+  public function importSiteStudioPackage(array $packages) {
+    /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
+    $facade = \Drupal::classResolver(CohesionFacade::class);
+    $operations = [];
+    foreach ($packages as $package) {
+      $operations = array_merge($operations, $facade->importPackage($package, TRUE));
+    }
+    $batch = [
+      'title' => t('Importing configuration.'),
+      'operations' => $operations,
+      'finished' => '\Drupal\acquia_cms\Facade\CohesionFacade::batchFinishedCallback',
+    ];
+    batch_set($batch);
+  }
+
+  /**
    * Import configurations for the given sources.
    *
-   * @param array $sources
+   * @param array $config_files
+   *   The config file that needs re-import.
    *
-   * @return bool|mixed|void
+   * @return bool|CommandError|mixed|void
    *
    * @throws \Drush\Exceptions\UserAbortException
    */
-  protected function importConfig(array $sources) {
-
+  protected function importPartialConfig(array $config_files) {
+    // Since we are running config import with partial option
+    // Lets check config module is enabled or not.
+    if (!\Drupal::moduleHandler()->moduleExists('config')) {
+      return new CommandError('Config module is not enabled, please enable it.');
+    }
     // Determine $source_storage in partial case.
     $active_storage = $this->getConfigStorage();
 
     $replacement_storage = new StorageReplaceDataWrapper($active_storage);
-    foreach ($sources as $name => $data) {
+    foreach ($config_files as $name => $data) {
       $replacement_storage->replaceData($name, $data);
     }
     $source_storage = $replacement_storage;
@@ -445,34 +498,9 @@ class AcmsConfigImportCommands extends DrushCommands {
         $message = 'The import failed due to the following reasons:' . "\n";
         $message .= implode("\n", $config_importer->getErrors());
 
-        watchdog_exception('config_import', $e);
+        watchdog_exception('acms_config_import', $e);
         throw new \Exception($message);
       }
-    }
-  }
-
-  /**
-   * @hook validate config:import
-   * @param \Consolidation\AnnotatedCommand\CommandData $commandData
-   * @return \Consolidation\AnnotatedCommand\CommandError|null
-   */
-  public function validate(CommandData $commandData) {
-    $msgs = [];
-    if ($commandData->input()->getOption('partial') && !\Drupal::moduleHandler()->moduleExists('config')) {
-      $msgs[] = 'Enable the config module in order to use the --partial option.';
-    }
-
-    if ($source = $commandData->input()->getOption('source')) {
-      if (!file_exists($source)) {
-        $msgs[] = 'The source directory does not exist.';
-      }
-      if (!is_dir($source)) {
-        $msgs[] = 'The source is not a directory.';
-      }
-    }
-
-    if ($msgs) {
-      return new CommandError(implode(' ', $msgs));
     }
   }
 
