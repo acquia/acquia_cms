@@ -130,7 +130,7 @@ final class SiteStudioCoreForm extends ConfigFormBase {
       $form[$module]['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => 'Save',
-        '#submit' => ['::saveConfig'],
+        '#button_type' => 'primary',
         '#prefix' => '<div class= "dashboard-buttons-wrapper">',
       ];
       $form[$module]['actions']['ignore'] = [
@@ -153,7 +153,7 @@ final class SiteStudioCoreForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function saveConfig(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $cohesion_api_key = $form_state->getValue(['api_key']);
     $cohesion_agency_key = $form_state->getValue(['agency_key']);
     $this->configFactory->getEditable('cohesion.settings')->set('api_key', $cohesion_api_key)->save();
