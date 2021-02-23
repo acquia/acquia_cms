@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides a form to configure Acquia Solr Search module.
  */
-final class AcquiaSearchSolrForm extends ConfigFormBase {
+final class AcquiaSearchSolrForm extends ConfigFormBase implements AcquiaDashboardInterface {
 
   /**
    * The state service.
@@ -22,6 +22,13 @@ final class AcquiaSearchSolrForm extends ConfigFormBase {
    * @var \Drupal\Core\State\StateInterface
    */
   protected $state;
+
+  /**
+   * Provides module name.
+   *
+   * @var string
+   */
+  protected $module = 'acquia_search_solr';
 
   /**
    * The module handler.
@@ -96,13 +103,17 @@ final class AcquiaSearchSolrForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
-    $module = 'acquia_search_solr';
+    $module = $this->module;
     if ($this->module_handler->moduleExists($module)) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $state_var = $this->getProgressState();
-      if (isset($state_var['count']) && $state_var['count']) {
-        $form['acquia_telemetry']['check_icon'] = [
+      $api_host = $this->config('acquia_search_solr.settings')->get('api_host');
+      $uuid = $this->state->get('acquia_search_solr.uuid');
+      if (!empty($api_host && $uuid)) {
+        $this->state->set('acquia_search_solr_progress', TRUE);
+      }
+      if ($this->state->get('acquia_search_solr_progress')) {
+        $form['check_icon'] = [
           '#prefix' => '<span class= "dashboard-check-icon">',
           '#suffix' => "</span>",
         ];
@@ -161,6 +172,27 @@ final class AcquiaSearchSolrForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    $triggering_element = $form_state->getTriggeringElement();
+    if ($triggering_element['#value'] == 'Save') {
+      $solr_identifier = $form_state->getValue(['identifier']);
+      $solr_api_host = $form_state->getValue(['api_host']);
+      $solr_api_uuid = $form_state->getValue(['uuid']);
+      if (empty($solr_identifier)) {
+        $form_state->setErrorByName('identifier', $this->t('Acquia Subscription identifier is required.'));
+      }
+      if (empty($solr_api_host)) {
+        $form_state->setErrorByName('api_host', $this->t('Acquia Search API hostname is required.'));
+      }
+      if (empty($solr_api_uuid)) {
+        $form_state->setErrorByName('uuid', $this->t('Acquia Application UUID is required.'));
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function saveConfig(array &$form, FormStateInterface $form_state) {
     $solr_identifier = $form_state->getValue(['identifier']);
     $solr_api_host = $form_state->getValue(['api_host']);
@@ -182,12 +214,18 @@ final class AcquiaSearchSolrForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function getModuleStatus() {
+    if ($this->module_handler->moduleExists($this->module)) {
+      return TRUE;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getProgressState() {
-    if ($this->module_handler->moduleExists('acquia_search_solr')) {
-      return [
-        'total' => 1,
-        'count' => $this->state->get('acquia_search_solr_progress'),
-      ];
+    if ($this->module_handler->moduleExists($this->module)) {
+      return $this->state->get('acquia_search_solr_progress');
     }
   }
 
