@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_common\Commands;
 
+use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\CommandError;
 use Drupal\acquia_cms\Facade\CohesionFacade;
 use Drupal\Component\Serialization\Yaml;
@@ -35,6 +36,14 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * for particular some or all given modules.
  */
 final class AcmsConfigImportCommands extends DrushCommands {
+
+  /**
+   * The allowed scope.
+   *
+   * @var string[]
+   * Allowed scope for drush commands.
+   */
+  const ALLOWED_SCOPE = ['config', 'site-studio', 'all'];
 
   /**
    * The config manager.
@@ -377,63 +386,53 @@ final class AcmsConfigImportCommands extends DrushCommands {
     $this->io()->text(["Welcome to Acquia CMS's Config reset wizard.",
       "This should only be used in case of emergencies and can lead to unexpected impacts on the site.",
     ]);
-    // Get the acquia cms module list.
-    $scope_allowed = ['config', 'site-studio', 'all'];
-    $modules = $this->moduleHandler->getModuleList();
-    $modules_array = [];
-    foreach ($modules as $module => $module_obj) {
-      if ($module_obj->getType() === 'module' && str_starts_with($module_obj->getName(), 'acquia_cms')) {
-        $modules_array[] = $module;
-      }
-    }
-
     // Lets get input from user if not provided package with command.
     if (empty($package)) {
-      if (!empty($modules_array)) {
-        $question_string = 'Choose a Module to reset its configurations. Separate multiple choices with commas, e.g. "1,2,4".';
-        $choices = array_merge(['Cancel'], $modules_array);
-        array_push($choices, 'All');
-        $question = new ChoiceQuestion(dt($question_string), $choices, NULL);
-        $question->setMultiselect(TRUE);
-        $types = $this->io()->askQuestion($question);
-        if (in_array('Cancel', $types)) {
-          throw new UserAbortException();
-        }
-        elseif (in_array('All', $types)) {
-          $package = $modules_array;
-        }
-        else {
-          $package = $types;
-        }
-        // Lets ask for scope if not already provided.
-        if (!$options['scope']) {
-          $scope = $this->io()->choice(dt('Choose a scope.'), $scope_allowed, NULL);
-          $options['scope'] = $scope_allowed[$scope];
-        }
-        elseif ($options['scope'] && !in_array($options['scope'], $scope_allowed)) {
-          throw new \InvalidArgumentException('Invalid scope, allowed values are [config, site-studio, all]');
-        }
-        // Lets import the configurations.
-        $this->doImport($package, $options['scope']);
+      $acms_modules = $this->getAcquiaModuleList();
+      $question_string = 'Choose a module to reset configurations. Separate multiple choices with commas, e.g. "1,2,4".';
+      $question = $this->createMultipleChoiceOptions($question_string, $acms_modules);
+      $types = $this->io()->askQuestion($question);
+      if (in_array('Cancel', $types)) {
+        throw new UserAbortException();
       }
-    }
-    // Lets check provided package & scope are valid.
-    else {
-      foreach ($package as $module) {
-        if (!in_array($module, $modules_array)) {
-          throw new \InvalidArgumentException('Invalid module name:' . $module);
-        }
+      elseif (in_array('All', $types)) {
+        $package = $acms_modules;
       }
-      if (!isset($options['scope'])) {
-        throw new \InvalidArgumentException('Missing argument scope');
+      else {
+        $package = $types;
       }
-      if ($options['scope'] && !in_array($options['scope'], $scope_allowed)) {
+      // Lets ask for scope if not already provided.
+      if (!$options['scope']) {
+        $scope = $this->io()->choice(dt('Choose a scope.'), self::ALLOWED_SCOPE, NULL);
+        $options['scope'] = self::ALLOWED_SCOPE[$scope];
+      }
+      elseif ($options['scope'] && !in_array($options['scope'], self::ALLOWED_SCOPE)) {
         throw new \InvalidArgumentException('Invalid scope, allowed values are [config, site-studio, all]');
       }
-
-      // Lets import the configurations.
-      $this->doImport($package, $options['scope']);
     }
+    // Lets import the configurations.
+    $this->doImport($package, $options['scope']);
+  }
+
+  /**
+   * Create multiple choice question.
+   *
+   * @param string $question_string
+   *   The question to ask.
+   * @param array $choice_options
+   *   The choice of options.
+   * @param int|null $default
+   *   The default option in multi-choice.
+   *
+   * @return \Symfony\Component\Console\Question\ChoiceQuestion
+   *   The ChoiceQuestion
+   */
+  private function createMultipleChoiceOptions(string $question_string, array $choice_options, $default = NULL) {
+    $choices = array_merge(['Cancel'], $choice_options);
+    array_push($choices, 'All');
+    $question = new ChoiceQuestion(dt($question_string), $choices, $default);
+    $question->setMultiselect(TRUE);
+    return $question;
   }
 
   /**
@@ -548,11 +547,6 @@ final class AcmsConfigImportCommands extends DrushCommands {
    * @throws \Drush\Exceptions\UserAbortException
    */
   private function importPartialConfig(array $config_files) {
-    // Since we are running config import with partial option
-    // Lets check config module is enabled or not.
-    if (!$this->moduleHandler->moduleExists('config')) {
-      return new CommandError('Config module is not enabled, please enable it.');
-    }
     // Determine $source_storage in partial case.
     $active_storage = $this->getConfigStorage();
 
@@ -645,6 +639,70 @@ final class AcmsConfigImportCommands extends DrushCommands {
         throw new \Exception($message);
       }
     }
+  }
+
+  /**
+   * Hook validate for acms config reset command.
+   *
+   * @hook validate acms:config-reset
+   */
+  public function validate(CommandData $commandData) {
+    // Since we are running config import with partial option
+    // Lets check config module is enabled or not.
+    if (!$this->moduleHandler->moduleExists('config')) {
+      $messages[] = 'Config module is not enabled, please enable it.';
+    }
+
+    $messages = [];
+    $isInteractive = $commandData->input()->isInteractive();
+    $scope = $commandData->input()->getOption('scope');
+    $package = $commandData->input()->getArgument('package');
+    if (isset($scope) && !in_array($scope, self::ALLOWED_SCOPE)) {
+      $messages[] = 'Invalid scope, allowed values are [config, site-studio, all]';
+    }
+    if ($package && !$this->hasValidPackage($package)) {
+      $messages[] = 'Given package are not valid, try providing list of ACMS modules ex: acquia_cms_article';
+    }
+    // In case of -y lets check user has provided all the required agruments.
+    if (!$isInteractive && (!$package || !$scope)) {
+      $messages[] = 'In order to use -y option, please provide package and scope variable.';
+    }
+    if ($messages) {
+      return new CommandError(implode(' ', $messages));
+    }
+  }
+
+  /**
+   * Check provided package are valid one.
+   *
+   * @param array $packages
+   *   The array of package.
+   *
+   * @return bool
+   *   The status of package.
+   */
+  private function hasValidPackage(array $packages): bool {
+    $valid_package = $this->getAcquiaModuleList();
+    foreach ($packages as $package) {
+      if (!in_array($package, $valid_package)) {
+        return FALSE;
+      }
+    }
+    return TRUE;
+  }
+
+  /**
+   * Fetch the list of enabled modules of ACMS.
+   */
+  private function getAcquiaModuleList(): array {
+    $modules = $this->moduleHandler->getModuleList();
+    $acms_modules = [];
+    foreach ($modules as $module => $module_obj) {
+      if ($module_obj->getType() === 'module' && str_starts_with($module_obj->getName(), 'acquia_cms')) {
+        $acms_modules[] = $module;
+      }
+    }
+    return $acms_modules;
   }
 
 }
