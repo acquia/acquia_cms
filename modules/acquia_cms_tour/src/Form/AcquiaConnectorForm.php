@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides a form to configure Acquia Connector.
  */
-final class AcquiaConnectorForm extends ConfigFormBase {
+final class AcquiaConnectorForm extends ConfigFormBase implements AcquiaDashboardInterface {
 
   /**
    * The state service.
@@ -23,6 +23,12 @@ final class AcquiaConnectorForm extends ConfigFormBase {
    */
   protected $state;
 
+  /**
+   * Provides module name.
+   *
+   * @var string
+   */
+  protected $module = 'acquia_connector';
 
   /**
    * The module handler.
@@ -95,10 +101,13 @@ final class AcquiaConnectorForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
-    $module = 'acquia_connector';
-    $state_var = $this->getProgressState();
-    if (isset($state_var['count']) && $state_var['count']) {
-      $form['acquia_telemetry']['check_icon'] = [
+    $module = $this->module;
+    $site_name = $this->state->get('spi.site_name');
+    if (!empty($site_name)) {
+      $this->state->set('acquia_connector_progress', TRUE);
+    }
+    if ($this->state->get('acquia_connector_progress')) {
+      $form['check_icon'] = [
         '#prefix' => '<span class= "dashboard-check-icon">',
         '#suffix' => "</span>",
       ];
@@ -115,9 +124,7 @@ final class AcquiaConnectorForm extends ConfigFormBase {
       $form[$module]['site_name'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Name'),
-        '#placeholder' => 'Dev',
         '#maxlength' => 255,
-        '#required' => TRUE,
         '#disabled' => TRUE,
         '#default_value' => $this->state->get('spi.site_name'),
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
@@ -152,6 +159,18 @@ final class AcquiaConnectorForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    $triggering_element = $form_state->getTriggeringElement();
+    if ($triggering_element['#value'] == 'Save') {
+      if (empty($form_state->getValue('site_name'))) {
+        $form_state->setErrorByName('site_name', $this->t('Site name is required.'));
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function saveConfig(array &$form, FormStateInterface $form_state) {
     $acquia_connector_site_name = $form_state->getValue(['site_name']);
     $this->state->set('spi.site_name', $acquia_connector_site_name);
@@ -169,12 +188,18 @@ final class AcquiaConnectorForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function getModuleStatus() {
+    if ($this->module_handler->moduleExists($this->module)) {
+      return TRUE;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getProgressState() {
-    if ($this->module_handler->moduleExists('acquia_connector')) {
-      return [
-        'total' => 1,
-        'count' => $this->state->get('acquia_connector_progress'),
-      ];
+    if ($this->module_handler->moduleExists($this->module)) {
+      return $this->state->get('acquia_connector_progress');
     }
   }
 
