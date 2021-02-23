@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides a form to configure Google Tag Manager module.
  */
-final class GoogleTagManagerForm extends ConfigFormBase {
+final class GoogleTagManagerForm extends ConfigFormBase implements AcquiaDashboardInterface {
 
   /**
    * The state service.
@@ -22,6 +22,13 @@ final class GoogleTagManagerForm extends ConfigFormBase {
    * @var \Drupal\Core\State\StateInterface
    */
   protected $state;
+
+  /**
+   * Provides module name.
+   *
+   * @var string
+   */
+  protected $module = 'google_tag';
 
   /**
    * The module handler.
@@ -96,11 +103,14 @@ final class GoogleTagManagerForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
-    $module = 'google_tag';
+    $module = $this->module;
     if ($this->module_handler->moduleExists($module)) {
-      $state_var = $this->getProgressState();
-      if (isset($state_var['count']) && $state_var['count']) {
-        $form['acquia_telemetry']['check_icon'] = [
+      $uri = $this->config('google_tag.settings')->get('uri');
+      if (!empty($uri) && $uri != 'public:/') {
+        $this->state->set('acquia_gtm_progress', TRUE);
+      }
+      if ($this->state->get('acquia_gtm_progress')) {
+        $form['check_icon'] = [
           '#prefix' => '<span class= "dashboard-check-icon">',
           '#suffix' => "</span>",
         ];
@@ -149,6 +159,19 @@ final class GoogleTagManagerForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    $triggering_element = $form_state->getTriggeringElement();
+    if ($triggering_element['#value'] == 'Save') {
+      $snippet_parent_uri = $form_state->getValue(['snippet_parent_uri']);
+      if (empty($snippet_parent_uri)) {
+        $form_state->setErrorByName('snippet_parent_uri', $this->t('Snippet parent URI is required.'));
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function saveConfig(array &$form, FormStateInterface $form_state) {
     $snippet_parent_uri = $form_state->getValue(['snippet_parent_uri']);
     $this->config('google_tag.settings')->set('uri', $snippet_parent_uri)->save();
@@ -166,12 +189,18 @@ final class GoogleTagManagerForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function getModuleStatus() {
+    if ($this->module_handler->moduleExists($this->module)) {
+      return TRUE;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getProgressState() {
-    if ($this->module_handler->moduleExists('google_tag')) {
-      return [
-        'total' => 1,
-        'count' => $this->state->get('acquia_gtm_progress'),
-      ];
+    if ($this->module_handler->moduleExists($this->module)) {
+      return $this->state->get('acquia_gtm_progress');
     }
   }
 

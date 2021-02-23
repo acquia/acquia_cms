@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides a form to configure the Recaptcha module.
  */
-final class RecaptchaForm extends ConfigFormBase {
+final class RecaptchaForm extends ConfigFormBase implements AcquiaDashboardInterface {
 
   /**
    * The state service.
@@ -22,6 +22,13 @@ final class RecaptchaForm extends ConfigFormBase {
    * @var \Drupal\Core\State\StateInterface
    */
   protected $state;
+
+  /**
+   * Provides module name.
+   *
+   * @var string
+   */
+  protected $module = 'recaptcha';
 
   /**
    * The module handler.
@@ -96,11 +103,15 @@ final class RecaptchaForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
-    $module = 'recaptcha';
+    $module = $this->module;
     if ($this->module_handler->moduleExists($module)) {
-      $state_var = $this->getProgressState();
-      if (isset($state_var['count']) && $state_var['count']) {
-        $form['acquia_telemetry']['check_icon'] = [
+      $site_key = $this->config('recaptcha.settings')->get('site_key');
+      $secret_key = $this->config('recaptcha.settings')->get('secret_key');
+      if (!empty($site_key && $secret_key)) {
+        $this->state->set('recaptcha_progress', TRUE);
+      }
+      if ($this->state->get('recaptcha_progress')) {
+        $form['check_icon'] = [
           '#prefix' => '<span class= "dashboard-check-icon">',
           '#suffix' => "</span>",
         ];
@@ -156,6 +167,23 @@ final class RecaptchaForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    $triggering_element = $form_state->getTriggeringElement();
+    if ($triggering_element['#value'] == 'Save') {
+      $recaptcha_site_key = $form_state->getValue(['site_key']);
+      $recaptcha_secret_key = $form_state->getValue(['secret_key']);
+      if (empty($recaptcha_site_key)) {
+        $form_state->setErrorByName('site_key', $this->t('Site key is required.'));
+      }
+      if (empty($recaptcha_secret_key)) {
+        $form_state->setErrorByName('secret_key', $this->t('Secret key is required.'));
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function saveConfig(array &$form, FormStateInterface $form_state) {
     $recaptcha_site_key = $form_state->getValue(['site_key']);
     $recaptcha_secret_key = $form_state->getValue(['secret_key']);
@@ -175,12 +203,18 @@ final class RecaptchaForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function getModuleStatus() {
+    if ($this->module_handler->moduleExists($this->module)) {
+      return TRUE;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getProgressState() {
-    if ($this->module_handler->moduleExists('recaptcha')) {
-      return [
-        'total' => 1,
-        'count' => $this->state->get('recaptcha_progress'),
-      ];
+    if ($this->module_handler->moduleExists($this->module)) {
+      return $this->state->get('recaptcha_progress');
     }
   }
 
