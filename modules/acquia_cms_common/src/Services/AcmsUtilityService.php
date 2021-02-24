@@ -7,7 +7,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 /**
  * Defines a service for ACMS.
  */
-class AcmsService {
+class AcmsUtilityService {
 
   /**
    * The module handler.

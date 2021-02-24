@@ -5,7 +5,7 @@ namespace Drupal\acquia_cms_common\Commands;
 use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\CommandError;
 use Drupal\acquia_cms\Facade\CohesionFacade;
-use Drupal\acquia_cms_common\Services\AcmsService;
+use Drupal\acquia_cms_common\Services\AcmsUtilityService;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\config\StorageReplaceDataWrapper;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -145,11 +145,11 @@ final class AcmsConfigImportCommands extends DrushCommands {
   protected $classResolver;
 
   /**
-   * The acquia cms service.
+   * The acquia cms utility service.
    *
-   * @var \Drupal\Core\DependencyInjection\ClassResolver
+   * @var \Drupal\acquia_cms_common\Services\AcmsUtilityService
    */
-  protected $acmsService;
+  protected $acmsUtilityService;
 
   /**
    * Get configuration manager.
@@ -333,7 +333,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *   The ModuleExtensionList.
    * @param \Drupal\Core\DependencyInjection\ClassResolver $classResolver
    *   The class resolver.
-   * @param \Drupal\acquia_cms_common\Services\AcmsService $acmsService
+   * @param \Drupal\acquia_cms_common\Services\AcmsUtilityService $acmsUtilityService
    *   The acquia cms service.
    */
   public function __construct(
@@ -352,7 +352,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
     TranslationInterface $stringTranslation,
     ModuleExtensionList $moduleExtensionList,
     ClassResolver $classResolver,
-    AcmsService $acmsService
+    AcmsUtilityService $acmsUtilityService
     ) {
     parent::__construct();
     $this->configManager = $configManager;
@@ -368,7 +368,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
     $this->stringTranslation = $stringTranslation;
     $this->moduleExtensionList = $moduleExtensionList;
     $this->classResolver = $classResolver;
-    $this->acmsService = $acmsService;
+    $this->acmsUtilityService = $acmsUtilityService;
   }
 
   /**
@@ -399,7 +399,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
     ]);
     // Lets get input from user if not provided package with command.
     if (empty($package)) {
-      $acms_modules = $this->acmsService->getModuleList();
+      $acms_modules = $this->acmsUtilityService->getModuleList();
       $question_string = 'Choose a module to reset configurations. Separate multiple choices with commas, e.g. "1,2,4".';
       $question = $this->createMultipleChoiceOptions($question_string, $acms_modules);
       $types = $this->io()->askQuestion($question);
@@ -693,7 +693,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *   The status of package.
    */
   private function hasValidPackage(array $packages): bool {
-    $valid_package = $this->acmsService->getModuleList();
+    $valid_package = $this->acmsUtilityService->getModuleList();
     foreach ($packages as $package) {
       if (!in_array($package, $valid_package)) {
         return FALSE;

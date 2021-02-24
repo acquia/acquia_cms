@@ -2,6 +2,8 @@
 
 namespace Drupal\acquia_cms_common\Commands;
 
+use Consolidation\AnnotatedCommand\CommandData;
+use Consolidation\AnnotatedCommand\CommandError;
 use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -43,39 +45,59 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
    * @param array $options
    *   The options array.
    *
-   * @option module
+   * @option modules
    *   The module whose schema version has to be display.
    * @command acms:get-schema
-   * @option module  A comma-separated list of module name to get schema version.
+   * @option modules  A comma-separated list of modules
    * @aliases ags
    * @usage acms:get-schema --modules=acquia_cms_article,acquia_cms_common
-   *   Display install schema version of given module.
+   *   Display installed schema version of given module(s).
    */
   public function getSchema(array $options = ['modules' => NULL]) {
-    $rows = [];
-    if ($options['modules']) {
-      $modules = explode(',', $options['modules']);
-      foreach ($modules as $module_name) {
-        if (!$this->moduleHandler->moduleExists($module_name)) {
-          $this->io()->error("Module: $module_name doesn't seems to be installed.");
-          break;
-        }
-        $version = drupal_get_installed_schema_version($module_name);
-        $rows[] = [$module_name, $version];
-      }
+    $modules = [];
+    if (empty($options['modules'])) {
+      $modules = array_keys($this->moduleHandler->getModuleList());
     }
-    // Get all modules, themes & profile and list
-    // the currently installed schema version.
     else {
-      $modules = $this->moduleHandler->getModuleList();
-      foreach ($modules as $module => $module_obj) {
-        $version = drupal_get_installed_schema_version($module);
-        $rows[] = [$module, $version];
+      foreach ($options['modules'] as $module) {
+        if ($this->moduleHandler->moduleExists($module)) {
+          $modules[] = $module;
+        }
+        else {
+          $rows[] = [$module, dt("Module is not installed.")];
+        }
       }
     }
+    foreach ($modules as $module) {
+      $version = drupal_get_installed_schema_version($module);
+      $rows[] = [$module, $version];
+    }
+
     // Show result in table format.
     if (!empty($rows)) {
       $this->io()->table(['Module name', 'Installed schema version'], $rows);
+    }
+  }
+
+  /**
+   * Hook validate for acms:get-schema command.
+   *
+   * @hook validate acms:get-schema
+   */
+  public function validateGetSchemaCommand(CommandData $commandData) {
+    $modules = $commandData->input()->getOption('modules');
+    $messages = [];
+    if ($modules) {
+      $modules_array = array_filter(explode(',', $modules));
+      if (empty($modules_array)) {
+        $messages[] = dt("Invalid value for module options");
+      }
+      else {
+        $commandData->input()->setOption('modules', $modules_array);
+      }
+    }
+    if ($messages) {
+      return new CommandError(implode(' ', $messages));
     }
   }
 
@@ -102,8 +124,7 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
   /**
    * Set schema version of particular module.
    *
-   * Command to set the current schema version of particular
-   * module to the previous value.
+   * A command to re-run a specific hook_update_n() command.
    *
    * @param string $module_name
    *   The name of module.
@@ -112,42 +133,48 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
    *
    * @command acms:rerun-schema
    * @aliases ars
-   * @usage acms:rerun-schema
-   *   Set the current schema version to the previous value.
+   * @usage acms:rerun-schema acquia_cms_article 8000
+   *   Set the current schema version to the given value.
    */
   public function setSchema(string $module_name, int $schema_version) {
+    drupal_set_installed_schema_version($module_name, $schema_version);
+    $this->output()->writeln(dt("Schema version set to $schema_version. now executing updatedb"));
+    $selfAlias = $this->siteAliasManager()->getSelf();
+    $options = [
+      'cache-clear' => TRUE,
+      'entity-updates' => FALSE,
+      'post-updates' => TRUE,
+    ];
+    $process = $this->processManager()->drush($selfAlias, 'updatedb', [], $options);
+    $process->mustRun($process->showRealtime());
+  }
+
+  /**
+   * Hook validate for acms:rerun-schema command.
+   *
+   * @hook validate acms:rerun-schema
+   */
+  public function validateSetSchemaCommand(CommandData $commandData) {
     $min_required_version = 8000;
-    if (!$this->moduleHandler->moduleExists($module_name)) {
-      $this->io()->error("Module: $module_name doesn't seems to be installed.");
-      return;
+    $args = $commandData->input()->getArguments();
+    $messages = [];
+    if (!$this->moduleHandler->moduleExists($args['module_name'])) {
+      $messages[] = dt("Module [@module_name] is not installed.", ['@module_name' => $args['module_name']]);
     }
-    if ($schema_version >= $min_required_version) {
-      $current_version = drupal_get_installed_schema_version($module_name);
-      // Lets check we are setting only previous version of schema.
-      if ($schema_version < $current_version) {
-        drupal_set_installed_schema_version($module_name, $schema_version);
-        $this->output()->writeln(dt("Schema version set to $schema_version, now executing updatedb"));
-        $selfAlias = $this->siteAliasManager()->getSelf();
-        $options = [
-          'cache-clear' => TRUE,
-          'entity-updates' => FALSE,
-          'post-updates' => TRUE,
-        ];
-        $process = $this->processManager()->drush($selfAlias, 'updatedb', [], $options);
-        $process->mustRun($process->showRealtime());
+    if ($this->moduleHandler->moduleExists($args['module_name'])) {
+      $current_version = drupal_get_installed_schema_version($args['module_name']);
+      // Do not allow schema version smaller than minimum required version
+      // & bigger that currently installed version.
+      if ($args['schema_version'] < $min_required_version || $args['schema_version'] > $current_version) {
+        $messages[] = dt("Invalid schema version for module [@module_name]", ['@module_name' => $args['module_name']]);
       }
       // No point in explicitly setting the current schema version.
-      elseif ($schema_version === $current_version) {
-        $this->io()->note("Currently '$module_name' has same schema version installed.");
-      }
-      // Warn user when trying to set next schema version
-      // i.e $schema_version > $current_version.
-      else {
-        $this->io()->error("Invalid schema version for Module: $module_name");
+      if ($args['schema_version'] == $current_version) {
+        $messages[] = dt("Currently module [@module_name] has same schema version installed.", ['@module_name' => $args['module_name']]);
       }
     }
-    else {
-      $this->io()->error("Invalid schema version for Module: $module_name");
+    if ($messages) {
+      return new CommandError(implode(' ', $messages));
     }
   }
 
