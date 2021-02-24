@@ -5,6 +5,7 @@ namespace Drupal\acquia_cms_common\Commands;
 use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\CommandError;
 use Drupal\acquia_cms\Facade\CohesionFacade;
+use Drupal\acquia_cms_common\Services\AcmsService;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\config\StorageReplaceDataWrapper;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -142,6 +143,13 @@ final class AcmsConfigImportCommands extends DrushCommands {
    * @var \Drupal\Core\DependencyInjection\ClassResolver
    */
   protected $classResolver;
+
+  /**
+   * The acquia cms service.
+   *
+   * @var \Drupal\Core\DependencyInjection\ClassResolver
+   */
+  protected $acmsService;
 
   /**
    * Get configuration manager.
@@ -325,6 +333,8 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *   The ModuleExtensionList.
    * @param \Drupal\Core\DependencyInjection\ClassResolver $classResolver
    *   The class resolver.
+   * @param \Drupal\acquia_cms_common\Services\AcmsService $acmsService
+   *   The acquia cms service.
    */
   public function __construct(
     ConfigManagerInterface $configManager,
@@ -341,7 +351,8 @@ final class AcmsConfigImportCommands extends DrushCommands {
     ThemeHandlerInterface $themeHandler,
     TranslationInterface $stringTranslation,
     ModuleExtensionList $moduleExtensionList,
-    ClassResolver $classResolver
+    ClassResolver $classResolver,
+    AcmsService $acmsService
     ) {
     parent::__construct();
     $this->configManager = $configManager;
@@ -357,7 +368,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
     $this->stringTranslation = $stringTranslation;
     $this->moduleExtensionList = $moduleExtensionList;
     $this->classResolver = $classResolver;
-
+    $this->acmsService = $acmsService;
   }
 
   /**
@@ -388,7 +399,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
     ]);
     // Lets get input from user if not provided package with command.
     if (empty($package)) {
-      $acms_modules = $this->getAcquiaModuleList();
+      $acms_modules = $this->acmsService->getModuleList();
       $question_string = 'Choose a module to reset configurations. Separate multiple choices with commas, e.g. "1,2,4".';
       $question = $this->createMultipleChoiceOptions($question_string, $acms_modules);
       $types = $this->io()->askQuestion($question);
@@ -682,27 +693,13 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *   The status of package.
    */
   private function hasValidPackage(array $packages): bool {
-    $valid_package = $this->getAcquiaModuleList();
+    $valid_package = $this->acmsService->getModuleList();
     foreach ($packages as $package) {
       if (!in_array($package, $valid_package)) {
         return FALSE;
       }
     }
     return TRUE;
-  }
-
-  /**
-   * Fetch the list of enabled modules of ACMS.
-   */
-  private function getAcquiaModuleList(): array {
-    $modules = $this->moduleHandler->getModuleList();
-    $acms_modules = [];
-    foreach ($modules as $module => $module_obj) {
-      if ($module_obj->getType() === 'module' && str_starts_with($module_obj->getName(), 'acquia_cms')) {
-        $acms_modules[] = $module;
-      }
-    }
-    return $acms_modules;
   }
 
 }

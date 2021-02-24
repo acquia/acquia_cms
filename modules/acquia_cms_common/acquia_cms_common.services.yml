@@ -5,3 +5,6 @@ services:
       - { name: event_subscriber }
   acquia_cms_toggle_modules:
     class:  Drupal\acquia_cms_common\ToggleModulesService
+  acquia_cms_common.acms_srvice:
+    class:  Drupal\acquia_cms_common\Services\AcmsService
+    arguments: ['@module_handler']
