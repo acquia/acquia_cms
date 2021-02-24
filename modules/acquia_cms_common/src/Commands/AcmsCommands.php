@@ -48,29 +48,34 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
    * @command acms:get-schema
    * @option module  A comma-separated list of module name to get schema version.
    * @aliases ags
-   * @usage acms:get-schema --module=acquia_cms_article,acquia_cms_common
+   * @usage acms:get-schema --modules=acquia_cms_article,acquia_cms_common
    *   Display install schema version of given module.
    */
-  public function getSchema(array $options = ['module' => NULL]) {
-    if ($options['module']) {
-      $modules = explode(',', $options['module']);
+  public function getSchema(array $options = ['modules' => NULL]) {
+    $rows = [];
+    if ($options['modules']) {
+      $modules = explode(',', $options['modules']);
       foreach ($modules as $module_name) {
-        if ($this->moduleHandler->moduleExists($module_name)) {
-          $version = drupal_get_installed_schema_version($module_name);
-          $this->output()->writeln("Currently installed schema version for '$module_name' is:$version");
+        if (!$this->moduleHandler->moduleExists($module_name)) {
+          $this->io()->error("Module: $module_name doesn't seems to be installed.");
+          break;
         }
-        else {
-          $this->output()->writeln("Module: $module_name doesn't seems to be installed.");
-        }
+        $version = drupal_get_installed_schema_version($module_name);
+        $rows[] = [$module_name, $version];
       }
     }
-    // Lets get all modules and list the schema version currently installed.
+    // Get all modules, themes & profile and list
+    // the currently installed schema version.
     else {
       $modules = $this->moduleHandler->getModuleList();
       foreach ($modules as $module => $module_obj) {
         $version = drupal_get_installed_schema_version($module);
-        $this->output()->writeln("Currently installed schema version for '" . $module_obj->getName() . "' is: $version");
+        $rows[] = [$module, $version];
       }
+    }
+    // Show result in table format.
+    if (!empty($rows)) {
+      $this->io()->table(['Module name', 'Installed schema version'], $rows);
     }
   }
 
@@ -112,39 +117,37 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
    */
   public function setSchema(string $module_name, int $schema_version) {
     $min_required_version = 8000;
-    // Lets check module exists and enabled, also schema version is correct.
-    if ($this->moduleHandler->moduleExists($module_name)) {
-      if ($schema_version >= $min_required_version) {
-        $current_version = drupal_get_installed_schema_version($module_name);
-        // Lets check we are setting only previous version of schema.
-        if ($schema_version < $current_version) {
-          drupal_set_installed_schema_version($module_name, $schema_version);
-          $this->output()->writeln("Schema version set to $schema_version, now executing updatedb");
-          $selfAlias = $this->siteAliasManager()->getSelf();
-          $options = [
-            'cache-clear' => TRUE,
-            'entity-updates' => FALSE,
-            'post-updates' => TRUE,
-          ];
-          $process = $this->processManager()->drush($selfAlias, 'updatedb', [], $options);
-          $process->mustRun($process->showRealtime());
-        }
-        // No point in explicitly setting the current schema version.
-        elseif ($schema_version === $current_version) {
-          $this->output()->writeln("Currently '$module_name' has same schema version installed.");
-        }
-        // Warn user when trying to set next schema version
-        // i.e $schema_version > $current_version.
-        else {
-          $this->output()->writeln("Invalid schema version for Module: $module_name");
-        }
+    if (!$this->moduleHandler->moduleExists($module_name)) {
+      $this->io()->error("Module: $module_name doesn't seems to be installed.");
+      return;
+    }
+    if ($schema_version >= $min_required_version) {
+      $current_version = drupal_get_installed_schema_version($module_name);
+      // Lets check we are setting only previous version of schema.
+      if ($schema_version < $current_version) {
+        drupal_set_installed_schema_version($module_name, $schema_version);
+        $this->output()->writeln(dt("Schema version set to $schema_version, now executing updatedb"));
+        $selfAlias = $this->siteAliasManager()->getSelf();
+        $options = [
+          'cache-clear' => TRUE,
+          'entity-updates' => FALSE,
+          'post-updates' => TRUE,
+        ];
+        $process = $this->processManager()->drush($selfAlias, 'updatedb', [], $options);
+        $process->mustRun($process->showRealtime());
       }
+      // No point in explicitly setting the current schema version.
+      elseif ($schema_version === $current_version) {
+        $this->io()->note("Currently '$module_name' has same schema version installed.");
+      }
+      // Warn user when trying to set next schema version
+      // i.e $schema_version > $current_version.
       else {
-        $this->output()->writeln("Invalid schema version for Module: $module_name");
+        $this->io()->error("Invalid schema version for Module: $module_name");
       }
     }
     else {
-      $this->output()->writeln("Module: $module_name doesn't seems to be installed.");
+      $this->io()->error("Invalid schema version for Module: $module_name");
     }
   }
 

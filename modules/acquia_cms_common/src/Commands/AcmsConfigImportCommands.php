@@ -663,7 +663,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
     if ($package && !$this->hasValidPackage($package)) {
       $messages[] = 'Given package are not valid, try providing list of ACMS modules ex: acquia_cms_article';
     }
-    // In case of -y lets check user has provided all the required agruments.
+    // In case of -y lets check user has provided all the required arguments.
     if (!$isInteractive && (!$package || !$scope)) {
       $messages[] = 'In order to use -y option, please provide package and scope variable.';
     }
