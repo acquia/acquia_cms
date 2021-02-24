@@ -399,7 +399,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
     ]);
     // Lets get input from user if not provided package with command.
     if (empty($package)) {
-      $acms_modules = $this->acmsUtilityService->getModuleList();
+      $acms_modules = $this->getAcmsModules();
       $question_string = 'Choose a module to reset configurations. Separate multiple choices with commas, e.g. "1,2,4".';
       $question = $this->createMultipleChoiceOptions($question_string, $acms_modules);
       $types = $this->io()->askQuestion($question);
@@ -423,6 +423,23 @@ final class AcmsConfigImportCommands extends DrushCommands {
     }
     // Lets import the configurations.
     $this->doImport($package, $options['scope']);
+  }
+
+  /**
+   * Get lists of module only.
+   *
+   * @return array
+   *   Array of acms modules.
+   */
+  private function getAcmsModules(): array {
+    $acms_modules = [];
+    $acms_extensions = $this->acmsUtilityService->getAcquiaCmsProfileModuleList();
+    foreach ($acms_extensions as $key => $module) {
+      if ($module->getType() === 'module') {
+        $acms_modules[] = $key;
+      }
+    }
+    return $acms_modules;
   }
 
   /**
@@ -693,7 +710,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *   The status of package.
    */
   private function hasValidPackage(array $packages): bool {
-    $valid_package = $this->acmsUtilityService->getModuleList();
+    $valid_package = $this->getAcmsModules();
     foreach ($packages as $package) {
       if (!in_array($package, $valid_package)) {
         return FALSE;
