@@ -206,4 +206,36 @@ class ArticleTest extends ContentTypeTestBase {
     $this->assertSame('Local', $tag->getName());
   }
 
+  protected function testArticleTaxonomyPath() : void {
+    /** @var \Drupal\taxonomy\VocabularyInterface $article_type */
+    $article_type = Vocabulary::load('article_type');
+    $this->createTerm($article_type, ['name' => 'Blog']);
+    // Create a person that we can reference as the display author.
+    $person_node = $this->drupalCreateNode([
+      'title' => 'Example person',
+      'type' => 'person',
+      'moderation_state' => 'published',
+    ]);
+    $person_node_id = $person_node->id();
+    $session = $this->getSession();
+    $page = $session->getPage();
+    $assert_session = $this->assertSession();
+    $account = $this->drupalCreateUser();
+    $account->addRole('content_author');
+    $account->save();
+    $this->drupalLogin($account);
+    $this->drupalGet('/node/add/article');
+    // Fill in the required fields and assert that things went as expected.
+    $page->fillField('Title', 'Local news');
+    $page->fillField('Body', 'This is an example of body text');
+    $page->fillField('Display Author', "Example person ($person_node_id)");
+    $page->selectFieldOption('Article Type', 'Blog');
+    $page->pressButton('Save');
+    $assert_session->pageTextContains('Article Local news has been created.');
+    $this->drupalGet('/blog');
+    $assert_session->statusCodeEquals(200);
+    $assert_session->pageTextContains('Local news');
+    echo 'This is working';
+  }
+
 }
