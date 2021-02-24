@@ -8,26 +8,18 @@ use Drupal\acquia_cms\Facade\CohesionFacade;
 use Drupal\acquia_cms_common\Services\AcmsUtilityService;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\config\StorageReplaceDataWrapper;
-use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Config\ConfigException;
-use Drupal\Core\Config\ConfigImporter;
 use Drupal\Core\Config\ConfigManagerInterface;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\StorageComparer;
 use Drupal\Core\Config\StorageInterface;
-use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\DependencyInjection\ClassResolver;
-use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Extension\ModuleInstallerInterface;
-use Drupal\Core\Extension\ThemeHandlerInterface;
-use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drush\Commands\DrushCommands;
 use Drush\Drupal\Commands\config\ConfigCommands;
+use Drush\Drupal\Commands\config\ConfigImportCommands;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * A Drush command file.
@@ -61,67 +53,11 @@ final class AcmsConfigImportCommands extends DrushCommands {
   protected $configStorage;
 
   /**
-   * The config storage sync.
+   * The standard drush config import commands.
    *
-   * @var \Drupal\Core\Config\StorageInterface
+   * @var \Drush\Drupal\Commands\config\ConfigImportCommands
    */
-  protected $configStorageSync;
-
-  /**
-   * The config cache.
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
-   */
-  protected $configCache;
-
-  /**
-   * The event dispatcher.
-   *
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   */
-  protected $eventDispatcher;
-
-  /**
-   * The lock.
-   *
-   * @var \Drupal\Core\Lock\LockBackendInterface
-   */
-  protected $lock;
-
-  /**
-   * The config type.
-   *
-   * @var \Drupal\Core\Config\TypedConfigManagerInterface
-   */
-  protected $configTyped;
-
-  /**
-   * The module installer.
-   *
-   * @var \Drupal\Core\Extension\ModuleInstallerInterface
-   */
-  protected $moduleInstaller;
-
-  /**
-   * The theme installer.
-   *
-   * @var \Drupal\Core\Extension\ThemeHandlerInterface
-   */
-  protected $themeHandler;
-
-  /**
-   * The string translation interface.
-   *
-   * @var \Drupal\Core\StringTranslation\TranslationInterface
-   */
-  protected $stringTranslation;
-
-  /**
-   * The import storage.
-   *
-   * @var \Drupal\Core\Config\ImportStorageTransformer
-   */
-  protected $importStorageTransformer;
+  protected $configImportCommands;
 
   /**
    * The module handler.
@@ -131,11 +67,11 @@ final class AcmsConfigImportCommands extends DrushCommands {
   protected $moduleHandler;
 
   /**
-   * The module extension list.
+   * The string translation interface.
    *
-   * @var \Drupal\Core\Extension\ModuleExtensionList
+   * @var \Drupal\Core\StringTranslation\TranslationInterface
    */
-  protected $moduleExtensionList;
+  protected $stringTranslation;
 
   /**
    * The ClassResolver.
@@ -172,23 +108,13 @@ final class AcmsConfigImportCommands extends DrushCommands {
   }
 
   /**
-   * Get config storage sync object.
+   * Get string translation object.
    *
-   * @return \Drupal\Core\Config\StorageInterface
-   *   The StorageInterface.
+   * @return \Drupal\Core\StringTranslation\TranslationInterface
+   *   The TranslationInterface.
    */
-  public function getConfigStorageSync() {
-    return $this->configStorageSync;
-  }
-
-  /**
-   * Get config cache object.
-   *
-   * @return \Drupal\Core\Cache\CacheBackendInterface
-   *   The CacheBackendInterface.
-   */
-  public function getConfigCache() {
-    return $this->configCache;
+  public function getStringTranslation() {
+    return $this->stringTranslation;
   }
 
   /**
@@ -202,135 +128,18 @@ final class AcmsConfigImportCommands extends DrushCommands {
   }
 
   /**
-   * Note that type hint is changing.
-   *
-   * Refer:
-   * https://www.drupal.org/project/drupal/issues/3161983.
-   *
-   * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   *   The EventDispatcherInterface.
-   */
-  public function getEventDispatcher() {
-    return $this->eventDispatcher;
-  }
-
-  /**
-   * Get the lock object.
-   *
-   * @return \Drupal\Core\Lock\LockBackendInterface
-   *   The LockBackendInterface.
-   */
-  public function getLock() {
-    return $this->lock;
-  }
-
-  /**
-   * Get config type object.
-   *
-   * @return \Drupal\Core\Config\TypedConfigManagerInterface
-   *   The TypedConfigManagerInterface.
-   */
-  public function getConfigTyped() {
-    return $this->configTyped;
-  }
-
-  /**
-   * Get module installer object.
-   *
-   * @return \Drupal\Core\Extension\ModuleInstallerInterface
-   *   The ModuleInstallerInterface.
-   */
-  public function getModuleInstaller() {
-    return $this->moduleInstaller;
-  }
-
-  /**
-   * Get theme handler object.
-   *
-   * @return \Drupal\Core\Extension\ThemeHandlerInterface
-   *   The ThemeHandlerInterface.
-   */
-  public function getThemeHandler() {
-    return $this->themeHandler;
-  }
-
-  /**
-   * Get string translation object.
-   *
-   * @return \Drupal\Core\StringTranslation\TranslationInterface
-   *   The TranslationInterface.
-   */
-  public function getStringTranslation() {
-    return $this->stringTranslation;
-  }
-
-  /**
-   * Set import transformer.
-   *
-   * @param ImportStorageTransformer $importStorageTransformer
-   *   The ImportStorageTransformer.
-   */
-  public function setImportTransformer(ImportStorageTransformer $importStorageTransformer) {
-    $this->importStorageTransformer = $importStorageTransformer;
-  }
-
-  /**
-   * Check import transformer.
-   *
-   * @return bool
-   *   The boolean true,false.
-   */
-  public function hasImportTransformer() {
-    return isset($this->importStorageTransformer);
-  }
-
-  /**
-   * Get import storage transformer.
-   *
-   * @return \Drupal\Core\Config\ImportStorageTransformer
-   *   The ImportStorageTransformer.
-   */
-  public function getImportTransformer() {
-    return $this->importStorageTransformer;
-  }
-
-  /**
-   * Get list of modules.
-   *
-   * @return \Drupal\Core\Extension\ModuleExtensionList
-   *   The ModuleExtensionList.
-   */
-  public function getModuleExtensionList(): ModuleExtensionList {
-    return $this->moduleExtensionList;
-  }
-
-  /**
    * The class constructor.
    *
    * @param \Drupal\Core\Config\ConfigManagerInterface $configManager
    *   The ConfigManagerInterface.
    * @param \Drupal\Core\Config\StorageInterface $configStorage
    *   The StorageInterface.
-   * @param \Drupal\Core\Config\StorageInterface $configStorageSync
-   *   The StorageInterface.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $configCache
-   *   The CacheBackendInterface.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
-   *   The ModuleHandlerInterface.
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-   *   The event dispatcher.
-   * @param \Drupal\Core\Lock\LockBackendInterface $lock
-   *   The lock.
-   * @param \Drupal\Core\Config\TypedConfigManagerInterface $configTyped
-   *   The TypedConfigManagerInterface.
-   * @param \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller
-   *   The module handler.
-   * @param \Drupal\Core\Extension\ThemeHandlerInterface $themeHandler
-   *   The theme handler.
+   * @param \Drush\Drupal\Commands\config\ConfigImportCommands $configImportCommands
+   *   The config importer class.
    * @param \Drupal\Core\StringTranslation\TranslationInterface $stringTranslation
    *   The TranslationInterface.
-   * @param \Drupal\Core\Extension\ModuleExtensionList $moduleExtensionList
-   *   The ModuleExtensionList.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   *   The ModuleHandlerInterface.
    * @param \Drupal\Core\DependencyInjection\ClassResolver $classResolver
    *   The class resolver.
    * @param \Drupal\acquia_cms_common\Services\AcmsUtilityService $acmsUtilityService
@@ -339,34 +148,18 @@ final class AcmsConfigImportCommands extends DrushCommands {
   public function __construct(
     ConfigManagerInterface $configManager,
     StorageInterface $configStorage,
-    StorageInterface $configStorageSync,
-    CacheBackendInterface $configCache,
-    ModuleHandlerInterface $moduleHandler,
-    // Omit type hint as it changed in
-    // https://www.drupal.org/project/drupal/issues/3161983
-    EventDispatcherInterface $eventDispatcher,
-    LockBackendInterface $lock,
-    TypedConfigManagerInterface $configTyped,
-    ModuleInstallerInterface $moduleInstaller,
-    ThemeHandlerInterface $themeHandler,
+    ConfigImportCommands $configImportCommands,
     TranslationInterface $stringTranslation,
-    ModuleExtensionList $moduleExtensionList,
+    ModuleHandlerInterface $moduleHandler,
     ClassResolver $classResolver,
     AcmsUtilityService $acmsUtilityService
     ) {
     parent::__construct();
     $this->configManager = $configManager;
     $this->configStorage = $configStorage;
-    $this->configStorageSync = $configStorageSync;
-    $this->configCache = $configCache;
-    $this->moduleHandler = $moduleHandler;
-    $this->eventDispatcher = $eventDispatcher;
-    $this->lock = $lock;
-    $this->configTyped = $configTyped;
-    $this->moduleInstaller = $moduleInstaller;
-    $this->themeHandler = $themeHandler;
+    $this->configImportCommands = $configImportCommands;
     $this->stringTranslation = $stringTranslation;
-    $this->moduleExtensionList = $moduleExtensionList;
+    $this->moduleHandler = $moduleHandler;
     $this->classResolver = $classResolver;
     $this->acmsUtilityService = $acmsUtilityService;
   }
@@ -569,10 +362,8 @@ final class AcmsConfigImportCommands extends DrushCommands {
    * @param array $config_files
    *   The config file that needs re-import.
    *
-   * @return \Consolidation\AnnotatedCommand\CommandError|mixed|void
-   *   The result command.
-   *
    * @throws \Drush\Exceptions\UserAbortException
+   * @throws \Exception
    */
   private function importPartialConfig(array $config_files) {
     // Determine $source_storage in partial case.
@@ -602,71 +393,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
     if (!$this->io()->confirm(dt('Import the listed configuration changes?'))) {
       throw new UserAbortException();
     }
-    return drush_op([$this, 'runImport'], $storage_comparer);
-  }
-
-  /**
-   * Run the import process for configurations.
-   *
-   * @param \Drupal\Core\Config\StorageComparer $storage_comparer
-   *   The storage comparer.
-   *
-   * @throws \Exception
-   */
-  public function runImport(StorageComparer $storage_comparer) {
-    $config_importer = new ConfigImporter(
-      $storage_comparer,
-      $this->getEventDispatcher(),
-      $this->getConfigManager(),
-      $this->getLock(),
-      $this->getConfigTyped(),
-      $this->getModuleHandler(),
-      $this->getModuleInstaller(),
-      $this->getThemeHandler(),
-      $this->getStringTranslation(),
-      $this->getModuleExtensionList()
-    );
-    if ($config_importer->alreadyImporting()) {
-      $this->logger()->warning('Another request may be synchronizing configuration already.');
-    }
-    else {
-      try {
-        // This is the contents of \Drupal\Core\Config\ConfigImporter::import.
-        // Copied here so we can log progress.
-        if ($config_importer->hasUnprocessedConfigurationChanges()) {
-          $sync_steps = $config_importer->initialize();
-          foreach ($sync_steps as $step) {
-            $context = [];
-            do {
-              $config_importer->doSyncStep($step, $context);
-              if (isset($context['message'])) {
-                $this->logger()->notice(str_replace('Synchronizing', 'Synchronized', (string) $context['message']));
-              }
-            } while ($context['finished'] < 1);
-          }
-          // Clear the cache of the active config storage.
-          $this->getConfigCache()->deleteAll();
-        }
-        if ($config_importer->getErrors()) {
-          throw new ConfigException('Errors occurred during import');
-        }
-        else {
-          $this->logger()->success('The configuration was imported successfully.');
-        }
-      }
-      catch (ConfigException $e) {
-        // Return a negative result for UI purposes. We do not differentiate
-        // between an actual synchronization error and a failed lock, because
-        // concurrent synchronizations are an edge-case happening only when
-        // multiple developers or site builders attempt to do it without
-        // coordinating.
-        $message = 'The import failed due to the following reasons:' . "\n";
-        $message .= implode("\n", $config_importer->getErrors());
-
-        watchdog_exception('acms_config_import', $e);
-        throw new \Exception($message);
-      }
-    }
+    $this->configImportCommands->doImport($storage_comparer);
   }
 
   /**
