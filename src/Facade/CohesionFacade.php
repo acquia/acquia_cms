@@ -131,7 +131,7 @@ final class CohesionFacade implements ContainerInjectionInterface {
 
     // Setting non-existent file "nofile.yml". Change back to "packages.yml"
     // when yml values are added back in.
-    $list = "$dir/config/site_studio/nofile.yml";
+    $list = "$dir/config/dx8/nofile.yml";
     if (file_exists($list)) {
       $list = file_get_contents($list);
 
