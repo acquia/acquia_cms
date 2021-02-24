@@ -22,3 +22,23 @@ fi
 # Toggle Modules based on the environment.
 /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_development --yes
 /usr/local/bin/drush9 @$site.$target_env acms:toggle:modules
+
+# Enable development related modules. This is for ease of development for core
+# Acquia CMS development.
+
+case $target_env in
+  ode1)
+    echo "Enabling Acquia CMS Pubsec Demo in $target_env"
+    /usr/local/bin/drush9 en -y acquia_cms_demo_pubsec
+    ;;
+
+  ode3)
+    echo "Enabling Acquia CMS Starter in $target_env"
+    /usr/local/bin/drush9 en -y acquia_cms_starter
+    ;;
+
+  stage)
+    echo "Enabling Acquia CMS Pubsec Demo in $target_env"
+    /usr/local/bin/drush9 en -y acquia_cms_demo_pubsec
+    ;;
+esac
