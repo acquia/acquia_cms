@@ -6,7 +6,7 @@ services:
       - { name: drush.command }
   acquia_cms_common_module.commands:
     class: 'Drupal\acquia_cms_common\Commands\ToggleModules'
-    arguments: ['@acquia_cms_toggle_modules']
+    arguments: ['@acquia_cms_common.toggle_modules']
     tags:
       - { name: drush.command }
 

@@ -201,7 +201,7 @@ function acquia_cms_install_ui_kit(array $install_state) {
  */
 function acquia_cms_install_additional_modules() {
   // Call ToggleModules Service.
-  \Drupal::service('acquia_cms_toggle_modules')->ToggleModules();
+  \Drupal::service('acquia_cms_common.toggle_modules')->ToggleModules();
   // Save configuration for imagemagick.
   if (Environment::isAhEnv() && !Environment::isAhIdeEnv()) {
     $moduleHandler = \Drupal::service('module_handler');

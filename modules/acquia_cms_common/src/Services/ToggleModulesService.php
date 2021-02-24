@@ -1,16 +1,16 @@
 <?php
 
-namespace Drupal\acquia_cms_common;
+namespace Drupal\acquia_cms_common\Services;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
 
 /**
- * Defines a service provider for module toggle.
+ * Defines a service that toggle modules based on environment.
  */
 class ToggleModulesService {
 
   /**
-   * {@inheritdoc}
+   * Toggle module based on environment.
    */
   public function toggleModules() {
     $is_dev = Environment::isAhIdeEnv() || Environment::isLocalEnv();
