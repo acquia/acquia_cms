@@ -111,10 +111,9 @@ final class AcquiaConnectorForm extends AcquiaCMSDashboardBase {
   public function saveConfig(array &$form, FormStateInterface $form_state) {
     $acquia_connector_site_name = $form_state->getValue(['site_name']);
     $this->state->set('spi.site_name', $acquia_connector_site_name);
-    $this->state->set('acquia_connector_progress', TRUE);
-    $this->messenger()->addStatus('The configuration options have been saved.');
     // Set configuration state for dashboard.
     $this->setState();
+    $this->messenger()->addStatus('The configuration options have been saved.');
   }
 
   /**

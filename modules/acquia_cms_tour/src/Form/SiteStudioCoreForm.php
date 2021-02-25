@@ -124,11 +124,8 @@ final class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
     $cohesion_agency_key = $form_state->getValue(['agency_key']);
     $this->configFactory->getEditable('cohesion.settings')->set('api_key', $cohesion_api_key)->save();
     $this->configFactory->getEditable('cohesion.settings')->set('organization_key', $cohesion_agency_key)->save();
-    $this->state->set('site_studio_progress', TRUE);
-    $this->messenger()->addStatus('The configuration options have been saved.');
-
-    // Set State for dashboard configuration.
     $this->setState();
+    $this->messenger()->addStatus('The configuration options have been saved.');
   }
 
   /**

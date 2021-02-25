@@ -48,10 +48,10 @@ final class DashboardController extends ControllerBase {
     'acquia_connector_form' => AcquiaConnectorForm::class,
     'acquia_solr_search_form' => AcquiaSearchSolrForm::class,
     'google_analytics_form' => GoogleAnalyticsForm::class,
-    // 'acquia_google_maps_api' => AcquiaGoogleMapsApiDashboardForm::class,
-    // 'recaptcha_form' => RecaptchaForm::class,
-    // 'google_tag_manager_form' => GoogleTagManagerForm::class,
-    // 'acquia_telemetry' => AcquiaTelemetryForm::class,
+    'acquia_google_maps_api' => AcquiaGoogleMapsApiDashboardForm::class,
+    'recaptcha_form' => RecaptchaForm::class,
+    'google_tag_manager_form' => GoogleTagManagerForm::class,
+    'acquia_telemetry' => AcquiaTelemetryForm::class,
   ];
 
   /**
