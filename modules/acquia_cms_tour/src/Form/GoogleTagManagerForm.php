@@ -40,13 +40,7 @@ final class GoogleTagManagerForm extends AcquiaCMSDashboardBase {
     $form['#tree'] = FALSE;
     $module = $this->module;
     if ($this->isModuleEnabled()) {
-      $uri = $this->config('google_tag.settings')->get('uri');
-
       $configured = $this->getConfigurationState();
-      if (!empty($uri)) {
-        $configured = TRUE;
-        $this->setConfigurationState();
-      }
       if ($configured) {
         $form['check_icon'] = [
           '#prefix' => '<span class= "dashboard-check-icon">',
@@ -122,6 +116,14 @@ final class GoogleTagManagerForm extends AcquiaCMSDashboardBase {
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
     $this->setConfigurationState();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkMinConfiguration() {
+    $uri = $this->config('google_tag.settings')->get('uri');
+    return $uri ? TRUE : FALSE;
   }
 
 }

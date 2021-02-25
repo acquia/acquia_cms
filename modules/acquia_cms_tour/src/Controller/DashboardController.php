@@ -118,8 +118,7 @@ final class DashboardController extends ControllerBase {
     $completed = 0;
     foreach (static::SECTIONS as $key => $controller) {
       $instance_definition = $this->classResolver->getInstanceFromDefinition($controller);
-      $module_status = $instance_definition->isModuleEnabled();
-      if ($module_status) {
+      if ($instance_definition->isModuleEnabled()) {
         $total++;
         $build[$key] = $this->getSectionOutput($controller);
         if ($instance_definition->getConfigurationState()) {

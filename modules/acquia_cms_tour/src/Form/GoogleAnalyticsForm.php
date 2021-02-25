@@ -40,13 +40,7 @@ final class GoogleAnalyticsForm extends AcquiaCMSDashboardBase {
     $form['#tree'] = FALSE;
     $module = $this->module;
     if ($this->isModuleEnabled()) {
-      $account = $this->config('google_analytics.settings')->get('account');
-
       $configured = $this->getConfigurationState();
-      if (!empty($account)) {
-        $configured = TRUE;
-        $this->setConfigurationState();
-      }
       if ($configured) {
         $form['check_icon'] = [
           '#prefix' => '<span class= "dashboard-check-icon">',
@@ -127,6 +121,14 @@ final class GoogleAnalyticsForm extends AcquiaCMSDashboardBase {
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
     $this->setConfigurationState();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkMinConfiguration() {
+    $account = $this->config('google_analytics.settings')->get('account');
+    return $account ? TRUE : FALSE;
   }
 
 }
