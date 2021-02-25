@@ -6,6 +6,23 @@ services:
       - { name: drush.command }
   acquia_cms_common_module.commands:
     class: 'Drupal\acquia_cms_common\Commands\ToggleModules'
-    arguments: ['@acquia_cms_toggle_modules']
+    arguments: ['@acquia_cms_common.toggle_modules']
+    tags:
+      - { name: drush.command }
+  acquia_cms_common.commands:
+    class: 'Drupal\acquia_cms_common\Commands\AcmsCommands'
+    arguments: ['@module_handler']
+    tags:
+      - { name: drush.command }
+  acquia_cms_common.config_commands:
+    class: 'Drupal\acquia_cms_common\Commands\AcmsConfigImportCommands'
+    arguments:
+      - '@config.manager'
+      - '@config.storage'
+      - '@config.import.commands'
+      - '@string_translation'
+      - '@module_handler'
+      - '@class_resolver'
+      - '@acquia_cms_common.utility'
     tags:
       - { name: drush.command }
