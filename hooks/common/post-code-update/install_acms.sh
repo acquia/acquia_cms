@@ -29,16 +29,16 @@ fi
 case $target_env in
   ode1)
     echo "Enabling Acquia CMS Pubsec Demo in $target_env"
-    /usr/local/bin/drush9 @$site.$target_env en -y acquia_cms_demo_pubsec
+    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_demo_pubsec --yes
     ;;
 
   ode3)
     echo "Enabling Acquia CMS Starter in $target_env"
-    /usr/local/bin/drush9 @$site.$target_env en -y acquia_cms_starter
+    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_starter --yes
     ;;
 
   stage)
     echo "Enabling Acquia CMS Pubsec Demo in $target_env"
-    /usr/local/bin/drush9 @$site.$target_env en -y acquia_cms_demo_pubsec
+    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_demo_pubsec --yes
     ;;
 esac
