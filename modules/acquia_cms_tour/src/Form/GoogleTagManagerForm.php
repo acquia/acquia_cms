@@ -42,10 +42,10 @@ final class GoogleTagManagerForm extends AcquiaCMSDashboardBase {
     if ($this->isModuleEnabled()) {
       $uri = $this->config('google_tag.settings')->get('uri');
 
-      $configured = $this->getProgressState();
+      $configured = $this->getConfigurationState();
       if (!empty($uri)) {
         $configured = TRUE;
-        $this->setState();
+        $this->setConfigurationState();
       }
       if ($configured) {
         $form['check_icon'] = [
@@ -112,7 +112,7 @@ final class GoogleTagManagerForm extends AcquiaCMSDashboardBase {
   public function saveConfig(array &$form, FormStateInterface $form_state) {
     $snippet_parent_uri = $form_state->getValue(['snippet_parent_uri']);
     $this->config('google_tag.settings')->set('uri', $snippet_parent_uri)->save();
-    $this->setState();
+    $this->setConfigurationState();
     $this->messenger()->addStatus('The configuration options have been saved.');
   }
 
@@ -120,7 +120,7 @@ final class GoogleTagManagerForm extends AcquiaCMSDashboardBase {
    * {@inheritdoc}
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
-    $this->setState();
+    $this->setConfigurationState();
   }
 
 }

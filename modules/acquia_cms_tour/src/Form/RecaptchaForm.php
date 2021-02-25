@@ -43,10 +43,10 @@ final class RecaptchaForm extends AcquiaCMSDashboardBase {
       $site_key = $this->config('recaptcha.settings')->get('site_key');
       $secret_key = $this->config('recaptcha.settings')->get('secret_key');
 
-      $configured = $this->getProgressState();
+      $configured = $this->getConfigurationState();
       if (!empty($site_key && $secret_key)) {
         $configured = TRUE;
-        $this->setState();
+        $this->setConfigurationState();
       }
 
       if ($configured) {
@@ -126,7 +126,7 @@ final class RecaptchaForm extends AcquiaCMSDashboardBase {
     $recaptcha_secret_key = $form_state->getValue(['secret_key']);
     $this->config('recaptcha.settings')->set('site_key', $recaptcha_site_key)->save();
     $this->config('recaptcha.settings')->set('secret_key', $recaptcha_secret_key)->save();
-    $this->setState();
+    $this->setConfigurationState();
     $this->messenger()->addStatus('The configuration options have been saved.');
   }
 
@@ -134,7 +134,7 @@ final class RecaptchaForm extends AcquiaCMSDashboardBase {
    * {@inheritdoc}
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
-    $this->setState();
+    $this->setConfigurationState();
   }
 
 }

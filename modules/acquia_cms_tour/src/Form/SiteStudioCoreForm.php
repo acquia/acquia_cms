@@ -45,10 +45,10 @@ final class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
       $api_key = $this->config('cohesion.settings')->get('api_key');
       $agency_key = $this->config('cohesion.settings')->get('organization_key');
 
-      $configured = $this->getProgressState();
+      $configured = $this->getConfigurationState();
       if (!empty($api_key && $agency_key)) {
         $configured = TRUE;
-        $this->setState();
+        $this->setConfigurationState();
       }
       if ($configured) {
         $form['check_icon'] = [
@@ -124,7 +124,7 @@ final class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
     $cohesion_agency_key = $form_state->getValue(['agency_key']);
     $this->configFactory->getEditable('cohesion.settings')->set('api_key', $cohesion_api_key)->save();
     $this->configFactory->getEditable('cohesion.settings')->set('organization_key', $cohesion_agency_key)->save();
-    $this->setState();
+    $this->setConfigurationState();
     $this->messenger()->addStatus('The configuration options have been saved.');
   }
 
@@ -132,7 +132,7 @@ final class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
    * {@inheritdoc}
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
-    $this->setState();
+    $this->setConfigurationState();
   }
 
 }

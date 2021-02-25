@@ -62,9 +62,9 @@ final class AcquiaTelemetryForm extends AcquiaCMSDashboardBase {
     $module_path = $this->module_handler->getModule($module)->getPathname();
     $module_info = $this->infoParser->parse($module_path);
 
-    $this->isModuleEnabled() ? $this->setState() : $this->setState(FALSE);
+    $this->isModuleEnabled() ? $this->setConfigurationState() : $this->setConfigurationState(FALSE);
 
-    if ($this->getProgressState()) {
+    if ($this->getConfigurationState()) {
       $form['check_icon'] = [
         '#prefix' => '<span class= "dashboard-check-icon">',
         '#suffix' => "</span>",
@@ -128,12 +128,12 @@ final class AcquiaTelemetryForm extends AcquiaCMSDashboardBase {
 
     if ($acquia_telemetry_opt_in) {
       $this->moduleInstaller->install(['acquia_telemetry']);
-      $this->setState();
+      $this->setConfigurationState();
       $this->messenger()->addStatus('You have opted into Acquia Telemetry. Thank you for helping improve Acquia products.');
     }
     else {
       $this->moduleInstaller->uninstall(['acquia_telemetry']);
-      $this->setState(FALSE);
+      $this->setConfigurationState(FALSE);
       $this->messenger()->addStatus('You have successfully opted out of Acquia Telemetry. Anonymous usage information will no longer be collected.');
     }
   }
@@ -142,7 +142,7 @@ final class AcquiaTelemetryForm extends AcquiaCMSDashboardBase {
    * {@inheritdoc}
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
-    $this->setState();
+    $this->setConfigurationState();
   }
 
 }

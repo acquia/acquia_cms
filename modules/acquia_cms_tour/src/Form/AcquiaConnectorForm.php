@@ -38,10 +38,10 @@ final class AcquiaConnectorForm extends AcquiaCMSDashboardBase {
     $form['#tree'] = FALSE;
     $module = $this->module;
     $site_name = $this->state->get('spi.site_name');
-    $configured = $this->getProgressState();
+    $configured = $this->getConfigurationState();
     if (!empty($site_name)) {
       $configured = TRUE;
-      $this->setState();
+      $this->setConfigurationState();
     }
     if ($configured) {
       $form['check_icon'] = [
@@ -112,7 +112,7 @@ final class AcquiaConnectorForm extends AcquiaCMSDashboardBase {
     $acquia_connector_site_name = $form_state->getValue(['site_name']);
     $this->state->set('spi.site_name', $acquia_connector_site_name);
     // Set configuration state for dashboard.
-    $this->setState();
+    $this->setConfigurationState();
     $this->messenger()->addStatus('The configuration options have been saved.');
   }
 
@@ -120,7 +120,7 @@ final class AcquiaConnectorForm extends AcquiaCMSDashboardBase {
    * {@inheritdoc}
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
-    $this->setState();
+    $this->setConfigurationState();
   }
 
 }

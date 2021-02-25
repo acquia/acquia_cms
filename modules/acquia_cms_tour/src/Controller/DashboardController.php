@@ -114,21 +114,21 @@ final class DashboardController extends ControllerBase {
       '#type' => 'value',
       '#value' => TRUE,
     ];
-    $count = 0;
-    $item_count = 0;
+    $total = 0;
+    $completed = 0;
     foreach (static::SECTIONS as $key => $controller) {
-      $module_status = $this->classResolver->getInstanceFromDefinition($controller)->isModuleEnabled();
-      $state_var = $this->classResolver->getInstanceFromDefinition($controller)->getProgressState();
+      $instance_definition = $this->classResolver->getInstanceFromDefinition($controller);
+      $module_status = $instance_definition->isModuleEnabled();
       if ($module_status) {
-        $count++;
+        $total++;
         $build[$key] = $this->getSectionOutput($controller);
-      }
-      if ($state_var) {
-        $item_count++;
+        if ($instance_definition->getConfigurationState()) {
+          $completed++;
+        }
       }
     }
-    $form['check_total']['#value'] = $count;
-    $form['check_count']['#value'] = $item_count;
+    $form['check_total']['#value'] = $total;
+    $form['check_count']['#value'] = $completed;
     array_unshift($build, $form);
     $build['wrapper_end'] = [
       '#markup' => '',
