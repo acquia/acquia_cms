@@ -2,26 +2,13 @@
 
 namespace Drupal\acquia_cms_tour\Form;
 
-use Drupal\Core\Extension\InfoParserInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
-use Drupal\Core\Utility\LinkGeneratorInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a form to configure Acquia Solr Search module.
  */
-final class AcquiaSearchSolrForm extends ConfigFormBase implements AcquiaDashboardInterface {
-
-  /**
-   * The state service.
-   *
-   * @var \Drupal\Core\State\StateInterface
-   */
-  protected $state;
+final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
 
   /**
    * Provides module name.
@@ -29,58 +16,6 @@ final class AcquiaSearchSolrForm extends ConfigFormBase implements AcquiaDashboa
    * @var string
    */
   protected $module = 'acquia_search_solr';
-
-  /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
-   * The link generator.
-   *
-   * @var \Drupal\Core\Utility\LinkGeneratorInterface
-   */
-  protected $linkGenerator;
-
-  /**
-   * The info file parser.
-   *
-   * @var \Drupal\Core\Extension\InfoParserInterface
-   */
-  protected $infoParser;
-
-  /**
-   * Constructs a new AcquiaSearchSolrForm.
-   *
-   * @param \Drupal\Core\State\StateInterface $state
-   *   The state service.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler service.
-   * @param \Drupal\Core\Utility\LinkGeneratorInterface $link_generator
-   *   The link generator.
-   * @param \Drupal\Core\Extension\InfoParserInterface $info_parser
-   *   The info file parser.
-   */
-  public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser) {
-    $this->state = $state;
-    $this->module_handler = $module_handler;
-    $this->linkGenerator = $link_generator;
-    $this->infoParser = $info_parser;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('state'),
-      $container->get('module_handler'),
-      $container->get('link_generator'),
-      $container->get('info_parser')
-    );
-  }
 
   /**
    * {@inheritdoc}
@@ -104,15 +39,19 @@ final class AcquiaSearchSolrForm extends ConfigFormBase implements AcquiaDashboa
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
     $module = $this->module;
-    if ($this->module_handler->moduleExists($module)) {
+    if ($this->isModuleEnabled()) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
       $api_host = $this->config('acquia_search_solr.settings')->get('api_host');
       $uuid = $this->state->get('acquia_search_solr.uuid');
+
+      $configured = $this->getProgressState();
       if (!empty($api_host && $uuid)) {
-        $this->state->set('acquia_search_solr_progress', TRUE);
+        $configured = TRUE;
+        $this->setState();
       }
-      if ($this->state->get('acquia_search_solr_progress')) {
+
+      if ($configured) {
         $form['check_icon'] = [
           '#prefix' => '<span class= "dashboard-check-icon">',
           '#suffix' => "</span>",
@@ -202,31 +141,16 @@ final class AcquiaSearchSolrForm extends ConfigFormBase implements AcquiaDashboa
     $this->state->set('acquia_search_solr.uuid', $solr_api_uuid);
     $this->state->set('acquia_search_solr_progress', TRUE);
     $this->messenger()->addStatus('The configuration options have been saved.');
+
+    // Set dashboard state.
+    $this->setState();
   }
 
   /**
    * {@inheritdoc}
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
-    $this->state->set('acquia_search_solr_progress', TRUE);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getModuleStatus() {
-    if ($this->module_handler->moduleExists($this->module)) {
-      return TRUE;
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getProgressState() {
-    if ($this->module_handler->moduleExists($this->module)) {
-      return $this->state->get('acquia_search_solr_progress');
-    }
+    $this->setState();
   }
 
 }
