@@ -196,11 +196,8 @@ final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
     $this->state->set('acquia_search_solr.identifier', $solr_identifier);
     $this->state->set('acquia_search.api_key', $solr_api_key);
     $this->state->set('acquia_search_solr.uuid', $solr_api_uuid);
-    $this->state->set('acquia_search_solr_progress', TRUE);
-    $this->messenger()->addStatus('The configuration options have been saved.');
-
-    // Set dashboard state.
     $this->setState();
+    $this->messenger()->addStatus('The configuration options have been saved.');
   }
 
   /**
