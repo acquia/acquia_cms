@@ -45,10 +45,10 @@ final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
       $api_host = $this->config('acquia_search_solr.settings')->get('api_host');
       $uuid = $this->state->get('acquia_search_solr.uuid');
 
-      $configured = $this->getProgressState();
+      $configured = $this->getConfigurationState();
       if (!empty($api_host && $uuid)) {
         $configured = TRUE;
-        $this->setState();
+        $this->setConfigurationState();
       }
 
       if ($configured) {
@@ -139,7 +139,7 @@ final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
     $this->config('acquia_search_solr.settings')->set('api_host', $solr_api_host)->save(TRUE);
     $this->state->set('acquia_search_solr.identifier', $solr_identifier);
     $this->state->set('acquia_search_solr.uuid', $solr_api_uuid);
-    $this->setState();
+    $this->setConfigurationState();
     $this->messenger()->addStatus('The configuration options have been saved.');
   }
 
@@ -147,7 +147,7 @@ final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
    * {@inheritdoc}
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
-    $this->setState();
+    $this->setConfigurationState();
   }
 
 }
