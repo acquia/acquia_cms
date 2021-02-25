@@ -9,7 +9,6 @@ use Drupal\Core\Config\ImportStorageTransformer;
 use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Config\StorageComparer;
 use Drupal\Core\Config\StorageInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Serialization\Yaml;
 
 /**
@@ -44,13 +43,6 @@ class AcquiaCmsConfigSyncService {
   protected $importTransformer;
 
   /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
    * AcquiaCmsConfigSyncService constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -59,29 +51,15 @@ class AcquiaCmsConfigSyncService {
    *   The target storage.
    * @param \Drupal\Core\Config\ImportStorageTransformer $import_transformer
    *   The import transformer service.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
     StorageInterface $target_storage,
-    ImportStorageTransformer $import_transformer,
-    ModuleHandlerInterface $module_handler
+    ImportStorageTransformer $import_transformer
   ) {
     $this->configFactory = $config_factory;
     $this->targetStorage = $target_storage;
     $this->importTransformer = $import_transformer;
-    $this->moduleHandler = $module_handler;
-  }
-
-  /**
-   * Fetch the acquia cms profile with list of enabled modules of ACMS.
-   */
-  public function getAcquiaCmsProfileModuleList() {
-    $profile_modules = $this->moduleHandler->getModuleList();
-    return array_filter($profile_modules, function ($key) {
-      return str_starts_with($key, 'acquia_cms');
-    }, ARRAY_FILTER_USE_KEY);
   }
 
   /**

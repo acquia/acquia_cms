@@ -1,4 +1,4 @@
 services:
   acquia_cms_support.config_service:
     class: '\Drupal\acquia_cms_support\Service\AcquiaCmsConfigSyncService'
-    arguments: ['@config.factory', '@config.storage', '@config.import_transformer', '@module_handler']
+    arguments: ['@config.factory', '@config.storage', '@config.import_transformer']
