@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_support\Controller;
 
+use Drupal\acquia_cms_common\Services\AcmsUtilityService;
 use Drupal\acquia_cms_support\Service\AcquiaCmsConfigSyncService;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
@@ -21,13 +22,23 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
   protected $acmsConfigSync;
 
   /**
+   * The acquia cms utility service.
+   *
+   * @var \Drupal\acquia_cms_common\Services\AcmsUtilityService
+   */
+  protected $acmsUtilityService;
+
+  /**
    * AcquiaCmsConfigSyncOverridden constructor.
    *
    * @param \Drupal\acquia_cms_support\Service\AcquiaCmsConfigSyncService $acms_config_sync
    *   The acquia cms config sync.
+   * @param \Drupal\acquia_cms_common\Services\AcmsUtilityService $acmsUtilityService
+   *   The acquia cms utility service.
    */
-  public function __construct(AcquiaCmsConfigSyncService $acms_config_sync) {
+  public function __construct(AcquiaCmsConfigSyncService $acms_config_sync, AcmsUtilityService $acmsUtilityService) {
     $this->acmsConfigSync = $acms_config_sync;
+    $this->acmsUtilityService = $acmsUtilityService;
   }
 
   /**
@@ -35,7 +46,8 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('acquia_cms_support.config_service')
+      $container->get('acquia_cms_support.config_service'),
+      $container->get('acquia_cms_common.utility')
     );
   }
 
@@ -51,7 +63,7 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
       $this->t('Default Parity'),
       $this->t('Operations'),
     ];
-    $acquiaCmsModules = $this->acmsConfigSync->getAcquiaCmsProfileModuleList();
+    $acquiaCmsModules = $this->acmsUtilityService->getAcquiaCmsProfileModuleList();
     $overriddenConfig = [];
     foreach ($acquiaCmsModules as $module) {
       $path = $module->getPath();
