@@ -100,8 +100,8 @@ abstract class AcquiaCMSDashboardBase extends ConfigFormBase implements AcquiaDa
   /**
    * {@inheritdoc}
    */
-  public function setState() {
-    $this->state->set($this->getState(), TRUE);
+  public function setState($status = TRUE) {
+    $this->state->set($this->getState(), $status);
   }
 
 }
