@@ -44,7 +44,7 @@ final class DashboardController extends ControllerBase {
    * @var array
    */
   private const SECTIONS = [
-    // 'site_studio_core_form' => SiteStudioCoreForm::class,
+    'site_studio_core_form' => SiteStudioCoreForm::class,
     'acquia_connector_form' => AcquiaConnectorForm::class,
     // 'acquia_solr_search_form' => AcquiaSearchSolrForm::class,
     // 'google_analytics_form' => GoogleAnalyticsForm::class,

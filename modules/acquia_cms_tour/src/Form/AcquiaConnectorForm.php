@@ -49,7 +49,7 @@ final class AcquiaConnectorForm extends AcquiaCMSDashboardBase {
         '#suffix' => "</span>",
       ];
     }
-    if ($this->module_handler->moduleExists($module)) {
+    if ($this->isModuleEnabled()) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
       $form[$module] = [

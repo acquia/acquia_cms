@@ -2,26 +2,13 @@
 
 namespace Drupal\acquia_cms_tour\Form;
 
-use Drupal\Core\Extension\InfoParserInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
-use Drupal\Core\Utility\LinkGeneratorInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a form to configure SiteStudioCore.
  */
-final class SiteStudioCoreForm extends ConfigFormBase implements AcquiaDashboardInterface {
-
-  /**
-   * The state service.
-   *
-   * @var \Drupal\Core\State\StateInterface
-   */
-  protected $state;
+final class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
 
   /**
    * Provides module name.
@@ -29,58 +16,6 @@ final class SiteStudioCoreForm extends ConfigFormBase implements AcquiaDashboard
    * @var string
    */
   protected $module = 'cohesion';
-
-  /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
-   * The link generator.
-   *
-   * @var \Drupal\Core\Utility\LinkGeneratorInterface
-   */
-  protected $linkGenerator;
-
-  /**
-   * The info file parser.
-   *
-   * @var \Drupal\Core\Extension\InfoParserInterface
-   */
-  protected $infoParser;
-
-  /**
-   * Constructs a new SiteStudioCoreForm.
-   *
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler service.
-   * @param \Drupal\Core\Utility\LinkGeneratorInterface $link_generator
-   *   The link generator.
-   * @param \Drupal\Core\Extension\InfoParserInterface $info_parser
-   *   The info file parser.
-   * @param \Drupal\Core\State\StateInterface $state
-   *   The state service.
-   */
-  public function __construct(ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser, StateInterface $state) {
-    $this->module_handler = $module_handler;
-    $this->linkGenerator = $link_generator;
-    $this->infoParser = $info_parser;
-    $this->state = $state;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('module_handler'),
-      $container->get('link_generator'),
-      $container->get('info_parser'),
-      $container->get('state')
-    );
-  }
 
   /**
    * {@inheritdoc}
@@ -104,15 +39,18 @@ final class SiteStudioCoreForm extends ConfigFormBase implements AcquiaDashboard
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
     $module = $this->module;
-    if ($this->module_handler->moduleExists($module)) {
+    if ($this->isModuleEnabled()) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
       $api_key = $this->config('cohesion.settings')->get('api_key');
       $agency_key = $this->config('cohesion.settings')->get('organization_key');
+
+      $configured = $this->getProgressState();
       if (!empty($api_key && $agency_key)) {
-        $this->state->set('site_studio_progress', TRUE);
+        $configured = TRUE;
+        $this->setState();
       }
-      if ($this->state->get('site_studio_progress')) {
+      if ($configured) {
         $form['check_icon'] = [
           '#prefix' => '<span class= "dashboard-check-icon">',
           '#suffix' => "</span>",
@@ -190,31 +128,16 @@ final class SiteStudioCoreForm extends ConfigFormBase implements AcquiaDashboard
     $this->configFactory->getEditable('cohesion.settings')->set('organization_key', $cohesion_agency_key)->save();
     $this->state->set('site_studio_progress', TRUE);
     $this->messenger()->addStatus('The configuration options have been saved.');
+
+    // Set State for dashboard configuration.
+    $this->setState();
   }
 
   /**
    * {@inheritdoc}
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
-    $this->state->set('site_studio_progress', TRUE);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getModuleStatus() {
-    if ($this->module_handler->moduleExists($this->module)) {
-      return TRUE;
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getProgressState() {
-    if ($this->module_handler->moduleExists($this->module)) {
-      return $this->state->get('site_studio_progress');
-    }
+    $this->setState();
   }
 
 }
