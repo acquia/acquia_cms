@@ -10,8 +10,12 @@ use Drupal\acquia_cms_tour\Form\GoogleAnalyticsForm;
 use Drupal\acquia_cms_tour\Form\GoogleTagManagerForm;
 use Drupal\acquia_cms_tour\Form\RecaptchaForm;
 use Drupal\acquia_cms_tour\Form\SiteStudioCoreForm;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
+use Drupal\Core\Link;
+use Drupal\Core\State\StateInterface;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -39,6 +43,13 @@ final class DashboardController extends ControllerBase {
   protected $moduleHandler;
 
   /**
+   * The state interface.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
+
+  /**
    * The sub-controllers to invoke in order to build the tour page.
    *
    * @var array
@@ -57,10 +68,13 @@ final class DashboardController extends ControllerBase {
   /**
    * Constructs a new ProgressBarForm.
    *
+   * @param \Drupal\Core\State\StateInterface $state
+   *   The state service.
    * @param \Drupal\Core\DependencyInjection\ClassResolverInterface $class_resolver
    *   The class resolver.
    */
-  public function __construct(ClassResolverInterface $class_resolver) {
+  public function __construct(StateInterface $state, ClassResolverInterface $class_resolver) {
+    $this->state = $state;
     $this->classResolver = $class_resolver;
   }
 
@@ -84,6 +98,7 @@ final class DashboardController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('state'),
       $container->get('class_resolver')
     );
   }
@@ -116,6 +131,35 @@ final class DashboardController extends ControllerBase {
     ];
     $total = 0;
     $completed = 0;
+
+    // Temporary code to load webform wizard.
+    $show_welcome_dialog = $this->state->get('show_welcome_modal');
+    $show_wizard_modal = $this->state->get('show_wizard_modal');
+    $link_url = Url::fromUri('internal:/admin/tour/dashboard/welcome-modal-form');
+    if (isset($show_welcome_dialog)) {
+      // @todo update below url of wizard form.
+      $link_url = Url::fromUri('internal:/node/add/article');
+    }
+    $link_url->setOptions([
+      'attributes' => [
+        'class' => [
+          'use-ajax',
+          'button',
+          'button--secondary',
+          'button--small',
+          'welcome-modal-form',
+        ],
+        'data-dialog-type' => 'modal',
+        'data-dialog-options' => Json::encode(['width' => 800]),
+      ],
+    ]);
+    $build['wizard'] = [
+      '#type' => 'markup',
+      '#markup' => Link::fromTextAndUrl($this->t('Get Started with Wizard'), $link_url)->toString(),
+    ];
+    // End Temporary code.
+    // Delegate building each section to sub-controllers, in order to keep all
+    // extension-specific logic cleanly encapsulated.
     foreach (static::SECTIONS as $key => $controller) {
       $instance_definition = $this->classResolver->getInstanceFromDefinition($controller);
       if ($instance_definition->isModuleEnabled()) {
@@ -133,6 +177,14 @@ final class DashboardController extends ControllerBase {
       '#markup' => '',
       '#suffix' => "</div>",
     ];
+
+    // Attach acquia_cms_tour_dashboard library.
+    $build['#attached'] = [
+      'library' => [
+        'acquia_cms_tour/acquia_cms_tour_dashboard',
+      ],
+    ];
+    $build['#attached']['drupalSettings']['show_wizard_modal'] = $show_wizard_modal ?? TRUE;
     return $build;
   }
 
