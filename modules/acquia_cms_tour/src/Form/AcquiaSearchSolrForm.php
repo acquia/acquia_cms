@@ -42,14 +42,8 @@ final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
     if ($this->isModuleEnabled()) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $api_host = $this->config('acquia_search_solr.settings')->get('api_host');
-      $uuid = $this->state->get('acquia_search_solr.uuid');
 
       $configured = $this->getConfigurationState();
-      if (!empty($api_host && $uuid)) {
-        $configured = TRUE;
-        $this->setConfigurationState();
-      }
 
       if ($configured) {
         $form['check_icon'] = [
@@ -148,6 +142,15 @@ final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
     $this->setConfigurationState();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkMinConfiguration() {
+    $api_host = $this->config('acquia_search_solr.settings')->get('api_host');
+    $uuid = $this->state->get('acquia_search_solr.uuid');
+    return !empty($api_host) && !empty($uuid) ? TRUE : FALSE;
   }
 
 }

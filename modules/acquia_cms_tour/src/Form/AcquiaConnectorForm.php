@@ -37,12 +37,7 @@ final class AcquiaConnectorForm extends AcquiaCMSDashboardBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
     $module = $this->module;
-    $site_name = $this->state->get('spi.site_name');
     $configured = $this->getConfigurationState();
-    if (!empty($site_name)) {
-      $configured = TRUE;
-      $this->setConfigurationState();
-    }
     if ($configured) {
       $form['check_icon'] = [
         '#prefix' => '<span class= "dashboard-check-icon">',
@@ -121,6 +116,14 @@ final class AcquiaConnectorForm extends AcquiaCMSDashboardBase {
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
     $this->setConfigurationState();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkMinConfiguration() {
+    $site_name = $this->state->get('spi.site_name');
+    return ($site_name) ? TRUE : FALSE;
   }
 
 }
