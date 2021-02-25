@@ -12,8 +12,6 @@ use Drupal\acquia_cms_tour\Form\RecaptchaForm;
 use Drupal\acquia_cms_tour\Form\SiteStudioCoreForm;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\State\StateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -34,13 +32,6 @@ final class DashboardController extends ControllerBase {
   protected $classResolver;
 
   /**
-   * The state service.
-   *
-   * @var \Drupal\Core\State\StateInterface
-   */
-  protected $state;
-
-  /**
    * The module handler.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
@@ -53,44 +44,36 @@ final class DashboardController extends ControllerBase {
    * @var array
    */
   private const SECTIONS = [
-    'site_studio_core_form' => SiteStudioCoreForm::class,
+    // 'site_studio_core_form' => SiteStudioCoreForm::class,
     'acquia_connector_form' => AcquiaConnectorForm::class,
-    'acquia_solr_search_form' => AcquiaSearchSolrForm::class,
-    'google_analytics_form' => GoogleAnalyticsForm::class,
-    'acquia_google_maps_api' => AcquiaGoogleMapsApiDashboardForm::class,
-    'recaptcha_form' => RecaptchaForm::class,
-    'google_tag_manager_form' => GoogleTagManagerForm::class,
-    'acquia_telemetry' => AcquiaTelemetryForm::class,
+    // 'acquia_solr_search_form' => AcquiaSearchSolrForm::class,
+    // 'google_analytics_form' => GoogleAnalyticsForm::class,
+    // 'acquia_google_maps_api' => AcquiaGoogleMapsApiDashboardForm::class,
+    // 'recaptcha_form' => RecaptchaForm::class,
+    // 'google_tag_manager_form' => GoogleTagManagerForm::class,
+    // 'acquia_telemetry' => AcquiaTelemetryForm::class,
   ];
 
   /**
    * Constructs a new ProgressBarForm.
    *
-   * @param \Drupal\Core\State\StateInterface $state
-   *   The state service.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler service.
    * @param \Drupal\Core\DependencyInjection\ClassResolverInterface $class_resolver
    *   The class resolver.
    */
-  public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, ClassResolverInterface $class_resolver) {
-    $this->state = $state;
-    $this->module_handler = $module_handler;
+  public function __construct(ClassResolverInterface $class_resolver) {
     $this->classResolver = $class_resolver;
   }
 
   /**
    * Invokes a sub-controller and returns its output.
    *
-   * @param string $key
-   *   The key.
    * @param string $controller_class
    *   The class name.
    *
    * @return mixed
    *   The markup/output of the sub-controller.
    */
-  private function getSectionOutput(string $key, string $controller_class) {
+  private function getSectionOutput(string $controller_class) {
     if (is_a($controller_class, 'Drupal\Core\Form\FormInterface', TRUE)) {
       return $this->formBuilder()->getForm($controller_class);
     }
@@ -101,8 +84,6 @@ final class DashboardController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('state'),
-      $container->get('module_handler'),
       $container->get('class_resolver')
     );
   }
@@ -136,11 +117,11 @@ final class DashboardController extends ControllerBase {
     $count = 0;
     $item_count = 0;
     foreach (static::SECTIONS as $key => $controller) {
-      $module_status = $this->classResolver->getInstanceFromDefinition($controller)->getModuleStatus();
+      $module_status = $this->classResolver->getInstanceFromDefinition($controller)->isModuleEnabled();
       $state_var = $this->classResolver->getInstanceFromDefinition($controller)->getProgressState();
       if ($module_status) {
         $count++;
-        $build[$key] = $this->getSectionOutput($key, $controller);
+        $build[$key] = $this->getSectionOutput($controller);
       }
       if ($state_var) {
         $item_count++;
