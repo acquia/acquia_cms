@@ -15,16 +15,16 @@ interface AcquiaDashboardInterface {
   /**
    * Provides progress bar status of a module.
    */
-  public function getProgressState();
+  public function getConfigurationState();
 
   /**
    * Provides the name of the state variable for the form.
    */
-  public function getState();
+  public function getStateName();
 
   /**
-   * Provides the name of the state variable for the form.
+   * Set the state of the module's minimum required configurations.
    */
-  public function setState();
+  public function setConfigurationState();
 
 }

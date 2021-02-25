@@ -73,10 +73,10 @@ final class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
         $maps_api_key = $configuration['apiKey'];
       }
 
-      $configured = $this->getProgressState();
+      $configured = $this->getConfigurationState();
       if (!empty($maps_api_key)) {
         $configured = TRUE;
-        $this->setState();
+        $this->setConfigurationState();
       }
       if ($configured) {
         $form['check_icon'] = [
@@ -170,7 +170,7 @@ final class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
       $this->geocoderProviderStorage->save($provider);
     }
 
-    $this->setState();
+    $this->setConfigurationState();
 
     $this->messenger()->addStatus('The Google Maps API key has been set.');
   }
@@ -179,7 +179,7 @@ final class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
    * {@inheritdoc}
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
-    $this->setState();
+    $this->setConfigurationState();
   }
 
 }
