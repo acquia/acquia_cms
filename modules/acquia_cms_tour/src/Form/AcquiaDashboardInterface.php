@@ -13,7 +13,13 @@ interface AcquiaDashboardInterface {
   public function isModuleEnabled();
 
   /**
-   * Provides progress bar status of a module.
+   * Check if the minimum require configuration are already in place or not.
+   *
+   * Multiple modules can have multiple ways to set configurations. For e.g.
+   * Site studio can be configured from site install page, from site studio
+   * setting page or from dashboard.
+   *
+   * This method will return current state of the configurations.
    */
   public function getConfigurationState();
 

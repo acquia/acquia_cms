@@ -62,8 +62,6 @@ final class AcquiaTelemetryForm extends AcquiaCMSDashboardBase {
     $module_path = $this->module_handler->getModule($module)->getPathname();
     $module_info = $this->infoParser->parse($module_path);
 
-    $this->isModuleEnabled() ? $this->setConfigurationState() : $this->setConfigurationState(FALSE);
-
     if ($this->getConfigurationState()) {
       $form['check_icon'] = [
         '#prefix' => '<span class= "dashboard-check-icon">',
@@ -143,6 +141,13 @@ final class AcquiaTelemetryForm extends AcquiaCMSDashboardBase {
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
     $this->setConfigurationState();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkMinConfiguration() {
+    return $this->isModuleEnabled() ? TRUE : FALSE;
   }
 
 }

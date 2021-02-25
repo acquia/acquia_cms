@@ -74,10 +74,7 @@ final class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
       }
 
       $configured = $this->getConfigurationState();
-      if (!empty($maps_api_key)) {
-        $configured = TRUE;
-        $this->setConfigurationState();
-      }
+
       if ($configured) {
         $form['check_icon'] = [
           '#prefix' => '<span class= "dashboard-check-icon">',
@@ -180,6 +177,20 @@ final class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
     $this->setConfigurationState();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkMinConfiguration() {
+    $maps_api_key = $this->config('cohesion.settings')->get('google_map_api_key');
+    $provider = $this->loadProvider();
+    if ($provider) {
+      $configuration = $provider->get('configuration');
+      $maps_api_key = $configuration['apiKey'];
+    }
+
+    return (!empty($maps_api_key)) ? TRUE : FALSE;
   }
 
 }
