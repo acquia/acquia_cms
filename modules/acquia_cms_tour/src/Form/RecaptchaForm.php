@@ -2,26 +2,13 @@
 
 namespace Drupal\acquia_cms_tour\Form;
 
-use Drupal\Core\Extension\InfoParserInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
-use Drupal\Core\Utility\LinkGeneratorInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a form to configure the Recaptcha module.
  */
-final class RecaptchaForm extends ConfigFormBase implements AcquiaDashboardInterface {
-
-  /**
-   * The state service.
-   *
-   * @var \Drupal\Core\State\StateInterface
-   */
-  protected $state;
+final class RecaptchaForm extends AcquiaCMSDashboardBase {
 
   /**
    * Provides module name.
@@ -29,58 +16,6 @@ final class RecaptchaForm extends ConfigFormBase implements AcquiaDashboardInter
    * @var string
    */
   protected $module = 'recaptcha';
-
-  /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
-   * The link generator.
-   *
-   * @var \Drupal\Core\Utility\LinkGeneratorInterface
-   */
-  protected $linkGenerator;
-
-  /**
-   * The info file parser.
-   *
-   * @var \Drupal\Core\Extension\InfoParserInterface
-   */
-  protected $infoParser;
-
-  /**
-   * Constructs a new RecaptchaForm.
-   *
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler service.
-   * @param \Drupal\Core\Utility\LinkGeneratorInterface $link_generator
-   *   The link generator.
-   * @param \Drupal\Core\Extension\InfoParserInterface $info_parser
-   *   The info file parser.
-   * @param \Drupal\Core\State\StateInterface $state
-   *   The state service.
-   */
-  public function __construct(ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser, StateInterface $state) {
-    $this->state = $state;
-    $this->module_handler = $module_handler;
-    $this->linkGenerator = $link_generator;
-    $this->infoParser = $info_parser;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('module_handler'),
-      $container->get('link_generator'),
-      $container->get('info_parser'),
-      $container->get('state')
-    );
-  }
 
   /**
    * {@inheritdoc}
@@ -104,13 +39,17 @@ final class RecaptchaForm extends ConfigFormBase implements AcquiaDashboardInter
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
     $module = $this->module;
-    if ($this->module_handler->moduleExists($module)) {
+    if ($this->isModuleEnabled()) {
       $site_key = $this->config('recaptcha.settings')->get('site_key');
       $secret_key = $this->config('recaptcha.settings')->get('secret_key');
+
+      $configured = $this->getProgressState();
       if (!empty($site_key && $secret_key)) {
-        $this->state->set('recaptcha_progress', TRUE);
+        $configured = TRUE;
+        $this->setState();
       }
-      if ($this->state->get('recaptcha_progress')) {
+
+      if ($configured) {
         $form['check_icon'] = [
           '#prefix' => '<span class= "dashboard-check-icon">',
           '#suffix' => "</span>",
@@ -189,7 +128,7 @@ final class RecaptchaForm extends ConfigFormBase implements AcquiaDashboardInter
     $recaptcha_secret_key = $form_state->getValue(['secret_key']);
     $this->config('recaptcha.settings')->set('site_key', $recaptcha_site_key)->save();
     $this->config('recaptcha.settings')->set('secret_key', $recaptcha_secret_key)->save();
-    $this->state->set('recaptcha_progress', TRUE);
+    $this->setState();
     $this->messenger()->addStatus('The configuration options have been saved.');
   }
 
@@ -197,25 +136,7 @@ final class RecaptchaForm extends ConfigFormBase implements AcquiaDashboardInter
    * {@inheritdoc}
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
-    $this->state->set('recaptcha_progress', TRUE);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getModuleStatus() {
-    if ($this->module_handler->moduleExists($this->module)) {
-      return TRUE;
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getProgressState() {
-    if ($this->module_handler->moduleExists($this->module)) {
-      return $this->state->get('recaptcha_progress');
-    }
+    $this->setState();
   }
 
 }
