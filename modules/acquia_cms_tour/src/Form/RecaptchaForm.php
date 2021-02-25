@@ -40,14 +40,7 @@ final class RecaptchaForm extends AcquiaCMSDashboardBase {
     $form['#tree'] = FALSE;
     $module = $this->module;
     if ($this->isModuleEnabled()) {
-      $site_key = $this->config('recaptcha.settings')->get('site_key');
-      $secret_key = $this->config('recaptcha.settings')->get('secret_key');
-
       $configured = $this->getConfigurationState();
-      if (!empty($site_key && $secret_key)) {
-        $configured = TRUE;
-        $this->setConfigurationState();
-      }
 
       if ($configured) {
         $form['check_icon'] = [
@@ -137,6 +130,15 @@ final class RecaptchaForm extends AcquiaCMSDashboardBase {
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
     $this->setConfigurationState();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkMinConfiguration() {
+    $site_key = $this->config('recaptcha.settings')->get('site_key');
+    $secret_key = $this->config('recaptcha.settings')->get('secret_key');
+    return $site_key &&  $secret_key ? TRUE : FALSE;
   }
 
 }

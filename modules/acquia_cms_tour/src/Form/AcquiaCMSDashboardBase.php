@@ -87,7 +87,12 @@ abstract class AcquiaCMSDashboardBase extends ConfigFormBase implements AcquiaDa
    * {@inheritdoc}
    */
   public function getConfigurationState() {
-    return $this->state->get($this->getStateName(), FALSE);
+    $state = $this->state->get($this->getStateName(), FALSE);
+    if (!$state && $this->checkMinConfiguration()) {
+      $state = TRUE;
+      $this->setConfigurationState();
+    }
+    return $state;
   }
 
   /**
@@ -103,5 +108,13 @@ abstract class AcquiaCMSDashboardBase extends ConfigFormBase implements AcquiaDa
   public function setConfigurationState($status = TRUE) {
     $this->state->set($this->getStateName(), $status);
   }
+
+  /**
+   * Check if the minimum require configuration are already in place or not.
+   *
+   * @return bool
+   *   Returns the state of min required configurations.
+   */
+  abstract public function checkMinConfiguration();
 
 }

@@ -42,14 +42,8 @@ final class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
     if ($this->isModuleEnabled()) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $api_key = $this->config('cohesion.settings')->get('api_key');
-      $agency_key = $this->config('cohesion.settings')->get('organization_key');
 
       $configured = $this->getConfigurationState();
-      if (!empty($api_key && $agency_key)) {
-        $configured = TRUE;
-        $this->setConfigurationState();
-      }
       if ($configured) {
         $form['check_icon'] = [
           '#prefix' => '<span class= "dashboard-check-icon">',
@@ -135,6 +129,15 @@ final class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
    */
   public function ignoreConfig(array &$form, FormStateInterface $form_state) {
     $this->setConfigurationState();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkMinConfiguration() {
+    $api_key = $this->config('cohesion.settings')->get('api_key');
+    $agency_key = $this->config('cohesion.settings')->get('organization_key');
+    return $api_key &&  $agency_key ? TRUE : FALSE;
   }
 
 }
