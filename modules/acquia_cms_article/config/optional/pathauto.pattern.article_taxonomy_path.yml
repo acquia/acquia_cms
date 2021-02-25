@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - ctools
+    - taxonomy
+id: article_taxonomy_path
+label: 'Article taxonomy path'
+type: 'canonical_entities:taxonomy_term'
+pattern: '/[term:name]'
+selection_criteria:
+  fd7393c8-d9af-4456-8a46-3db25b9fd745:
+    id: 'entity_bundle:taxonomy_term'
+    bundles:
+      article_type: article_type
+    negate: false
+    context_mapping:
+      taxonomy_term: taxonomy_term
+    uuid: fd7393c8-d9af-4456-8a46-3db25b9fd745
+selection_logic: and
+weight: -5
+relationships: {  }
