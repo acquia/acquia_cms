@@ -2,8 +2,6 @@
 
 namespace Drupal\acquia_cms_tour\Form;
 
-use Drupal\Core\Form\FormStateInterface;
-
 /**
  * Interface for acquia cms dashboard.
  */
@@ -12,7 +10,7 @@ interface AcquiaDashboardInterface {
   /**
    * Provides module status.
    */
-  public function getModuleStatus();
+  public function isModuleEnabled();
 
   /**
    * Provides progress bar status of a module.
@@ -20,8 +18,13 @@ interface AcquiaDashboardInterface {
   public function getProgressState();
 
   /**
-   * {@inheritdoc}
+   * Provides the name of the state variable for the form.
    */
-  public function ignoreConfig(array &$form, FormStateInterface $form_state);
+  public function getState();
+
+  /**
+   * Provides the name of the state variable for the form.
+   */
+  public function setState();
 
 }
