@@ -105,6 +105,13 @@ abstract class AcquiaCMSDashboardBase extends ConfigFormBase implements AcquiaDa
   /**
    * {@inheritdoc}
    */
+  public function getModuleName($module) {
+    return $this->moduleHandler->getName($module);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function setConfigurationState($status = TRUE) {
     $this->state->set($this->getStateName(), $status);
   }
