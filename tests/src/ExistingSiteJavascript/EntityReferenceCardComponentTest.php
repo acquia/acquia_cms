@@ -25,7 +25,7 @@ class EntityReferenceCardComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $edit_form = $this->getLayoutCanvas()->add('Card - Entity Reference')->edit();
+    $edit_form = $this->getLayoutCanvas()->add('Content reference card')->edit();
     $this->waitForElementVisible('css', '.form-group.coh-select .form-control', $this->getSession()->getPage());
     $this->assertSession()->optionExists('Entity type', 'Content', $edit_form);
   }
