@@ -132,10 +132,10 @@ final class DashboardController extends ControllerBase {
     $total = 0;
     $completed = 0;
 
-    $show_welcome_dialog = $this->state->get('show_welcome_modal');
-    $show_wizard_modal = $this->state->get('show_wizard_modal');
+    $show_welcome_dialog = $this->state->get('show_welcome_modal', TRUE);
+    $show_wizard_modal = $this->state->get('show_wizard_modal', TRUE);
     $link_url = Url::fromRoute('acquia_cms_tour.welcome_modal_form');
-    if (isset($show_welcome_dialog)) {
+    if (!$show_welcome_dialog) {
       $link_url = Url::fromRoute('acquia_cms_tour.installation_wizard');
     }
     $link_url->setOptions([
@@ -181,8 +181,10 @@ final class DashboardController extends ControllerBase {
       'library' => [
         'acquia_cms_tour/acquia_cms_tour_dashboard',
       ],
+      'drupalSettings' => [
+        'show_wizard_modal' => $show_wizard_modal,
+      ],
     ];
-    $build['#attached']['drupalSettings']['show_wizard_modal'] = $show_wizard_modal ?? TRUE;
     return $build;
   }
 

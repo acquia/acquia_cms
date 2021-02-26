@@ -6,7 +6,7 @@
 
 (function ($, Drupal, drupalSettings) {
   // Override the throbber icon.
-  Drupal.theme.ajaxProgressThrobber = function () {return ""; };
+  Drupal.theme.ajaxProgressThrobber = function () { return ""; };
   Drupal.behaviors.acquiaCmsWelcomeDialog = {
     attach: function () {
       // Open modal.
