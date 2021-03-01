@@ -7,6 +7,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Render\Renderer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -38,6 +39,13 @@ class InstallationWizardForm extends FormBase {
    * @var bool
    */
   protected $useAjax = TRUE;
+
+  /**
+   * The rendered array renderer.
+   *
+   * @var array
+   */
+  protected $renderer;
 
   /**
    * The module handler.
@@ -74,10 +82,13 @@ class InstallationWizardForm extends FormBase {
    *   The class resolver.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler service.
+   * @param Drupal\Core\Render\Renderer $renderer
+   *   The renderer service.
    */
-  public function __construct(ClassResolverInterface $class_resolver, ModuleHandlerInterface $module_handler) {
+  public function __construct(ClassResolverInterface $class_resolver, ModuleHandlerInterface $module_handler, Renderer $renderer) {
     $this->classResolver = $class_resolver;
     $this->moduleHandler = $module_handler;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -86,7 +97,8 @@ class InstallationWizardForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('class_resolver'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('renderer')
     );
   }
 
@@ -374,7 +386,7 @@ class InstallationWizardForm extends FormBase {
     ];
     $form['sidebar_markup'] = [
       '#type' => 'markup',
-      '#markup' => $this->getSideBarMarkup($sections, ($this->currentStep) + 1),
+      '#markup' => $this->getSideBarMarkup(($this->currentStep) + 1),
     ];
     $form = $this->classResolver->getInstanceFromDefinition($formController)->buildForm($form, $form_state);
     // Change details to fieldset for all form.
@@ -386,28 +398,27 @@ class InstallationWizardForm extends FormBase {
   /**
    * Helper method for adding sidebar markup.
    *
-   * @param array $sections
-   *   The module classes.
    * @param int $current_step
    *   The forms current step.
    *
    * @return string
    *   The render array defining the markup of the sidebar.
    */
-  public function getSideBarMarkup(array $sections, int $current_step) {
-    $sno = 0;
+  public function getSideBarMarkup(int $current_step) {
     $markup = '<div class="tour_sidebar">';
-    foreach ($sections as $module) {
-      if ($this->moduleHandler->moduleExists($module)) {
-        $sno++;
+    $steps = $this->getSteps();
+    foreach ($steps as $key => $controller) {
+      $instance_definition = $this->classResolver->getInstanceFromDefinition($controller);
+      if ($instance_definition->isModuleEnabled()) {
+        $sno = $key + 1;
         if ($sno == $current_step) {
           $current_class = 'current_step';
         }
         else {
           $current_class = 'item-';
         }
-        $module_name = $this->moduleHandler->getName($module);
-        $markup .= '<div class = ' . $current_class . ' id = ' . $module . '>' .
+        $module_name = $this->moduleHandler->getName($instance_definition->getmodule());
+        $markup .= '<div class = ' . $current_class . ' id = ' . $instance_definition->getmodule() . '>' .
           $sno . ' ' . $module_name .
           '<div class = "status-icon">icon</div></div>';
       }
@@ -426,13 +437,16 @@ class InstallationWizardForm extends FormBase {
    *   The forms current step.
    *
    * @return string
-   *   The render array defining the markup of the title.
+   *   The rendered array defining the markup of the title.
    */
   public function getTitleMarkup(string $module, int $current_step) {
     $module_name = $this->moduleHandler->getName($module);
-    return '<div class="title_markup"><div id="main-title">Acquia CMS Installation Wizard</div><div class="configure-markup">' .
-      $current_step . '. Configure ' . $module_name .
-      '</div><span class="req-markup">Fields marked <span id = "astrick">*</span> are required</span></span></div>';
+    $title_markup = [
+      '#theme' => 'acquia_cms_tour_title_markup',
+      '#module_name' => $module_name,
+      '#current_step' => $current_step,
+    ];
+    return $this->renderer->render($title_markup);
   }
 
 }
