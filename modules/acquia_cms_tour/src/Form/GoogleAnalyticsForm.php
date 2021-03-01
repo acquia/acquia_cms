@@ -78,7 +78,7 @@ final class GoogleAnalyticsForm extends AcquiaCMSDashboardBase {
         '#submit' => ['::ignoreConfig'],
       ];
       if (isset($module_info['configure'])) {
-        $form[$module]['acquia_search_solr']['actions']['advanced'] = [
+        $form[$module]['actions']['advanced'] = [
           '#markup' => $this->linkGenerator->generate(
             'Advanced',
             Url::fromRoute($module_info['configure'])

@@ -16,18 +16,32 @@
   margin: 0 !important;
   background: #fff;
 }
-.acms-welcome-modal.ui-dialog > .ui-dialog-content {
-  overflow: auto;
-}
 .acms-welcome-modal .button--primary {
   background: #003cc5;
 }
-
+.setup-manually.button {
+  display: block;
+  margin: 1rem 0.75rem 1rem 0;
+  background-color: #fff;
+}
+.setup-manually.button:not(:focus) {
+  box-shadow: none;
+}
+.setup-manually.button:hover {
+  background: #fff;
+}
+.acms-welcome-modal .form-actions {
+  flex-direction: column;
+  align-items: center;
+}
+.acms-welcome-modal .form-actions .button {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
 .acms-dashboard-form-wrapper .claro-details__summary::before {
   right: 0.75rem;
   left: unset;
 }
-
 .acms-dashboard-form-wrapper  .dashboard-check-icon {
   height: 23px;
   width: 22px;

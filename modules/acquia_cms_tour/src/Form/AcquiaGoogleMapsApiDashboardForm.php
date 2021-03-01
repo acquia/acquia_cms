@@ -81,13 +81,13 @@ final class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
           '#suffix' => "</span>",
         ];
       }
-      $form['acquia_google_maps_api_wrapper'] = [
+      $form[$module] = [
         '#type' => 'details',
         '#title' => $module_info['name'],
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
       ];
-      $form['acquia_google_maps_api_wrapper']['acquia_google_maps_api'] = [
+      $form[$module]['acquia_google_maps_api'] = [
         'maps_api_key' => [
           '#type' => 'textfield',
           '#title' => $this->t('Maps API key'),
@@ -98,18 +98,18 @@ final class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
           '#suffix' => "</div>",
         ],
       ];
-      $form['acquia_google_maps_api_wrapper']['actions']['submit'] = [
+      $form[$module]['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => 'Save',
         '#submit' => ['::saveConfig'],
         '#prefix' => '<div class= "dashboard-buttons-wrapper">',
       ];
-      $form['acquia_google_maps_api_wrapper']['actions']['ignore'] = [
+      $form[$module]['actions']['ignore'] = [
         '#type' => 'submit',
         '#value' => 'Ignore',
         '#submit' => ['::ignoreConfig'],
       ];
-      $form['acquia_google_maps_api_wrapper']['actions']['advanced'] = [
+      $form[$module]['actions']['advanced'] = [
         '#markup' => $this->linkGenerator->generate(
           'Advanced',
           Url::fromRoute('entity.geocoder_provider.collection')
