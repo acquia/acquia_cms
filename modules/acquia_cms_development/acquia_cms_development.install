@@ -8,7 +8,7 @@
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
 use Drupal\acquia_connector\Helper\Storage as ConnectorStorage;
 use Drupal\acquia_connector\Subscription;
-use Drupal\acquia_search_solr\Helper\Storage as SolrStorage;
+use Drupal\acquia_search\Helper\Storage as SolrStorage;
 
 /**
  * Implements hook_install().
@@ -33,7 +33,7 @@ function acquia_cms_development_install() {
   // Since Acquia solr search view is disabled, the exposed form filter block
   // for this view is broken. Delete the broken block.
   $block = \Drupal::service('entity_type.manager')->getStorage('block');
-  $block->load('exposed_form_acquia_search_solr_page')->delete();
+  $block->load('exposed_form_acquia_search_page')->delete();
 
   // Both PubSec and Starter "really" need Google Maps API Keys to "work."
   // This code is a work around for the dev team to ensure that we can install
@@ -93,7 +93,7 @@ function _acquia_search_solr_config(string $key, string $identifier) {
   $storage->setApiKey($key);
   $storage->setIdentifier($identifier);
 
-  // @todo This code was copied verbatim from the Acquia Search Solr module,
+  // @todo This code was copied verbatim from the Acquia Search module,
   // but it's not at all clear why it uses this face-melter of a cache clear.
   // (My guess is that the original authors were flailing.) Replace this with a
   // more precise and lightweight cache invalidation or similar ASAP.
