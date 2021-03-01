@@ -132,13 +132,11 @@ final class DashboardController extends ControllerBase {
     $total = 0;
     $completed = 0;
 
-    // Temporary code to load webform wizard.
-    $show_welcome_dialog = $this->state->get('show_welcome_modal');
-    $show_wizard_modal = $this->state->get('show_wizard_modal');
-    $link_url = Url::fromUri('internal:/admin/tour/dashboard/welcome-modal-form');
-    if (isset($show_welcome_dialog)) {
-      // @todo update below url of wizard form.
-      $link_url = Url::fromUri('internal:/node/add/article');
+    $show_welcome_dialog = $this->state->get('show_welcome_modal', TRUE);
+    $show_wizard_modal = $this->state->get('show_wizard_modal', TRUE);
+    $link_url = Url::fromRoute('acquia_cms_tour.welcome_modal_form');
+    if (!$show_welcome_dialog) {
+      $link_url = Url::fromRoute('acquia_cms_tour.installation_wizard');
     }
     $link_url->setOptions([
       'attributes' => [
@@ -147,7 +145,7 @@ final class DashboardController extends ControllerBase {
           'button',
           'button--secondary',
           'button--small',
-          'welcome-modal-form',
+          'acms-dashboard-modal-form',
         ],
         'data-dialog-type' => 'modal',
         'data-dialog-options' => Json::encode(['width' => 800]),
@@ -157,7 +155,7 @@ final class DashboardController extends ControllerBase {
       '#type' => 'markup',
       '#markup' => Link::fromTextAndUrl($this->t('Get Started with Wizard'), $link_url)->toString(),
     ];
-    // End Temporary code.
+
     // Delegate building each section to sub-controllers, in order to keep all
     // extension-specific logic cleanly encapsulated.
     foreach (static::SECTIONS as $key => $controller) {
@@ -183,8 +181,10 @@ final class DashboardController extends ControllerBase {
       'library' => [
         'acquia_cms_tour/acquia_cms_tour_dashboard',
       ],
+      'drupalSettings' => [
+        'show_wizard_modal' => $show_wizard_modal,
+      ],
     ];
-    $build['#attached']['drupalSettings']['show_wizard_modal'] = $show_wizard_modal ?? TRUE;
     return $build;
   }
 

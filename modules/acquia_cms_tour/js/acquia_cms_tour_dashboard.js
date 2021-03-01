@@ -4,15 +4,16 @@
  * Contains client-side support code for Acquia CMS's dashboard page.
  */
 
-(function ($, Drupal, drupalSettings) {
+(function ($, Drupal) {
   // Override the throbber icon.
-  Drupal.theme.ajaxProgressThrobber = function () {return ""; };
-  Drupal.behaviors.acquiaCmsWelcomeDialog = {
-    attach: function () {
-      // Open modal.
-      if (drupalSettings.show_wizard_modal){
-        $('.welcome-modal-form').click();
-      }
+  Drupal.theme.ajaxProgressThrobber = function () { return ""; };
+  Drupal.behaviors.acquiaCmsDashboardDialog = {
+    attach: function (context, settings) {
+      $('.acms-dashboard-form-wrapper', context).once('acquiaCmsDashboardDialog').each(function () {
+        if (settings.show_wizard_modal){
+          $('.acms-dashboard-modal-form').click();
+        }
+      });
     }
   }
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal);
