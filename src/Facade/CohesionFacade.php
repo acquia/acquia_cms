@@ -110,10 +110,6 @@ final class CohesionFacade implements ContainerInjectionInterface {
     foreach ($this->getSortedModules() as $module) {
       $packages = array_merge($packages, $this->getPackagesFromExtension($module));
     }
-    // @todo This line should be deleted when we are no longer shipping the big
-    // UI kit package.
-    $packages[] = $this->moduleHandler->getModule('acquia_cms')->getPath() . '/misc/ui-kit.package.yml';
-
     return $packages;
   }
 
@@ -131,7 +127,7 @@ final class CohesionFacade implements ContainerInjectionInterface {
 
     // Setting non-existent file "nofile.yml". Change back to "packages.yml"
     // when yml values are added back in.
-    $list = "$dir/config/dx8/nofile.yml";
+    $list = "$dir/config/dx8/packages.yml";
     if (file_exists($list)) {
       $list = file_get_contents($list);
 
