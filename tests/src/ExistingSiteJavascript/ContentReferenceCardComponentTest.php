@@ -3,7 +3,7 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Tests 'Card - Entity Reference' cohesion component.
+ * Tests 'Content reference card' cohesion component.
  *
  * @group acquia_cms
  * @group site_studio
@@ -11,7 +11,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * @group pr
  * @group push
  */
-class EntityReferenceCardComponentTest extends CohesionComponentTestBase {
+class ContentReferenceCardComponentTest extends CohesionComponentTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.
