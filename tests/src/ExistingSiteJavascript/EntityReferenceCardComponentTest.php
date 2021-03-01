@@ -3,7 +3,7 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Tests 'Content reference card' cohesion component.
+ * Tests 'Card - Entity Reference' cohesion component.
  *
  * @group acquia_cms
  * @group site_studio
@@ -11,7 +11,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * @group pr
  * @group push
  */
-class ContentReferenceCardComponentTest extends CohesionComponentTestBase {
+class EntityReferenceCardComponentTest extends CohesionComponentTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.
@@ -25,7 +25,8 @@ class ContentReferenceCardComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $this->assertSession()->elementExists('css', '.form-group.coh-typeahead .form-control', $this->getSession()->getPage());
+    $edit_form = $this->getLayoutCanvas()->add('Content reference card')->edit();
+    $this->assertSession()->elementExists('css', '.form-group.coh-typeahead .form-control', $edit_form);
   }
 
   /**
