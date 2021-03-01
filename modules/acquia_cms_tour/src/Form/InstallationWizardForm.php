@@ -3,7 +3,6 @@
 namespace Drupal\acquia_cms_tour\Form;
 
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
@@ -61,23 +60,13 @@ class InstallationWizardForm extends FormBase {
   }
 
   /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
    * Constructs a new InstallationWizardForm.
    *
    * @param \Drupal\Core\DependencyInjection\ClassResolverInterface $class_resolver
    *   The class resolver.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler service.
    */
-  public function __construct(ClassResolverInterface $class_resolver, ModuleHandlerInterface $module_handler) {
+  public function __construct(ClassResolverInterface $class_resolver) {
     $this->classResolver = $class_resolver;
-    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -85,8 +74,7 @@ class InstallationWizardForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('class_resolver'),
-      $container->get('module_handler')
+      $container->get('class_resolver')
     );
   }
 
@@ -344,8 +332,9 @@ class InstallationWizardForm extends FormBase {
    */
   public function getSteps() {
     $steps = [];
-    foreach (static::SECTIONS as $module => $controller) {
-      if ($this->moduleHandler->moduleExists($module)) {
+    foreach (static::SECTIONS as $controller) {
+      $isModuleEnabled = $this->classResolver->getInstanceFromDefinition($controller)->isModuleEnabled();
+      if ($isModuleEnabled) {
         $steps[] = $controller;
       }
     }
