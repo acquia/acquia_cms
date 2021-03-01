@@ -7,6 +7,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Renderer;
+use Drupal\Core\State\StateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -61,6 +62,13 @@ class InstallationWizardForm extends FormBase {
   protected $classResolver;
 
   /**
+   * The state interface.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
+
+  /**
    * {@inheritdoc}
    */
   public function getFormId() {
@@ -72,12 +80,15 @@ class InstallationWizardForm extends FormBase {
    *
    * @param \Drupal\Core\DependencyInjection\ClassResolverInterface $class_resolver
    *   The class resolver.
-   * @param Drupal\Core\Render\Renderer $renderer
+   * @param Renderer $renderer
    *   The renderer service.
+   * @param StateInterface $state
+   *   The state interface.
    */
-  public function __construct(ClassResolverInterface $class_resolver, Renderer $renderer) {
+  public function __construct(ClassResolverInterface $class_resolver, Renderer $renderer, StateInterface $state) {
     $this->classResolver = $class_resolver;
     $this->renderer = $renderer;
+    $this->state = $state;
   }
 
   /**
@@ -86,7 +97,8 @@ class InstallationWizardForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('class_resolver'),
-      $container->get('renderer')
+      $container->get('renderer'),
+      $container->get('state')
     );
   }
 
@@ -168,6 +180,7 @@ class InstallationWizardForm extends FormBase {
       $actions['back'] = [
         '#type' => 'submit',
         '#value' => $this->t('< Back'),
+        '#limit_validation_errors' => [],
         '#submit' => ['::previousStepSubmit'],
       ];
     }
@@ -216,6 +229,11 @@ class InstallationWizardForm extends FormBase {
    */
   public function nextStepSubmit(array &$form, FormStateInterface $form_state) {
     $this->copyFormValuesToStorage($form, $form_state);
+
+    // Call submitForm of corresponding form.
+    $formController = $this->getCurrentFormController()['formController'];
+    $this->classResolver->getInstanceFromDefinition($formController)->submitForm($form, $form_state);
+
     $this->currentStep += 1;
     $form_state->setRebuild(TRUE);
   }
@@ -224,6 +242,10 @@ class InstallationWizardForm extends FormBase {
    * Skip the current state and mark it as completed.
    */
   public function skipStepSubmit(array &$form, FormStateInterface $form_state) {
+    // Call ignoreConfig of corresponding form.
+    $formController = $this->getCurrentFormController()['formController'];
+    $this->classResolver->getInstanceFromDefinition($formController)->ignoreConfig($form, $form_state);
+
     $this->currentStep += 1;
     $form_state->setRebuild(TRUE);
     $form_state->clearErrors();
@@ -232,28 +254,28 @@ class InstallationWizardForm extends FormBase {
   /**
    * Checks if the current step is the first step.
    */
-  protected function isCurrentStepFirst() {
-    return $this->currentStep == 0 ? TRUE : FALSE;
+  protected function isCurrentStepFirst(): bool {
+    return $this->currentStep == 0;
   }
 
   /**
    * Checks if the current step is the last step.
    */
-  protected function isCurrentStepLast() {
-    return $this->currentStep == $this->amountSteps() ? TRUE : FALSE;
+  protected function isCurrentStepLast(): bool {
+    return $this->currentStep == $this->amountSteps();
   }
 
   /**
    * Returns an amount of the all steps.
    */
-  protected function amountSteps() {
+  protected function amountSteps(): int {
     return count($this->steps) - 1;
   }
 
   /**
    * Returns current step.
    */
-  protected function getCurrentStep() {
+  protected function getCurrentStep(): int {
     return $this->currentStep;
   }
 
@@ -262,7 +284,7 @@ class InstallationWizardForm extends FormBase {
    *
    * @param array $form
    *   A nested array of form elements comprising the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   * @param FormStateInterface $form_state
    *   The current state of the form.
    */
   protected function copyFormValuesToStorage(array $form, FormStateInterface $form_state) {
@@ -289,7 +311,7 @@ class InstallationWizardForm extends FormBase {
    * @return mixed
    *   A field value.
    */
-  protected function getFieldValueFromStorage($field_name, $empty_value = NULL) {
+  protected function getFieldValueFromStorage(string $field_name, $empty_value = NULL) {
     if (isset($this->storage[$field_name])) {
       return $this->storage[$field_name];
     }
@@ -301,15 +323,12 @@ class InstallationWizardForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->messenger()->addStatus($this->t('The message has been sent.'));
-    $form_state->setRedirect('<front>');
+    $formController = $this->getCurrentFormController()['formController'];
+    $this->classResolver->getInstanceFromDefinition($formController)->submitForm($form, $form_state);
+    $this->state->set('wizard_completed', TRUE);
+    $this->messenger()->addStatus($this->t('The configuration options have been saved.'));
+    $form_state->setRedirect('acquia_cms_tour.enabled_modules');
   }
 
   /**
@@ -317,7 +336,7 @@ class InstallationWizardForm extends FormBase {
    *
    * @param array $form
    *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   * @param FormStateInterface $form_state
    *   The current state of the form.
    */
   protected function initMultistepForm(array $form, FormStateInterface $form_state) {
@@ -358,17 +377,18 @@ class InstallationWizardForm extends FormBase {
    *
    * @param array $form
    *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   * @param FormStateInterface $form_state
    *   The current state of the form.
    *
    * @return array
    *   The render array defining the elements of the form.
+   * @throws \Exception
    */
   public function stepForm(array &$form, FormStateInterface $form_state) {
-    $formController = $this->steps[$this->currentStep];
-    $sections = \array_flip(self::SECTIONS);
+    $helper = $this->getCurrentFormController();
+    $formController = $helper['formController'];
+    $key = $helper['moduleName'];
     $formControllerDefinition = $this->classResolver->getInstanceFromDefinition($formController);
-    $key = $sections[$formController];
     $module_title = $formControllerDefinition->getModuleName();
     $form['title_markup'] = [
       '#type' => 'markup',
@@ -396,7 +416,7 @@ class InstallationWizardForm extends FormBase {
    *
    * @throws \Exception
    */
-  public function getSideBarMarkup(int $current_step) {
+  public function getSideBarMarkup(int $current_step): string {
     $data = [];
     $steps = $this->getSteps();
     foreach ($steps as $key => $controller) {
@@ -437,13 +457,24 @@ class InstallationWizardForm extends FormBase {
    *
    * @throws \Exception
    */
-  public function getTitleMarkup(string $module_title, int $current_step) {
+  public function getTitleMarkup(string $module_title, int $current_step): string {
     $title_markup = [
       '#theme' => 'acquia_cms_tour_title_markup',
       '#module_name' => $module_title,
       '#current_step' => $current_step,
     ];
     return $this->renderer->render($title_markup);
+  }
+
+  /**
+   * Helper to get current formController based on step.
+   * @return array
+   */
+  private function getCurrentFormController() {
+    $formController = $this->steps[$this->currentStep];
+    $sections = \array_flip(self::SECTIONS);
+    $key = $sections[$formController];
+    return ['moduleName' => $key, 'formController' => $formController];
   }
 
 }
