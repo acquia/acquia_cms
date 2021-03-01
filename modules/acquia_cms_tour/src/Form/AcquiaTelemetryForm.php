@@ -67,35 +67,33 @@ final class AcquiaTelemetryForm extends AcquiaCMSDashboardBase {
         '#suffix' => "</span>",
       ];
     }
-    $form['acquia_telemetry_wrapper'] = [
+    $form[$module] = [
       '#type' => 'details',
-      '#title' => $this->t('Acquia Telemetry'),
+      '#title' => $module_info['name'],
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
     ];
-    $form['acquia_telemetry_wrapper'][$module] = [
-      'opt_in' => [
-        '#type' => 'checkbox',
-        '#title' => $this->t('Send anonymous data about Acquia product usage'),
-        '#default_value' => $this->isModuleEnabled() ? 1 : 0,
-        '#description' => $this->t('This module intends to collect anonymous data about Acquia product usage. No private information will be gathered. Data will not be used for marketing or sold to any third party. This is an opt-in module and can be disabled at any time by uninstalling the acquia_telemetry module by your site administrator.'),
-        '#prefix' => '<div class= "dashboard-fields-wrapper">',
-        '#suffix' => "</div>",
-      ],
+    $form[$module]['opt_in'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Send anonymous data about Acquia product usage'),
+      '#default_value' => $this->isModuleEnabled() ? 1 : 0,
+      '#description' => $this->t('This module intends to collect anonymous data about Acquia product usage. No private information will be gathered. Data will not be used for marketing or sold to any third party. This is an opt-in module and can be disabled at any time by uninstalling the acquia_telemetry module by your site administrator.'),
+      '#prefix' => '<div class= "dashboard-fields-wrapper">',
+      '#suffix' => "</div>",
     ];
-    $form['acquia_telemetry_wrapper'][$module]['actions']['submit'] = [
+    $form[$module]['actions']['submit'] = [
       '#type' => 'submit',
       '#value' => 'Save',
       '#submit' => ['::saveConfig'],
       '#prefix' => '<div class= "dashboard-buttons-wrapper">',
     ];
-    $form['acquia_telemetry_wrapper'][$module]['actions']['ignore'] = [
+    $form[$module]['actions']['ignore'] = [
       '#type' => 'submit',
       '#value' => 'Ignore',
       '#submit' => ['::ignoreConfig'],
     ];
     if (isset($module_info['configure'])) {
-      $form['acquia_telemetry_wrapper'][$module]['actions']['advanced'] = [
+      $form[$module]['actions']['advanced'] = [
         '#markup' => $this->linkGenerator->generate(
           'Advanced',
           Url::fromRoute($module_info['configure'])

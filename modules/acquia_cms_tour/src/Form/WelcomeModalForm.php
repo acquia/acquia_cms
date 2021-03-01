@@ -91,7 +91,7 @@ class WelcomeModalForm extends FormBase {
       '#value' => $this->t('Setup Manually'),
       '#attributes' => [
         'class' => [
-          'button button--secondary',
+          'setup-manually',
         ],
       ],
     ];
