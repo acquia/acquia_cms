@@ -3,7 +3,7 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Tests 'Card - Entity Reference' cohesion component.
+ * Tests 'Content reference card' cohesion component.
  *
  * @group acquia_cms
  * @group site_studio
@@ -11,7 +11,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * @group pr
  * @group push
  */
-class EntityReferenceCardComponentTest extends CohesionComponentTestBase {
+class ContentReferenceCardComponentTest extends CohesionComponentTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.
@@ -25,9 +25,7 @@ class EntityReferenceCardComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $edit_form = $this->getLayoutCanvas()->add('Content reference card')->edit();
-    $this->waitForElementVisible('css', '.form-group.coh-select .form-control', $this->getSession()->getPage());
-    $this->assertSession()->optionExists('Entity type', 'Content', $edit_form);
+    $this->assertSession()->elementExists('css', '.form-group.coh-typeahead .form-control', $this->getSession()->getPage());
   }
 
   /**
@@ -46,7 +44,7 @@ class EntityReferenceCardComponentTest extends CohesionComponentTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('Card components', 'Card - Entity Reference');
+    $this->editDefinition('Dynamic components', 'Content reference card');
   }
 
 }
