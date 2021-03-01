@@ -145,7 +145,7 @@ final class DashboardController extends ControllerBase {
           'button',
           'button--secondary',
           'button--small',
-          'welcome-modal-form',
+          'acms-dashboard-modal-form',
         ],
         'data-dialog-type' => 'modal',
         'data-dialog-options' => Json::encode(['width' => 800]),

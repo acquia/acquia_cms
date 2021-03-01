@@ -16,7 +16,7 @@ class InstallationWizardForm extends FormBase {
 
   private const SECTIONS = [
     'acquia_telemetry' => AcquiaTelemetryForm::class,
-    'acquia_google_maps_api' => AcquiaGoogleMapsAPIForm::class,
+    'geocoder' => AcquiaGoogleMapsApiDashboardForm::class,
     'acquia_search_solr' => AcquiaSearchSolrForm::class,
     'google_analytics' => GoogleAnalyticsForm::class,
     'google_tag' => GoogleTagManagerForm::class,
@@ -196,7 +196,7 @@ class InstallationWizardForm extends FormBase {
     if ($this->isCurrentStepLast()) {
       $actions['submit'] = [
         '#type' => 'submit',
-        '#value' => $this->t("Submit information"),
+        '#value' => $this->t("Complete"),
       ];
     }
     return $actions;
@@ -368,11 +368,9 @@ class InstallationWizardForm extends FormBase {
     $sections = \array_flip(self::SECTIONS);
     $key = $sections[$formController];
     $form = $this->classResolver->getInstanceFromDefinition($formController)->buildForm($form, $form_state);
-    // Change details to fieldset.
+    // Change details to fieldset for all form.
     $form[$key]['#type'] = 'fieldset';
-    // Unset all actions & submit.
     unset($form[$key]['actions']);
-    unset($form[$key]['submit']);
     return $form;
   }
 
