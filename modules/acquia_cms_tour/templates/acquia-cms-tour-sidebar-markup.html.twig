@@ -1,0 +1,8 @@
+<div class="tour_sidebar">
+{% for key, item in data %}
+    <div class="{{ item.class }}" id="{{ key }}">
+      {{ item.sr_no }}. {{ item.title }}
+      <div class = "status-icon">icon</div>
+    </div>
+{% endfor %}
+</div>

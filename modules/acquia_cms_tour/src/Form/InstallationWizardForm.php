@@ -6,6 +6,7 @@ use Drupal\Core\DependencyInjection\ClassResolverInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Render\Renderer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -39,6 +40,13 @@ class InstallationWizardForm extends FormBase {
   protected $useAjax = TRUE;
 
   /**
+   * The rendered array renderer.
+   *
+   * @var array
+   */
+  protected $renderer;
+
+  /**
    * Current step.
    *
    * @var int
@@ -64,9 +72,12 @@ class InstallationWizardForm extends FormBase {
    *
    * @param \Drupal\Core\DependencyInjection\ClassResolverInterface $class_resolver
    *   The class resolver.
+   * @param Drupal\Core\Render\Renderer $renderer
+   *   The renderer service.
    */
-  public function __construct(ClassResolverInterface $class_resolver) {
+  public function __construct(ClassResolverInterface $class_resolver, Renderer $renderer) {
     $this->classResolver = $class_resolver;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -74,7 +85,8 @@ class InstallationWizardForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('class_resolver')
+      $container->get('class_resolver'),
+      $container->get('renderer')
     );
   }
 
@@ -356,11 +368,77 @@ class InstallationWizardForm extends FormBase {
     $formController = $this->steps[$this->currentStep];
     $sections = \array_flip(self::SECTIONS);
     $key = $sections[$formController];
+    $form['title_markup'] = [
+      '#type' => 'markup',
+      '#markup' => $this->getTitleMarkup($key, ($this->currentStep) + 1),
+    ];
+    $form['sidebar_markup'] = [
+      '#type' => 'markup',
+      '#markup' => $this->getSideBarMarkup(($this->currentStep) + 1),
+    ];
     $form = $this->classResolver->getInstanceFromDefinition($formController)->buildForm($form, $form_state);
     // Change details to fieldset for all form.
     $form[$key]['#type'] = 'fieldset';
     unset($form[$key]['actions']);
     return $form;
+  }
+
+  /**
+   * Helper method for adding sidebar markup.
+   *
+   * @param int $current_step
+   *   The forms current step.
+   *
+   * @return string
+   *   The render array defining the markup of the sidebar.
+   */
+  public function getSideBarMarkup(int $current_step) {
+    $steps = $this->getSteps();
+    $data = [];
+    foreach ($steps as $key => $controller) {
+      $instance_definition = $this->classResolver->getInstanceFromDefinition($controller);
+      $module_machine_name = $instance_definition->getmodule();
+      $module_title = $instance_definition->getModuleName();
+      if ($instance_definition->isModuleEnabled()) {
+        $sr_no = $key + 1;
+        $data[$module_machine_name]['sr_no'] = $sr_no;
+        $data[$module_machine_name]['title'] = $module_title;
+        if ($sr_no == $current_step) {
+          $current_class = 'current_step';
+        }
+        else {
+          $current_class = 'item-';
+        }
+        $data[$module_machine_name]['class'] = $current_class;
+      }
+    }
+    $sidebar_markup = [
+      '#theme' => 'acquia_cms_tour_sidebar_markup',
+      '#data' => $data,
+    ];
+    return $this->renderer->render($sidebar_markup);
+
+  }
+
+  /**
+   * Helper method for adding title markup.
+   *
+   * @param string $module
+   *   The module machine name.
+   * @param int $current_step
+   *   The forms current step.
+   *
+   * @return string
+   *   The rendered array defining the markup of the title.
+   */
+  public function getTitleMarkup(string $module, int $current_step) {
+    $module_name = $this->moduleHandler->getName($module);
+    $title_markup = [
+      '#theme' => 'acquia_cms_tour_title_markup',
+      '#module_name' => $module_name,
+      '#current_step' => $current_step,
+    ];
+    return $this->renderer->render($title_markup);
   }
 
 }
