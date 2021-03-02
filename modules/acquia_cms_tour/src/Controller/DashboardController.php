@@ -13,7 +13,6 @@ use Drupal\acquia_cms_tour\Form\SiteStudioCoreForm;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
-use Drupal\Core\Link;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -109,8 +108,10 @@ final class DashboardController extends ControllerBase {
   public function content() {
     $build = [];
     $build['wrapper'] = [
-      '#markup' => '',
-      '#prefix' => '<div class = "acms-dashboard-form-wrapper">',
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['acms-dashboard-form-wrapper'],
+      ],
     ];
     $form = [];
     $form['#theme'] = 'acquia_cms_tour_checklist_form';
@@ -134,6 +135,7 @@ final class DashboardController extends ControllerBase {
 
     $show_welcome_dialog = $this->state->get('show_welcome_modal', TRUE);
     $show_wizard_modal = $this->state->get('show_wizard_modal', TRUE);
+    $wizard_completed = $this->state->get('wizard_completed', FALSE);
     $link_url = Url::fromRoute('acquia_cms_tour.welcome_modal_form');
     if (!$show_welcome_dialog) {
       $link_url = Url::fromRoute('acquia_cms_tour.installation_wizard');
@@ -151,9 +153,18 @@ final class DashboardController extends ControllerBase {
         'data-dialog-options' => Json::encode(['width' => 800]),
       ],
     ]);
-    $build['wizard'] = [
+    $form['help_text'] = [
       '#type' => 'markup',
-      '#markup' => Link::fromTextAndUrl($this->t('Get Started with Wizard'), $link_url)->toString(),
+      '#markup' => "ACMS organizes its features into individual components called modules.
+       The configuration dashboard/wizard setup will help you setup the pre-requisties.
+       Please note, not all modules in ACMS are required by default, and some optional modules
+       are left disabled on install. A checklist is provided to help you keep track of the tasks
+       needed to complete configuration.",
+    ];
+    $form['modal_link'] = [
+      '#type' => 'link',
+      '#title' => 'Wizard set-up',
+      '#url' => $link_url,
     ];
 
     // Delegate building each section to sub-controllers, in order to keep all
@@ -162,7 +173,7 @@ final class DashboardController extends ControllerBase {
       $instance_definition = $this->classResolver->getInstanceFromDefinition($controller);
       if ($instance_definition->isModuleEnabled()) {
         $total++;
-        $build[$key] = $this->getSectionOutput($controller);
+        $build['wrapper'][$key] = $this->getSectionOutput($controller);
         if ($instance_definition->getConfigurationState()) {
           $completed++;
         }
@@ -171,10 +182,6 @@ final class DashboardController extends ControllerBase {
     $form['check_total']['#value'] = $total;
     $form['check_count']['#value'] = $completed;
     array_unshift($build, $form);
-    $build['wrapper_end'] = [
-      '#markup' => '',
-      '#suffix' => "</div>",
-    ];
 
     // Attach acquia_cms_tour_dashboard library.
     $build['#attached'] = [
@@ -183,6 +190,7 @@ final class DashboardController extends ControllerBase {
       ],
       'drupalSettings' => [
         'show_wizard_modal' => $show_wizard_modal,
+        'wizard_completed' => $wizard_completed,
       ],
     ];
     return $build;

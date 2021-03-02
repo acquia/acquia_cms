@@ -84,12 +84,12 @@ final class AcquiaTelemetryForm extends AcquiaCMSDashboardBase {
     $form[$module]['actions']['submit'] = [
       '#type' => 'submit',
       '#value' => 'Save',
-      '#submit' => ['::saveConfig'],
       '#prefix' => '<div class= "dashboard-buttons-wrapper">',
     ];
     $form[$module]['actions']['ignore'] = [
       '#type' => 'submit',
       '#value' => 'Ignore',
+      '#limit_validation_errors' => [],
       '#submit' => ['::ignoreConfig'],
     ];
     if (isset($module_info['configure'])) {
@@ -108,12 +108,6 @@ final class AcquiaTelemetryForm extends AcquiaCMSDashboardBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function saveConfig(array &$form, FormStateInterface $form_state) {
     // Enable the Acquia Telemetry module if user opts in.
     $acquia_telemetry_opt_in = $form_state->getValue('opt_in');
 
@@ -140,7 +134,7 @@ final class AcquiaTelemetryForm extends AcquiaCMSDashboardBase {
    * {@inheritdoc}
    */
   public function checkMinConfiguration() {
-    return $this->isModuleEnabled() ? TRUE : FALSE;
+    return $this->isModuleEnabled();
   }
 
 }
