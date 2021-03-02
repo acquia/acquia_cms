@@ -59,7 +59,7 @@ class AcquiaGoogleMapsTest extends BrowserTestBase {
     // API key should be blank to start.
     $assert_session->fieldValueEquals('maps_api_key', '', $container);
     $container->pressButton('Save');
-    $assert_session->pageTextContains('Maps API key is required.');
+    $assert_session->pageTextContains('Maps API key field is required.');
 
     // Save a dummmy API key.
     $dummy_key = 'keykeykey123';

@@ -10,7 +10,7 @@
   Drupal.behaviors.acquiaCmsDashboardDialog = {
     attach: function (context, settings) {
       $('.acms-dashboard-form-wrapper', context).once('acquiaCmsDashboardDialog').each(function () {
-        if (settings.show_wizard_modal){
+        if (settings.show_wizard_modal && !settings.wizard_completed){
           $('.acms-dashboard-modal-form').click();
         }
       });

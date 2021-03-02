@@ -90,6 +90,7 @@ final class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
       $form[$module]['acquia_google_maps_api'] = [
         'maps_api_key' => [
           '#type' => 'textfield',
+          '#required' => TRUE,
           '#title' => $this->t('Maps API key'),
           '#placeholder' => '1234abcd',
           '#description' => $this->t('Enter your Google Maps API Key to automatically generate maps for Place content in Acquia CMS.'),
@@ -101,12 +102,12 @@ final class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
       $form[$module]['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => 'Save',
-        '#submit' => ['::saveConfig'],
         '#prefix' => '<div class= "dashboard-buttons-wrapper">',
       ];
       $form[$module]['actions']['ignore'] = [
         '#type' => 'submit',
         '#value' => 'Ignore',
+        '#limit_validation_errors' => [],
         '#submit' => ['::ignoreConfig'],
       ];
       $form[$module]['actions']['advanced'] = [
@@ -137,20 +138,7 @@ final class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    $triggering_element = $form_state->getTriggeringElement();
-    if ($triggering_element['#value'] == 'Save') {
-      $maps_api_key = $form_state->getValue('maps_api_key');
-      if (empty($maps_api_key)) {
-        $form_state->setErrorByName('maps_api_key', $this->t('Maps API key is required.'));
-      }
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function saveConfig(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $maps_api_key = $form_state->getValue('maps_api_key');
 
     // Configure Google Maps API Key for both Site Studio and
@@ -190,7 +178,7 @@ final class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
       $maps_api_key = $configuration['apiKey'];
     }
 
-    return (!empty($maps_api_key)) ? TRUE : FALSE;
+    return !empty($maps_api_key);
   }
 
 }

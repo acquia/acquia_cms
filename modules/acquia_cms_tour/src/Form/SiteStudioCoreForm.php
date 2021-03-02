@@ -81,6 +81,7 @@ final class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
       $form[$module]['actions']['ignore'] = [
         '#type' => 'submit',
         '#value' => 'Ignore',
+        '#limit_validation_errors' => [],
         '#submit' => ['::ignoreConfig'],
       ];
       $form[$module]['actions']['advanced'] = [
@@ -98,28 +99,13 @@ final class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    $triggering_element = $form_state->getTriggeringElement();
-    if ($triggering_element['#value'] == 'Save') {
-      $cohesion_api_key = $form_state->getValue(['api_key']);
-      $cohesion_agency_key = $form_state->getValue(['agency_key']);
-      if (empty($cohesion_api_key)) {
-        $form_state->setErrorByName('api_key', $this->t('API key is required.'));
-      }
-      if (empty($cohesion_agency_key)) {
-        $form_state->setErrorByName('agency_key', $this->t('Agency key is required.'));
-      }
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $cohesion_api_key = $form_state->getValue(['api_key']);
     $cohesion_agency_key = $form_state->getValue(['agency_key']);
-    $this->configFactory->getEditable('cohesion.settings')->set('api_key', $cohesion_api_key)->save();
-    $this->configFactory->getEditable('cohesion.settings')->set('organization_key', $cohesion_agency_key)->save();
+    if ($cohesion_api_key && $cohesion_agency_key) {
+      $this->config('cohesion.settings')->set('api_key', $cohesion_api_key)->save();
+      $this->config('cohesion.settings')->set('organization_key', $cohesion_agency_key)->save();
+    }
     $this->setConfigurationState();
     $this->messenger()->addStatus('The configuration options have been saved.');
   }
@@ -137,7 +123,7 @@ final class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
   public function checkMinConfiguration() {
     $api_key = $this->config('cohesion.settings')->get('api_key');
     $agency_key = $this->config('cohesion.settings')->get('organization_key');
-    return $api_key &&  $agency_key ? TRUE : FALSE;
+    return $api_key &&  $agency_key;
   }
 
 }

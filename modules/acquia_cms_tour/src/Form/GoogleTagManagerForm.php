@@ -67,12 +67,12 @@ final class GoogleTagManagerForm extends AcquiaCMSDashboardBase {
       $form[$module]['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => 'Save',
-        '#submit' => ['::saveConfig'],
         '#prefix' => '<div class= "dashboard-buttons-wrapper">',
       ];
       $form[$module]['actions']['ignore'] = [
         '#type' => 'submit',
         '#value' => 'Ignore',
+        '#limit_validation_errors' => [],
         '#submit' => ['::ignoreConfig'],
       ];
       if (isset($module_info['configure'])) {
@@ -91,20 +91,7 @@ final class GoogleTagManagerForm extends AcquiaCMSDashboardBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    $triggering_element = $form_state->getTriggeringElement();
-    if ($triggering_element['#value'] == 'Save') {
-      $snippet_parent_uri = $form_state->getValue(['snippet_parent_uri']);
-      if (empty($snippet_parent_uri)) {
-        $form_state->setErrorByName('snippet_parent_uri', $this->t('Snippet parent URI is required.'));
-      }
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function saveConfig(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $snippet_parent_uri = $form_state->getValue(['snippet_parent_uri']);
     $this->config('google_tag.settings')->set('uri', $snippet_parent_uri)->save();
     $this->setConfigurationState();
