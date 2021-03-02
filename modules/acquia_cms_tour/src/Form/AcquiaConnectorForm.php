@@ -58,6 +58,7 @@ final class AcquiaConnectorForm extends AcquiaCMSDashboardBase {
         '#title' => $this->t('Name'),
         '#maxlength' => 255,
         '#disabled' => TRUE,
+        '#required' => TRUE,
         '#default_value' => $this->state->get('spi.site_name'),
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
         '#suffix' => "</div>",
@@ -66,12 +67,12 @@ final class AcquiaConnectorForm extends AcquiaCMSDashboardBase {
       $form[$module]['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => 'Save',
-        '#submit' => ['::saveConfig'],
         '#prefix' => '<div class= "dashboard-buttons-wrapper">',
       ];
       $form[$module]['actions']['ignore'] = [
         '#type' => 'submit',
         '#value' => 'Ignore',
+        '#limit_validation_errors' => [],
         '#submit' => ['::ignoreConfig'],
       ];
       if (isset($module_info['configure'])) {
@@ -91,19 +92,7 @@ final class AcquiaConnectorForm extends AcquiaCMSDashboardBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    $triggering_element = $form_state->getTriggeringElement();
-    if ($triggering_element['#value'] == 'Save') {
-      if (empty($form_state->getValue('site_name'))) {
-        $form_state->setErrorByName('site_name', $this->t('Site name is required.'));
-      }
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function saveConfig(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $acquia_connector_site_name = $form_state->getValue(['site_name']);
     $this->state->set('spi.site_name', $acquia_connector_site_name);
     // Set configuration state for dashboard.

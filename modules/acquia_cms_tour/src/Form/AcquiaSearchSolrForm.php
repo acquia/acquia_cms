@@ -60,6 +60,7 @@ final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
 
       $form[$module]['identifier'] = [
         '#type' => 'textfield',
+        '#required' => TRUE,
         '#title' => $this->t('Acquia Subscription identifier'),
         '#placeholder' => 'ABCD-1234',
         '#default_value' => $this->state->get('acquia_search_solr.identifier'),
@@ -67,12 +68,14 @@ final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
       ];
       $form[$module]['api_host'] = [
         '#type' => 'textfield',
+        '#required' => TRUE,
         '#title' => $this->t('Acquia Search API hostname'),
         '#placeholder' => 'https://api.example.com',
         '#default_value' => $this->config('acquia_search_solr.settings')->get('api_host'),
       ];
       $form[$module]['uuid'] = [
         '#type' => 'textfield',
+        '#required' => TRUE,
         '#title' => $this->t('Acquia Application UUID'),
         '#placeholder' => 'abcd-1234',
         '#default_value' => $this->state->get('acquia_search_solr.uuid'),
@@ -81,12 +84,12 @@ final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
       $form[$module]['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => 'Save',
-        '#submit' => ['::saveConfig'],
         '#prefix' => '<div class= "dashboard-buttons-wrapper">',
       ];
       $form[$module]['actions']['ignore'] = [
         '#type' => 'submit',
         '#value' => 'Ignore',
+        '#limit_validation_errors' => [],
         '#submit' => ['::ignoreConfig'],
       ];
       if (isset($module_info['configure'])) {
@@ -105,28 +108,7 @@ final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    $triggering_element = $form_state->getTriggeringElement();
-    if ($triggering_element['#value'] == 'Save') {
-      $solr_identifier = $form_state->getValue(['identifier']);
-      $solr_api_host = $form_state->getValue(['api_host']);
-      $solr_api_uuid = $form_state->getValue(['uuid']);
-      if (empty($solr_identifier)) {
-        $form_state->setErrorByName('identifier', $this->t('Acquia Subscription identifier is required.'));
-      }
-      if (empty($solr_api_host)) {
-        $form_state->setErrorByName('api_host', $this->t('Acquia Search API hostname is required.'));
-      }
-      if (empty($solr_api_uuid)) {
-        $form_state->setErrorByName('uuid', $this->t('Acquia Application UUID is required.'));
-      }
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function saveConfig(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $solr_identifier = $form_state->getValue(['identifier']);
     $solr_api_host = $form_state->getValue(['api_host']);
     $solr_api_uuid = $form_state->getValue(['uuid']);
@@ -150,7 +132,7 @@ final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
   public function checkMinConfiguration() {
     $api_host = $this->config('acquia_search_solr.settings')->get('api_host');
     $uuid = $this->state->get('acquia_search_solr.uuid');
-    return !empty($api_host) && !empty($uuid) ? TRUE : FALSE;
+    return !empty($api_host) && !empty($uuid);
   }
 
 }

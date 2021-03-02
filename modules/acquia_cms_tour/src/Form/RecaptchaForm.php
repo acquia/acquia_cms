@@ -58,6 +58,7 @@ final class RecaptchaForm extends AcquiaCMSDashboardBase {
       ];
       $form[$module]['site_key'] = [
         '#type' => 'textfield',
+        '#required' => TRUE,
         '#title' => $this->t('Site key'),
         '#placeholder' => '1234abcd',
         '#default_value' => $this->config('recaptcha.settings')->get('site_key'),
@@ -65,6 +66,7 @@ final class RecaptchaForm extends AcquiaCMSDashboardBase {
       ];
       $form[$module]['secret_key'] = [
         '#type' => 'textfield',
+        '#required' => TRUE,
         '#title' => $this->t('Secret key'),
         '#placeholder' => '1234abcd',
         '#default_value' => $this->config('recaptcha.settings')->get('secret_key'),
@@ -73,12 +75,12 @@ final class RecaptchaForm extends AcquiaCMSDashboardBase {
       $form[$module]['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => 'Save',
-        '#submit' => ['::saveConfig'],
         '#prefix' => '<div class= "dashboard-buttons-wrapper">',
       ];
       $form[$module]['actions']['ignore'] = [
         '#type' => 'submit',
         '#value' => 'Ignore',
+        '#limit_validation_errors' => [],
         '#submit' => ['::ignoreConfig'],
       ];
       if (isset($module_info['configure'])) {
@@ -97,24 +99,7 @@ final class RecaptchaForm extends AcquiaCMSDashboardBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    $triggering_element = $form_state->getTriggeringElement();
-    if ($triggering_element['#value'] == 'Save') {
-      $recaptcha_site_key = $form_state->getValue(['site_key']);
-      $recaptcha_secret_key = $form_state->getValue(['secret_key']);
-      if (empty($recaptcha_site_key)) {
-        $form_state->setErrorByName('site_key', $this->t('Site key is required.'));
-      }
-      if (empty($recaptcha_secret_key)) {
-        $form_state->setErrorByName('secret_key', $this->t('Secret key is required.'));
-      }
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function saveConfig(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $recaptcha_site_key = $form_state->getValue(['site_key']);
     $recaptcha_secret_key = $form_state->getValue(['secret_key']);
     $this->config('recaptcha.settings')->set('site_key', $recaptcha_site_key)->save();
@@ -136,7 +121,7 @@ final class RecaptchaForm extends AcquiaCMSDashboardBase {
   public function checkMinConfiguration() {
     $site_key = $this->config('recaptcha.settings')->get('site_key');
     $secret_key = $this->config('recaptcha.settings')->get('secret_key');
-    return $site_key &&  $secret_key ? TRUE : FALSE;
+    return $site_key &&  $secret_key;
   }
 
 }

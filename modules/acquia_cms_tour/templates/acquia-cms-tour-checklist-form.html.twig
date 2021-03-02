@@ -9,6 +9,11 @@
 
 {% set progress = (form.check_count['#value'] ? (form.check_count['#value'] * 100)/form.check_total['#value'] : 0)|round %}
 
+<div class="section-top">
+  <div class="help-text">{{ form.help_text }}</div>
+  <div class="wizard">{{ form.modal_link }}</div>
+</div>
+
 <div class="tour-checklist {{ form.form_id['#value'] }}">
   {% if form.show_progress %}
     <div class="progress__track">

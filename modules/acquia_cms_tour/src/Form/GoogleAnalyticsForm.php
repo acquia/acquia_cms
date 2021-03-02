@@ -59,6 +59,7 @@ final class GoogleAnalyticsForm extends AcquiaCMSDashboardBase {
 
       $form[$module]['web_property_id'] = [
         '#type' => 'textfield',
+        '#required' => TRUE,
         '#title' => $this->t('Web Property ID'),
         '#placeholder' => 'UA-',
         '#default_value' => $this->config('google_analytics.settings')->get('account'),
@@ -68,12 +69,12 @@ final class GoogleAnalyticsForm extends AcquiaCMSDashboardBase {
       $form[$module]['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => 'Save',
-        '#submit' => ['::saveConfig'],
         '#prefix' => '<div class= "dashboard-buttons-wrapper">',
       ];
       $form[$module]['actions']['ignore'] = [
         '#type' => 'submit',
         '#value' => 'Ignore',
+        '#limit_validation_errors' => [],
         '#submit' => ['::ignoreConfig'],
       ];
       if (isset($module_info['configure'])) {
@@ -92,20 +93,7 @@ final class GoogleAnalyticsForm extends AcquiaCMSDashboardBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    $triggering_element = $form_state->getTriggeringElement();
-    if ($triggering_element['#value'] == 'Save') {
-      $property_id = $form_state->getValue(['web_property_id']);
-      if (empty($property_id)) {
-        $form_state->setErrorByName('web_property_id', $this->t('Web Property ID is required.'));
-      }
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function saveConfig(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $property_id = $form_state->getValue(['web_property_id']);
     $this->config('google_analytics.settings')->set('account', $property_id)->save();
     $this->state->set('google_analytics_progress', TRUE);
