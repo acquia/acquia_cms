@@ -102,8 +102,10 @@ final class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $cohesion_api_key = $form_state->getValue(['api_key']);
     $cohesion_agency_key = $form_state->getValue(['agency_key']);
-    $this->config('cohesion.settings')->set('api_key', $cohesion_api_key)->save();
-    $this->config('cohesion.settings')->set('organization_key', $cohesion_agency_key)->save();
+    if ($cohesion_api_key && $cohesion_agency_key) {
+      $this->config('cohesion.settings')->set('api_key', $cohesion_api_key)->save();
+      $this->config('cohesion.settings')->set('organization_key', $cohesion_agency_key)->save();
+    }
     $this->setConfigurationState();
     $this->messenger()->addStatus('The configuration options have been saved.');
   }
