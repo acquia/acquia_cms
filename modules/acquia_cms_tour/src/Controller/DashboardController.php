@@ -155,10 +155,11 @@ final class DashboardController extends ControllerBase {
     ]);
     $form['help_text'] = [
       '#type' => 'markup',
-      '#markup' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-       Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-       when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-       It has survived not only five centuries, but also the leap into electronic typesetting.",
+      '#markup' => "ACMS organizes its features into individual components called modules.
+       The configuration dashboard/wizard setup will help you setup the pre-requisties.
+       Please note, not all modules in ACMS are required by default, and some optional modules
+       are left disabled on install. A checklist is provided to help you keep track of the tasks
+       needed to complete configuration.",
     ];
     $form['modal_link'] = [
       '#type' => 'link',

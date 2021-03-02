@@ -121,6 +121,12 @@ class InstallationWizardForm extends FormBase {
     if (is_null($this->currentStep)) {
       // Initialize multistep form.
       $this->initMultistepForm($form, $form_state);
+      // If the user resumes the wizard later, lets take them
+      // to the appropriate config form.
+      $current_wizard_step = $this->state->get('current_wizard_step', NULL);
+      if ($current_wizard_step && $current_wizard_step != 'completed') {
+        $this->setCurrentStep($current_wizard_step);
+      }
     }
 
     $form = $this->stepForm($form, $form_state);
@@ -235,6 +241,7 @@ class InstallationWizardForm extends FormBase {
     $this->classResolver->getInstanceFromDefinition($formController)->submitForm($form, $form_state);
 
     $this->currentStep += 1;
+    $this->state->set('current_wizard_step', $this->currentStep);
     $form_state->setRebuild(TRUE);
   }
 
@@ -247,6 +254,7 @@ class InstallationWizardForm extends FormBase {
     $this->classResolver->getInstanceFromDefinition($formController)->ignoreConfig($form, $form_state);
 
     $this->currentStep += 1;
+    $this->state->set('current_wizard_step', $this->currentStep);
     $form_state->setRebuild(TRUE);
     $form_state->clearErrors();
   }
@@ -277,6 +285,16 @@ class InstallationWizardForm extends FormBase {
    */
   protected function getCurrentStep(): int {
     return $this->currentStep;
+  }
+
+  /**
+   * Set current step.
+   *
+   * @param int $step
+   *   The step to set.
+   */
+  protected function setCurrentStep(int $step) {
+    $this->currentStep = $step;
   }
 
   /**
@@ -327,6 +345,7 @@ class InstallationWizardForm extends FormBase {
     $formController = $this->getCurrentFormController()['formController'];
     $this->classResolver->getInstanceFromDefinition($formController)->submitForm($form, $form_state);
     $this->state->set('wizard_completed', TRUE);
+    $this->state->set('current_wizard_step', 'completed');
     $this->messenger()->addStatus($this->t('The configuration options have been saved.'));
     $form_state->setRedirect('acquia_cms_tour.enabled_modules');
   }
@@ -449,7 +468,7 @@ class InstallationWizardForm extends FormBase {
    * Helper method for adding title markup.
    *
    * @param string $module_title
-   *   The module human redable name.
+   *   The module human readable name.
    * @param int $current_step
    *   The forms current step.
    *
