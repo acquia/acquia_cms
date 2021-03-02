@@ -367,16 +367,18 @@ class InstallationWizardForm extends FormBase {
   public function stepForm(array &$form, FormStateInterface $form_state) {
     $formController = $this->steps[$this->currentStep];
     $sections = \array_flip(self::SECTIONS);
+    $formControllerDefinition = $this->classResolver->getInstanceFromDefinition($formController);
     $key = $sections[$formController];
+    $module_title = $formControllerDefinition->getModuleName();
     $form['title_markup'] = [
       '#type' => 'markup',
-      '#markup' => $this->getTitleMarkup($key, ($this->currentStep) + 1),
+      '#markup' => $this->getTitleMarkup($module_title, ($this->currentStep) + 1),
     ];
     $form['sidebar_markup'] = [
       '#type' => 'markup',
       '#markup' => $this->getSideBarMarkup(($this->currentStep) + 1),
     ];
-    $form = $this->classResolver->getInstanceFromDefinition($formController)->buildForm($form, $form_state);
+    $form = $formControllerDefinition->buildForm($form, $form_state);
     // Change details to fieldset for all form.
     $form[$key]['#type'] = 'fieldset';
     unset($form[$key]['actions']);
@@ -391,10 +393,12 @@ class InstallationWizardForm extends FormBase {
    *
    * @return string
    *   The render array defining the markup of the sidebar.
+   *
+   * @throws \Exception
    */
   public function getSideBarMarkup(int $current_step) {
-    $steps = $this->getSteps();
     $data = [];
+    $steps = $this->getSteps();
     foreach ($steps as $key => $controller) {
       $instance_definition = $this->classResolver->getInstanceFromDefinition($controller);
       $module_machine_name = $instance_definition->getmodule();
@@ -423,19 +427,20 @@ class InstallationWizardForm extends FormBase {
   /**
    * Helper method for adding title markup.
    *
-   * @param string $module
-   *   The module machine name.
+   * @param string $module_title
+   *   The module human redable name.
    * @param int $current_step
    *   The forms current step.
    *
    * @return string
    *   The rendered array defining the markup of the title.
+   *
+   * @throws \Exception
    */
-  public function getTitleMarkup(string $module, int $current_step) {
-    $module_name = $this->moduleHandler->getName($module);
+  public function getTitleMarkup(string $module_title, int $current_step) {
     $title_markup = [
       '#theme' => 'acquia_cms_tour_title_markup',
-      '#module_name' => $module_name,
+      '#module_name' => $module_title,
       '#current_step' => $current_step,
     ];
     return $this->renderer->render($title_markup);
