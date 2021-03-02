@@ -3,7 +3,7 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Tests 'Card - Image' cohesion component.
+ * Tests 'Linked feature card' cohesion component.
  *
  * @group acquia_cms
  * @group site_studio
@@ -11,7 +11,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * @group pr
  * @group push
  */
-class ImageCardComponentTest extends CohesionComponentTestBase {
+class LinkedFeatureCardComponentTest extends CohesionComponentTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.
@@ -29,10 +29,15 @@ class ImageCardComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $edit_form = $this->getLayoutCanvas()->add('Card - Image')->edit();
+    $edit_form = $this->getLayoutCanvas()->add('Linked feature card')->edit();
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMedia(0);
     $this->insertSelectedMedia();
+
+    $edit_form->fillField('Card heading', 'Example component 123');
+    $edit_form->fillField('Description', 'Example');
+    $edit_form->fillField('Link to page or URL', 'https://www.acquia.com');
+    $this->assertSession()->optionExists('Card heading element', 'Heading 3');
   }
 
   /**
@@ -51,7 +56,7 @@ class ImageCardComponentTest extends CohesionComponentTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('Card components', 'Card - Image');
+    $this->editDefinition('Card components', 'Linked feature card');
   }
 
 }

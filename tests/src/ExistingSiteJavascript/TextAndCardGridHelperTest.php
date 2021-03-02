@@ -11,7 +11,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * @group pr
  * @group push
  */
-class TwoColumnPageWithHeroHelperTest extends CohesionHelperTestBase {
+class TextAndCardGridHelperTest extends CohesionHelperTestBase {
 
   /**
    * Tests that the helper can be added to a layout canvas.
@@ -30,10 +30,8 @@ class TwoColumnPageWithHeroHelperTest extends CohesionHelperTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the helper to the layout canvas.
-    $this->getLayoutCanvas()->addHelper('Two column page with hero', [
-      'Hero',
-      'Breadcrumb',
-      'Two column',
+    $this->getLayoutCanvas()->addHelper('Text and card grid', [
+      'Text and cards - 2 column layout',
     ]);
   }
 
@@ -52,7 +50,7 @@ class TwoColumnPageWithHeroHelperTest extends CohesionHelperTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/helpers/helpers');
-    $this->editDefinition('Page Layouts', 'Two column page with hero');
+    $this->editDefinition('Card sections', 'Text and card grid');
   }
 
 }

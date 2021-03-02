@@ -11,7 +11,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * @group pr
  * @group push
  */
-class ImageBackgroundHeroHelperTest extends CohesionHelperTestBase {
+class TextPanelOverImageHelperTest extends CohesionHelperTestBase {
 
   /**
    * Tests that the helper can be added to a layout canvas.
@@ -32,8 +32,8 @@ class ImageBackgroundHeroHelperTest extends CohesionHelperTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the helper to the layout canvas.
-    $this->getLayoutCanvas()->addHelper('Image Background Hero', [
-      'Background container',
+    $this->getLayoutCanvas()->addHelper('Text panel over image section', [
+      'Text panel over image - 1 column layout',
     ]);
   }
 
@@ -54,7 +54,7 @@ class ImageBackgroundHeroHelperTest extends CohesionHelperTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/helpers/helpers');
-    $this->editDefinition('Page Layouts', 'Image Background Hero');
+    $this->editDefinition('Text Sections', 'Text panel over image section');
   }
 
 }
