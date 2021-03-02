@@ -3,7 +3,7 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Test that "Card container" component is installed and operating correctly.
+ * Tests "Background container" component.
  *
  * @group acquia_cms
  * @group site_studio
@@ -11,7 +11,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * @group pr
  * @group push
  */
-class CardContainerTest extends CohesionComponentTestBase {
+class ContainerTest extends CohesionComponentTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.
@@ -22,11 +22,17 @@ class CardContainerTest extends CohesionComponentTestBase {
     $account->save();
     $this->drupalLogin($account);
 
+    // Create a random image that we can select in the media library when
+    // editing the component.
+    $this->createMedia(['bundle' => 'image']);
+
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $edit_form = $this->getLayoutCanvas()->add('Card container')->edit();
-    $this->assertSession()->optionExists('Inner gutters', 'Bleed into gutters', $edit_form);
+    $edit_form = $this->getLayoutCanvas()->add('Container')->edit();
+    $this->openMediaLibrary($edit_form, 'Select image');
+    $this->selectMedia(0);
+    $this->insertSelectedMedia();
   }
 
   /**
@@ -44,7 +50,7 @@ class CardContainerTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('Layout components', 'Card container');
+    $this->editDefinition('Layout components', 'Container');
   }
 
 }

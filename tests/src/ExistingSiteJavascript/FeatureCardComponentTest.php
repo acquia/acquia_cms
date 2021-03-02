@@ -3,7 +3,7 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Tests "Background container" component.
+ * Tests 'Feature card' cohesion component.
  *
  * @group acquia_cms
  * @group site_studio
@@ -11,7 +11,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * @group pr
  * @group push
  */
-class BackgroundContainerTest extends CohesionComponentTestBase {
+class FeatureCardComponentTest extends CohesionComponentTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.
@@ -29,10 +29,14 @@ class BackgroundContainerTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $edit_form = $this->getLayoutCanvas()->add('Background container')->edit();
+    $edit_form = $this->getLayoutCanvas()->add('Feature card')->edit();
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMedia(0);
     $this->insertSelectedMedia();
+
+    $edit_form->fillField('Card heading', 'Example component 123');
+    $edit_form->fillField('Description', 'Example');
+    $this->assertSession()->optionExists('Card heading element', 'Heading 3');
   }
 
   /**
@@ -49,8 +53,9 @@ class BackgroundContainerTest extends CohesionComponentTestBase {
     $account->save();
     $this->drupalLogin($account);
 
+    // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('Layout components', 'Background container');
+    $this->editDefinition('Card components', 'Feature card');
   }
 
 }
