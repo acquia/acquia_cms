@@ -37,18 +37,19 @@ class DrupalBlockComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
     $assert_session = $this->assertSession();
     // Add the component to the layout canvas & edit it.
-    $edit_form = $this->getLayoutCanvas()->add('Drupal Blocks')->edit();
+    $edit_form = $this->getLayoutCanvas()->add('Drupal blocks')->edit();
+    $assert_session->waitForElementVisible('css', '.coh-select .form-control');
 
     // Assert that select block exits.
-    $edit_form->hasSelect('Select Block');
+    $edit_form->hasSelect('Select block');
 
     // Assert that following blocks are available as option.
-    $assert_session->optionExists('Select Block', 'Article Cards', $edit_form);
-    $assert_session->optionExists('Select Block', 'Language switcher', $edit_form);
-    $assert_session->optionExists('Select Block', 'Past Events', $edit_form);
-    $assert_session->optionExists('Select Block', 'Social Media Links', $edit_form);
-    $assert_session->optionExists('Select Block', 'Upcoming Events', $edit_form);
-    $assert_session->optionExists('Select Block', 'User login', $edit_form);
+    $assert_session->optionExists('Select block', 'Article Cards', $edit_form);
+    $assert_session->optionExists('Select block', 'Language switcher', $edit_form);
+    $assert_session->optionExists('Select block', 'Past Events', $edit_form);
+    $assert_session->optionExists('Select block', 'Social Media Links', $edit_form);
+    $assert_session->optionExists('Select block', 'Upcoming Events', $edit_form);
+    $assert_session->optionExists('Select block', 'User login', $edit_form);
   }
 
   /**
@@ -67,7 +68,7 @@ class DrupalBlockComponentTest extends CohesionComponentTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('Basic components', 'Drupal Blocks');
+    $this->editDefinition('Dynamic components', 'Drupal blocks');
   }
 
 }

@@ -3,7 +3,7 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Tests that "Card - project" component is installed and operating correctly.
+ * Tests "Background container" component.
  *
  * @group acquia_cms
  * @group site_studio
@@ -11,7 +11,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * @group pr
  * @group push
  */
-class ProjectCardComponentTest extends CohesionComponentTestBase {
+class ContainerTest extends CohesionComponentTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.
@@ -29,14 +29,10 @@ class ProjectCardComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $edit_form = $this->getLayoutCanvas()->add('Card - project')->edit();
+    $edit_form = $this->getLayoutCanvas()->add('Container')->edit();
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMedia(0);
     $this->insertSelectedMedia();
-
-    $edit_form->fillField('Heading', 'Example component 123');
-    $edit_form->fillField('Pre heading', 'Example');
-    $edit_form->fillField('Link to page', 'https://www.acquia.com');
   }
 
   /**
@@ -53,9 +49,8 @@ class ProjectCardComponentTest extends CohesionComponentTestBase {
     $account->save();
     $this->drupalLogin($account);
 
-    // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('Card components', 'Card - project');
+    $this->editDefinition('Layout components', 'Container');
   }
 
 }

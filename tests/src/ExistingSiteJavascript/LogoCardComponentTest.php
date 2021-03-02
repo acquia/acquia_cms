@@ -3,7 +3,7 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Test that "Google map marker" component is installed and operating correctly.
+ * Tests 'Logo card' cohesion component.
  *
  * @group acquia_cms
  * @group site_studio
@@ -11,7 +11,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * @group pr
  * @group push
  */
-class GoogleMapMarkerComponentTest extends CohesionComponentTestBase {
+class LogoCardComponentTest extends CohesionComponentTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.
@@ -22,14 +22,17 @@ class GoogleMapMarkerComponentTest extends CohesionComponentTestBase {
     $account->save();
     $this->drupalLogin($account);
 
+    // Create a random image that we can select in the media library when
+    // editing the component.
+    $this->createMedia(['bundle' => 'image']);
+
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $edit_form = $this->getLayoutCanvas()->add('Google map marker')->edit();
-
-    $edit_form->fillField('Address', 'Test Address');
-    $edit_form->fillField('Latitude', '22.52138');
-    $edit_form->fillField('Longitude', '88.294324');
+    $edit_form = $this->getLayoutCanvas()->add('Logo card')->edit();
+    $this->openMediaLibrary($edit_form, 'Select image');
+    $this->selectMedia(0);
+    $this->insertSelectedMedia();
   }
 
   /**
@@ -46,8 +49,9 @@ class GoogleMapMarkerComponentTest extends CohesionComponentTestBase {
     $account->save();
     $this->drupalLogin($account);
 
+    // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('Map components', 'Google map marker');
+    $this->editDefinition('Card components', 'Logo card');
   }
 
 }

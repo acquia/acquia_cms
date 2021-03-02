@@ -3,7 +3,7 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Tests the "Image Background Hero" helper.
+ * Tests the "Two column page with hero helpers".
  *
  * @group acquia_cms
  * @group site_studio
@@ -11,7 +11,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * @group pr
  * @group push
  */
-class ImageBackgroundHeroHelperTest extends CohesionHelperTestBase {
+class TextAndCardGridHelperTest extends CohesionHelperTestBase {
 
   /**
    * Tests that the helper can be added to a layout canvas.
@@ -30,9 +30,8 @@ class ImageBackgroundHeroHelperTest extends CohesionHelperTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the helper to the layout canvas.
-    $this->getLayoutCanvas()->addHelper('Image Background Hero', [
-      'Background container',
-      'Hero',
+    $this->getLayoutCanvas()->addHelper('Text and card grid', [
+      'Text and cards - 2 column layout',
     ]);
   }
 
@@ -51,7 +50,7 @@ class ImageBackgroundHeroHelperTest extends CohesionHelperTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/helpers/helpers');
-    $this->editDefinition('Page Layouts', 'Image Background Hero');
+    $this->editDefinition('Card sections', 'Text and card grid');
   }
 
 }
