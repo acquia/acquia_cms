@@ -3,7 +3,6 @@
 namespace Drupal\acquia_cms_tour\Form;
 
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
@@ -48,13 +47,6 @@ class InstallationWizardForm extends FormBase {
   protected $renderer;
 
   /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
    * Current step.
    *
    * @var int
@@ -80,14 +72,11 @@ class InstallationWizardForm extends FormBase {
    *
    * @param \Drupal\Core\DependencyInjection\ClassResolverInterface $class_resolver
    *   The class resolver.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler service.
    * @param Drupal\Core\Render\Renderer $renderer
    *   The renderer service.
    */
-  public function __construct(ClassResolverInterface $class_resolver, ModuleHandlerInterface $module_handler, Renderer $renderer) {
+  public function __construct(ClassResolverInterface $class_resolver, Renderer $renderer) {
     $this->classResolver = $class_resolver;
-    $this->moduleHandler = $module_handler;
     $this->renderer = $renderer;
   }
 
@@ -97,7 +86,6 @@ class InstallationWizardForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('class_resolver'),
-      $container->get('module_handler'),
       $container->get('renderer')
     );
   }
@@ -405,26 +393,30 @@ class InstallationWizardForm extends FormBase {
    *   The render array defining the markup of the sidebar.
    */
   public function getSideBarMarkup(int $current_step) {
-    $markup = '<div class="tour_sidebar">';
     $steps = $this->getSteps();
+    $data = [];
     foreach ($steps as $key => $controller) {
       $instance_definition = $this->classResolver->getInstanceFromDefinition($controller);
+      $module_machine_name = $instance_definition->getmodule();
+      $module_title = $instance_definition->getModuleName();
       if ($instance_definition->isModuleEnabled()) {
-        $sno = $key + 1;
-        if ($sno == $current_step) {
+        $sr_no = $key + 1;
+        $data[$module_machine_name]['sr_no'] = $sr_no;
+        $data[$module_machine_name]['title'] = $module_title;
+        if ($sr_no == $current_step) {
           $current_class = 'current_step';
         }
         else {
           $current_class = 'item-';
         }
-        $module_name = $this->moduleHandler->getName($instance_definition->getmodule());
-        $markup .= '<div class = ' . $current_class . ' id = ' . $instance_definition->getmodule() . '>' .
-          $sno . ' ' . $module_name .
-          '<div class = "status-icon">icon</div></div>';
+        $data[$module_machine_name]['class'] = $current_class;
       }
     }
-    $markup .= '</div>';
-    return $markup;
+    $sidebar_markup = [
+      '#theme' => 'acquia_cms_tour_sidebar_markup',
+      '#data' => $data,
+    ];
+    return $this->renderer->render($sidebar_markup);
 
   }
 
