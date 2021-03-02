@@ -80,9 +80,9 @@ class InstallationWizardForm extends FormBase {
    *
    * @param \Drupal\Core\DependencyInjection\ClassResolverInterface $class_resolver
    *   The class resolver.
-   * @param Renderer $renderer
+   * @param \Drupal\Core\Render\Renderer $renderer
    *   The renderer service.
-   * @param StateInterface $state
+   * @param \Drupal\Core\State\StateInterface $state
    *   The state interface.
    */
   public function __construct(ClassResolverInterface $class_resolver, Renderer $renderer, StateInterface $state) {
@@ -284,7 +284,7 @@ class InstallationWizardForm extends FormBase {
    *
    * @param array $form
    *   A nested array of form elements comprising the form.
-   * @param FormStateInterface $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
   protected function copyFormValuesToStorage(array $form, FormStateInterface $form_state) {
@@ -336,7 +336,7 @@ class InstallationWizardForm extends FormBase {
    *
    * @param array $form
    *   An associative array containing the structure of the form.
-   * @param FormStateInterface $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
   protected function initMultistepForm(array $form, FormStateInterface $form_state) {
@@ -377,11 +377,12 @@ class InstallationWizardForm extends FormBase {
    *
    * @param array $form
    *   An associative array containing the structure of the form.
-   * @param FormStateInterface $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    *
    * @return array
    *   The render array defining the elements of the form.
+   *
    * @throws \Exception
    */
   public function stepForm(array &$form, FormStateInterface $form_state) {
@@ -468,7 +469,9 @@ class InstallationWizardForm extends FormBase {
 
   /**
    * Helper to get current formController based on step.
+   *
    * @return array
+   *   The array of module name & Form class object.
    */
   private function getCurrentFormController() {
     $formController = $this->steps[$this->currentStep];
