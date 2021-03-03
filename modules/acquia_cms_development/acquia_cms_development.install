@@ -30,11 +30,6 @@ function acquia_cms_development_install() {
       ->save();
   }
 
-  // Since Acquia solr search view is disabled, the exposed form filter block
-  // for this view is broken. Delete the broken block.
-  $block = \Drupal::service('entity_type.manager')->getStorage('block');
-  $block->load('exposed_form_acquia_search_page')->delete();
-
   // Both PubSec and Starter "really" need Google Maps API Keys to "work."
   // This code is a work around for the dev team to ensure that we can install
   // these modules w/o issue until a more permanent API key is supplied by

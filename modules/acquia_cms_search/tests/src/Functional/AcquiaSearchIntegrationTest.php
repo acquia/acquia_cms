@@ -53,32 +53,34 @@ class AcquiaSearchIntegrationTest extends BrowserTestBase {
   public function testAcquiaSearchIntegration() {
     $this->assertSame('database', Index::load('content')->getServerId());
 
-    $index = Index::load('acquia_search_search_api_solr_index');
+    $index = Index::load('acquia_search_index');
     $this->assertTrue($index->status());
-    $this->assertSame('acquia_search_search_api_solr_server', $index->getServerId());
+    $this->assertSame('acquia_search_server', $index->getServerId());
 
     $this->assertTrue(View::load('acquia_search')->status());
 
-    $account = $this->drupalCreateUser(['administer site configuration']);
+    $account = $this->drupalCreateUser([
+      'administer site configuration',
+      'administer search_api',
+    ]);
     $this->drupalLogin($account);
-    $this->drupalGet('/admin/config/search/acquia-search');
+    $this->drupalGet('/admin/config/search/search-api/server/acquia_search_server/edit');
 
     $page = $this->getSession()->getPage();
     $page->fillField('Acquia Subscription identifier', 'ABCD-12345');
     $page->fillField('Acquia Connector key', $this->randomString());
     $page->fillField('Acquia Application UUID', $this->container->get('uuid')->generate());
-    $page->pressButton('Save configuration');
+    $page->pressButton('Save');
 
     $assert_session = $this->assertSession();
     $assert_session->statusCodeEquals(200);
-    $assert_session->pageTextContains('The configuration options have been saved.');
-    $assert_session->pageTextContains('The Content search index is now using the Acquia Search Solr Search API Solr server server. All content will be reindexed.');
+    $assert_session->pageTextContains('The server was successfully saved.');
 
     // Our index should be using the Solr server, whereas the one that ships
     // with Acquia Search Solr should be disabled, along with any views that are
     // using it.
-    $this->assertSame('acquia_search_search_api_solr_server', Index::load('content')->getServerId());
-    $index = Index::load('acquia_search_search_api_solr_index');
+    $this->assertSame('acquia_search_server', Index::load('content')->getServerId());
+    $index = Index::load('acquia_search_index');
     $this->assertFalse($index->status());
     $this->assertNull($index->getServerId());
     $this->assertFalse(View::load('acquia_search')->status());

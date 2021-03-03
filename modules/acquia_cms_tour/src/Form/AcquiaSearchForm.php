@@ -132,7 +132,7 @@ final class AcquiaSearchForm extends ConfigFormBase {
       $form['acquia_search']['actions']['advanced'] = [
         '#markup' => $this->linkGenerator->generate(
           'Advanced',
-          Url::fromRoute($module_info['configure'])
+          Url::fromRoute('entity.search_api_server.edit_form', ['search_api_server' => 'acquia_search_server'])
         ),
         '#prefix' => '<span class= "button advanced-button">',
         '#suffix' => "</span>",
