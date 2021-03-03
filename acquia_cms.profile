@@ -281,6 +281,7 @@ function acquia_cms_form_alter(array &$form, FormStateInterface $form_state, $fo
   $allowed_form_ids = [
     'cohesion_account_settings_form',
     'acquia_cms_site_studio_core_form',
+    'acquia_cms_tour_installation_wizard',
   ];
   if (in_array($form_id, $allowed_form_ids)) {
     $config = Drupal::config('cohesion.settings');
