@@ -1,10 +1,12 @@
+{% set module_path = _self|split('/templates') %}
 <div class="tour-page">
   <div class="section-hero">
     <h2>Welcome to Acquia CMS</h2>
     <div class="row">
       <div class="text-section">
-        <p>Acquia CMS is an opinionated implementation of Drupal that enables Acquia
-          customers to build beautiful websites without writing code.</p>
+        <p>Acquia CMS is an opinionated instance of Drupal that enables Acquia customers to build beautiful websites
+          without writing code.
+        </p>
         <p>It provides an easier way to:</p>
         <p>
         <ul>
@@ -14,15 +16,14 @@
           <li>Integrate easily with products in the Acquia platform</li>
         </ul>
         </p>
-        <p>Acquia CMS comes bundled with a demonstration website which will provide an
-          ‘out-of-the-box’ experience which will demonstrate the power of Drupal and
-          the Acquia DXP.</p>
-        <h6>What will this tour guide me through?</h6>
-        <p>This tour will guide you through key concepts of ACMS which will help your
-          journey building with Drupal on the Acquia platform. It will also link you to
-          more in-depth documentation and training materials within
-          <a href="https://training.acquia.com/">Acquia Academy</a>, our learning
-          platform.</p>
+        <p>Acquia CMS comes bundled with a demonstration website which will provide an ‘out-of-the-box’ experience
+          which will demonstrate the power of Drupal and the Acquia DXP.
+        </p>
+        <p>What will this tour guide me through?</p>
+        <p>This tour will guide you through key concepts of ACMS which will help your journey building with
+          Drupal on the Acquia platform. It will also link you to more in-depth documentation and training materials
+          within Acquia Academy, our learning platform.
+        </p>
       </div>
       <div class="button-section">
         <a class="button button--primary" href="/admin/tour/dashboard">Get started</a>
@@ -48,83 +49,203 @@
     <div class='content-main'>
       <div class="content-start">
         <h2><a name="authoring">Authoring Content</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        <p>ACMS comes with default structured and unstructured content types. The structured content types are -</p>
+        <p>
+        <ol>
+          <li>Places</li>
+          <li>People</li>
+          <li>Events</li>
+          <li>Articles</li>
+        </ol>
+        </p>
+        <p>Unstructured content types are -</p>
+        <p>
+        <ol>
+          <li>Pages</li>
+        </ol>
+        </p>
+        <p>You can use the pages content type to create any of the landing pages. The pages content type allows you to
+          use the various Site Studio components and create landing pages as you like.
+        </p>
+        <p>The content types follow the out of the box content authoring experience. All you need to do is head over to
+          the node/add screen and follow the links. For more detailed information please refer to the user guide.
+        </p>
       </div>
-
       <div class="content-leaf">
         <h2><a name="editing">Editing and Publishing Content</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        <p>ACMS comes with a pre-configured content lifecycle. An article or event (or any content type) begins with a
+          draft state, moves to in review and finally gets published. Once you feel you no longer need the content for
+          the site visitor you can move it to archive, which will unpublish the content from the site. Only content with
+          state published is visible to site visitors. All other states are only visible to users with appropriate
+          content permissions.
+        </p>
+        <p class="error">Please note the current workflow within ACMS is only set up for content types.</p>
+        <div style="overflow-x:auto;">
+          <table>
+          <caption>Your site is pre-configured with the following roles:</caption>
+          <thead>
+          <th>Role</th>
+          <th>Create</th>
+          <th>Edit Own</th>
+          <th>Edit Any</th>
+          <th>Delete Own</th>
+          <th>Delete Any</th>
+          </thead>
+          <tbody>
+          <tr>
+            <td colspan="6">Content</td>
+          </tr>
+          <tr>
+            <td>Content Administrator</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td>Content Author</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>No</td>
+            <td>Yes</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Content Editor</td>
+            <td>No</td>
+            <td>No</td>
+            <td>Yes</td>
+            <td>No</td>
+            <td>Yes</td>
+          </tr>
+          </tbody>
+        </table>
+        </div>
+        <p>For more detailed information please refer to the documentation.</p>
       </div>
-
       <div class="content-leaf">
         <h2><a name="media">Working with Media</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
       </div>
-
       <div class="content-leaf">
         <h2><a name="users">Managing Users</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        <p>To manage users you need to login to the site with an user who has an administrator or user administrator
+          role.
+        </p>
+        <br>
+        <p>To manage users on the site goto /admin/people page</p>
+        <p>To manage permissions on the site goto /people/permissions</p>
+        <p>To manage roles on the site goto admin/people/roles</p>
+        <br>
+        <p>In addition to the administrator, anonymous and authenticated roles, your site comes pre-setup with the
+          following roles -
+        </p>
+        <table class="diff-responsive-table">
+          <thead>
+          <th>Role</th>
+          <th></th>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Content Administrator</td>
+            <td>Has full control over the content on the site. Can create/edit/delete, publish/unpublish any
+              content </td>
+          <tr>
+            <td>Content Author</td>
+            <td>Can create/edit/delete own content.</td>
+          <tr>
+            <td>Content Editor</td>
+            <td>Can create/edit any content, but cannot delete</td>
+          <tr>
+            <td>Developer</td>
+            <td>Can create/edit new Site Studio components or edit existing ones</td>
+          <tr>
+            <td>Site Builder</td>
+            <td>Can help building landing pages using Site Studio components</td>
+          <tr>
+            <td>Administrator</td>
+            <td>Has full control over the site.</td>
+          <tr>
+            <td>User Administrator</td>
+            <td>Can administer users on the site. This role can Add/Delete users as well as block/unblock users.</td>
+          </tbody>
+        </table>
       </div>
-
       <div class="content-leaf">
         <h2><a name="menus">Building Menus</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        <p>In ACMS, menu management is unchanged and follows the core Drupal workflow.
+          Menus can be managed at /admin/structure/menu.
+        </p>
+        <p>ACMS comes pre-configured with header and footer menus.
+          The menu that you see in the header of the site after installation is named as Main Navigation.
+          You can access the menu admin/structure/menu/manage/main.
+          Once you are on the page you can add/edit/delete and manage the links shown in the header
+        </p>
+        <img style="width:100%;" src="/{{ module_path[0] }}/assets/images/header.png"/>
+        <p>Similar to the header menu, the footer menu also comes pre-configured with ACMS.
+          The footer menu is displayed on the site in the footer region.
+          You can access the menu admin/structure/menu/manage/footer.
+          Once you are on the page you can add/edit/delete and manage the links shown in the footer
+        </p>
+        <img style="width:100%;" src="/{{ module_path[0] }}/assets/images/footer.png"/>
       </div>
-
       <div class="content-leaf">
         <h2><a name="forms">Creating Forms</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        <p>Acquia CMS includes the Webform module to enable site builders to create forms through the administrative UI.
+          We include one sample form in our public sector demo (‘Contact Us’ in the main menu)
+          as an implementation example.
+        </p>
+        <p>There is extensive documentation on working with webforms on Drupal.org. Some key reference materials are:</p>
+        <p>
+        <ul>
+          <li><a href="https://www.drupal.org/node/2834423">Webform introduction</a></li>
+          <li><a href="https://www.drupal.org/node/2837024">Features overview</a></li>
+          <li><a href="https://www.drupal.org/node/2834424">Video tutorials</a></li>
+        </ul>
+        </p>
+        <p>Additionally, Acquia Academy provides training materials on the Webform module here (include link).</p>
       </div>
-
       <div class="content-leaf">
         <h2><a name="site-studio">Working with Site Studio</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        <p>ACMS is opinionated and integrated with other Acquia products out of the box.
+          With the current version it comes pre-configured with Acquia Site Studio and has pre-built components.
+        </p>
+        <p>When you install ACMS and set up your Acquia Site Studio keys, you get the following components
+          out of the box which will help you to get started with your site building right after installation.
+        </p>
+        <p>To use these components all you need to do is start creating page type of content.
+          To do so head over to node/add/page
+        </p>
+        <img style="width:100%;" src="/{{ module_path[0] }}/assets/images/component-list-1.png"/>
+        <img style="width:100%;" src="/{{ module_path[0] }}/assets/images/component-list-2.png"/>
+        <img style="width:100%;" src="/{{ module_path[0] }}/assets/images/component-list-3.png"/>
       </div>
-
       <div class="content-leaf">
         <h2><a name="troubleshooting">Troubleshooting</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        <p>Q. What should I do if maps are not being displayed on my places pages?</p>
+        <p>For maps to be displayed correctly, you have to make sure you have set the correct Google API keys.
+          You need to set the api keys at two places -
+        </p>
+        <p>
+        <ol>
+          <li>admin/config/system/geocoder/geocoder-provider/manage/googlemaps</li>
+          <li>admin/cohesion/configuration/google-map-api-key</li>
+        </ol>
+        </p>
+        <br>
+        <P>Q. I would like to see a demo of the ACMS system?</P>
+        <P>ACMS ships with a demo site which is not enabled by default.
+          To enable the demo site, please head over to admin/modules page and install Acquia CMS PubSec Demo module
+        </P>
+        <br>
+        <P>Q. I would like to see some default content after i install ACMS</P>
+        <P>ACMS has a starter module available which has default content. To enable the starter module,
+          please head over to the admin/modules page and install Acquia CMS Starter module.
+        </P>
       </div>
-
       <div class="content-leaf">
         <h2><a name="support">Getting Support</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        <p>To get support on ACMS during the beta phase, please file a support ticket via your subscription.</p>
       </div>
     </div>
   </div>
