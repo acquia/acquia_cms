@@ -174,6 +174,14 @@ class InstallationWizardForm extends FormBase {
           ],
         ];
       }
+      // Lets add ajax call for back button on last step.
+      if ($this->useAjax && $action == 'back' && $this->isCurrentStepLast()) {
+        $element[$action] += [
+          '#ajax' => [
+            'wrapper' => $this->getFormWrapper(),
+          ],
+        ];
+      }
     }
 
     if (!empty($element)) {
