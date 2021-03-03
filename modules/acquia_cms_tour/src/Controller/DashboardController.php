@@ -155,11 +155,11 @@ final class DashboardController extends ControllerBase {
     ]);
     $form['help_text'] = [
       '#type' => 'markup',
-      '#markup' => "ACMS organizes its features into individual components called modules.
+      '#markup' => $this->t("ACMS organizes its features into individual components called modules.
        The configuration dashboard/wizard setup will help you setup the pre-requisties.
        Please note, not all modules in ACMS are required by default, and some optional modules
        are left disabled on install. A checklist is provided to help you keep track of the tasks
-       needed to complete configuration.",
+       needed to complete configuration."),
     ];
     $form['modal_link'] = [
       '#type' => 'link',
