@@ -42,7 +42,7 @@ class AcquiaSearchSolrIntegrationTest extends BrowserTestBase {
    */
   protected static $modules = [
     'acquia_cms_search',
-    'acquia_search_solr',
+    'acquia_search',
     'cohesion',
     'search_api_db',
   ];
@@ -53,15 +53,15 @@ class AcquiaSearchSolrIntegrationTest extends BrowserTestBase {
   public function testAcquiaSearchSolrIntegration() {
     $this->assertSame('database', Index::load('content')->getServerId());
 
-    $index = Index::load('acquia_search_solr_search_api_solr_index');
+    $index = Index::load('acquia_search_search_api_solr_index');
     $this->assertTrue($index->status());
-    $this->assertSame('acquia_search_solr_search_api_solr_server', $index->getServerId());
+    $this->assertSame('acquia_search_search_api_solr_server', $index->getServerId());
 
-    $this->assertTrue(View::load('acquia_search_solr')->status());
+    $this->assertTrue(View::load('acquia_search')->status());
 
     $account = $this->drupalCreateUser(['administer site configuration']);
     $this->drupalLogin($account);
-    $this->drupalGet('/admin/config/search/acquia-search-solr');
+    $this->drupalGet('/admin/config/search/acquia-search');
 
     $page = $this->getSession()->getPage();
     $page->fillField('Acquia Subscription identifier', 'ABCD-12345');
@@ -77,11 +77,11 @@ class AcquiaSearchSolrIntegrationTest extends BrowserTestBase {
     // Our index should be using the Solr server, whereas the one that ships
     // with Acquia Search Solr should be disabled, along with any views that are
     // using it.
-    $this->assertSame('acquia_search_solr_search_api_solr_server', Index::load('content')->getServerId());
-    $index = Index::load('acquia_search_solr_search_api_solr_index');
+    $this->assertSame('acquia_search_search_api_solr_server', Index::load('content')->getServerId());
+    $index = Index::load('acquia_search_search_api_solr_index');
     $this->assertFalse($index->status());
     $this->assertNull($index->getServerId());
-    $this->assertFalse(View::load('acquia_search_solr')->status());
+    $this->assertFalse(View::load('acquia_search')->status());
   }
 
 }
