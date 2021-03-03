@@ -99,9 +99,6 @@ final class CohesionFacade implements ContainerInjectionInterface {
   /**
    * Returns a list of all available sync packages.
    *
-   * This will also include the big UI kit shipped during development of Acquia
-   * CMS (misc/ui-kit.package.yml), at the end of the list.
-   *
    * @return string[]
    *   An array of sync package paths, relative to the Drupal root.
    */
@@ -125,8 +122,6 @@ final class CohesionFacade implements ContainerInjectionInterface {
   public function getPackagesFromExtension(Extension $extension) : array {
     $dir = $extension->getPath();
 
-    // Setting non-existent file "nofile.yml". Change back to "packages.yml"
-    // when yml values are added back in.
     $list = "$dir/config/dx8/packages.yml";
     if (file_exists($list)) {
       $list = file_get_contents($list);
@@ -143,17 +138,27 @@ final class CohesionFacade implements ContainerInjectionInterface {
    * Returns a list of all installed modules.
    *
    * @return \Drupal\Core\Extension\Extension[]
-   *   A list of all installed modules. The acquia_cms profile will be the last
-   *   item in the list.
+   *   A list of all installed modules. The acquia_cms profile and its modules
+   *   will be the last items in the list.
    */
   private function getSortedModules() : array {
-    $modules = $this->moduleHandler->getModuleList();
+    $module_list = $this->moduleHandler->getModuleList();
+    $acms_module_list = [];
 
-    $profile = $modules['acquia_cms'];
-    unset($modules['acquia_cms']);
-    $modules['acquia_cms'] = $profile;
+    foreach ($module_list as $name => $extension) {
+      if ('acquia_cms' === $name) {
+        // Ensure the Acquia CMS Profile is the first ACMS extension.
+        $acms_module_list = [$name => $extension] + $acms_module_list;
+        unset($module_list[$name]);
+      }
+      elseif (stripos($name, 'acquia_cms') === 0) {
+        // Add any other ACMS modules to the array.
+        $acms_module_list[$name] = $extension;
+        unset($module_list[$name]);
+      }
+    }
 
-    return $modules;
+    return $module_list + $acms_module_list;
   }
 
   /**
