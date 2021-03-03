@@ -15,7 +15,7 @@ use Drupal\views\Entity\View;
  * @group pr
  * @group push
  */
-class AcquiaSearchSolrIntegrationTest extends BrowserTestBase {
+class AcquiaSearchIntegrationTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
@@ -50,7 +50,7 @@ class AcquiaSearchSolrIntegrationTest extends BrowserTestBase {
   /**
    * Tests administrative integration with Acquia Search Solr.
    */
-  public function testAcquiaSearchSolrIntegration() {
+  public function testAcquiaSearchIntegration() {
     $this->assertSame('database', Index::load('content')->getServerId());
 
     $index = Index::load('acquia_search_search_api_solr_index');
