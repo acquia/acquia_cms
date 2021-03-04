@@ -150,7 +150,10 @@ final class DashboardController extends ControllerBase {
           'acms-dashboard-modal-form',
         ],
         'data-dialog-type' => 'modal',
-        'data-dialog-options' => Json::encode(['width' => 800]),
+        'data-dialog-options' => Json::encode([
+          'width' => 912,
+          'dialogClass' => 'acms-installation-wizard',
+        ]),
       ],
     ]);
     $form['help_text'] = [

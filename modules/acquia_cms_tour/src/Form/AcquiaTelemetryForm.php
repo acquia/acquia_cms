@@ -61,13 +61,6 @@ final class AcquiaTelemetryForm extends AcquiaCMSDashboardBase {
     $module = $this->module;
     $module_path = $this->module_handler->getModule($module)->getPathname();
     $module_info = $this->infoParser->parse($module_path);
-
-    if ($this->getConfigurationState()) {
-      $form['check_icon'] = [
-        '#prefix' => '<span class= "dashboard-check-icon">',
-        '#suffix' => "</span>",
-      ];
-    }
     $form[$module] = [
       '#type' => 'details',
       '#title' => $module_info['name'],
