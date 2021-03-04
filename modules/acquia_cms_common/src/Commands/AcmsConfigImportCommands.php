@@ -187,13 +187,14 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *   Reset the configuration to the default.
    */
   public function resetConfigurations(array $package, array $options = ['scope' => NULL]) {
-    $this->io()->text(["Welcome to Acquia CMS's Config reset wizard.",
-      "This should only be used in case of emergencies and can lead to unexpected impacts on the site.",
+    $this->io()->text(["Welcome to the Acquia CMS config reset wizard.",
+      "This should be used with extreme caution and can lead to unexpected behavior on your site if not well tested.",
+      "Do not run this in production until you've tested it in a safe, non-public environment first.",
     ]);
     // Lets get input from user if not provided package with command.
     if (empty($package)) {
       $acms_modules = $this->getAcmsModules();
-      $question_string = 'Choose a module to reset configurations. Separate multiple choices with commas, e.g. "1,2,4".';
+      $question_string = 'Choose a module that needs a configuration reset. Separate multiple choices with commas, e.g. "1,2,4".';
       $question = $this->createMultipleChoiceOptions($question_string, $acms_modules);
       $types = $this->io()->askQuestion($question);
       if (in_array('Cancel', $types)) {
@@ -225,7 +226,8 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *   Array of acms modules.
    */
   private function getAcmsModules(): array {
-    $acms_modules = [];
+    // Start with the profile itself.
+    $acms_modules = ['acquia_cms'];
     $acms_extensions = $this->acmsUtilityService->getAcquiaCmsProfileModuleList();
     foreach ($acms_extensions as $key => $module) {
       if ($module->getType() === 'module') {
@@ -390,7 +392,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
     $table = ConfigCommands::configChangesTable($change_list, $this->output());
     $table->render();
 
-    if (!$this->io()->confirm(dt('Import the listed configuration changes?'))) {
+    if (!$this->io()->confirm(dt('Import these configuration changes?'))) {
       throw new UserAbortException();
     }
     $this->configImportCommands->doImport($storage_comparer);
@@ -416,11 +418,11 @@ final class AcmsConfigImportCommands extends DrushCommands {
       $messages[] = 'Invalid scope, allowed values are [config, site-studio, all]';
     }
     if ($package && !$this->hasValidPackage($package)) {
-      $messages[] = 'Given package are not valid, try providing list of ACMS modules ex: acquia_cms_article';
+      $messages[] = 'Given packages are not valid, try providing a list of ACMS modules ex: acquia_cms_article';
     }
     // In case of -y lets check user has provided all the required arguments.
     if (!$isInteractive && (!$package || !$scope)) {
-      $messages[] = 'In order to use -y option, please provide package and scope variable.';
+      $messages[] = 'In order to use -y option, please provide a package and scope variable.';
     }
     if ($messages) {
       return new CommandError(implode(' ', $messages));
@@ -428,7 +430,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
   }
 
   /**
-   * Check provided package are valid one.
+   * Check the provided packages are valid.
    *
    * @param array $packages
    *   The array of package.
