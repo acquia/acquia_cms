@@ -129,8 +129,14 @@ class InstallationWizardForm extends FormBase {
       }
     }
 
+    // Generate side nav in wizard.
+    $form['nav-item'] = [
+      '#theme' => 'item_list',
+      '#list_type' => 'ol',
+      '#items' => $this->getItemList(),
+      '#wrapper_attributes' => ['class' => 'tour-sidebar'],
+    ];
     $form = $this->stepForm($form, $form_state);
-
     $form['#prefix'] = '<div id=' . $this->getFormWrapper() . '>';
     $form['#suffix'] = '</div>';
 
@@ -162,6 +168,14 @@ class InstallationWizardForm extends FormBase {
       ];
       // Lets remove ajax call for last step.
       if ($this->useAjax && $action != 'submit' && !$this->isCurrentStepLast()) {
+        $element[$action] += [
+          '#ajax' => [
+            'wrapper' => $this->getFormWrapper(),
+          ],
+        ];
+      }
+      // Lets add ajax call for back button on last step.
+      if ($this->useAjax && $action == 'back' && $this->isCurrentStepLast()) {
         $element[$action] += [
           '#ajax' => [
             'wrapper' => $this->getFormWrapper(),
@@ -416,58 +430,52 @@ class InstallationWizardForm extends FormBase {
     $key = $helper['moduleName'];
     $formControllerDefinition = $this->classResolver->getInstanceFromDefinition($formController);
     $module_title = $formControllerDefinition->getModuleName();
-    $form['title_markup'] = [
+    $form = $formControllerDefinition->buildForm($form, $form_state);
+    $form[$key]['title_markup'] = [
       '#type' => 'markup',
       '#markup' => $this->getTitleMarkup($module_title, ($this->currentStep) + 1),
+      '#weight' => -1,
     ];
-    $form['sidebar_markup'] = [
-      '#type' => 'markup',
-      '#markup' => $this->getSideBarMarkup(($this->currentStep) + 1),
-    ];
-    $form = $formControllerDefinition->buildForm($form, $form_state);
     // Change details to fieldset for all form.
     $form[$key]['#type'] = 'fieldset';
     unset($form[$key]['actions']);
+    unset($form[$key]['#title']);
     return $form;
   }
 
   /**
-   * Helper method for adding sidebar markup.
-   *
-   * @param int $current_step
-   *   The forms current step.
+   * Helper method for sidebar nav item list.
    *
    * @return string
    *   The render array defining the markup of the sidebar.
    *
    * @throws \Exception
    */
-  public function getSideBarMarkup(int $current_step): string {
-    $data = [];
+  protected function getItemList(): array {
+    $items = [];
     $steps = $this->getSteps();
     foreach ($steps as $key => $controller) {
       $instance_definition = $this->classResolver->getInstanceFromDefinition($controller);
       $module_machine_name = $instance_definition->getmodule();
       $module_title = $instance_definition->getModuleName();
-      if ($instance_definition->isModuleEnabled()) {
-        $sr_no = $key + 1;
-        $data[$module_machine_name]['sr_no'] = $sr_no;
-        $data[$module_machine_name]['title'] = $module_title;
-        if ($sr_no == $current_step) {
-          $current_class = 'current_step';
-        }
-        else {
-          $current_class = 'item-';
-        }
-        $data[$module_machine_name]['class'] = $current_class;
+      $sr_no = $key + 1;
+      if ($sr_no < ($this->currentStep) + 1) {
+        $current_class = ['item', 'step-complete'];
       }
+      elseif ($sr_no == ($this->currentStep) + 1) {
+        $current_class = ['item', 'current-step'];
+      }
+      else {
+        $current_class = ['item'];
+      }
+      $items[$module_machine_name] = [
+        '#wrapper_attributes' => [
+          'class' => $current_class,
+        ],
+        '#children' => $module_title,
+      ];
     }
-    $sidebar_markup = [
-      '#theme' => 'acquia_cms_tour_sidebar_markup',
-      '#data' => $data,
-    ];
-    return $this->renderer->render($sidebar_markup);
-
+    return $items;
   }
 
   /**
