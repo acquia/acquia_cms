@@ -88,14 +88,15 @@ final class GoogleTagManagerForm extends ConfigFormBase {
     if ($this->module_handler->moduleExists($module)) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $form['google_tag']['description'] = [
-        '#type' => 'markup',
-        '#markup' => '',
-        '#prefix' => $module_info['name'],
+      $form['google_tag'] = [
+        '#type' => 'fieldset',
+        '#title' => $module_info['name'],
         '#description' => $module_info['description'],
+        '#open' => TRUE,
       ];
       $form['google_tag']['snippet_parent_uri'] = [
         '#type' => 'textfield',
+        '#required' => TRUE,
         '#title' => $this->t('Snippet parent URI'),
         '#attributes' => ['placeholder' => $this->t('public:/')],
         '#default_value' => $this->config('google_tag.settings')->get('uri'),

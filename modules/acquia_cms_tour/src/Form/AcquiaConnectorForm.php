@@ -99,11 +99,11 @@ final class AcquiaConnectorForm extends ConfigFormBase {
     if ($this->module_handler->moduleExists($module)) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $form['acquia_connector']['description'] = [
-        '#type' => 'markup',
-        '#markup' => '',
-        '#prefix' => $module_info['name'],
+      $form['acquia_connector'] = [
+        '#type' => 'fieldset',
+        '#title' => $module_info['name'],
         '#description' => $module_info['description'],
+        '#open' => TRUE,
       ];
       $form['acquia_connector']['site_name'] = [
         '#type' => 'textfield',

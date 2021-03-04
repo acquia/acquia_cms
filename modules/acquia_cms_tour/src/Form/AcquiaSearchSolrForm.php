@@ -100,25 +100,27 @@ final class AcquiaSearchSolrForm extends ConfigFormBase {
     if ($this->module_handler->moduleExists($module)) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $form['acquia_connector']['description'] = [
-        '#type' => 'markup',
-        '#markup' => '',
-        '#prefix' => $module_info['name'],
+      $form['acquia_search_solr'] = [
+        '#type' => 'fieldset',
+        '#title' => $module_info['name'],
         '#description' => $module_info['description'],
+        '#open' => TRUE,
       ];
-
       $form['acquia_search_solr']['identifier'] = [
         '#type' => 'textfield',
+        '#required' => TRUE,
         '#title' => $this->t('Acquia Subscription identifier'),
         '#default_value' => $this->state->get('acquia_search_solr.identifier'),
       ];
       $form['acquia_search_solr']['api_host'] = [
         '#type' => 'textfield',
+        '#required' => TRUE,
         '#title' => $this->t('Acquia Search API hostname'),
         '#default_value' => $this->config('acquia_search_solr.settings')->get('api_host'),
       ];
       $form['acquia_search_solr']['uuid'] = [
         '#type' => 'textfield',
+        '#required' => TRUE,
         '#title' => $this->t('Acquia Application UUID'),
         '#default_value' => $this->state->get('acquia_search_solr.uuid'),
       ];

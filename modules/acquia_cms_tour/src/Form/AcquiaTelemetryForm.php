@@ -63,17 +63,16 @@ final class AcquiaTelemetryForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     // Checkbox for Acquia Telemetry.
     $form['acquia_telemetry'] = [
-      'opt_in' => [
-        '#type' => 'checkbox',
-        '#title' => $this->t('Send anonymous data about Acquia product usage'),
-        '#default_value' => $this->moduleHandler->moduleExists('acquia_telemetry'),
-        '#description' => $this->t('This module intends to collect anonymous data about Acquia product usage. No private information will be gathered. Data will not be used for marketing or sold to any third party. This is an opt-in module and can be disabled at any time by uninstalling the acquia_telemetry module by your site administrator.'),
-      ],
       '#type' => 'fieldset',
       '#open' => TRUE,
       '#title' => $this->t('Acquia Telemetry'),
     ];
-
+    $form['acquia_telemetry']['opt_in'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Send anonymous data about Acquia product usage'),
+      '#default_value' => $this->moduleHandler->moduleExists('acquia_telemetry'),
+      '#description' => $this->t('This module intends to collect anonymous data about Acquia product usage. No private information will be gathered. Data will not be used for marketing or sold to any third party. This is an opt-in module and can be disabled at any time by uninstalling the acquia_telemetry module by your site administrator.'),
+    ];
     $form['acquia_telemetry']['actions']['submit'] = [
       '#type' => 'submit',
       '#value' => 'Save',
