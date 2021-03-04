@@ -1,28 +1,34 @@
+{% set module_path = _self|split('/templates') %}
 <div class="tour-page">
   <div class="section-hero">
     <h2>Welcome to Acquia CMS</h2>
     <div class="row">
       <div class="text-section">
-        <p>Acquia CMS is an opinionated implementation of Drupal that enables Acquia
-          customers to build beautiful websites without writing code.</p>
+        <p>
+          Acquia CMS is an opinionated instance of Drupal that enables Acquia
+          customers to build beautiful websites without writing code.
+        </p>
         <p>It provides an easier way to:</p>
         <p>
-        <ul>
-          <li>Build Drupal sites</li>
-          <li>Manage their look & feel</li>
-          <li>Create & manage content</li>
-          <li>Integrate easily with products in the Acquia platform</li>
-        </ul>
+          <ul>
+            <li>Build Drupal sites</li>
+            <li>Manage their look and feel</li>
+            <li>Create and manage content</li>
+            <li>Integrate easily with products on the Acquia platform</li>
+          </ul>
         </p>
-        <p>Acquia CMS comes bundled with a demonstration website which will provide an
-          ‘out-of-the-box’ experience which will demonstrate the power of Drupal and
-          the Acquia DXP.</p>
-        <h6>What will this tour guide me through?</h6>
-        <p>This tour will guide you through key concepts of ACMS which will help your
-          journey building with Drupal on the Acquia platform. It will also link you to
-          more in-depth documentation and training materials within
-          <a href="https://training.acquia.com/">Acquia Academy</a>, our learning
-          platform.</p>
+        <p>
+          Acquia CMS comes bundled with a demonstration website which will
+          provide an ‘out-of-the-box’ experience which will demonstrate the
+          power of Drupal and the Acquia DXP.
+        </p>
+        <p>What will this tour guide me through?</p>
+        <p>
+          This tour will guide you through key concepts of Acquia CMS, which will guide
+          your journey learning to build on the Acquia platform. It will also link
+          you to more in-depth documentation and training materials within Acquia
+          Academy, our learning platform.
+        </p>
       </div>
       <div class="button-section">
         <a class="button button--primary" href="/admin/tour/dashboard">Get started</a>
@@ -48,83 +54,306 @@
     <div class='content-main'>
       <div class="content-start">
         <h2><a name="authoring">Authoring Content</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        <p>As a Content Management System, Drupal organizes content by type.
+        Examples of content types are Articles or Events. Acquia CMS divides
+        content types into <i>structured</i> and <i>unstructured</i> types.
+        </p>
+        <p>Structured content types have well-defined fields, like 'Image' and
+        'Tags' and are designed so that content appears uniform to people viewing
+        your site. Examples of structured content include:</p>
+        <p>
+        <ul>
+          <b>
+            <li>Articles</li>
+            <li>Events</li>
+            <li>People</li>
+            <li>Places</li>
+          </b>
+        </ul>
+        </p>
+        <p>Unstructured content types have some pre-defined fields, like 'Title',
+        but are deliberately designed to be custom. Each piece of unstructured
+        content can have its own unique look and feel.</p>
+        <p>
+          There is only one unstructured content type in Acquia CMS:
+          <b>Page</b>.
+        </p>
+        <p>You can use the page content type to create landing pages, such as
+        a homepage, or a marketing campaign landing page with a custom layout.
+        Custom page layouts are built using
+        <a href="#site-studio">Site Studio components.</a>
+        </p>
+        <p>
+          Content types in Acquia CMS include an out of the box content
+          authoring experience. <a href="/node/add">Click here to go to the Add Content form</a>
+          and start creating content.
+        </p>
+        <p>
+          For more detailed information and how-to walkthroughs,
+          <a href="https://docs.acquia.com">please visit our
+          documentation site.</a>
+        </p>
       </div>
-
       <div class="content-leaf">
         <h2><a name="editing">Editing and Publishing Content</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        <p>
+          Acquia CMS comes with a pre-configured content publishing lifecycle.
+          All content begins in a draft state. The author then marks it as
+          'in review' to signal to their coworkers that it's ready for editing.
+        </p>
+        <p>
+          Once an editor has made their changes and is ready to publish the
+          content, they mark it as 'published'. The content is now visiable to the
+          public.
+        </p>
+        <p>
+          Once you feel you no longer need the content to be public, an editor
+          can move it to the 'archive' state, which will unpublish the content
+          from the site. Only content with state 'published' is visible to site
+          visitors. All other states are only visible to users with appropriate
+          content permissions.
+        </p>
+        <p>
+          <b><i>Note</i>:</b> the editing workflow in Acquia CMS is only set up
+          for content types.
+        </p>
+        <p>
+          Roles and permissions limit what users are able to do inside
+          The administrative interface. Your Acquia CMS site is pre-configured
+          with the following roles and permissions for managing content:
+        </p>
+        <div style="overflow-x:auto;">
+          <table>
+          <thead>
+          <th>Role</th>
+          <th>Create</th>
+          <th>Edit Own</th>
+          <th>Edit Any</th>
+          <th>Delete Own</th>
+          <th>Delete Any</th>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Content Administrator</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td>Content Author</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>No</td>
+            <td>Yes</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Content Editor</td>
+            <td>No</td>
+            <td>No</td>
+            <td>Yes</td>
+            <td>No</td>
+            <td>Yes</td>
+          </tr>
+          </tbody>
+        </table>
+        </div>
+        <p>For more detailed information and how-to walkthroughs,
+          <a href="https://docs.acquia.com">please visit our
+          documentation site.</a></p>
       </div>
-
       <div class="content-leaf">
         <h2><a name="media">Working with Media</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        <p>In addition to allowing authors to create and edit text content on your
+        website, Acquia CMS is great at organizing rich multimedia content and
+        including it on pages throughout your website. You can also categorize
+        your media content and link it to other content in your site, to make
+        it easier for your user audience to find.<p>
+        <p>Examples of supported Media in Acquia CMS include:</p>
+        <ul>
+          <li>
+            <b><u>Audio</u>:</b> podcast, lecture recordings, or music
+            files.
+          </li>
+          <li>
+            <b><u>Documents</u>:</b> PDFs and Office documents.
+          </li>
+          <li>
+            <b><u>Images</u>:</b> most modern image file types are supported, including JPEG,
+            GIF, and PNG.
+          </li>
+          <li>
+            <b><u>Videos</u>:</b> major external video hosting providers are supported, such
+            as YouTube or Vimeo.
+          </li>
+          <li>
+            <i>Note: Acquia recommends embedding videos from
+            external providers. We do not recommend hosting videos directly from
+            the Drupal file system, as it can easily result in data transfer
+            overage charges.</i>
+          </li>
+        </ul>
+        <br>
+        <p>
+          For more detailed information and how-to walkthroughs,
+          <a href="https://docs.acquia.com">please visit our
+          documentation site.</a>
+        </p>
       </div>
-
       <div class="content-leaf">
         <h2><a name="users">Managing Users</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        <p>Only users logged into Acquia CMS with the 'administrator' role can
+        add or remove users from your website, or change their roles and
+        permissions.
+        </p>
+        <p>'Roles' are groups of users that define what they can see or do
+        on your website. Roughly speaking, they describe jobs for your team or
+        audiences on your website.</p>
+        <br>
+        <p>To add or remove users, <a href="/admin/people">go here</a>.</p>
+        <p>To manage user permissions, <a href="/admin/people/permissions">go here</a>.</p>
+        <p>To manage user roles, <a href="/admin/people/roles">go here</a>.</p>
+        <br>
+        <p>
+          There are several default roles that are included with Acquia CMS:
+        </p>
+        <table class="diff-responsive-table">
+          <thead>
+          <th>Role</th>
+          <th></th>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Content Administrator</td>
+            <td>
+              These users have full control over the content on the site.
+              They can create, edit, delete, publish, and unpublish any
+              content on the site.
+            </td>
+          <tr>
+            <td>Content Author</td>
+            <td>Authors can create, edit, delete and delete <i>their own</i> content.</td>
+          <tr>
+            <td>Content Editor</td>
+            <td>Editors an create or edit <i>any</i> content, but they cannot delete content.</td>
+          <tr>
+            <td>Developer</td>
+            <td>These users can create new Site Studio components or edit existing ones.</td>
+          <tr>
+            <td>Site Builder</td>
+            <td>Builders can create landing pages using Site Studio components.</td>
+          <tr>
+            <td>Administrator</td>
+            <td>Administrators have full control over the site.</td>
+          <tr>
+            <td>User Administrator</td>
+            <td>These users have permission to manage other users on the site.
+            This role can add, delete, block, and unblock users.</td>
+          </tbody>
+        </table>
       </div>
-
       <div class="content-leaf">
         <h2><a name="menus">Building Menus</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        <p>
+          In Acquia CMS, there <a href="/admin/structure/menu">is a dedicated
+          interface for creating menus</a>.
+        </p>
+        <p>
+          Acquia CMS comes pre-configured with menus for the site-wide header
+          and footer. These menus will be the same on every page of your website.
+          The menu that you <a href="admin/structure/menu/manage/main">see in the
+          header is labeled 'Main Navigation'</a>.
+        </p>
+        <p>
+          By following the link above, you can manage the items shown in the
+          header menu.
+        </p>
+        <img style="width:100%;" src="/{{ module_path[0] }}/assets/images/header.png"/>
+        <p>
+          Similar to the header menu, Acquia CMS includes a
+          <a href="admin/structure/menu/manage/footer">menu in the footer</a>.
+        </p>
+        <p>
+          Follow the link above to manage the items in the footer menu.
+        </p>
+        <img style="width:100%;" src="/{{ module_path[0] }}/assets/images/footer.png"/>
       </div>
-
       <div class="content-leaf">
         <h2><a name="forms">Creating Forms</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        <p>
+          Acquia CMS includes the Webform module, which enables site builders to
+          create forms through an easy to use administrative UI.
+          We include one sample form in our starter site (‘Contact Us’ in the
+          main menu) as an example.
+        </p>
+        <p>
+          There is extensive documentation on webforms at Drupal.org. Some key
+          reference materials are:
+        </p>
+        <p>
+        <ul>
+          <li><a href="https://www.drupal.org/node/2834423">Webform introduction</a></li>
+          <li><a href="https://www.drupal.org/node/2837024">Features overview</a></li>
+          <li><a href="https://www.drupal.org/node/2834424">Video tutorials</a></li>
+        </ul>
+        </p>
+        <p>
+          <a href="https://training.acquia.com/">Go to Acquia Academy</a> for
+          training on using the Webform module.
+        </p>
       </div>
-
       <div class="content-leaf">
         <h2><a name="site-studio">Working with Site Studio</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        <p>
+          Acquia CMS includes automatic integration with Site Studio, a powerful
+          low-code design tool that allows users to design their website look
+          and feel without writing a line of code. All you need to do is
+          <a href="/admin/tour/dashboard">configure Acquia CMS with your Site
+          Studio API keys</a>, which you recieved when purchasing  your Acquia
+          Cloud subscription.
+        </p>
+        <p>
+          Once the API keys are installed, Acquia CMS configures Site Studio
+          and installs several components automatically.
+        </p>
+        <p>
+          <a href="/node/add/page">Go here to create your first Page</a> and
+          start using the following pre-built components:
+        </p>
+        <img style="width:100%;" src="/{{ module_path[0] }}/assets/images/component-list-1.png"/>
+        <img style="width:100%;" src="/{{ module_path[0] }}/assets/images/component-list-2.png"/>
+        <img style="width:100%;" src="/{{ module_path[0] }}/assets/images/component-list-3.png"/>
       </div>
-
       <div class="content-leaf">
         <h2><a name="troubleshooting">Troubleshooting</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        <p><b>Q: What should I do if maps are not displaying correctly on Place pages?</b></p>
+        <p>
+          For maps to display correctly, you must configure Acquia CMS with
+          valid Google API keys. <a href="/admin/tour/dashboard">You can set
+          your Google Map keys on the Dashboard</a>.
+        </p>
+        <br>
+        <p><b>Q: How can I see a demo of Acquia CMS?</b></P>
+        <p>Acquia CMS includes with a starter site which is not enabled by
+        default. To enable the starter site, <a href="/admin/modules">please go
+        to the modules page and install Acquia CMS Starter</a>.
+        </p>
+        <br>
+        <p><b>Q: I would like to see some default content after i install ACMS</b></p>
+        <p>The starter module includes default content. To enable the starter
+        site, <a href="/admin/modules">please go to the modules page and install
+        Acquia CMS Starter</a>.
+        </p>
       </div>
-
       <div class="content-leaf">
-        <h2><a name="support">Getting Support</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
-        <p>Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</p>
-        <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante.</p>
-        <p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam.</p>
-        <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        <h2><a name="support">Getting Additional Help</a></h2>
+        <p>
+          <a href="https://docs.acquia.com/support/#contacting-acquia-support">
+            Go here to contact the Acquia Support team.
+          </a>
+        </p>
       </div>
     </div>
   </div>
