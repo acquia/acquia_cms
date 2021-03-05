@@ -179,14 +179,19 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *
    * @option scope
    *   The scope for particular package to be imported.
+   * @option delete-list
+   *   The comma separated list of config files to be deleted during import.
    * @command acms:config-reset
    * @aliases acr
    * @usage acms:config-reset
    *   Reset the configuration to the default.
-   * @usage acms:config-reset acquia_cms_article acquia_cms_common --scope=all
+   * @usage acms:config-reset acquia_cms_article acquia_cms_common --scope=all --delete-list=autologout.settings
    *   Reset the configuration to the default.
    */
-  public function resetConfigurations(array $package, array $options = ['scope' => NULL]) {
+  public function resetConfigurations(array $package, array $options = [
+    'scope' => NULL,
+    'delete-list' => NULL,
+  ]) {
     $this->io()->text(["Welcome to the Acquia CMS config reset wizard.",
       "This should be used with extreme caution and can lead to unexpected behavior on your site if not well tested.",
       "Do not run this in production until you've tested it in a safe, non-public environment first.",
@@ -214,9 +219,12 @@ final class AcmsConfigImportCommands extends DrushCommands {
       elseif ($options['scope'] && !in_array($options['scope'], self::ALLOWED_SCOPE)) {
         throw new \InvalidArgumentException('Invalid scope, allowed values are [config, site-studio, all]');
       }
+      if (!$options['delete-list']) {
+        $options['delete-list'] = [];
+      }
     }
     // Lets import the configurations.
-    $this->doImport($package, $options['scope']);
+    $this->doImport($package, $options['scope'], $options['delete-list']);
   }
 
   /**
@@ -265,17 +273,22 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *   The array of modules.
    * @param string $scope
    *   The scope.
+   * @param array $delete_list
+   *   The list of config files to be deleted during import.
    *
    * @throws \Drush\Exceptions\UserAbortException
-   * @throws \Exception
    */
-  private function doImport(array $package, string $scope) {
+  private function doImport(array $package, string $scope, array $delete_list) {
     $config_files = $ss_config_files = [];
     if (in_array($scope, ['config', 'all'])) {
       foreach ($package as $module) {
         $config_files = array_merge($config_files, $this->getConfigFiles($module));
       }
-      $this->importPartialConfig($config_files);
+      // Let validate delete list against given scope of configurations.
+      if (!$this->validDeleteList($config_files, $delete_list)) {
+        throw new \Exception("The file specified in --delete-list option is invalid.");
+      }
+      $this->importPartialConfig($config_files, $delete_list);
     }
     // Import the site studio configurations.
     if (in_array($scope, ['site-studio', 'all'])) {
@@ -363,11 +376,12 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *
    * @param array $config_files
    *   The config file that needs re-import.
+   * @param array $delete_list
+   *   The list of configurations to be deleted before import.
    *
    * @throws \Drush\Exceptions\UserAbortException
-   * @throws \Exception
    */
-  private function importPartialConfig(array $config_files) {
+  private function importPartialConfig(array $config_files, array $delete_list) {
     // Determine $source_storage in partial case.
     $active_storage = $this->getConfigStorage();
 
@@ -376,7 +390,19 @@ final class AcmsConfigImportCommands extends DrushCommands {
       $replacement_storage->replaceData($name, $data);
     }
     $source_storage = $replacement_storage;
-
+    // In case of --delete-list option lets delete configurations from
+    // source storage before running the actual importing.
+    if ($delete_list) {
+      foreach ($delete_list as $del_config_item) {
+        // Allow for accidental .yml extension.
+        if (substr($del_config_item, -4) === '.yml') {
+          $del_config_item = substr($del_config_item, 0, -4);
+        }
+        if ($source_storage->exists($del_config_item)) {
+          $source_storage->delete($del_config_item);
+        }
+      }
+    }
     $config_manager = $this->getConfigManager();
     $storage_comparer = new StorageComparer($source_storage, $active_storage, $config_manager);
     if (!$storage_comparer->createChangelist()->hasChanges()) {
@@ -403,7 +429,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *
    * @hook validate acms:config-reset
    */
-  public function validate(CommandData $commandData) {
+  public function validateConfigResetCommand(CommandData $commandData) {
     // Since we are running config import with partial option
     // Lets check config module is enabled or not.
     if (!$this->moduleHandler->moduleExists('config')) {
@@ -413,6 +439,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
     $messages = [];
     $isInteractive = $commandData->input()->isInteractive();
     $scope = $commandData->input()->getOption('scope');
+    $delete_list = $commandData->input()->getOption('delete-list');
     $package = $commandData->input()->getArgument('package');
     if (isset($scope) && !in_array($scope, self::ALLOWED_SCOPE)) {
       $messages[] = 'Invalid scope, allowed values are [config, site-studio, all]';
@@ -420,6 +447,17 @@ final class AcmsConfigImportCommands extends DrushCommands {
     if ($package && !$this->hasValidPackage($package)) {
       $messages[] = 'Given packages are not valid, try providing a list of ACMS modules ex: acquia_cms_article';
     }
+    // In case of --delete-list option.
+    if ($delete_list) {
+      $delete_list_array = array_filter(explode(',', $delete_list));
+      if (empty($delete_list_array)) {
+        $messages[] = dt("The file specified in --delete-list option is in the wrong format.");
+      }
+      else {
+        $commandData->input()->setOption('delete-list', $delete_list_array);
+      }
+    }
+
     // In case of -y lets check user has provided all the required arguments.
     if (!$isInteractive && (!$package || !$scope)) {
       $messages[] = 'In order to use -y option, please provide a package and scope variable.';
@@ -427,6 +465,29 @@ final class AcmsConfigImportCommands extends DrushCommands {
     if ($messages) {
       return new CommandError(implode(' ', $messages));
     }
+  }
+
+  /**
+   * Validate the given delete list has valid configuration file.
+   *
+   * @param array $config_file
+   *   The list of configurations file per scope.
+   * @param array $delete_list_array
+   *   The list of config file to be deleted.
+   *
+   * @return bool
+   *   Boolean indicate true, false.
+   */
+  private function validDeleteList(array $config_file, array $delete_list_array) {
+    $config_file_list = array_keys($config_file);
+    $valid = TRUE;
+    foreach ($delete_list_array as $config_name) {
+      if (!in_array($config_name, $config_file_list)) {
+        $valid = FALSE;
+        break;
+      }
+    }
+    return $valid;
   }
 
   /**
