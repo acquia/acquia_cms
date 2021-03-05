@@ -3,7 +3,7 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Tests 'Card - Image' cohesion component.
+ * Tests 'Contact Information' cohesion component.
  *
  * @group acquia_cms
  * @group site_studio
@@ -11,7 +11,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * @group pr
  * @group push
  */
-class ImageCardComponentTest extends CohesionComponentTestBase {
+class ContactInformationCardComponentTest extends CohesionComponentTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.
@@ -29,10 +29,18 @@ class ImageCardComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $edit_form = $this->getLayoutCanvas()->add('Card - Image')->edit();
+    $edit_form = $this->getLayoutCanvas()->add('Contact information card')->edit();
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMedia(0);
     $this->insertSelectedMedia();
+
+    $edit_form->fillField('Card heading element', 'string:h3');
+    $edit_form->fillField('Card heading', 'This is the Heading');
+    $edit_form->fillField('Contact name', 'Leia Organa');
+    $edit_form->fillField('Company', 'Acquiaville');
+    $edit_form->fillField('Address', 'City Hall,200 main ST,Acquiaville');
+    $edit_form->fillField('Telephone', '9820964326');
+    $edit_form->fillField('Email', 'acquiaindia@test.com');
   }
 
   /**
@@ -51,7 +59,7 @@ class ImageCardComponentTest extends CohesionComponentTestBase {
 
     // Visit to cohesion components page.
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('Card components', 'Card - Image');
+    $this->editDefinition('Card components', 'Contact information card');
   }
 
 }

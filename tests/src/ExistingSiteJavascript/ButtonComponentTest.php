@@ -25,20 +25,20 @@ class ButtonComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $edit_form = $this->getLayoutCanvas()->add('Button')->edit();
+    $edit_form = $this->getLayoutCanvas()->add('Button(s)')->edit();
 
     $edit_form->clickLink('Layout and style');
     // Check if all the button styles are there in the select list.
     $styles = [
-      'Button CTA',
-      'Button Solid',
-      'Button Outline',
-      'Button Unstyled',
+      'Left',
+      'Center',
+      'Right',
     ];
     $assert_session = $this->assertSession();
     foreach ($styles as $style) {
-      $assert_session->optionExists('Button Style', $style, $edit_form);
+      $assert_session->optionExists('Align buttons', $style, $edit_form);
     }
+    $assert_session->optionExists('Add space below', 'Add space below', $edit_form);
   }
 
   /**
@@ -56,7 +56,7 @@ class ButtonComponentTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('Basic components', 'Button');
+    $this->editDefinition('Basic components', 'Button(s)');
   }
 
 }

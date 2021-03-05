@@ -3,7 +3,7 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Tests the "Sidebar nav component.
+ * Tests "Background container" component.
  *
  * @group acquia_cms
  * @group site_studio
@@ -11,7 +11,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * @group pr
  * @group push
  */
-class SidebarNavComponentTest extends CohesionComponentTestBase {
+class ContainerTest extends CohesionComponentTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.
@@ -22,11 +22,17 @@ class SidebarNavComponentTest extends CohesionComponentTestBase {
     $account->save();
     $this->drupalLogin($account);
 
+    // Create a random image that we can select in the media library when
+    // editing the component.
+    $this->createMedia(['bundle' => 'image']);
+
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    $this->getLayoutCanvas()
-      ->add('Template - Sidebar nav')->edit();
+    $edit_form = $this->getLayoutCanvas()->add('Container')->edit();
+    $this->openMediaLibrary($edit_form, 'Select image');
+    $this->selectMedia(0);
+    $this->insertSelectedMedia();
   }
 
   /**
@@ -44,7 +50,7 @@ class SidebarNavComponentTest extends CohesionComponentTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/admin/cohesion/components/components');
-    $this->editDefinition('Header and footer components', 'Template - Sidebar nav');
+    $this->editDefinition('Layout components', 'Container');
   }
 
 }
