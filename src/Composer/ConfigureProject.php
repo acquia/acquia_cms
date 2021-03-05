@@ -6,7 +6,7 @@ use Composer\Json\JsonFile;
 use Composer\Script\Event;
 
 /**
- * Configures an instance of drupal/legacy-project to install Lightning.
+ * Configures an instance of drupal/legacy-project to install Acquia CMS.
  */
 final class ConfigureProject {
 
@@ -22,6 +22,7 @@ final class ConfigureProject {
     $target = new JsonFile($arguments[0] . '/composer.json');
     $project = $target->read();
 
+    $project['name'] = 'acquia/acquia-cms-project';
     $project['extra']['installer-paths']['libraries/{$name}'] = [
       'type:drupal-library',
       'type:bower-asset',
