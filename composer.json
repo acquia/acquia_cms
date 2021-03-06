@@ -189,6 +189,9 @@
             "@putenv MODULES_DIR=./docroot/sites/all",
             "if [ \"$PIPELINE_ENV\" != \"true\" ]; then composer build:local; fi;"
         ],
+        "acms:install": [
+            "bash install-acms"
+        ],
         "build:frontend": [
             "Composer\\Config::disableProcessTimeout",
             "cd themes/acquia_claro && npm run build",
