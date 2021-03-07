@@ -42,6 +42,17 @@ composer install
 
 ### Installing Acquia CMS
 
+* Once your Composer vendor folder has been built, you can now install Drupal and Acquia CMS.
+* First, either browse to the site and use the Installer UI and follow the directions.
+* Or you can use our handy Composer script, `composer acms:install` and follow the directions.
+* Once the installer is complete, you can either build from scratch, or you can
+install the starter site. To do so, first log into Drupal and go to the Dashboard.
+* At minimum, you must set the Google Maps API key. If you don't have an API key,
+just enter any string. Note that using an invalid API key will throw an error
+during content creation.
+* Then run `drush en acquia_cms_starter`. This will create a demo site with
+default components.
+
 #### Installing from the Command Line
 For development purposes, it's easiest to install Acquia CMS at the command line using Drush. In these instructions, I assume that you have the [Drush launcher](https://github.com/drush-ops/drush-launcher) installed globally in your PATH (`drush --version`).
 
