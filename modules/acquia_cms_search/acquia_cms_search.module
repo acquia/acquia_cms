@@ -151,3 +151,10 @@ function acquia_cms_search_search_api_server_update(EntityInterface $entity) {
     \Drupal::classResolver(AcquiaSearchFacade::class)->submitSettingsForm();
   }
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function acquia_cms_search_form_acquia_cms_solr_search_form_alter(array &$form) {
+  $form['#submit'][] = AcquiaSearchFacade::class . '::submitSettingsForm';
+}

@@ -111,18 +111,26 @@ final class AcquiaSearchForm extends ConfigFormBase {
         '#required' => TRUE,
         '#title' => $this->t('Acquia Subscription identifier'),
         '#default_value' => $this->state->get('acquia_search.identifier'),
+        '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI. Example: ABCD-12345'),
+      ];
+      $form['acquia_search']['api_key'] = [
+        '#type' => 'password',
+        '#title' => $this->t('Acquia Connector key'),
+        '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI.'),
       ];
       $form['acquia_search']['api_host'] = [
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Acquia Search API hostname'),
         '#default_value' => $this->config('acquia_search.settings')->get('api_host'),
+        '#description' => $this->t('API endpoint domain or URL. Default value is "https://api.sr-prod02.acquia.com".'),
       ];
       $form['acquia_search']['uuid'] = [
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Acquia Application UUID'),
         '#default_value' => $this->state->get('acquia_search.uuid'),
+        '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI.'),
       ];
       $form['acquia_search']['actions']['submit'] = [
         '#type' => 'submit',
@@ -146,10 +154,12 @@ final class AcquiaSearchForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $solr_identifier = $form_state->getValue(['identifier']);
+    $solr_api_key = $form_state->getValue(['api_key']);
     $solr_api_host = $form_state->getValue(['api_host']);
     $solr_api_uuid = $form_state->getValue(['uuid']);
     $this->config('acquia_search.settings')->set('api_host', $solr_api_host)->save(TRUE);
     $this->state->set('acquia_search.identifier', $solr_identifier);
+    $this->state->set('acquia_search.api_key', $solr_api_key);
     $this->state->set('acquia_search.uuid', $solr_api_uuid);
     $this->messenger()->addStatus('The configuration options have been saved.');
   }
