@@ -12,13 +12,6 @@ function acquia_cms_starter_requirements(string $phase) : array {
   $requirements = [];
 
   if ($phase === 'install') {
-    if (\Drupal::moduleHandler()->moduleExists('acquia_cms_demo_pubsec')) {
-      $requirements['acquia_cms_starter_pubsec_demo_conflict'] = [
-        'title' => t('Acquia CMS Demo Pubsec'),
-        'description' => t('Acquia CMS Demo Pubsec conflicts with Starter.'),
-        'severity' => REQUIREMENT_ERROR,
-      ];
-    }
 
     // Block install if the Google Maps API keys aren't set in the Geocoder
     // provider.
