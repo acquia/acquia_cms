@@ -44,7 +44,7 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
    */
   public function __construct(ModuleHandlerInterface $module_handler, LoggerChannelFactoryInterface $loggerFactory) {
     $this->moduleHandler = $module_handler;
-    $this->loggerFactory = $loggerFactory->get('acms:update-db');
+    $this->loggerFactory = $loggerFactory->get('acquia_cms_db_update');
   }
 
   /**
