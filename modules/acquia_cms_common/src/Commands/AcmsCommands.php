@@ -7,6 +7,7 @@ use Consolidation\AnnotatedCommand\CommandError;
 use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -27,13 +28,23 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
   protected $moduleHandler;
 
   /**
+   * Logger Factory.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelFactory
+   */
+  protected $loggerFactory;
+
+  /**
    * Constructs a ModuleHandlerInterface object.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerFactory
+   *   The logger factory.
    */
-  public function __construct(ModuleHandlerInterface $module_handler) {
+  public function __construct(ModuleHandlerInterface $module_handler, LoggerChannelFactoryInterface $loggerFactory) {
     $this->moduleHandler = $module_handler;
+    $this->loggerFactory = $loggerFactory->get('acquia_cms_db_update');
   }
 
   /**
@@ -118,7 +129,30 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
       'post-updates' => TRUE,
     ];
     $process = $this->processManager()->drush($selfAlias, 'updatedb', [], $options);
-    $process->mustRun($process->showRealtime());
+    $process->mustRun();
+
+    // Use symfony process component getIterator to get all output
+    // and log them in system using drupal logger service
+    // so that sumo logic can take the logs from system.
+    // https://symfony.com/doc/current/components/process.html#usage
+    $iterator = $process->getIterator($process::ITER_SKIP_OUT);
+    foreach ($iterator as $message) {
+      $this->logMessage($message);
+    }
+  }
+
+  /**
+   * Helper to log message using logger.
+   *
+   * @param string $message
+   *   The message string.
+   */
+  private function logMessage(string $message) {
+    $message_array = array_filter(explode(PHP_EOL, $message));
+    foreach ($message_array as $log) {
+      $str_text = str_replace('> ', '', $log);
+      $this->loggerFactory->notice($str_text);
+    }
   }
 
   /**
