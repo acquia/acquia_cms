@@ -63,12 +63,14 @@ final class Hooks extends DrushCommands {
     require_once DRUSH_DRUPAL_CORE . '/includes/install.inc';
     foreach ($modules as $module) {
       module_load_install($module);
+      $require_constants = [REQUIREMENT_ERROR, REQUIREMENT_WARNING];
       $requirements = $this->moduleHandler->invoke($module, 'requirements', ['install']);
-      if (is_array($requirements) && drupal_requirements_severity($requirements) == REQUIREMENT_ERROR) {
+      if (is_array($requirements) &&
+        in_array(drupal_requirements_severity($requirements), $require_constants)) {
         $reasons = [];
         // Print any error messages.
         foreach ($requirements as $id => $requirement) {
-          if (isset($requirement['severity']) && $requirement['severity'] == REQUIREMENT_ERROR) {
+          if (isset($requirement['severity']) && in_array($requirement['severity'], $require_constants)) {
             $message = $requirement['description'];
             if (isset($requirement['value']) && $requirement['value']) {
               $message = dt('@requirements_message (Currently using @item version @version)',
