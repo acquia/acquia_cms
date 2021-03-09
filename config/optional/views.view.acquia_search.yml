@@ -3,19 +3,19 @@ status: false
 dependencies:
   config:
     - field.storage.node.body
-    - search_api.index.acquia_search_solr_search_api_solr_index
+    - search_api.index.acquia_search_index
     - system.menu.main
   module:
     - search_api
     - text
     - user
     - acquia_cms_development
-id: acquia_search_solr
+id: acquia_search
 label: 'Acquia Search Solr'
 module: views
 description: ''
 tag: ''
-base_table: search_api_index_acquia_search_solr_search_api_solr_index
+base_table: search_api_index_acquia_search_index
 base_field: search_api_id
 display:
   default:
@@ -87,7 +87,7 @@ display:
       fields:
         title:
           id: title
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: title
           relationship: none
           group_type: group
@@ -157,7 +157,7 @@ display:
           plugin_id: search_api_field
         body:
           id: body
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: body
           relationship: none
           group_type: group
@@ -226,7 +226,7 @@ display:
           plugin_id: search_api_field
         search_api_excerpt:
           id: search_api_excerpt
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: search_api_excerpt
           relationship: none
           group_type: group
@@ -279,7 +279,7 @@ display:
           plugin_id: search_api
         type:
           id: type
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: type
           relationship: none
           group_type: group
@@ -353,7 +353,7 @@ display:
       filters:
         search_api_fulltext:
           id: search_api_fulltext
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: search_api_fulltext
           relationship: none
           group_type: group
@@ -395,7 +395,7 @@ display:
           plugin_id: search_api_fulltext
         search_api_language:
           id: search_api_language
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: search_api_language
           relationship: none
           group_type: group
@@ -436,7 +436,7 @@ display:
       sorts:
         search_api_relevance:
           id: search_api_relevance
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: search_api_relevance
           relationship: none
           group_type: group

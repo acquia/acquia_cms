@@ -22,7 +22,7 @@ events:
             # We can probably remove this, along with the acquia_cms_development module
             # itself, once we have a permanent demo site in place.
             - cp -R modules/acquia_cms_development docroot/profiles/acquia_cms/modules
-            - cp config/optional/views.view.acquia_search_solr.yml docroot/profiles/acquia_cms/config/optional
+            - cp config/optional/views.view.acquia_search.yml docroot/profiles/acquia_cms/config/optional
       - front-end:
           type: script
           script:

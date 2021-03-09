@@ -4,7 +4,7 @@ namespace Drupal\acquia_cms_tour\Controller;
 
 use Drupal\acquia_cms_tour\Form\AcquiaConnectorForm;
 use Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm;
-use Drupal\acquia_cms_tour\Form\AcquiaSearchSolrForm;
+use Drupal\acquia_cms_tour\Form\AcquiaSearchForm;
 use Drupal\acquia_cms_tour\Form\AcquiaTelemetryForm;
 use Drupal\acquia_cms_tour\Form\GoogleAnalyticsForm;
 use Drupal\acquia_cms_tour\Form\GoogleTagManagerForm;
@@ -30,7 +30,7 @@ final class DashboardController extends ControllerBase {
   private const SECTIONS = [
     'acquia_telemetry' => AcquiaTelemetryForm::class,
     'acquia_google_maps_api' => AcquiaGoogleMapsAPIForm::class,
-    'acquia_solr_search_form' => AcquiaSearchSolrForm::class,
+    'acquia_search_form' => AcquiaSearchForm::class,
     'google_analytics_form' => GoogleAnalyticsForm::class,
     'google_tag_manager_form' => GoogleTagManagerForm::class,
     'recaptcha_form' => RecaptchaForm::class,
