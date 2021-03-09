@@ -22,7 +22,7 @@ final class ConfigOverrider implements ConfigFactoryOverrideInterface {
   public function loadOverrides($names) {
     $overrides = [];
 
-    $name = 'acquia_search_solr.settings';
+    $name = 'acquia_search.settings';
     if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv() && in_array($name, $names, TRUE)) {
       $overrides[$name]['override_search_core'] = 'BGVZ-196143.dev.orionacms';
     }

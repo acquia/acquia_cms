@@ -8,7 +8,7 @@
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
 use Drupal\acquia_connector\Helper\Storage as ConnectorStorage;
 use Drupal\acquia_connector\Subscription;
-use Drupal\acquia_search_solr\Helper\Storage as SolrStorage;
+use Drupal\acquia_search\Helper\Storage as SolrStorage;
 
 /**
  * Implements hook_install().
@@ -18,7 +18,7 @@ function acquia_cms_development_install() {
   $identifier = 'BGVZ-196143';
 
   _acquia_connector_config($key, $identifier);
-  _acquia_search_solr_config($key, $identifier);
+  _acquia_search_config($key, $identifier);
 
   // Configure shield if it is an Acquia cloud environment (but not an IDE).
   if (Environment::isAhEnv() && !Environment::isAhIdeEnv()) {
@@ -29,11 +29,6 @@ function acquia_cms_development_install() {
       ->set('credentials.shield.pass', 'DmpU05sN13o1@bQ!')
       ->save();
   }
-
-  // Since Acquia solr search view is disabled, the exposed form filter block
-  // for this view is broken. Delete the broken block.
-  $block = \Drupal::service('entity_type.manager')->getStorage('block');
-  $block->load('exposed_form_acquia_search_solr_page')->delete();
 
   // Both PubSec and Starter "really" need Google Maps API Keys to "work."
   // This code is a work around for the dev team to ensure that we can install
@@ -85,15 +80,15 @@ function _acquia_connector_config(string $key, string $identifier) {
  * @param string $identifier
  *   The Acquia hosting identifier.
  */
-function _acquia_search_solr_config(string $key, string $identifier) {
-  // Replicating Storage from acquia_search_solr/src/Form/SettingsForm.php.
+function _acquia_search_config(string $key, string $identifier) {
+  // Replicating Storage from acquia_search/src/Helper/Storage.php.
   $storage = new SolrStorage();
   $storage->setApiHost('https://api.sr-prod02.acquia.com');
   $storage->setUuid('f63c4427-2738-4e14-a756-5f7b80b74062');
   $storage->setApiKey($key);
   $storage->setIdentifier($identifier);
 
-  // @todo This code was copied verbatim from the Acquia Search Solr module,
+  // @todo This code was copied verbatim from the Acquia Search module,
   // but it's not at all clear why it uses this face-melter of a cache clear.
   // (My guess is that the original authors were flailing.) Replace this with a
   // more precise and lightweight cache invalidation or similar ASAP.

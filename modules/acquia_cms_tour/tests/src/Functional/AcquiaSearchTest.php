@@ -10,7 +10,7 @@ use Drupal\Tests\BrowserTestBase;
  * @group acquia_cms
  * @group acquia_cms_tour
  */
-class AcquiaSearchSolrTest extends BrowserTestBase {
+class AcquiaSearchTest extends BrowserTestBase {
 
 
   /**
@@ -23,7 +23,7 @@ class AcquiaSearchSolrTest extends BrowserTestBase {
    */
   protected static $modules = [
     'acquia_cms_tour',
-    'acquia_search_solr',
+    'acquia_search',
   ];
 
   /**
@@ -44,7 +44,7 @@ class AcquiaSearchSolrTest extends BrowserTestBase {
   /**
    * Tests the Acquia Search Solr Form.
    */
-  public function testAcquiaSearchSolr() {
+  public function testAcquiaSearch() {
     $assert_session = $this->assertSession();
 
     $account = $this->drupalCreateUser(['access acquia cms tour dashboard']);
@@ -74,11 +74,11 @@ class AcquiaSearchSolrTest extends BrowserTestBase {
     $assert_session->pageTextContains('The configuration options have been saved.');
     // Test that the config values we expect are set correctly.
     $state = $this->container->get('state');
-    $solr_identifier = $state->get('acquia_search_solr.identifier');
+    $solr_identifier = $state->get('acquia_search.identifier');
     $this->assertSame($solr_identifier, $dummy_identifier);
-    $solr_api_host = $this->config('acquia_search_solr.settings')->get('api_host');
+    $solr_api_host = $this->config('acquia_search.settings')->get('api_host');
     $this->assertSame($solr_api_host, $dummy_hostname);
-    $solr_uuid = $state->get('acquia_search_solr.uuid');
+    $solr_uuid = $state->get('acquia_search.uuid');
     $this->assertSame($solr_uuid, $dummy_uuid);
   }
 
