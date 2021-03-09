@@ -31,13 +31,31 @@ function acquia_cms_starter_requirements(string $phase) : array {
       if ($provider) {
         $configuration = $provider->get('configuration');
         if (empty($configuration['apiKey'])) {
-          $requirements['acquia_cms_starter_google_maps_api_key'] = [
-            'title' => t('Google Maps API Key is missing!'),
-            'description' => t('Acquia CMS Starter requires a Google Maps API key to be set. <a href="@url">Go here to set it.</a>', [
-              '@url' => '/admin/tour/dashboard',
-            ]),
-            'severity' => REQUIREMENT_ERROR,
-          ];
+          // If the install is via Drush, just assume the user knows what
+          // they're doing and display a warning.
+          if (PHP_SAPI === 'cli') {
+            $requirements['acquia_cms_starter_google_maps_api_key'] = [
+              'title' => t('Google Maps API Key is missing!'),
+              'description' => t(
+                'The Google API key is not set, and you will see errors below,
+                 which are technically harmless, but the maps will not work.
+                 You can set this later and resave your starter content to
+                 re-generate them.'
+              ),
+              'severity' => REQUIREMENT_WARNING,
+            ];
+          }
+          else {
+            // Otherwise, the install is via the UI and we should direct them
+            // to the tour dashboard.
+            $requirements['acquia_cms_starter_google_maps_api_key'] = [
+              'title' => t('Google Maps API Key is missing!'),
+              'description' => t('Acquia CMS Starter requires a Google Maps API key to be set. <a href="@url">Go here to set it.</a>', [
+                '@url' => '/admin/tour/dashboard',
+              ]),
+              'severity' => REQUIREMENT_ERROR,
+            ];
+          }
         }
       }
     }
