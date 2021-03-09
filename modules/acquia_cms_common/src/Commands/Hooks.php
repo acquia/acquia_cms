@@ -84,7 +84,9 @@ final class Hooks extends DrushCommands {
       }
     }
     if (is_array($requirements) && drupal_requirements_severity($requirements) == REQUIREMENT_WARNING) {
-      Drush::logger()->warning(dt($requirement['description']));
+      foreach ($requirements as $id => $requirement) {
+        Drush::logger()->warning(dt($requirement['description']));
+      }
     }
   }
 
