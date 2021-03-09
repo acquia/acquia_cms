@@ -88,19 +88,21 @@ final class SiteStudioCoreForm extends ConfigFormBase {
     if ($this->module_handler->moduleExists($module)) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $form['cohesion']['description'] = [
-        '#type' => 'markup',
-        '#markup' => '',
-        '#prefix' => $module_info['name'],
+      $form['cohesion'] = [
+        '#type' => 'fieldset',
+        '#title' => $module_info['name'],
         '#description' => $module_info['description'],
+        '#open' => TRUE,
       ];
       $form['cohesion']['api_key'] = [
         '#type' => 'textfield',
+        '#required' => TRUE,
         '#title' => $this->t('API key'),
         '#default_value' => $this->config('cohesion.settings')->get('api_key'),
       ];
       $form['cohesion']['agency_key'] = [
         '#type' => 'textfield',
+        '#required' => TRUE,
         '#title' => $this->t('Agency key'),
         '#default_value' => $this->config('cohesion.settings')->get('organization_key'),
       ];
