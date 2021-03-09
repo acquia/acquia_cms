@@ -60,6 +60,7 @@
 }
 .dashboard-fields-wrapper {
   width: 90%;
+  margin-right: 10px;
 }
 .dashboard-buttons-wrapper {
   display: flex;
@@ -92,9 +93,18 @@
   margin-bottom: 30px;
 }
 .section-top .help-text {
-  width: 85%;
+  width: 80%;
 }
 .section-top .wizard {
   position: absolute;
   right: 2.75rem;
+}
+
+@media screen and (max-width: 767px) {
+  .section-top {
+    flex-direction: column;
+  }
+  .section-top .wizard {
+    position: inherit;
+  }
 }
