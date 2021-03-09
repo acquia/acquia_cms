@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0db5fc3ac3a64db5a576ad72966df358",
+    "content-hash": "fc8e8582a8e0a5e640969912335367af",
     "packages": [
         {
             "name": "acquia/cohesion",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/cohesion.git",
-                "reference": "7a3e16f03c7598e1296503559c900dc71adaedd9"
+                "reference": "65d0a9456fd787584d1d702d21be9bab036e5904"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/cohesion/zipball/7a3e16f03c7598e1296503559c900dc71adaedd9",
-                "reference": "7a3e16f03c7598e1296503559c900dc71adaedd9",
+                "url": "https://api.github.com/repos/acquia/cohesion/zipball/65d0a9456fd787584d1d702d21be9bab036e5904",
+                "reference": "65d0a9456fd787584d1d702d21be9bab036e5904",
                 "shasum": ""
             },
             "require": {
@@ -69,20 +69,20 @@
             "support": {
                 "source": "https://github.com/acquia/cohesion/tree/6.4.2"
             },
-            "time": "2021-03-08T15:10:07+00:00"
+            "time": "2021-03-09T18:20:56+00:00"
         },
         {
             "name": "acquia/cohesion-theme",
-            "version": "6.4.1",
+            "version": "6.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/cohesion-theme.git",
-                "reference": "e1a45529f57e6ef5fa110ffe2afa347b02a6351b"
+                "reference": "afa270a18af7e0867fa84d494f613f084b61342e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/cohesion-theme/zipball/e1a45529f57e6ef5fa110ffe2afa347b02a6351b",
-                "reference": "e1a45529f57e6ef5fa110ffe2afa347b02a6351b",
+                "url": "https://api.github.com/repos/acquia/cohesion-theme/zipball/afa270a18af7e0867fa84d494f613f084b61342e",
+                "reference": "afa270a18af7e0867fa84d494f613f084b61342e",
                 "shasum": ""
             },
             "type": "drupal-theme",
@@ -100,9 +100,9 @@
             "description": "Site Studio minimal theme",
             "support": {
                 "issues": "https://github.com/acquia/cohesion-theme/issues",
-                "source": "https://github.com/acquia/cohesion-theme/tree/6.4.1"
+                "source": "https://github.com/acquia/cohesion-theme/tree/6.4.2"
             },
-            "time": "2021-01-18T15:24:50+00:00"
+            "time": "2021-03-09T18:21:04+00:00"
         },
         {
             "name": "acquia/content-hub-php",
@@ -1628,47 +1628,48 @@
             }
         },
         {
-            "name": "drupal/acquia_search_solr",
-            "version": "1.0.0-beta10",
+            "name": "drupal/acquia_search",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/acquia_search_solr.git",
-                "reference": "8.x-1.0-beta10"
+                "url": "https://git.drupalcode.org/project/acquia_search.git",
+                "reference": "3.0.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_search_solr-8.x-1.0-beta10.zip",
-                "reference": "8.x-1.0-beta10",
-                "shasum": "8edb7b76febbcca5eb02d04bcb148e81e470d198"
+                "url": "https://ftp.drupal.org/files/projects/acquia_search-3.0.1.zip",
+                "reference": "3.0.1",
+                "shasum": "ebffd6dceb66eb8cba0e5e1e718f449826c1281c"
             },
             "require": {
-                "drupal/core": "^8 || ^9",
-                "drupal/search_api_solr": "^4.1.8",
+                "drupal/core": "^8.9 || ^9",
+                "drupal/search_api_solr": "^4.1.10",
                 "http-interop/http-factory-guzzle": "^1.0",
                 "php-http/guzzle6-adapter": "^2.0"
             },
             "conflict": {
+                "drupal/acquia_connector": "<3",
                 "drupal/search_api_solr_multilingual": "<3"
             },
             "require-dev": {
-                "drush/drush": "~9.0"
+                "drush/drush": "^10.0"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-beta10",
-                    "datestamp": "1605298385",
+                    "version": "3.0.1",
+                    "datestamp": "1614363710",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "branch-alias": {
-                    "dev-8.x-1.x": "1.x-dev"
+                    "dev-3.x": "3.x-dev"
                 },
                 "drush": {
                     "services": {
-                        "drush.services.yml": "^9"
+                        "drush.services.yml": "^10"
                     }
                 }
             },
@@ -1678,70 +1679,30 @@
             ],
             "authors": [
                 {
-                    "name": "Dane Powell",
-                    "homepage": "https://www.drupal.org/user/339326"
-                },
-                {
-                    "name": "Gary.Wu",
-                    "homepage": "https://www.drupal.org/user/1469028"
-                },
-                {
-                    "name": "Jabb",
-                    "homepage": "https://www.drupal.org/user/584658"
-                },
-                {
-                    "name": "Mark Trapp",
-                    "homepage": "https://www.drupal.org/user/212019"
+                    "name": "Nick_vh",
+                    "homepage": "https://www.drupal.org/user/122682"
                 },
                 {
                     "name": "acquia",
                     "homepage": "https://www.drupal.org/user/1231722"
                 },
                 {
-                    "name": "ayang",
-                    "homepage": "https://www.drupal.org/user/1777884"
-                },
-                {
                     "name": "dmitrii",
                     "homepage": "https://www.drupal.org/user/411965"
-                },
-                {
-                    "name": "gcassie",
-                    "homepage": "https://www.drupal.org/user/80260"
-                },
-                {
-                    "name": "janusman",
-                    "homepage": "https://www.drupal.org/user/153120"
                 },
                 {
                     "name": "japerry",
                     "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
-                    "name": "jmoreira",
-                    "homepage": "https://www.drupal.org/user/2374486"
-                },
-                {
-                    "name": "kolafson",
-                    "homepage": "https://www.drupal.org/user/822402"
-                },
-                {
-                    "name": "m.yudin",
-                    "homepage": "https://www.drupal.org/user/2358036"
-                },
-                {
-                    "name": "mundanity",
-                    "homepage": "https://www.drupal.org/user/373605"
-                },
-                {
-                    "name": "vlad.pavlovic",
-                    "homepage": "https://www.drupal.org/user/92673"
+                    "name": "pwolanin",
+                    "homepage": "https://www.drupal.org/user/49851"
                 }
             ],
             "description": "Provides integration between your Drupal site and Acquia's hosted search service.",
-            "homepage": "https://www.drupal.org/project/acquia_search_solr",
+            "homepage": "https://www.drupal.org/project/acquia_search",
             "support": {
-                "source": "https://git.drupalcode.org/project/acquia_search_solr"
+                "source": "https://git.drupalcode.org/project/acquia_search"
             }
         },
         {
@@ -5944,17 +5905,17 @@
         },
         {
             "name": "drupal/social_media_links",
-            "version": "2.7.0",
+            "version": "2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/social_media_links.git",
-                "reference": "8.x-2.7"
+                "reference": "8.x-2.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/social_media_links-8.x-2.7.zip",
-                "reference": "8.x-2.7",
-                "shasum": "132db954d880c743bd6316f7fecd0b085bb73f91"
+                "url": "https://ftp.drupal.org/files/projects/social_media_links-8.x-2.8.zip",
+                "reference": "8.x-2.8",
+                "shasum": "7702fd4465c47767f6be0444015fa9bcdbfb1aa6"
             },
             "require": {
                 "drupal/core": "^8 || ^9"
@@ -5962,8 +5923,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.7",
-                    "datestamp": "1598506938",
+                    "version": "8.x-2.8",
+                    "datestamp": "1615222638",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5981,8 +5942,9 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "cbeier",
-                    "homepage": "https://www.drupal.org/user/1500710"
+                    "name": "Christian Beier",
+                    "homepage": "https://www.drupal.org/u/cbeier",
+                    "role": "Maintainer"
                 }
             ],
             "description": "The module provides a block that display links (icons) to your profiles on various social networking sites.",
@@ -7050,16 +7012,16 @@
         },
         {
             "name": "guzzlehttp/promises",
-            "version": "1.4.0",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "60d379c243457e073cff02bc323a2a86cb355631"
+                "reference": "8e7d04f1f6450fef59366c399cfad4b9383aa30d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/60d379c243457e073cff02bc323a2a86cb355631",
-                "reference": "60d379c243457e073cff02bc323a2a86cb355631",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/8e7d04f1f6450fef59366c399cfad4b9383aa30d",
+                "reference": "8e7d04f1f6450fef59366c399cfad4b9383aa30d",
                 "shasum": ""
             },
             "require": {
@@ -7099,9 +7061,9 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/1.4.0"
+                "source": "https://github.com/guzzle/promises/tree/1.4.1"
             },
-            "time": "2020-09-30T07:37:28+00:00"
+            "time": "2021-03-07T09:25:29+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -13757,30 +13719,35 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "1.9.1",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozarts/assert.git",
-                "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389"
+                "reference": "6964c76c7804814a842473e0c8fd15bab0f18e25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozarts/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
-                "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/6964c76c7804814a842473e0c8fd15bab0f18e25",
+                "reference": "6964c76c7804814a842473e0c8fd15bab0f18e25",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.3 || ^7.0 || ^8.0",
+                "php": "^7.2 || ^8.0",
                 "symfony/polyfill-ctype": "^1.8"
             },
             "conflict": {
                 "phpstan/phpstan": "<0.12.20",
-                "vimeo/psalm": "<3.9.1"
+                "vimeo/psalm": "<4.6.1 || 4.6.2"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.36 || ^7.5.13"
+                "phpunit/phpunit": "^8.5.13"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.10-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Webmozart\\Assert\\": "src/"
@@ -13804,9 +13771,9 @@
             ],
             "support": {
                 "issues": "https://github.com/webmozarts/assert/issues",
-                "source": "https://github.com/webmozarts/assert/tree/1.9.1"
+                "source": "https://github.com/webmozarts/assert/tree/1.10.0"
             },
-            "time": "2020-07-08T17:02:28+00:00"
+            "time": "2021-03-09T10:59:23+00:00"
         },
         {
             "name": "willdurand/geocoder",

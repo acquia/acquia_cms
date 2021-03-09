@@ -9,6 +9,7 @@
  * Implements hook_requirements().
  */
 function acquia_cms_starter_requirements(string $phase) : array {
+
   $requirements = [];
 
   if ($phase === 'install') {
@@ -29,12 +30,7 @@ function acquia_cms_starter_requirements(string $phase) : array {
           if (PHP_SAPI === 'cli') {
             $requirements['acquia_cms_starter_google_maps_api_key'] = [
               'title' => t('Google Maps API Key is missing!'),
-              'description' => t(
-                'The Google API key is not set, and you will see errors below,
-                 which are technically harmless, but the maps will not work.
-                 You can set this later and resave your starter content to
-                 re-generate them.'
-              ),
+              'description' => t("The Google API key is not set, and you will see errors below. They're technically harmless, but the maps will not work. You can set the key later and resave your starter content to generate them."),
               'severity' => REQUIREMENT_WARNING,
             ];
           }
