@@ -20,6 +20,8 @@ class ImageBackgroundHeroHelperTest extends CohesionHelperTestBase {
    *   Additional user roles to apply to the account being logged in.
    *
    * @dataProvider providerAddHelperToLayoutCanvas
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testHelper(array $roles = []) {
     $account = $this->createUser();
@@ -32,7 +34,6 @@ class ImageBackgroundHeroHelperTest extends CohesionHelperTestBase {
     // Add the helper to the layout canvas.
     $this->getLayoutCanvas()->addHelper('Image Background Hero', [
       'Background container',
-      'Hero',
     ]);
   }
 
@@ -43,6 +44,8 @@ class ImageBackgroundHeroHelperTest extends CohesionHelperTestBase {
    *   The ID of the user role to test with.
    *
    * @dataProvider providerEditAccess
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testEditAccess(string $role) {
     $account = $this->createUser();
