@@ -32,7 +32,7 @@ function acquia_cms_starter_requirements(string $phase) : array {
         $configuration = $provider->get('configuration');
         if (empty($configuration['apiKey'])) {
           $requirements['acquia_cms_starter_google_maps_api_key'] = [
-            'title' => t('Google Maps API Key missing!'),
+            'title' => t('Google Maps API Key is missing!'),
             'description' => t('Acquia CMS Starter requires a Google Maps API key to be set. <a href="@url">Go here to set it.</a>', [
               '@url' => '/admin/tour/dashboard',
             ]),

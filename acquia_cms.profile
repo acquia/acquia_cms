@@ -87,6 +87,7 @@ function acquia_cms_install_tasks(): array {
     'type' => 'batch',
     'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
   ];
+
   $tasks['acquia_cms_install_additional_modules'] = [];
 
   // If the user has opted in for Acquia Telemetry, send heartbeat event.
