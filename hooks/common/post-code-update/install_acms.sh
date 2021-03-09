@@ -25,20 +25,21 @@ fi
 
 # Enable development related modules. This is for ease of development for core
 # Acquia CMS development.
-
+echo "Enabling Acquia CMS Starter in $target_env"
 case $target_env in
   ode1)
-    echo "Enabling Acquia CMS Pubsec Demo in $target_env"
-    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_demo_pubsec --yes
+    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_starter --yes
     ;;
 
   ode3)
-    echo "Enabling Acquia CMS Starter in $target_env"
+    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_starter --yes
+    ;;
+
+  ode5)
     /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_starter --yes
     ;;
 
   stage)
-    echo "Enabling Acquia CMS Pubsec Demo in $target_env"
-    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_demo_pubsec --yes
+    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_starter --yes
     ;;
 esac

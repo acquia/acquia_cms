@@ -3,10 +3,9 @@
 namespace Drupal\acquia_cms_common\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
-use Consolidation\AnnotatedCommand\CommandResult;
-use Drupal\cohesion\Drush\DX8CommandHelpers;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drush\Commands\DrushCommands;
+use Drush\Drush;
 
 /**
  * Implements Drush command hooks.
@@ -63,14 +62,12 @@ final class Hooks extends DrushCommands {
     require_once DRUSH_DRUPAL_CORE . '/includes/install.inc';
     foreach ($modules as $module) {
       module_load_install($module);
-      $require_constants = [REQUIREMENT_ERROR, REQUIREMENT_WARNING];
       $requirements = $this->moduleHandler->invoke($module, 'requirements', ['install']);
-      if (is_array($requirements) &&
-        in_array(drupal_requirements_severity($requirements), $require_constants)) {
+      if (is_array($requirements) && drupal_requirements_severity($requirements) == REQUIREMENT_ERROR) {
         $reasons = [];
         // Print any error messages.
         foreach ($requirements as $id => $requirement) {
-          if (isset($requirement['severity']) && in_array($requirement['severity'], $require_constants)) {
+          if (isset($requirement['severity']) && $requirement['severity'] == REQUIREMENT_ERROR) {
             $message = $requirement['description'];
             if (isset($requirement['value']) && $requirement['value']) {
               $message = dt('@requirements_message (Currently using @item version @version)',
@@ -86,35 +83,8 @@ final class Hooks extends DrushCommands {
         throw new \Exception(implode("\n", $reasons));
       }
     }
-  }
-
-  /**
-   * Rebuild site studio when pubsec or starter is being enabled via drush.
-   *
-   * Cohesion_sync do not rebuild the site when pubsec is enabled via Drush.
-   * Do a forceful rebuild whenever acquia_cms_demo_pubsec module is enabled.
-   *
-   * @hook post-command pm:enable
-   */
-  public function postCommand($result, CommandData $commandData) {
-    $modules = $commandData->input()->getArgument('modules');
-    if (in_array('acquia_cms_demo_pubsec', $modules)) {
-      // Forcefully clear the cache after pubsec is enabled otherwise site
-      // studio fails to rebuild.
-      drupal_flush_all_caches();
-      // Below code ensure that drush batch process doesn't hang. Unset all the
-      // ealier created batches so that drush_backend_batch_process() can run
-      // without being stuck.
-      // @see https://github.com/drush-ops/drush/issues/3773 for the issue.
-      $batch = &batch_get();
-      $batch = NULL;
-      unset($batch);
-      $this->say(dt('Rebuilding all entities.'));
-      $result = DX8CommandHelpers::rebuild([]);
-      // Output results.
-      $this->yell('Finished rebuilding.');
-      // Status code.
-      return is_array($result) && isset(array_shift($result)['error']) ? CommandResult::exitCode(self::EXIT_FAILURE) : CommandResult::exitCode(self::EXIT_SUCCESS);
+    if (is_array($requirements) && drupal_requirements_severity($requirements) == REQUIREMENT_WARNING) {
+      Drush::logger()->warning(dt($requirement['description']));
     }
   }
 

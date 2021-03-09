@@ -1,19 +1,43 @@
 langcode: en
-status: false
+status: true
 dependencies:
+  config:
+    - field.storage.node.body
+    - field.storage.node.field_article_type
+    - field.storage.node.field_categories
+    - field.storage.node.field_door_time
+    - field.storage.node.field_email
+    - field.storage.node.field_event_duration
+    - field.storage.node.field_event_end
+    - field.storage.node.field_event_start
+    - field.storage.node.field_event_type
+    - field.storage.node.field_job_title
+    - field.storage.node.field_person_telephone
+    - field.storage.node.field_person_type
+    - field.storage.node.field_place_address
+    - field.storage.node.field_place_telephone
+    - field.storage.node.field_place_type
+    - search_api.server.database
+    - core.entity_view_mode.node.search_index
   module:
     - node
+    - taxonomy
     - search_api
-  config:
-    - core.entity_view_mode.node.search_index
-third_party_settings:
-  acquia_cms:
-    search_server: database
+_core:
+  default_config_hash: fX7hEB3V64kRcd57VP8EVkZaizgf7Mhn2uQk10ZANgo
 id: content
 name: Content
 description: 'An index of all content in your site.'
 read_only: false
 field_settings:
+  body:
+    label: Body
+    datasource_id: 'entity:node'
+    property_path: body
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.body
   created:
     label: 'Created time'
     datasource_id: 'entity:node'
@@ -22,6 +46,168 @@ field_settings:
     dependencies:
       module:
         - node
+  field_article_type:
+    label: 'Article Type'
+    datasource_id: 'entity:node'
+    property_path: field_article_type
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_article_type
+  field_article_type_name:
+    label: 'Article Type: Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_article_type:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_article_type
+      module:
+        - taxonomy
+  field_categories:
+    label: Categories
+    datasource_id: 'entity:node'
+    property_path: field_categories
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_categories
+  field_categories_name:
+    label: 'Categories: Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_categories:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_categories
+      module:
+        - taxonomy
+  field_door_time:
+    label: 'Door Time'
+    datasource_id: 'entity:node'
+    property_path: field_door_time
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_door_time
+  field_email:
+    label: Email
+    datasource_id: 'entity:node'
+    property_path: field_email
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_email
+  field_event_duration:
+    label: 'Event Duration'
+    datasource_id: 'entity:node'
+    property_path: field_event_duration
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_event_duration
+  field_event_end:
+    label: 'Event End Date'
+    datasource_id: 'entity:node'
+    property_path: field_event_end
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_event_end
+  field_event_start:
+    label: 'Event Start Date'
+    datasource_id: 'entity:node'
+    property_path: field_event_start
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_event_start
+  field_event_type:
+    label: 'Event Type'
+    datasource_id: 'entity:node'
+    property_path: field_event_type
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_event_type
+  field_event_type_name:
+    label: 'Event Type: Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_event_type:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_event_type
+      module:
+        - taxonomy
+  field_job_title:
+    label: 'Job Title'
+    datasource_id: 'entity:node'
+    property_path: field_job_title
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_job_title
+  field_person_telephone:
+    label: 'Person Telephone'
+    datasource_id: 'entity:node'
+    property_path: field_person_telephone
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_person_telephone
+  field_person_type:
+    label: 'Person Type'
+    datasource_id: 'entity:node'
+    property_path: field_person_type
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_person_type
+  field_person_type_name:
+    label: 'Person Type: Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_person_type:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_person_type
+      module:
+        - taxonomy
+  field_place_address:
+    label: 'Place Address'
+    datasource_id: 'entity:node'
+    property_path: field_place_address
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_place_address
+  field_place_telephone:
+    label: 'Place Telephone'
+    datasource_id: 'entity:node'
+    property_path: field_place_telephone
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_place_telephone
+  field_place_type:
+    label: 'Place Type'
+    datasource_id: 'entity:node'
+    property_path: field_place_type
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_place_type
+  field_place_type_name:
+    label: 'Place Type: Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_place_type:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_place_type
+      module:
+        - taxonomy
   langcode:
     label: Language
     datasource_id: 'entity:node'
@@ -51,11 +237,17 @@ field_settings:
     label: 'Rendered HTML output'
     property_path: rendered_item
     type: text
-    boost: 0
+    boost: !!float 0
     configuration:
       roles:
         anonymous: anonymous
-      view_mode: {  }
+      view_mode:
+        'entity:node':
+          article: search_index
+          event: search_index
+          page: search_index
+          person: search_index
+          place: search_index
   title:
     label: Title
     datasource_id: 'entity:node'
@@ -86,7 +278,12 @@ datasource_settings:
   'entity:node':
     bundles:
       default: false
-      selected: {  }
+      selected:
+        - article
+        - event
+        - page
+        - person
+        - place
     languages:
       default: true
       selected: {  }
@@ -113,6 +310,18 @@ processor_settings:
   ignorecase:
     all_fields: true
     fields:
+      - body
+      - field_article_type_name
+      - field_categories_name
+      - field_email
+      - field_event_duration
+      - field_event_type_name
+      - field_job_title
+      - field_person_telephone
+      - field_person_type_name
+      - field_place_address
+      - field_place_telephone
+      - field_place_type_name
       - langcode
       - rendered_item
       - title
@@ -175,6 +384,7 @@ processor_settings:
     weights:
       preprocess_index: -6
       preprocess_query: -5
+    ignored: ._-
   transliteration:
     all_fields: false
     fields:
@@ -188,4 +398,4 @@ tracker_settings:
 options:
   index_directly: true
   cron_limit: 50
-server: ''
+server: database
