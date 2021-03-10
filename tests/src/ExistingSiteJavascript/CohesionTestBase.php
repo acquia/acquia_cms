@@ -120,6 +120,17 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
   }
 
   /**
+   * Waits for the search container.
+   *
+   * @return \Drupal\Tests\acquia_cms\ExistingSiteJavascript\Search
+   *   A wrapper object for interacting with Cohesion's search container.
+   */
+  protected function getSearch() : Search {
+    $element = $this->waitForElementVisible('css', '.search-toggle-button', $this->getSession()->getPage());
+    return new Search($element->getXpath(), $element->getSession());
+  }
+
+  /**
    * Data provider for testing administrative edit access to components.
    *
    * @return array[]
