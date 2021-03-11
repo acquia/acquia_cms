@@ -2,7 +2,7 @@
 
 namespace Drupal\acquia_cms_search\Facade;
 
-use Drupal\acquia_search_solr\Helper\Storage as AcquiaSearch;
+use Drupal\acquia_search\Helper\Storage as AcquiaSearch;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -117,7 +117,7 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
     /** @var \Drupal\search_api\IndexInterface $index */
     $index = $this->indexStorage->load('content');
     /** @var \Drupal\search_api\ServerInterface $server */
-    $server = $this->serverStorage->load('acquia_search_solr_search_api_solr_server');
+    $server = $this->serverStorage->load('acquia_search_server');
 
     if ($index && $server && $index->getServerId() === 'database') {
       $index->setServer($server)->reindex();
@@ -134,7 +134,7 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
     // complain mildly about it. Also, it's possible that things might not work
     // as well as they should. To get past that, load the index that ships
     // with Acquia Search Solr and unlink it from the Solr server.
-    $index = $this->indexStorage->load('acquia_search_solr_search_api_solr_index');
+    $index = $this->indexStorage->load('acquia_search_index');
     if ($index && $index->getServerId() === $server->id()) {
       $index->setServer(NULL);
 

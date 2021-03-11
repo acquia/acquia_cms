@@ -1,0 +1,44 @@
+#!/bin/sh
+
+# Set colors, because we're fancy.
+CYAN='\033[0;36m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m'
+
+validate_email () {
+
+  if [[ $1 =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$ ]]
+  then
+    return
+  fi
+  printf "${YELLOW}*** Invalid email address!${NC}\n"
+  false
+}
+
+printf "${CYAN}### Welcome to Acquia CMS! ###${NC}\n"
+printf "Please enter the username for your administrator account [${GREEN}admin${NC}]: "
+DEFAULT_NAME="admin"
+read ADMIN_NAME
+ADMIN_NAME="${ADMIN_NAME:-$DEFAULT_NAME}"
+printf "Please enter the password for your administrator account [${GREEN}random${NC}]: "
+read ADMIN_PASS
+while [ ! ${FINISHED} ]
+do
+  printf "Please enter the email for your administrator account: "
+  read ADMIN_EMAIL
+  if validate_email ${ADMIN_EMAIL}; then
+    FINISHED=1
+  fi
+done
+
+printf "${CYAN}*** Thanks! Proceeding with the install..${NC}\n"
+PARAMS=""
+if [ ${ADMIN_PASS} ]; then
+  PARAMS+="--account-pass=${ADMIN_PASS} "
+fi
+if [ ${ADMIN_EMAIL} ]; then
+  PARAMS+="--account-mail=${ADMIN_EMAIL} "
+fi
+./vendor/bin/drush site-install -y acquia_cms --account-name=${ADMIN_NAME} ${PARAMS}
+./vendor/bin/drush cohesion:rebuild

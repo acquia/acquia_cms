@@ -14,7 +14,7 @@ cd "$(dirname "$0")"
 # Reuse ORCA's own includes.
 source ../../../orca/bin/travis/_includes.sh
 
-if [ "$TRAVIS_JOB_NAME" != "Starter" ] && [ "$TRAVIS_JOB_NAME" != "PubSec Demo" ] && [ "$ACMS_JOB" != "pubsec_full" ] && [ "$ACMS_JOB" != "starter_full" ]; then
+if [ "$TRAVIS_JOB_NAME" != "Starter" ] && [ "$ACMS_JOB" != "starter_full" ]; then
   # Run ORCA's standard script.
   ../../../orca/bin/travis/script.sh
 fi

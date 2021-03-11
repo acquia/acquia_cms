@@ -20,6 +20,8 @@ class TextPanelOverImageHelperTest extends CohesionHelperTestBase {
    *   Additional user roles to apply to the account being logged in.
    *
    * @dataProvider providerAddHelperToLayoutCanvas
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testHelper(array $roles = []) {
     $account = $this->createUser();
@@ -42,6 +44,8 @@ class TextPanelOverImageHelperTest extends CohesionHelperTestBase {
    *   The ID of the user role to test with.
    *
    * @dataProvider providerEditAccess
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testEditAccess(string $role) {
     $account = $this->createUser();

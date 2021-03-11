@@ -13,7 +13,7 @@
         "drupal/acquia_contenthub": "^2.16",
         "drupal/acquia_lift": "^4.2",
         "drupal/acquia_purge": "^1",
-        "drupal/acquia_search_solr": "1.0-beta10",
+        "drupal/acquia_search": "^3.0",
         "drupal/acquia_telemetry-acquia_telemetry": "^1.0-alpha4",
         "drupal/acsf": "^2",
         "drupal/address": "^1",
@@ -188,6 +188,9 @@
             "@putenv PROFILE_DIR=./docroot/profiles/contrib/acquia_cms",
             "@putenv MODULES_DIR=./docroot/sites/all",
             "if [ \"$PIPELINE_ENV\" != \"true\" ]; then composer build:local; fi;"
+        ],
+        "acms:install": [
+            "bash install-acms"
         ],
         "build:frontend": [
             "Composer\\Config::disableProcessTimeout",

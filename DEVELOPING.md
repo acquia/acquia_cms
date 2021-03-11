@@ -5,12 +5,13 @@ These instructions assume that you have an Acquia Cloud account, and that you ar
 
 You should also have:
 * PHP 7.3 or later installed. (`php --version`)
-* Composer 1.9.2 or later. (`composer --version`)
-* An invitation to the Acquia Engineering subscription in Acquia Cloud. Your manager or technical architect should be able to get you an invitation to this subscription if you need one.
+* Composer 2 or later. (`composer --version`)
+* An invitation to the Acquia CMS development subscription in Acquia Cloud.
+Contact Michael Sherron or Prafful Nagwani for an invitation.
 * A GitHub account which is authorized within the Acquia organization and can access https://github.com/acquia/acquia_cms.
 
 ### Background
-To provide a consistent environment for our development team, Acquia CMS is developed using Acquia's Cloud IDE service, which provides a VSCode-like developer experience. It is possible to work on Acquia CMS on your own machine, using your IDE of choice, but that is not the recommended set-up in most circumstances.
+To provide a consistent environment for our development team, Acquia CMS is developed using Acquia's Cloud IDE service, which provides a VSCode-like developer experience. It is possible to work on Acquia CMS on your own machine, using an IDE of your choice, but we do not recommend that set-up in most circumstances.
 
 ### Setting up a Cloud IDE
 Because there is a limited number of Cloud IDEs available to the Acquia CMS team, each active developer should only need (and have) one. Therefore, you should only do this once.
@@ -41,15 +42,26 @@ composer install
 
 ### Installing Acquia CMS
 
+* Once your Composer vendor folder has been built, you can now install Drupal and Acquia CMS.
+* First, either browse to the site and use the Installer UI and follow the directions.
+* Or you can use our handy Composer script, `composer acms:install` and follow the directions.
+* Once the installer is complete, you can either build from scratch, or you can
+install the starter site. To do so, first log into Drupal and go to the Dashboard.
+* At minimum, you must set the Google Maps API key. If you don't have an API key,
+just enter any string. Note that using an invalid API key will throw an error
+during content creation.
+* Then run `drush en acquia_cms_starter`. This will create a demo site with
+default components.
+
 #### Installing from the Command Line
 For development purposes, it's easiest to install Acquia CMS at the command line using Drush. In these instructions, I assume that you have the [Drush launcher](https://github.com/drush-ops/drush-launcher) installed globally in your PATH (`drush --version`).
 
-To save time and resources, Acquia CMS will not by default import any templates from Cohesion during installation. If you want to automatically import Cohesion templates during installation, you'll need to provide the Cohesion API key and organization key, which you can get from your manager or technical architect, as environment variables:
+To save time and resources, Acquia CMS will not by default import any templates from Cohesion during installation. If you want to automatically import Cohesion templates during installation, you'll need to provide the Cohesion API key and organization key, which you can get from ACMS leaders, as environment variables:
 ```
 export SITESTUDIO_API_KEY=foo
 export SITESTUDIO_ORG_KEY=bar
 ```
-Cloud IDEs come with a preconfigured MySQL database, so to install Acquia CMS on a Cloud IDE, simply run `drush site:install acquia_cms --yes --account-pass admin`.
+Cloud IDEs come with a preconfigured MySQL database. To install Acquia CMS on a Cloud IDE, simply run `composer acms:install` and follow the instructions.
 
 It can take a lot of memory to install Acquia CMS. If you run into memory errors, try increasing the memory limit when installing Acquia CMS:
 ```
@@ -60,14 +72,9 @@ If 2 GB *still* isn't enough memory, try raising the limit even more.
 #### Installing through the Browser
 Due to some of the work being done on Acquia CMS (specifically related to installation tasks) it may be necessary to do a manual install through the browser.
 
-In this case, you will need to manually drop your existing database with mysql and then re-visit the site via your browser.
+In this case, you will need to manually drop your existing database with drush and then re-visit the site via your browser.
 
-For Cloud IDEs that can be accomplished with:
-```
-mysql -u root
-drop database drupal;
-exit
-```
+For Cloud IDEs that can be accomplished by running `drush sql-drop`.
 
 ### Running tests
 
@@ -118,7 +125,7 @@ cd docroot
 
 As our testing strategy evolves to shorten Travis build times, lower risk tests
 will move to overnight cron builds. To improve our collective efficiency, it is
-important that developers run tests locally to verify changes while work is in 
+important that developers run tests locally to verify changes while work is in
 progress. See instructions above for running individual tests and group/module
 tests to run tests that are especially relevant to current work in progress.
 

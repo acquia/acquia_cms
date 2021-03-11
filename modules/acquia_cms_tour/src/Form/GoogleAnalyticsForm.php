@@ -88,15 +88,15 @@ final class GoogleAnalyticsForm extends ConfigFormBase {
     if ($this->module_handler->moduleExists($module)) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $form['google_analytics']['description'] = [
-        '#type' => 'markup',
-        '#markup' => '',
-        '#prefix' => $module_info['name'],
+      $form['google_analytics'] = [
+        '#type' => 'fieldset',
+        '#title' => $module_info['name'],
         '#description' => $module_info['description'],
+        '#open' => TRUE,
       ];
-
       $form['google_analytics']['web_property_id'] = [
         '#type' => 'textfield',
+        '#required' => TRUE,
         '#title' => $this->t('Web Property ID'),
         '#default_value' => $this->config('google_analytics.settings')->get('account'),
       ];
@@ -105,7 +105,7 @@ final class GoogleAnalyticsForm extends ConfigFormBase {
         '#value' => 'Save',
         '#button_type' => 'primary',
       ];
-      $form['acquia_search_solr']['actions']['advanced'] = [
+      $form['google_analytics']['actions']['advanced'] = [
         '#markup' => $this->linkGenerator->generate(
           'Advanced',
           Url::fromRoute($module_info['configure'])

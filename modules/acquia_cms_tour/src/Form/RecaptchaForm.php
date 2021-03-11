@@ -89,20 +89,21 @@ final class RecaptchaForm extends ConfigFormBase {
     if ($this->module_handler->moduleExists($module)) {
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $form['recaptcha']['description'] = [
-        '#type' => 'markup',
-        '#markup' => '',
-        '#prefix' => $module_info['name'],
+      $form['recaptcha'] = [
+        '#type' => 'fieldset',
+        '#title' => $module_info['name'],
         '#description' => $module_info['description'],
+        '#open' => TRUE,
       ];
-
       $form['recaptcha']['site_key'] = [
         '#type' => 'textfield',
+        '#required' => TRUE,
         '#title' => $this->t('Site key'),
         '#default_value' => $this->config('recaptcha.settings')->get('site_key'),
       ];
       $form['recaptcha']['secret_key'] = [
         '#type' => 'textfield',
+        '#required' => TRUE,
         '#title' => $this->t('Secret key'),
         '#default_value' => $this->config('recaptcha.settings')->get('secret_key'),
       ];
