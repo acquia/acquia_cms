@@ -25,7 +25,6 @@ elif [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]]; th
 else
   # Run ORCA's standard installation script.
   ../../../orca/bin/travis/install.sh
-  drush cohesion:rebuild
 fi
 
 printenv | grep ACMS_ | sort
