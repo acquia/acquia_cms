@@ -186,7 +186,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
   }
 
   /**
-   * Asserts that a link exists.
+   * Asserts that a link does not exist.
    *
    * @param string $title
    *   The title, text, or rel of the link.
