@@ -111,7 +111,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
       $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
 
       // Activate the facet for this content type.
-      $this->assertLinkExists($node_type_label, $facets)->click();
+      $this->assertLinkExists($node_type_label . ' (1)', $facets)->click();
 
       $this->assertLinkExists('Test published ' . $node_type_label);
       $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
@@ -124,14 +124,13 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
         // can uncomment this line.
         // $this->assertLinkExists("$node_type_label Type", $facets)->click();
         // Check if term facet is working properly.
-        $assert_session->elementExists('css', '.coh-style-facet-accordion')->clickLink($node_type_label . ' Music');
+        $assert_session->elementExists('css', '.coh-style-facet-accordion')->clickLink($node_type_label . ' Music (1)');
         // Assert that the clear filter is present.
         $assert_session->linkExists('Clear filter(s)');
         // Check if node of the selected term is shown.
-        // @todo this is turned off until facets bug is addressed.
-        // $this->assertLinkExists('Test published ' . $node_type_label);
-        // $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
-        $assert_session->linkNotExists($node_type_label . ' Rocks');
+        $this->assertLinkExists('Test published ' . $node_type_label);
+        $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
+        $assert_session->linkNotExists($node_type_label . ' Rocks (1)');
       }
     }
   }
