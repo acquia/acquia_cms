@@ -138,6 +138,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "acquia/cohesion": {
+                "Prevent possible array_flip warning on config import/export": "https://gist.githubusercontent.com/brianreese/9f5f8000853d76a3e805e5a6a39a94ba/raw/33152583acbb7888d436f1f8ce5e69609c080dee/site-studio-array-flip-warning.patch"
+            },
             "drupal/acquia_telemetry-acquia_telemetry": {
                 "Add check for core index": "https://www.drupal.org/files/issues/2020-08-18/3165473-27.patch"
             },
