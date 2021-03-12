@@ -22,11 +22,9 @@ if [[ "$ACMS_JOB" == "base" ]] || [[ "$ACMS_JOB" == "starter" ]]; then
 elif [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]]; then
   orca debug:packages CURRENT_DEV
   orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=acquia_cms --no-sqlite
-  drush cohesion:rebuild -y
 else
   # Run ORCA's standard installation script.
   ../../../orca/bin/travis/install.sh
-  drush cohesion:rebuild -y
 fi
 
 printenv | grep ACMS_ | sort
@@ -35,6 +33,11 @@ printenv | grep ACMS_ | sort
 [[ -d "$ORCA_FIXTURE_DIR" ]] || exit 0
 
 cd $ORCA_FIXTURE_DIR
+
+# Rebuild cohesion after install.
+if [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]]; then
+  drush cohesion:rebuild -y
+fi
 
 # Install dev dependencies.
 composer require --dev weitzman/drupal-test-traits phpspec/prophecy-phpunit:^2
