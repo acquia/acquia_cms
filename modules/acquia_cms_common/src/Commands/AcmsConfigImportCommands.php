@@ -185,7 +185,8 @@ final class AcmsConfigImportCommands extends DrushCommands {
    * @aliases acr
    * @usage acms:config-reset
    *   Reset the configuration to the default.
-   * @usage acms:config-reset acquia_cms_article acquia_cms_common --scope=all --delete-list=autologout.settings
+   * @usage acms:config-reset acquia_cms_article acquia_cms_common --scope=all
+   * --delete-list=search_api.index.acquia_search_index
    *   Reset the configuration to the default.
    */
   public function resetConfigurations(array $package, array $options = [
@@ -290,6 +291,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
       }
       $this->importPartialConfig($config_files, $delete_list);
     }
+
     // Import the site studio configurations.
     if (in_array($scope, ['site-studio', 'all'])) {
       // Show big warning if site-studio is in scope.
@@ -312,14 +314,47 @@ final class AcmsConfigImportCommands extends DrushCommands {
    */
   private function getConfigFiles(string $module): array {
     $config_files = [];
-    $sources[] = drupal_get_path('module', $module) . '/config/install';
-    $sources[] = drupal_get_path('module', $module) . '/config/optional';
-    foreach ($sources as $source) {
-      $source_storage_dir = ConfigCommands::getDirectory(NULL, $source);
-      $source_storage = new FileStorage($source_storage_dir);
+    $source_install = drupal_get_path('module', $module) . '/config/install';
+    $source_optional = drupal_get_path('module', $module) . '/config/optional';
 
-      foreach ($source_storage->listAll() as $name) {
-        $config_files[$name] = $source_storage->read($name);
+    // Get optional configuration list for specified module.
+    $source_storage_dir = ConfigCommands::getDirectory(NULL, $source_optional);
+    $source_storage = new FileStorage($source_storage_dir);
+    foreach ($source_storage->listAll() as $name) {
+      $config_files[$name] = $source_storage->read($name);
+    }
+    // Remove configuration files where its dependencies cannot be met
+    // in case of optional configurations.
+    $this->removeDependentFiles($config_files);
+
+    // Now get default configurations.
+    $source_storage_dir = ConfigCommands::getDirectory(NULL, $source_install);
+    $source_storage = new FileStorage($source_storage_dir);
+    foreach ($source_storage->listAll() as $name) {
+      $config_files[$name] = $source_storage->read($name);
+    }
+
+    return $config_files;
+  }
+
+  /**
+   * Remove configuration files where its dependencies cannot be met.
+   *
+   * @param array $config_files
+   *   Array of configurations files.
+   *
+   * @return array
+   *   Array of filtered configurations file.
+   */
+  private function removeDependentFiles(array &$config_files): array {
+    $enabled_extensions = $this->acmsUtilityService->getEnabledExtensions();
+    $all_config = $active_storage = $this->getConfigStorage()->listAll();
+    $all_config = array_combine($all_config, $all_config);
+    foreach ($config_files as $config_name => $data) {
+      // Remove configuration where its dependencies cannot be met.
+      $remove = !$this->acmsUtilityService->validateDependencies($config_name, $data, $enabled_extensions, $all_config);
+      if ($remove) {
+        unset($config_files[$config_name]);
       }
     }
     return $config_files;
