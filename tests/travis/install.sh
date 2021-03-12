@@ -22,10 +22,10 @@ if [[ "$ACMS_JOB" == "base" ]] || [[ "$ACMS_JOB" == "starter" ]]; then
 elif [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]]; then
   orca debug:packages CURRENT_DEV
   orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=acquia_cms --no-sqlite
-  drush cohesion:rebuild
 else
   # Run ORCA's standard installation script.
   ../../../orca/bin/travis/install.sh
+  drush cohesion:rebuild
 fi
 
 printenv | grep ACMS_ | sort
