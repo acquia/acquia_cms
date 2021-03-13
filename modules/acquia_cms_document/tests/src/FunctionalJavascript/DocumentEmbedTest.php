@@ -52,6 +52,7 @@ class DocumentEmbedTest extends MediaEmbedTestBase {
    * {@inheritdoc}
    */
   protected function addMedia() {
+    $this->getSession()->getPage()->clickLink('Document');
     $this->getSession()
       ->getPage()
       ->attachFileToField('Add file', $this->getTestFilePath('text'));
