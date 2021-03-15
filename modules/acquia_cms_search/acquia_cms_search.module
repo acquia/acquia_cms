@@ -147,7 +147,7 @@ function acquia_cms_search_config_schema_info_alter(array &$definitions) {
  * Implements hook_ENTITY_TYPE_update().
  */
 function acquia_cms_search_search_api_server_update(EntityInterface $entity) {
-  if (Runtime::isAcquiaServer($entity)) {
+  if (Drupal::moduleHandler()->moduleExists('acquia_search') && Runtime::isAcquiaServer($entity)) {
     \Drupal::classResolver(AcquiaSearchFacade::class)->submitSettingsForm();
   }
 }
