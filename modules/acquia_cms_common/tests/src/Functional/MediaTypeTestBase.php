@@ -103,15 +103,15 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
     $assert_session->statusCodeEquals(200);
 
     // Test that we cannot edit others' media.
-    $this->drupalGet('/media/1/edit');
+    $this->drupalGet('/media/2/edit');
     $assert_session->statusCodeEquals(403);
 
     // Test we can delete our own media.
-    $this->drupalGet('/media/2/delete');
+    $this->drupalGet('/media/3/delete');
     $assert_session->statusCodeEquals(200);
 
     // Test that we cannot delete others' media.
-    $this->drupalGet('/media/1/delete');
+    $this->drupalGet('/media/2/delete');
     $assert_session->statusCodeEquals(403);
   }
 
@@ -150,7 +150,7 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
     $assert_session->statusCodeEquals(200);
 
     // Test that we can delete others' media.
-    $this->drupalGet('/media/1/delete');
+    $this->drupalGet('/media/2/delete');
     $assert_session->statusCodeEquals(200);
   }
 
@@ -184,15 +184,15 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
     $assert_session->statusCodeEquals(200);
 
     // Test that we can edit our own media.
-    $this->drupalGet('/media/4/edit');
+    $this->drupalGet('/media/5/edit');
     $assert_session->statusCodeEquals(200);
 
     // Test that we can delete our own media.
-    $this->drupalGet('/media/4/delete');
+    $this->drupalGet('/media/5/delete');
     $assert_session->statusCodeEquals(200);
 
     // Test that we can delete others' media.
-    $this->drupalGet('/media/1/delete');
+    $this->drupalGet('/media/2/delete');
     $assert_session->statusCodeEquals(200);
   }
 

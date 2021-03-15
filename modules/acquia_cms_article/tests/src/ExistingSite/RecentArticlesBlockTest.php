@@ -65,7 +65,6 @@ class RecentArticlesBlockTest extends ExistingSiteBase {
    */
   public function testRecentArticlesBlock() {
     $this->drupalGet('');
-    $this->assertSession()->pageTextContains('Recent Articles');
     $this->assertLinksExistInOrder();
   }
 
@@ -75,7 +74,7 @@ class RecentArticlesBlockTest extends ExistingSiteBase {
   protected function getLinks() : array {
     $links = $this->getSession()
       ->getPage()
-      ->findAll('css', '#block-recent-articles-block .view-article-cards .coh-container .coh-heading');
+      ->findAll('css', '#block-recent-articles-block .card-outer-container .coh-container .coh-heading');
 
     $map = function (ElementInterface $link) {
       return $link->getText();

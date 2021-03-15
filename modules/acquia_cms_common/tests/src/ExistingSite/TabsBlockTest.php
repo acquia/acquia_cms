@@ -42,7 +42,7 @@ class TabsBlockTest extends ExistingSiteBase {
       ]);
       $this->assertSame($account->id(), $node->getOwnerId());
       $this->drupalGet($node->toUrl());
-      $assert_session->elementExists('css', '#block-tabs');
+      $assert_session->elementExists('css', '#block-tabs-2');
     }
   }
 

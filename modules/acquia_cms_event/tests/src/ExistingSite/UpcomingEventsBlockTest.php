@@ -69,7 +69,6 @@ class UpcomingEventsBlockTest extends ExistingSiteBase {
    */
   public function testUpcomingEventsBlock() {
     $this->drupalGet('');
-    $this->assertSession()->pageTextContains('Upcoming Events');
     $this->assertLinksExistInOrder();
   }
 

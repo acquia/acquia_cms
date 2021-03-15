@@ -1,9 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms\ExistingSite;
-
-use Drupal\Tests\acquia_cms\Traits\CohesionTestTrait;
-use weitzman\DrupalTestTraits\ExistingSiteBase;
+namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
  * Tests search functionality that ships with Acquia CMS.
@@ -13,9 +10,7 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * @group medium_risk
  * @group push
  */
-class SearchTest extends ExistingSiteBase {
-
-  use CohesionTestTrait;
+class SearchBlockTest extends CohesionComponentTestBase {
 
   /**
    * Data provider for ::testSearchBlock().
@@ -80,13 +75,14 @@ class SearchTest extends ExistingSiteBase {
 
     $assert_session = $this->assertSession();
     $this->drupalGet('/node');
+    $this->getSearch()->showSearch();
     $search_block = $assert_session->elementExists('css', '#views-exposed-form-search-search');
     $search_block->fillField('keywords', 'Test');
-    $search_block->pressButton('Search');
+    $assert_session->waitForElementVisible('css', '#edit-submit-search')->keyPress('enter');
+
     // Assert that the search by title shows the proper result.
-    // @todo re-enable Pages in Content Index once ACMS-445 completed.
-    // $this->assertLinkExistsByTitle('Test published');
-    // $this->assertLinkNotExistsByTitle('Test unpublished');
+    $assert_session->linkExists('Test published');
+    $assert_session->linkNotExists('Test unpublished');
   }
 
 }
