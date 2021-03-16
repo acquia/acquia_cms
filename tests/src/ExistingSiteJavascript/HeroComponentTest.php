@@ -28,9 +28,8 @@ class HeroComponentTest extends CohesionComponentTestBase {
     // Add the component to the layout canvas.
     $edit_form = $this->getLayoutCanvas()->add('Hero')->edit();
     $this->waitForElementVisible('css', 'coh-typeahead input.form-control ', $this->getSession()->getPage());
-
-    $edit_form->fillField('Link to page or URL', 'https://www.acquia.com');
-
+    // @todo Revisit this field test.
+    // $edit_form->fillField('Link to page or URL', 'https://www.acquia.com');
     $assert_styles = function (string $select, array $styles) use ($assert_session, $edit_form) {
       foreach ($styles as $style) {
         $assert_session->optionExists($select, $style, $edit_form);
