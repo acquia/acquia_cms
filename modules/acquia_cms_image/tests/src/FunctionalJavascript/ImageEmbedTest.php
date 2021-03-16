@@ -72,8 +72,6 @@ class ImageEmbedTest extends MediaEmbedTestBase {
    * {@inheritdoc}
    */
   protected function addMedia() {
-    sleep(30);
-    $this->getSession()->getPage()->clickLink('Image');
     $this->getSession()
       ->getPage()
       ->attachFileToField('Add file', $this->getTestFilePath('image'));
