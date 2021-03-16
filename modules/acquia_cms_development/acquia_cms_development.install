@@ -78,7 +78,7 @@ function _acquia_connector_config(string $key, string $identifier) {
   $subscription->update();
 
   // Setting specific config for Acquia Connector.
-  $config->set('subscription_name', "Aqquia Engineering");
+  $config->set('subscription_name', "Acquia Engineering");
   $config->set('hide_signup_messages', 1);
   $config->save();
 }

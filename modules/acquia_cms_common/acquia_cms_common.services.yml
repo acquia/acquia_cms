@@ -7,4 +7,4 @@ services:
     class:  Drupal\acquia_cms_common\Services\ToggleModulesService
   acquia_cms_common.utility:
     class:  Drupal\acquia_cms_common\Services\AcmsUtilityService
-    arguments: ['@module_handler']
+    arguments: ['@module_handler', '@config.factory']
