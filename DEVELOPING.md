@@ -58,9 +58,25 @@ For development purposes, it's easiest to install Acquia CMS at the command line
 
 To save time and resources, Acquia CMS will not by default import any templates from Cohesion during installation. If you want to automatically import Cohesion templates during installation, you'll need to provide the Cohesion API key and organization key, which you can get from ACMS leaders, as environment variables:
 ```
-export SITESTUDIO_API_KEY=foo
-export SITESTUDIO_ORG_KEY=bar
+export SITESTUDIO_API_KEY='[replaceme]'
+export SITESTUDIO_ORG_KEY='[replaceme]'
 ```
+
+Additionally, Acquia CMS includes `acquia_cms_development` as a helper module for ACMS dev team members to configure credentials for most of our major integrations.
+
+Credentials for these services are not stored in the repository. The development module looks for the credentials it needs as environment variables. To set these,
+you can run the following export commands. Note :
+```
+export CONNECTOR_KEY=‘[replaceme]’
+export CONNECTOR_ID=‘[replaceme]’
+export SHIELD_USER='[replaceme]'
+export SHIELD_PASS='[replaceme]'
+export GMAPS_KEY='[replaceme]'
+export SEARCH_UUID='[replaceme]'
+```
+
+To get access to these variables, reach out to your technical lead or product owner.
+
 Cloud IDEs come with a preconfigured MySQL database. To install Acquia CMS on a Cloud IDE, simply run `composer acms:install` and follow the instructions.
 
 It can take a lot of memory to install Acquia CMS. If you run into memory errors, try increasing the memory limit when installing Acquia CMS:
