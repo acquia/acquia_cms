@@ -62,13 +62,13 @@ class AcquiaSearchTest extends BrowserTestBase {
     $assert_session->fieldExists('Acquia Search API hostname');
     $assert_session->fieldExists('Acquia Application UUID');
     // Save Subscription identifier.
-    $dummy_identifier = 'BGVZ-196143';
+    $dummy_identifier = getenv('CONNECTOR_ID');
     $container->fillField('edit-identifier', $dummy_identifier);
     // Save Search API hostname.
     $dummy_hostname = 'https://api.sr-prod02.acquia.com';
     $container->fillField('edit-api-host', $dummy_hostname);
     // Save Application UUID.
-    $dummy_uuid = 'f63c4427-2738-4e14-a756-5f7b80b7406';
+    $dummy_uuid = getenv('SEARCH_UUID');
     $container->fillField('edit-uuid', $dummy_uuid);
     $container->pressButton('Save');
     $assert_session->pageTextContains('The configuration options have been saved.');
