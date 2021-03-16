@@ -92,18 +92,6 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
     $this->assertSession()->waitForElementVisible('css', '.coh-style-facet-accordion');
     $facets = $this->assertSession()->elementExists('css', '.coh-style-facet-accordion');
     // @todo Revisit these assertions.
-    // $this->assertTrue($this
-    // ->assertLinkExists('Content Type', $facets)->isVisible());
-    // $this->assertFalse($this
-    // ->assertLinkExists('Article Type', $facets)->isVisible());
-    // $this->assertFalse($this
-    // ->assertLinkExists('Event Type', $facets)->isVisible());
-    // $this->assertFalse($this
-    // ->assertLinkExists('Person Type', $facets)->isVisible());
-    // $this->assertFalse($this
-    // ->assertLinkExists('Place Type', $facets)->isVisible());
-    // Facets should filter the content type and "type" taxonomy as expected,
-    // and we should only see published content.
     foreach ($node_types as $node_type_id => $type) {
       // Clear all selected facets.
       $this->drupalGet('/search');
