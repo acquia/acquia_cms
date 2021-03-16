@@ -102,8 +102,8 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
     $assert_session->statusCodeEquals(200);
 
     // Asset that overridden configuration appears on overridden tab.
-    $assert_session->elementTextContains('xpath', "//table/tbody/tr[15]/td[1]", 'taxonomy.vocabulary.tags');
-    $assert_session->elementTextContains('xpath', "//table/tbody/tr[15]/td[3]", '87 %');
+    $assert_session->elementTextContains('xpath', "//table/tbody/tr[63]/td[1]", 'taxonomy.vocabulary.tags');
+    $assert_session->elementTextContains('xpath', "//table/tbody/tr[63]/td[3]", '87 %');
 
     // Asset that unchanged configuration does not appear on overridden tab.
     $assert_session->elementNotExists('xpath', "//table/tbody/tr/td[contains(text(),'taxonomy.vocabulary.categories')]");
@@ -112,7 +112,7 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
     $assert_session->statusCodeEquals(200);
 
     // Asset that unchanged configuration appears on unchanged tab.
-    $assert_session->elementTextContains('xpath', "//table/tbody/tr[23]/td[1]", 'taxonomy.vocabulary.categories');
+    $assert_session->elementTextContains('xpath', "//table/tbody/tr[271]/td[1]", 'taxonomy.vocabulary.categories');
 
     // Asset that overridden configuration does not appear on unchanged tab.
     $assert_session->elementNotExists('xpath', "//table/tbody/tr/td[contains(text(),'taxonomy.vocabulary.tags')]");
