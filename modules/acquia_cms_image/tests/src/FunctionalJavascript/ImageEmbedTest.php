@@ -18,7 +18,7 @@ class ImageEmbedTest extends MediaEmbedTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['acquia_cms_image', 'focal_point'];
+  protected static $modules = ['acquia_cms_common', 'acquia_cms_image', 'focal_point'];
 
   /**
    * Disable strict config schema checks in this test.

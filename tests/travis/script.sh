@@ -14,7 +14,7 @@ cd "$(dirname "$0")"
 # Reuse ORCA's own includes.
 source ../../../orca/bin/travis/_includes.sh
 
-if [ "$TRAVIS_JOB_NAME" != "Starter" ] && [ "$TRAVIS_JOB_NAME" != "PubSec Demo" ] && [ "$ACMS_JOB" != "pubsec_full" ] && [ "$ACMS_JOB" != "starter_full" ]; then
+if [ "$TRAVIS_JOB_NAME" != "Starter" ] && [ "$ACMS_JOB" != "starter_full" ]; then
   # Run ORCA's standard script.
   ../../../orca/bin/travis/script.sh
 fi
@@ -28,8 +28,9 @@ if [ "$TRAVIS_JOB_NAME" == "Starter" ] || [ "$ACMS_JOB" == "starter_full" ]; the
   cd $TRAVIS_BUILD_DIR
   npm install
   orca fixture:run-server &
+
   # Runs Backstop.js
-   npm run backstop-starter
+  # npm run backstop-starter
   # Runs Pa11y.js
-  npm run pa11y-starter
+  # npm run pa11y-starter
 fi

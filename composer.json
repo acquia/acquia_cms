@@ -10,7 +10,7 @@
         "acquia/memcache-settings": "^1",
         "cweagans/composer-patches": "^1.7",
         "drupal/acquia_connector": "^3",
-        "drupal/acquia_contenthub": "^2.16",
+        "drupal/acquia_contenthub": "2.20",
         "drupal/acquia_lift": "^4.2",
         "drupal/acquia_purge": "^1",
         "drupal/acquia_search": "^3.0",
@@ -138,6 +138,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "acquia/cohesion": {
+                "Prevent possible array_flip warning on config import/export": "https://gist.githubusercontent.com/brianreese/9f5f8000853d76a3e805e5a6a39a94ba/raw/33152583acbb7888d436f1f8ce5e69609c080dee/site-studio-array-flip-warning.patch"
+            },
             "drupal/acquia_telemetry-acquia_telemetry": {
                 "Add check for core index": "https://www.drupal.org/files/issues/2020-08-18/3165473-27.patch"
             },
@@ -192,6 +195,9 @@
             "@putenv PROFILE_DIR=./docroot/profiles/contrib/acquia_cms",
             "@putenv MODULES_DIR=./docroot/sites/all",
             "if [ \"$PIPELINE_ENV\" != \"true\" ]; then composer build:local; fi;"
+        ],
+        "acms:install": [
+            "bash install-acms"
         ],
         "build:frontend": [
             "Composer\\Config::disableProcessTimeout",

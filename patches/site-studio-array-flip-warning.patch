@@ -1,0 +1,13 @@
+diff --git a/src/Plugin/Usage/ViewUsage.php b/src/Plugin/Usage/ViewUsage.php
+index ac56dc3..dfa7a37 100644
+--- a/src/Plugin/Usage/ViewUsage.php
++++ b/src/Plugin/Usage/ViewUsage.php
+@@ -75,7 +75,7 @@ class ViewUsage extends UsagePluginBase {
+         $iterator = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($entry['decoded']['model']));
+         foreach ($iterator as $k => $v) {
+           // View used directly.
+-          if ($k == 'view' && $v != NULL) {
++          if ($k == 'view' && $v != NULL && !is_bool($v)) {
+             if ($view_entity = $this->storage->load($v)) {
+               $entities[] = [
+                 'type' => $this->getEntityType(),

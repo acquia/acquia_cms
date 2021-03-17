@@ -26,7 +26,15 @@ class GoogleMapComponentTest extends CohesionComponentTestBase {
 
     // Add the component to the layout canvas.
     $edit_form = $this->getLayoutCanvas()->add('Google map')->edit();
-    $this->assertSession()->optionExists('Width of accordion', 'Narrow', $edit_form);
+    $this->assertSession()->elementExists('css', '.coh-accordion-title')->click();
+
+    $edit_form->fillField('Address', 'Test Address');
+    $edit_form->fillField('Latitude', '22.52138');
+    $edit_form->fillField('Longitude', '88.294324');
+
+    $this->getSession()->getPage()->clickLink('Layout and style');
+
+    $this->assertSession()->optionExists('Space below map', 'Add space below map', $edit_form);
   }
 
   /**

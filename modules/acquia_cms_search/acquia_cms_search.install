@@ -5,7 +5,7 @@
  * Contains installation routines for Acquia CMS Search.
  */
 
-use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\node\Entity\NodeType;
 
 /**
@@ -19,6 +19,6 @@ function acquia_cms_search_install() {
 
   // Retroactively enable indexing for any fields that existed before this
   // module was installed.
-  $fields = FieldStorageConfig::loadMultiple();
-  array_walk($fields, 'acquia_cms_search_field_storage_config_insert');
+  $fields = FieldConfig::loadMultiple();
+  array_walk($fields, 'acquia_cms_search_field_config_insert');
 }

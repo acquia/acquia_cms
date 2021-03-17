@@ -14,31 +14,42 @@ use Drupal\acquia_search\Helper\Storage as SolrStorage;
  * Implements hook_install().
  */
 function acquia_cms_development_install() {
-  $key = 'b560ae0de7e596c5d1f7fe54803c70cd';
-  $identifier = 'BGVZ-196143';
 
-  _acquia_connector_config($key, $identifier);
-  _acquia_search_config($key, $identifier);
+  $key = getenv('CONNECTOR_KEY');
+  $identifier = getenv('CONNECTOR_ID');
+  if (isset($key, $identifier)) {
+
+    _acquia_connector_config($key, $identifier);
+    _acquia_search_config($key, $identifier);
+  }
 
   // Configure shield if it is an Acquia cloud environment (but not an IDE).
   if (Environment::isAhEnv() && !Environment::isAhIdeEnv()) {
-    \Drupal::service('module_installer')->install(['shield']);
-    Drupal::configFactory()
-      ->getEditable('shield.settings')
-      ->set('credentials.shield.user', 'acms')
-      ->set('credentials.shield.pass', 'DmpU05sN13o1@bQ!')
-      ->save();
+
+    $shield_user = getenv('SHIELD_USER');
+    $shield_pass = getenv('SHIELD_PASS');
+    if (isset($shield_user, $shield_pass)) {
+      \Drupal::service('module_installer')->install(['shield']);
+      Drupal::configFactory()
+        ->getEditable('shield.settings')
+        ->set('credentials.shield.user', $shield_user)
+        ->set('credentials.shield.pass', $shield_pass)
+        ->save();
+    }
   }
 
-  // Both PubSec and Starter "really" need Google Maps API Keys to "work."
+  // Starter "really" needs Google Maps API Keys to "work."
   // This code is a work around for the dev team to ensure that we can install
   // these modules w/o issue until a more permanent API key is supplied by
   // Acquia AND/OR we provide a free maps option.
   // @todo remove this once the above conditions are met.
-  Drupal::configFactory()
-    ->getEditable('geocoder.geocoder_provider.googlemaps')
-    ->set('configuration.apiKey', 'AIzaSyBr7XorQ408VCspnrw-F6-2i3t2g0W5Se4')
-    ->save();
+  $gmaps_key = getenv('GMAPS_KEY');
+  if (isset($gmaps_key)) {
+    Drupal::configFactory()
+      ->getEditable('geocoder.geocoder_provider.googlemaps')
+      ->set('configuration.apiKey', $gmaps_key)
+      ->save();
+  }
 }
 
 /**
@@ -67,7 +78,7 @@ function _acquia_connector_config(string $key, string $identifier) {
   $subscription->update();
 
   // Setting specific config for Acquia Connector.
-  $config->set('subscription_name', "Aqquia Engineering");
+  $config->set('subscription_name', "Acquia Engineering");
   $config->set('hide_signup_messages', 1);
   $config->save();
 }
@@ -81,16 +92,20 @@ function _acquia_connector_config(string $key, string $identifier) {
  *   The Acquia hosting identifier.
  */
 function _acquia_search_config(string $key, string $identifier) {
-  // Replicating Storage from acquia_search/src/Helper/Storage.php.
-  $storage = new SolrStorage();
-  $storage->setApiHost('https://api.sr-prod02.acquia.com');
-  $storage->setUuid('f63c4427-2738-4e14-a756-5f7b80b74062');
-  $storage->setApiKey($key);
-  $storage->setIdentifier($identifier);
 
-  // @todo This code was copied verbatim from the Acquia Search module,
-  // but it's not at all clear why it uses this face-melter of a cache clear.
-  // (My guess is that the original authors were flailing.) Replace this with a
-  // more precise and lightweight cache invalidation or similar ASAP.
-  drupal_flush_all_caches();
+  // Replicating Storage from acquia_search/src/Helper/Storage.php.
+  $search_uuid = getenv('SEARCH_UUID');
+  if (isset($search_uuid)) {
+    $storage = new SolrStorage();
+    $storage->setApiHost('https://api.sr-prod02.acquia.com');
+    $storage->setUuid($search_uuid);
+    $storage->setApiKey($key);
+    $storage->setIdentifier($identifier);
+
+    // @todo This code was copied verbatim from the Acquia Search module,
+    // but it's not at all clear why it uses this face-melter of a cache clear.
+    // (My guess is that the original authors were flailing.) Replace this with
+    // a more precise and lightweight cache invalidation or similar ASAP.
+    drupal_flush_all_caches();
+  }
 }

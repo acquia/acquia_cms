@@ -25,21 +25,10 @@ class HeroComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
     $assert_session = $this->assertSession();
 
-    // Create a random image that we can select in the media library when
-    // editing the component.
-    $this->createMedia(['bundle' => 'image']);
-
     // Add the component to the layout canvas.
     $edit_form = $this->getLayoutCanvas()->add('Hero')->edit();
-
-    // Test adding an image to the component.
-    $edit_form->selectFieldOption('Image/Video', 'Image');
-    $this->openMediaLibrary($edit_form, 'Select image');
-    $this->selectMedia(0);
-    $this->insertSelectedMedia();
-
-    $edit_form->fillField('Link to page', 'https://www.acquia.com');
-
+    $this->waitForElementVisible('css', 'coh-typeahead input.form-control ', $this->getSession()->getPage());
+    // @todo Revisit this field test.
     $assert_styles = function (string $select, array $styles) use ($assert_session, $edit_form) {
       foreach ($styles as $style) {
         $assert_session->optionExists($select, $style, $edit_form);
@@ -48,64 +37,30 @@ class HeroComponentTest extends CohesionComponentTestBase {
 
     $edit_form->clickLink('Layout and style');
     // Check if all the height styles are there in the select list.
-    $assert_styles('Height', [
-      'Large',
-      'Small',
-      '60% height of viewport',
+    $assert_styles('Hero height', [
+      'Fluid (Scales to fit browser height)',
+      'Tall',
+      'Short',
     ]);
 
-    // Check if all the text position styles are there in the select list.
-    $assert_styles('Text position', [
-      'Left',
-      'Right',
-      'Center',
+    // Check if all the layout options are there in the select list.
+    $assert_styles('Text and drop zone layout', [
+      'Text left - Drop zone right',
+      'Text left - Drop zone right',
+      'Text right - Drop zone left',
     ]);
 
-    // Check if all the padding styles are there in the select list.
-    $assert_styles('Padding top and bottom', [
-      'None',
-      'Top - small',
-      'Bottom - small',
-      'Top and bottom - small',
-      'Top - medium',
-      'Bottom - medium',
-      'Top and bottom - medium',
-      'Top - large',
-      'Bottom - large',
-      'Top and bottom - large',
-    ]);
-    $assert_styles('Padding left and right', [
-      'None',
-      'Left - small',
-      'Right - small',
-      'Left and right - small',
-      'Left - medium',
-      'Right - medium',
-      'Left and right - medium',
-      'Left - large',
-      'Right - large',
-      'Left and right - large',
+    // Check if all the heading text colors are there in the select list.
+    $assert_styles('Heading text color', [
+      'Light',
+      'Dark',
+      'Colored',
     ]);
 
-    // Check if all the image position styles are there in the select list.
-    $assert_styles('Position', [
-      'Right to the content',
-      'Left to the content',
-    ]);
-
-    // Check if all the text box position styles are there in the select list.
-    $assert_styles('Text box position', [
-      'Left',
-      'Right',
-      'Center',
-    ]);
-
-    // Check if all the button styles are there in the select list.
-    $assert_styles('Button style', [
-      'Button light',
-      'Button dark',
-      'Button default',
-      'None (transparent)',
+    // Check if all the text colors are there in the select list.
+    $assert_styles('Text color', [
+      'Light',
+      'Dark',
     ]);
   }
 

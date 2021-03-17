@@ -17,12 +17,14 @@ class RouteSubscriber extends RouteSubscriberBase {
     if ($route = $collection->get('system.404')) {
       $route->setDefaults([
         '_controller' => '\Drupal\acquia_cms_common\Controller\CustomHttp4xxController::on404',
+        '_title_callback' => '\Drupal\acquia_cms_common\Controller\CustomHttp4xxController::get404Title',
       ]);
     }
 
     if ($route = $collection->get('system.403')) {
       $route->setDefaults([
         '_controller' => '\Drupal\acquia_cms_common\Controller\CustomHttp4xxController::on403',
+        '_title_callback' => '\Drupal\acquia_cms_common\Controller\CustomHttp4xxController::get403Title',
       ]);
     }
   }

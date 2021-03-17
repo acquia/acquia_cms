@@ -307,14 +307,10 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
   protected function getLinks() : array {
     $links = $this->getSession()
       ->getPage()
-      ->findAll('css', 'a[title]');
+      ->findAll('css', 'article a.card-link');
 
     $map = function (ElementInterface $link) {
-      // Our template for node teasers doesn't actually link the title -- which
-      // is probably an accessibility no-no, but let's not get into that now --
-      // but it does include a 'title' attribute in the "read more" link which
-      // contains the actual title of the linked node.
-      return $link->getAttribute('title');
+      return $link->getText();
     };
     return array_map($map, $links);
   }

@@ -10,6 +10,9 @@ use Drupal\Tests\BrowserTestBase;
  * @group acquia_cms
  * @group acquia_cms_support
  * @group risky
+ * @group push
+ * @group pr
+ * @group disabled
  */
 class AcquiaCmsConfigSyncTest extends BrowserTestBase {
 
@@ -112,7 +115,7 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
     $assert_session->statusCodeEquals(200);
 
     // Asset that unchanged configuration appears on unchanged tab.
-    $assert_session->elementTextContains('xpath', "//table/tbody/tr[11]/td[1]", 'taxonomy.vocabulary.categories');
+    $assert_session->elementTextContains('xpath', "//table/tbody/tr[13]/td[1]", 'taxonomy.vocabulary.categories');
 
     // Asset that overridden configuration does not appear on unchanged tab.
     $assert_session->elementNotExists('xpath', "//table/tbody/tr/td[contains(text(),'taxonomy.vocabulary.tags')]");
