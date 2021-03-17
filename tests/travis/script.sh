@@ -32,7 +32,7 @@ if [ "$TRAVIS_JOB_NAME" == "Starter" ] || [ "$ACMS_JOB" == "starter_full" ]; the
   orca fixture:run-server &
 
   # Runs Backstop.js
-  npm run backstop-starter
+  npm run backstop-starter -vvv
   # Runs Pa11y.js
   npm run pa11y-starter
 fi
