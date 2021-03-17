@@ -26,10 +26,11 @@ cd $ORCA_FIXTURE_DIR
 if [ "$TRAVIS_JOB_NAME" == "Starter" ] || [ "$ACMS_JOB" == "starter_full" ]; then
   # Install npm dependencies and run JS test suites.
   cd $TRAVIS_BUILD_DIR
+  # Clear cache to give image styles a chance to warm up.
+  drush cr
   npm install
   orca fixture:run-server &
-  # Clear cache to give image styles a chance to warm up.
-  ./vendor/bin/drush cr
+
   # Runs Backstop.js
   npm run backstop-starter
   # Runs Pa11y.js
