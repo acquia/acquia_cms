@@ -28,8 +28,10 @@ if [ "$TRAVIS_JOB_NAME" == "Starter" ] || [ "$ACMS_JOB" == "starter_full" ]; the
   cd $TRAVIS_BUILD_DIR
   npm install
   orca fixture:run-server &
+  # Clear cache to give image styles a chance to warm up.
+  drush cr
   # Runs Backstop.js
-   npm run backstop-starter
+  npm run backstop-starter
   # Runs Pa11y.js
   npm run pa11y-starter
 fi
