@@ -143,7 +143,14 @@ final class SearchFacade implements ContainerInjectionInterface {
     if (empty($index)) {
       return;
     }
+
     $field_name = $field_storage->getName();
+
+    // Bail out if the field already exists on the index.
+    if ($index->getField($field_name)) {
+      return;
+    }
+
     // Field storages don't normally have a human-readable label, so allow it to
     // provide one in its third-party settings.
     $field_label = $field_storage->getThirdPartySetting('acquia_cms', 'search_label') ?: $field_storage->getLabel();
@@ -189,6 +196,12 @@ final class SearchFacade implements ContainerInjectionInterface {
     }
 
     $field_name = $field_storage->getName();
+
+    // Bail out if the field already exists on the index.
+    if ($index->getField($field_name)) {
+      return;
+    }
+
     $field_type = $field_storage->getType();
     // Field storages don't normally have a human-readable label, so allow it to
     // provide one in its third-party settings.
@@ -217,6 +230,7 @@ final class SearchFacade implements ContainerInjectionInterface {
         $type = 'text';
         break;
     }
+
     // Add the referenced term's ID to the index.
     $field = $this->fieldsHelper->createField($index, $field_name)
       ->setLabel($field_label)
@@ -224,7 +238,6 @@ final class SearchFacade implements ContainerInjectionInterface {
       ->setPropertyPath($field_name)
       ->setType($type);
     $index->addField($field);
-
     $this->indexStorage->save($index);
   }
 

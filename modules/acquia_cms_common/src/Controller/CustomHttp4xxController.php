@@ -22,6 +22,16 @@ class CustomHttp4xxController extends ControllerBase {
   }
 
   /**
+   * The 403 page title.
+   *
+   * @return string
+   *   A string to display title for 403 pages.
+   */
+  public function get403Title() {
+    return $this->t('Access denied');
+  }
+
+  /**
    * The default 404 content.
    *
    * @return array
@@ -31,6 +41,16 @@ class CustomHttp4xxController extends ControllerBase {
     return [
       '#theme' => 'page__system__404',
     ];
+  }
+
+  /**
+   * The 404 page title.
+   *
+   * @return string
+   *   A string to display title for 404 pages.
+   */
+  public function get404Title() {
+    return $this->t('Page not found');
   }
 
 }

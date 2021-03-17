@@ -24,7 +24,9 @@ final class ConfigOverrider implements ConfigFactoryOverrideInterface {
 
     $name = 'acquia_search.settings';
     if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv() && in_array($name, $names, TRUE)) {
-      $overrides[$name]['override_search_core'] = 'BGVZ-196143.dev.orionacms';
+      if ($connector_id = getenv('CONNECTOR_ID')) {
+        $overrides[$name]['override_search_core'] = $connector_id . '.dev.orionacms';
+      }
     }
 
     // Override system performance on IDE and local environment.

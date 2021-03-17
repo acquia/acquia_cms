@@ -11,7 +11,7 @@ use Drupal\acquia_cms_search\Plugin\views\query\SearchApiQuery;
 use Drupal\acquia_search\Helper\Runtime;
 use Drupal\Core\DestructableInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\field\FieldStorageConfigInterface;
+use Drupal\field\FieldConfigInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\ServerInterface;
@@ -50,9 +50,12 @@ function acquia_cms_search_node_type_insert(NodeTypeInterface $node_type) {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_insert() for configurable field storages.
+ * Implements hook_ENTITY_TYPE_insert() for configurable field.
  */
-function acquia_cms_search_field_storage_config_insert(FieldStorageConfigInterface $field_storage) {
+function acquia_cms_search_field_config_insert(FieldConfigInterface $field_config) {
+
+  $field_storage = $field_config->getFieldStorageDefinition();
+
   // Adding the third party settings in the node.body storage configuration to
   // index the body field for searching.
   if ($field_storage->getType() === 'text_with_summary' && $field_storage->id() === 'node.body') {

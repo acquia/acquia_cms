@@ -11,6 +11,12 @@ target_env="$2"
 # enabled, else there will be a collision on site install.
 /usr/local/bin/drush9 @$site.$target_env cr
 
+# Don't reinstall ode5 on every update.
+if [ "$target_env" = "ode5" ]; then
+  echo "Skipping ACMS re-install on ode5."
+  exit 0
+fi
+
 # Only run update hooks on ode4. ode4 is used to test update path.
 if [ "$target_env" = "ode4" ]; then
     /usr/local/bin/drush9 @$site.$target_env updatedb --no-interaction
@@ -25,20 +31,21 @@ fi
 
 # Enable development related modules. This is for ease of development for core
 # Acquia CMS development.
-
+echo "Enabling Acquia CMS Starter in $target_env"
 case $target_env in
   ode1)
-    echo "Enabling Acquia CMS Pubsec Demo in $target_env"
-    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_demo_pubsec --yes
+    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_starter --yes
     ;;
 
   ode3)
-    echo "Enabling Acquia CMS Starter in $target_env"
+    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_starter --yes
+    ;;
+
+  ode5)
     /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_starter --yes
     ;;
 
   stage)
-    echo "Enabling Acquia CMS Pubsec Demo in $target_env"
-    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_demo_pubsec --yes
+    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_starter --yes
     ;;
 esac
