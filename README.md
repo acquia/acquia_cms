@@ -6,8 +6,8 @@ An opinionated implementation of Drupal 9 for running low code websites in the A
 
 If you're contributing to Acquia CMS as a developer, see our install instructions in [DEVELOPING.md](/DEVELOPING.md).
 
-If you're installing Acquia CMS to build a Drupal project on the Acquia platform,
-we invite you to use the Acquia CMS Composer template:
+If you're installing Acquia CMS to build a new Drupal project on the Acquia platform,
+we invite you to use our Acquia CMS Composer template:
 [Acquia CMS Project](https://github.com/acquia/acquia-cms-project). This repository
 is for developers contributing to the Acquia CMS distribution.
 
@@ -18,8 +18,12 @@ User-facing documentation for Acquia CMS lives on
 
 ## Releases
 
-[@TODO] Click here for release notes for Acquia CMS.
+[@TODO] Release notes will be added here once releases are created post-GA.
 
-## Contributing
+## Developing Acquia CMS
 
-[@TODO] [Click here](https://github.com/acquia/acquia_cms/DEVELOPING.md#contributing) for a contribution guide.
+[Click here](https://github.com/acquia/acquia_cms/DEVELOPING.md) for a developers guide.
+
+## Contributing to Acquia CMS
+
+[Click here](https://github.com/acquia/acquia_cms/CONTRIBUTING.md) for a contributors guide.
