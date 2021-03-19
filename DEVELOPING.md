@@ -225,25 +225,10 @@ Then, install Acquia CMS as detailed in the "Installing Acquia CMS" section abov
 
 Once you've installed Acquia CMS, how you serve it is up to you. For local development, the most convenient option is PHP's built-in web server: `drush runserver 8080`.
 
-### Updating site studio configuration
+### Updating Site Studio configuration
 The Acquia CMS profile contains both core and module-specific Site Studio Sync Packages. Site Studio Sync Packages can be configured via the UI at the path `/admin/cohesion/sync/packages`.
 
-The following are the recommended steps for creating and updating Site Studio Sync Packages for Acquia CMS:
-1. Add and install the [cohesion_sync_extras](https://github.com/acquia/cohesion-sync-extras-poc) module.
-1. Install the acquia_cms_development module if it isn't already installed. This module contains additional export configuration for each Sync Package entity.
-1. If creating a new Sync Package, add the following cohesion_sync_extras export settings to the package:
-
-    | Setting                              | Value                                                                                            |
-    | ------------------------------------ | ------------------------------------------------------------------------------------------------ |
-    | Export plugin                        | Export to module                                                                                 |
-    | Module machine name                  | The Acquia CMS module containing the package. Or `acquia_cms` to export directly to the profile. |
-    | Export individual yaml files         | Checked, to force generation of a separate yaml file for each config object.                     |
-    | Exclude config dependencies          | Checked, to force exclusion of calculated config dependencies.                                   |
-    | Exclude file dependencies            | Checked, to force exclusion of calculate file dependencies.                                      |
-    | Include Sync Package export settings | Unchecked. These settings should be excluded from the public facing Sync Package entity.         |
-
-1. If creating a new Sync Package, export the Sync Package third party settings to `acquia_cms_development/config/rewrite/cohesion_sync.package.<package>.yml`.
-1. Export sync packages via drush: `drush package:export:all`.
+To update Site Studio configuration, you can run the `drush acms:config-reset` command and follow the instructions. Note that this will overwrite *any* changes you've made to the default ACMS configuration for Site Studio, and may affect your site in unexpected ways. *You should test using this command in a non-production environment before running it in production.*
 
 ### Updating Acquia Claro theming
 * Update SCSS as per requirement in Acquia Claro theme.
