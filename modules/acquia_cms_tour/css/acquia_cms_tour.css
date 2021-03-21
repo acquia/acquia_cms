@@ -5,19 +5,22 @@
   display: flex;
 }
 .tour-page .section-hero {
-  background: #d7ebf5;
+  color: white;
+  background-image: url('/sites/all/modules/acquia_cms_tour/assets/images/hero-background.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
   padding: 30px 18px 50px 50px;
 }
-.tour-page .section-hero h2,
-.tour-page .section-hero .button-section p {
-  opacity: 0.7;
+a:-webkit-any-link {
+  cursor: pointer;
 }
 .tour-page .section-hero .button--primary {
-  background-color: #003cc5;
+  background-color: #26a3dd;
 }
 .tour-page .section-hero .text-section {
   width: 75%;
-  opacity: 0.7;
   margin-right: 5%;
 }
 .tour-page .section-content {
