@@ -2,7 +2,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - facets.facet_source.search_api__views_page__articles__page
     - search_api.index.content
     - views.view.articles
   module:
@@ -10,7 +9,7 @@ dependencies:
     - search_api
 third_party_settings:
   facets_pretty_paths:
-    coder: taxonomy_term_name_coder
+    coder: taxonomy_term_coder
 id: articles_category
 name: Category
 url_alias: category
