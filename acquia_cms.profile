@@ -105,6 +105,10 @@ function acquia_cms_install_tasks(): array {
   $tasks['acquia_cms_send_heartbeat_event'] = [
     'run' => Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
   ];
+
+  // Remove unwanted config entities installed by Site Studio.
+  $tasks['acquia_cms_delete_unwanted_config'] = [];
+
   return $tasks;
 }
 
@@ -347,6 +351,21 @@ function acquia_cms_set_favicon() {
       'use_default' => FALSE,
     ])
     ->save(TRUE);
+}
+
+/**
+ * Removing unwanted Site Studio config entities.
+ */
+function acquia_cms_delete_unwanted_config() {
+  $config_items = [
+    'cohesion_website_settings.cohesion_color.gray',
+    'cohesion_elements.cohesion_component_category.cpt_cat_general_components',
+    'cohesion_elements.cohesion_component_category.cpt_cat_interactive_components',
+  ];
+
+  foreach ($config_items as $config_item) {
+    \Drupal::configFactory()->getEditable($config_item)->delete();
+  }
 }
 
 /**
