@@ -46,6 +46,7 @@ function acquia_cms_form_cohesion_account_settings_form_alter(array &$form) {
     // configuration import and cohesion style rebuild functionality into
     // separate submit handlers.
     // @see \Drupal\cohesion_website_settings\Controller\WebsiteSettingsController::batch
+    $form['#submit'][] = 'acquia_cms_rebuild_cohesion';
   }
 }
 
