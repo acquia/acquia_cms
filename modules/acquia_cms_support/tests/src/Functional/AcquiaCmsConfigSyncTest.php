@@ -98,15 +98,14 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
   public function testAcquiaConfigSyncOverriddenPage() {
     $account = $this->drupalCreateUser(['administer site configuration']);
     $this->drupalLogin($account);
+
     $this->drupalGet('/admin/config/development/acquia-cms-support/overridden-config');
-
     $assert_session = $this->assertSession();
-
     $assert_session->statusCodeEquals(200);
 
     // Asset that overridden configuration appears on overridden tab.
-    $assert_session->elementTextContains('xpath', "//table/tbody/tr[11]/td[1]", 'taxonomy.vocabulary.tags');
-    $assert_session->elementTextContains('xpath', "//table/tbody/tr[11]/td[3]", '87 %');
+    $assert_session->elementExists('xpath', "//table/tbody/tr/td[contains(text(),'taxonomy.vocabulary.tags')]");
+    $assert_session->elementExists('xpath', "//table/tbody/tr/td/span[contains(text(),'87  %')]");
 
     // Asset that unchanged configuration does not appear on overridden tab.
     $assert_session->elementNotExists('xpath', "//table/tbody/tr/td[contains(text(),'taxonomy.vocabulary.categories')]");
@@ -115,7 +114,7 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
     $assert_session->statusCodeEquals(200);
 
     // Asset that unchanged configuration appears on unchanged tab.
-    $assert_session->elementTextContains('xpath', "//table/tbody/tr[32]/td[1]", 'taxonomy.vocabulary.categories');
+    $assert_session->elementExists('xpath', "//table/tbody/tr/td[contains(text(),'taxonomy.vocabulary.categories')]");
 
     // Asset that overridden configuration does not appear on unchanged tab.
     $assert_session->elementNotExists('xpath', "//table/tbody/tr/td[contains(text(),'taxonomy.vocabulary.tags')]");
