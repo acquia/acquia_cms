@@ -102,4 +102,97 @@ class ImageTest extends MediaTypeTestBase {
     $assert_session->fieldNotExists('path[0][alias]');
   }
 
+  /**
+   * Tests the media type as a content administrator.
+   *
+   * Lets override parent's method so that we can change
+   * media id here because we are adding one addition image
+   * as default content for site logo, which breaks the
+   * test if we use parents method.
+   *
+   * Asserts that content administrators:
+   * - Can create media of the type under test.
+   * - Can edit their own media.
+   * - Can edit others' media.
+   * - Can delete their own media.
+   * - Can delete others' media.
+   */
+  protected function doTestAdministratorAccess() {
+    $account = $this->drupalCreateUser();
+    $account->addRole('content_administrator');
+    $account->save();
+    $this->drupalLogin($account);
+
+    $assert_session = $this->assertSession();
+    $page = $this->getSession()->getPage();
+
+    // Test that we can create media.
+    $this->drupalGet("/media/add/$this->mediaType");
+    $assert_session->statusCodeEquals(200);
+    // We should be able to select the language of the media item.
+    $assert_session->selectExists('Language');
+    $page->fillField('Name', 'Pastafazoul!');
+    $this->fillSourceField();
+    $page->pressButton('Save');
+    $assert_session->statusCodeEquals(200);
+
+    // Test that we can edit our own media.
+    $this->drupalGet('/media/4/edit');
+    $assert_session->statusCodeEquals(200);
+
+    // Test that we can delete our own media.
+    $this->drupalGet('/media/4/delete');
+    $assert_session->statusCodeEquals(200);
+
+    // Test that we can delete others' media.
+    $this->drupalGet('/media/2/delete');
+    $assert_session->statusCodeEquals(200);
+  }
+
+  /**
+   * Tests the media type as a content author.
+   *
+   * Lets override parent's method so that we can change
+   * media id here because we are adding one addition image
+   * as default content for site logo, which breaks the
+   * test if we use parents method.
+   *
+   * Asserts that content authors:
+   * - Can create media of the type under test.
+   * - Can edit their own media.
+   * - Cannot edit others' media.
+   * - Can delete their own media.
+   * - Cannot delete others' media.
+   */
+  protected function doTestAuthorAccess() {
+    $account = $this->drupalCreateUser();
+    $account->addRole('content_author');
+    $account->save();
+    $this->drupalLogin($account);
+
+    $assert_session = $this->assertSession();
+    $page = $this->getSession()->getPage();
+
+    $this->drupalGet("/media/add/$this->mediaType");
+    $assert_session->statusCodeEquals(200);
+    // We should be able to select the language of the media item.
+    $assert_session->selectExists('Language');
+    $page->fillField('Name', 'Pastafazoul!');
+    $this->fillSourceField();
+    $page->pressButton('Save');
+    $assert_session->statusCodeEquals(200);
+
+    // Test that we cannot edit others' media.
+    $this->drupalGet('/media/1/edit');
+    $assert_session->statusCodeEquals(403);
+
+    // Test we can delete our own media.
+    $this->drupalGet('/media/3/delete');
+    $assert_session->statusCodeEquals(200);
+
+    // Test that we cannot delete others' media.
+    $this->drupalGet('/media/1/delete');
+    $assert_session->statusCodeEquals(403);
+  }
+
 }
