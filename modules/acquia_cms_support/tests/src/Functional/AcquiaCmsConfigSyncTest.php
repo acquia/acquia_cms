@@ -47,7 +47,7 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     // Update configuration to cover a simulated
     // config parity calculation test.
