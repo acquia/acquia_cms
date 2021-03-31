@@ -27,8 +27,6 @@ class HeroComponentTest extends CohesionComponentTestBase {
 
     // Add the component to the layout canvas.
     $edit_form = $this->getLayoutCanvas()->add('Hero')->edit();
-    $this->waitForElementVisible('css', 'coh-typeahead input.form-control ', $this->getSession()->getPage());
-    $edit_form->fillField('Link to page or URL', 'https://www.acquia.com');
     $edit_form->fillField('Button text', 'Button Text');
     $edit_form->selectFieldOption('Target', 'New window');
     $edit_form->selectFieldOption('Button style', 'Link button color');

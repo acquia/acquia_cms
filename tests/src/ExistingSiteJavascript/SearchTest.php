@@ -81,8 +81,6 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
     $this->drupalLogin($account);
 
     $node_types = NodeType::loadMultiple();
-    // @todo Delete this line once ACMS-445 is fixed.
-    unset($node_types['page']);
 
     $this->drupalGet('/search');
     $assert_session->elementExists('css', '.views-element-container .coh-style-search-block')->fillField('keywords', 'Test');
@@ -92,7 +90,11 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
     // the content type facet is visible but none of the dependent facets are.
     $this->assertSession()->waitForElementVisible('css', '.coh-style-facet-accordion');
     $facets = $this->assertSession()->elementExists('css', '.coh-style-facet-accordion');
-    // @todo Revisit these assertions.
+    $this->assertTrue($this->assertLinkExists('Content Type', $facets)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Article Type', $facets)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Event Type', $facets)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Person Type', $facets)->isVisible());
+    $this->assertFalse($this->assertLinkExists('Place Type', $facets)->isVisible());
     foreach ($node_types as $node_type_id => $type) {
       // Clear all selected facets.
       $this->drupalGet('/search');
@@ -136,8 +138,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
   public function testAutocomplete() {
     $page = $this->getSession()->getPage();
     $node_types = NodeType::loadMultiple();
-    // @todo Delete this line once ACMS-445 is fixed.
-    unset($node_types['page']);
+
     foreach ($node_types as $type) {
       $node_type_label = $type->label();
       $this->drupalGet('/search');
