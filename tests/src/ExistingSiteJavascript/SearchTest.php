@@ -21,7 +21,6 @@ use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
  * @group low_risk
  * @group pr
  * @group push
- * @group disabled
  */
 class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
