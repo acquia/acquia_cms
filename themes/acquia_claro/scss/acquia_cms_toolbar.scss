@@ -450,7 +450,7 @@
                 content: url(../images/0084d7/chevron-right.svg);
                 pointer-events: none;
               }
-              
+
               &:hover {
                 &:after {
                   transform: translate(6px, -8px);
@@ -865,6 +865,12 @@
 
 .toolbar {
   .toolbar-tray-vertical {
+    .level-2 {
+      a {
+        color: $df-light-grey !important;
+      }
+    }
+
     .level-3 {
       ul {
         margin-left: 0 !important;
