@@ -12,7 +12,6 @@ use Drupal\Tests\BrowserTestBase;
  * @group risky
  * @group push
  * @group pr
- * @group disabled
  */
 class AcquiaCmsConfigSyncTest extends BrowserTestBase {
 

@@ -14,7 +14,6 @@ use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
  * @group medium_risk
  * @group push
  * @group pr
- * @group disabled
  */
 class VideoTest extends MediaTypeTestBase {
 
