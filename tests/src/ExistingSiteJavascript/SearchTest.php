@@ -87,8 +87,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
     // Get the container which holds the facets, and assert that, initially,
     // the content type facet is visible but none of the dependent facets are.
-    $this->assertSession()->waitForElementVisible('css', '.coh-style-facet-accordion');
-    $facets = $this->assertSession()->elementExists('css', '.coh-style-facet-accordion');
+    $facets = $this->assertSession()->waitForElementVisible('css', '.coh-style-facet-accordion');
     $this->assertTrue($this->assertLinkExists('Content Type', $facets)->isVisible());
     $this->assertFalse($this->assertLinkExists('Article Type', $facets)->isVisible());
     $this->assertFalse($this->assertLinkExists('Event Type', $facets)->isVisible());
