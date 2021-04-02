@@ -105,20 +105,14 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
       $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
 
       // Activate the facet for this content type.
-      // @todo check why below assertions are not working.
-      // $this->assertLinkExists($node_type_label . ' (1)', $facets);
+      // @todo Revisit this assertion.
       $this->assertLinkExists('Test published ' . $node_type_label);
       $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
 
       // Pages have no facets.
       if ($node_type_id !== 'page') {
         // Check if term facet is working properly.
-        // @todo why below assertion not working
-        // $this->assertSession()
-        // ->elementExists('css', '.coh-style-facet-accordion')
-        // ->clickLink($node_type_label . ' Music (1)');
-        // Assert that the clear filter is present.
-        // $this->assertSession()->linkExists('Clear filter(s)');
+        // @todo Revisit this assertion.
         // Check if node of the selected term is shown.
         $this->assertLinkExists('Test published ' . $node_type_label);
         $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
