@@ -89,23 +89,22 @@ final class CohesionFacade implements ContainerInjectionInterface {
     // @see \Drupal\cohesion_sync\Drush\CommandHelpers::import()
     // Use validatePackageBatch method as per site studio 6.5.0
     $store_key = 'drush_sync_validation' . $this->uuidGenerator->generate();
-    $action_data = $this->packager->validatePackageBatch($package, $store_key);
+    $validate_package_operations = $this->packager->validatePackageBatch($package, $store_key);
+    $batch_operations = [];
 
     // Basically, overwrite everything without validating. This is equivalent
     // to passing the --overwrite-all and --force options to the 'sync:import'
     // Drush command.
-    foreach ($action_data as &$action) {
-      $action['entry_action_state'] = ENTRY_EXISTING_OVERWRITTEN;
-    }
-
-    $batch_operations = [];
+    $batch_operations[] = [
+      '\Drupal\cohesion_sync\Controller\BatchImportController::setImportBatch',
+      [$package, $store_key, TRUE, FALSE, TRUE, $no_rebuild, FALSE],
+    ];
 
     $batch_operations[] = [
       '_display_package_import_operation',
       [$package],
     ];
-    $operations = $this->packager->applyBatchYamlPackageStream($package, $action_data, $no_rebuild);
-    $batch_operations = \array_merge($batch_operations, $operations);
+    $batch_operations = \array_merge($validate_package_operations, $batch_operations);
 
     return $batch_operations;
   }
