@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "01f2b0494fae7611abe9b6d854f45e9e",
+    "content-hash": "7adcc106df98cdb8af48a59beb04ba9f",
     "packages": [
         {
             "name": "acquia/cohesion",
@@ -54,6 +54,7 @@
                 },
                 "enable-patching": true,
                 "patches_applied": {
+                    "Prevent error call to a member function getOption() on null during starter enable": "https://gist.githubusercontent.com/chandan-singh7929/c70de6c88b8951022786cfeed75ff714/raw/dfe8481b77594405b27af24ec88da8254d9a00c1/frontendBuilderDropzone.patch",
                     "Prevent possible array_flip warning on config import/export": "https://gist.githubusercontent.com/brianreese/9f5f8000853d76a3e805e5a6a39a94ba/raw/33152583acbb7888d436f1f8ce5e69609c080dee/site-studio-array-flip-warning.patch"
                 }
             },
