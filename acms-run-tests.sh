@@ -192,6 +192,7 @@ if [ -z "$(printenv SYMFONY_DEPRECATIONS_HELPER)" ] ; then
   printenv SYMFONY_DEPRECATIONS_HELPER
 fi
 
+
 # Run all automated PHPUnit tests.
 # If --stop-on-failure is passed as an argument $1 will handle it.
 echo -e "${YELLOW}Running phpunit tests for acquia_cms. ${NOCOLOR}"
