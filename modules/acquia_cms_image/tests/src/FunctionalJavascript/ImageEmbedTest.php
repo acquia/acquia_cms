@@ -43,7 +43,7 @@ class ImageEmbedTest extends MediaEmbedTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->container->get('entity_display.repository')

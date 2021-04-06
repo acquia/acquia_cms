@@ -40,7 +40,7 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     // Ensure that the media type under test has been specified by a subclass.
     $this->assertNotEmpty($this->mediaType);
 

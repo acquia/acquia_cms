@@ -55,7 +55,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     // Ensure that the content type under test has been specified by a subclass.
     $this->assertNotEmpty($this->nodeType);
 

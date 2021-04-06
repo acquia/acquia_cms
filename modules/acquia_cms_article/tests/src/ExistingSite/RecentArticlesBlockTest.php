@@ -24,7 +24,7 @@ class RecentArticlesBlockTest extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $block = $this->placeBlock('views_block:article_cards-recent_articles_block', [
       'region' => 'content',
