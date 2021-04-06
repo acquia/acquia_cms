@@ -27,8 +27,11 @@ class HeroComponentTest extends CohesionComponentTestBase {
 
     // Add the component to the layout canvas.
     $edit_form = $this->getLayoutCanvas()->add('Hero')->edit();
-    $this->waitForElementVisible('css', 'coh-typeahead input.form-control ', $this->getSession()->getPage());
-    // @todo Revisit this field test.
+    $edit_form->fillField('Button text', 'Button Text');
+    $edit_form->selectFieldOption('Target', 'New window');
+    $edit_form->selectFieldOption('Button style', 'Link button color');
+    $edit_form->selectFieldOption('Show breadcrumbs', 'Show breadcrumbs on solid light background');
+
     $assert_styles = function (string $select, array $styles) use ($assert_session, $edit_form) {
       foreach ($styles as $style) {
         $assert_session->optionExists($select, $style, $edit_form);

@@ -37,7 +37,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $langcode = 'es';
