@@ -14,6 +14,9 @@ cd "$(dirname "$0")"
 # Reuse ORCA's own includes.
 source ../../../orca/bin/travis/_includes.sh
 
+# Reset Chromedriver arguments.
+export DRUPAL_TEST_WEBDRIVER_CHROME_ARGS="--disable-gpu --headless --no-sandbox --window-size=1920x1080"
+
 if [ "$TRAVIS_JOB_NAME" != "Starter" ] && [ "$ACMS_JOB" != "starter_full" ]; then
   # Run ORCA's standard script.
   ../../../orca/bin/travis/script.sh
