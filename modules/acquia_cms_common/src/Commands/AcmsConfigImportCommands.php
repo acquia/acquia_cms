@@ -78,7 +78,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *
    * @var \Drupal\Core\DependencyInjection\ClassResolver
    */
-  protected $classResolver;
+  protected $cohesionFacade;
 
   /**
    * The acquia cms utility service.
@@ -160,7 +160,8 @@ final class AcmsConfigImportCommands extends DrushCommands {
     $this->configImportCommands = $configImportCommands;
     $this->stringTranslation = $stringTranslation;
     $this->moduleHandler = $moduleHandler;
-    $this->classResolver = $classResolver;
+    $this->cohesionFacade = $classResolver->getInstanceFromDefinition(CohesionFacade::class);
+    ;
     $this->acmsUtilityService = $acmsUtilityService;
   }
 
@@ -278,6 +279,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *   The list of config files to be deleted during import.
    *
    * @throws \Drush\Exceptions\UserAbortException
+   * @throws \Exception
    */
   private function doImport(array $package, string $scope, array $delete_list) {
     $config_files = $ss_config_files = [];
@@ -285,22 +287,54 @@ final class AcmsConfigImportCommands extends DrushCommands {
       foreach ($package as $module) {
         $config_files = array_merge($config_files, $this->getConfigFiles($module));
       }
-      // Let validate delete list against given scope of configurations.
+      // Validate delete list against given scope of configurations.
       if (!$this->validDeleteList($config_files, $delete_list)) {
         throw new \Exception("The file specified in --delete-list option is invalid.");
       }
       $this->importPartialConfig($config_files, $delete_list);
     }
 
-    // Import the site studio configurations.
+    // Build site studio packages.
     if (in_array($scope, ['site-studio', 'all'])) {
-      // Show big warning if site-studio is in scope.
-      $this->io()->warning("This can have unintended side effects for existing pages built using previous versions of components, it might literally break them, and should be tested in a non-production environment first.");
       foreach ($package as $module) {
         $ss_config_files = array_merge($ss_config_files, $this->getSiteStudioPackage($module));
       }
-      $this->importSiteStudioPackage($ss_config_files);
+      // Confirm the site studio changes before import.
+      if ($this->buildSiteStudioChanges($ss_config_files)) {
+        if (!$this->io()->confirm(dt('Import these site studio configuration changes?'))) {
+          throw new UserAbortException();
+        }
+        // Import the site studio configurations.
+        $this->importSiteStudioPackage($ss_config_files);
+      }
+      else {
+        $this->io()->success('No site studio package found to import.');
+      }
     }
+  }
+
+  /**
+   * Show changes list for site studio packages.
+   *
+   * @param array $ss_config_files
+   *   Array of configurations file.
+   *
+   * @return bool
+   *   The package status.
+   */
+  private function buildSiteStudioChanges(array $ss_config_files): bool {
+    if (empty($ss_config_files)) {
+      return FALSE;
+    }
+
+    $rows = [];
+    foreach ($ss_config_files as $name) {
+      $rows[] = [$name];
+    }
+    // Show warning if site-studio is in scope.
+    $this->io()->warning("This can have unintended side effects for existing pages built using previous versions of components, it might literally break them, and should be tested in a non-production environment first.");
+    $this->io()->table(['Configuration'], $rows);
+    return TRUE;
   }
 
   /**
@@ -392,16 +426,11 @@ final class AcmsConfigImportCommands extends DrushCommands {
    * @throws \Exception
    */
   private function importSiteStudioPackage(array $packages) {
-    $cohesion_facade = $this->classResolver->getInstanceFromDefinition(CohesionFacade::class);
     $operations = [];
     foreach ($packages as $package) {
-      $operations = array_merge($operations, $cohesion_facade->importPackage($package, TRUE));
+      $operations = array_merge($operations, $this->cohesionFacade->importPackage($package));
     }
-    $batch = [
-      'title' => $this->stringTranslation->translate('Importing configuration.'),
-      'operations' => $operations,
-      'finished' => '\Drupal\acquia_cms\Facade\CohesionFacade::batchFinishedCallback',
-    ];
+    $batch = ['operations' => $operations];
     batch_set($batch);
     drush_backend_batch_process();
   }
@@ -415,6 +444,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *   The list of configurations to be deleted before import.
    *
    * @throws \Drush\Exceptions\UserAbortException
+   * @throws \Exception
    */
   private function importPartialConfig(array $config_files, array $delete_list) {
     // Determine $source_storage in partial case.
