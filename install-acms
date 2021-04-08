@@ -41,4 +41,3 @@ if [ ${ADMIN_EMAIL} ]; then
   PARAMS+="--account-mail=${ADMIN_EMAIL} "
 fi
 ./vendor/bin/drush site-install -y acquia_cms --account-name=${ADMIN_NAME} ${PARAMS}
-./vendor/bin/drush cohesion:rebuild
