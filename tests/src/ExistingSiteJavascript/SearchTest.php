@@ -233,7 +233,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
   private function assertFacetLinkExists(ElementInterface $facets = NULL) {
     // Get the container which holds the facets, and assert that, initially, the
     // content type facet is not visible but none of the dependent facets are.
-    $this->assertFalse($this->assertLinkExists('Content Type', $facets)->isVisible());
+    $this->assertTrue($this->assertLinkExists('Content Type', $facets)->isVisible());
     $this->assertFalse($this->assertLinkExists('Article Type', $facets)->isVisible());
     $this->assertFalse($this->assertLinkExists('Event Type', $facets)->isVisible());
     $this->assertFalse($this->assertLinkExists('Person Type', $facets)->isVisible());
