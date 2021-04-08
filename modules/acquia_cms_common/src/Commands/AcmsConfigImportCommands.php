@@ -163,7 +163,6 @@ final class AcmsConfigImportCommands extends DrushCommands {
     $this->stringTranslation = $stringTranslation;
     $this->moduleHandler = $moduleHandler;
     $this->cohesionFacade = $classResolver->getInstanceFromDefinition(CohesionFacade::class);
-    ;
     $this->acmsUtilityService = $acmsUtilityService;
   }
 
@@ -453,6 +452,12 @@ final class AcmsConfigImportCommands extends DrushCommands {
 
     $replacement_storage = new StorageReplaceDataWrapper($active_storage);
     foreach ($config_files as $name => $data) {
+      // We should not re-import cohesion settings at all,
+      // it will override the site studio credentials which
+      // will break the whole site.
+      if ($name === 'cohesion.settings') {
+        continue;
+      }
       $replacement_storage->replaceData($name, $data);
     }
     $source_storage = $replacement_storage;
