@@ -55,7 +55,7 @@ class EventTest extends ContentTypeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Normally, functional tests run in the Syndey time zone in order to catch
