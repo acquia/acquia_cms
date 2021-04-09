@@ -5,7 +5,7 @@ dependencies:
     - field.field.media.video.field_categories
     - field.field.media.video.field_media_oembed_video
     - field.field.media.video.field_tags
-    - image.style.card
+    - image.style.thumbnail
     - media.type.video
   module:
     - image
@@ -18,7 +18,7 @@ content:
   created:
     label: hidden
     type: timestamp
-    weight: 1
+    weight: 0
     region: content
     settings:
       date_format: medium
@@ -27,12 +27,12 @@ content:
     third_party_settings: {  }
   thumbnail:
     type: image
-    weight: 2
-    region: content
+    weight: 5
     label: hidden
     settings:
-      image_style: card
+      image_style: thumbnail
       image_link: ''
+    region: content
     third_party_settings: {  }
   uid:
     label: hidden
