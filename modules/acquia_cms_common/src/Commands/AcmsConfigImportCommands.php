@@ -214,7 +214,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    */
   private function getPackagesFromUserInput(): array {
     // Lets get input from user if not provided package with command.
-    $acms_modules = $this->getAcmsModules();
+    $acms_modules = $this->filterModuleForConfig();
     $question_string = 'Choose a module that needs a configuration reset. Separate multiple choices with commas, e.g. "1,2,4".';
     $question = $this->createMultipleChoiceOptions($question_string, $acms_modules);
     $types = $this->io()->askQuestion($question);
@@ -228,6 +228,27 @@ final class AcmsConfigImportCommands extends DrushCommands {
       $package = $types;
     }
     return $package;
+  }
+
+  /**
+   * Filter out those modules which do not have config to import from the list.
+   *
+   * @return array
+   *   The list of module which has configurations.
+   */
+  private function filterModuleForConfig(): array {
+    $acms_modules = $this->getAcmsModules();
+    $acms_filtered_modules = [];
+    foreach ($acms_modules as $module) {
+      $dir = drupal_get_path('module', $module);
+      $install = "$dir/config/install";
+      $optional = "$dir/config/optional";
+      if (is_dir($install) || is_dir($optional)) {
+        $acms_filtered_modules[] = $module;
+      }
+    }
+
+    return $acms_filtered_modules;
   }
 
   /**
@@ -452,10 +473,12 @@ final class AcmsConfigImportCommands extends DrushCommands {
 
     $replacement_storage = new StorageReplaceDataWrapper($active_storage);
     foreach ($config_files as $name => $data) {
-      // We should not re-import cohesion settings at all,
+      // We should not re-import cohesion settings,
       // it will override the site studio credentials which
-      // will break the whole site.
-      if ($name === 'cohesion.settings') {
+      // will break the whole site. Also re-importing
+      // search_api.index.content will have unexpected error since
+      // we have modified it using facade to add index field.
+      if ($name === 'cohesion.settings' || $name === 'search_api.index.content') {
         continue;
       }
       $replacement_storage->replaceData($name, $data);
@@ -488,7 +511,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
     }
     $table = ConfigCommands::configChangesTable($change_list, $this->output());
     $table->render();
-
+    $this->io()->warning("Any overridden configurations will be reverted back with the one listed above which may result in unexpected behaviour.");
     if (!$this->io()->confirm(dt('Import these configuration changes?'))) {
       throw new UserAbortException();
     }
