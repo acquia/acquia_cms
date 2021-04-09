@@ -193,13 +193,18 @@ function acquia_cms_install_ui_kit(array $install_state) {
   $facade = Drupal::classResolver(CohesionFacade::class);
 
   $operations = ($install_state['interactive']) ? $facade->getAllOperations(TRUE) : $facade->getAllOperations();
-  $batch = [
-    'title' => t('Importing configuration.'),
-    'operations' => $operations,
-    'finished' => '\Drupal\acquia_cms\Facade\CohesionFacade::batchFinishedCallback',
-  ];
+  $batch = ['operations' => $operations];
 
-  return $batch;
+  // Set batch along with drush backend process if site is being
+  // installed via Drush, so that we can show log on the screen during
+  // site studio package import/validate.
+  if (PHP_SAPI == 'cli') {
+    batch_set($batch);
+    drush_backend_batch_process();
+  }
+  else {
+    return $batch;
+  }
 }
 
 /**
@@ -347,15 +352,4 @@ function acquia_cms_set_favicon() {
       'use_default' => FALSE,
     ])
     ->save(TRUE);
-}
-
-/**
- * Display which package is being imported.
- *
- * @param string $package
- *   Name of the package.
- */
-function _display_package_import_operation(string $package) {
-  $message = t('Importing package: @package', ['@package' => $package]);
-  \Drupal::logger('acquia_cms')->notice($message);
 }
