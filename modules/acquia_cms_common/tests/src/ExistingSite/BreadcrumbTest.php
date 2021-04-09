@@ -23,7 +23,7 @@ class BreadcrumbTest extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $block = $this->placeBlock('system_breadcrumb_block', [
       'region' => 'content',

@@ -13,7 +13,6 @@ use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
  * @group medium_risk
  * @group push
  * @group pr
- * @group disabled
  */
 class VideoEmbedTest extends MediaEmbedTestBase {
 

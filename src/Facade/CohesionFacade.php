@@ -4,6 +4,7 @@ namespace Drupal\acquia_cms\Facade;
 
 use Drupal\cohesion_sync\PackagerManager;
 use Drupal\Component\Serialization\Yaml;
+use Drupal\Component\Uuid\UuidInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -34,16 +35,26 @@ final class CohesionFacade implements ContainerInjectionInterface {
   private $moduleHandler;
 
   /**
+   * The uuid service.
+   *
+   * @var \Drupal\Component\Uuid\UuidInterface
+   */
+  protected $uuidGenerator;
+
+  /**
    * CohesionFacade constructor.
    *
    * @param \Drupal\cohesion_sync\PackagerManager $packager
    *   The Cohesion sync packager manager service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler service.
+   * @param \Drupal\Component\Uuid\UuidInterface $uuid
+   *   The uuid service.
    */
-  public function __construct(PackagerManager $packager, ModuleHandlerInterface $module_handler) {
+  public function __construct(PackagerManager $packager, ModuleHandlerInterface $module_handler, UuidInterface $uuid) {
     $this->packager = $packager;
     $this->moduleHandler = $module_handler;
+    $this->uuidGenerator = $uuid;
   }
 
   /**
@@ -52,7 +63,8 @@ final class CohesionFacade implements ContainerInjectionInterface {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('cohesion_sync.packager'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('uuid')
     );
   }
 
@@ -75,24 +87,17 @@ final class CohesionFacade implements ContainerInjectionInterface {
     // extremely careful when changing it.
     // @see \Drupal\cohesion_sync\Form\ImportFileForm::submitForm()
     // @see \Drupal\cohesion_sync\Drush\CommandHelpers::import()
-    $action_data = $this->packager->validateYamlPackageStream($package);
-
+    // Use validatePackageBatch method as per site studio 6.5.0
+    $store_key = 'drush_sync_validation' . $this->uuidGenerator->generate();
+    $validate_package_operations = $this->packager->validatePackageBatch($package, $store_key);
     // Basically, overwrite everything without validating. This is equivalent
     // to passing the --overwrite-all and --force options to the 'sync:import'
     // Drush command.
-    foreach ($action_data as &$action) {
-      $action['entry_action_state'] = ENTRY_EXISTING_OVERWRITTEN;
-    }
-
-    $batch_operations = [];
-
     $batch_operations[] = [
-      '_display_package_import_operation',
-      [$package],
+      '\Drupal\cohesion_sync\Controller\BatchImportController::setImportBatch',
+      [$package, $store_key, TRUE, FALSE, TRUE, $no_rebuild, FALSE],
     ];
-    $operations = $this->packager->applyBatchYamlPackageStream($package, $action_data, $no_rebuild);
-    $batch_operations = \array_merge($batch_operations, $operations);
-
+    $batch_operations = \array_merge($validate_package_operations, $batch_operations);
     return $batch_operations;
   }
 
