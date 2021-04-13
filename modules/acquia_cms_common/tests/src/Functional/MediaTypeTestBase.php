@@ -12,7 +12,7 @@ use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
 abstract class MediaTypeTestBase extends ContentModelTestBase {
 
   use MediaTestTrait {
-    createMedia as traitCreateMedia;
+    MediaTestTrait::createMedia as traitCreateMedia;
   }
 
   /**
@@ -40,7 +40,7 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     // Ensure that the media type under test has been specified by a subclass.
     $this->assertNotEmpty($this->mediaType);
 
@@ -103,15 +103,15 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
     $assert_session->statusCodeEquals(200);
 
     // Test that we cannot edit others' media.
-    $this->drupalGet('/media/2/edit');
+    $this->drupalGet('/media/1/edit');
     $assert_session->statusCodeEquals(403);
 
     // Test we can delete our own media.
-    $this->drupalGet('/media/3/delete');
+    $this->drupalGet('/media/2/delete');
     $assert_session->statusCodeEquals(200);
 
     // Test that we cannot delete others' media.
-    $this->drupalGet('/media/2/delete');
+    $this->drupalGet('/media/1/delete');
     $assert_session->statusCodeEquals(403);
   }
 
@@ -184,11 +184,11 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
     $assert_session->statusCodeEquals(200);
 
     // Test that we can edit our own media.
-    $this->drupalGet('/media/5/edit');
+    $this->drupalGet('/media/4/edit');
     $assert_session->statusCodeEquals(200);
 
     // Test that we can delete our own media.
-    $this->drupalGet('/media/5/delete');
+    $this->drupalGet('/media/4/delete');
     $assert_session->statusCodeEquals(200);
 
     // Test that we can delete others' media.

@@ -37,7 +37,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $langcode = 'es';
@@ -212,7 +212,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
     // Assert that the clear filter is present.
     $assert_session->linkExists('Clear filter(s)');
 
-    $assert_session->addressMatches('/.\/category\/art/');
+    $assert_session->addressMatches('/.\/category\/art-[0-9]/');
     $this->assertLinksExistInOrder(['Foxtrot', 'Beta']);
     $assert_session->linkNotExists('Alpha');
     $assert_session->linkNotExists('Charlie');
@@ -228,7 +228,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
 
     // Filtering by type should narrow the results down even more.
     $page->clickLink('Type O (1)');
-    $assert_session->addressMatches('/.\/type\/type-o\/category\/art/');
+    $assert_session->addressMatches('/.\/type\/type-o-.*\/category\/art-.*/');
     $assert_session->linkNotExists('Alpha');
     $assert_session->linkNotExists('Beta');
     $assert_session->linkNotExists('Charlie');
@@ -239,7 +239,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
 
     // Removing a facet should widen the results.
     $page->clickLink('Art (1)');
-    $assert_session->addressMatches('/.\/type\/type-o/');
+    $assert_session->addressMatches('/.\/type\/type-o-.*/');
     $this->assertLinksExistInOrder(['Foxtrot', 'Charlie']);
     $assert_session->linkNotExists('Alpha');
     $assert_session->linkNotExists('Beta');

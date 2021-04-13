@@ -14,7 +14,6 @@ use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
  * @group medium_risk
  * @group push
  * @group pr
- * @group disabled
  */
 class VideoTest extends MediaTypeTestBase {
 
@@ -46,7 +45,7 @@ class VideoTest extends MediaTypeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     // Set the a default value for field_media_oembed_video so that we can
     // bypass the oEmbed system's URL validation. (It's not necessary for this
