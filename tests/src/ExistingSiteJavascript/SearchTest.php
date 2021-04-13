@@ -34,6 +34,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    */
   protected function setUp(): void {
     parent::setUp();
+    $this->getDriverInstance()->resizeWindow(1920, 800);
     $node_types = NodeType::loadMultiple();
     // Create some published and unpublished nodes to assert that the search
     // respects the published status of content.
@@ -80,7 +81,6 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
     $account->addRole('content_administrator');
     $account->save();
     $this->drupalLogin($account);
-
     $node_types = NodeType::loadMultiple();
 
     $this->drupalGet('/search');
