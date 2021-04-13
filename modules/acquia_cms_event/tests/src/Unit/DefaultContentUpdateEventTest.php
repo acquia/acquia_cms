@@ -26,7 +26,7 @@ class DefaultContentUpdateEventTest extends UnitTestCase {
   /**
    * Before a test method is run, setUp() is invoked.
    */
-  public function setUp() {
+  public function setUp(): void {
     $this->updateEvent = new DefaultContentEventUpdate();
   }
 

@@ -17,13 +17,12 @@
         }
     ],
     "require": {
-        "acquia/cohesion": "6.4.3",
-        "acquia/cohesion-theme": "6.4.3",
+        "acquia/cohesion": "^6.5",
+        "acquia/cohesion-theme": "^6.5",
         "acquia/drupal-environment-detector": "^1",
         "acquia/memcache-settings": "^1",
         "cweagans/composer-patches": "^1.7",
         "drupal/acquia_connector": "^3",
-        "drupal/acquia_contenthub": "2.20",
         "drupal/acquia_lift": "^4.2",
         "drupal/acquia_purge": "^1",
         "drupal/acquia_search": "^3.0",
@@ -152,6 +151,7 @@
         },
         "patches": {
             "acquia/cohesion": {
+                "Prevent error call to a member function getOption() on null during starter enable": "https://gist.githubusercontent.com/chandan-singh7929/c70de6c88b8951022786cfeed75ff714/raw/dfe8481b77594405b27af24ec88da8254d9a00c1/frontendBuilderDropzone.patch",
                 "Prevent possible array_flip warning on config import/export": "https://gist.githubusercontent.com/brianreese/9f5f8000853d76a3e805e5a6a39a94ba/raw/33152583acbb7888d436f1f8ce5e69609c080dee/site-studio-array-flip-warning.patch"
             },
             "drupal/acquia_telemetry-acquia_telemetry": {
@@ -170,6 +170,9 @@
             },
             "drupal/focal_point": {
                 "3162210 - Preview link accidentally closes the media library": "https://www.drupal.org/files/issues/2020-10-06/3162210-17.patch"
+            },
+            "drupal/moderation_dashboard": {
+                "dashboard_owner return a string value and thus the hasPermission function throws an error": "https://www.drupal.org/files/issues/2020-05-04/user_load_moderation_dashboard_updated_with_DI_for_beta_version_3048782.patch"
             },
             "drupal/password_policy": {
                 "Register account anonymously, does not validate constraint 'password_username'.": "https://www.drupal.org/files/issues/2020-09-24/password-username-validate--3161012-4.patch"
