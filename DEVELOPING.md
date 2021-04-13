@@ -97,7 +97,14 @@ For Cloud IDEs that can be accomplished by running `drush sql-drop`.
 #### PHPUnit
 Most of Acquia CMS's tests are written using the PHPUnit-based framework provided by Drupal core. To run tests, we have provided a shell script that automatically executes all code validation and tests in a single command.
 
-From the repository root, simply run:
+First, ensure that the necessary environment variables are set. To get access to these variables, reach out to your technical lead or product owner.
+
+```
+export CONNECTOR_ID='[replaceme]'
+export SEARCH_UUID='[replaceme]'
+```
+
+Then, from the repository root, simply run:
 
 ```
 ./acms-run-tests.sh
