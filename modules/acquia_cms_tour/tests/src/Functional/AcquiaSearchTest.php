@@ -53,7 +53,7 @@ class AcquiaSearchTest extends BrowserTestBase {
     // Visit the tour page.
     $this->drupalGet('/admin/tour/dashboard');
     $assert_session->statusCodeEquals(200);
-    $container = $assert_session->elementExists('css', '.acquia-cms-solr-search-form');
+    $container = $assert_session->elementExists('css', '.acquia-cms-search-form');
     // Assert that save and advanced buttons are present on form.
     $assert_session->buttonExists('Save');
     // Assert that the expected fields show up.
