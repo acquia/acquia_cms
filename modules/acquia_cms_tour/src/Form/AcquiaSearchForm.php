@@ -4,76 +4,24 @@ namespace Drupal\acquia_cms_tour\Form;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
  * Provides a form to configure Acquia Solr Search module.
  */
-final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
+final class AcquiaSearchForm extends AcquiaCMSDashboardBase {
 
   /**
    * Provides module name.
    *
    * @var string
    */
-  protected $module = 'acquia_search_solr';
-
-  /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
-   * The link generator.
-   *
-   * @var \Drupal\Core\Utility\LinkGeneratorInterface
-   */
-  protected $linkGenerator;
-
-  /**
-   * The info file parser.
-   *
-   * @var \Drupal\Core\Extension\InfoParserInterface
-   */
-  protected $infoParser;
-
-  /**
-   * Constructs a new AcquiaSearchForm.
-   *
-   * @param \Drupal\Core\State\StateInterface $state
-   *   The state service.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler service.
-   * @param \Drupal\Core\Utility\LinkGeneratorInterface $link_generator
-   *   The link generator.
-   * @param \Drupal\Core\Extension\InfoParserInterface $info_parser
-   *   The info file parser.
-   */
-  public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser) {
-    $this->state = $state;
-    $this->module_handler = $module_handler;
-    $this->linkGenerator = $link_generator;
-    $this->infoParser = $info_parser;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('state'),
-      $container->get('module_handler'),
-      $container->get('link_generator'),
-      $container->get('info_parser')
-    );
-  }
+  protected $module = 'acquia_search';
 
   /**
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'acquia_cms_solr_search_form';
+    return 'acquia_cms_search_form';
   }
 
   /**
@@ -111,13 +59,9 @@ final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Acquia Subscription identifier'),
-        '#default_value' => $this->state->get('acquia_search.identifier'),
-        '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI. Example: ABCD-12345'),
-      ];
-      $form[$module]['api_key'] = [
-        '#type' => 'password',
-        '#title' => $this->t('Acquia Connector key'),
-        '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI.'),
+        '#placeholder' => 'ABCD-1234',
+        '#default_value' => $this->state->get('acquia_search_solr.identifier'),
+        '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
       ];
       $form[$module]['api_host'] = [
         '#type' => 'textfield',
@@ -132,10 +76,12 @@ final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
         '#title' => $this->t('Acquia Application UUID'),
         '#default_value' => $this->state->get('acquia_search.uuid'),
         '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI.'),
+        '#suffix' => "</div>",
       ];
       $form[$module]['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => 'Save',
+        '#button_type' => 'primary',
         '#prefix' => '<div class= "dashboard-buttons-wrapper">',
       ];
       $form[$module]['actions']['ignore'] = [
@@ -144,15 +90,13 @@ final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
         '#limit_validation_errors' => [],
         '#submit' => ['::ignoreConfig'],
       ];
-      if (isset($module_info['configure'])) {
-        $form[$module]['actions']['advanced'] = [
-          '#markup' => $this->linkGenerator->generate(
-            'Advanced',
-            Url::fromRoute($module_info['configure'])
-          ),
-          '#suffix' => "</div>",
-        ];
-      }
+      $form[$module]['actions']['advanced'] = [
+        '#markup' => $this->linkGenerator->generate(
+          'Advanced',
+          Url::fromRoute('entity.search_api_server.edit_form', ['search_api_server' => 'acquia_search_server'])
+        ),
+        '#suffix' => "</div>",
+      ];
       return $form;
     }
   }
@@ -165,10 +109,10 @@ final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
     $solr_api_key = $form_state->getValue(['api_key']);
     $solr_api_host = $form_state->getValue(['api_host']);
     $solr_api_uuid = $form_state->getValue(['uuid']);
-    $this->config('acquia_search_solr.settings')->set('api_host', $solr_api_host)->save(TRUE);
-    $this->state->set('acquia_search_solr.identifier', $solr_identifier);
+    $this->config('acquia_search.settings')->set('api_host', $solr_api_host)->save(TRUE);
+    $this->state->set('acquia_search.identifier', $solr_identifier);
     $this->state->set('acquia_search.api_key', $solr_api_key);
-    $this->state->set('acquia_search_solr.uuid', $solr_api_uuid);
+    $this->state->set('acquia_search.uuid', $solr_api_uuid);
     $this->setConfigurationState();
     $this->messenger()->addStatus('The configuration options have been saved.');
   }
@@ -184,9 +128,10 @@ final class AcquiaSearchSolrForm extends AcquiaCMSDashboardBase {
    * {@inheritdoc}
    */
   public function checkMinConfiguration() {
-    $api_host = $this->config('acquia_search_solr.settings')->get('api_host');
-    $uuid = $this->state->get('acquia_search_solr.uuid');
-    return !empty($api_host) && !empty($uuid);
+    $api_host = $this->config('acquia_search.settings')->get('api_host');
+    $api_key = $this->state->get('acquia_search.api_key');
+    $uuid = $this->state->get('acquia_search.uuid');
+    return !empty($api_host) && !empty($uuid) && !empty($api_key);
   }
 
 }
