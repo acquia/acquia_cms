@@ -18,7 +18,7 @@ class InstallationWizardForm extends FormBase {
   private const SECTIONS = [
     'acquia_telemetry' => AcquiaTelemetryForm::class,
     'geocoder' => AcquiaGoogleMapsApiDashboardForm::class,
-    'acquia_search_solr' => AcquiaSearchSolrForm::class,
+    'acquia_search' => AcquiaSearchForm::class,
     'google_analytics' => GoogleAnalyticsForm::class,
     'google_tag' => GoogleTagManagerForm::class,
     'recaptcha' => RecaptchaForm::class,
