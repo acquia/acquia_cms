@@ -23,7 +23,7 @@ class PastEventsBlockTest extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $block = $this->placeBlock('views_block:event_cards-past_events_block', [
       'region' => 'content',

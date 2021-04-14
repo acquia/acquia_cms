@@ -27,7 +27,7 @@ env:
     - ACMS_STARTER_DB_ARTIFACT=$TRAVIS_BUILD_DIR/tests/acms-starter.sql.gz
     - ACMS_STARTER_FILES_ARTIFACT=$TRAVIS_BUILD_DIR/tests/acms-files-starter.tar.gz
     # By default, no PHPUnit test groups are excluded.
-    - ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP=disabled
+    - ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP=
     # Provide your package's name.
     - ORCA_SUT_NAME=acquia/acquia_cms
     # Specify the name of the nearest Git version branch, e.g., 1.x or 8.x-1.x.

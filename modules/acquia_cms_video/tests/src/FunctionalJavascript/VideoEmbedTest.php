@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_video\FunctionalJavascript;
 
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
 
 /**
@@ -12,7 +13,6 @@ use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
  * @group medium_risk
  * @group push
  * @group pr
- * @group disabled
  */
 class VideoEmbedTest extends MediaEmbedTestBase {
 
@@ -40,5 +40,37 @@ class VideoEmbedTest extends MediaEmbedTestBase {
    * {@inheritdoc}
    */
   protected $mediaType = 'video';
+
+  /**
+   * {@inheritdoc}
+   */
+  public function testEmbedMedia() {
+    if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
+      $this->markTestSkipped('This cannot be run in a Cloud IDE right now');
+    }
+    $node_type = $this->drupalCreateContentType()->id();
+    user_role_grant_permissions('content_author', [
+      "create $node_type content",
+    ]);
+
+    $account = $this->drupalCreateUser();
+    $account->addRole('content_author');
+    $account->save();
+    $this->drupalLogin($account);
+
+    $this->drupalGet("/node/add/$node_type");
+    $this->doTestCreateMedia();
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   */
+  protected function addMedia() {
+    $this->getSession()
+      ->getPage()->fillField('Add Video via URL', 'https://youtu.be/VHO9uZX9FNU');
+    $this->getSession()->getPage()->pressButton('Add');
+  }
 
 }
