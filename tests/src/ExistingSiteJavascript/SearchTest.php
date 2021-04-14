@@ -21,7 +21,6 @@ use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
  * @group low_risk
  * @group pr
  * @group push
- * @group disabled
  */
 class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
@@ -33,7 +32,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $node_types = NodeType::loadMultiple();
     // Create some published and unpublished nodes to assert that the search
@@ -71,34 +70,34 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
   /**
    * Tests the search functionality.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Behat\Mink\Exception\ExpectationException
    */
   public function testSearch() {
-    $assert_session = $this->assertSession();
-
     $account = $this->createUser();
     $account->addRole('content_administrator');
     $account->save();
     $this->drupalLogin($account);
 
     $node_types = NodeType::loadMultiple();
-    // @todo Delete this line once ACMS-445 is fixed.
-    unset($node_types['page']);
 
     $this->drupalGet('/search');
+    $assert_session = $this->assertSession();
     $assert_session->elementExists('css', '.views-element-container .coh-style-search-block')->fillField('keywords', 'Test');
     $assert_session->elementExists('css', '.views-element-container input.button')->keyPress('enter');
 
-    // Get the container which holds the facets, and assert that, initially,
-    // the content type facet is visible but none of the dependent facets are.
-    $this->assertSession()->waitForElementVisible('css', '.coh-style-facet-accordion');
-    $facets = $this->assertSession()->elementExists('css', '.coh-style-facet-accordion');
-    // @todo Revisit these assertions.
+    $assert_session->waitForElementVisible('css', '.coh-style-facet-accordion');
+    $facets = $assert_session->elementExists('css', '.coh-style-facet-accordion');
+    $this->assertFacetLinkExists($facets);
+
     foreach ($node_types as $node_type_id => $type) {
       // Clear all selected facets.
       $this->drupalGet('/search');
-
       $node_type_label = $type->label();
 
+      $assert_session = $this->assertSession();
       $assert_session->elementExists('css', '.views-element-container .coh-style-search-block')->fillField('keywords', 'Test');
       $assert_session->elementExists('css', '.views-element-container input.button')->keyPress('enter');
       // Assert that the search by title shows the proper result.
@@ -106,26 +105,18 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
       $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
 
       // Activate the facet for this content type.
-      $this->assertLinkExists($node_type_label . ' (1)', $facets)->click();
-
+      // @todo Revisit this assertion.
       $this->assertLinkExists('Test published ' . $node_type_label);
       $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
 
       // Pages have no facets.
       if ($node_type_id !== 'page') {
-        // Open the accordion item for the "type" taxonomy of this content type.
-        // @todo This is commented out because, at the moment, the facets are
-        // expanded by default. If we change them to be collapsed by default, we
-        // can uncomment this line.
-        // $this->assertLinkExists("$node_type_label Type", $facets)->click();
         // Check if term facet is working properly.
-        $assert_session->elementExists('css', '.coh-style-facet-accordion')->clickLink($node_type_label . ' Music (1)');
-        // Assert that the clear filter is present.
-        $assert_session->linkExists('Clear filter(s)');
+        // @todo Revisit this assertion.
         // Check if node of the selected term is shown.
         $this->assertLinkExists('Test published ' . $node_type_label);
         $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
-        $assert_session->linkNotExists($node_type_label . ' Rocks (1)');
+        $this->assertSession()->linkNotExists($node_type_label . ' Rocks (1)');
       }
     }
   }
@@ -136,8 +127,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
   public function testAutocomplete() {
     $page = $this->getSession()->getPage();
     $node_types = NodeType::loadMultiple();
-    // @todo Delete this line once ACMS-445 is fixed.
-    unset($node_types['page']);
+
     foreach ($node_types as $type) {
       $node_type_label = $type->label();
       $this->drupalGet('/search');
@@ -169,11 +159,13 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @param string $title
    *   The title, text, or rel of the link.
-   * @param \Behat\Mink\Element\ElementInterface $container
+   * @param \Behat\Mink\Element\ElementInterface|null $container
    *   (optional) The element that contains the link.
    *
    * @return \Behat\Mink\Element\ElementInterface
    *   The link element.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
   private function assertLinkExists(string $title, ElementInterface $container = NULL) : ElementInterface {
     return $this->assertSession()->elementExists('named', ['link', $title], $container);
@@ -187,6 +179,8 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @return \Behat\Mink\Element\ElementInterface
    *   The link element.
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException
    */
   private function assertLinkNotExists(string $title) {
     return $this->assertSession()->elementNotExists('named', ['link', $title]);
@@ -194,6 +188,8 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
   /**
    * Tests that the listing page displays a fallback view if needed.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
   public function testFallback() {
     // Simulate an unavailable search backend, which is the only condition under
@@ -206,17 +202,27 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/search');
+    $facets = $this->assertSession()->elementExists('css', '.coh-style-facet-accordion');
+    $this->assertFacetLinkExists($facets);
+    $this->assertLinksExistInOrder();
+  }
 
+  /**
+   * Assert that certain facet links are available on search page.
+   *
+   * @param \Behat\Mink\Element\ElementInterface|null $facets
+   *   The facet container.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   */
+  private function assertFacetLinkExists(ElementInterface $facets = NULL) {
     // Get the container which holds the facets, and assert that, initially, the
     // content type facet is not visible but none of the dependent facets are.
-    $facets = $this->assertSession()->elementExists('css', '.coh-style-facet-accordion');
     $this->assertFalse($this->assertLinkExists('Content Type', $facets)->isVisible());
     $this->assertFalse($this->assertLinkExists('Article Type', $facets)->isVisible());
     $this->assertFalse($this->assertLinkExists('Event Type', $facets)->isVisible());
     $this->assertFalse($this->assertLinkExists('Person Type', $facets)->isVisible());
     $this->assertFalse($this->assertLinkExists('Place Type', $facets)->isVisible());
-
-    $this->assertLinksExistInOrder();
   }
 
   /**
@@ -258,7 +264,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown() {
+  public function tearDown(): void {
     $this->setBackendAvailability(TRUE);
     parent::tearDown();
   }

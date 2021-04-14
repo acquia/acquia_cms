@@ -63,7 +63,7 @@ class CkeditorConfigurationTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     // @todo Remove this check when Acquia Cloud IDEs support running functional
     // JavaScript tests.
     if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {

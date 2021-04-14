@@ -23,7 +23,7 @@ abstract class ContentModelTestBase extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     /** @var \Drupal\taxonomy\VocabularyInterface $categories */
