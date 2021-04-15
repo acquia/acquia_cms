@@ -59,9 +59,14 @@ final class AcquiaSearchForm extends AcquiaCMSDashboardBase {
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Acquia Subscription identifier'),
-        '#default_value' => $this->state->get('acquia_search_solr.identifier'),
+        '#default_value' => $this->state->get('acquia_search.identifier'),
         '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI. Example: ABCD-12345'),
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
+      ];
+      $form[$module]['api_key'] = [
+        '#type' => 'password',
+        '#title' => $this->t('Acquia Connector key'),
+        '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI.'),
       ];
       $form[$module]['api_host'] = [
         '#type' => 'textfield',
@@ -129,9 +134,10 @@ final class AcquiaSearchForm extends AcquiaCMSDashboardBase {
    */
   public function checkMinConfiguration() {
     $api_host = $this->config('acquia_search.settings')->get('api_host');
+    $solr_identifier = $this->state->get('acquia_search.identifier');
     $api_key = $this->state->get('acquia_search.api_key');
     $uuid = $this->state->get('acquia_search.uuid');
-    return !empty($api_host) && !empty($uuid) && !empty($api_key);
+    return !empty($api_host) && !empty($uuid) && !empty($api_key) && !empty($solr_identifier);
   }
 
 }
