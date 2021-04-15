@@ -5,9 +5,13 @@ dependencies:
     - facets.facet.places_category
   module:
     - cohesion
+    - collapsiblock
     - facets
   theme:
     - cohesion_theme
+third_party_settings:
+  collapsiblock:
+    collapse_action: '2'
 id: places_category
 theme: cohesion_theme
 region: dx8_hidden
@@ -18,8 +22,8 @@ settings:
   id: 'facet_block:places_category'
   label: Category
   provider: facets
-  label_display: '0'
-  block_id: places_categories
+  label_display: visible
+  block_id: places_category
 visibility:
   cohesion_master_template:
     id: cohesion_master_template
