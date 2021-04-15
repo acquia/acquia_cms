@@ -7,7 +7,6 @@ use Consolidation\AnnotatedCommand\CommandError;
 use Consolidation\AnnotatedCommand\CommandResult;
 use Drupal\acquia_cms\Facade\CohesionFacade;
 use Drupal\acquia_cms_common\Services\AcmsUtilityService;
-use Drupal\cohesion\Drush\DX8CommandHelpers;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\config\StorageReplaceDataWrapper;
 use Drupal\Core\Config\ConfigManagerInterface;
@@ -623,24 +622,12 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *
    * @hook post-command acms:config-reset
    */
-  public function postCommand($result, CommandData $commandData) {
+  public function acmsConfigResetPostCommand($result, CommandData $commandData) {
     $scope = $commandData->input()->getOption('scope');
     if (in_array($scope, ['site-studio', 'all'])) {
-      // Forcefully clear the cache after site is installed otherwise site
-      // studio fails to rebuild.
-      drupal_flush_all_caches();
-      // Below code ensures that drush batch process doesn't hang. Unset all the
-      // earlier created batches so that drush_backend_batch_process() can run
-      // without being stuck.
-      // @see https://github.com/drush-ops/drush/issues/3773 for the issue.
-      $batch = &batch_get();
-      $batch = NULL;
-      unset($batch);
       $this->say(dt('Rebuilding all entities.'));
-      $result = DX8CommandHelpers::rebuild([]);
-      // Output results.
+      $result = $this->acmsUtilityService->rebuildSiteStudio();
       $this->yell('Finished rebuilding.');
-      // Status code.
       return is_array($result) && isset(array_shift($result)['error']) ? CommandResult::exitCode(self::EXIT_FAILURE) : CommandResult::exitCode(self::EXIT_SUCCESS);
     }
   }
