@@ -185,7 +185,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    * @aliases acr
    * @usage acms:config-reset
    *   Reset the configuration to the default.
-   * @usage acms:config-reset acquia_cms_article acquia_cms_article acquia_cms_person --scope=all
+   * @usage acms:config-reset acquia_cms_article acquia_cms_person --scope=all
    * --delete-list=search_api.index.acquia_search_index
    *   Reset the configuration to the default.
    *
