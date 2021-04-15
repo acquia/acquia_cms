@@ -59,8 +59,8 @@ final class AcquiaSearchForm extends AcquiaCMSDashboardBase {
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Acquia Subscription identifier'),
-        '#placeholder' => 'ABCD-1234',
         '#default_value' => $this->state->get('acquia_search_solr.identifier'),
+        '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI. Example: ABCD-12345'),
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
       ];
       $form[$module]['api_host'] = [
