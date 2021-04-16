@@ -11,6 +11,8 @@ $site_name = AcquiaDrupalEnvironmentDetector::getSiteName($site_path);
 if (AcquiaDrupalEnvironmentDetector::isAhEnv()) {
   $ah_group = AcquiaDrupalEnvironmentDetector::getAhGroup();
   if (!AcquiaDrupalEnvironmentDetector::isAcsfEnv()) {
+    global $conf, $databases;
+    $conf['acquia_hosting_settings_autoconnect'] = FALSE;
     if ($site_name == 'default') {
       require "/var/www/site-php/$ah_group/$ah_group-settings.inc";
     } else {
@@ -18,7 +20,11 @@ if (AcquiaDrupalEnvironmentDetector::isAhEnv()) {
       $safe_site_name = str_replace('.', '_', $site_name);
       require "/var/www/site-php/$ah_group/$safe_site_name-settings.inc";
     }
-  }
+    // Temporary workaround to override the default MySQL wait_timeout setting.
+    $databases['default']['default']['init_commands'] = array(
+     'wait_timeout' => "SET SESSION wait_timeout=1200",
+    );
+    acquia_hosting_db_choose_active();
 }
 
 /**
