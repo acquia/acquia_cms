@@ -38,11 +38,6 @@ events:
           type: script
           script:
             - rm acquia_cms.zip
-            - rm tests/acms.sql.gz
-            - rm tests/acms-files.tar.gz
-            - rm tests/acms-starter.sql.gz
-            - rm tests/acms-files-starter.tar.gz
-            - rm tests/cohesion.tar.gz
             # Prepare settings.php with the minimum required for Cloud.
             - chmod -R +w docroot/sites/default
             - cp docroot/sites/default/default.settings.php docroot/sites/default/settings.php
