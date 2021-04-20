@@ -19,7 +19,7 @@ class SiteInstallCommands extends DrushCommands {
     $arguments = $commandData->arguments();
     $moduleHandler = \Drupal::service('module_handler');
     if (isset($arguments['profile'][0]) && $arguments['profile'][0] == 'acquia_cms' && $moduleHandler->moduleExists('cohesion')) {
-      $this->say(dt('Rebuilding all entities.'));
+      $this->say(dt('Rebuilding all entities site-install.'));
       $result = \Drupal::service('acquia_cms_common.utility')->rebuildSiteStudio();
       $this->yell('Finished rebuilding.');
       return is_array($result) && isset(array_shift($result)['error']) ? CommandResult::exitCode(self::EXIT_FAILURE) : CommandResult::exitCode(self::EXIT_SUCCESS);
