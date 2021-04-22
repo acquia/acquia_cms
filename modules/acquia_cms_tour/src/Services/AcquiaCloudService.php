@@ -2,8 +2,11 @@
 
 namespace Drupal\acquia_cms_tour\Services;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelFactory;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\State\StateInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -11,6 +14,7 @@ use GuzzleHttp\Exception\GuzzleException;
  * AcquiaCloudService to automated provisioning of Search Cores.
  */
 class AcquiaCloudService {
+  use StringTranslationTrait;
 
   /**
    * Guzzle\Client instance.
@@ -34,23 +38,54 @@ class AcquiaCloudService {
   protected $loggerFactory;
 
   /**
+   * The Messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
+   * Drupal\Core\Database\Connection.
+   *
+   * @var Drupal\Core\Database\Connection
+   */
+  protected $connection;
+
+
+  /**
+   * The auth token.
+   *
+   * @var string|null
+   */
+  protected $authToken;
+
+  /**
    * Constructs a new AcmsService object.
    *
    * @param \GuzzleHttp\ClientInterface $http_client
    *   The guzzle client.
    * @param \Drupal\Core\State\StateInterface $state
-   *   The logger factory.
+   *   The state service.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   The logger factory.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger service.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   The connection object.
    */
   public function __construct(
     ClientInterface $http_client,
     StateInterface $state,
-    LoggerChannelFactory $logger_factory
+    LoggerChannelFactory $logger_factory,
+    MessengerInterface $messenger,
+    Connection $connection
   ) {
     $this->httpClient = $http_client;
     $this->state = $state;
+    $this->messenger = $messenger;
+    $this->connection = $connection;
     $this->loggerFactory = $logger_factory->get('acquia_cms_tour');
+    $this->authToken = NULL;
   }
 
   /**
@@ -59,9 +94,69 @@ class AcquiaCloudService {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function createSearchIndex($env_name) {
-    $this->getEnvironmentUuid($env_name);
-    // @todo first check if search index already exists
-    // else create one for specified environment.
+    $env_uuid = $this->getEnvironmentUuid($env_name);
+    if ($env_uuid) {
+      $options = [
+        'headers' => [
+          'Authorization' => 'Bearer ' . $this->authToken,
+          'Accept' => 'application/json',
+        ],
+      ];
+      $uri = 'https://cloud.acquia.com/api/environments/' . $env_uuid . '/search/indexes';
+      try {
+        $request = $this->httpClient->request('GET', $uri, $options);
+        if ($request->getStatusCode() == 200) {
+          $search_indexes = json_decode($request->getBody()->getContents(), TRUE);
+          if ($search_indexes['total'] >= 1) {
+            $indexes = $search_indexes['_embedded']['items'];
+            foreach ($indexes as $index) {
+              // Check that index exists and active.
+              if ($index['environment_id'] == $env_uuid && $index['status'] == 'active') {
+                $this->messenger->addStatus($this->t('Search index [@index_id] is already exists and active!', [
+                  '@index_id' => $index['id'],
+                ]));
+                break;
+              }
+            }
+          }
+          // Create search index for specified environment.
+          else {
+            $this->createAcquiaSolrSearchIndex($env_uuid);
+          }
+        }
+      }
+      catch (GuzzleException $guzzleException) {
+        $this->loggerFactory->error('@error', ['@error' => $guzzleException->getMessage()]);
+        $this->messenger->addError($this->t('Unable to get search index, please check logs for more details.'));
+      }
+    }
+  }
+
+  /**
+   * API call to acquia cloud for creating search index.
+   */
+  private function createAcquiaSolrSearchIndex($env_uuid) {
+    $options = [
+      'headers' => [
+        'Authorization' => 'Bearer ' . $this->authToken,
+        'Accept' => 'application/json',
+      ],
+      'json' => [
+        'database_role' => $this->connection->getConnectionOptions()['database'],
+      ],
+    ];
+    $uri = 'https://cloud.acquia.com/api/environments/' . $env_uuid . '/search/indexes';
+    try {
+      $request = $this->httpClient->request('POST', $uri, $options);
+      if ($request->getStatusCode() == 202) {
+        $search_index = json_decode($request->getBody()->getContents(), TRUE);
+        $this->messenger->addStatus($this->t('@message', ['@message' => $search_index['message']]));
+      }
+    }
+    catch (GuzzleException $guzzleException) {
+      $this->loggerFactory->error('@error', ['@error' => $guzzleException->getMessage()]);
+      $this->messenger->addError($this->t('Unable to create search index, please check logs for more details.'));
+    }
   }
 
   /**
@@ -90,6 +185,7 @@ class AcquiaCloudService {
           foreach ($environments as $env) {
             if ($env['name'] == $current_env_name) {
               $env_id = $env['id'];
+              break;
             }
           }
         }
@@ -98,6 +194,7 @@ class AcquiaCloudService {
     }
     catch (GuzzleException $ge) {
       $this->loggerFactory->error('@error', ['@error' => $ge->getMessage()]);
+      $this->messenger->addError($this->t('Unable to get environment ID, please check logs for more details.'));
     }
     return NULL;
   }
@@ -120,11 +217,13 @@ class AcquiaCloudService {
       $request = $this->httpClient->request('POST', $uri, $options);
       if ($request->getStatusCode() == 200) {
         $body_content = json_decode($request->getBody()->getContents(), TRUE);
+        $this->authToken = $body_content['access_token'];
         return $body_content['access_token'] ?? NULL;
       }
     }
     catch (GuzzleException $guzzleException) {
       $this->loggerFactory->error('@error', ['@error' => $guzzleException->getMessage()]);
+      $this->messenger->addError($this->t('Unable to get auth token, please check logs for more details.'));
     }
     return NULL;
   }

@@ -1,4 +1,4 @@
 services:
   acquia_cms_tour.cloud_service:
     class: Drupal\acquia_cms_tour\Services\AcquiaCloudService
-    arguments: ['@http_client', '@state', '@logger.factory']
+    arguments: ['@http_client', '@state', '@logger.factory', '@messenger', '@database']
