@@ -135,8 +135,8 @@ final class AcquiaSearchForm extends ConfigFormBase {
       $form['acquia_search']['api_key'] = [
         '#type' => 'password',
         '#title' => $this->t('Acquia Connector key'),
-        '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI. Previously saved value will not appear here.'),
-        '#field_suffix' => $this->state->get('acquia_search.identifier') ? '***' : 'No value',
+        '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI.'),
+        '#field_suffix' => $this->state->get('acquia_search.identifier') ? '***' : '',
       ];
       $form['acquia_search']['api_host'] = [
         '#type' => 'textfield',
@@ -156,8 +156,8 @@ final class AcquiaSearchForm extends ConfigFormBase {
         '#type' => 'password',
         '#title' => $this->t('Acquia API key'),
         '#default_value' => $this->state->get('acquia_search.cloud_api_key'),
-        '#field_suffix' => $this->state->get('acquia_search.cloud_api_key') ? '***' : 'No value',
-        '#description' => $this->t('Obtain this from the <a href="@api_tokens">API Token</a> section of the Acquia Cloud UI.', [
+        '#field_suffix' => $this->state->get('acquia_search.cloud_api_key') ? '***' : '',
+        '#description' => $this->t('Obtain this from <a href="@api_tokens">API Token</a> section of the Acquia Cloud UI.', [
           '@api_tokens' => 'https://cloud.acquia.com/a/profile/tokens',
         ]),
       ];
@@ -165,8 +165,8 @@ final class AcquiaSearchForm extends ConfigFormBase {
         '#type' => 'password',
         '#title' => $this->t('Acquia API secret'),
         '#default_value' => $this->state->get('acquia_search.cloud_api_secret'),
-        '#field_suffix' => $this->state->get('acquia_search.cloud_api_secret') ? '***' : 'No value',
-        '#description' => $this->t('Obtain this from the <a href="@api_tokens">API Token</a> section of the Acquia Cloud UI.', [
+        '#field_suffix' => $this->state->get('acquia_search.cloud_api_secret') ? '***' : '',
+        '#description' => $this->t('Obtain this from <a href="@api_tokens">API Token</a> section of the Acquia Cloud UI.', [
           '@api_tokens' => 'https://cloud.acquia.com/a/profile/tokens',
         ]),
       ];
