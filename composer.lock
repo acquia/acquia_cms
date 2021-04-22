@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5c0181f2397f980412f86724f219e8a2",
+    "content-hash": "5c28ca3e4f9e1df3724d3280aa504667",
     "packages": [
         {
             "name": "acquia/cohesion",
@@ -52,7 +52,11 @@
                         "drush.services.yml": "^9"
                     }
                 },
-                "enable-patching": true
+                "enable-patching": true,
+                "patches_applied": {
+                    "Prevent error call to a member function getOption() on null during starter enable": "https://gist.githubusercontent.com/chandan-singh7929/c70de6c88b8951022786cfeed75ff714/raw/dfe8481b77594405b27af24ec88da8254d9a00c1/frontendBuilderDropzone.patch",
+                    "Prevent possible array_flip warning on config import/export": "https://gist.githubusercontent.com/brianreese/9f5f8000853d76a3e805e5a6a39a94ba/raw/33152583acbb7888d436f1f8ce5e69609c080dee/site-studio-array-flip-warning.patch"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -66,9 +70,6 @@
                 }
             ],
             "description": "Site Studio",
-            "support": {
-                "source": "https://github.com/acquia/cohesion/tree/6.5.0"
-            },
             "time": "2021-03-23T09:39:11+00:00"
         },
         {
@@ -98,10 +99,6 @@
                 }
             ],
             "description": "Site Studio minimal theme",
-            "support": {
-                "issues": "https://github.com/acquia/cohesion-theme/issues",
-                "source": "https://github.com/acquia/cohesion-theme/tree/6.5.0"
-            },
             "time": "2021-03-23T09:39:29+00:00"
         },
         {
@@ -2100,6 +2097,9 @@
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
                     }
+                },
+                "patches_applied": {
+                    "Add check for core index": "https://www.drupal.org/files/issues/2020-08-18/3165473-27.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2876,6 +2876,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Make config_rewrite/tests/modules compatible with Drupal 9": "https://www.drupal.org/files/issues/2020-08-22/3166694-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3103,6 +3106,11 @@
                         "[web-root]/profiles/README.txt": "assets/scaffold/files/profiles.README.txt",
                         "[web-root]/themes/README.txt": "assets/scaffold/files/themes.README.txt"
                     }
+                },
+                "patches_applied": {
+                    "It is possible to overflow the number of items allowed in Media Library": "https://www.drupal.org/files/issues/2019-12-28/3082690-80.patch",
+                    "Media Library widget produces error this value should not be null when field is required": "https://www.drupal.org/files/issues/2020-10-08/3160238-25.patch",
+                    "SQLite database locking errors cause fatal errors": "https://www.drupal.org/files/issues/1120020-59.patch"
                 }
             },
             "autoload": {
@@ -3147,9 +3155,6 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
-            "support": {
-                "source": "https://github.com/drupal/core/tree/9.1.7"
-            },
             "time": "2021-04-20T23:05:22+00:00"
         },
         {
@@ -3488,6 +3493,9 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Allow fields implementing EntityReferenceFieldItemListInterface to clone their referenced entities": "https://www.drupal.org/files/issues/2019-02-22/3013286-8.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3891,6 +3899,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "3162210 - Preview link accidentally closes the media library": "https://www.drupal.org/files/issues/2020-10-06/3162210-17.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4394,8 +4405,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.4+0-dev",
-                    "datestamp": "1618250676",
+                    "version": "8.x-2.3+90-dev",
+                    "datestamp": "1609868653",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -4422,7 +4433,8 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/imce",
                 "issues": "https://www.drupal.org/project/issues/imce?version=8.x"
-            }
+            },
+            "time": "2021-02-11T22:51:35+00:00"
         },
         {
             "name": "drupal/jquery_ui",
@@ -4841,6 +4853,9 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "dashboard_owner return a string value and thus the hasPermission function throws an error": "https://www.drupal.org/files/issues/2020-05-04/user_load_moderation_dashboard_updated_with_DI_for_beta_version_3048782.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5154,6 +5169,10 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Register account anonymously, does not validate constraint 'password_username'.": "https://www.drupal.org/files/issues/2020-09-24/password-username-validate--3161012-4.patch",
+                    "Field field_last_password_reset is unknown": "https://www.drupal.org/files/issues/2020-07-03/2771129-114.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5473,6 +5492,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Core version needs removing from info file": "https://www.drupal.org/files/issues/2020-11-17/reroute_email-remove-core-version-3182079-5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6423,6 +6445,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Deprecated function User::getUsername": "https://www.drupal.org/files/issues/2020-09-01/fix-deprecated-getusername-3167106-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -17481,5 +17506,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "1.1.0"
 }
