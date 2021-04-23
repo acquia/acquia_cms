@@ -69,18 +69,18 @@ matrix:
     # current dev test.
     # Exclude push group tests on this job to exclude low and medium risk tests.
     - { name: "Isolated test on current dev Drupal core version", if: type = push, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="push" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
-    - { name: "Starter", env: ACMS_JOB=starter ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    - { name: "Starter", if: NOT branch = main, env: ACMS_JOB=starter ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     # Exclude pr group tests to exclude only low-risk tests during PR builds.
     - { name: "Isolated test on current dev Drupal core version - PR Tests", if: type = pull_request, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="pr" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     # The following jobs run only during cron runs, and fully install the site before
     # running tests.
     - { name: "Isolated test on current dev Drupal core version - Full Install", if: type = cron, env: ACMS_JOB=base_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
-    - { name: "Starter - Full Install", if: type = cron, env: ACMS_JOB=starter_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    - { name: "Starter - Full Install", if: NOT branch = main AND type = cron, env: ACMS_JOB=starter_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     # Acquia CMS is going to support both PHP 7.3 and PHP 7.4 until Acquia Cloud
     # officially stop support for PHP 7.3.
     # Run the following jobs on PHP 7.3 to make sure it works fine, during cron run.
     - { php: "7.3", name: "[PHP 7.3] - Isolated test on current dev Drupal core version - Full Install", if: type = cron, env: ACMS_JOB=base_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV }
-    - { php: "7.3", name: "[PHP 7.3] - Starter - Full Install", if: type = cron, env: ACMS_JOB=starter_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV }
+    - { php: "7.3", name: "[PHP 7.3] - Starter - Full Install", if: NOT branch = main AND type = cron, env: ACMS_JOB=starter_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV }
     # Uncomment the following four lines to enable the corresponding tests once
     # the next major version of Drupal core has an alpha release or earlier.
     # Until then it's wasteful to use CI jobs on them, even if they exit early.
