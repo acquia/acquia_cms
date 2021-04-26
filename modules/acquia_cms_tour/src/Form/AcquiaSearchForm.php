@@ -147,7 +147,7 @@ final class AcquiaSearchForm extends ConfigFormBase {
       if ($this->state->get('acquia_search.api_key')) {
         $form['acquia_search']['api_key_toggle'] = [
           '#type' => 'checkbox',
-          '#title' => t('Check to edit Acquia Connector key field'),
+          '#title' => $this->t('Check to edit Acquia Connector key field'),
         ];
       }
       $form['acquia_search']['api_host'] = [
@@ -181,7 +181,7 @@ final class AcquiaSearchForm extends ConfigFormBase {
       if ($this->state->get('acquia_search.cloud_api_key')) {
         $form['acquia_search']['cloud_api_key_toggle'] = [
           '#type' => 'checkbox',
-          '#title' => t('Check to edit Acquia API key field'),
+          '#title' => $this->t('Check to edit Acquia API key field'),
         ];
       }
       $form['acquia_search']['cloud_api_secret'] = [
@@ -201,7 +201,7 @@ final class AcquiaSearchForm extends ConfigFormBase {
       if ($this->state->get('acquia_search.cloud_api_secret')) {
         $form['acquia_search']['cloud_api_secret_toggle'] = [
           '#type' => 'checkbox',
-          '#title' => t('Check to edit Acquia API secret field'),
+          '#title' => $this->t('Check to edit Acquia API secret field'),
         ];
       }
       $form['acquia_search']['actions']['submit'] = [

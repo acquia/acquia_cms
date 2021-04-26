@@ -65,11 +65,13 @@ class AcquiaCloudService {
    * @param \GuzzleHttp\ClientInterface $http_client
    *   The guzzle client.
    * @param \Drupal\Core\State\StateInterface $state
-   *   The logger factory.
+   *   The state service.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   The logger factory.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The logger factory.
+   *   The messenger service.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   The connection object.
    */
   public function __construct(
     ClientInterface $http_client,
