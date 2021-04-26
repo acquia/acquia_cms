@@ -61,6 +61,8 @@ class AcquiaSearchTest extends BrowserTestBase {
     $assert_session->fieldExists('Acquia Subscription identifier');
     $assert_session->fieldExists('Acquia Search API hostname');
     $assert_session->fieldExists('Acquia Application UUID');
+    $assert_session->fieldExists('Acquia API key');
+    $assert_session->fieldExists('Acquia API secret');
     // Save Subscription identifier.
     $dummy_identifier = getenv('CONNECTOR_ID');
     $container->fillField('edit-identifier', $dummy_identifier);
@@ -70,6 +72,12 @@ class AcquiaSearchTest extends BrowserTestBase {
     // Save Application UUID.
     $dummy_uuid = getenv('SEARCH_UUID');
     $container->fillField('edit-uuid', $dummy_uuid);
+    // Save API key & secret.
+    $dummy_cloud_api_key = getenv('CLOUD_API_KEY');
+    $container->fillField('edit-cloud-api-key', $dummy_cloud_api_key);
+    $dummy_cloud_api_secret = getenv('CLOUD_API_SECRET');
+    $container->fillField('edit-cloud-api-secret', $dummy_cloud_api_secret);
+
     $container->pressButton('Save');
     $assert_session->pageTextContains('The configuration options have been saved.');
     // Test that the config values we expect are set correctly.
@@ -80,6 +88,10 @@ class AcquiaSearchTest extends BrowserTestBase {
     $this->assertSame($solr_api_host, $dummy_hostname);
     $solr_uuid = $state->get('acquia_search.uuid');
     $this->assertSame($solr_uuid, $dummy_uuid);
+    $cloud_api_key = $this->state->get('acquia_search.cloud_api_key');
+    $this->assertSame($dummy_cloud_api_key, $cloud_api_key);
+    $cloud_api_secret = $this->state->get('acquia_search.cloud_api_secret');
+    $this->assertSame($dummy_cloud_api_secret, $cloud_api_secret);
   }
 
 }
