@@ -135,9 +135,21 @@ final class AcquiaSearchForm extends ConfigFormBase {
       $form['acquia_search']['api_key'] = [
         '#type' => 'password',
         '#title' => $this->t('Acquia Connector key'),
+        '#disabled' => (bool) $this->state->get('acquia_search.api_key'),
+        '#states' => [
+          'enabled' => [
+            ':input[name="api_key_toggle"]' => ['checked' => TRUE],
+          ],
+        ],
         '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI.'),
-        '#field_suffix' => $this->state->get('acquia_search.identifier') ? '***' : '',
       ];
+      // Provide checkbox to edit api_key value.
+      if ($this->state->get('acquia_search.api_key')) {
+        $form['acquia_search']['api_key_toggle'] = [
+          '#type' => 'checkbox',
+          '#title' => t('Check to edit Acquia Connector key field'),
+        ];
+      }
       $form['acquia_search']['api_host'] = [
         '#type' => 'textfield',
         '#required' => TRUE,
@@ -155,21 +167,43 @@ final class AcquiaSearchForm extends ConfigFormBase {
       $form['acquia_search']['cloud_api_key'] = [
         '#type' => 'password',
         '#title' => $this->t('Acquia API key'),
-        '#default_value' => $this->state->get('acquia_search.cloud_api_key'),
-        '#field_suffix' => $this->state->get('acquia_search.cloud_api_key') ? '***' : '',
+        '#disabled' => (bool) $this->state->get('acquia_search.cloud_api_key'),
+        '#states' => [
+          'enabled' => [
+            ':input[name="cloud_api_key_toggle"]' => ['checked' => TRUE],
+          ],
+        ],
         '#description' => $this->t('Obtain this from <a href="@api_tokens">API Token</a> section of the Acquia Cloud UI.', [
           '@api_tokens' => 'https://cloud.acquia.com/a/profile/tokens',
         ]),
       ];
+      // Provide checkbox to edit cloud_api_key value.
+      if ($this->state->get('acquia_search.cloud_api_key')) {
+        $form['acquia_search']['cloud_api_key_toggle'] = [
+          '#type' => 'checkbox',
+          '#title' => t('Check to edit Acquia API key field'),
+        ];
+      }
       $form['acquia_search']['cloud_api_secret'] = [
         '#type' => 'password',
         '#title' => $this->t('Acquia API secret'),
-        '#default_value' => $this->state->get('acquia_search.cloud_api_secret'),
-        '#field_suffix' => $this->state->get('acquia_search.cloud_api_secret') ? '***' : '',
+        '#disabled' => (bool) $this->state->get('acquia_search.cloud_api_key'),
+        '#states' => [
+          'enabled' => [
+            ':input[name="cloud_api_secret_toggle"]' => ['checked' => TRUE],
+          ],
+        ],
         '#description' => $this->t('Obtain this from <a href="@api_tokens">API Token</a> section of the Acquia Cloud UI.', [
           '@api_tokens' => 'https://cloud.acquia.com/a/profile/tokens',
         ]),
       ];
+      // Provide checkbox to edit cloud_api_secret value.
+      if ($this->state->get('acquia_search.cloud_api_secret')) {
+        $form['acquia_search']['cloud_api_secret_toggle'] = [
+          '#type' => 'checkbox',
+          '#title' => t('Check to edit Acquia API secret field'),
+        ];
+      }
       $form['acquia_search']['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => 'Save',

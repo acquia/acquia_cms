@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_tour\Services;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\State\StateInterface;
@@ -44,6 +45,14 @@ class AcquiaCloudService {
   protected $messenger;
 
   /**
+   * Drupal\Core\Database\Connection.
+   *
+   * @var Drupal\Core\Database\Connection
+   */
+  protected $connection;
+
+
+  /**
    * The auth token.
    *
    * @var string|null
@@ -66,11 +75,13 @@ class AcquiaCloudService {
     ClientInterface $http_client,
     StateInterface $state,
     LoggerChannelFactory $logger_factory,
-    MessengerInterface $messenger
+    MessengerInterface $messenger,
+    Connection $connection
   ) {
     $this->httpClient = $http_client;
     $this->state = $state;
     $this->messenger = $messenger;
+    $this->connection = $connection;
     $this->loggerFactory = $logger_factory->get('acquia_cms_tour');
     $this->authToken = NULL;
   }
@@ -128,9 +139,8 @@ class AcquiaCloudService {
         'Authorization' => 'Bearer ' . $this->authToken,
         'Accept' => 'application/json',
       ],
-      // @todo need to update below code.
       'json' => [
-        'database_role' => 'orionacms',
+        'database_role' => $this->connection->getConnectionOptions()['database'],
       ],
     ];
     $uri = 'https://cloud.acquia.com/api/environments/' . $env_uuid . '/search/indexes';
