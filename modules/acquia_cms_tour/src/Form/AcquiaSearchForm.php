@@ -135,7 +135,9 @@ final class AcquiaSearchForm extends ConfigFormBase {
       $form['acquia_search']['api_key'] = [
         '#type' => 'password',
         '#title' => $this->t('Acquia Connector key'),
-        '#disabled' => (bool) $this->state->get('acquia_search.api_key'),
+        '#attributes' => [
+          'disabled' => (bool) $this->state->get('acquia_search.api_key'),
+        ],
         '#states' => [
           'enabled' => [
             ':input[name="api_key_toggle"]' => ['checked' => TRUE],
@@ -167,7 +169,9 @@ final class AcquiaSearchForm extends ConfigFormBase {
       $form['acquia_search']['cloud_api_key'] = [
         '#type' => 'password',
         '#title' => $this->t('Acquia API key'),
-        '#disabled' => (bool) $this->state->get('acquia_search.cloud_api_key'),
+        '#attributes' => [
+          'disabled' => (bool) $this->state->get('acquia_search.cloud_api_key'),
+        ],
         '#states' => [
           'enabled' => [
             ':input[name="cloud_api_key_toggle"]' => ['checked' => TRUE],
@@ -187,7 +191,9 @@ final class AcquiaSearchForm extends ConfigFormBase {
       $form['acquia_search']['cloud_api_secret'] = [
         '#type' => 'password',
         '#title' => $this->t('Acquia API secret'),
-        '#disabled' => (bool) $this->state->get('acquia_search.cloud_api_key'),
+        '#attributes' => [
+          'disabled' => (bool) $this->state->get('acquia_search.cloud_api_secret'),
+        ],
         '#states' => [
           'enabled' => [
             ':input[name="cloud_api_secret_toggle"]' => ['checked' => TRUE],
@@ -254,7 +260,8 @@ final class AcquiaSearchForm extends ConfigFormBase {
     $this->config('acquia_search.settings')->set('api_host', $solr_api_host)->save(TRUE);
     $this->state->set('acquia_search.identifier', $solr_identifier);
     $this->state->set('acquia_search.uuid', $solr_api_uuid);
-    // Since this is non required field, save ony if value is provided.
+    // Since these are non required field, we should only
+    // save or update if value is given.
     if ($solr_api_key) {
       $this->state->set('acquia_search.api_key', $solr_api_key);
     }
