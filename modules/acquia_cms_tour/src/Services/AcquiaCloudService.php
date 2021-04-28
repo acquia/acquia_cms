@@ -2,7 +2,6 @@
 
 namespace Drupal\acquia_cms_tour\Services;
 
-use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\State\StateInterface;
@@ -45,14 +44,6 @@ class AcquiaCloudService {
   protected $messenger;
 
   /**
-   * Drupal\Core\Database\Connection.
-   *
-   * @var Drupal\Core\Database\Connection
-   */
-  protected $connection;
-
-
-  /**
    * The auth token.
    *
    * @var string|null
@@ -70,20 +61,16 @@ class AcquiaCloudService {
    *   The logger factory.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger service.
-   * @param \Drupal\Core\Database\Connection $connection
-   *   The connection object.
    */
   public function __construct(
     ClientInterface $http_client,
     StateInterface $state,
     LoggerChannelFactory $logger_factory,
-    MessengerInterface $messenger,
-    Connection $connection
+    MessengerInterface $messenger
   ) {
     $this->httpClient = $http_client;
     $this->state = $state;
     $this->messenger = $messenger;
-    $this->connection = $connection;
     $this->loggerFactory = $logger_factory->get('acquia_cms_tour');
     $this->authToken = NULL;
   }
@@ -95,7 +82,8 @@ class AcquiaCloudService {
    */
   public function createSearchIndex($env_name) {
     $env_uuid = $this->getEnvironmentUuid($env_name);
-    if ($env_uuid) {
+    $database_name = $this->getEnvironmentDatabaseName($env_uuid);
+    if ($env_uuid && $database_name) {
       $options = [
         'headers' => [
           'Authorization' => 'Bearer ' . $this->authToken,
@@ -121,7 +109,7 @@ class AcquiaCloudService {
           }
           // Create search index for specified environment.
           else {
-            $this->createAcquiaSolrSearchIndex($env_uuid);
+            $this->createAcquiaSolrSearchIndex($env_uuid, $database_name);
           }
         }
       }
@@ -135,14 +123,14 @@ class AcquiaCloudService {
   /**
    * API call to acquia cloud for creating search index.
    */
-  private function createAcquiaSolrSearchIndex($env_uuid) {
+  private function createAcquiaSolrSearchIndex($env_uuid, $database_name) {
     $options = [
       'headers' => [
         'Authorization' => 'Bearer ' . $this->authToken,
         'Accept' => 'application/json',
       ],
       'json' => [
-        'database_role' => $this->connection->getConnectionOptions()['database'],
+        'database_role' => $database_name,
       ],
     ];
     $uri = 'https://cloud.acquia.com/api/environments/' . $env_uuid . '/search/indexes';
@@ -157,6 +145,36 @@ class AcquiaCloudService {
       $this->loggerFactory->error('@error', ['@error' => $guzzleException->getMessage()]);
       $this->messenger->addError($this->t('Unable to create search index, please check logs for more details.'));
     }
+  }
+
+  /**
+   * Get environment database name.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  private function getEnvironmentDatabaseName($env_uuid) {
+    $options = [
+      'headers' => [
+        'Authorization' => 'Bearer ' . $this->authToken,
+        'Accept' => 'application/json',
+      ],
+    ];
+    $uri = 'https://cloud.acquia.com/api/environments/' . $env_uuid . '/databases';
+    try {
+      $request = $this->httpClient->request('GET', $uri, $options);
+      if ($request->getStatusCode() == 200) {
+        $body_content = json_decode($request->getBody()->getContents(), TRUE);
+        if (isset($body_content['_embedded']['items'])) {
+          $database_name = $body_content['_embedded']['items'][0]['name'];
+          return $database_name ?? NULL;
+        }
+      }
+    }
+    catch (GuzzleException $ge) {
+      $this->loggerFactory->error('@error', ['@error' => $ge->getMessage()]);
+      $this->messenger->addError($this->t('Unable to get environment database name, please check logs for more details.'));
+    }
+    return NULL;
   }
 
   /**
