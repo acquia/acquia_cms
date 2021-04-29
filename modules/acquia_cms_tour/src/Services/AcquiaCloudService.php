@@ -78,9 +78,12 @@ class AcquiaCloudService {
   /**
    * Create a search index for specified env.
    *
+   * @param string $env_name
+   *   The name of environment.
+   *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function createSearchIndex($env_name) {
+  public function createSearchIndex(string $env_name) {
     $env_uuid = $this->getEnvironmentUuid($env_name);
     $database_name = $this->getEnvironmentDatabaseName($env_uuid);
     if ($env_uuid && $database_name) {
@@ -98,10 +101,12 @@ class AcquiaCloudService {
           if ($search_indexes['total'] >= 1) {
             $indexes = $search_indexes['_embedded']['items'];
             foreach ($indexes as $index) {
-              // Check that index exists and active.
-              if ($index['environment_id'] == $env_uuid && $index['status'] == 'active') {
-                $this->messenger->addStatus($this->t('Search index [@index_id] is already exists and active!', [
+              // Check that index exists and has active or progress state.
+              $index_status = ['active', 'in-progress'];
+              if ($index['environment_id'] == $env_uuid && in_array($index['status'], $index_status)) {
+                $this->messenger->addStatus($this->t('Search index [@index_id] is already exists and @status', [
                   '@index_id' => $index['id'],
+                  '@status' => $index['status'],
                 ]));
                 break;
               }
@@ -122,8 +127,13 @@ class AcquiaCloudService {
 
   /**
    * API call to acquia cloud for creating search index.
+   *
+   * @param string $env_uuid
+   *   The environment uuid.
+   * @param string $database_name
+   *   Name of database.
    */
-  private function createAcquiaSolrSearchIndex($env_uuid, $database_name) {
+  private function createAcquiaSolrSearchIndex(string $env_uuid, string $database_name) {
     $options = [
       'headers' => [
         'Authorization' => 'Bearer ' . $this->authToken,
@@ -139,6 +149,18 @@ class AcquiaCloudService {
       if ($request->getStatusCode() == 202) {
         $search_index = json_decode($request->getBody()->getContents(), TRUE);
         $this->messenger->addStatus($this->t('@message', ['@message' => $search_index['message']]));
+        $notifications = $search_index['_links']['notification']['href'];
+        $batch = [
+          'title' => $this->t('Creating acquia search solr index.'),
+          'operations' => [
+            [
+              '\Drupal\acquia_cms_tour\SearchSolrBatchOperation::checkSolrIndexStatus',
+              [$notifications],
+            ],
+          ],
+          'finished' => '\Drupal\example_batch\SearchSolrBatchOperation::batchFinishedCallback',
+        ];
+        batch_set($batch);
       }
     }
     catch (GuzzleException $guzzleException) {
@@ -148,11 +170,54 @@ class AcquiaCloudService {
   }
 
   /**
-   * Get environment database name.
+   * Create batch to monitor status of solr search index.
+   *
+   * Once index get created successfully,
+   * api return status as completed. We can utilize that api
+   * to show progress through batch on our end.
+   *
+   * @param string $notifications
+   *   The notification url.
+   *
+   * @return false|mixed
+   *   The index status.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  private function getEnvironmentDatabaseName($env_uuid) {
+  public function checkSolrIndexStatus(string $notifications) {
+    $options = [
+      'headers' => [
+        'Authorization' => 'Bearer ' . $this->authToken ?? $this->getApiToken(),
+        'Accept' => 'application/json',
+      ],
+    ];
+    try {
+      $request = $this->httpClient->request('GET', $notifications, $options);
+      if ($request->getStatusCode() == 200) {
+        $body_content = json_decode($request->getBody()->getContents(), TRUE);
+        if ($body_content['status'] !== 'completed') {
+          return $body_content['progress'];
+        }
+        return FALSE;
+      }
+    }
+    catch (GuzzleException $ge) {
+      $this->loggerFactory->error('@error', ['@error' => $ge->getMessage()]);
+      $this->messenger->addError($this->t('Unable to get solr index status, please check logs for more details.'));
+    }
+    return FALSE;
+  }
+
+  /**
+   * Get environment database name.
+   *
+   * @param string $env_uuid
+   *   The environment uuid.
+   *
+   * @return mixed|null
+   *   The name of database
+   */
+  private function getEnvironmentDatabaseName(string $env_uuid) {
     $options = [
       'headers' => [
         'Authorization' => 'Bearer ' . $this->authToken,
@@ -180,9 +245,15 @@ class AcquiaCloudService {
   /**
    * Get environment UUID.
    *
+   * @param string $current_env_name
+   *   The current environment uuid.
+   *
+   * @return mixed|null
+   *   environment ID or null.
+   *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  private function getEnvironmentUuid($current_env_name) {
+  private function getEnvironmentUuid(string $current_env_name) {
     $api_token = $this->getApiToken();
     $options = [
       'headers' => [
