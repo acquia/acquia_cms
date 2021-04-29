@@ -179,15 +179,16 @@ class AcquiaCloudService {
    * @param string $notifications
    *   The notification url.
    *
-   * @return false|mixed
+   * @return bool
    *   The index status.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function checkSolrIndexStatus(string $notifications) {
+  public function checkSolrIndexStatus(string $notifications): bool {
+    $auth_token = $this->authToken ?? $this->getApiToken();
     $options = [
       'headers' => [
-        'Authorization' => 'Bearer ' . $this->authToken ?? $this->getApiToken(),
+        'Authorization' => 'Bearer ' . $auth_token,
         'Accept' => 'application/json',
       ],
     ];
@@ -195,8 +196,8 @@ class AcquiaCloudService {
       $request = $this->httpClient->request('GET', $notifications, $options);
       if ($request->getStatusCode() == 200) {
         $body_content = json_decode($request->getBody()->getContents(), TRUE);
-        if ($body_content['status'] !== 'completed') {
-          return $body_content['progress'];
+        if ($body_content['status'] == 'in-progress') {
+          return TRUE;
         }
         return FALSE;
       }

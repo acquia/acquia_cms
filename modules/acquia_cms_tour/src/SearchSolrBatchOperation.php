@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_tour;
 
+use Drupal\acquia_cms_search\Facade\AcquiaSearchFacade;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -16,10 +17,12 @@ class SearchSolrBatchOperation {
   public static function checkSolrIndexStatus($notifications, &$context) {
 
     $cloud_service = \Drupal::service('acquia_cms_tour.cloud_service');
+    $count = 0;
     do {
+      $count++;
       $progress = $cloud_service->checkSolrIndexStatus($notifications);
-      $context['message'] = $progress . '% completed of 100%';
-      $context['results'] = time();
+      $context['message'] = 'Search index creation in progress, please wait...';
+      $context['results'] = $count;
       sleep(10);
     } while ($progress);
   }
@@ -31,12 +34,13 @@ class SearchSolrBatchOperation {
     // The 'success' parameter means no fatal PHP errors were detected. All
     // other error management should be handled using 'results'.
     if ($success) {
-      $message = 'Search solr index created successfully';
+      // Once index is created and active let's switch
+      // the index to use Solr Server.
+      \Drupal::classResolver(AcquiaSearchFacade::class)->submitSettingsForm();
     }
     else {
-      $message = $this->t('Finished with an error.');
+      \Drupal::messenger()->addMessage($this->t('Finished with an error.'));
     }
-    \Drupal::messenger()->addMessage($message);
   }
 
 }
