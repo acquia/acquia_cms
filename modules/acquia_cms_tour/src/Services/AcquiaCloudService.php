@@ -150,15 +150,23 @@ class AcquiaCloudService {
         $search_index = json_decode($request->getBody()->getContents(), TRUE);
         $this->messenger->addStatus($this->t('@message', ['@message' => $search_index['message']]));
         $notifications = $search_index['_links']['notification']['href'];
+        // Lets assume that index get created and ready in max 3 minutes,
+        // our api token also valid for 3 minute only, if we need to update
+        // this value with some bigger value then we need to call getApiToken.
+        $start_time = time();
+        $end_time = strtotime('+1 minutes', $start_time);
         $batch = [
           'title' => $this->t('Creating acquia search solr index.'),
           'operations' => [
             [
               '\Drupal\acquia_cms_tour\SearchSolrBatchOperation::checkSolrIndexStatus',
-              [$notifications],
+              [$start_time, $end_time, $notifications],
             ],
           ],
-          'finished' => '\Drupal\example_batch\SearchSolrBatchOperation::batchFinishedCallback',
+          'finished' => [
+            '\Drupal\acquia_cms_tour\SearchSolrBatchOperation',
+            'batchFinishedCallback',
+          ],
         ];
         batch_set($batch);
       }
