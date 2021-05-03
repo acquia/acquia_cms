@@ -73,6 +73,8 @@ export SHIELD_USER='[replaceme]'
 export SHIELD_PASS='[replaceme]'
 export GMAPS_KEY='[replaceme]'
 export SEARCH_UUID='[replaceme]'
+export CLOUD_API_KEY='[replaceme]'
+export CLOUD_API_SECRET='[replaceme]'
 ```
 
 To get access to these variables, reach out to your technical lead or product owner.
