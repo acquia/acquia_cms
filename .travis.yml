@@ -65,6 +65,11 @@ matrix:
     # @see https://github.com/acquia/orca/blob/master/docs/understanding-orca.md#continuous-integration
     - { env: ORCA_JOB=STATIC_CODE_ANALYSIS, name: "Static code analysis" }
     - { env: ORCA_JOB=STRICT_DEPRECATED_CODE_SCAN, name: "Strict deprecated code scan" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_OLDEST_SUPPORTED, name: "Integrated test on oldest supported Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_LATEST_LTS, name: "Integrated test on latest LTS Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_PREVIOUS_MINOR, name: "Integrated test on previous minor Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_UPGRADE_TEST_FROM_PREVIOUS_MINOR, name: "Integrated upgrade test from previous minor" }
+    - { env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT, name: "Isolated test on current Drupal core version" }
     # The following nine jobs are custom ACMS jobs based on the standard isolated
     # current dev test.
     # Exclude push group tests on this job to exclude low and medium risk tests.
@@ -81,6 +86,33 @@ matrix:
     # Run the following jobs on PHP 7.3 to make sure it works fine, during cron run.
     - { php: "7.3", name: "[PHP 7.3] - Isolated test on current dev Drupal core version - Full Install", if: type = cron, env: ACMS_JOB=base_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV }
     - { php: "7.3", name: "[PHP 7.3] - Starter - Full Install", if: NOT branch = main AND type = cron, env: ACMS_JOB=starter_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV }
+    # To send PHPUnit test coverage data to Coveralls (coveralls.io), configure
+    # your GitHub repository according to the FAQ below and uncomment the
+    # following line. By default this job is allowed to fail (see below) so that
+    # the total build can be marked finished sooner, because it will have the
+    # same testing outcome as the above ISOLATED_TEST_ON_CURRENT but may take
+    # significantly longer. Note: this setting implies ORCA_COVERAGE_ENABLE,
+    # which need not be set separately.
+    # @see https://github.com/acquia/orca/blob/main/docs/faq.md#coveralls
+    # @see https://github.com/acquia/orca/blob/main/docs/advanced-usage.md#ORCA_COVERALLS_ENABLE
+    # @see https://github.com/acquia/orca/blob/main/docs/advanced-usage.md#ORCA_COVERAGE_ENABLE
+    # - { env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT ORCA_COVERALLS_ENABLE=TRUE, name: "Isolated test on current Drupal core version with test coverage" }
+    #
+    # To generate test coverage data to send somewhere other than Coveralls, use
+    # the ORCA_COVERAGE_ENABLE variable instead.
+    # - { env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT ORCA_COVERAGE_ENABLE=TRUE, name: "Isolated test on current Drupal core version with test coverage" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_CURRENT, name: "Integrated test on current Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_UPGRADE_TEST_TO_NEXT_MINOR, name: "Integrated upgrade test to next minor Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_UPGRADE_TEST_TO_NEXT_MINOR_DEV, name: "Integrated upgrade test to next minor dev Drupal core version" }
+    - { env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV, name: "Isolated test on current dev Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_CURRENT_DEV, name: "Integrated test on current dev Drupal core version" }
+    - { env: ORCA_JOB=LOOSE_DEPRECATED_CODE_SCAN, name: "Loose deprecated code scan" }
+    - { env: ORCA_JOB=STRICT_DEPRECATED_CODE_SCAN, name: "Strict deprecated code scan" }
+    - { env: ORCA_JOB=DEPRECATED_CODE_SCAN_W_CONTRIB, name: "Deprecated code scan w/ contrib" }
+    - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MINOR, name: "Isolated test on next minor Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR, name: "Integrated test on next minor Drupal core version" }
+    - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MINOR_DEV, name: "Isolated test on next minor dev Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR_DEV, name: "Integrated test on next minor dev Drupal core version" }
     # Uncomment the following four lines to enable the corresponding tests once
     # the next major version of Drupal core has an alpha release or earlier.
     # Until then it's wasteful to use CI jobs on them, even if they exit early.
