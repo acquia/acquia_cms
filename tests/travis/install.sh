@@ -23,6 +23,18 @@ elif [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]]; th
   orca debug:packages CURRENT_DEV
   orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=acquia_cms --no-sqlite
 else
+elif [[ "$ORCA_JOB" == "INTEGRATED_TEST_ON_LATEST_LTS" ]]; then
+  orca debug:packages LATEST_LTS
+  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=LATEST_LTS --dev --profile=acquia_cms --no-sqlite
+else
+elif [[ "$ORCA_JOB" == "INTEGRATED_TEST_ON_PREVIOUS_MINOR" ]]; then
+  orca debug:packages PREVIOUS_MINOR
+  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=PREVIOUS_MINOR --dev --profile=acquia_cms --no-sqlite
+else
+elif [[ "$ORCA_JOB" == "INTEGRATED_TEST_ON_CURRENT" ]]; then
+  orca debug:packages CURRENT
+  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT --dev --profile=acquia_cms --no-sqlite
+else
   # Run ORCA's standard installation script.
   ../../../orca/bin/travis/install.sh
 fi
