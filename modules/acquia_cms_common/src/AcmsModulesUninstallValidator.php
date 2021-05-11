@@ -52,6 +52,11 @@ class AcmsModulesUninstallValidator implements ModuleUninstallValidatorInterface
         '@type' => $node_type,
       ]);
     }
+    elseif ($module == 'acquia_cms_document' && $this->hasMedia($node_type)) {
+      $reasons[] = $this->t('There is media available for type [@type], please manually delete content before uninstallation.', [
+        '@type' => $node_type,
+      ]);
+    }
     return $reasons;
   }
 
@@ -73,6 +78,28 @@ class AcmsModulesUninstallValidator implements ModuleUninstallValidatorInterface
         ->condition('type', $node_type)
         ->execute();
       return (bool) $nodes;
+    }
+    return FALSE;
+  }
+
+  /**
+   * Check if media with certain type is available.
+   *
+   * @param string $media_type
+   *   The media type.
+   *
+   * @return bool
+   *   The status of data available for certain node type.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  protected function hasMedia(string $media_type): bool {
+    if ($media_type) {
+      $media = $this->entityTypeManager->getStorage('media')->getQuery()
+        ->condition('bundle', $media_type)
+        ->execute();
+      return (bool) $media;
     }
     return FALSE;
   }
