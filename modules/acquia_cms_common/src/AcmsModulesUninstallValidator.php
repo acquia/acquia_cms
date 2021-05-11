@@ -41,8 +41,11 @@ class AcmsModulesUninstallValidator implements ModuleUninstallValidatorInterface
     $reasons = [];
     $node_type = explode('_', $module)[2];
     $allowed_modules = [
-      'acquia_cms_article', 'acquia_cms_event',
-      'acquia_cms_person', 'acquia_cms_place',
+      'acquia_cms_article',
+      'acquia_cms_event',
+      'acquia_cms_page',
+      'acquia_cms_person',
+      'acquia_cms_place',
     ];
     if (in_array($module, $allowed_modules) && $this->hasContent($node_type)) {
       $reasons[] = $this->t('There is content available for node type [@type], please manually delete content before uninstallation.', [
