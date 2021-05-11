@@ -50,6 +50,7 @@ class AcmsModulesUninstallValidator implements ModuleUninstallValidatorInterface
     $allowed_media_modules = [
       'acquia_cms_document',
       'acquia_cms_image',
+      'acquia_cms_video',
     ];
     if (in_array($module, $allowed_modules) && $this->hasContent($type)) {
       $reasons[] = $this->t('There is content available for node type [@type], please manually delete content before uninstallation.', [
