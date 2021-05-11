@@ -39,7 +39,7 @@ class AcmsModulesUninstallValidator implements ModuleUninstallValidatorInterface
    */
   public function validate($module): array {
     $reasons = [];
-    $node_type = explode('_', $module)[2];
+    $type = explode('_', $module)[2];
     $allowed_modules = [
       'acquia_cms_article',
       'acquia_cms_event',
@@ -47,14 +47,18 @@ class AcmsModulesUninstallValidator implements ModuleUninstallValidatorInterface
       'acquia_cms_person',
       'acquia_cms_place',
     ];
-    if (in_array($module, $allowed_modules) && $this->hasContent($node_type)) {
+    $allowed_media_modules = [
+      'acquia_cms_document',
+      'acquia_cms_image',
+    ];
+    if (in_array($module, $allowed_modules) && $this->hasContent($type)) {
       $reasons[] = $this->t('There is content available for node type [@type], please manually delete content before uninstallation.', [
-        '@type' => $node_type,
+        '@type' => $type,
       ]);
     }
-    elseif ($module == 'acquia_cms_document' && $this->hasMedia($node_type)) {
+    elseif (in_array($module, $allowed_media_modules)  && $this->hasMedia($type)) {
       $reasons[] = $this->t('There is media available for type [@type], please manually delete content before uninstallation.', [
-        '@type' => $node_type,
+        '@type' => $type,
       ]);
     }
     return $reasons;
