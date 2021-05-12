@@ -4,8 +4,102 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5c28ca3e4f9e1df3724d3280aa504667",
+    "content-hash": "8a6cce03cf0074134fe1999151b279a8",
     "packages": [
+        {
+            "name": "acquia/acsf-contenthub-console",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acsf-contenthub-console.git",
+                "reference": "82cef0305376c6b82b2fc35f5ca948955f6be08a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acsf-contenthub-console/zipball/82cef0305376c6b82b2fc35f5ca948955f6be08a",
+                "reference": "82cef0305376c6b82b2fc35f5ca948955f6be08a",
+                "shasum": ""
+            },
+            "require": {
+                "acquia/cloud-contenthub-console": "^1.2.0"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2.4",
+                "phpunit/phpunit": "^8",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Acquia\\Console\\Acsf\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Acquia Engineering",
+                    "homepage": "https://www.acquia.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A package providing Acquia Cloud Site Factory commands for the CommonConsole command line interface.",
+            "support": {
+                "issues": "https://github.com/acquia/acsf-contenthub-console/issues",
+                "source": "https://github.com/acquia/acsf-contenthub-console/tree/1.2.0"
+            },
+            "time": "2021-04-09T19:10:08+00:00"
+        },
+        {
+            "name": "acquia/cloud-contenthub-console",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/cloud-contenthub-console.git",
+                "reference": "c251e29d95255bc9436c21bea2a45234b2992a4c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/cloud-contenthub-console/zipball/c251e29d95255bc9436c21bea2a45234b2992a4c",
+                "reference": "c251e29d95255bc9436c21bea2a45234b2992a4c",
+                "shasum": ""
+            },
+            "require": {
+                "acquia/contenthub-console-helpers": "^1.0",
+                "ext-json": "*",
+                "typhonius/acquia-php-sdk-v2": "<=2.0.15"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2.4",
+                "phpunit/phpunit": "^8",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Acquia\\Console\\Cloud\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Acquia Engineering",
+                    "homepage": "https://www.acquia.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A package providing Acquia Cloud commands for the CommonConsole command line interface.",
+            "support": {
+                "issues": "https://github.com/acquia/cloud-contenthub-console/issues",
+                "source": "https://github.com/acquia/cloud-contenthub-console/tree/1.2.0"
+            },
+            "time": "2021-04-09T18:50:18+00:00"
+        },
         {
             "name": "acquia/cohesion",
             "version": "6.5.0",
@@ -102,6 +196,170 @@
             "time": "2021-03-23T09:39:29+00:00"
         },
         {
+            "name": "acquia/content-hub-php",
+            "version": "2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/content-hub-php.git",
+                "reference": "e5e39bb026ba253b8c29cfe5514a4160ef4387e1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/content-hub-php/zipball/e5e39bb026ba253b8c29cfe5514a4160ef4387e1",
+                "reference": "e5e39bb026ba253b8c29cfe5514a4160ef4387e1",
+                "shasum": ""
+            },
+            "require": {
+                "acquia/http-hmac-php": "~3.4|~4.1.2",
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "~6.0",
+                "php": ">=7.1",
+                "psr/log": "~1.0",
+                "symfony/event-dispatcher": "^3.4 || ^4.3",
+                "symfony/http-foundation": "^3.4 || ^4.3",
+                "symfony/serializer": "^3.4 || ^4.3"
+            },
+            "require-dev": {
+                "drupal/coder": "^8.3",
+                "mockery/mockery": "^1.2",
+                "pdepend/pdepend": "~1.0",
+                "phploc/phploc": "~2.0",
+                "phpmd/phpmd": "~1.0",
+                "phpunit/phpunit": "^7",
+                "scrutinizer/ocular": "~1.0",
+                "sebastian/phpcpd": "~2.0",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "suggest": {
+                "ramsey/uuid": "A PHP 5.4+ library for generating RFC 4122 version 1, 3, 4, and 5 universally unique identifiers (UUID)"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Acquia\\ContentHubClient\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "See Contributors",
+                    "homepage": "https://github.com/acquia/content-hub-php/graphs/contributors"
+                }
+            ],
+            "description": "A PHP Client library to consume the Acquia Content Hub API.",
+            "homepage": "https://github.com/acquia/content-hub-php",
+            "support": {
+                "issues": "https://github.com/acquia/content-hub-php/issues",
+                "source": "https://github.com/acquia/content-hub-php/tree/2.0.3"
+            },
+            "time": "2020-11-11T21:34:48+00:00"
+        },
+        {
+            "name": "acquia/contenthub-console",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/contenthub-console.git",
+                "reference": "4dc8e23253e9a1685b19a28eb687da2a7854c1b7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/contenthub-console/zipball/4dc8e23253e9a1685b19a28eb687da2a7854c1b7",
+                "reference": "4dc8e23253e9a1685b19a28eb687da2a7854c1b7",
+                "shasum": ""
+            },
+            "require": {
+                "acquia/acsf-contenthub-console": "^1.2.0",
+                "ext-json": "*",
+                "spatie/ssl-certificate": "1.21",
+                "zumba/amplitude-php": "^1"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2.4",
+                "phpunit/phpunit": "^8",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Acquia\\Console\\ContentHub\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Acquia Engineering",
+                    "homepage": "https://www.acquia.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A package providing Acquia ContentHub commands for the CommonConsole command line interface.",
+            "support": {
+                "issues": "https://github.com/acquia/contenthub-console/issues",
+                "source": "https://github.com/acquia/contenthub-console/tree/1.3.0"
+            },
+            "time": "2021-04-09T19:35:16+00:00"
+        },
+        {
+            "name": "acquia/contenthub-console-helpers",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/contenthub-console-helpers.git",
+                "reference": "61061aa7684bf31b80a3e6f7edf28cfd4e5e8eea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/contenthub-console-helpers/zipball/61061aa7684bf31b80a3e6f7edf28cfd4e5e8eea",
+                "reference": "61061aa7684bf31b80a3e6f7edf28cfd4e5e8eea",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/coder": "^8.3",
+                "eclipsegc/common-console": "^0.0.1",
+                "ext-json": "*"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2.4",
+                "phpunit/phpunit": "^8",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Acquia\\Console\\Helpers\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Acquia Engineering",
+                    "homepage": "https://www.acquia.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A package providing Helper Libraries for the CommonConsole command line interface.",
+            "support": {
+                "issues": "https://github.com/acquia/contenthub-console-helpers/issues",
+                "source": "https://github.com/acquia/contenthub-console-helpers/tree/1.0"
+            },
+            "time": "2021-02-16T22:30:39+00:00"
+        },
+        {
             "name": "acquia/drupal-environment-detector",
             "version": "v1.3.0",
             "source": {
@@ -150,6 +408,69 @@
                 "source": "https://github.com/acquia/drupal-environment-detector/tree/v1.3.0"
             },
             "time": "2021-02-20T01:48:44+00:00"
+        },
+        {
+            "name": "acquia/http-hmac-php",
+            "version": "4.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/http-hmac-php.git",
+                "reference": "6c915b44f67399dd51fc4a404fad9a70130490a9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/http-hmac-php/zipball/6c915b44f67399dd51fc4a404fad9a70130490a9",
+                "reference": "6c915b44f67399dd51fc4a404fad9a70130490a9",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~5.6 || ~7.0",
+                "psr/http-message": "~1.0.0"
+            },
+            "replace": {
+                "acquia/hmac-request": "self.version"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.11",
+                "guzzlehttp/guzzle": "~6.0",
+                "laminas/laminas-diactoros": "^1.8 || ^2.2",
+                "phploc/phploc": "^4.0",
+                "phpmd/phpmd": "^2.0",
+                "phpunit/phpunit": "~5.7",
+                "sebastian/phpcpd": "^2.0",
+                "symfony/psr-http-message-bridge": "^1.1.2 | ^2.0",
+                "symfony/security": "^3.0 | ^4.0",
+                "symfony/security-bundle": "^3.0 | ^4.0"
+            },
+            "suggest": {
+                "guzzlehttp/guzzle": "~6.0",
+                "laminas/laminas-diactoros": "^1.8 || ^2.2",
+                "symfony/psr-http-message-bridge": "^1.1.2 | ^2.0",
+                "symfony/security": "^3.0 | ^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Acquia\\Hmac\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "See contributors",
+                    "homepage": "https://github.com/acquia/http-hmac-php/graphs/contributors"
+                }
+            ],
+            "description": "An implementation of the HTTP HMAC Spec in PHP that integrates with popular libraries such as Symfony and Guzzle.",
+            "homepage": "https://github.com/acquia/http-hmac-php",
+            "support": {
+                "issues": "https://github.com/acquia/http-hmac-php/issues",
+                "source": "https://github.com/acquia/http-hmac-php/tree/4.1.2"
+            },
+            "time": "2020-05-14T18:49:51+00:00"
         },
         {
             "name": "acquia/memcache-settings",
@@ -1871,6 +2192,111 @@
             }
         },
         {
+            "name": "drupal/acquia_contenthub",
+            "version": "2.22.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/acquia_contenthub.git",
+                "reference": "8.x-2.22"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/acquia_contenthub-8.x-2.22.zip",
+                "reference": "8.x-2.22",
+                "shasum": "b782bc2867955ba96d4d0754b93d470e552364c9"
+            },
+            "require": {
+                "acquia/content-hub-php": "^2.0.3",
+                "acquia/contenthub-console": "^1.3.0",
+                "drupal/core": "^8.8 || ^9",
+                "drupal/depcalc": "^1.6",
+                "laminas/laminas-diactoros": "^1.8 || ^2.2",
+                "symfony/psr-http-message-bridge": "^1.1.2 || ^2.0"
+            },
+            "require-dev": {
+                "dms/phpunit-arraysubset-asserts": "^0.1.0",
+                "drupal/acquia_contenthub_subscriber": "*",
+                "drupal/paragraphs": "^1.5",
+                "drupal/s3fs": "3.0.0-alpha16"
+            },
+            "suggest": {
+                "dms/phpunit-arraysubset-asserts": "Used for PHPUnit 8.0+ tests (Drupal 9)"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.22",
+                    "datestamp": "1617999950",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "branch-alias": {
+                    "dev-8.x-2.x": "2.x-dev"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "EclipseGc",
+                    "homepage": "https://www.drupal.org/user/61203"
+                },
+                {
+                    "name": "abarrios",
+                    "homepage": "https://www.drupal.org/user/109765"
+                },
+                {
+                    "name": "acquia",
+                    "homepage": "https://www.drupal.org/user/1231722"
+                },
+                {
+                    "name": "attilatilman",
+                    "homepage": "https://www.drupal.org/user/3528404"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "kaynen",
+                    "homepage": "https://www.drupal.org/user/733308"
+                },
+                {
+                    "name": "looking4justice",
+                    "homepage": "https://www.drupal.org/user/3607847"
+                },
+                {
+                    "name": "m.yudin",
+                    "homepage": "https://www.drupal.org/user/2358036"
+                },
+                {
+                    "name": "mpcm",
+                    "homepage": "https://www.drupal.org/user/1539366"
+                },
+                {
+                    "name": "pajor",
+                    "homepage": "https://www.drupal.org/user/3528384"
+                },
+                {
+                    "name": "scor",
+                    "homepage": "https://www.drupal.org/user/52142"
+                },
+                {
+                    "name": "ynx",
+                    "homepage": "https://www.drupal.org/user/3161427"
+                }
+            ],
+            "description": "Module allowing Drupal sites to connect to Acquia Content Hub.",
+            "homepage": "https://www.drupal.org/project/acquia_contenthub",
+            "support": {
+                "source": "https://git.drupalcode.org/project/acquia_contenthub"
+            }
+        },
+        {
             "name": "drupal/acquia_lift",
             "version": "4.3.0",
             "source": {
@@ -2790,6 +3216,49 @@
             }
         },
         {
+            "name": "drupal/coder",
+            "version": "8.3.12",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/coder.git",
+                "reference": "719ddb16aec2e5da4ce274bf3bf8450caef564d4"
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=7.0.8",
+                "sirbrillig/phpcs-variable-analysis": "^2.10",
+                "squizlabs/php_codesniffer": "^3.5.6",
+                "symfony/yaml": ">=2.0.5"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^0.12.51",
+                "phpunit/phpunit": "^6.0 || ^7.0"
+            },
+            "type": "phpcodesniffer-standard",
+            "autoload": {
+                "psr-4": {
+                    "Drupal\\": "coder_sniffer/Drupal/",
+                    "DrupalPractice\\": "coder_sniffer/DrupalPractice/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Coder is a library to review Drupal code.",
+            "homepage": "https://www.drupal.org/project/coder",
+            "keywords": [
+                "code review",
+                "phpcs",
+                "standards"
+            ],
+            "support": {
+                "issues": "https://www.drupal.org/project/issues/coder",
+                "source": "https://www.drupal.org/project/coder"
+            },
+            "time": "2020-12-06T09:34:55+00:00"
+        },
+        {
             "name": "drupal/collapsiblock",
             "version": "3.0.0",
             "source": {
@@ -2905,16 +3374,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "9.1.7",
+            "version": "9.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "0cbed9e7b0243ccc89a3735853eedb40becf8095"
+                "reference": "487661aa08e9474ef234074844e7b1b8fa6e3c3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/0cbed9e7b0243ccc89a3735853eedb40becf8095",
-                "reference": "0cbed9e7b0243ccc89a3735853eedb40becf8095",
+                "url": "https://api.github.com/repos/drupal/core/zipball/487661aa08e9474ef234074844e7b1b8fa6e3c3c",
+                "reference": "487661aa08e9474ef234074844e7b1b8fa6e3c3c",
                 "shasum": ""
             },
             "require": {
@@ -3155,7 +3624,10 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
-            "time": "2021-04-20T23:05:22+00:00"
+            "support": {
+                "source": "https://github.com/drupal/core/tree/9.1.8"
+            },
+            "time": "2021-05-05T11:09:15+00:00"
         },
         {
             "name": "drupal/crop",
@@ -3378,6 +3850,68 @@
             "homepage": "https://www.drupal.org/project/default_content",
             "support": {
                 "source": "https://git.drupalcode.org/project/default_content"
+            }
+        },
+        {
+            "name": "drupal/depcalc",
+            "version": "1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/depcalc.git",
+                "reference": "8.x-1.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/depcalc-8.x-1.7.zip",
+                "reference": "8.x-1.7",
+                "shasum": "32af7e3227208b00576c317126b6aafd5a818b16"
+            },
+            "require": {
+                "drupal/core": "^8.7.7 || ^9"
+            },
+            "require-dev": {
+                "drupal/entity_embed": "^1.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.7",
+                    "datestamp": "1619803733",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "branch-alias": {
+                    "dev-8.x-1.x": "1.x-dev"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "EclipseGc",
+                    "homepage": "https://www.drupal.org/user/61203"
+                },
+                {
+                    "name": "abarrios",
+                    "homepage": "https://www.drupal.org/user/109765"
+                },
+                {
+                    "name": "jmoreira",
+                    "homepage": "https://www.drupal.org/user/2374486"
+                },
+                {
+                    "name": "kaynen",
+                    "homepage": "https://www.drupal.org/user/733308"
+                }
+            ],
+            "description": "Calculates recursive dependencies of any entity.",
+            "homepage": "https://www.drupal.org/project/depcalc",
+            "support": {
+                "source": "https://git.drupalcode.org/project/depcalc"
             }
         },
         {
@@ -6269,7 +6803,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-2.8",
-                    "datestamp": "1615222638",
+                    "datestamp": "1615222684",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6836,6 +7370,55 @@
                 "source": "https://github.com/e0ipso/shaper/tree/1.2.3"
             },
             "time": "2019-07-27T10:13:44+00:00"
+        },
+        {
+            "name": "eclipsegc/common-console",
+            "version": "0.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/EclipseGc/CommonConsole.git",
+                "reference": "b18b5c707c882bbaa877eab07f40547f63407a6d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/EclipseGc/CommonConsole/zipball/b18b5c707c882bbaa877eab07f40547f63407a6d",
+                "reference": "b18b5c707c882bbaa877eab07f40547f63407a6d",
+                "shasum": ""
+            },
+            "require": {
+                "consolidation/config": "^1.0@dev",
+                "ext-json": "*",
+                "symfony/config": "^3.4 || ^4.3@dev",
+                "symfony/console": "^3.4 || ^4.2",
+                "symfony/dependency-injection": "^3.4 || ^4.3@dev",
+                "symfony/event-dispatcher": "^3.4 || ^4.3@dev",
+                "symfony/filesystem": "^3.4 || ^4.3@dev",
+                "symfony/process": "^3.4 || ^4.3@dev",
+                "symfony/yaml": "^3.4 || ^4.2"
+            },
+            "require-dev": {
+                "phpspec/prophecy-phpunit": "^2.0@dev",
+                "phpunit/phpunit": "^9.3@dev"
+            },
+            "bin": [
+                "bin/commoncli"
+            ],
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "EclipseGc\\CommonConsole\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "A Common Console base application.",
+            "support": {
+                "issues": "https://github.com/EclipseGc/CommonConsole/issues",
+                "source": "https://github.com/EclipseGc/CommonConsole/tree/0.0.1"
+            },
+            "time": "2021-01-27T16:06:07+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -8340,6 +8923,76 @@
             "time": "2021-02-22T09:20:06+00:00"
         },
         {
+            "name": "league/oauth2-client",
+            "version": "2.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/oauth2-client.git",
+                "reference": "badb01e62383430706433191b82506b6df24ad98"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-client/zipball/badb01e62383430706433191b82506b6df24ad98",
+                "reference": "badb01e62383430706433191b82506b6df24ad98",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.0 || ^7.0",
+                "paragonie/random_compat": "^1 || ^2 || ^9.99",
+                "php": "^5.6 || ^7.0 || ^8.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.3",
+                "php-parallel-lint/php-parallel-lint": "^1.2",
+                "phpunit/phpunit": "^5.7 || ^6.0 || ^9.3",
+                "squizlabs/php_codesniffer": "^2.3 || ^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\OAuth2\\Client\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alex Bilbie",
+                    "email": "hello@alexbilbie.com",
+                    "homepage": "http://www.alexbilbie.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Woody Gilk",
+                    "homepage": "https://github.com/shadowhand",
+                    "role": "Contributor"
+                }
+            ],
+            "description": "OAuth 2.0 Client Library",
+            "keywords": [
+                "Authentication",
+                "SSO",
+                "authorization",
+                "identity",
+                "idp",
+                "oauth",
+                "oauth2",
+                "single sign on"
+            ],
+            "support": {
+                "issues": "https://github.com/thephpleague/oauth2-client/issues",
+                "source": "https://github.com/thephpleague/oauth2-client/tree/2.6.0"
+            },
+            "time": "2020-10-28T02:03:40+00:00"
+        },
+        {
             "name": "localheinz/diff",
             "version": "1.1.1",
             "source": {
@@ -8759,6 +9412,99 @@
             "time": "2021-02-15T16:11:48+00:00"
         },
         {
+            "name": "nesbot/carbon",
+            "version": "2.47.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/briannesbitt/Carbon.git",
+                "reference": "606262fd8888b75317ba9461825a24fc34001e1e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/606262fd8888b75317ba9461825a24fc34001e1e",
+                "reference": "606262fd8888b75317ba9461825a24fc34001e1e",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.1.8 || ^8.0",
+                "symfony/polyfill-mbstring": "^1.0",
+                "symfony/translation": "^3.4 || ^4.0 || ^5.0"
+            },
+            "require-dev": {
+                "doctrine/orm": "^2.7",
+                "friendsofphp/php-cs-fixer": "^2.14 || ^3.0",
+                "kylekatarnls/multi-tester": "^2.0",
+                "phpmd/phpmd": "^2.9",
+                "phpstan/extension-installer": "^1.0",
+                "phpstan/phpstan": "^0.12.54",
+                "phpunit/phpunit": "^7.5.20 || ^8.5.14",
+                "squizlabs/php_codesniffer": "^3.4"
+            },
+            "bin": [
+                "bin/carbon"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev",
+                    "dev-3.x": "3.x-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Carbon\\Laravel\\ServiceProvider"
+                    ]
+                },
+                "phpstan": {
+                    "includes": [
+                        "extension.neon"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Carbon\\": "src/Carbon/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brian Nesbitt",
+                    "email": "brian@nesbot.com",
+                    "homepage": "http://nesbot.com"
+                },
+                {
+                    "name": "kylekatarnls",
+                    "homepage": "http://github.com/kylekatarnls"
+                }
+            ],
+            "description": "An API extension for DateTime that supports 281 different languages.",
+            "homepage": "http://carbon.nesbot.com",
+            "keywords": [
+                "date",
+                "datetime",
+                "time"
+            ],
+            "support": {
+                "issues": "https://github.com/briannesbitt/Carbon/issues",
+                "source": "https://github.com/briannesbitt/Carbon"
+            },
+            "funding": [
+                {
+                    "url": "https://opencollective.com/Carbon",
+                    "type": "open_collective"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/nesbot/carbon",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-04-13T21:54:02+00:00"
+        },
+        {
             "name": "nikic/php-parser",
             "version": "v4.10.4",
             "source": {
@@ -8813,6 +9559,56 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v4.10.4"
             },
             "time": "2020-12-20T10:01:03+00:00"
+        },
+        {
+            "name": "paragonie/random_compat",
+            "version": "v9.99.100",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paragonie/random_compat.git",
+                "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/996434e5492cb4c3edcb9168db6fbb1359ef965a",
+                "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 7"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*|5.*",
+                "vimeo/psalm": "^1"
+            },
+            "suggest": {
+                "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paragon Initiative Enterprises",
+                    "email": "security@paragonie.com",
+                    "homepage": "https://paragonie.com"
+                }
+            ],
+            "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
+            "keywords": [
+                "csprng",
+                "polyfill",
+                "pseudorandom",
+                "random"
+            ],
+            "support": {
+                "email": "info@paragonie.com",
+                "issues": "https://github.com/paragonie/random_compat/issues",
+                "source": "https://github.com/paragonie/random_compat"
+            },
+            "time": "2020-10-15T08:29:30+00:00"
         },
         {
             "name": "pear/archive_tar",
@@ -10326,6 +11122,55 @@
             "time": "2020-12-01T04:58:47+00:00"
         },
         {
+            "name": "psr/cache",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/cache.git",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/cache/zipball/d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Cache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for caching libraries",
+            "keywords": [
+                "cache",
+                "psr",
+                "psr-6"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/cache/tree/master"
+            },
+            "time": "2016-08-06T20:24:11+00:00"
+        },
+        {
             "name": "psr/container",
             "version": "1.1.1",
             "source": {
@@ -11718,6 +12563,59 @@
             "time": "2020-09-28T06:39:44+00:00"
         },
         {
+            "name": "sirbrillig/phpcs-variable-analysis",
+            "version": "v2.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sirbrillig/phpcs-variable-analysis.git",
+                "reference": "e76e816236f401458dd8e16beecab905861b5867"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sirbrillig/phpcs-variable-analysis/zipball/e76e816236f401458dd8e16beecab905861b5867",
+                "reference": "e76e816236f401458dd8e16beecab905861b5867",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+                "limedeck/phpunit-detailed-printer": "^3.1 || ^4.0 || ^5.0",
+                "phpstan/phpstan": "^0.11.8",
+                "phpunit/phpunit": "^5.0 || ^6.5 || ^7.0 || ^8.0",
+                "sirbrillig/phpcs-import-detection": "^1.1"
+            },
+            "type": "phpcodesniffer-standard",
+            "autoload": {
+                "psr-4": {
+                    "VariableAnalysis\\": "VariableAnalysis/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Sam Graham",
+                    "email": "php-codesniffer-variableanalysis@illusori.co.uk"
+                },
+                {
+                    "name": "Payton Swick",
+                    "email": "payton@foolord.com"
+                }
+            ],
+            "description": "A PHPCS sniff to detect problems with variables.",
+            "support": {
+                "issues": "https://github.com/sirbrillig/phpcs-variable-analysis/issues",
+                "source": "https://github.com/sirbrillig/phpcs-variable-analysis",
+                "wiki": "https://github.com/sirbrillig/phpcs-variable-analysis/wiki"
+            },
+            "time": "2021-03-09T22:32:14+00:00"
+        },
+        {
             "name": "solarium/solarium",
             "version": "6.1.1",
             "source": {
@@ -11779,6 +12677,175 @@
                 "source": "https://github.com/solariumphp/solarium/tree/6.1.1"
             },
             "time": "2021-02-05T13:03:56+00:00"
+        },
+        {
+            "name": "spatie/macroable",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/macroable.git",
+                "reference": "7a99549fc001c925714b329220dea680c04bfa48"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/macroable/zipball/7a99549fc001c925714b329220dea680c04bfa48",
+                "reference": "7a99549fc001c925714b329220dea680c04bfa48",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2|^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.0|^9.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Macroable\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A trait to dynamically add methods to a class",
+            "homepage": "https://github.com/spatie/macroable",
+            "keywords": [
+                "macroable",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/macroable/issues",
+                "source": "https://github.com/spatie/macroable/tree/1.0.1"
+            },
+            "time": "2020-11-03T10:15:05+00:00"
+        },
+        {
+            "name": "spatie/ssl-certificate",
+            "version": "1.21.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/ssl-certificate.git",
+                "reference": "3f827acdbff1745e1af2a4a38d7b985494db4ac1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/ssl-certificate/zipball/3f827acdbff1745e1af2a4a38d7b985494db4ac1",
+                "reference": "3f827acdbff1745e1af2a4a38d7b985494db4ac1",
+                "shasum": ""
+            },
+            "require": {
+                "ext-intl": "*",
+                "ext-json": "*",
+                "nesbot/carbon": "^2.3",
+                "php": "^7.2",
+                "spatie/macroable": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.0",
+                "spatie/phpunit-snapshot-assertions": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\SslCertificate\\": "src"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A class to easily query the properties of an ssl certificate",
+            "homepage": "https://github.com/spatie/ssl-certificate",
+            "keywords": [
+                "spatie",
+                "ssl-certificate"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/ssl-certificate/issues",
+                "source": "https://github.com/spatie/ssl-certificate/tree/1.21.0"
+            },
+            "funding": [
+                {
+                    "type": "spatie"
+                }
+            ],
+            "time": "2020-10-19T06:41:57+00:00"
+        },
+        {
+            "name": "squizlabs/php_codesniffer",
+            "version": "3.5.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
+                "reference": "9d583721a7157ee997f235f327de038e7ea6dac4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/9d583721a7157ee997f235f327de038e7ea6dac4",
+                "reference": "9d583721a7157ee997f235f327de038e7ea6dac4",
+                "shasum": ""
+            },
+            "require": {
+                "ext-simplexml": "*",
+                "ext-tokenizer": "*",
+                "ext-xmlwriter": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
+            },
+            "bin": [
+                "bin/phpcs",
+                "bin/phpcbf"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Greg Sherwood",
+                    "role": "lead"
+                }
+            ],
+            "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
+            "homepage": "https://github.com/squizlabs/PHP_CodeSniffer",
+            "keywords": [
+                "phpcs",
+                "standards"
+            ],
+            "support": {
+                "issues": "https://github.com/squizlabs/PHP_CodeSniffer/issues",
+                "source": "https://github.com/squizlabs/PHP_CodeSniffer",
+                "wiki": "https://github.com/squizlabs/PHP_CodeSniffer/wiki"
+            },
+            "time": "2020-10-23T02:01:07+00:00"
         },
         {
             "name": "stack/builder",
@@ -11896,6 +12963,256 @@
                 "source": "https://github.com/symfony-cmf/Routing/tree/2.3.3"
             },
             "time": "2020-10-06T10:15:37+00:00"
+        },
+        {
+            "name": "symfony/cache",
+            "version": "v5.2.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/cache.git",
+                "reference": "1d801d1dc5e3840e832568db6b35a954cfb435a8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/1d801d1dc5e3840e832568db6b35a954cfb435a8",
+                "reference": "1d801d1dc5e3840e832568db6b35a954cfb435a8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "psr/cache": "^1.0|^2.0",
+                "psr/log": "^1.1",
+                "symfony/cache-contracts": "^1.1.7|^2",
+                "symfony/polyfill-php80": "^1.15",
+                "symfony/service-contracts": "^1.1|^2",
+                "symfony/var-exporter": "^4.4|^5.0"
+            },
+            "conflict": {
+                "doctrine/dbal": "<2.10",
+                "symfony/dependency-injection": "<4.4",
+                "symfony/http-kernel": "<4.4",
+                "symfony/var-dumper": "<4.4"
+            },
+            "provide": {
+                "psr/cache-implementation": "1.0|2.0",
+                "psr/simple-cache-implementation": "1.0",
+                "symfony/cache-implementation": "1.0|2.0"
+            },
+            "require-dev": {
+                "cache/integration-tests": "dev-master",
+                "doctrine/cache": "^1.6",
+                "doctrine/dbal": "^2.10|^3.0",
+                "predis/predis": "^1.1",
+                "psr/simple-cache": "^1.0",
+                "symfony/config": "^4.4|^5.0",
+                "symfony/dependency-injection": "^4.4|^5.0",
+                "symfony/filesystem": "^4.4|^5.0",
+                "symfony/http-kernel": "^4.4|^5.0",
+                "symfony/messenger": "^4.4|^5.0",
+                "symfony/var-dumper": "^4.4|^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Cache\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides an extended PSR-6, PSR-16 (and tags) implementation",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "caching",
+                "psr6"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/cache/tree/v5.2.7"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-04-23T16:56:33+00:00"
+        },
+        {
+            "name": "symfony/cache-contracts",
+            "version": "v2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/cache-contracts.git",
+                "reference": "c0446463729b89dd4fa62e9aeecc80287323615d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/cache-contracts/zipball/c0446463729b89dd4fa62e9aeecc80287323615d",
+                "reference": "c0446463729b89dd4fa62e9aeecc80287323615d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "psr/cache": "^1.0|^2.0|^3.0"
+            },
+            "suggest": {
+                "symfony/cache-implementation": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "2.4-dev"
+                },
+                "thanks": {
+                    "name": "symfony/contracts",
+                    "url": "https://github.com/symfony/contracts"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Contracts\\Cache\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Generic abstractions related to caching",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "abstractions",
+                "contracts",
+                "decoupling",
+                "interfaces",
+                "interoperability",
+                "standards"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/cache-contracts/tree/v2.4.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-03-23T23:28:01+00:00"
+        },
+        {
+            "name": "symfony/config",
+            "version": "v4.4.20",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/config.git",
+                "reference": "98606c6fa1a8f55ff964ccdd704275bf5b9f71b3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/config/zipball/98606c6fa1a8f55ff964ccdd704275bf5b9f71b3",
+                "reference": "98606c6fa1a8f55ff964ccdd704275bf5b9f71b3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.3",
+                "symfony/filesystem": "^3.4|^4.0|^5.0",
+                "symfony/polyfill-ctype": "~1.8"
+            },
+            "conflict": {
+                "symfony/finder": "<3.4"
+            },
+            "require-dev": {
+                "symfony/event-dispatcher": "^3.4|^4.0|^5.0",
+                "symfony/finder": "^3.4|^4.0|^5.0",
+                "symfony/messenger": "^4.1|^5.0",
+                "symfony/service-contracts": "^1.1|^2",
+                "symfony/yaml": "^3.4|^4.0|^5.0"
+            },
+            "suggest": {
+                "symfony/yaml": "To use the yaml reference dumper"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Config\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Helps you find, load, combine, autofill and validate configuration values of any kind",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/config/tree/v4.4.20"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-02-22T15:36:50+00:00"
         },
         {
             "name": "symfony/console",
@@ -14314,6 +15631,79 @@
             "time": "2021-03-28T09:42:18+00:00"
         },
         {
+            "name": "symfony/var-exporter",
+            "version": "v5.2.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/var-exporter.git",
+                "reference": "01184a5ab95eb9500b9b0ef3e525979e003d9c81"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/01184a5ab95eb9500b9b0ef3e525979e003d9c81",
+                "reference": "01184a5ab95eb9500b9b0ef3e525979e003d9c81",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "symfony/polyfill-php80": "^1.15"
+            },
+            "require-dev": {
+                "symfony/var-dumper": "^4.4.9|^5.0.9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\VarExporter\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Allows exporting any serializable PHP data structure to plain PHP code",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "clone",
+                "construct",
+                "export",
+                "hydrate",
+                "instantiate",
+                "serialize"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/var-exporter/tree/v5.3.0-BETA1"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-04-01T10:42:13+00:00"
+        },
+        {
             "name": "symfony/yaml",
             "version": "v4.4.21",
             "source": {
@@ -14512,6 +15902,67 @@
                 }
             ],
             "time": "2021-03-10T10:05:55+00:00"
+        },
+        {
+            "name": "typhonius/acquia-php-sdk-v2",
+            "version": "2.0.15",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/typhonius/acquia-php-sdk-v2.git",
+                "reference": "ce6534ab7d79697a0f0204d81b7475c1037d4471"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/typhonius/acquia-php-sdk-v2/zipball/ce6534ab7d79697a0f0204d81b7475c1037d4471",
+                "reference": "ce6534ab7d79697a0f0204d81b7475c1037d4471",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.3",
+                "league/oauth2-client": "^2.4",
+                "php": ">=7.3",
+                "symfony/cache": "^4|^5",
+                "webmozart/path-util": "^2.3"
+            },
+            "require-dev": {
+                "eloquent/phony-phpunit": "^4",
+                "php-coveralls/php-coveralls": "^2.0.0",
+                "phpstan/phpstan": "^0.11.19",
+                "phpstan/phpstan-phpunit": "^0.11.2",
+                "phpunit/phpunit": "^7.0",
+                "squizlabs/php_codesniffer": "3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AcquiaCloudApi\\Connector\\": "src/Connector",
+                    "AcquiaCloudApi\\Endpoints\\": "src/Endpoints",
+                    "AcquiaCloudApi\\Response\\": "src/Response",
+                    "AcquiaCloudApi\\Exception\\": "src/Exception"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adam Malone",
+                    "email": "adam@adammalone.net"
+                }
+            ],
+            "description": "A PHP SDK for Acquia CloudAPI v2",
+            "support": {
+                "issues": "https://github.com/typhonius/acquia-php-sdk-v2/issues",
+                "source": "https://github.com/typhonius/acquia-php-sdk-v2/tree/2.0.15"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/typhonius",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-10-20T22:54:07+00:00"
         },
         {
             "name": "typo3/phar-stream-wrapper",
@@ -14781,6 +16232,65 @@
                 "source": "https://github.com/geocoder-php/php-common/tree/4.4.0"
             },
             "time": "2020-12-21T09:30:01+00:00"
+        },
+        {
+            "name": "zumba/amplitude-php",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zumba/amplitude-php.git",
+                "reference": "144da6e648b21a95e5bc67e711af6858f7dae38e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zumba/amplitude-php/zipball/144da6e648b21a95e5bc67e711af6858f7dae38e",
+                "reference": "144da6e648b21a95e5bc67e711af6858f7dae38e",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=7.2",
+                "psr/log": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "8.3.*",
+                "squizlabs/php_codesniffer": "3.4.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Zumba\\Amplitude\\": "./src/",
+                    "Zumba\\Amplitude\\Test\\": "./test/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Zumba Fitness, LLC",
+                    "homepage": "https://tech.zumba.com"
+                },
+                {
+                    "name": "Jonathan Foote",
+                    "email": "jonathan.foote@zumba.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP SDK for Amplitude",
+            "homepage": "https://github.com/zumba/amplitude-php",
+            "keywords": [
+                "amplitude",
+                "analytics",
+                "sdk",
+                "tracking"
+            ],
+            "support": {
+                "issues": "https://github.com/zumba/amplitude-php/issues",
+                "source": "https://github.com/zumba/amplitude-php/tree/1.0.2"
+            },
+            "time": "2021-01-26T15:42:42+00:00"
         }
     ],
     "packages-dev": [
@@ -15684,49 +17194,6 @@
                 "source": "https://github.com/dealerdirect/phpcodesniffer-composer-installer"
             },
             "time": "2020-12-07T18:04:37+00:00"
-        },
-        {
-            "name": "drupal/coder",
-            "version": "8.3.12",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/coder.git",
-                "reference": "719ddb16aec2e5da4ce274bf3bf8450caef564d4"
-            },
-            "require": {
-                "ext-mbstring": "*",
-                "php": ">=7.0.8",
-                "sirbrillig/phpcs-variable-analysis": "^2.10",
-                "squizlabs/php_codesniffer": "^3.5.6",
-                "symfony/yaml": ">=2.0.5"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "^0.12.51",
-                "phpunit/phpunit": "^6.0 || ^7.0"
-            },
-            "type": "phpcodesniffer-standard",
-            "autoload": {
-                "psr-4": {
-                    "Drupal\\": "coder_sniffer/Drupal/",
-                    "DrupalPractice\\": "coder_sniffer/DrupalPractice/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "description": "Coder is a library to review Drupal code.",
-            "homepage": "https://www.drupal.org/project/coder",
-            "keywords": [
-                "code review",
-                "phpcs",
-                "standards"
-            ],
-            "support": {
-                "issues": "https://www.drupal.org/project/issues/coder",
-                "source": "https://www.drupal.org/project/coder"
-            },
-            "time": "2020-12-06T09:34:55+00:00"
         },
         {
             "name": "drupal/core-composer-scaffold",
@@ -16826,59 +18293,6 @@
             "time": "2020-07-07T18:42:57+00:00"
         },
         {
-            "name": "sirbrillig/phpcs-variable-analysis",
-            "version": "v2.11.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sirbrillig/phpcs-variable-analysis.git",
-                "reference": "e76e816236f401458dd8e16beecab905861b5867"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sirbrillig/phpcs-variable-analysis/zipball/e76e816236f401458dd8e16beecab905861b5867",
-                "reference": "e76e816236f401458dd8e16beecab905861b5867",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0",
-                "squizlabs/php_codesniffer": "^3.5"
-            },
-            "require-dev": {
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
-                "limedeck/phpunit-detailed-printer": "^3.1 || ^4.0 || ^5.0",
-                "phpstan/phpstan": "^0.11.8",
-                "phpunit/phpunit": "^5.0 || ^6.5 || ^7.0 || ^8.0",
-                "sirbrillig/phpcs-import-detection": "^1.1"
-            },
-            "type": "phpcodesniffer-standard",
-            "autoload": {
-                "psr-4": {
-                    "VariableAnalysis\\": "VariableAnalysis/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-2-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Sam Graham",
-                    "email": "php-codesniffer-variableanalysis@illusori.co.uk"
-                },
-                {
-                    "name": "Payton Swick",
-                    "email": "payton@foolord.com"
-                }
-            ],
-            "description": "A PHPCS sniff to detect problems with variables.",
-            "support": {
-                "issues": "https://github.com/sirbrillig/phpcs-variable-analysis/issues",
-                "source": "https://github.com/sirbrillig/phpcs-variable-analysis",
-                "wiki": "https://github.com/sirbrillig/phpcs-variable-analysis/wiki"
-            },
-            "time": "2021-03-09T22:32:14+00:00"
-        },
-        {
             "name": "slevomat/coding-standard",
             "version": "5.0.4",
             "source": {
@@ -16921,62 +18335,6 @@
                 "source": "https://github.com/slevomat/coding-standard/tree/master"
             },
             "time": "2019-03-22T19:10:53+00:00"
-        },
-        {
-            "name": "squizlabs/php_codesniffer",
-            "version": "3.5.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "9d583721a7157ee997f235f327de038e7ea6dac4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/9d583721a7157ee997f235f327de038e7ea6dac4",
-                "reference": "9d583721a7157ee997f235f327de038e7ea6dac4",
-                "shasum": ""
-            },
-            "require": {
-                "ext-simplexml": "*",
-                "ext-tokenizer": "*",
-                "ext-xmlwriter": "*",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
-            },
-            "bin": [
-                "bin/phpcs",
-                "bin/phpcbf"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.x-dev"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Greg Sherwood",
-                    "role": "lead"
-                }
-            ],
-            "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
-            "homepage": "https://github.com/squizlabs/PHP_CodeSniffer",
-            "keywords": [
-                "phpcs",
-                "standards"
-            ],
-            "support": {
-                "issues": "https://github.com/squizlabs/PHP_CodeSniffer/issues",
-                "source": "https://github.com/squizlabs/PHP_CodeSniffer",
-                "wiki": "https://github.com/squizlabs/PHP_CodeSniffer/wiki"
-            },
-            "time": "2020-10-23T02:01:07+00:00"
         },
         {
             "name": "symfony/browser-kit",
@@ -17048,82 +18406,6 @@
                 }
             ],
             "time": "2021-02-18T10:52:56+00:00"
-        },
-        {
-            "name": "symfony/config",
-            "version": "v4.4.20",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/config.git",
-                "reference": "98606c6fa1a8f55ff964ccdd704275bf5b9f71b3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/98606c6fa1a8f55ff964ccdd704275bf5b9f71b3",
-                "reference": "98606c6fa1a8f55ff964ccdd704275bf5b9f71b3",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1.3",
-                "symfony/filesystem": "^3.4|^4.0|^5.0",
-                "symfony/polyfill-ctype": "~1.8"
-            },
-            "conflict": {
-                "symfony/finder": "<3.4"
-            },
-            "require-dev": {
-                "symfony/event-dispatcher": "^3.4|^4.0|^5.0",
-                "symfony/finder": "^3.4|^4.0|^5.0",
-                "symfony/messenger": "^4.1|^5.0",
-                "symfony/service-contracts": "^1.1|^2",
-                "symfony/yaml": "^3.4|^4.0|^5.0"
-            },
-            "suggest": {
-                "symfony/yaml": "To use the yaml reference dumper"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Config\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Helps you find, load, combine, autofill and validate configuration values of any kind",
-            "homepage": "https://symfony.com",
-            "support": {
-                "source": "https://github.com/symfony/config/tree/v4.4.20"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2021-02-22T15:36:50+00:00"
         },
         {
             "name": "symfony/css-selector",
