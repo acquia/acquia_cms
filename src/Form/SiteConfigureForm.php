@@ -133,7 +133,24 @@ final class SiteConfigureForm extends ConfigFormBase {
       $form['acquia_google_maps_api']['maps_api_key']['#required'],
       $form['acquia_google_maps_api']['submit']
     );
-
+    $form['optional_ct'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Enable optional content types'),
+      '#description' => $this->t('Choose content types to enable.'),
+      '#tree' => TRUE,
+    ];
+    $form['optional_ct']['acquia_cms_event'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Event'),
+    ];
+    $form['optional_ct']['acquia_cms_person'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Person'),
+    ];
+    $form['optional_ct']['acquia_cms_place'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Place'),
+    ];
     $form['acquia_telemetry'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Send anonymous usage information to Acquia'),
@@ -187,6 +204,21 @@ final class SiteConfigureForm extends ConfigFormBase {
         ->set('organization_key', $org_key)
         ->save(TRUE);
     }
+
+    // Enable the modules if user opt's in optional content types.
+    if ($form_state->getValue(['optional_ct', 'acquia_cms_event'])) {
+      $this->moduleInstaller->install(['acquia_cms_event']);
+      print "acquia_cms_event";
+    }
+    if ($form_state->getValue(['optional_ct', 'acquia_cms_person'])) {
+      $this->moduleInstaller->install(['acquia_cms_person']);
+      print "acquia_cms_event";
+    }
+    if ($form_state->getValue(['optional_ct', 'acquia_cms_place'])) {
+      $this->moduleInstaller->install(['acquia_cms_place']);
+      print "acquia_cms_event";
+    }
+
     // Enable the Acquia Telemetry module if user opt's in.
     $acquia_telemetry_opt_in = $form_state->getValue('acquia_telemetry');
     if ($acquia_telemetry_opt_in) {
