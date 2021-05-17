@@ -1,0 +1,110 @@
+.tour-dashboard {
+  text-align: center;
+}
+.tour-dashboard p {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+.acms-welcome-modal.ui-dialog .ui-dialog-titlebar {
+  padding: 0;
+  color: #fff;
+  background: #fff;
+}
+.acms-welcome-modal .ui-dialog-buttonset {
+  justify-content: center !important;
+  margin: 0 !important;
+  background: #fff;
+}
+.acms-welcome-modal .button--primary {
+  background: #003cc5;
+}
+.setup-manually.button {
+  display: block;
+  margin: 1rem 0.75rem 1rem 0;
+  background-color: #fff;
+}
+.setup-manually.button:not(:focus) {
+  box-shadow: none;
+}
+.setup-manually.button:hover {
+  background: #fff;
+}
+.acms-welcome-modal .form-actions {
+  flex-direction: column;
+  align-items: center;
+}
+.acms-welcome-modal .form-actions .button {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.acms-dashboard-form-wrapper {
+  margin-top: 50px;
+}
+.acms-dashboard-form-wrapper .claro-details__summary::before {
+  right: 0.75rem;
+  left: unset;
+}
+.acms-dashboard-form-wrapper  .dashboard-check-icon {
+  height: 23px;
+  width: 22px;
+  background-image: url(../assets/images/check.svg);
+  display: inline-block;
+  float: right;
+  right: 100px;
+  position: absolute;
+  margin-top: 14px;
+  z-index: 1;
+}
+.acms-dashboard-form-wrapper .details-wrapper {
+  display: flex;
+}
+.dashboard-fields-wrapper {
+  width: 90%;
+  margin-right: 10px;
+}
+.dashboard-buttons-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.dashboard-buttons-wrapper a {
+  padding-left: 10px;
+}
+
+.acms-dashboard-form-wrapper .claro-details__summary[aria-expanded='true'] {
+  border-bottom: 1px solid #808080;
+}
+.acms-dashboard-form-wrapper  .js-form-wrapper {
+  border: 1px solid #808080;
+}
+.acms-dashboard-form-wrapper .button,
+.button--primary {
+  background-color: white;
+  border: 1px solid #808080!important;
+  margin-top: 0;
+  color: #222330;
+}
+.acms-dashboard-form-wrapper .button--primary:hover {
+  background-color: #c2c3ca;
+  color: #222330;
+}
+.section-top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.section-top .help-text {
+  width: 80%;
+}
+.section-top .wizard {
+  position: absolute;
+  right: 2.75rem;
+}
+
+@media screen and (max-width: 767px) {
+  .section-top {
+    flex-direction: column;
+  }
+  .section-top .wizard {
+    position: inherit;
+  }
+}
