@@ -5,7 +5,7 @@ namespace Drupal\acquia_cms_common\Commands;
 use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\CommandError;
 use Consolidation\AnnotatedCommand\CommandResult;
-use Drupal\acquia_cms\Facade\CohesionFacade;
+use Drupal\acquia_cms_site_studio\Facade\CohesionFacade;
 use Drupal\acquia_cms_common\Services\AcmsUtilityService;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\config\StorageReplaceDataWrapper;
