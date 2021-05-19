@@ -6,6 +6,7 @@ dependencies:
     - field.field.media.image.field_categories
     - field.field.media.image.field_tags
     - field.field.media.image.image
+    - image.style.large
     - media.type.image
   enforced:
     module:
@@ -21,9 +22,9 @@ content:
     type: image
     weight: 0
     region: content
-    label: hidden
+    label: visually_hidden
     settings:
-      image_style: ''
+      image_style: banner
       image_link: ''
     third_party_settings: {  }
 hidden:
