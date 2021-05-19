@@ -17,6 +17,13 @@ validate_email () {
 }
 
 printf "${CYAN}### Welcome to Acquia CMS! ###${NC}\n"
+COMPOSER=$(composer -V)
+VERSION="Composer version 1"
+printf "${CYAN}Composer version:${NC} $COMPOSER\n"
+if grep -q "$VERSION" <<< "$COMPOSER"; then
+    printf "${YELLOW}This script requires Composer version 2 or later. Go here for instructions to install: https://getcomposer.org${NC}\n";
+    exit 0;
+fi
 printf "Please enter the username for your administrator account [${GREEN}admin${NC}]: "
 DEFAULT_NAME="admin"
 read ADMIN_NAME
