@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9fdb024c990464328e72f4f97fe17faa",
+    "content-hash": "cfab63b5657fae3dba0eb3542ee1a6db",
     "packages": [
         {
             "name": "acquia/acsf-contenthub-console",
@@ -3276,6 +3276,130 @@
             }
         },
         {
+            "name": "drupal/config_filter",
+            "version": "1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/config_filter.git",
+                "reference": "8.x-1.8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/config_filter-8.x-1.8.zip",
+                "reference": "8.x-1.8",
+                "shasum": "5def5f97e79d6f5af6bb7007f012443475c90bfe"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "suggest": {
+                "drupal/config_split": "Split site configuration for different environments."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.8",
+                    "datestamp": "1603870062",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Fabian Bircher",
+                    "homepage": "https://www.drupal.org/u/bircher",
+                    "email": "opensource@fabianbircher.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Nuvole Web",
+                    "homepage": "http://nuvole.org",
+                    "email": "info@nuvole.org",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "pescetti",
+                    "homepage": "https://www.drupal.org/user/436244"
+                }
+            ],
+            "description": "Config Filter allows other modules to interact with a ConfigStorage through filter plugins.",
+            "homepage": "https://www.drupal.org/project/config_filter",
+            "keywords": [
+                "Drupal",
+                "configuration",
+                "configuration management"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/config_filter",
+                "issues": "https://www.drupal.org/project/issues/config_filter",
+                "slack": "https://drupal.slack.com/archives/C45342CDD"
+            }
+        },
+        {
+            "name": "drupal/config_ignore",
+            "version": "2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/config_ignore.git",
+                "reference": "8.x-2.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/config_ignore-8.x-2.3.zip",
+                "reference": "8.x-2.3",
+                "shasum": "2e1f07a455275fb6637909921a8915646601fc00"
+            },
+            "require": {
+                "drupal/config_filter": "^1 || ^2",
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.3",
+                    "datestamp": "1608306489",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Tommy Lynge Jørgensen",
+                    "homepage": "https://www.drupal.org/u/tlyngej",
+                    "email": "tlyngej@gmail.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Fabian Bircher",
+                    "homepage": "https://www.drupal.org/u/bircher",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "tlyngej",
+                    "homepage": "https://www.drupal.org/user/413139"
+                }
+            ],
+            "description": "Ignore certain configuration during import.",
+            "homepage": "http://drupal.org/project/config_ignore",
+            "support": {
+                "source": "https://git.drupalcode.org/project/config_ignore",
+                "issues": "http://drupal.org/project/config_ignore",
+                "irc": "irc://irc.freenode.org/drupal-contribute"
+            }
+        },
+        {
             "name": "drupal/config_rewrite",
             "version": "1.3.0",
             "source": {
@@ -3324,6 +3448,82 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/config_rewrite",
                 "issues": "https://www.drupal.org/project/issues/config_rewrite"
+            }
+        },
+        {
+            "name": "drupal/config_split",
+            "version": "1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/config_split.git",
+                "reference": "8.x-1.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/config_split-8.x-1.7.zip",
+                "reference": "8.x-1.7",
+                "shasum": "3cd524ebc0b52db31a6bef2c55693f4e62890b4f"
+            },
+            "require": {
+                "drupal/config_filter": "^1",
+                "drupal/core": "^8.8 || ^9"
+            },
+            "conflict": {
+                "drupal/console": "<1.3.2"
+            },
+            "suggest": {
+                "drupal/chosen": "Chosen uses the Chosen jQuery plugin to make the <select> elements more user-friendly.",
+                "drupal/select2_all": "Applies the Select2 library to all select fields on the site similar to the Chosen module."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.7",
+                    "datestamp": "1603782947",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9 || ^10"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Fabian Bircher",
+                    "homepage": "https://www.drupal.org/u/bircher",
+                    "email": "opensource@fabianbircher.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Nuvole Web",
+                    "homepage": "http://nuvole.org",
+                    "email": "info@nuvole.org",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "pescetti",
+                    "homepage": "https://www.drupal.org/user/436244"
+                }
+            ],
+            "description": "Configuration filter for importing and exporting extra config",
+            "homepage": "https://www.drupal.org/project/config_split",
+            "keywords": [
+                "Drupal",
+                "configuration",
+                "configuration management"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/config_split",
+                "issues": "https://www.drupal.org/project/issues/config_split",
+                "slack": "https://drupal.slack.com/archives/C45342CDD"
             }
         },
         {
