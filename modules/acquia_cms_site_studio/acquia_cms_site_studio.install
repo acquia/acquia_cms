@@ -1,0 +1,231 @@
+<?php
+
+/**
+ * @file
+ * Contains install-time code for the Acquia CMS profile.
+ */
+
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
+use Drupal\acquia_cms_site_studio\Facade\CohesionFacade;
+use Drupal\cohesion\Controller\AdministrationController;
+use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
+use Drupal\Core\Ajax\CloseDialogCommand;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\media_library\MediaLibraryState;
+use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * Imports all Cohesion elements.
+ *
+ * @return array
+ *   The batch job definition.
+ */
+function acquia_cms_site_studio_initialize_cohesion(): array {
+  // Build and run the batch job for the initial import of Cohesion elements and
+  // assets.
+  // @todo When Cohesion provides a service to generate this batch job, use
+  // that instead of calling an internal method of an internal controller, since
+  // this may break at any time due to internal refactoring done by Cohesion.
+  $batch = AdministrationController::batchAction(TRUE);
+  if (isset($batch['error'])) {
+    Drupal::messenger()->addError($batch['error']);
+    return [];
+  }
+  return $batch;
+}
+
+/**
+ * Send heartbeat event after site installation.
+ */
+function acquia_cms_site_studio_send_heartbeat_event() {
+  Drupal::configFactory()
+    ->getEditable('acquia_telemetry.settings')
+    ->set('api_key', 'e896d8a97a24013cee91e37a35bf7b0b')
+    ->save();
+  \Drupal::service('acquia.telemetry')->sendTelemetry('acquia_cms_installed', [
+    'Application UUID' => Environment::getAhApplicationUuid(),
+    'Site Environment' => Environment::getAhEnv(),
+  ]);
+}
+
+/**
+ * Imports the Cohesion UI kit that ships with this profile.
+ *
+ * @return array
+ *   The batch job definition.
+ */
+function acquia_cms_site_studio_install_ui_kit() {
+  // During testing, we don't import the UI kit, because it takes forever.
+  // Instead, we swap in a pre-built directory of Cohesion templates and assets.
+  if (getenv('COHESION_ARTIFACT')) {
+    return [];
+  }
+  /** @var \Drupal\acquia_cms_site_studio\Facade\CohesionFacade $facade */
+  $facade = Drupal::classResolver(CohesionFacade::class);
+
+  $operations = $facade->getAllOperations(TRUE);
+  $batch = ['operations' => $operations];
+  // Set batch along with drush backend process if site is being
+  // installed via Drush, so that we can show log on the screen during
+  // site studio package import/validate.
+  if (PHP_SAPI == 'cli') {
+    batch_set($batch);
+    drush_backend_batch_process();
+  }
+  else {
+    return $batch;
+  }
+}
+
+/**
+ * Rebuilds the site studio from installation.
+ *
+ * @return array
+ *   Batch for rebuild operation.
+ */
+function acquia_cms_site_studio_rebuild_site_studio() {
+  // Get the batch array filled with operations that should be performed during
+  // rebuild. Also, we explicitly do not clear the cache during site install.
+  $batch = WebsiteSettingsController::batch(TRUE);
+  if (isset($batch['error'])) {
+    Drupal::messenger()->addError($batch['error']);
+  }
+  return $batch;
+}
+
+/**
+ * Installs additional required modules, depending on the environment.
+ */
+function acquia_cms_site_studio_install_additional_modules() {
+  // Call ToggleModules Service.
+  \Drupal::service('acquia_cms_common.toggle_modules')->ToggleModules();
+  // Save configuration for imagemagick.
+  if (Environment::isAhEnv() && !Environment::isAhIdeEnv()) {
+    $moduleHandler = \Drupal::service('module_handler');
+    if ($moduleHandler->moduleExists('imagemagick')) {
+      \Drupal::configFactory()
+        ->getEditable('imagemagick.settings')
+        ->set('path_to_binaries', '/usr/bin/')
+        ->save();
+      \Drupal::configFactory()
+        ->getEditable('system.image')
+        ->set('toolkit', 'imagemagick')
+        ->save();
+    }
+  }
+}
+
+/**
+ * Imports all Cohesion elements immediately in a batch process.
+ */
+function acquia_cms_site_studio_cohesion_init() {
+  /** @var \Drupal\acquia_cms_site_studio\Facade\CohesionFacade $facade */
+  $facade = Drupal::classResolver(CohesionFacade::class);
+  $operations = $facade->getAllOperations(TRUE);
+  // Instead of returning the batch array, we are just executing the batch here.
+  $batch = acquia_cms_site_studio_initialize_cohesion();
+  $operations = array_merge($batch['operations'], $operations);
+  $batch['operations'] = $operations;
+  batch_set($batch);
+}
+
+/**
+ * Rebuilds the cohesion components.
+ */
+function acquia_cms_site_studio_rebuild_cohesion() {
+  // Get the batch array filled with operations that should be performed during
+  // rebuild.
+  batch_set(acquia_cms_site_studio_rebuild_site_studio());
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function acquia_cms_site_studio_form_alter(array &$form, FormStateInterface $form_state, $form_id) : void {
+  // Instead of directly adding a patch in core, we are modifying the ajax
+  // callback.
+  if ($form_id === 'views_form_media_library_widget_image') {
+    $request = Drupal::request();
+    $state = MediaLibraryState::fromRequest($request);
+    if ($state->getOpenerId() === 'media_library.opener.cohesion') {
+      $form['actions']['submit']['#ajax']['callback'] = 'alter_update_widget';
+    }
+  }
+  // Trigger site studio config import and rebuild whenever user
+  // try to save site studio account settings or the site studio core
+  // form from tour dashboard page.
+  $allowed_form_ids = [
+    'cohesion_account_settings_form',
+    'acquia_cms_site_studio_core_form',
+    'acquia_cms_tour_installation_wizard',
+  ];
+  if (in_array($form_id, $allowed_form_ids)) {
+    $config = Drupal::config('cohesion.settings');
+    $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
+    // We should add submit handler, only if cohesion keys are not already set.
+    if (!$cohesion_configured) {
+      $form['#submit'][] = 'acquia_cms_site_studio_cohesion_init';
+      // Here we are adding a separate submit handler to rebuild the cohesion
+      // styles. Now the reason why we are doing this is because the rebuild is
+      // expecting that all the entities of cohesion are in place but as the
+      // cohesion is getting build for the first time and
+      // acquia_cms_site_studio_initialize_cohesion imports the
+      // entities. So we cannot execute both the batch process in a single
+      // function, Hence to achieve the synchronous behaviour we have separated
+      // cohesion configuration import and cohesion style rebuild functionality
+      // into separate submit handlers.
+      // @see \Drupal\cohesion_website_settings\Controller\WebsiteSettingsController::batch
+      $form['#submit'][] = 'acquia_cms_site_studio_rebuild_cohesion';
+    }
+  }
+}
+
+/**
+ * Callback for the media library image widget.
+ */
+function alter_update_widget(array &$form, FormStateInterface $form_state, Request $request) {
+  // As cohesion is using angular for the media library popup, So the modal id
+  // mismatch is causing the issue of no media selection. To resolve this we are
+  // passing the selector in the CloseDialogCommand.
+  // @see \Drupal\media_library\Plugin\views\field\MediaLibrarySelectForm::updateWidget().
+  $field_id = $form_state->getTriggeringElement()['#field_id'];
+  $selected_ids = $form_state->getValue($field_id);
+  $selected_ids = $selected_ids ? array_filter(explode(',', $selected_ids)) : [];
+
+  // Allow the opener service to handle the selection.
+  $state = MediaLibraryState::fromRequest($request);
+  return Drupal::service('media_library.opener_resolver')
+    ->get($state)
+    ->getSelectionResponse($state, $selected_ids)
+    ->addCommand(new CloseDialogCommand('#modal-body'));
+}
+
+/**
+ * Set the path to the logo file based on install directory.
+ */
+function acquia_cms_site_studio_set_logo() {
+  $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+  Drupal::configFactory()
+    ->getEditable('system.theme.global')
+    ->set('logo', [
+      'path' => $acquia_cms_path . '/acquia_cms.png',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->save(TRUE);
+}
+
+/**
+ * Set the path to the favicon file based on install directory.
+ */
+function acquia_cms_site_studio_set_favicon() {
+  $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+  Drupal::configFactory()
+    ->getEditable('system.theme.global')
+    ->set('favicon', [
+      'path' => $acquia_cms_path . '/acquia_cms.png',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->save(TRUE);
+}
