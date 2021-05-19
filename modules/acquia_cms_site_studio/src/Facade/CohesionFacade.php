@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acquia_cms\Facade;
+namespace Drupal\acquia_cms_site_studio\Facade;
 
 use Drupal\cohesion_sync\PackagerManager;
 use Drupal\Component\Serialization\Yaml;
