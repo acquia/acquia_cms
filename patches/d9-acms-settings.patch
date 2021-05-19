@@ -27,7 +27,10 @@ if (AcquiaDrupalEnvironmentDetector::isAhEnv()) {
       ],
     ];
     $databases = array_merge_recursive($databases, $default_settings);
-    acquia_hosting_db_choose_active();
+    // Only call this function on the cloud, not on a local environment.
+    if (function_exists('acquia_hosting_db_choose_active')) {
+      acquia_hosting_db_choose_active();
+    }
   }
 }
 
