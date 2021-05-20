@@ -78,6 +78,8 @@ final class WorkflowFacade implements ContainerInjectionInterface {
    *
    * @param \Drupal\node\NodeTypeInterface $node_type
    *   The new node type.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function addNodeType(NodeTypeInterface $node_type) {
     // We don't want to do any secondary config writes during a config sync,
