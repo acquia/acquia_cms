@@ -51,6 +51,13 @@ final class SearchFacade implements ContainerInjectionInterface {
   private $fieldsHelper;
 
   /**
+   * The field config storage handler.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  private $fieldConfigStorage;
+
+  /**
    * SearchFacade constructor.
    *
    * @param \Drupal\Core\Config\ConfigInstallerInterface $config_installer
@@ -59,14 +66,17 @@ final class SearchFacade implements ContainerInjectionInterface {
    *   The search index entity storage handler.
    * @param \Drupal\Core\Entity\EntityStorageInterface $view_storage
    *   The view entity storage handler.
+   * @param \Drupal\Core\Entity\EntityStorageInterface $field_config_storage
+   *   The view filed config storage handler.
    * @param \Drupal\search_api\Utility\FieldsHelperInterface $fields_helper
    *   The Search API fields helper service.
    */
-  public function __construct(ConfigInstallerInterface $config_installer, EntityStorageInterface $index_storage, EntityStorageInterface $view_storage, FieldsHelperInterface $fields_helper) {
+  public function __construct(ConfigInstallerInterface $config_installer, EntityStorageInterface $index_storage, EntityStorageInterface $view_storage, EntityStorageInterface $field_config_storage, FieldsHelperInterface $fields_helper) {
     $this->configInstaller = $config_installer;
     $this->indexStorage = $index_storage;
     $this->viewStorage = $view_storage;
     $this->fieldsHelper = $fields_helper;
+    $this->fieldConfigStorage = $field_config_storage;
   }
 
   /**
@@ -79,6 +89,7 @@ final class SearchFacade implements ContainerInjectionInterface {
       $container->get('config.installer'),
       $entity_type_manager->getStorage('search_api_index'),
       $entity_type_manager->getStorage('view'),
+      $entity_type_manager->getStorage('field_config'),
       $container->get('search_api.fields_helper')
     );
   }
@@ -115,6 +126,13 @@ final class SearchFacade implements ContainerInjectionInterface {
     }
     $this->indexStorage->save($index);
 
+    // @todo re-visit to see if below code can be improve further
+    // currently its getting called for each node types.
+    // Retroactively enable indexing for any fields that existed before this
+    // module was installed.
+    $fields = $this->fieldConfigStorage->loadMultiple();
+    array_walk($fields, 'acquia_cms_search_field_config_insert');
+
     // Update the view mode used for this node type in the Search view.
     /** @var \Drupal\views\ViewEntityInterface $view */
     $view = $this->viewStorage->load('search');
@@ -122,10 +140,15 @@ final class SearchFacade implements ContainerInjectionInterface {
       return;
     }
 
+    // Update node view mode with teaser for newly created content types
+    // where display options of row type usage search_api.
     $display = &$view->getDisplay('default');
     if ($display['display_options']['row']['type'] == 'search_api') {
-      $display['display_options']['row']['options']['view_modes']['entity:node'][$node_type_id] = 'teaser';
-      $this->viewStorage->save($view);
+      $node_type_view_mode = $display['display_options']['row']['options']['view_modes']['entity:node'][$node_type_id];
+      if ($node_type_view_mode !== 'teaser') {
+        $display['display_options']['row']['options']['view_modes']['entity:node'][$node_type_id] = 'teaser';
+        $this->viewStorage->save($view);
+      }
     }
   }
 
