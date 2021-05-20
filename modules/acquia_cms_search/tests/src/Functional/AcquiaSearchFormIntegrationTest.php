@@ -52,40 +52,37 @@ class AcquiaSearchFormIntegrationTest extends BrowserTestBase {
    * Tests administrative integration with Acquia Search Solr.
    */
   public function testAcquiaSearchFormIntegration() {
-    $this->assertSame('database', Index::load('content')->getServerId());
-
-    $index = Index::load('acquia_search_index');
-    $this->assertTrue($index->status());
-    $this->assertSame('acquia_search_server', $index->getServerId());
-
-    $this->assertTrue(View::load('acquia_search')->status());
-
+    $assert_session = $this->assertSession();
     $account = $this->drupalCreateUser([
       'administer site configuration',
       'administer search_api',
       'access acquia cms tour dashboard',
     ]);
     $this->drupalLogin($account);
+    // Visit the tour page.
     $this->drupalGet('/admin/tour/dashboard');
-
-    $page = $this->getSession()->getPage();
-    $page->fillField('Acquia Subscription identifier', 'ABCD-12345');
-    $page->fillField('Acquia Connector key', $this->randomString());
-    $page->fillField('Acquia Application UUID', $this->container->get('uuid')->generate());
-    $page->pressButton('edit-submit--3');
-
-    $assert_session = $this->assertSession();
     $assert_session->statusCodeEquals(200);
+
+    $container = $assert_session->elementExists('css', '.acquia-cms-search-form');
+    // Assert that save button is present on form.
+    $assert_session->buttonExists('Save');
+    // Assert that the expected fields show up.
+    $assert_session->fieldExists('Acquia Subscription identifier');
+    $assert_session->fieldExists('Acquia Connector key');
+    $assert_session->fieldExists('Acquia Application UUID');
+
+    // Save Fields.
+    $container->fillField('Acquia Subscription identifier', 'ABCD-12345');
+    $container->fillField('Acquia Connector key', $this->randomString());
+    $container->fillField('Acquia Application UUID', $this->container->get('uuid')->generate());
+    $container->pressButton('Save');
+
     $assert_session->pageTextContains('The configuration options have been saved.');
 
-    // Our index should be using the Solr server, whereas the one that ships
-    // with Acquia Search Solr should be disabled, along with any views that are
-    // using it.
-    $this->assertSame('acquia_search_server', Index::load('content')->getServerId());
-    $index = Index::load('acquia_search_index');
-    $this->assertFalse($index->status());
-    $this->assertNull($index->getServerId());
-    $this->assertFalse(View::load('acquia_search')->status());
+    // Our index should be using the database server.
+    $this->assertSame('database', Index::load('content')->getServerId());
+    // The search view of acquia search should be enabled.
+    $this->assertTrue(View::load('search')->status());
   }
 
 }
