@@ -75,7 +75,7 @@ class AcmsModulesUninstallValidator implements ModuleUninstallValidatorInterface
    */
   private function hasMediaAndContent() {
     $node_types = ['article', 'page', 'event', 'person', 'place'];
-    $media_types = ['document', 'image', 'vide'];
+    $media_types = ['document', 'image', 'video'];
     foreach ($node_types as $type) {
       $has_reason = $this->hasContent($type);
       if ($has_reason) {
