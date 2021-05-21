@@ -37,7 +37,7 @@ function acquia_cms_common_workbench_email_template_insert(TemplateInterface $te
  */
 function acquia_cms_common_preprocess_html(&$variables) {
   $path = Drupal::service('path.current')->getPath();
-  if (Imce::access() && $path == '/imce') {
+  if (\Drupal::moduleHandler()->moduleExists('imce') && Imce::access() && $path == '/imce') {
     $variables['attributes']['class'][] = 'acquia-cms';
     $variables['#attached']['library'][] = 'acquia_cms_common/imce';
   }
