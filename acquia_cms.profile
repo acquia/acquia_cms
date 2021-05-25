@@ -168,7 +168,8 @@ function acquia_cms_install_ui_kit(array $install_state) {
   /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
   $facade = Drupal::classResolver(CohesionFacade::class);
 
-  $operations = ($install_state['interactive']) ? $facade->getAllOperations(TRUE) : $facade->getAllOperations();
+  // Interactive state means the site install is happening in the browser.
+  $operations = ($install_state['interactive']) ? $facade->getAllOperations() : $facade->getAllOperations(TRUE);
   $batch = ['operations' => $operations];
 
   // Set batch along with drush backend process if site is being
