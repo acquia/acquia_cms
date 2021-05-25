@@ -41,7 +41,7 @@ printenv | grep ACMS_ | sort
 cd $ORCA_FIXTURE_DIR
 
 # Rebuild cohesion after install.
-if [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]]; then
+if [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]] || [[ "$ORCA_JOB" == "ISOLATED_TEST_ON_NEXT_MINOR" ]]; then
   drush cohesion:rebuild -y
 fi
 
