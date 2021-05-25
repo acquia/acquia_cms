@@ -25,9 +25,15 @@ elif [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]]; th
 elif [[ "$ORCA_JOB" == "ISOLATED_TEST_ON_NEXT_MINOR" ]]; then
   orca debug:packages NEXT_MINOR
   orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=NEXT_MINOR --dev --profile=acquia_cms --no-sqlite
+elif [[ "$ORCA_JOB" == "INTEGRATED_TEST_ON_NEXT_MINOR" ]]; then
+  orca debug:packages NEXT_MINOR
+  orca fixture:init --force --sut=acquia/acquia_cms --core=NEXT_MINOR --profile=acquia_cms --no-sqlite
 elif [[ "$ORCA_JOB" == "ISOLATED_TEST_ON_NEXT_MINOR_DEV" ]]; then
   orca debug:packages NEXT_MINOR_DEV
   orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=NEXT_MINOR_DEV --dev --profile=acquia_cms --no-sqlite
+elif [[ "$ORCA_JOB" == "INTEGRATED_TEST_ON_NEXT_MINOR_DEV" ]]; then
+  orca debug:packages NEXT_MINOR_DEV
+  orca fixture:init --force --sut=acquia/acquia_cms --core=NEXT_MINOR_DEV --profile=acquia_cms --no-sqlite
 else
 # Run ORCA's standard installation script.
   ../../../orca/bin/travis/install.sh
