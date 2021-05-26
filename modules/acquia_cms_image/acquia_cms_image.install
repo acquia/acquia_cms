@@ -5,6 +5,8 @@
  * Install, update and uninstall functions for the acquia_cms_image module.
  */
 
+use Drupal\Core\Installer\InstallerKernel;
+
 /**
  * Implements hook_install().
  */
@@ -21,28 +23,15 @@ function acquia_cms_image_install() {
 }
 
 /**
- * Implements hook_preinstall().
- */
-function acquia_cms_image_module_preinstall($module) {
-  // When running site installation (i.e., install.php or drush site-install),
-  // optional config is treated a little bit differently. In such a case,
-  // all extensions are installed as normal, but their optional config is
-  // ignored initially. Then, at the end of the installation process1, once
-  // all extensions are installed (and their default config has been imported),
-  // all the optional config is imported in a single batch.
-  // @see https://dev.acquia.com/blog/optional-config-weirdness-in-drupal-8/09/11/2017/18866
-  if ($module == 'acquia_cms_image') {
-    _acquia_cms_common_rewrite_configuration('media.type.image', 'acquia_cms_image');
-  }
-}
-
-/**
  * Implements hook_module_implements_alter().
  */
 function acquia_cms_image_module_implements_alter(array &$implementations, string $hook) : void {
   if ($hook === 'modules_installed') {
     // Unset default_content import during site install,
     // will do it later post install to avoid any error.
-    unset($implementations['default_content']);
+    // @see acquia_cms_import_default_content install task.
+    if (InstallerKernel::installationAttempted()) {
+      unset($implementations['default_content']);
+    }
   }
 }
