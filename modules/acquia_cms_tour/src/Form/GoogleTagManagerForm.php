@@ -2,66 +2,20 @@
 
 namespace Drupal\acquia_cms_tour\Form;
 
-use Drupal\Core\Extension\InfoParserInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\Core\Utility\LinkGeneratorInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a form to configure Google Tag Manager module.
  */
-final class GoogleTagManagerForm extends ConfigFormBase {
+final class GoogleTagManagerForm extends AcquiaCMSDashboardBase {
 
   /**
-   * The module handler.
+   * Provides module name.
    *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   * @var string
    */
-  protected $moduleHandler;
-
-  /**
-   * The link generator.
-   *
-   * @var \Drupal\Core\Utility\LinkGeneratorInterface
-   */
-  protected $linkGenerator;
-
-  /**
-   * The info file parser.
-   *
-   * @var \Drupal\Core\Extension\InfoParserInterface
-   */
-  protected $infoParser;
-
-  /**
-   * Constructs a new GoogleTagManagerForm.
-   *
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler service.
-   * @param \Drupal\Core\Utility\LinkGeneratorInterface $link_generator
-   *   The link generator.
-   * @param \Drupal\Core\Extension\InfoParserInterface $info_parser
-   *   The info file parser.
-   */
-  public function __construct(ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser) {
-    $this->module_handler = $module_handler;
-    $this->linkGenerator = $link_generator;
-    $this->infoParser = $info_parser;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('module_handler'),
-      $container->get('link_generator'),
-      $container->get('info_parser'),
-    );
-  }
+  protected $module = 'google_tag';
 
   /**
    * {@inheritdoc}
@@ -84,36 +38,52 @@ final class GoogleTagManagerForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
-    $module = 'google_tag';
-    if ($this->module_handler->moduleExists($module)) {
+    $module = $this->module;
+    if ($this->isModuleEnabled()) {
+      $configured = $this->getConfigurationState();
+      if ($configured) {
+        $form['check_icon'] = [
+          '#prefix' => '<span class= "dashboard-check-icon">',
+          '#suffix' => "</span>",
+        ];
+      }
       $module_path = $this->module_handler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $form['google_tag'] = [
-        '#type' => 'fieldset',
+      $form[$module] = [
+        '#type' => 'details',
         '#title' => $module_info['name'],
-        '#description' => $module_info['description'],
-        '#open' => TRUE,
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
       ];
-      $form['google_tag']['snippet_parent_uri'] = [
+      $form[$module]['snippet_parent_uri'] = [
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Snippet parent URI'),
         '#attributes' => ['placeholder' => $this->t('public:/')],
         '#default_value' => $this->config('google_tag.settings')->get('uri'),
+        '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
+        '#suffix' => "</div>",
       ];
-      $form['google_tag']['actions']['submit'] = [
+      $form[$module]['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => 'Save',
-        '#button_type' => 'primary',
+        '#prefix' => '<div class= "dashboard-buttons-wrapper">',
       ];
-      $form['google_tag']['actions']['advanced'] = [
-        '#markup' => $this->linkGenerator->generate(
-          'Advanced',
-          Url::fromRoute($module_info['configure'])
-        ),
-        '#prefix' => '<span class= "button advanced-button">',
-        '#suffix' => "</span>",
+      $form[$module]['actions']['ignore'] = [
+        '#type' => 'submit',
+        '#value' => 'Ignore',
+        '#limit_validation_errors' => [],
+        '#submit' => ['::ignoreConfig'],
       ];
+      if (isset($module_info['configure'])) {
+        $form[$module]['actions']['advanced'] = [
+          '#markup' => $this->linkGenerator->generate(
+            'Advanced',
+            Url::fromRoute($module_info['configure'])
+          ),
+          '#suffix' => "</div>",
+        ];
+      }
     }
     return $form;
   }
@@ -124,7 +94,23 @@ final class GoogleTagManagerForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $snippet_parent_uri = $form_state->getValue(['snippet_parent_uri']);
     $this->config('google_tag.settings')->set('uri', $snippet_parent_uri)->save();
+    $this->setConfigurationState();
     $this->messenger()->addStatus('The configuration options have been saved.');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function ignoreConfig(array &$form, FormStateInterface $form_state) {
+    $this->setConfigurationState();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkMinConfiguration() {
+    $uri = $this->config('google_tag.settings')->get('uri');
+    return $uri ? TRUE : FALSE;
   }
 
 }
