@@ -69,6 +69,9 @@ function acquia_cms_install_tasks(): array {
   // Set default favicon for ACMS.
   $tasks['acquia_cms_set_favicon'] = [];
 
+  // Install default content for ACMS.
+  $tasks['acquia_cms_import_default_content'] = [];
+
   $config = Drupal::config('cohesion.settings');
   $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
 
@@ -416,4 +419,13 @@ function acquia_cms_set_favicon() {
       'use_default' => FALSE,
     ])
     ->save(TRUE);
+}
+
+/**
+ * Install default content as part of install task.
+ */
+function acquia_cms_import_default_content() {
+  if (\Drupal::moduleHandler()->moduleExists('acquia_cms_image')) {
+    \Drupal::service('default_content.importer')->importContent('acquia_cms_image');
+  }
 }
