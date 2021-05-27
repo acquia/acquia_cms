@@ -2,16 +2,14 @@
 
 namespace Drupal\acquia_cms_tour\Form;
 
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Extension\ModuleInstallerInterface;
-use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a form to toggle the Acquia Telemetry module.
  */
-final class AcquiaTelemetryForm extends FormBase {
+final class AcquiaTelemetryForm extends AcquiaCMSDashboardBase {
 
   /**
    * The module installer.
@@ -21,33 +19,22 @@ final class AcquiaTelemetryForm extends FormBase {
   private $moduleInstaller;
 
   /**
-   * The module handler.
+   * Provides module name.
    *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   * @var string
    */
-  private $moduleHandler;
-
-  /**
-   * AcquiaTelemetryForm constructor.
-   *
-   * @param \Drupal\Core\Extension\ModuleInstallerInterface $module_installer
-   *   The module installer.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
-   */
-  public function __construct(ModuleInstallerInterface $module_installer, ModuleHandlerInterface $module_handler) {
-    $this->moduleInstaller = $module_installer;
-    $this->moduleHandler = $module_handler;
-  }
+  protected $module = 'acquia_telemetry';
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('module_installer'),
-      $container->get('module_handler')
-    );
+    $instance = parent::create($container);
+
+    $module_installer = $container->get('module_installer');
+    $instance->moduleInstaller = $module_installer;
+
+    return $instance;
   }
 
   /**
@@ -60,25 +47,60 @@ final class AcquiaTelemetryForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
-    // Checkbox for Acquia Telemetry.
-    $form['acquia_telemetry'] = [
-      '#type' => 'fieldset',
-      '#open' => TRUE,
-      '#title' => $this->t('Acquia Telemetry'),
+  protected function getEditableConfigNames() {
+    return [
+      'acquia_telemetry.settings',
     ];
-    $form['acquia_telemetry']['opt_in'] = [
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state) {
+    $form['#tree'] = FALSE;
+    $module = $this->module;
+    $module_path = $this->module_handler->getModule($module)->getPathname();
+    $module_info = $this->infoParser->parse($module_path);
+    if ($this->getConfigurationState()) {
+      $form['check_icon'] = [
+        '#prefix' => '<span class= "dashboard-check-icon">',
+        '#suffix' => "</span>",
+      ];
+    }
+    $form[$module] = [
+      '#type' => 'details',
+      '#title' => $module_info['name'],
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+    ];
+    $form[$module]['opt_in'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Send anonymous data about Acquia product usage'),
-      '#default_value' => $this->moduleHandler->moduleExists('acquia_telemetry'),
+      '#default_value' => $this->isModuleEnabled() ? 1 : 0,
       '#description' => $this->t('This module intends to collect anonymous data about Acquia product usage. No private information will be gathered. Data will not be used for marketing or sold to any third party. This is an opt-in module and can be disabled at any time by uninstalling the acquia_telemetry module by your site administrator.'),
+      '#prefix' => '<div class= "dashboard-fields-wrapper">',
+      '#suffix' => "</div>",
     ];
-    $form['acquia_telemetry']['actions']['submit'] = [
+    $form[$module]['actions']['submit'] = [
       '#type' => 'submit',
       '#value' => 'Save',
-      '#button_type' => 'primary',
+      '#prefix' => '<div class= "dashboard-buttons-wrapper">',
     ];
-
+    $form[$module]['actions']['ignore'] = [
+      '#type' => 'submit',
+      '#value' => 'Ignore',
+      '#limit_validation_errors' => [],
+      '#submit' => ['::ignoreConfig'],
+    ];
+    if (isset($module_info['configure'])) {
+      $form[$module]['actions']['advanced'] = [
+        '#markup' => $this->linkGenerator->generate(
+          'Advanced',
+          Url::fromRoute($module_info['configure'])
+        ),
+        '#suffix' => "</div>",
+      ];
+    }
     return $form;
   }
 
@@ -91,12 +113,28 @@ final class AcquiaTelemetryForm extends FormBase {
 
     if ($acquia_telemetry_opt_in) {
       $this->moduleInstaller->install(['acquia_telemetry']);
+      $this->setConfigurationState();
       $this->messenger()->addStatus('You have opted into Acquia Telemetry. Thank you for helping improve Acquia products.');
     }
     else {
       $this->moduleInstaller->uninstall(['acquia_telemetry']);
+      $this->setConfigurationState(FALSE);
       $this->messenger()->addStatus('You have successfully opted out of Acquia Telemetry. Anonymous usage information will no longer be collected.');
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function ignoreConfig(array &$form, FormStateInterface $form_state) {
+    $this->setConfigurationState();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkMinConfiguration() {
+    return $this->isModuleEnabled();
   }
 
 }

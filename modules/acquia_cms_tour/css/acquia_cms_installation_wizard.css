@@ -1,0 +1,164 @@
+.acms-installation-wizard {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.acms-installation-wizard .ui-dialog-titlebar .ui-dialog-titlebar-close {
+  top: 24%;
+}
+.acms-installation-wizard .ui-dialog-titlebar .ui-dialog-title {
+  display: inline-block;
+  margin-top: 61px;
+  font-size: 32px;
+  line-height: 1.3;
+  color: #232429;
+}
+.acms-installation-wizard .ui-widget-header.ui-dialog-titlebar {
+  height: 125px;
+  background-color: #fff;
+  padding-left: 48px;
+}
+.acms-installation-wizard .messages-list {
+  margin: 0;
+}
+.acms-installation-wizard #drupal-modal {
+  padding-left: 0;
+  padding-bottom: 0;
+}
+.acms-installation-wizard .acquia-cms-tour-installation-wizard {
+  display: flex;
+}
+.acms-installation-wizard .acquia-cms-tour-installation-wizard .form-checkbox {
+  background-color: #003cc5;
+  border-color: #003cc5;
+}
+.acms-installation-wizard .acquia-cms-tour-installation-wizard .tour-sidebar {
+  flex: 1 1 34%;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.acms-installation-wizard .acquia-cms-tour-installation-wizard .tour-sidebar ol {
+  margin-left: 0;
+  padding-left: 0;
+  list-style-type: none;
+  counter-reset: qa;
+}
+.acms-installation-wizard .acquia-cms-tour-installation-wizard .tour-sidebar .item {
+  padding: 16px 0;
+  align-items: center;
+  display: flex;
+  margin-left: 0;
+  padding-left: 48px;
+  margin-bottom: 0;
+  counter-increment: qa;
+  color: #232429;
+}
+.acms-installation-wizard .acquia-cms-tour-installation-wizard .tour-sidebar li:before {
+  content: counter(qa);
+  padding-right: 10px;
+}
+.acms-installation-wizard .acquia-cms-tour-installation-wizard .tour-sidebar .step-complete {
+  color: #919297;
+}
+.acms-installation-wizard .acquia-cms-tour-installation-wizard .tour-sidebar .step-complete::after {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: url(../assets/images/check.svg);
+  margin-left: 10px;
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+}
+.acms-installation-wizard .acquia-cms-tour-installation-wizard .tour-sidebar .current-step {
+  background-color: #e6ecf8;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+  color: #003cc5;
+}
+.acms-installation-wizard .acquia-cms-tour-installation-wizard .fieldset.form-wrapper {
+  flex: 1 1 65%;
+  margin-top: 0;
+  border: 0;
+  box-shadow: none;
+}
+.acms-installation-wizard .acquia-cms-tour-installation-wizard .fieldset .fieldset__wrapper {
+  margin-top: 0;
+  margin-left: 48px;
+  margin-right: 26px;
+}
+.acms-installation-wizard .acquia-cms-tour-installation-wizard .fieldset .fieldset__wrapper .dashboard-fields-wrapper {
+  font-size: 14px;
+}
+.acms-installation-wizard .acquia-cms-tour-installation-wizard .title-wrapper .step-title {
+  font-size: 28px;
+  font-weight: bold;
+}
+.acms-installation-wizard .acquia-cms-tour-installation-wizard .title-wrapper .req-markup {
+  font-size: 14px;
+  font-weight: normal;
+}
+.acms-installation-wizard .red-astrick {
+  color: red;
+}
+.ui-dialog.acms-installation-wizard .ui-widget-content.ui-dialog-buttonpane {
+  background: #fff;
+}
+.acms-installation-wizard .ui-dialog-buttonset {
+  width: 60%;
+  float: right;
+  display: block;
+  text-align: right;
+  margin-left: 0;
+  background: #fff;
+  padding-bottom: 16px;
+}
+acms-installation-wizard .ui-dialog-buttonset button {
+  background-color: #fff;
+  color: #55565b;
+}
+.acms-installation-wizard .ui-dialog-buttonset button:first-child:not(.skip-button) {
+  float: left;
+  background-color: #fff;
+  border: 2px solid #003cc5 !important;
+  box-shadow: none;
+  color: #003cc5;
+}
+.acms-installation-wizard .ui-dialog-buttonset button:last-child {
+  background-color: #003cc5;
+  color: #fff;
+}
+.acms-installation-wizard .ui-dialog-buttonset button:last-child:hover {
+  background-color: #00339a;
+}
+.acms-installation-wizard .ui-dialog-buttonset button.skip-button {
+  float: none;
+  background: none;
+  color: #55565b;
+  border: none;
+  box-shadow: none;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-right: 6px;
+}
+.acms-installation-wizard .ui-dialog-buttonset button.skip-button:hover {
+  background-color: #f0f5fd;
+  color: #0036b1;
+}
+
+@media screen and (max-width: 767px) {
+  .acms-installation-wizard .acquia-cms-tour-installation-wizard {
+    flex-direction: column;
+  }
+  .acms-installation-wizard .ui-dialog-titlebar .ui-dialog-title {
+    margin-top: 20px;
+    font-size: 25px;
+  }
+  .acms-installation-wizard .ui-dialog-buttonpane .ui-dialog-buttonset {
+    width: 100%;
+    justify-content: center;
+    margin: auto;
+  }
+  .acms-installation-wizard .ui-dialog-buttonset button:first-child:not(.skip-button) {
+    float: none;
+  }
+}
