@@ -62,7 +62,10 @@ class AcmsUtilityService {
     $batch = &batch_get();
     $batch = NULL;
     unset($batch);
-    return DX8CommandHelpers::rebuild([]);
+    return DX8CommandHelpers::rebuild([
+      'verbose' => '',
+      'no-cache-clear' => FALSE,
+    ]);
   }
 
   /**
