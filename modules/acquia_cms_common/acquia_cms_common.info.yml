@@ -4,13 +4,6 @@ description: "Handles shared functionality for Acquia CMS."
 type: module
 core_version_requirement: ^9
 dependencies:
-  - drupal:cohesion_elements
-  - drupal:cohesion_templates
-  # Cohesion has an undeclared dependency on the CKEditor module. Until this
-  # is fixed upstream, enforce the dependency on its behalf.
-  # @see Drupal\cohesion\Element\CohesionField::processCohesion()
-  # @see cohesion.libraries.yml
-  - drupal:ckeditor
   - drupal:content_moderation
   - drupal:media
   - drupal:node

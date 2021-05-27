@@ -3,3 +3,11 @@ package: 'Acquia CMS'
 description: 'Module for Site Studio Installation Code.'
 core_version_requirement: ^9
 type: module
+dependencies:
+  - drupal:cohesion_elements
+  - drupal:cohesion_templates
+  # Cohesion has an undeclared dependency on the CKEditor module. Until this
+  # is fixed upstream, enforce the dependency on its behalf.
+  # @see Drupal\cohesion\Element\CohesionField::processCohesion()
+  # @see cohesion.libraries.yml
+  - drupal:ckeditor
