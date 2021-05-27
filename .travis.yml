@@ -97,7 +97,7 @@ matrix:
     # The following nine jobs are custom ACMS jobs based on the standard isolated
     # current dev test.
     # Exclude push group tests on this job to exclude low and medium risk tests.
-    - { name: "Isolated test on current dev Drupal core version - Commit Tests", if: type = push, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="push" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    - { name: "Isolated test on current dev Drupal core version", if: type = push, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="push" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     - { name: "Starter", if: NOT branch = main, env: ACMS_JOB=starter ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     # Exclude pr group tests to exclude only low-risk tests during PR builds.
     - { name: "Isolated test on current dev Drupal core version - PR Tests", if: type = pull_request, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="pr" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
