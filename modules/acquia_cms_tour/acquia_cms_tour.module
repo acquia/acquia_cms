@@ -29,43 +29,25 @@ function acquia_cms_tour_theme() {
     'acquia_cms_tour' => [
       'variables' => [],
     ],
-    'acquia_cms_tour_dashboard_disabled' => [
-      'variables' => [
-        'section' => [],
-      ],
-    ],
     'acquia_cms_tour_checklist_form' => [
       'render element' => 'form',
+    ],
+    'acquia_cms_tour_title_markup' => [
+      'variables' => [
+        'module_name' => NULL,
+        'current_step' => NULL,
+      ],
     ],
   ];
 }
 
 /**
- * Remove checklist form state when module is uninstalled.
+ * Remove configuration form state when module is uninstalled.
  *
  * Implements hook_modules_uninstalled().
  */
 function acquia_cms_tour_modules_uninstalled(array $modules) {
-  $checklist_forms = [
-    'acquia_csm_tool_checklist_form',
-    'google_api_checklist_form',
-  ];
-
-  // When a checklist-form has a module entry checked, it stores its checked
-  // state and when that particular module is unistalled- state data should
-  // remove its entry. Installing the module again shall have unchecked entry
-  // in concerned checklist form.
-  foreach ($checklist_forms as $form_id) {
-    $config_state = \Drupal::state()->get('acquia_cms_tour.' . $form_id);
-
-    // Ignore checklist-forms with empty state data.
-    if (!isset($config_state) || !is_array($config_state)) {
-      continue;
-    }
-
-    // Unset module being uninstalled entry from the checklist-form.
-    $config_state = array_diff_key($config_state, array_flip($modules));
-    \Drupal::state()->set('acquia_cms_tour.' . $form_id, $config_state);
+  foreach ($modules as $module) {
+    \Drupal::state()->delete('acms_' . $module . '_configured');
   }
-
 }

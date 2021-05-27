@@ -1,4 +1,17 @@
-styling:
+acquia_cms_tour:
   css:
     theme:
       css/acquia_cms_tour.css: {}
+
+acquia_cms_tour_dashboard:
+  css:
+    theme:
+      css/acquia_cms_tour_dashboard.css: { }
+      css/acquia_cms_installation_wizard.css: { }
+  js:
+    js/acquia_cms_tour_dashboard.js: {}
+  dependencies:
+    - core/jquery #Just to be safe
+    - core/drupal.dialog.ajax #Required for dialogs
+    - core/jquery.form #If you also want to use Ajax for form operations
+    - core/drupalSettings #for drupalSettings
