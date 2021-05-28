@@ -168,8 +168,11 @@ function acquia_cms_install_ui_kit(array $install_state) {
   /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
   $facade = Drupal::classResolver(CohesionFacade::class);
 
-  // Interactive state means the site install is happening in the browser.
-  $operations = ($install_state['interactive']) ? $facade->getAllOperations() : $facade->getAllOperations(TRUE);
+  // Site studio will rebuild packages (fetch HTML/CSS via the API) by default
+  // on import. Passing this bool as TRUE will skip the rebuild, since we force
+  // a total rebuild at the end. This cuts install times approximately in half,
+  // especially via Drush.
+  $operations = $facade->getAllOperations(TRUE);
   $batch = ['operations' => $operations];
 
   // Set batch along with drush backend process if site is being
