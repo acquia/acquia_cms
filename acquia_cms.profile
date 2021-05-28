@@ -7,7 +7,7 @@
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
 use Drupal\acquia_cms\Facade\TelemetryFacade;
-use Drupal\acquia_cms\Form\SiteConfigureForm;
+use Drupal\acquia_cms_site_studio\Form\SiteConfigureForm;
 use Drupal\Core\Installer\InstallerKernel;
 
 /**
@@ -16,56 +16,49 @@ use Drupal\Core\Installer\InstallerKernel;
 function acquia_cms_install_tasks(): array {
   $tasks = [];
   // Set default logo for ACMS.
-  $tasks['acquia_cms_site_studio_set_logo'] = [];
+  $tasks['install_acms_set_logo'] = [];
 
   // Set default favicon for ACMS.
-  $tasks['acquia_cms_site_studio_set_favicon'] = [];
+  $tasks['install_acms_set_favicon'] = [];
 
   // Install default content for ACMS.
-  $tasks['acquia_cms_import_default_content'] = [];
+  $tasks['install_acms_import_default_content'] = [];
 
+  // If the user has configured their Cohesion keys,
+  // and site studio module exists lets import all elements.
   $config = Drupal::config('cohesion.settings');
   $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
+  $tasks['install_acms_site_studio_initialize'] = [
+    'display_name' => t('Import Site Studio elements'),
+    'display' => $cohesion_configured,
+    'type' => 'batch',
+    'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+  ];
+  $tasks['install_acms_site_studio_ui_kit'] = [
+    'display_name' => t('Import Site Studio components'),
+    'display' => $cohesion_configured,
+    'type' => 'batch',
+    'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+  ];
 
-  if ($cohesion_configured) {
-    $installer = \Drupal::service('module_installer');
-    // Install single module.
-    $installer->install(['acquia_cms_site_studio']);
-  }
-
-  if (\Drupal::service('module_handler')->moduleExists('acquia_cms_site_studio')) {
-    // If the user has configured their Cohesion keys, import all elements.
-    $tasks['acquia_cms_site_studio_initialize_cohesion'] = [
-      'display_name' => t('Import Site Studio elements'),
+  // Don't include the rebuild task if installing via Drush,
+  // we automate that elsewhere.
+  if (PHP_SAPI !== 'cli') {
+    $tasks['install_acms_site_studio_rebuild'] = [
+      'display_name' => t('Rebuild Site Studio'),
       'display' => $cohesion_configured,
       'type' => 'batch',
       'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
     ];
-    $tasks['acquia_cms_site_studio_install_ui_kit'] = [
-      'display_name' => t('Import Site Studio components'),
-      'display' => $cohesion_configured,
-      'type' => 'batch',
-      'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
-    ];
-
-    // Don't include the rebuild task if installing via Drush, we automate that
-    // elsewhere.
-    if (PHP_SAPI !== 'cli') {
-      $tasks['acquia_cms_site_studio_rebuild_site_studio'] = [
-        'display_name' => t('Rebuild Site Studio'),
-        'display' => $cohesion_configured,
-        'type' => 'batch',
-        'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
-      ];
-    }
-
-    $tasks['acquia_cms_site_studio_install_additional_modules'] = [];
-
-    // If the user has opted in for Acquia Telemetry, send heartbeat event.
-    $tasks['acquia_cms_site_studio_send_heartbeat_event'] = [
-      'run' => Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
-    ];
   }
+  // Install additional acquia cms modules.
+  $tasks['install_acms_additional_modules'] = [];
+
+  // If the user has opted in for Acquia Telemetry, send heartbeat event.
+  $has_acquia_telemetry = (bool) Drupal::service('module_handler')->moduleExists('acquia_telemetry');
+  $tasks['install_acms_send_heartbeat_event'] = [
+    'run' => $has_acquia_telemetry && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+  ];
   return $tasks;
 }
 
@@ -84,7 +77,9 @@ function acquia_cms_form_user_login_form_alter(array &$form) {
 function acquia_cms_install_tasks_alter(array &$tasks) {
   // Decorate the site configuration form to allow the user to configure their
   // Cohesion keys at install time.
-  $tasks['install_configure_form']['function'] = SiteConfigureForm::class;
+  if (Drupal::service('module_handler')->moduleExists('acquia_cms_site_studio')) {
+    $tasks['install_configure_form']['function'] = SiteConfigureForm::class;
+  }
 }
 
 /**
@@ -99,7 +94,6 @@ function acquia_cms_modules_installed(array $modules) : void {
   }
 
   $module_handler = Drupal::moduleHandler();
-
   if ($module_handler->moduleExists('acquia_telemetry')) {
     Drupal::classResolver(TelemetryFacade::class)->modulesInstalled($modules);
   }
@@ -137,8 +131,74 @@ function acquia_cms_module_implements_alter(array &$implementations, string $hoo
 /**
  * Install default content as part of install task.
  */
-function acquia_cms_import_default_content() {
+function install_acms_import_default_content() {
   if (\Drupal::moduleHandler()->moduleExists('acquia_cms_image')) {
     \Drupal::service('default_content.importer')->importContent('acquia_cms_image');
   }
+}
+
+/**
+ * Send heartbeat event after site installation.
+ */
+function install_acms_send_heartbeat_event() {
+  Drupal::configFactory()
+    ->getEditable('acquia_telemetry.settings')
+    ->set('api_key', 'e896d8a97a24013cee91e37a35bf7b0b')
+    ->save();
+  \Drupal::service('acquia.telemetry')->sendTelemetry('acquia_cms_installed', [
+    'Application UUID' => Environment::getAhApplicationUuid(),
+    'Site Environment' => Environment::getAhEnv(),
+  ]);
+}
+
+/**
+ * Installs additional required modules, depending on the environment.
+ */
+function install_acms_additional_modules() {
+  // Call ToggleModules Service.
+  \Drupal::service('acquia_cms_common.toggle_modules')->ToggleModules();
+  // Save configuration for imagemagick.
+  if (Environment::isAhEnv() && !Environment::isAhIdeEnv()) {
+    $moduleHandler = \Drupal::service('module_handler');
+    if ($moduleHandler->moduleExists('imagemagick')) {
+      \Drupal::configFactory()
+        ->getEditable('imagemagick.settings')
+        ->set('path_to_binaries', '/usr/bin/')
+        ->save();
+      \Drupal::configFactory()
+        ->getEditable('system.image')
+        ->set('toolkit', 'imagemagick')
+        ->save();
+    }
+  }
+}
+
+/**
+ * Set the path to the logo file based on install directory.
+ */
+function install_acms_set_logo() {
+  $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+  Drupal::configFactory()
+    ->getEditable('system.theme.global')
+    ->set('logo', [
+      'path' => $acquia_cms_path . '/acquia_cms.png',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->save(TRUE);
+}
+
+/**
+ * Set the path to the favicon file based on install directory.
+ */
+function install_acms_set_favicon() {
+  $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+  Drupal::configFactory()
+    ->getEditable('system.theme.global')
+    ->set('favicon', [
+      'path' => $acquia_cms_path . '/acquia_cms.png',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->save(TRUE);
 }
