@@ -67,9 +67,36 @@
   flex-direction: column;
 }
 .dashboard-buttons-wrapper a {
-  padding-left: 10px;
+  margin-left: 2px;
 }
-
+.dashboard-buttons-wrapper .tooltip {
+  position: absolute;
+  visibility: hidden;
+  width: 200px;
+  background-color: black;
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  z-index: 1;
+}
+.tool-tip__icon:hover + .tooltip {
+  visibility: visible;
+  right: 4%;
+  margin-top: 25px;
+}
+.dashboard-buttons-wrapper .tool-tip__icon {
+  background: #27b1f0;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-block;
+  height: 20px;
+  line-height: 1.3em;
+  text-align: center;
+  width: 20px;
+  margin-left: 5px;
+  color: white;
+}
 .acms-dashboard-form-wrapper .claro-details__summary[aria-expanded='true'] {
   border-bottom: 1px solid #808080;
 }
