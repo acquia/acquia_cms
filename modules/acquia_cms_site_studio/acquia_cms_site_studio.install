@@ -15,8 +15,49 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Implements hook_install().
+ *
+ * @throws Exception
  */
 function acquia_cms_site_studio_install() {
+  $site_studio_api_key = getenv('SITESTUDIO_API_KEY');
+  $site_studio_org_key = getenv('SITESTUDIO_ORG_KEY');
+  if ($site_studio_api_key && $site_studio_org_key) {
+    set_site_studio_credentials($site_studio_api_key, $site_studio_org_key);
+    set_theme_site_studio_as_default();
+    // If the user has configured their Cohesion keys,
+    // and site studio module exists lets import all elements.
+    batch_set(install_acms_site_studio_initialize());
+    install_acms_site_studio_ui_kit();
+    if (PHP_SAPI !== 'cli') {
+      // Don't include the rebuild task if installing via Drush,
+      // we automate that elsewhere.
+      install_acms_site_studio_rebuild();
+    }
+  }
+  else {
+    \Drupal::logger('acquia_cms_site_studio')->warning('Site studio credentials are not set');
+  }
+}
+
+/**
+ * Update site studio credentials from environment.
+ *
+ * @param string $site_studio_api_key
+ *   The site studio api key.
+ * @param string $site_studio_org_key
+ *   The site studio organisation key.
+ */
+function set_site_studio_credentials(string $site_studio_api_key, string $site_studio_org_key) {
+  \Drupal::configFactory()->getEditable('cohesion.settings')
+    ->set('api_key', $site_studio_api_key)
+    ->set('organization_key', $site_studio_org_key)
+    ->save(TRUE);
+}
+
+/**
+ * Set default theme as site studio theme.
+ */
+function set_theme_site_studio_as_default() {
   \Drupal::service('theme_installer')->install(['cohesion_theme']);
   \Drupal::configFactory()
     ->getEditable('system.theme')
@@ -26,9 +67,6 @@ function acquia_cms_site_studio_install() {
 
 /**
  * Imports all Cohesion elements.
- *
- * @return array
- *   The batch job definition.
  */
 function install_acms_site_studio_initialize(): array {
   // Build and run the batch job for the initial import of Cohesion elements and
@@ -47,14 +85,13 @@ function install_acms_site_studio_initialize(): array {
 /**
  * Imports the Cohesion UI kit that ships with this profile.
  *
- * @return array
- *   The batch job definition.
+ * @throws Exception
  */
-function install_acms_site_studio_ui_kit(): array {
+function install_acms_site_studio_ui_kit() {
   // During testing, we don't import the UI kit, because it takes forever.
   // Instead, we swap in a pre-built directory of Cohesion templates and assets.
   if (getenv('COHESION_ARTIFACT')) {
-    return [];
+    return;
   }
   /** @var \Drupal\acquia_cms_site_studio\Facade\CohesionFacade $facade */
   $facade = Drupal::classResolver(CohesionFacade::class);
@@ -64,33 +101,26 @@ function install_acms_site_studio_ui_kit(): array {
   // Set batch along with drush backend process if site is being
   // installed via Drush, so that we can show log on the screen during
   // site studio package import/validate.
-  if (PHP_SAPI == 'cli') {
-    batch_set($batch);
-    drush_backend_batch_process();
-  }
-  else {
-    return $batch;
-  }
+  batch_set($batch);
 }
 
 /**
  * Rebuilds the site studio from installation.
- *
- * @return array
- *   Batch for rebuild operation.
  */
-function install_acms_site_studio_rebuild(): array {
+function install_acms_site_studio_rebuild() {
   // Get the batch array filled with operations that should be performed during
   // rebuild. Also, we explicitly do not clear the cache during site install.
   $batch = WebsiteSettingsController::batch(TRUE);
   if (isset($batch['error'])) {
     Drupal::messenger()->addError($batch['error']);
   }
-  return $batch;
+  batch_set($batch);
 }
 
 /**
  * Imports all Cohesion elements immediately in a batch process.
+ *
+ * @throws Exception
  */
 function acquia_cms_site_studio_init() {
   /** @var \Drupal\acquia_cms_site_studio\Facade\CohesionFacade $facade */
@@ -101,15 +131,6 @@ function acquia_cms_site_studio_init() {
   $operations = array_merge($batch['operations'], $operations);
   $batch['operations'] = $operations;
   batch_set($batch);
-}
-
-/**
- * Rebuilds the cohesion components.
- */
-function acquia_cms_site_studio_rebuild() {
-  // Get the batch array filled with operations that should be performed during
-  // rebuild.
-  batch_set(install_acms_site_studio_rebuild());
 }
 
 /**

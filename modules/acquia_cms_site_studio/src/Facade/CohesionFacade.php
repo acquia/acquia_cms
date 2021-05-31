@@ -81,7 +81,7 @@ final class CohesionFacade implements ContainerInjectionInterface {
    *
    * @throws \Exception
    */
-  public function importPackage(string $package, $no_rebuild = FALSE): array {
+  public function importPackage(string $package, bool $no_rebuild = FALSE): array {
     // Prepare to import the package. This code is delicate because it was
     // basically written by rooting around in Cohesion's internals. So be
     // extremely careful when changing it.
@@ -97,8 +97,7 @@ final class CohesionFacade implements ContainerInjectionInterface {
       '\Drupal\cohesion_sync\Controller\BatchImportController::setImportBatch',
       [$package, $store_key, TRUE, FALSE, TRUE, $no_rebuild, FALSE],
     ];
-    $batch_operations = \array_merge($validate_package_operations, $batch_operations);
-    return $batch_operations;
+    return array_merge($validate_package_operations, $batch_operations);
   }
 
   /**
@@ -176,7 +175,7 @@ final class CohesionFacade implements ContainerInjectionInterface {
    * @param array $operations
    *   Operations performed in the batch process.
    */
-  public static function batchFinishedCallback($success, array $results, array $operations) {
+  public static function batchFinishedCallback(bool $success, array $results, array $operations) {
     // The 'success' parameter means no fatal PHP errors were detected. All
     // other error management should be handled using 'results'.
     if ($success) {
@@ -195,6 +194,8 @@ final class CohesionFacade implements ContainerInjectionInterface {
    *
    * @return array
    *   All the operations.
+   *
+   * @throws \Exception
    */
   public function getAllOperations(bool $no_rebuild = FALSE) : array {
     $operations = [];
