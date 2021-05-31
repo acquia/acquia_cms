@@ -24,33 +24,6 @@ function acquia_cms_install_tasks(): array {
   // Install default content for ACMS.
   $tasks['install_acms_import_default_content'] = [];
 
-  // If the user has configured their Cohesion keys,
-  // and site studio module exists lets import all elements.
-  $config = Drupal::config('cohesion.settings');
-  $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
-  $tasks['install_acms_site_studio_initialize'] = [
-    'display_name' => t('Import Site Studio elements'),
-    'display' => $cohesion_configured,
-    'type' => 'batch',
-    'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
-  ];
-  $tasks['install_acms_site_studio_ui_kit'] = [
-    'display_name' => t('Import Site Studio components'),
-    'display' => $cohesion_configured,
-    'type' => 'batch',
-    'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
-  ];
-
-  // Don't include the rebuild task if installing via Drush,
-  // we automate that elsewhere.
-  if (PHP_SAPI !== 'cli') {
-    $tasks['install_acms_site_studio_rebuild'] = [
-      'display_name' => t('Rebuild Site Studio'),
-      'display' => $cohesion_configured,
-      'type' => 'batch',
-      'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
-    ];
-  }
   // Install additional acquia cms modules.
   $tasks['install_acms_additional_modules'] = [];
 
