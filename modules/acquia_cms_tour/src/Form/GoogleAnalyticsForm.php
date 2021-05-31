@@ -79,11 +79,21 @@ final class GoogleAnalyticsForm extends AcquiaCMSDashboardBase {
       ];
       if (isset($module_info['configure'])) {
         $form[$module]['actions']['advanced'] = [
+          '#prefix' => '<div class= "dashboard-tooltiptext">',
           '#markup' => $this->linkGenerator->generate(
             'Advanced',
             Url::fromRoute($module_info['configure'])
           ),
           '#suffix' => "</div>",
+        ];
+        $form[$module]['actions']['advanced']['information'] = [
+          '#prefix' => '<b class= "tool-tip__icon">i',
+          '#suffix' => "</b>",
+        ];
+        $form[$module]['actions']['advanced']['tooltip-text'] = [
+          '#prefix' => '<span class= "tooltip">',
+          '#markup' => $this->t("Opens Advance Configuration in new tab"),
+          '#suffix' => "</span></div>",
         ];
       }
       return $form;
