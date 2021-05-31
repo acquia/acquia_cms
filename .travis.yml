@@ -173,6 +173,10 @@ after_script: ../orca/bin/travis/after_script.sh
 
 notifications:
   slack:
-    secure: JoX4qk8RVk0m7Y/kNbnaGmeHywqTjnOJ5woKaXOavFayjscNB5Lg8gkceSP61dbqeKeJeMGhlbBAu0zFv5oPgMgxYpXdlvxEQ/8erhMmP4hymvF6V6FfDhjGR2rFVvSCs6W9V2uCSDoNUcecyHEXNYVAYozYq3ir1KJL75RI5j4FZB4EqwiERN/H+z+Ti3lVKfN9V+vmL/d4epIdOaoZKjJkKh86DLN6MuXXY0mPsoablrOi9Yu0JSwGSTTcz5a3EwMGrSaCOVt8IqeNuNsDhKzdOqRhGOYlbudDxTZEteMV2NgzJUPk0P1ukC2DIJACbOQ0mssSnzfToVlpSV0/paoIuWQhuybyHE/dO4/kxrDE2D5FgWHLeNpSZbUBl+LmKW9sjwODJTDYyUrJ+rOh9t8jqoMAIdqvnPslxEQla/2+r0+uNVGMH2A3Uk2N/lEyP8TIFRsq7B/0D4g2WTOUzmzuFyFs5/Khvswi4EZQtZBf524/iYR79Mt8n6iEmkTpVzeciC45tF5Qov2cxRuSGMo42x3WvedFjWUTsQhvvFIyeD2YVetxCclzO2TND0JYWkL0FY7k9KgnXqTrYnd9Ek99U3FI7seC8PQdRfyUHpQRaYSJ5KsR+zpp6sApApoKNPl+4aHRzAcS571xKnxACmUGT7PcNEycnM5nl+VehCs=
+    rooms:
+    - secure: JoX4qk8RVk0m7Y/kNbnaGmeHywqTjnOJ5woKaXOavFayjscNB5Lg8gkceSP61dbqeKeJeMGhlbBAu0zFv5oPgMgxYpXdlvxEQ/8erhMmP4hymvF6V6FfDhjGR2rFVvSCs6W9V2uCSDoNUcecyHEXNYVAYozYq3ir1KJL75RI5j4FZB4EqwiERN/H+z+Ti3lVKfN9V+vmL/d4epIdOaoZKjJkKh86DLN6MuXXY0mPsoablrOi9Yu0JSwGSTTcz5a3EwMGrSaCOVt8IqeNuNsDhKzdOqRhGOYlbudDxTZEteMV2NgzJUPk0P1ukC2DIJACbOQ0mssSnzfToVlpSV0/paoIuWQhuybyHE/dO4/kxrDE2D5FgWHLeNpSZbUBl+LmKW9sjwODJTDYyUrJ+rOh9t8jqoMAIdqvnPslxEQla/2+r0+uNVGMH2A3Uk2N/lEyP8TIFRsq7B/0D4g2WTOUzmzuFyFs5/Khvswi4EZQtZBf524/iYR79Mt8n6iEmkTpVzeciC45tF5Qov2cxRuSGMo42x3WvedFjWUTsQhvvFIyeD2YVetxCclzO2TND0JYWkL0FY7k9KgnXqTrYnd9Ek99U3FI7seC8PQdRfyUHpQRaYSJ5KsR+zpp6sApApoKNPl+4aHRzAcS571xKnxACmUGT7PcNEycnM5nl+VehCs=
     on_success: always
     on_failure: change
+    template:
+      - "%{repository_slug} (%{commit}) : %{message}"
+      - "Build details: %{build_url}"
