@@ -1,7 +1,7 @@
 services:
   acquia_cms_common.hooks:
     class: 'Drupal\acquia_cms_common\Commands\Hooks'
-    arguments: ['@module_handler']
+    arguments: ['@module_handler', '@acquia_cms_common.utility']
     tags:
       - { name: drush.command }
   acquia_cms_common_module.commands:
