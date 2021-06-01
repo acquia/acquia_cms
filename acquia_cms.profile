@@ -27,12 +27,42 @@ function acquia_cms_install_tasks(): array {
   // Install additional acquia cms modules.
   $tasks['install_acms_additional_modules'] = [];
 
+  // Allow acquia_cms_site_studio module to be install using profile.
+  if (Drupal::service('module_handler')->moduleExists('acquia_cms_site_studio')) {
+    // If the user has configured their Cohesion keys,
+    // and site studio module exists lets import all elements.
+    $config = Drupal::config('cohesion.settings');
+    $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
+    $tasks['install_acms_site_studio_initialize'] = [
+      'display_name' => t('Import Site Studio elements'),
+      'display' => $cohesion_configured,
+      'type' => 'batch',
+      'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+    ];
+    $tasks['install_acms_site_studio_ui_kit'] = [
+      'display_name' => t('Import Site Studio components'),
+      'display' => $cohesion_configured,
+      'type' => 'batch',
+      'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+    ];
+  }
+
   // If the user has opted in for Acquia Telemetry, send heartbeat event.
   $has_acquia_telemetry = (bool) Drupal::service('module_handler')->moduleExists('acquia_telemetry');
   $tasks['install_acms_send_heartbeat_event'] = [
     'run' => $has_acquia_telemetry && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
   ];
   return $tasks;
+}
+
+/**
+ * Import site studio uikit.
+ *
+ * @throws Exception
+ */
+function install_acms_site_studio_ui_kit() {
+  batch_set(site_studio_import_ui_kit());
+  drush_backend_batch_process();
 }
 
 /**
