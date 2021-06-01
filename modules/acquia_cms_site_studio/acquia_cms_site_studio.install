@@ -10,6 +10,7 @@ use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
 use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Installer\InstallerKernel;
 use Drupal\media_library\MediaLibraryState;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -21,21 +22,20 @@ use Symfony\Component\HttpFoundation\Request;
 function acquia_cms_site_studio_install() {
   $site_studio_api_key = getenv('SITESTUDIO_API_KEY');
   $site_studio_org_key = getenv('SITESTUDIO_ORG_KEY');
-  if ($site_studio_api_key && $site_studio_org_key) {
+  // Don't do anything during site installation,
+  // since that can have unintended side effects.
+  if (!InstallerKernel::installationAttempted() && $site_studio_api_key && $site_studio_org_key) {
     set_site_studio_credentials($site_studio_api_key, $site_studio_org_key);
     set_theme_site_studio_as_default();
     // If the user has configured their Cohesion keys,
     // and site studio module exists lets import all elements.
     batch_set(install_acms_site_studio_initialize());
-    install_acms_site_studio_ui_kit();
+    batch_set(site_studio_import_ui_kit());
     if (PHP_SAPI !== 'cli') {
       // Don't include the rebuild task if installing via Drush,
       // we automate that elsewhere.
       install_acms_site_studio_rebuild();
     }
-  }
-  else {
-    \Drupal::logger('acquia_cms_site_studio')->warning('Site studio credentials are not set');
   }
 }
 
@@ -87,21 +87,17 @@ function install_acms_site_studio_initialize(): array {
  *
  * @throws Exception
  */
-function install_acms_site_studio_ui_kit() {
+function site_studio_import_ui_kit(): array {
   // During testing, we don't import the UI kit, because it takes forever.
   // Instead, we swap in a pre-built directory of Cohesion templates and assets.
   if (getenv('COHESION_ARTIFACT')) {
-    return;
+    return [];
   }
   /** @var \Drupal\acquia_cms_site_studio\Facade\CohesionFacade $facade */
   $facade = Drupal::classResolver(CohesionFacade::class);
 
   $operations = $facade->getAllOperations(TRUE);
-  $batch = ['operations' => $operations];
-  // Set batch along with drush backend process if site is being
-  // installed via Drush, so that we can show log on the screen during
-  // site studio package import/validate.
-  batch_set($batch);
+  return ['operations' => $operations];
 }
 
 /**
