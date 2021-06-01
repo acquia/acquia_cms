@@ -173,9 +173,9 @@ after_script: ../orca/bin/travis/after_script.sh
 
 notifications:
   slack:
-    secure: JoX4qk8RVk0m7Y/kNbnaGmeHywqTjnOJ5woKaXOavFayjscNB5Lg8gkceSP61dbqeKeJeMGhlbBAu0zFv5oPgMgxYpXdlvxEQ/8erhMmP4hymvF6V6FfDhjGR2rFVvSCs6W9V2uCSDoNUcecyHEXNYVAYozYq3ir1KJL75RI5j4FZB4EqwiERN/H+z+Ti3lVKfN9V+vmL/d4epIdOaoZKjJkKh86DLN6MuXXY0mPsoablrOi9Yu0JSwGSTTcz5a3EwMGrSaCOVt8IqeNuNsDhKzdOqRhGOYlbudDxTZEteMV2NgzJUPk0P1ukC2DIJACbOQ0mssSnzfToVlpSV0/paoIuWQhuybyHE/dO4/kxrDE2D5FgWHLeNpSZbUBl+LmKW9sjwODJTDYyUrJ+rOh9t8jqoMAIdqvnPslxEQla/2+r0+uNVGMH2A3Uk2N/lEyP8TIFRsq7B/0D4g2WTOUzmzuFyFs5/Khvswi4EZQtZBf524/iYR79Mt8n6iEmkTpVzeciC45tF5Qov2cxRuSGMo42x3WvedFjWUTsQhvvFIyeD2YVetxCclzO2TND0JYWkL0FY7k9KgnXqTrYnd9Ek99U3FI7seC8PQdRfyUHpQRaYSJ5KsR+zpp6sApApoKNPl+4aHRzAcS571xKnxACmUGT7PcNEycnM5nl+VehCs=
-    on_success: always
-    on_failure: change
-    template:
-      - "%{repository_slug} (%{commit}) : %{message}"
-      - "Build details: %{build_url}"
+    rooms:
+      - secure: P7RpwdM8JKMCs6386SOy24nsh7jBYaZ/CLzKH1vRu1sVnAopRSlk98VoejGED4YzCq2V3+b84PNltjyOZlDdPutZMP2Fat4OU+e4Mt05Vlrbn470cjk0puzFBnuubAq2GwXcyAB6Eq9DEe6DARCdFSya6GsTjvf3+RVFIaiVDDG0PYYQrMlwQ/C/+JBmnP7FLfidL6vX2YDL6UbQpQGuqJ/hwliW2RVnMTM7gCpgNaY8rxRRBuKKPjzJt09hV+YNpvsnGab+t5DMWKzeNKWUl0wiVOWEv90CKyx9QIt4zJy8pAxXitDFz74z/cMZV/ELGaD20nl7hw88R3rTzK2V+5FRCZHcQvkCgiZbHayaF4ShquHZbzE8YH48sEORFaGnbfaY69sveLq4+74dpFdMHRj1cBRY1CGnN59JgtBTwZShlXbUZoYJGbebfBvlxt6A2IcSERiTGl0i64L1elAkN6854VPwWMDi+iLfgfJN/0jugsvAcCQi0DOV1DJzHdF+EbVhFAVFfivwHo3Ai7QSZN2Rs4ojE8sdWQOp83wjA493FATkCSvFcpyPqG9kX1nQuDf6SNHwVg4jdpePwp/okgm+WcCZPiCEE2jW4gu49Gx4m2Y3r2878b76cQn+K4DX/mP5vRu6vA50gAa1fMsL4Yo9v/VbtrbEPYEVmFUHdq0=
+    on_success: change
+    on_failure: always
+    # Limit to cron builds.
+    if: type = cron
