@@ -61,9 +61,12 @@ function acquia_cms_install_tasks(): array {
  * @throws Exception
  */
 function install_acms_site_studio_ui_kit() {
-  batch_set(site_studio_import_ui_kit());
   if (PHP_SAPI == 'cli') {
+    batch_set(site_studio_import_ui_kit());
     drush_backend_batch_process();
+  }
+  else {
+    return site_studio_import_ui_kit();
   }
 }
 
