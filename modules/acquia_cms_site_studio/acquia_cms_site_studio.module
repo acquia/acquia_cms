@@ -4,3 +4,71 @@
  * @file
  * File for the Site Studio Installation Code.
  */
+
+use Drupal\acquia_cms_site_studio\Facade\CohesionFacade;
+use Drupal\cohesion\Controller\AdministrationController;
+use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
+
+/**
+ * Imports all Cohesion elements.
+ */
+function install_acms_site_studio_initialize(): array {
+  // Build and run the batch job for the initial import of Cohesion elements and
+  // assets.
+  // @todo When Cohesion provides a service to generate this batch job, use
+  // that instead of calling an internal method of an internal controller, since
+  // this may break at any time due to internal refactoring done by Cohesion.
+  $batch = AdministrationController::batchAction(TRUE);
+  if (isset($batch['error'])) {
+    Drupal::messenger()->addError($batch['error']);
+    return [];
+  }
+  return $batch;
+}
+
+/**
+ * Imports the Cohesion UI kit that ships with this profile.
+ *
+ * @throws Exception
+ */
+function site_studio_import_ui_kit(): array {
+  // During testing, we don't import the UI kit, because it takes forever.
+  // Instead, we swap in a pre-built directory of Cohesion templates and assets.
+  if (getenv('COHESION_ARTIFACT')) {
+    return [];
+  }
+  /** @var \Drupal\acquia_cms_site_studio\Facade\CohesionFacade $facade */
+  $facade = Drupal::classResolver(CohesionFacade::class);
+
+  $operations = $facade->getAllOperations(TRUE);
+  return ['operations' => $operations];
+}
+
+/**
+ * Rebuilds the site studio from installation.
+ */
+function install_acms_site_studio_rebuild() {
+  // Get the batch array filled with operations that should be performed during
+  // rebuild. Also, we explicitly do not clear the cache during site install.
+  $batch = WebsiteSettingsController::batch(TRUE);
+  if (isset($batch['error'])) {
+    Drupal::messenger()->addError($batch['error']);
+  }
+  batch_set($batch);
+}
+
+/**
+ * Imports all Cohesion elements immediately in a batch process.
+ *
+ * @throws Exception
+ */
+function acquia_cms_site_studio_init() {
+  /** @var \Drupal\acquia_cms_site_studio\Facade\CohesionFacade $facade */
+  $facade = Drupal::classResolver(CohesionFacade::class);
+  $operations = $facade->getAllOperations(TRUE);
+  // Instead of returning the batch array, we are just executing the batch here.
+  $batch = install_acms_site_studio_initialize();
+  $operations = array_merge($batch['operations'], $operations);
+  $batch['operations'] = $operations;
+  batch_set($batch);
+}

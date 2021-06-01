@@ -62,7 +62,9 @@ function acquia_cms_install_tasks(): array {
  */
 function install_acms_site_studio_ui_kit() {
   batch_set(site_studio_import_ui_kit());
-  drush_backend_batch_process();
+  if (PHP_SAPI == 'cli') {
+    drush_backend_batch_process();
+  }
 }
 
 /**
