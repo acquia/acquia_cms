@@ -7,7 +7,8 @@
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
 use Drupal\acquia_cms\Facade\TelemetryFacade;
-use Drupal\acquia_cms_site_studio\Form\SiteConfigureForm;
+use Drupal\acquia_cms\Form\SiteConfigureForm;
+use Drupal\acquia_cms_site_studio\Form\AcquiaCmsSiteStudioSiteConfigureForm;
 use Drupal\Core\Installer\InstallerKernel;
 
 /**
@@ -92,10 +93,11 @@ function acquia_cms_form_user_login_form_alter(array &$form) {
  * Implements hook_install_tasks_alter().
  */
 function acquia_cms_install_tasks_alter(array &$tasks) {
+  $tasks['install_configure_form']['function'] = SiteConfigureForm::class;
   // Decorate the site configuration form to allow the user to configure their
   // Cohesion keys at install time.
   if (Drupal::service('module_handler')->moduleExists('acquia_cms_site_studio')) {
-    $tasks['install_configure_form']['function'] = SiteConfigureForm::class;
+    $tasks['install_configure_form']['function'] = AcquiaCmsSiteStudioSiteConfigureForm::class;
   }
 }
 
