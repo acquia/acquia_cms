@@ -45,6 +45,15 @@ function acquia_cms_install_tasks(): array {
       'type' => 'batch',
       'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
     ];
+    // Include rebuild task if site is being install through UI.
+    if (PHP_SAPI !== 'cli') {
+      $tasks['install_acms_site_studio_rebuild'] = [
+        'display_name' => t('Rebuild Site Studio'),
+        'display' => $cohesion_configured,
+        'type' => 'batch',
+        'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+      ];
+    }
   }
 
   // If the user has opted in for Acquia Telemetry, send heartbeat event.
