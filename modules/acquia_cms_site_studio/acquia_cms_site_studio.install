@@ -5,11 +5,7 @@
  * Contains install-time code for the Acquia CMS profile.
  */
 
-use Drupal\Core\Ajax\CloseDialogCommand;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Installer\InstallerKernel;
-use Drupal\media_library\MediaLibraryState;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Implements hook_install().
@@ -31,16 +27,14 @@ function acquia_cms_site_studio_install() {
     // Set default theme as cohesion.
     set_theme_site_studio_as_default();
 
-    // If the user has configured their Cohesion keys,
-    // and site studio module exists lets import
-    // all elements and its components.
+    // If the user has configured their Cohesion keys, and site studio module
+    // exists lets import all elements and its components.
     batch_set(install_acms_site_studio_initialize());
     batch_set(site_studio_import_ui_kit());
 
+    // Invoke site studio rebuild if module is being install via UI.
     if (PHP_SAPI !== 'cli') {
-      // Don't include the rebuild task if installing via Drush,
-      // we automate that elsewhere.
-      install_acms_site_studio_rebuild();
+      acquia_cms_site_studio_rebuild_styles();
     }
   }
 }
@@ -69,66 +63,4 @@ function set_theme_site_studio_as_default() {
     ->getEditable('system.theme')
     ->set('default', 'cohesion_theme')
     ->save();
-}
-
-/**
- * Implements hook_form_alter().
- */
-function acquia_cms_site_studio_form_alter(array &$form, FormStateInterface $form_state, $form_id) : void {
-  // Instead of directly adding a patch in core, we are modifying the ajax
-  // callback.
-  if ($form_id === 'views_form_media_library_widget_image') {
-    $request = Drupal::request();
-    $state = MediaLibraryState::fromRequest($request);
-    if ($state->getOpenerId() === 'media_library.opener.cohesion') {
-      $form['actions']['submit']['#ajax']['callback'] = 'alter_update_widget';
-    }
-  }
-  // Trigger site studio config import and rebuild whenever user
-  // try to save site studio account settings or the site studio core
-  // form from tour dashboard page.
-  $allowed_form_ids = [
-    'cohesion_account_settings_form',
-    'acquia_cms_site_studio_core_form',
-    'acquia_cms_tour_installation_wizard',
-  ];
-  if (in_array($form_id, $allowed_form_ids)) {
-    $config = Drupal::config('cohesion.settings');
-    $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
-    // We should add submit handler, only if cohesion keys are not already set.
-    if (!$cohesion_configured) {
-      $form['#submit'][] = 'acquia_cms_site_studio_init';
-      // Here we are adding a separate submit handler to rebuild the cohesion
-      // styles. Now the reason why we are doing this is because the rebuild is
-      // expecting that all the entities of cohesion are in place but as the
-      // cohesion is getting build for the first time and
-      // install_acms_site_studio_initialize imports the
-      // entities. So we cannot execute both the batch process in a single
-      // function, Hence to achieve the synchronous behaviour we have separated
-      // cohesion configuration import and cohesion style rebuild functionality
-      // into separate submit handlers.
-      // @see \Drupal\cohesion_website_settings\Controller\WebsiteSettingsController::batch
-      $form['#submit'][] = 'acquia_cms_site_studio_rebuild';
-    }
-  }
-}
-
-/**
- * Callback for the media library image widget.
- */
-function alter_update_widget(array &$form, FormStateInterface $form_state, Request $request) {
-  // As cohesion is using angular for the media library popup, So the modal id
-  // mismatch is causing the issue of no media selection. To resolve this we are
-  // passing the selector in the CloseDialogCommand.
-  // @see \Drupal\media_library\Plugin\views\field\MediaLibrarySelectForm::updateWidget().
-  $field_id = $form_state->getTriggeringElement()['#field_id'];
-  $selected_ids = $form_state->getValue($field_id);
-  $selected_ids = $selected_ids ? array_filter(explode(',', $selected_ids)) : [];
-
-  // Allow the opener service to handle the selection.
-  $state = MediaLibraryState::fromRequest($request);
-  return Drupal::service('media_library.opener_resolver')
-    ->get($state)
-    ->getSelectionResponse($state, $selected_ids)
-    ->addCommand(new CloseDialogCommand('#modal-body'));
 }
