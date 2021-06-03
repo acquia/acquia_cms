@@ -71,7 +71,7 @@ final class MetatagFacade implements ContainerInjectionInterface {
       return;
     }
 
-    $settings = $node_type->getThirdPartySetting('acquia_cms', 'metatag', []);
+    $settings = $node_type->getThirdPartySetting('acquia_cms_common', 'metatag', []);
     if (isset($settings['tag_types'])) {
       $key = 'entity_type_groups.node.' . $node_type->id();
 
