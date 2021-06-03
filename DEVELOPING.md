@@ -32,13 +32,18 @@ acli --version
 7. Click the "Generate SSH key" button. When asked for a password, enter one that you can remember. When asked if you want to upload the SSH key to Acquia Cloud, say yes. Label your SSH key similarly to how you labeled the IDE, e.g. `phenaproxima_AcquiaCMS`, and upload it to Acquia Cloud. When prompted for the passphrase, enter the password you just created.
 8. Run `cat ~/.ssh/id_rsa.pub`. Copy the SSH key and add it to your GitHub account. See https://docs.acquia.com/dev-studio/ide/start/#cloning-your-application-from-a-github-repository-to-your-ide for more information. Be sure to enable SSO for the newly added key, authorizing the Acquia organization.
 9. In the Cloud IDE's terminal, clone the Acquia CMS Git repository: `git clone git@github.com:acquia/acquia_cms.git ~/project --branch develop`
-10. Install all dependencies:
+10. Enable the Intl extension. Intl is required to install Content Hub 8.x-2.21 and above & restart the PHP-FPM after making this change.
+```
+echo "extension=intl.so" >> ../configs/php/custom.ini
+supervisorctl restart php-fpm
+``` 
+11. Install all dependencies:
 ```
 cd project
 composer install
 ```
-11. Install Acquia CMS, as detailed in the "Installing Acquia CMS" section below.
-12. In the "Open Drupal Site" menu, choose "Open site in a new tab" and ensure you can see the Drupal site, and log in with the username "admin" and password "admin".
+12. Install Acquia CMS, as detailed in the "Installing Acquia CMS" section below.
+13. In the "Open Drupal Site" menu, choose "Open site in a new tab" and ensure you can see the Drupal site, and log in with the username "admin" and password "admin".
 
 ### Installing Acquia CMS
 
