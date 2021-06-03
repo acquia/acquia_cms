@@ -90,7 +90,7 @@ final class WorkflowFacade implements ContainerInjectionInterface {
     }
 
     // If the node type does not specify a workflow, there's nothing to do.
-    $workflow_id = $node_type->getThirdPartySetting('acquia_cms', 'workflow_id');
+    $workflow_id = $node_type->getThirdPartySetting('acquia_cms_common', 'workflow_id');
     if (empty($workflow_id)) {
       return;
     }

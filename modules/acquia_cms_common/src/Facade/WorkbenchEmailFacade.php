@@ -130,7 +130,7 @@ final class WorkbenchEmailFacade implements ContainerInjectionInterface {
     foreach ($node_types as $id => $node_type) {
       $variables['%node_type'] = $node_type->label();
 
-      $email_templates = $node_type->getThirdPartySetting('acquia_cms', 'workbench_email_templates', []);
+      $email_templates = $node_type->getThirdPartySetting('acquia_cms_common', 'workbench_email_templates', []);
       if (array_key_exists($template->id(), $email_templates)) {
         $enabled_bundles["node:$id"] = "node:$id";
       }
@@ -142,7 +142,7 @@ final class WorkbenchEmailFacade implements ContainerInjectionInterface {
 
     // Add the template to the workflow specified in its third-party settings.
     // If the template does not specify a workflow, there's nothing to do.
-    $workflow_id = $template->getThirdPartySetting('acquia_cms', 'workflow_id');
+    $workflow_id = $template->getThirdPartySetting('acquia_cms_common', 'workflow_id');
     if (empty($workflow_id)) {
       return;
     }
@@ -156,7 +156,7 @@ final class WorkbenchEmailFacade implements ContainerInjectionInterface {
     }
 
     $enabled_templates = $workflow->getThirdPartySetting('workbench_email', 'workbench_email_templates', []);
-    $transitions = $template->getThirdPartySetting('acquia_cms', 'workflow_transitions', []);
+    $transitions = $template->getThirdPartySetting('acquia_cms_common', 'workflow_transitions', []);
     foreach ($transitions as $transition_id) {
       // Enable this template for the specified transition, but only if the
       // transition is not already associated with a template.
