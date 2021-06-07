@@ -36,11 +36,11 @@ acli --version
 ```
 echo "extension=intl.so" >> ../configs/php/custom.ini
 supervisorctl restart php-fpm
-``` 
+```
 11. Install all dependencies:
 ```
 cd project
-composer install
+composer install && composer run post-update-cmd
 ```
 12. Install Acquia CMS, as detailed in the "Installing Acquia CMS" section below.
 13. In the "Open Drupal Site" menu, choose "Open site in a new tab" and ensure you can see the Drupal site, and log in with the username "admin" and password "admin".
