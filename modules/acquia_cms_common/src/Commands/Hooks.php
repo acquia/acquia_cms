@@ -3,6 +3,8 @@
 namespace Drupal\acquia_cms_common\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
+use Consolidation\AnnotatedCommand\CommandResult;
+use Drupal\acquia_cms_common\Services\AcmsUtilityService;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
@@ -20,13 +22,23 @@ final class Hooks extends DrushCommands {
   protected $moduleHandler;
 
   /**
+   * The The acms utility service.
+   *
+   * @var \Drupal\acquia_cms_common\Services\AcmsUtilityService
+   */
+  protected $acmsUtilityService;
+
+  /**
    * Constructs a WebformSubmissionLogRouteSubscriber object.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\acquia_cms_common\Services\AcmsUtilityService $acms_utility_service
+   *   The acms utility service.
    */
-  public function __construct(ModuleHandlerInterface $module_handler) {
+  public function __construct(ModuleHandlerInterface $module_handler, AcmsUtilityService $acms_utility_service) {
     $this->moduleHandler = $module_handler;
+    $this->acmsUtilityService = $acms_utility_service;
   }
 
   /**
@@ -87,6 +99,20 @@ final class Hooks extends DrushCommands {
       foreach ($requirements as $id => $requirement) {
         Drush::logger()->warning(dt($requirement['description']));
       }
+    }
+  }
+
+  /**
+   * Run site studio rebuild after acquia_cms_site_studio module enable.
+   *
+   * @hook post-command pm:enable
+   */
+  public function postCommand($result, CommandData $commandData) {
+    if (in_array('acquia_cms_site_studio', $commandData->getArgsWithoutAppName()['modules'])) {
+      $this->say(dt('Rebuilding all entities.'));
+      $result = $this->acmsUtilityService->rebuildSiteStudio();
+      $this->yell('Finished rebuilding.');
+      return is_array($result) && isset(array_shift($result)['error']) ? CommandResult::exitCode(self::EXIT_FAILURE) : CommandResult::exitCode(self::EXIT_SUCCESS);
     }
   }
 
