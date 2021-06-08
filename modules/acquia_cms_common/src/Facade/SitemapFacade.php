@@ -97,7 +97,7 @@ final class SitemapFacade implements ContainerInjectionInterface {
     }
 
     // If the node type does not specify the sitemap, there's nothing to do.
-    $sitemap_variant = $node_type->getThirdPartySetting('acquia_cms', 'sitemap_variant');
+    $sitemap_variant = $node_type->getThirdPartySetting('acquia_cms_common', 'sitemap_variant');
     if (empty($sitemap_variant)) {
       return;
     }
