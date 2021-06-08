@@ -5,8 +5,8 @@ namespace Drupal\acquia_cms_common\Commands;
 use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\CommandError;
 use Consolidation\AnnotatedCommand\CommandResult;
-use Drupal\acquia_cms\Facade\CohesionFacade;
 use Drupal\acquia_cms_common\Services\AcmsUtilityService;
+use Drupal\acquia_cms_site_studio\Facade\CohesionFacade;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\config\StorageReplaceDataWrapper;
 use Drupal\Core\Config\ConfigManagerInterface;
@@ -37,7 +37,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    * @var string[]
    * Allowed scope for drush commands.
    */
-  const ALLOWED_SCOPE = ['config', 'site-studio', 'all'];
+  protected $allowedScope = ['config'];
 
   /**
    * The config manager.
@@ -161,7 +161,10 @@ final class AcmsConfigImportCommands extends DrushCommands {
     $this->configImportCommands = $configImportCommands;
     $this->stringTranslation = $stringTranslation;
     $this->moduleHandler = $moduleHandler;
-    $this->cohesionFacade = $classResolver->getInstanceFromDefinition(CohesionFacade::class);
+    if ($this->moduleHandler->moduleExists('acquia_cms_site_studio')) {
+      $this->cohesionFacade = $classResolver->getInstanceFromDefinition(CohesionFacade::class);
+      $this->allowedScope = ['config', 'site-studio', 'all'];
+    }
     $this->acmsUtilityService = $acmsUtilityService;
   }
 
@@ -537,7 +540,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
     $delete_list = $commandData->input()->getOption('delete-list');
     $package = $commandData->input()->getArgument('package');
 
-    if (isset($scope) && !in_array($scope, self::ALLOWED_SCOPE)) {
+    if (isset($scope) && !in_array($scope, $this->allowedScope)) {
       $messages[] = 'Invalid scope, allowed values are [config, site-studio, all]';
     }
     if ($package && !$this->hasValidPackage($package)) {
@@ -567,8 +570,8 @@ final class AcmsConfigImportCommands extends DrushCommands {
     }
     // Get scope from user input.
     if ($isInteractive && empty($messages) && !$scope) {
-      $scope = $this->io()->choice(dt('Choose a scope.'), self::ALLOWED_SCOPE, NULL);
-      $commandData->input()->setOption('scope', self::ALLOWED_SCOPE[$scope]);
+      $scope = $this->io()->choice(dt('Choose a scope.'), $this->allowedScope, NULL);
+      $commandData->input()->setOption('scope', $this->allowedScope[$scope]);
     }
     if ($messages) {
       return new CommandError(implode(' ', $messages));
