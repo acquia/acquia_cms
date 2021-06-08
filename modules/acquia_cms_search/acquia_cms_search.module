@@ -59,8 +59,8 @@ function acquia_cms_search_field_config_insert(FieldConfigInterface $field_confi
   // Adding the third party settings in the node.body storage configuration to
   // index the body field for searching.
   if ($field_storage->getType() === 'text_with_summary' && $field_storage->id() === 'node.body') {
-    $field_storage->setThirdPartySetting('acquia_cms', 'search_index', 'content')
-      ->setThirdPartySetting('acquia_cms', 'search_label', 'Body')
+    $field_storage->setThirdPartySetting('acquia_cms_common', 'search_index', 'content')
+      ->setThirdPartySetting('acquia_cms_common', 'search_label', 'Body')
       ->save();
   }
 
@@ -118,12 +118,12 @@ function acquia_cms_search_search_api_server_insert(ServerInterface $server) {
     }
 
     // If the index wants to opt into using this server, grant its wish.
-    $server_name = $index->getThirdPartySetting('acquia_cms', 'search_server');
+    $server_name = $index->getThirdPartySetting('acquia_cms_common', 'search_server');
     if ($server_name && $server->id() === $server_name) {
       $index->setServer($server)
         ->enable()
         // The third-party setting is only needed once.
-        ->unsetThirdPartySetting('acquia_cms', 'search_server')
+        ->unsetThirdPartySetting('acquia_cms_common', 'search_server')
         ->save();
     }
   }
@@ -133,7 +133,7 @@ function acquia_cms_search_search_api_server_insert(ServerInterface $server) {
  * Implements hook_config_schema_info_alter().
  */
 function acquia_cms_search_config_schema_info_alter(array &$definitions) {
-  $key = 'node.type.*.third_party.acquia_cms';
+  $key = 'node.type.*.third_party.acquia_cms_common';
   // Allow node types to carry a 'search_index' setting. This is used by our
   // facade to passively opt the node type into a particular index.
   // @see acquia_cms_search_node_type_insert()

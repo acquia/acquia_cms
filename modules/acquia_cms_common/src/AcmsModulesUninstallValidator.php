@@ -39,7 +39,7 @@ class AcmsModulesUninstallValidator implements ModuleUninstallValidatorInterface
    */
   public function validate($module): array {
     $reasons = [];
-    $type = explode('_', $module)[2];
+    $type = explode('_', $module)[2] ?? NULL;
     $allowed_modules = [
       'acquia_cms_article',
       'acquia_cms_event',
