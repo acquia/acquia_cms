@@ -64,32 +64,37 @@ function acquia_cms_install_tasks(): array {
   $tasks = [];
 
   // Set default logo for ACMS.
-  $tasks['acquia_cms_set_logo'] = [];
+  $tasks['install_acms_set_logo'] = [];
 
   // Set default favicon for ACMS.
-  $tasks['acquia_cms_set_favicon'] = [];
+  $tasks['install_acms_set_favicon'] = [];
 
   // Install default content for ACMS.
-  $tasks['acquia_cms_import_default_content'] = [];
+  $tasks['install_acms_import_default_content'] = [];
 
+  // Install additional acquia cms modules.
+  $tasks['install_acms_additional_modules'] = [];
+
+  // If the user has configured their Cohesion keys,
+  // and site studio module exists lets import all elements.
   $config = Drupal::config('cohesion.settings');
   $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
 
-  // If the user has configured their Cohesion keys, import all elements.
-  $tasks['acquia_cms_initialize_cohesion'] = [
-    'display_name' => t('Import Site Studio elements'),
-    'display' => $cohesion_configured,
-    'type' => 'batch',
-    'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
-  ];
-  $tasks['acquia_cms_install_ui_kit'] = [
-    'display_name' => t('Import Site Studio components'),
-    'display' => $cohesion_configured,
-    'type' => 'batch',
-    'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
-  ];
-
-  $tasks['acquia_cms_install_additional_modules'] = [];
+  // Allow acquia_cms_site_studio module to be install using profile.
+  if (Drupal::service('module_handler')->moduleExists('acquia_cms_site_studio')) {
+    $tasks['install_acms_site_studio_initialize'] = [
+      'display_name' => t('Import Site Studio elements'),
+      'display' => $cohesion_configured,
+      'type' => 'batch',
+      'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+    ];
+    $tasks['install_acms_site_studio_ui_kit'] = [
+      'display_name' => t('Import Site Studio components'),
+      'display' => $cohesion_configured,
+      'type' => 'batch',
+      'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+    ];
+  }
 
   $tasks['install_acms_finished'] = [];
 
@@ -99,17 +104,17 @@ function acquia_cms_install_tasks(): array {
   // Also send hearbeat event only for UI here.
   // For cli we are sending it from file mentioned above.
   if (PHP_SAPI !== 'cli') {
-    $tasks['acquia_cms_rebuild_site_studio'] = [
+    $tasks['install_acms_site_studio_rebuild'] = [
       'display_name' => t('Rebuild Site Studio'),
       'display' => $cohesion_configured,
       'type' => 'batch',
       'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
     ];
-    // If the user has opted in for Acquia Telemetry, send heartbeat event.
-    $tasks['acquia_cms_send_heartbeat_event'] = [
+    $tasks['install_acms_send_heartbeat_event'] = [
       'run' => Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
     ];
   }
+
   return $tasks;
 }
 
@@ -136,66 +141,53 @@ function acquia_cms_send_heartbeat_event() {
 }
 
 /**
- * Imports all Cohesion elements.
+ * Function to process time values.
  *
  * @return array
- *   The batch job definition.
+ *   Returns all the processed time values.
  */
-function acquia_cms_initialize_cohesion(): array {
-  // Build and run the batch job for the initial import of Cohesion elements and
-  // assets.
-  // @todo When Cohesion provides a service to generate this batch job, use
-  // that instead of calling an internal method of an internal controller, since
-  // this may break at any time due to internal refactoring done by Cohesion.
-  $batch = AdministrationController::batchAction(TRUE);
-  if (isset($batch['error'])) {
-    Drupal::messenger()->addError($batch['error']);
-    return [];
-  }
-  return $batch;
+function acquia_cms_process_time_values() {
+  // Get the install & rebuild time from state API.
+  $install_start_time = \Drupal::state()->get('install_start_time');
+  $install_end_time = \Drupal::state()->get('install_end_time');
+  $rebuild_start_time = \Drupal::state()->get('rebuild_start_time');
+  $rebuild_end_time = \Drupal::state()->get('rebuild_end_time');
+  // Calculate the time diff from the function and pass it to telemetry.
+  $time_values = [
+    'install_start_time' => new DrupalDateTime($install_start_time),
+    'install_end_time' => new DrupalDateTime($install_end_time),
+    'rebuild_start_time' => new DrupalDateTime($rebuild_start_time),
+    'rebuild_end_time' => new DrupalDateTime($rebuild_end_time),
+  ];
+
+  return $time_values;
 }
 
 /**
- * Implements hook_modules_installed().
- */
-function acquia_cms_modules_installed(array $modules) : void {
-  // Don't do anything during site installation, since that can break things in
-  // a big way if modules are being installed due to changes made on the site
-  // configuration form.
-  if (InstallerKernel::installationAttempted()) {
-    return;
-  }
-
-  $module_handler = Drupal::moduleHandler();
-
-  if ($module_handler->moduleExists('acquia_telemetry')) {
-    Drupal::classResolver(TelemetryFacade::class)->modulesInstalled($modules);
-  }
-
-  if ($module_handler->moduleExists('cohesion_sync')) {
-    $module_handler->invoke('cohesion_sync', 'modules_installed', [$modules]);
-  }
-}
-
-/**
- * Implements hook_modules_uninstalled().
- */
-function acquia_cms_modules_uninstalled(array $modules) {
-  if (\Drupal::service('module_handler')->moduleExists('acquia_telemetry')) {
-    Drupal::classResolver(TelemetryFacade::class)->modulesUninstalled($modules);
-  }
-}
-
-/**
- * Imports the Cohesion UI kit that ships with this profile.
+ * Function to calculate the time difference.
  *
- * @param array $install_state
- *   The current state of the installation.
+ * @param \Drupal\Core\Datetime\DrupalDateTime $start_time
+ *   Variable that stores the start time.
+ * @param \Drupal\Core\Datetime\DrupalDateTime $end_time
+ *   Variable that stores the end time.
  *
- * @return array
- *   The batch job definition.
+ * @return int
+ *   Returns the time difference in seconds.
  */
-function acquia_cms_install_ui_kit(array $install_state) {
+function acquia_cms_calculate_time_diff(DrupalDateTime $start_time, DrupalDateTime $end_time) {
+  // Perform the subtraction and return the time in seconds.
+  $timeDiff = $end_time->getTimestamp() - $start_time->getTimestamp();
+
+  // Return the difference.
+  return $timeDiff;
+}
+
+/**
+ * Import site studio uikit.
+ *
+ * @throws Exception
+ */
+function install_acms_site_studio_ui_kit() {
   // During testing, we don't import the UI kit, because it takes forever.
   // Instead, we swap in a pre-built directory of Cohesion templates and assets.
   if (getenv('COHESION_ARTIFACT')) {
@@ -227,17 +219,76 @@ function acquia_cms_install_ui_kit(array $install_state) {
 }
 
 /**
+ * Implements hook_modules_installed().
+ */
+function acquia_cms_modules_installed(array $modules) : void {
+  // Don't do anything during site installation, since that can break things in
+  // a big way if modules are being installed due to changes made on the site
+  // configuration form.
+  if (InstallerKernel::installationAttempted()) {
+    return;
+  }
+
+  $module_handler = Drupal::moduleHandler();
+  if ($module_handler->moduleExists('acquia_telemetry')) {
+    Drupal::classResolver(TelemetryFacade::class)->modulesInstalled($modules);
+  }
+
+  if ($module_handler->moduleExists('cohesion_sync')) {
+    $module_handler->invoke('cohesion_sync', 'modules_installed', [$modules]);
+  }
+}
+
+/**
+ * Implements hook_modules_uninstalled().
+ */
+function acquia_cms_modules_uninstalled(array $modules) {
+  if (\Drupal::service('module_handler')->moduleExists('acquia_telemetry')) {
+    Drupal::classResolver(TelemetryFacade::class)->modulesUninstalled($modules);
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function acquia_cms_module_implements_alter(array &$implementations, string $hook) : void {
+  // @todo The below code needs to be updated once the memory limit issue is
+  // fixed by the site studio.
+  if ($hook === 'modules_installed') {
+    // Prevent cohesion_sync from reacting to module installation, for an
+    // excellent reason: it tries to import all of the new module's sync
+    // packages, at once, in the current request, which leads to memory errors.
+    // We replace it with a slightly smarter implementation that uses the batch
+    // system when installing a module via the UI.
+    unset($implementations['cohesion_sync']);
+  }
+}
+
+/**
+ * Install default content as part of install task.
+ */
+function install_acms_import_default_content() {
+  if (\Drupal::moduleHandler()->moduleExists('acquia_cms_image')) {
+    \Drupal::service('default_content.importer')->importContent('acquia_cms_image');
+  }
+}
+
+/**
  * Method that calls another method to capture the installation end time.
  */
 function install_acms_finished() {
-  $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
-  $telemetry->setTime('install_end_time');
+  // The 'success' parameter means no fatal PHP errors were detected. All
+  // other error management should be handled using 'results'.
+  $end_time = new DrupalDateTime();
+  $formatted_time = acquia_cms_format_time($end_time);
+  \Drupal::state()->set('install_end_time', $formatted_time);
+
 }
 
 /**
  * Installs additional required modules, depending on the environment.
  */
-function acquia_cms_install_additional_modules() {
+function install_acms_additional_modules() {
   // Call ToggleModules Service.
   \Drupal::service('acquia_cms_common.toggle_modules')->ToggleModules();
   // Save configuration for imagemagick.
@@ -310,22 +361,6 @@ function acquia_cms_rebuild_site_studio_finished() {
 }
 
 /**
- * Implements hook_module_implements_alter().
- */
-function acquia_cms_module_implements_alter(array &$implementations, string $hook) : void {
-  // @todo The below code needs to be updated once the memory limit issue is
-  // fixed by the site studio.
-  if ($hook === 'modules_installed') {
-    // Prevent cohesion_sync from reacting to module installation, for an
-    // excellent reason: it tries to import all of the new module's sync
-    // packages, at once, in the current request, which leads to memory errors.
-    // We replace it with a slightly smarter implementation that uses the batch
-    // system when installing a module via the UI.
-    unset($implementations['cohesion_sync']);
-  }
-}
-
-/**
  * Implements hook_form_alter().
  */
 function acquia_cms_form_alter(array &$form, FormStateInterface $form_state, $form_id) : void {
@@ -392,9 +427,8 @@ function alter_update_widget(array &$form, FormStateInterface $form_state, Reque
 /**
  * Set the path to the logo file based on install directory.
  */
-function acquia_cms_set_logo() {
+function install_acms_set_logo() {
   $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
-
   Drupal::configFactory()
     ->getEditable('system.theme.global')
     ->set('logo', [
@@ -408,9 +442,8 @@ function acquia_cms_set_logo() {
 /**
  * Set the path to the favicon file based on install directory.
  */
-function acquia_cms_set_favicon() {
+function install_acms_set_favicon() {
   $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
-
   Drupal::configFactory()
     ->getEditable('system.theme.global')
     ->set('favicon', [
@@ -419,13 +452,4 @@ function acquia_cms_set_favicon() {
       'use_default' => FALSE,
     ])
     ->save(TRUE);
-}
-
-/**
- * Install default content as part of install task.
- */
-function acquia_cms_import_default_content() {
-  if (\Drupal::moduleHandler()->moduleExists('acquia_cms_image')) {
-    \Drupal::service('default_content.importer')->importContent('acquia_cms_image');
-  }
 }
