@@ -53,6 +53,7 @@ remote acquia_cms_page git@github.com:acquia/acquia_cms_page.git
 remote acquia_cms_person git@github.com:acquia/acquia_cms_person.git
 remote acquia_cms_place git@github.com:acquia/acquia_cms_place.git
 remote acquia_cms_search git@github.com:acquia/acquia_cms_search.git
+remote acquia_cms_site_studio git@github.com:acquia/acquia_cms_site_studio.git
 remote acquia_cms_starter git@github.com:acquia/acquia_cms_starter.git
 remote acquia_cms_support git@github.com:acquia/acquia_cms_support.git
 remote acquia_cms_toolbar git@github.com:acquia/acquia_cms_toolbar.git
@@ -70,6 +71,7 @@ split 'modules/acquia_cms_image' acquia_cms_image
 split 'modules/acquia_cms_page' acquia_cms_page
 split 'modules/acquia_cms_person' acquia_cms_person
 split 'modules/acquia_cms_place' acquia_cms_place
+split 'modules/acquia_cms_site_studio' acquia_cms_site_studio
 split 'modules/acquia_cms_search' acquia_cms_search
 split 'modules/acquia_cms_starter' acquia_cms_starter
 split 'modules/acquia_cms_support' acquia_cms_support
