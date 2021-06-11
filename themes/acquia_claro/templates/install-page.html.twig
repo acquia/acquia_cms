@@ -15,8 +15,10 @@
   <header role="banner">
     {% if site_name %}
     <div class="banner-title-img">
+      {% if install_page_logo_path %}
+        <img src="{{ install_page_logo_path }}">
+      {% endif %}  
       <h1 class="page-title">
-        <img src="http://orionacmsdev.prod.acquia-sites.com/profiles/contrib/acquia_cms/acquia_cms.png">
         {{ site_name }}<span class="site-version">{{ site_version }}</span>
       </h1>
     </div>
