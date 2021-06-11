@@ -20,6 +20,8 @@ use Drupal\acquia_claro\PreRender;
  */
 function acquia_claro_preprocess_install_page(array &$variables) {
   $variables['drupal_core_version'] = \Drupal::VERSION;
+  $variables['#attached']['library'][] = 'seven/install-page';
+  $variables['#attached']['library'][] = 'acquia_claro/install-page';
 }
 
 /**
