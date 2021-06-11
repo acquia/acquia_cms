@@ -16,15 +16,13 @@
     {% if site_name %}
     <div class="banner-title-img">
       <h1 class="page-title" style="display: flex;align-items: center;margin-left: 50px;color: #168ec4;">
-        <a href="drupal.org">
-          <img src="http://orionacmsdev.prod.acquia-sites.com/profiles/contrib/acquia_cms/acquia_cms.png" style="height: 36px; margin-right: 10px;">
-        </a>  
-        {{ site_name }}<span class="site-version">1.2.3</span>
-    </div>
+        <img src="http://orionacmsdev.prod.acquia-sites.com/profiles/contrib/acquia_cms/acquia_cms.png" style="height: 36px; margin-right: 10px;">
+        {{ site_name }}<span class="site-version" style="margin-left: 10px;">{{ site_version }}</span>
       </h1>
+    </div>
       {% if site_version %}
         <span class="powered-by" style="display: block; margin-bottom: 24px; margin-left: 53px;">
-          Powered by <a href="https://www.drupal.org/project/drupal">Drupal {{ site_version }}</a></span>
+          Powered by <a href="https://www.drupal.org/project/drupal">Drupal {{ drupal_core_version }}</a></span>
       {% endif %}
     {% endif %}
   </header>
