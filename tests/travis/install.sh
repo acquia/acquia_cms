@@ -14,8 +14,8 @@ cd "$(dirname "$0")"
 # Reuse ORCA's own includes.
 source ../../../orca/bin/travis/_includes.sh
 
-# If running our custom jobs, initialize the fixture. Otherwise, use Orca's
-# installation script.
+# If running our custom jobs or isolated test jobs, initialize the fixture.
+# Otherwise, use Orca's installation script.
 if [[ "$ACMS_JOB" == "base" ]] || [[ "$ACMS_JOB" == "starter" ]]; then
   orca debug:packages CURRENT_DEV
   orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=acquia_cms --no-sqlite --no-site-install
@@ -23,7 +23,7 @@ elif [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]]; th
   orca debug:packages CURRENT_DEV
   orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=acquia_cms --no-sqlite
 else
-  # Run ORCA's standard installation script.
+# Run ORCA's standard installation script.
   ../../../orca/bin/travis/install.sh
 fi
 
@@ -35,7 +35,7 @@ printenv | grep ACMS_ | sort
 cd $ORCA_FIXTURE_DIR
 
 # Rebuild cohesion after install.
-if [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]]; then
+if [[ "$ACMS_JOB" != "base" ]] && [[ "$ACMS_JOB" != "starter" ]] && [[ "$ORCA_JOB" != "LOOSE_DEPRECATED_CODE_SCAN" ]] && [[ "$ORCA_JOB" != "DEPRECATED_CODE_SCAN_W_CONTRIB" ]]; then
   drush cohesion:rebuild -y
 fi
 

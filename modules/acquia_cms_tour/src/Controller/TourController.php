@@ -22,7 +22,7 @@ final class TourController extends ControllerBase {
       '#theme' => 'acquia_cms_tour',
       '#attached' => [
         'library' => [
-          'acquia_cms_tour/styling',
+          'acquia_cms_tour/acquia_cms_tour',
         ],
       ],
     ];

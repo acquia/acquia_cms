@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_common\Services;
 
+use Drupal\cohesion\Drush\DX8CommandHelpers;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 
@@ -45,6 +46,26 @@ class AcmsUtilityService {
     return array_filter($profile_modules, function ($key) {
       return str_starts_with($key, 'acquia_cms');
     }, ARRAY_FILTER_USE_KEY);
+  }
+
+  /**
+   * Trigger site studio rebuild on demand.
+   */
+  public function rebuildSiteStudio() {
+    // Forcefully clear the cache after site is installed otherwise site
+    // studio fails to rebuild.
+    drupal_flush_all_caches();
+    // Below code ensures that drush batch process doesn't hang. Unset all the
+    // earlier created batches so that drush_backend_batch_process() can run
+    // without being stuck.
+    // @see https://github.com/drush-ops/drush/issues/3773 for the issue.
+    $batch = &batch_get();
+    $batch = NULL;
+    unset($batch);
+    return DX8CommandHelpers::rebuild([
+      'verbose' => '',
+      'no-cache-clear' => FALSE,
+    ]);
   }
 
   /**

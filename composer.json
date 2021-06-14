@@ -26,7 +26,7 @@
         "drupal/acquia_contenthub": "^2.22",
         "drupal/acquia_lift": "^4.2",
         "drupal/acquia_purge": "^1",
-        "drupal/acquia_search": "^3.0",
+        "drupal/acquia_search": "^3.0.3",
         "drupal/acquia_telemetry-acquia_telemetry": "1.0-alpha5",
         "drupal/acsf": "^2",
         "drupal/address": "^1",
@@ -34,8 +34,9 @@
         "drupal/autologout": "^1",
         "drupal/checklistapi": "^2.0",
         "drupal/collapsiblock": "^3",
+        "drupal/config_ignore": "^2.3",
         "drupal/config_rewrite": "1.3",
-        "drupal/core": "~9.1.9",
+        "drupal/core": "^9.1.9",
         "drupal/default_content": "^2",
         "drupal/diff": "^1",
         "drupal/entity_clone": "1.0-beta4",
@@ -173,6 +174,7 @@
                 "dashboard_owner return a string value and thus the hasPermission function throws an error": "https://www.drupal.org/files/issues/2020-05-04/user_load_moderation_dashboard_updated_with_DI_for_beta_version_3048782.patch"
             },
             "drupal/password_policy": {
+                "Field field_last_password_reset is unknown": "https://www.drupal.org/files/issues/2020-07-03/2771129-114.patch",
                 "Register account anonymously, does not validate constraint 'password_username'.": "https://www.drupal.org/files/issues/2020-09-24/password-username-validate--3161012-4.patch"
             },
             "drupal/reroute_email": {

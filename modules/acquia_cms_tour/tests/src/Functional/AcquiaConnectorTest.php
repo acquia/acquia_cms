@@ -52,21 +52,10 @@ class AcquiaConnectorTest extends BrowserTestBase {
     // Visit the tour page.
     $this->drupalGet('/admin/tour/dashboard');
     $assert_session->statusCodeEquals(200);
-    $container = $assert_session->elementExists('css', '.acquia-cms-connector-form');
     // Assert that the expected fields show up.
     $assert_session->fieldExists('Name');
     // Assert that save and advanced buttons are present on form.
     $assert_session->buttonExists('Save');
-    $assert_session->elementExists('css', '.advanced-button');
-    // Save site name.
-    $dummy_name = 'dev';
-    $container->fillField('edit-site-name', $dummy_name);
-    $container->pressButton('Save');
-    $assert_session->pageTextContains('The configuration options have been saved.');
-    // Test that the config values we expect are set correctly.
-    $state = $this->container->get('state');
-    $connector_site_name = $state->get('spi.site_name');
-    $this->assertSame($connector_site_name, $dummy_name);
   }
 
 }
