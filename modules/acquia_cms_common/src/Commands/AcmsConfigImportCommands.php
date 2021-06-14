@@ -4,6 +4,7 @@ namespace Drupal\acquia_cms_common\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\CommandError;
+use Consolidation\AnnotatedCommand\CommandResult;
 use Drupal\acquia_cms\Facade\CohesionFacade;
 use Drupal\acquia_cms_common\Services\AcmsUtilityService;
 use Drupal\Component\Serialization\Yaml;
@@ -78,7 +79,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *
    * @var \Drupal\Core\DependencyInjection\ClassResolver
    */
-  protected $classResolver;
+  protected $cohesionFacade;
 
   /**
    * The acquia cms utility service.
@@ -160,7 +161,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
     $this->configImportCommands = $configImportCommands;
     $this->stringTranslation = $stringTranslation;
     $this->moduleHandler = $moduleHandler;
-    $this->classResolver = $classResolver;
+    $this->cohesionFacade = $classResolver->getInstanceFromDefinition(CohesionFacade::class);
     $this->acmsUtilityService = $acmsUtilityService;
   }
 
@@ -175,8 +176,6 @@ final class AcmsConfigImportCommands extends DrushCommands {
    * @param array $options
    *   The options array.
    *
-   * @throws \Drush\Exceptions\UserAbortException
-   *
    * @option scope
    *   The scope for particular package to be imported.
    * @option delete-list
@@ -185,9 +184,11 @@ final class AcmsConfigImportCommands extends DrushCommands {
    * @aliases acr
    * @usage acms:config-reset
    *   Reset the configuration to the default.
-   * @usage acms:config-reset acquia_cms_article acquia_cms_common --scope=all
+   * @usage acms:config-reset acquia_cms_article acquia_cms_person --scope=all
    * --delete-list=search_api.index.acquia_search_index
    *   Reset the configuration to the default.
+   *
+   * @throws \Drush\Exceptions\UserAbortException
    */
   public function resetConfigurations(array $package, array $options = [
     'scope' => NULL,
@@ -197,39 +198,60 @@ final class AcmsConfigImportCommands extends DrushCommands {
       "This should be used with extreme caution and can lead to unexpected behavior on your site if not well tested.",
       "Do not run this in production until you've tested it in a safe, non-public environment first.",
     ]);
-    // Lets get input from user if not provided package with command.
-    if (empty($package)) {
-      $acms_modules = $this->getAcmsModules();
-      $question_string = 'Choose a module that needs a configuration reset. Separate multiple choices with commas, e.g. "1,2,4".';
-      $question = $this->createMultipleChoiceOptions($question_string, $acms_modules);
-      $types = $this->io()->askQuestion($question);
-      if (in_array('Cancel', $types)) {
-        throw new UserAbortException();
-      }
-      elseif (in_array('All', $types)) {
-        $package = $acms_modules;
-      }
-      else {
-        $package = $types;
-      }
-      // Lets ask for scope if not already provided.
-      if (!$options['scope']) {
-        $scope = $this->io()->choice(dt('Choose a scope.'), self::ALLOWED_SCOPE, NULL);
-        $options['scope'] = self::ALLOWED_SCOPE[$scope];
-      }
-      elseif ($options['scope'] && !in_array($options['scope'], self::ALLOWED_SCOPE)) {
-        throw new \InvalidArgumentException('Invalid scope, allowed values are [config, site-studio, all]');
-      }
-      if (!$options['delete-list']) {
-        $options['delete-list'] = [];
-      }
-    }
-    // Lets import the configurations.
+    // Reset the configurations for given packages aka modules
+    // package, scope & delete-list are being added in validate command.
     $this->doImport($package, $options['scope'], $options['delete-list']);
   }
 
   /**
-   * Get lists of module only.
+   * Get package from user input if not provided already.
+   *
+   * @return array
+   *   The package from user input.
+   *
+   * @throws \Drush\Exceptions\UserAbortException
+   */
+  private function getPackagesFromUserInput(): array {
+    // Lets get input from user if not provided package with command.
+    $acms_modules = $this->filterModuleForConfig();
+    $question_string = 'Choose a module that needs a configuration reset. Separate multiple choices with commas, e.g. "1,2,4".';
+    $question = $this->createMultipleChoiceOptions($question_string, $acms_modules);
+    $types = $this->io()->askQuestion($question);
+    if (in_array('Cancel', $types)) {
+      throw new UserAbortException();
+    }
+    elseif (in_array('All', $types)) {
+      $package = $acms_modules;
+    }
+    else {
+      $package = $types;
+    }
+    return $package;
+  }
+
+  /**
+   * Filter out those modules which do not have config to import from the list.
+   *
+   * @return array
+   *   The list of module which has configurations.
+   */
+  private function filterModuleForConfig(): array {
+    $acms_modules = $this->getAcmsModules();
+    $acms_filtered_modules = [];
+    foreach ($acms_modules as $module) {
+      $dir = drupal_get_path('module', $module);
+      $install = "$dir/config/install";
+      $optional = "$dir/config/optional";
+      if (is_dir($install) || is_dir($optional)) {
+        $acms_filtered_modules[] = $module;
+      }
+    }
+
+    return $acms_filtered_modules;
+  }
+
+  /**
+   * Get list of Acquia CMS modules.
    *
    * @return array
    *   Array of acms modules.
@@ -259,7 +281,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    * @return \Symfony\Component\Console\Question\ChoiceQuestion
    *   The ChoiceQuestion
    */
-  private function createMultipleChoiceOptions(string $question_string, array $choice_options, $default = NULL) {
+  private function createMultipleChoiceOptions(string $question_string, array $choice_options, $default = NULL): ChoiceQuestion {
     $choices = array_merge(['Cancel'], $choice_options);
     array_push($choices, 'All');
     $question = new ChoiceQuestion(dt($question_string), $choices, $default);
@@ -278,6 +300,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *   The list of config files to be deleted during import.
    *
    * @throws \Drush\Exceptions\UserAbortException
+   * @throws \Exception
    */
   private function doImport(array $package, string $scope, array $delete_list) {
     $config_files = $ss_config_files = [];
@@ -285,22 +308,53 @@ final class AcmsConfigImportCommands extends DrushCommands {
       foreach ($package as $module) {
         $config_files = array_merge($config_files, $this->getConfigFiles($module));
       }
-      // Let validate delete list against given scope of configurations.
+      // Validate delete list against given scope of configurations.
       if (!$this->validDeleteList($config_files, $delete_list)) {
         throw new \Exception("The file specified in --delete-list option is invalid.");
       }
       $this->importPartialConfig($config_files, $delete_list);
     }
 
-    // Import the site studio configurations.
+    // Build site studio packages.
     if (in_array($scope, ['site-studio', 'all'])) {
-      // Show big warning if site-studio is in scope.
-      $this->io()->warning("This can have unintended side effects for existing pages built using previous versions of components, it might literally break them, and should be tested in a non-production environment first.");
       foreach ($package as $module) {
         $ss_config_files = array_merge($ss_config_files, $this->getSiteStudioPackage($module));
       }
-      $this->importSiteStudioPackage($ss_config_files);
+      // Confirm the site studio changes before import.
+      if ($this->buildSiteStudioChangeList($ss_config_files)) {
+        if (!$this->io()->confirm(dt('Import these site studio configuration changes?'))) {
+          throw new UserAbortException();
+        }
+        // Import the site studio configurations.
+        $this->importSiteStudioPackage($ss_config_files);
+      }
+      else {
+        $this->io()->success('No site studio package to import.');
+      }
     }
+  }
+
+  /**
+   * Show change list for site studio packages.
+   *
+   * @param array $ss_config_files
+   *   Array of configurations file.
+   *
+   * @return bool
+   *   The package status.
+   */
+  private function buildSiteStudioChangeList(array $ss_config_files): bool {
+    if (empty($ss_config_files)) {
+      return FALSE;
+    }
+    $rows = [];
+    foreach ($ss_config_files as $name) {
+      $rows[] = [$name];
+    }
+    // Show warning if site-studio is in scope.
+    $this->io()->warning("This can have unintended side effects for existing pages built using previous versions of components, it might literally break them, and should be tested in a non-production environment first.");
+    $this->io()->table(['Configuration'], $rows);
+    return TRUE;
   }
 
   /**
@@ -392,16 +446,11 @@ final class AcmsConfigImportCommands extends DrushCommands {
    * @throws \Exception
    */
   private function importSiteStudioPackage(array $packages) {
-    $cohesion_facade = $this->classResolver->getInstanceFromDefinition(CohesionFacade::class);
     $operations = [];
     foreach ($packages as $package) {
-      $operations = array_merge($operations, $cohesion_facade->importPackage($package, TRUE));
+      $operations = array_merge($operations, $this->cohesionFacade->importPackage($package));
     }
-    $batch = [
-      'title' => $this->stringTranslation->translate('Importing configuration.'),
-      'operations' => $operations,
-      'finished' => '\Drupal\acquia_cms\Facade\CohesionFacade::batchFinishedCallback',
-    ];
+    $batch = ['operations' => $operations];
     batch_set($batch);
     drush_backend_batch_process();
   }
@@ -415,6 +464,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *   The list of configurations to be deleted before import.
    *
    * @throws \Drush\Exceptions\UserAbortException
+   * @throws \Exception
    */
   private function importPartialConfig(array $config_files, array $delete_list) {
     // Determine $source_storage in partial case.
@@ -422,6 +472,14 @@ final class AcmsConfigImportCommands extends DrushCommands {
 
     $replacement_storage = new StorageReplaceDataWrapper($active_storage);
     foreach ($config_files as $name => $data) {
+      // We should not re-import cohesion settings,
+      // it will override the site studio credentials which
+      // will break the whole site. Also re-importing
+      // search_api.index.content will have unexpected error since
+      // we have modified it using facade to add index field.
+      if ($name === 'cohesion.settings' || $name === 'search_api.index.content') {
+        continue;
+      }
       $replacement_storage->replaceData($name, $data);
     }
     $source_storage = $replacement_storage;
@@ -452,7 +510,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
     }
     $table = ConfigCommands::configChangesTable($change_list, $this->output());
     $table->render();
-
+    $this->io()->warning("Any overridden configurations will be reverted back with the one listed above which may result in unexpected behaviour.");
     if (!$this->io()->confirm(dt('Import these configuration changes?'))) {
       throw new UserAbortException();
     }
@@ -463,12 +521,14 @@ final class AcmsConfigImportCommands extends DrushCommands {
    * Hook validate for acms config reset command.
    *
    * @hook validate acms:config-reset
+   *
+   * @throws \Drush\Exceptions\UserAbortException
    */
   public function validateConfigResetCommand(CommandData $commandData) {
     // Since we are running config import with partial option
     // Lets check config module is enabled or not.
     if (!$this->moduleHandler->moduleExists('config')) {
-      $messages[] = 'Config module is not enabled, please enable it.';
+      return new CommandError('Config module is not enabled, please enable it.');
     }
 
     $messages = [];
@@ -476,11 +536,12 @@ final class AcmsConfigImportCommands extends DrushCommands {
     $scope = $commandData->input()->getOption('scope');
     $delete_list = $commandData->input()->getOption('delete-list');
     $package = $commandData->input()->getArgument('package');
+
     if (isset($scope) && !in_array($scope, self::ALLOWED_SCOPE)) {
       $messages[] = 'Invalid scope, allowed values are [config, site-studio, all]';
     }
     if ($package && !$this->hasValidPackage($package)) {
-      $messages[] = 'Given packages are not valid, try providing a list of ACMS modules ex: acquia_cms_article';
+      $messages[] = 'Given packages are not valid, try providing a list of ACMS modules separated by space ex: acquia_cms_article acquia_cms_place';
     }
     // In case of --delete-list option.
     if ($delete_list) {
@@ -492,10 +553,22 @@ final class AcmsConfigImportCommands extends DrushCommands {
         $commandData->input()->setOption('delete-list', $delete_list_array);
       }
     }
-
+    else {
+      $commandData->input()->setOption('delete-list', []);
+    }
     // In case of -y lets check user has provided all the required arguments.
     if (!$isInteractive && (!$package || !$scope)) {
       $messages[] = 'In order to use -y option, please provide a package and scope variable.';
+    }
+    // Get packages from user input.
+    if ($isInteractive && empty($messages) && !$package) {
+      $package = $this->getPackagesFromUserInput();
+      $commandData->input()->setArgument('package', $package);
+    }
+    // Get scope from user input.
+    if ($isInteractive && empty($messages) && !$scope) {
+      $scope = $this->io()->choice(dt('Choose a scope.'), self::ALLOWED_SCOPE, NULL);
+      $commandData->input()->setOption('scope', self::ALLOWED_SCOPE[$scope]);
     }
     if ($messages) {
       return new CommandError(implode(' ', $messages));
@@ -542,6 +615,21 @@ final class AcmsConfigImportCommands extends DrushCommands {
       }
     }
     return TRUE;
+  }
+
+  /**
+   * Execute site studio rebuild after Acquia CMS config reset.
+   *
+   * @hook post-command acms:config-reset
+   */
+  public function acmsConfigResetPostCommand($result, CommandData $commandData) {
+    $scope = $commandData->input()->getOption('scope');
+    if (in_array($scope, ['site-studio', 'all'])) {
+      $this->say(dt('Rebuilding all entities.'));
+      $result = $this->acmsUtilityService->rebuildSiteStudio();
+      $this->yell('Finished rebuilding.');
+      return is_array($result) && isset(array_shift($result)['error']) ? CommandResult::exitCode(self::EXIT_FAILURE) : CommandResult::exitCode(self::EXIT_SUCCESS);
+    }
   }
 
 }

@@ -1,3 +1,4 @@
+uuid: 7aae5706-2b63-487e-b74f-a00e04e1ad26
 langcode: en
 status: true
 dependencies:
@@ -14,16 +15,6 @@ targetEntityType: media
 bundle: image
 mode: default
 content:
-  created:
-    label: hidden
-    type: timestamp
-    weight: 1
-    region: content
-    settings:
-      date_format: medium
-      custom_date_format: ''
-      timezone: ''
-    third_party_settings: {  }
   thumbnail:
     type: image
     weight: 2
@@ -33,17 +24,12 @@ content:
       image_style: coh_small_square
       image_link: ''
     third_party_settings: {  }
-  uid:
-    label: hidden
-    type: author
-    weight: 0
-    region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
+  created: true
   field_categories: true
   field_tags: true
   image: true
   langcode: true
   name: true
   search_api_excerpt: true
+  uid: true

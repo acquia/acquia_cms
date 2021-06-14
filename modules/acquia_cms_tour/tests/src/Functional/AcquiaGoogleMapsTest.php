@@ -55,7 +55,7 @@ class AcquiaGoogleMapsTest extends BrowserTestBase {
     $this->drupalGet('/admin/tour/dashboard');
     $assert_session->statusCodeEquals(200);
 
-    $container = $assert_session->elementExists('css', '[data-drupal-selector="edit-acquia-google-maps-api"]');
+    $container = $assert_session->elementExists('css', '[data-drupal-selector="edit-geocoder"]');
     // API key should be blank to start.
     $assert_session->fieldValueEquals('maps_api_key', '', $container);
     $container->pressButton('Save');

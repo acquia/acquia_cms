@@ -65,6 +65,35 @@ matrix:
     # @see https://github.com/acquia/orca/blob/master/docs/understanding-orca.md#continuous-integration
     - { env: ORCA_JOB=STATIC_CODE_ANALYSIS, name: "Static code analysis" }
     - { env: ORCA_JOB=STRICT_DEPRECATED_CODE_SCAN, name: "Strict deprecated code scan" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_OLDEST_SUPPORTED, if: type = cron, name: "Integrated test on oldest supported Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_UPGRADE_TEST_FROM_PREVIOUS_MINOR, if: type = cron, name: "Integrated upgrade test from previous minor" }
+    - { env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT ACMS_JOB=base_full, if: type = cron, name: "Isolated test on current Drupal core version" }
+    # To send PHPUnit test coverage data to Coveralls (coveralls.io), configure
+    # your GitHub repository according to the FAQ below and uncomment the
+    # following line. By default this job is allowed to fail (see below) so that
+    # the total build can be marked finished sooner, because it will have the
+    # same testing outcome as the above ISOLATED_TEST_ON_CURRENT but may take
+    # significantly longer. Note: this setting implies ORCA_COVERAGE_ENABLE,
+    # which need not be set separately.
+    # @see https://github.com/acquia/orca/blob/main/docs/faq.md#coveralls
+    # @see https://github.com/acquia/orca/blob/main/docs/advanced-usage.md#ORCA_COVERALLS_ENABLE
+    # @see https://github.com/acquia/orca/blob/main/docs/advanced-usage.md#ORCA_COVERAGE_ENABLE
+    # - { env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT ORCA_COVERALLS_ENABLE=TRUE, name: "Isolated test on current Drupal core version with test coverage" }
+    #
+    # To generate test coverage data to send somewhere other than Coveralls, use
+    # the ORCA_COVERAGE_ENABLE variable instead.
+    # - { env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT ORCA_COVERAGE_ENABLE=TRUE, name: "Isolated test on current Drupal core version with test coverage" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_CURRENT, if: type = cron, name: "Integrated test on current Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_UPGRADE_TEST_TO_NEXT_MINOR, if: type = cron, name: "Integrated upgrade test to next minor Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_UPGRADE_TEST_TO_NEXT_MINOR_DEV, if: type = cron, name: "Integrated upgrade test to next minor dev Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_CURRENT_DEV ACMS_JOB=base_full, if: type = cron, name: "Integrated test on current dev Drupal core version" }
+    - { env: ORCA_JOB=LOOSE_DEPRECATED_CODE_SCAN, if: type = cron, name: "Loose deprecated code scan" }
+    - { env: ORCA_JOB=STRICT_DEPRECATED_CODE_SCAN, if: type = cron, name: "Strict deprecated code scan" }
+    - { env: ORCA_JOB=DEPRECATED_CODE_SCAN_W_CONTRIB, if: type = cron, name: "Deprecated code scan w/ contrib" }
+    - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MINOR, if: type = cron, name: "Isolated test on next minor Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR, if: type = cron, name: "Integrated test on next minor Drupal core version" }
+    - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MINOR_DEV, if: type = cron, name: "Isolated test on next minor dev Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR_DEV, if: type = cron, name: "Integrated test on next minor dev Drupal core version" }
     # The following nine jobs are custom ACMS jobs based on the standard isolated
     # current dev test.
     # Exclude push group tests on this job to exclude low and medium risk tests.
@@ -99,6 +128,8 @@ matrix:
     - env: ORCA_JOB=INTEGRATED_UPGRADE_TEST_TO_NEXT_MINOR_DEV
     - env: ORCA_JOB=LOOSE_DEPRECATED_CODE_SCAN
     - env: ORCA_JOB=DEPRECATED_CODE_SCAN_W_CONTRIB
+    - env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR
+    - env: ORCA_JOB=INTEGRATED_TEST_ON_CURRENT
     - env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MINOR_DEV
     - env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR_DEV
     - env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV
@@ -139,3 +170,12 @@ after_failure: ../orca/bin/travis/after_failure.sh
 
 # Reserved for future use.
 after_script: ../orca/bin/travis/after_script.sh
+
+notifications:
+  slack:
+    rooms:
+      - secure: P7RpwdM8JKMCs6386SOy24nsh7jBYaZ/CLzKH1vRu1sVnAopRSlk98VoejGED4YzCq2V3+b84PNltjyOZlDdPutZMP2Fat4OU+e4Mt05Vlrbn470cjk0puzFBnuubAq2GwXcyAB6Eq9DEe6DARCdFSya6GsTjvf3+RVFIaiVDDG0PYYQrMlwQ/C/+JBmnP7FLfidL6vX2YDL6UbQpQGuqJ/hwliW2RVnMTM7gCpgNaY8rxRRBuKKPjzJt09hV+YNpvsnGab+t5DMWKzeNKWUl0wiVOWEv90CKyx9QIt4zJy8pAxXitDFz74z/cMZV/ELGaD20nl7hw88R3rTzK2V+5FRCZHcQvkCgiZbHayaF4ShquHZbzE8YH48sEORFaGnbfaY69sveLq4+74dpFdMHRj1cBRY1CGnN59JgtBTwZShlXbUZoYJGbebfBvlxt6A2IcSERiTGl0i64L1elAkN6854VPwWMDi+iLfgfJN/0jugsvAcCQi0DOV1DJzHdF+EbVhFAVFfivwHo3Ai7QSZN2Rs4ojE8sdWQOp83wjA493FATkCSvFcpyPqG9kX1nQuDf6SNHwVg4jdpePwp/okgm+WcCZPiCEE2jW4gu49Gx4m2Y3r2878b76cQn+K4DX/mP5vRu6vA50gAa1fMsL4Yo9v/VbtrbEPYEVmFUHdq0=
+    on_success: change
+    on_failure: always
+    # Limit to cron builds.
+    if: type = cron
