@@ -171,7 +171,13 @@ npm install
 
 ##### Running Existing Tests
 
-To run Backstop tests on Acquia CMS, run the following command:
+To run the backstop tests on Acquia CMS, start the server on another terminal with following command.
+
+```
+drush runserver --default-server=http://127.0.0.1:8080
+```
+
+Once, the server is started, run the following command:
 
 ```
 npm run backstop-starter
