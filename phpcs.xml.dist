@@ -24,4 +24,9 @@
   <!-- This value should be the same as the value set in .travis.yml -->
   <rule ref="AcquiaDrupalStrict"/>
 
+  <rule ref="Drupal.InfoFiles.AutoAddedKeys.Version">
+      <!-- Exclude .info.yml file from the auto add version key rule. -->
+      <exclude-pattern>acquia_cms\.info</exclude-pattern>
+  </rule>
+
 </ruleset>
