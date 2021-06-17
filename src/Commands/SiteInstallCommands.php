@@ -30,6 +30,9 @@ class SiteInstallCommands extends DrushCommands {
       $result = \Drupal::service('acquia_cms_common.utility')->rebuildSiteStudio();
       $this->yell('Finished rebuilding.');
       $this->setFinishedTime();
+      if (function_exists('acquia_cms_print_icon')) {
+        acquia_cms_print_icon();
+      }
     }
     // Send data to telemetry based upon certain conditions.
     if (\Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv()) {
