@@ -9,7 +9,7 @@
  * @see template_preprocess_install_page()
  */
 #}
-{% set site_name = 'Acquia CMS' %}
+
 <div class="layout-container">
 
   <header role="banner">
@@ -17,7 +17,7 @@
     <div class="banner-title-img">
       {% if install_page_logo_path %}
         <img src="{{ install_page_logo_path }}">
-      {% endif %}  
+      {% endif %}
       <h1 class="page-title">
         {{ site_name }}<span class="site-version">{{ site_version }}</span>
       </h1>
