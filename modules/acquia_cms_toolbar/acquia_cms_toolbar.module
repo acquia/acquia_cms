@@ -20,10 +20,13 @@ function acquia_cms_toolbar_preprocess_html(array &$variables) {
 /**
  * Implements hook_preprocess_HOOK() for page.
  */
-function acquia_cms_common_preprocess_page(&$variables) {
-  // Check if user has access to admin toolbar.
-  $toolbar_access = \Drupal::currentUser()->hasPermission('access toolbar') ? \Drupal::currentUser()->hasPermission('access toolbar') : FALSE;
-  if ($toolbar_access) {
+function acquia_cms_toolbar_preprocess_page(&$variables) {
+  $toolbar_access = \Drupal::currentUser()->hasPermission('access toolbar') ?? FALSE;
+  $route = \Drupal::routeMatch()->getRouteObject();
+  $is_admin_route = \Drupal::service('router.admin_context')->isAdminRoute($route);
+
+  // Check if user has access to admin toolbar and its not admin route.
+  if ($toolbar_access && !$is_admin_route) {
     // Attach toolbar styles library on all pages.
     $variables['#attached']['library'][] = 'acquia_cms_toolbar/toolbar_styles';
   }

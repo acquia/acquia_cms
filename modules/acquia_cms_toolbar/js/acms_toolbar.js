@@ -9,6 +9,7 @@
     // Avoid main menu's overlapping with admin toolbar.
     // Spacing from top should be equal to the height of admin toolbar.
     // JS code only gets applied when user is logged in and has access to admin toolbar.
+    // This was causing contentHub UI issue, hence added only for non-admin route.
     attach(context) {
       function adjustTopPadding() {
         // Since toolbar-icon-menu was adding its own js,
@@ -17,7 +18,7 @@
         var new_height = body_padding_top.replace('px', '') - 5;
         // Js should not be applied for desktop.
         if ($(window).width() < 768) {
-          $('body').css('margin-top', $('#toolbar-bar').height()- new_height);
+          $('body').css('margin-top', $('#toolbar-bar').height() - new_height);
         }
       }
       window.onload = adjustTopPadding;
