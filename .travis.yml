@@ -83,7 +83,7 @@ matrix:
     # To generate test coverage data to send somewhere other than Coveralls, use
     # the ORCA_COVERAGE_ENABLE variable instead.
     # - { env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT ORCA_COVERAGE_ENABLE=TRUE, name: "Isolated test on current Drupal core version with test coverage" }
-    - { env: ORCA_JOB=INTEGRATED_TEST_ON_CURRENT, if: type = cron, name: "Integrated test on current Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_CURRENT, name: "Integrated test on current Drupal core version" }
     - { env: ORCA_JOB=INTEGRATED_UPGRADE_TEST_TO_NEXT_MINOR, if: type = cron, name: "Integrated upgrade test to next minor Drupal core version" }
     - { env: ORCA_JOB=INTEGRATED_UPGRADE_TEST_TO_NEXT_MINOR_DEV, if: type = cron, name: "Integrated upgrade test to next minor dev Drupal core version" }
     - { env: ORCA_JOB=INTEGRATED_TEST_ON_CURRENT_DEV ACMS_JOB=base_full, if: type = cron, name: "Integrated test on current dev Drupal core version" }
@@ -91,9 +91,9 @@ matrix:
     - { env: ORCA_JOB=STRICT_DEPRECATED_CODE_SCAN, if: type = cron, name: "Strict deprecated code scan" }
     - { env: ORCA_JOB=DEPRECATED_CODE_SCAN_W_CONTRIB, if: type = cron, name: "Deprecated code scan w/ contrib" }
     - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MINOR, if: type = cron, name: "Isolated test on next minor Drupal core version" }
-    - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR, if: type = cron, name: "Integrated test on next minor Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR, name: "Integrated test on next minor Drupal core version" }
     - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MINOR_DEV, if: type = cron, name: "Isolated test on next minor dev Drupal core version" }
-    - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR_DEV, if: type = cron, name: "Integrated test on next minor dev Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR_DEV, name: "Integrated test on next minor dev Drupal core version" }
     # The following nine jobs are custom ACMS jobs based on the standard isolated
     # current dev test.
     # Exclude push group tests on this job to exclude low and medium risk tests.
