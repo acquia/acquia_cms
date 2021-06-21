@@ -5,8 +5,13 @@ acquia/acquia_cms:
 # Cog has a composer bug as of 3/16.
 drupal/cog: ~
 
-# Do not install Lightning modules explictly excluded by ACMS.
+# Do not install Lightning modules explicitly excluded by ACMS.
 drupal/lightning_layout: ~
 drupal/lightning_page: ~
 drupal/lightning_search: ~
 drupal/lightning_media: ~
+# During integrated test run, enabling company modules & themes
+# section of install script enables module acsf_sso which requires samlauth,
+# we observe that samlauth causing issue while creating user in test,
+# hence wr are explicitly excluding acsf_sso module from the tests.
+drupal/acsf_sso: ~
