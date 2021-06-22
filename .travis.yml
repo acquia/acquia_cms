@@ -86,7 +86,7 @@ matrix:
     - { env: ORCA_JOB=INTEGRATED_TEST_ON_CURRENT, name: "Integrated test on current Drupal core version" }
     - { env: ORCA_JOB=INTEGRATED_UPGRADE_TEST_TO_NEXT_MINOR, if: type = cron, name: "Integrated upgrade test to next minor Drupal core version" }
     - { env: ORCA_JOB=INTEGRATED_UPGRADE_TEST_TO_NEXT_MINOR_DEV, if: type = cron, name: "Integrated upgrade test to next minor dev Drupal core version" }
-    - { env: ORCA_JOB=INTEGRATED_TEST_ON_CURRENT_DEV ACMS_JOB=base_full, if: type = cron, name: "Integrated test on current dev Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_CURRENT_DEV, if: type = cron, name: "Integrated test on current dev Drupal core version" }
     - { env: ORCA_JOB=LOOSE_DEPRECATED_CODE_SCAN, if: type = cron, name: "Loose deprecated code scan" }
     - { env: ORCA_JOB=STRICT_DEPRECATED_CODE_SCAN, if: type = cron, name: "Strict deprecated code scan" }
     - { env: ORCA_JOB=DEPRECATED_CODE_SCAN_W_CONTRIB, if: type = cron, name: "Deprecated code scan w/ contrib" }
@@ -130,6 +130,7 @@ matrix:
     - env: ORCA_JOB=DEPRECATED_CODE_SCAN_W_CONTRIB
     - env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR
     - env: ORCA_JOB=INTEGRATED_TEST_ON_CURRENT
+    - env: ORCA_JOB=INTEGRATED_TEST_ON_CURRENT_DEV
     - env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MINOR_DEV
     - env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR_DEV
     - env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV

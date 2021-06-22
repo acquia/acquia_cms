@@ -39,6 +39,21 @@ class LoginRedirectionTest extends ExistingSiteBase {
       'title' => 'User Stories',
       'moderation_state' => 'published',
     ]);
+
+    // If the samlauth module is installed, ensure that it is configured (in
+    // this case, using its own test data) to avoid errors when creating user
+    // accounts in this test.
+    if ($this->container->get('module_handler')->moduleExists('samlauth')) {
+      $path = $this->container->get('extension.list.module')
+        ->getPath('samlauth');
+      $data = file_get_contents("$path/test_resources/samlauth.authentication.yml");
+      $data = Yaml::decode($data);
+
+      $this->container->get('config.factory')
+        ->getEditable('samlauth.authentication')
+        ->setData($data)
+        ->save();
+    }
   }
 
   /**
