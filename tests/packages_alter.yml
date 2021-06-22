@@ -10,3 +10,8 @@ drupal/lightning_layout: ~
 drupal/lightning_page: ~
 drupal/lightning_search: ~
 drupal/lightning_media: ~
+# During integrated test run, enabling company modules & themes
+# section of install script enables module acsf_sso which requires samlauth,
+# we observe that samlauth causing issue while creating user in test,
+# hence wr are explicitly excluding acsf_sso module from the tests.
+drupal/acsf_sso: ~
