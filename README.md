@@ -18,7 +18,7 @@ User-facing documentation for Acquia CMS lives on
 
 ## Releases
 
-[@TODO] Release notes will be added here once releases are created post-GA.
+See [Changelog](https://github.com/acquia/acquia_cms/wiki/Changelog) for release notes.
 
 ## Developing Acquia CMS
 
