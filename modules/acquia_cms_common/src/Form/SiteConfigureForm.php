@@ -1,8 +1,7 @@
 <?php
 
-namespace Drupal\acquia_cms\Form;
+namespace Drupal\acquia_cms_common\Form;
 
-use Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
@@ -55,10 +54,16 @@ class SiteConfigureForm extends ConfigFormBase {
    *   The module handler.
    * @param \Drupal\Core\Installer\Form\SiteConfigureForm $site_form
    *   The decorated site configuration form object.
-   * @param \Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm $maps_form
+   * @param AcquiaGoogleMapsAPIForm $maps_form
    *   The decorated Google Maps configuration form object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ModuleInstallerInterface $module_installer, ModuleHandlerInterface $module_handler, CoreSiteConfigureForm $site_form, AcquiaGoogleMapsAPIForm $maps_form) {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    ModuleInstallerInterface $module_installer,
+    ModuleHandlerInterface $module_handler,
+    CoreSiteConfigureForm $site_form,
+    AcquiaGoogleMapsAPIForm $maps_form
+  ) {
     parent::__construct($config_factory);
     $this->moduleInstaller = $module_installer;
     $this->moduleHandler = $module_handler;
@@ -106,18 +111,21 @@ class SiteConfigureForm extends ConfigFormBase {
       $form['acquia_google_maps_api']['maps_api_key']['#required'],
       $form['acquia_google_maps_api']['submit']
     );
-
-    $form['acquia_telemetry'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Send anonymous usage information to Acquia'),
-      '#default_value' => 1,
-      '#description' => $this->t('This module intends to collect anonymous data about Acquia product usage. No private information will be gathered. Data will not be used for marketing or sold to any third party. This is an opt-in module and can be disabled at any time by uninstalling the acquia_telemetry module by your site administrator.'),
-    ];
-    $form['decoupled'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Enable decoupled functionality'),
-      '#description' => $this->t('If checked, additional modules will be installed to help you build your site as a content backend for mobile apps.'),
-    ];
+    if ($this->moduleHandler->moduleExists('acquia_telemetry')) {
+      $form['acquia_telemetry'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Send anonymous usage information to Acquia'),
+        '#default_value' => 1,
+        '#description' => $this->t('This module intends to collect anonymous data about Acquia product usage. No private information will be gathered. Data will not be used for marketing or sold to any third party. This is an opt-in module and can be disabled at any time by uninstalling the acquia_telemetry module by your site administrator.'),
+      ];
+    }
+    if ($this->moduleHandler->moduleExists('jsonapi_extras')) {
+      $form['decoupled'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Enable decoupled functionality'),
+        '#description' => $this->t('If checked, additional modules will be installed to help you build your site as a content backend for mobile apps.'),
+      ];
+    }
     return $form;
   }
 

@@ -7,7 +7,7 @@
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
 use Drupal\acquia_cms\Facade\TelemetryFacade;
-use Drupal\acquia_cms\Form\SiteConfigureForm;
+use Drupal\acquia_cms_common\Form\SiteConfigureForm;
 use Drupal\acquia_cms_site_studio\Form\AcquiaCmsSiteStudioSiteConfigureForm;
 use Drupal\Core\Installer\InstallerKernel;
 

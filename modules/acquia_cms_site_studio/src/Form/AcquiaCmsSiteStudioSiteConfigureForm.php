@@ -2,8 +2,8 @@
 
 namespace Drupal\acquia_cms_site_studio\Form;
 
-use Drupal\acquia_cms\Form\SiteConfigureForm;
-use Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm;
+use Drupal\acquia_cms_common\Form\AcquiaGoogleMapsAPIForm;
+use Drupal\acquia_cms_common\Form\SiteConfigureForm;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
@@ -39,7 +39,14 @@ class AcquiaCmsSiteStudioSiteConfigureForm extends SiteConfigureForm {
    * @param \Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm $maps_form
    *   The decorated Google Maps configuration form object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, string $api_url, ModuleInstallerInterface $module_installer, ModuleHandlerInterface $module_handler, CoreSiteConfigureForm $site_form, AcquiaGoogleMapsAPIForm $maps_form) {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    string $api_url,
+    ModuleInstallerInterface $module_installer,
+    ModuleHandlerInterface $module_handler,
+    CoreSiteConfigureForm $site_form,
+    AcquiaGoogleMapsAPIForm $maps_form
+  ) {
     parent::__construct($config_factory, $module_installer, $module_handler, $site_form, $maps_form);
     $this->apiUrl = $api_url;
   }
