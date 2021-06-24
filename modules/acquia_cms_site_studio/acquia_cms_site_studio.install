@@ -16,6 +16,9 @@ function acquia_cms_site_studio_install() {
   $site_studio_api_key = getenv('SITESTUDIO_API_KEY');
   $site_studio_org_key = getenv('SITESTUDIO_ORG_KEY');
 
+  // Set default theme as cohesion.
+  set_theme_site_studio_as_default();
+
   // Don't do anything during site installation, since that can have unintended
   // side effects. We have separate task in acquia_cms profile which do the same
   // thing if this module is being installed as part of profile.
@@ -23,9 +26,6 @@ function acquia_cms_site_studio_install() {
   if (!InstallerKernel::installationAttempted() && $site_studio_api_key && $site_studio_org_key) {
     // Set credentials if module being installed independently.
     set_site_studio_credentials($site_studio_api_key, $site_studio_org_key);
-
-    // Set default theme as cohesion.
-    set_theme_site_studio_as_default();
 
     // If the user has configured their Cohesion keys, and site studio module
     // exists lets import all elements and its components.
