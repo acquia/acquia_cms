@@ -2,46 +2,56 @@
 
 namespace Drupal\acquia_cms_site_studio\Form;
 
-use Drupal\acquia_cms\Form\SiteConfigureForm;
-use Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm;
+// Use Drupal\acquia_cms\Form\SiteConfigureForm;
+// use Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm;.
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Extension\ModuleInstallerInterface;
+// Use Drupal\Core\Extension\ModuleHandlerInterface;
+// use Drupal\Core\Extension\ModuleInstallerInterface;.
+use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Installer\Form\SiteConfigureForm as CoreSiteConfigureForm;
+use Drupal\Core\Installer\Form\SiteConfigureForm;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Extends the installer's site configuration form to configure Cohesion.
  */
-class AcquiaCmsSiteStudioSiteConfigureForm extends SiteConfigureForm {
+class AcquiaCmsSiteStudioSiteConfigureForm extends ConfigFormBase {
 
   /**
    * The Cohesion API URL.
    *
    * @var string
    */
-  private $apiUrl;
+  protected $apiUrl;
 
   /**
-   * SiteConfigureForm constructor.
+   * The decorated site configuration form object.
+   *
+   * @var \Drupal\Core\Installer\Form\SiteConfigureForm
+   */
+  protected $installSiteForm;
+
+  /**
+   * Constructs a \Drupal\system\ConfigFormBase object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The config factory service.
-   * @param string $api_url
-   *   The Cohesion API URL.
-   * @param \Drupal\Core\Extension\ModuleInstallerInterface $module_installer
-   *   The module installer.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
-   * @param \Drupal\Core\Installer\Form\SiteConfigureForm $site_form
-   *   The decorated site configuration form object.
-   * @param \Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm $maps_form
-   *   The decorated Google Maps configuration form object.
+   *   The factory for configuration objects.
+   * @param string $apiUrl
+   *   The Site Studio api url.
+   * @param \Drupal\Core\Installer\Form\SiteConfigureForm $siteConfigureForm
+   *   The installer site configuration form object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, string $api_url, ModuleInstallerInterface $module_installer, ModuleHandlerInterface $module_handler, CoreSiteConfigureForm $site_form, AcquiaGoogleMapsAPIForm $maps_form) {
-    parent::__construct($config_factory, $module_installer, $module_handler, $site_form, $maps_form);
-    $this->apiUrl = $api_url;
+  public function __construct(ConfigFactoryInterface $config_factory, string $apiUrl, SiteConfigureForm $siteConfigureForm) {
+    parent::__construct($config_factory);
+    $this->installSiteForm = $siteConfigureForm;
+    $this->apiUrl = $apiUrl;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormId() {
+    return 'acquia_cms_site_studio_site_installer_form';
   }
 
   /**
@@ -51,10 +61,7 @@ class AcquiaCmsSiteStudioSiteConfigureForm extends SiteConfigureForm {
     return new static(
       $container->get('config.factory'),
       $container->get('cohesion.api.utils')->getAPIServerURL(),
-      $container->get('module_installer'),
-      $container->get('module_handler'),
-      CoreSiteConfigureForm::create($container),
-      AcquiaGoogleMapsAPIForm::create($container)
+      SiteConfigureForm::create($container)
     );
   }
 
@@ -70,6 +77,7 @@ class AcquiaCmsSiteStudioSiteConfigureForm extends SiteConfigureForm {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
+    $form = $this->installSiteForm->buildForm($form, $form_state);
     $form['cohesion'] = [
       'api_key' => [
         '#type' => 'textfield',
@@ -93,7 +101,8 @@ class AcquiaCmsSiteStudioSiteConfigureForm extends SiteConfigureForm {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-
+    parent::submitForm($form, $form_state);
+    $this->installSiteForm->submitForm($form, $form_state);
     $api_key = $form_state->getValue(['cohesion', 'api_key']);
     $org_key = $form_state->getValue(['cohesion', 'organization_key']);
 
@@ -112,6 +121,14 @@ class AcquiaCmsSiteStudioSiteConfigureForm extends SiteConfigureForm {
         ->save(TRUE);
     }
     parent::submitForm($form, $form_state);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    parent::validateForm($form, $form_state);
+    $this->installSiteForm->validateForm($form, $form_state);
   }
 
 }
