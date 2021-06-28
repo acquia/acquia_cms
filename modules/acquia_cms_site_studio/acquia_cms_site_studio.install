@@ -64,3 +64,19 @@ function set_theme_site_studio_as_default() {
     ->set('default', 'cohesion_theme')
     ->save();
 }
+
+/**
+ * Set cohesion filter format.
+ */
+function set_cohesion_filter() {
+  \Drupal::configFactory()
+    ->getEditable('filter.format.filtered_html')
+    ->set('filters.black_list_html_tags', [
+      'id' => 'black_list_html_tags',
+      'provider' => 'cohesion',
+      'status' => 'false',
+      'weight' => '-41',
+      'settings' => '',
+    ])
+    ->save();
+}
