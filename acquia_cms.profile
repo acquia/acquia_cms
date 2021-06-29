@@ -139,6 +139,7 @@ function acquia_cms_module_implements_alter(array &$implementations, string $hoo
     // system when installing a module via the UI.
     unset($implementations['cohesion_sync']);
   }
+  // Remove acquia_cms_site_studio from here will do in module itself.
   if ($hook == 'form_alter') {
     unset($implementations['acquia_cms_site_studio']);
   }
