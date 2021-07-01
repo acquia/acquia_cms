@@ -5,7 +5,6 @@ namespace Drupal\acquia_cms_site_studio\Form;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Installer\Form\SiteConfigureForm;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -21,25 +20,15 @@ class AcquiaCmsSiteStudioSiteConfigureForm extends ConfigFormBase {
   protected $apiUrl;
 
   /**
-   * The decorated site configuration form object.
-   *
-   * @var \Drupal\Core\Installer\Form\SiteConfigureForm
-   */
-  protected $installSiteForm;
-
-  /**
    * Constructs a \Drupal\system\ConfigFormBase object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
    * @param string $apiUrl
    *   The Site Studio api url.
-   * @param \Drupal\Core\Installer\Form\SiteConfigureForm $siteConfigureForm
-   *   The installer site configuration form object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, string $apiUrl, SiteConfigureForm $siteConfigureForm) {
+  public function __construct(ConfigFactoryInterface $config_factory, string $apiUrl) {
     parent::__construct($config_factory);
-    $this->installSiteForm = $siteConfigureForm;
     $this->apiUrl = $apiUrl;
   }
 
@@ -56,8 +45,7 @@ class AcquiaCmsSiteStudioSiteConfigureForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('cohesion.api.utils')->getAPIServerURL(),
-      SiteConfigureForm::create($container)
+      $container->get('cohesion.api.utils')->getAPIServerURL()
     );
   }
 
@@ -72,8 +60,6 @@ class AcquiaCmsSiteStudioSiteConfigureForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form = parent::buildForm($form, $form_state);
-    $form = $this->installSiteForm->buildForm($form, $form_state);
     $form['cohesion'] = [
       'api_key' => [
         '#type' => 'textfield',
@@ -97,8 +83,6 @@ class AcquiaCmsSiteStudioSiteConfigureForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    parent::submitForm($form, $form_state);
-    $this->installSiteForm->submitForm($form, $form_state);
     $api_key = $form_state->getValue(['cohesion', 'api_key']);
     $org_key = $form_state->getValue(['cohesion', 'organization_key']);
 
@@ -116,15 +100,6 @@ class AcquiaCmsSiteStudioSiteConfigureForm extends ConfigFormBase {
         ->set('organization_key', $org_key)
         ->save(TRUE);
     }
-    parent::submitForm($form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    parent::validateForm($form, $form_state);
-    $this->installSiteForm->validateForm($form, $form_state);
   }
 
 }

@@ -15,13 +15,12 @@ use Drupal\media_library\MediaLibraryState;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Overrides drupal core site installer form with the site studio config form.
- *
- * @throws \Drupal\Core\Form\FormAjaxException
- * @throws \Drupal\Core\Form\EnforcedResponseException
+ * Extends drupal core site installer form to add SiteStudio config form.
  */
 function acquia_cms_site_studio_form_install_configure_form_alter(&$form, FormStateInterface $form_state) {
-  $form = \Drupal::formBuilder()->buildForm(AcquiaCmsSiteStudioSiteConfigureForm::class, $form_state);
+  $acquiaSiteStudioForm = \Drupal::classResolver(AcquiaCmsSiteStudioSiteConfigureForm::class);
+  $form = $acquiaSiteStudioForm->buildForm($form, $form_state);
+  $form['#submit'][] = [$acquiaSiteStudioForm, 'submitForm'];
 }
 
 /**
