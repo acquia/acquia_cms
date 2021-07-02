@@ -267,9 +267,18 @@ function acquia_cms_install_ui_kit(array $install_state) {
 }
 
 /**
+ * Method that calls another method to capture the installation start time.
+ */
+function acquia_cms_install_ui_kit_finished($install_state) {
+  $function = $install_state['active_task'];
+  acquia_cms_set_install_finished_time();
+  return $function($install_state);
+}
+
+/**
  * Method for performing functions once the ui kit is installed.
  */
-function acquia_cms_install_ui_kit_finished() {
+function acquia_cms_set_install_finished_time() {
   // The 'success' parameter means no fatal PHP errors were detected. All
   // other error management should be handled using 'results'.
   $end_time = new DrupalDateTime();
