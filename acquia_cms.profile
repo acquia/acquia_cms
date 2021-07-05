@@ -128,18 +128,16 @@ function acquia_cms_install_tasks(): array {
  * Send heartbeat event after site installation.
  */
 function acquia_cms_send_heartbeat_event() {
-  // Get the install & rebuild time from state API.
-  $install_start_time = \Drupal::state()->get('install_start_time');
-  $install_end_time = \Drupal::state()->get('install_end_time');
-  $rebuild_start_time = \Drupal::state()->get('rebuild_start_time');
-  $rebuild_end_time = \Drupal::state()->get('rebuild_end_time');
-  // Calculate the time diff from the function and pass it to telemetry.
-  $install_start_time = new DrupalDateTime($install_start_time);
-  $install_end_time = new DrupalDateTime($install_end_time);
-  $rebuild_start_time = new DrupalDateTime($rebuild_start_time);
-  $rebuild_end_time = new DrupalDateTime($rebuild_end_time);
-  $install_time_diff = acquia_cms_calculate_time_diff($install_start_time, $install_end_time);
-  $rebuild_time_diff = acquia_cms_calculate_time_diff($rebuild_start_time, $rebuild_end_time);
+  // Get time values and calculate the difference.
+  $time_values = acquia_cms_process_time_values();
+  $install_time_diff = acquia_cms_calculate_time_diff(
+    $time_values['install_start_time'],
+    $time_values['install_end_time']
+  );
+  $rebuild_time_diff = acquia_cms_calculate_time_diff(
+    $time_values['rebuild_start_time'],
+    $time_values['rebuild_end_time']
+  );
   $config = Drupal::config('cohesion.settings');
   $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
   Drupal::configFactory()
@@ -153,6 +151,29 @@ function acquia_cms_send_heartbeat_event() {
     'Rebuild Time' => $rebuild_time_diff,
     'Site Studio Install Status' => $cohesion_configured ? 1 : 0,
   ]);
+}
+
+/**
+ * Function to process time values.
+ *
+ * @return array
+ *   Returns all the processed time values.
+ */
+function acquia_cms_process_time_values() {
+  // Get the install & rebuild time from state API.
+  $install_start_time = \Drupal::state()->get('install_start_time');
+  $install_end_time = \Drupal::state()->get('install_end_time');
+  $rebuild_start_time = \Drupal::state()->get('rebuild_start_time');
+  $rebuild_end_time = \Drupal::state()->get('rebuild_end_time');
+  // Calculate the time diff from the function and pass it to telemetry.
+  $time_values = [
+    'install_start_time' => new DrupalDateTime($install_start_time),
+    'install_end_time' => new DrupalDateTime($install_end_time),
+    'rebuild_start_time' => new DrupalDateTime($rebuild_start_time),
+    'rebuild_end_time' => new DrupalDateTime($rebuild_end_time),
+  ];
+
+  return $time_values;
 }
 
 /**
