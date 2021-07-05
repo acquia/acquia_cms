@@ -38,6 +38,7 @@ function acquia_cms_install_tasks_alter(array &$tasks) {
   // This code helps capture time right when the drupal bootstrap happens.
   // The pre start function calls another method that performs the actual logic.
   $tasks['install_bootstrap_full']['function'] = 'acquia_cms_pre_start';
+  $tasks['install_finished']['function'] = 'acquia_cms_install_finished';
 }
 
 /**
@@ -53,9 +54,16 @@ function acquia_cms_pre_start($install_state) {
  * Set the install start time using state API.
  */
 function acquia_cms_set_install_time() {
-  $start_time = new DrupalDateTime();
-  $formatted_time = acquia_cms_format_time($start_time);
-  \Drupal::state()->set('install_start_time', $formatted_time);
+  // The bootstrap method is called every time on UI installation.
+  // Hence, it is important to check if variable is empty or not.
+  // Set the time value only if variable is empty.
+  // This helps in avoiding to capture incorrect start time.
+  $start_time = \Drupal::state()->get('install_start_time');
+  if (empty($start_time)) {
+    $start_time = new DrupalDateTime();
+    $formatted_time = acquia_cms_format_time($start_time);
+    \Drupal::state()->set('install_start_time', $formatted_time);
+  }
 }
 
 /**
@@ -117,15 +125,19 @@ function acquia_cms_install_tasks(): array {
 
   $tasks['acquia_cms_install_additional_modules'] = [];
 
-  // If the user has opted in for Acquia Telemetry, send heartbeat event.
-  $tasks['acquia_cms_send_heartbeat_event'] = [
-    'run' => Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
-  ];
+  if (PHP_SAPI !== 'cli') {
+    // If the user has opted in for Acquia Telemetry, send heartbeat event.
+    $tasks['acquia_cms_send_heartbeat_event'] = [
+      'run' => Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+    ];
+  }
   return $tasks;
 }
 
 /**
  * Send heartbeat event after site installation.
+ *
+ * @see src/Commands/SiteInstallCommands.php
  */
 function acquia_cms_send_heartbeat_event() {
   // Get time values and calculate the difference.
@@ -272,7 +284,6 @@ function acquia_cms_install_ui_kit(array $install_state) {
   $operations = $facade->getAllOperations(TRUE);
   $batch = [
     'operations' => $operations,
-    'finished' => 'acquia_cms_install_ui_kit_finished',
   ];
 
   // Set batch along with drush backend process if site is being
@@ -288,16 +299,16 @@ function acquia_cms_install_ui_kit(array $install_state) {
 }
 
 /**
- * Method that calls another method to capture the installation start time.
+ * Method that calls another method to capture the installation end time.
  */
-function acquia_cms_install_ui_kit_finished($install_state) {
+function acquia_cms_install_finished($install_state) {
   $function = $install_state['active_task'];
   acquia_cms_set_install_finished_time();
   return $function($install_state);
 }
 
 /**
- * Method for performing functions once the ui kit is installed.
+ * Method for performing functions once the install is installed.
  */
 function acquia_cms_set_install_finished_time() {
   // The 'success' parameter means no fatal PHP errors were detected. All
