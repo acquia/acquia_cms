@@ -6,17 +6,13 @@
  */
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
-use Acquia\Utility\AcquiaTelemetry;
 use Drupal\acquia_cms\Facade\CohesionFacade;
 use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
-use Drupal\Core\Ajax\CloseDialogCommand;
-use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Installer\InstallerKernel;
-use Drupal\media_library\MediaLibraryState;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -219,6 +215,15 @@ function install_acms_site_studio_ui_kit() {
 }
 
 /**
+ * Install default content as part of install task.
+ */
+function install_acms_import_default_content() {
+  if (\Drupal::moduleHandler()->moduleExists('acquia_cms_image')) {
+    \Drupal::service('default_content.importer')->importContent('acquia_cms_image');
+  }
+}
+
+/**
  * Implements hook_modules_installed().
  */
 function acquia_cms_modules_installed(array $modules) : void {
@@ -230,6 +235,7 @@ function acquia_cms_modules_installed(array $modules) : void {
   }
 
   $module_handler = Drupal::moduleHandler();
+
   if ($module_handler->moduleExists('acquia_telemetry')) {
     Drupal::classResolver(TelemetryFacade::class)->modulesInstalled($modules);
   }
@@ -265,15 +271,6 @@ function acquia_cms_module_implements_alter(array &$implementations, string $hoo
 }
 
 /**
- * Install default content as part of install task.
- */
-function install_acms_import_default_content() {
-  if (\Drupal::moduleHandler()->moduleExists('acquia_cms_image')) {
-    \Drupal::service('default_content.importer')->importContent('acquia_cms_image');
-  }
-}
-
-/**
  * Method that calls another method to capture the installation end time.
  */
 function install_acms_finished() {
@@ -282,7 +279,6 @@ function install_acms_finished() {
   $end_time = new DrupalDateTime();
   $formatted_time = acquia_cms_format_time($end_time);
   \Drupal::state()->set('install_end_time', $formatted_time);
-
 }
 
 /**
@@ -429,6 +425,7 @@ function alter_update_widget(array &$form, FormStateInterface $form_state, Reque
  */
 function install_acms_set_logo() {
   $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+
   Drupal::configFactory()
     ->getEditable('system.theme.global')
     ->set('logo', [
@@ -444,6 +441,7 @@ function install_acms_set_logo() {
  */
 function install_acms_set_favicon() {
   $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+
   Drupal::configFactory()
     ->getEditable('system.theme.global')
     ->set('favicon', [
