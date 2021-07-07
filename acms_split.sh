@@ -42,6 +42,7 @@ function remote()
 git pull origin $CURRENT_BRANCH
 
 # Adding remote for all split branches.
+remote acquia_claro git@github.com:acquia/acquia_claro.git
 remote acquia_cms_article git@github.com:acquia/acquia_cms_article.git
 remote acquia_cms_audio git@github.com:acquia/acquia_cms_audio.git
 remote acquia_cms_common git@github.com:acquia/acquia_cms_common.git
@@ -61,6 +62,7 @@ remote acquia_cms_tour git@github.com:acquia/acquia_cms_tour.git
 remote acquia_cms_video git@github.com:acquia/acquia_cms_video.git
 
 # Calling split method for mapping remote branches to splits.
+split 'themes/acquia_claro' acquia_claro
 split 'modules/acquia_cms_article' acquia_cms_article
 split 'modules/acquia_cms_audio' acquia_cms_audio
 split 'modules/acquia_cms_common' acquia_cms_common
