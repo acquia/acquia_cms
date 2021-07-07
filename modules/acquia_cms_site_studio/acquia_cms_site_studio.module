@@ -6,12 +6,22 @@
  */
 
 use Drupal\acquia_cms_site_studio\Facade\CohesionFacade;
+use Drupal\acquia_cms_site_studio\Form\AcquiaCmsSiteStudioSiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
 use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\media_library\MediaLibraryState;
 use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * Extends drupal core site installer form to add SiteStudio config form.
+ */
+function acquia_cms_site_studio_form_install_configure_form_alter(&$form, FormStateInterface $form_state) {
+  $acquiaSiteStudioForm = \Drupal::classResolver(AcquiaCmsSiteStudioSiteConfigureForm::class);
+  $form = $acquiaSiteStudioForm->buildForm($form, $form_state);
+  $form['#submit'][] = [$acquiaSiteStudioForm, 'submitForm'];
+}
 
 /**
  * Imports all Cohesion elements.

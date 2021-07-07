@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms\Form;
 
+use Drupal\acquia_cms_site_studio\Form\AcquiaCmsSiteStudioSiteConfigureForm;
 use Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
@@ -45,6 +46,13 @@ class SiteConfigureForm extends ConfigFormBase {
   protected $mapsForm;
 
   /**
+   * The decorated Google Maps configuration form object.
+   *
+   * @var \Drupal\acquia_cms_site_studio\Form\AcquiaCmsSiteStudioSiteConfigureForm
+   */
+  protected $siteStudioForm;
+
+  /**
    * SiteConfigureForm constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -57,13 +65,16 @@ class SiteConfigureForm extends ConfigFormBase {
    *   The decorated site configuration form object.
    * @param \Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm $maps_form
    *   The decorated Google Maps configuration form object.
+   * @param \Drupal\acquia_cms_site_studio\Form\AcquiaCmsSiteStudioSiteConfigureForm $siteStudioForm
+   *   The decorated Site Studio configuration form object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ModuleInstallerInterface $module_installer, MessengerInterface $messenger, CoreSiteConfigureForm $site_form, AcquiaGoogleMapsAPIForm $maps_form) {
+  public function __construct(ConfigFactoryInterface $config_factory, ModuleInstallerInterface $module_installer, MessengerInterface $messenger, CoreSiteConfigureForm $site_form, AcquiaGoogleMapsAPIForm $maps_form, AcquiaCmsSiteStudioSiteConfigureForm $siteStudioForm) {
     parent::__construct($config_factory);
     $this->moduleInstaller = $module_installer;
     $this->messenger = $messenger;
     $this->siteForm = $site_form;
     $this->mapsForm = $maps_form;
+    $this->siteStudioForm = $siteStudioForm;
   }
 
   /**
@@ -75,7 +86,8 @@ class SiteConfigureForm extends ConfigFormBase {
       $container->get('module_installer'),
       $container->get('messenger'),
       CoreSiteConfigureForm::create($container),
-      AcquiaGoogleMapsAPIForm::create($container)
+      AcquiaGoogleMapsAPIForm::create($container),
+      AcquiaCmsSiteStudioSiteConfigureForm::create($container)
     );
   }
 
@@ -109,6 +121,7 @@ class SiteConfigureForm extends ConfigFormBase {
     $form['site_information']['site_name']['#default_value'] = $this->t('Acquia CMS');
 
     $form = $this->mapsForm->buildForm($form, $form_state);
+    $form = $this->siteStudioForm->buildForm($form, $form_state);
     unset(
       $form['acquia_google_maps_api']['maps_api_key']['#required'],
       $form['acquia_google_maps_api']['submit']
@@ -138,6 +151,7 @@ class SiteConfigureForm extends ConfigFormBase {
     if ($form_state->getValue('maps_api_key')) {
       $this->mapsForm->validateForm($form, $form_state);
     }
+    $this->siteStudioForm->validateForm($form, $form_state);
   }
 
   /**
@@ -149,7 +163,7 @@ class SiteConfigureForm extends ConfigFormBase {
     if ($form_state->getValue('maps_api_key')) {
       $this->mapsForm->submitForm($form, $form_state);
     }
-
+    $this->siteStudioForm->submitForm($form, $form_state);
     // Enable the Acquia Telemetry module if user opt's in.
     $acquia_telemetry_opt_in = $form_state->getValue('acquia_telemetry');
     if ($acquia_telemetry_opt_in) {
