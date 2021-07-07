@@ -10,7 +10,6 @@ use Acquia\Utility\AcquiaTelemetry;
 use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\acquia_cms_site_studio\Facade\CohesionFacade;
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Installer\InstallerKernel;
 
 /**
@@ -172,6 +171,15 @@ function install_acms_site_studio_ui_kit() {
 }
 
 /**
+ * Install default content as part of install task.
+ */
+function install_acms_import_default_content() {
+  if (\Drupal::moduleHandler()->moduleExists('acquia_cms_image')) {
+    \Drupal::service('default_content.importer')->importContent('acquia_cms_image');
+  }
+}
+
+/**
  * Implements hook_modules_installed().
  */
 function acquia_cms_modules_installed(array $modules) : void {
@@ -183,6 +191,7 @@ function acquia_cms_modules_installed(array $modules) : void {
   }
 
   $module_handler = Drupal::moduleHandler();
+
   if ($module_handler->moduleExists('acquia_telemetry')) {
     Drupal::classResolver(TelemetryFacade::class)->modulesInstalled($modules);
   }
@@ -214,15 +223,6 @@ function acquia_cms_module_implements_alter(array &$implementations, string $hoo
     // We replace it with a slightly smarter implementation that uses the batch
     // system when installing a module via the UI.
     unset($implementations['cohesion_sync']);
-  }
-}
-
-/**
- * Install default content as part of install task.
- */
-function install_acms_import_default_content() {
-  if (\Drupal::moduleHandler()->moduleExists('acquia_cms_image')) {
-    \Drupal::service('default_content.importer')->importContent('acquia_cms_image');
   }
 }
 
@@ -261,6 +261,7 @@ function install_acms_additional_modules() {
  */
 function install_acms_set_logo() {
   $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+
   Drupal::configFactory()
     ->getEditable('system.theme.global')
     ->set('logo', [
@@ -276,6 +277,7 @@ function install_acms_set_logo() {
  */
 function install_acms_set_favicon() {
   $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+
   Drupal::configFactory()
     ->getEditable('system.theme.global')
     ->set('favicon', [
