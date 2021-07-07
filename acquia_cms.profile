@@ -6,16 +6,13 @@
  */
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
+use Drupal\acquia_cms\Facade\CohesionFacade;
 use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
-use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Datetime\DrupalDateTime;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Installer\InstallerKernel;
-use Drupal\media_library\MediaLibraryState;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -252,6 +249,15 @@ function install_acms_site_studio_ui_kit() {
 }
 
 /**
+ * Install default content as part of install task.
+ */
+function install_acms_import_default_content() {
+  if (\Drupal::moduleHandler()->moduleExists('acquia_cms_image')) {
+    \Drupal::service('default_content.importer')->importContent('acquia_cms_image');
+  }
+}
+
+/**
  * Implements hook_modules_installed().
  */
 function acquia_cms_modules_installed(array $modules) : void {
@@ -263,6 +269,7 @@ function acquia_cms_modules_installed(array $modules) : void {
   }
 
   $module_handler = Drupal::moduleHandler();
+
   if ($module_handler->moduleExists('acquia_telemetry')) {
     Drupal::classResolver(TelemetryFacade::class)->modulesInstalled($modules);
   }
@@ -298,15 +305,6 @@ function acquia_cms_module_implements_alter(array &$implementations, string $hoo
 }
 
 /**
- * Install default content as part of install task.
- */
-function install_acms_import_default_content() {
-  if (\Drupal::moduleHandler()->moduleExists('acquia_cms_image')) {
-    \Drupal::service('default_content.importer')->importContent('acquia_cms_image');
-  }
-}
-
-/**
  * Method that calls another method to capture the installation end time.
  */
 function install_acms_finished() {
@@ -315,7 +313,6 @@ function install_acms_finished() {
   $end_time = new DrupalDateTime();
   $formatted_time = acquia_cms_format_time($end_time);
   \Drupal::state()->set('install_end_time', $formatted_time);
-
 }
 
 /**
@@ -341,74 +338,11 @@ function install_acms_additional_modules() {
 }
 
 /**
- * Implements hook_form_alter().
- */
-function acquia_cms_form_alter(array &$form, FormStateInterface $form_state, $form_id) : void {
-  // Instead of directly adding a patch in core, we are modifying the ajax
-  // callback.
-  if ($form_id === 'views_form_media_library_widget_image') {
-    $request = Drupal::request();
-    $state = MediaLibraryState::fromRequest($request);
-    if ($state->getOpenerId() === 'media_library.opener.cohesion') {
-      $form['actions']['submit']['#ajax']['callback'] = 'alter_update_widget';
-    }
-  }
-  // Trigger site studio config import and rebuild whenever user
-  // try to save site studio account settings or the site studio core
-  // form from tour dashboard page.
-  $allowed_form_ids = [
-    'cohesion_account_settings_form',
-    'acquia_cms_site_studio_core_form',
-    'acquia_cms_tour_installation_wizard',
-  ];
-  if (in_array($form_id, $allowed_form_ids)) {
-    $config = Drupal::config('cohesion.settings');
-    $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
-    // We should add submit handler, only if cohesion keys are not already set.
-    if (!$cohesion_configured) {
-      $form['#submit'][] = 'acquia_cms_cohesion_init';
-
-      // Here we are adding a separate submit handler to rebuild the cohesion
-      // styles. Now the reason why we are doing this is because the rebuild is
-      // expecting that all the entities of cohesion are in place but as the
-      // cohesion is getting build for the first time and
-      // acquia_cms_initialize_cohesion is responsible for importing the
-      // entities. So we cannot execute both the batch process in a single
-      // function, Hence to achieve the synchronous behaviour we have separated
-      // cohesion configuration import and cohesion style rebuild functionality
-      // into separate submit handlers.
-      // @see \Drupal\cohesion_website_settings\Controller\WebsiteSettingsController::batch
-      $form['#submit'][] = 'acquia_cms_rebuild_cohesion';
-    }
-  }
-}
-
-/**
- * Callback for the media library image widget.
- */
-function alter_update_widget(array &$form, FormStateInterface $form_state, Request $request) {
-  // As cohesion is using angular for the media library popup, So the modal id
-  // mismatch is causing the issue of no media selection. To resolve this we are
-  // passing the selector in the CloseDialogCommand.
-  // @see \Drupal\media_library\Plugin\views\field\MediaLibrarySelectForm::updateWidget().
-  $field_id = $form_state->getTriggeringElement()['#field_id'];
-  $selected_ids = $form_state->getValue($field_id);
-  $selected_ids = $selected_ids ? array_filter(explode(',', $selected_ids)) : [];
-
-  // Allow the opener service to handle the selection.
-  $state = MediaLibraryState::fromRequest($request);
-
-  return Drupal::service('media_library.opener_resolver')
-    ->get($state)
-    ->getSelectionResponse($state, $selected_ids)
-    ->addCommand(new CloseDialogCommand('#modal-body'));
-}
-
-/**
  * Set the path to the logo file based on install directory.
  */
 function install_acms_set_logo() {
   $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+
   Drupal::configFactory()
     ->getEditable('system.theme.global')
     ->set('logo', [
@@ -424,6 +358,7 @@ function install_acms_set_logo() {
  */
 function install_acms_set_favicon() {
   $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+
   Drupal::configFactory()
     ->getEditable('system.theme.global')
     ->set('favicon', [
