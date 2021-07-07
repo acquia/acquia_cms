@@ -10,6 +10,7 @@ use Drupal\acquia_cms_site_studio\Form\AcquiaCmsSiteStudioSiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
 use Drupal\Core\Ajax\CloseDialogCommand;
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\media_library\MediaLibraryState;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,17 +67,50 @@ function site_studio_import_ui_kit(): array {
  *
  * @return array
  *   Batch for rebuild operation.
- *
- * @throws Exception
  */
-function install_acms_site_studio_rebuild(): array {
+function install_acms_site_studio_rebuild() {
+  $rebuild_start_time = new DrupalDateTime();
+  $formatted_time = acquia_cms_site_studio_format_time($rebuild_start_time);
+  \Drupal::state()->set('rebuild_start_time', $formatted_time);
   // Get the batch array filled with operations that should be performed during
   // rebuild. Also, we explicitly do not clear the cache during site install.
   $batch = WebsiteSettingsController::batch(TRUE);
+
   if (isset($batch['error'])) {
     Drupal::messenger()->addError($batch['error']);
   }
+  $batch['finished'] = 'acquia_cms_rebuild_site_studio_finished';
   return $batch;
+}
+
+/**
+ * Method for performing functions once the rebuild is finished.
+ */
+function acquia_cms_rebuild_site_studio_finished() {
+  // The 'success' parameter means no fatal PHP errors were detected. All
+  // other error management should be handled using 'results'.
+  $rebuild_end_time = new DrupalDateTime();
+  $formatted_time = acquia_cms_site_studio_format_time($rebuild_end_time);
+  \Drupal::state()->set('rebuild_end_time', $formatted_time);
+}
+
+/**
+ * Function for formatting date.
+ * @todo get rid of this duplicate function.
+ * @see acquia_cms_format_time().
+ *
+ * @param \Drupal\Core\Datetime\DrupalDateTime $time
+ *   Parameter that passes raw date value.
+ *
+ * @return \Drupal\Core\Datetime\DrupalDateTime
+ *   The formatted date.
+ */
+function acquia_cms_site_studio_format_time(DrupalDateTime $time) {
+  $formatted = \Drupal::service('date.formatter')->format(
+    $time->getTimestamp(), 'custom', 'Y-m-d h:i:s'
+  );
+
+  return $formatted;
 }
 
 /**
