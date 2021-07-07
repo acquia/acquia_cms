@@ -38,7 +38,6 @@ function acquia_cms_install_tasks_alter(array &$tasks) {
   // This code helps capture time right when the drupal bootstrap happens.
   // The pre start function calls another method that performs the actual logic.
   $tasks['install_bootstrap_full']['function'] = 'acquia_cms_pre_start';
-  $tasks['install_finished']['function'] = 'acquia_cms_install_ui_kit_finished';
 }
 
 /**
