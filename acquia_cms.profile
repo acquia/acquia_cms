@@ -6,11 +6,9 @@
  */
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
-use Drupal\acquia_cms\Facade\CohesionFacade;
 use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
-use Drupal\cohesion\Controller\AdministrationController;
-use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
+use Drupal\acquia_cms_site_studio\Facade\CohesionFacade;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Installer\InstallerKernel;
 
