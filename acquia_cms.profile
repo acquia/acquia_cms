@@ -44,7 +44,7 @@ function acquia_cms_install_tasks_alter(array &$tasks) {
 /**
  * Method that calls another method to capture the installation start time.
  */
-function acquia_cms_pre_start_print_icon($install_state) {
+function acquia_cms_pre_start($install_state) {
   $function = $install_state['active_task'];
   acquia_cms_set_install_time();
   return $function($install_state);
