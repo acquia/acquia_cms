@@ -16,10 +16,28 @@ use Drupal\acquia_claro\PreRender;
  *   An associative array containing:
  *   - content - An array of page content.
  *
- * @see template_preprocess_maintenance_page()
+ * @see template_preprocess_install_page()
  */
 function acquia_claro_preprocess_install_page(array &$variables) {
   $variables['drupal_core_version'] = \Drupal::VERSION;
+  $variables['#attached']['library'][] = 'seven/install-page';
+  $variables['#attached']['library'][] = 'acquia_claro/install-page';
+  $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+  $variables['install_page_logo_path'] = file_create_url($acquia_cms_path . '/acquia_cms.png');
+}
+
+/**
+ * Prepares variables for maintenance page templates.
+ *
+ * Default template: maintenance-page.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - content - An array of page content.
+ *
+ * @see template_preprocess_maintenance_page()
+ */
+function acquia_claro_preprocess_maintenance_page(array &$variables) {
   $variables['#attached']['library'][] = 'seven/install-page';
   $variables['#attached']['library'][] = 'acquia_claro/install-page';
   $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
