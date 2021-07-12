@@ -38,7 +38,6 @@ function acquia_cms_install_tasks_alter(array &$tasks) {
   // This code helps capture time right when the drupal bootstrap happens.
   // The pre start function calls another method that performs the actual logic.
   $tasks['install_bootstrap_full']['function'] = 'acquia_cms_pre_start';
-  $tasks['install_finished']['function'] = 'acquia_cms_install_finished';
 }
 
 /**
@@ -112,8 +111,15 @@ function acquia_cms_install_tasks(): array {
     'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
   ];
 
-  // Don't include the rebuild task if installing via Drush, we automate that
-  // elsewhere.
+  $tasks['acquia_cms_install_additional_modules'] = [];
+
+  $tasks['install_acms_finished'] = [];
+
+  // Don't include the rebuild task & don't send heartbeat event to telemetry.
+  // if installing site via Drush.
+  // @see src/Commands/SiteInstallCommands.php.
+  // Also send hearbeat event only for UI here. 
+  // For cli we are sending it from file mentioned above.
   if (PHP_SAPI !== 'cli') {
     $tasks['acquia_cms_rebuild_site_studio'] = [
       'display_name' => t('Rebuild Site Studio'),
@@ -121,11 +127,6 @@ function acquia_cms_install_tasks(): array {
       'type' => 'batch',
       'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
     ];
-  }
-
-  $tasks['acquia_cms_install_additional_modules'] = [];
-
-  if (PHP_SAPI !== 'cli') {
     // If the user has opted in for Acquia Telemetry, send heartbeat event.
     $tasks['acquia_cms_send_heartbeat_event'] = [
       'run' => Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
@@ -301,16 +302,7 @@ function acquia_cms_install_ui_kit(array $install_state) {
 /**
  * Method that calls another method to capture the installation end time.
  */
-function acquia_cms_install_finished($install_state) {
-  $function = $install_state['active_task'];
-  acquia_cms_set_install_finished_time();
-  return $function($install_state);
-}
-
-/**
- * Method for performing functions once the install is installed.
- */
-function acquia_cms_set_install_finished_time() {
+function install_acms_finished() {
   // The 'success' parameter means no fatal PHP errors were detected. All
   // other error management should be handled using 'results'.
   $end_time = new DrupalDateTime();
