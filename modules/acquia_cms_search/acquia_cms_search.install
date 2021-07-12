@@ -5,6 +5,7 @@
  * Contains installation routines for Acquia CMS Search.
  */
 
+use Drupal\acquia_cms_search\Facade\SearchFacade;
 use Drupal\node\Entity\NodeType;
 
 /**
@@ -15,4 +16,12 @@ function acquia_cms_search_install() {
   // this module was installed.
   $node_types = NodeType::loadMultiple();
   array_walk($node_types, 'acquia_cms_search_node_type_insert');
+
+  // Update search & search_fallback views display_options's style
+  // type as cohesion_layout and option's views_template & master_template
+  // if acquia_cms_site_studio module is present else use default one.
+  if (\Drupal::moduleHandler()->moduleExists('acquia_cms_site_studio')) {
+    Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('search');
+    Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('search_fallback');
+  }
 }
