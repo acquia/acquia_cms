@@ -53,6 +53,7 @@ env:
     # values are "AcquiaPHP", "AcquiaDrupalStrict", and
     # "AcquiaDrupalTransitional". Defaults to "AcquiaDrupalTransitional".
     # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_PHPCS_STANDARD
+    - ORCA_PHPCS_STANDARD=AcquiaPHP
 
 # Execution time is drastically reduced by splitting the build into multiple
 # concurrent jobs.
@@ -150,6 +151,7 @@ before_install:
   - composer self-update
   # Optionally, remove SUT-provided tests with a specific PHPUnit test group.
   - if [ ! -z $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP ]; then find ./ -type f | xargs grep -l "@group $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP$" | xargs rm -v; fi
+  - sed -i 's/<\/ruleset>/  <rule ref="Drupal.InfoFiles.AutoAddedKeys.Version">\n    <exclude-pattern>acquia_cms\.info\.yml<\/exclude-pattern>\n  <\/rule>\n\n<\/ruleset>/' ../orca/phpcs.xml.dist && cat ../orca/phpcs.xml.dist
   - ../orca/bin/travis/before_install.sh
 
 # Create the test fixture and place the SUT.
