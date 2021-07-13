@@ -27,8 +27,6 @@ function acquia_cms_site_studio_install() {
     // Set credentials if module being installed independently.
     set_site_studio_credentials($site_studio_api_key, $site_studio_org_key);
 
-    // Set additional cohesion filter.
-    // set_cohesion_filter();
     // If the user has configured their Cohesion keys, and site studio module
     // exists lets import all elements and its components.
     batch_set(install_acms_site_studio_initialize());
@@ -64,21 +62,5 @@ function set_theme_site_studio_as_default() {
   \Drupal::configFactory()
     ->getEditable('system.theme')
     ->set('default', 'cohesion_theme')
-    ->save();
-}
-
-/**
- * Set cohesion filter format.
- */
-function set_cohesion_filter() {
-  \Drupal::configFactory()
-    ->getEditable('filter.format.filtered_html')
-    ->set('filters.black_list_html_tags', [
-      'id' => 'black_list_html_tags',
-      'provider' => 'cohesion',
-      'status' => 'false',
-      'weight' => '-41',
-      'settings' => [],
-    ])
     ->save();
 }
