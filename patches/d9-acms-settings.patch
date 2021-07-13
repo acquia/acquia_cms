@@ -49,3 +49,5 @@ if (file_exists($memcacheSettingsFile) && getenv('ENABLE_MEMCACHED')) {
 }
 
 $settings['config_sync_directory'] = '../config';
+// Setting to change the theme for maintenance page and update.php page.
+$settings['maintenance_theme'] = 'acquia_claro';
