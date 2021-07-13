@@ -28,8 +28,7 @@ function acquia_cms_site_studio_install() {
     set_site_studio_credentials($site_studio_api_key, $site_studio_org_key);
 
     // Set additional cohesion filter.
-    set_cohesion_filter();
-
+    // set_cohesion_filter();
     // If the user has configured their Cohesion keys, and site studio module
     // exists lets import all elements and its components.
     batch_set(install_acms_site_studio_initialize());
