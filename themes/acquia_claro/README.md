@@ -1,6 +1,6 @@
 # About
 
-A clean, accessible, and powerful Drupal administration theme for Acquia CMS.
+A clean, accessible, and powerful Drupal administration theme for Acquia CMS, based on the Claro theme.
 
 ## Documentation
 
