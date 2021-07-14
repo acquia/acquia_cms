@@ -284,4 +284,27 @@ final class SearchFacade implements ContainerInjectionInterface {
     return $index ? $this->indexStorage->load($index) : NULL;
   }
 
+  /**
+   * Update views display_options's style.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function updateViewDisplayOptionsStyle($view_name) {
+    /** @var \Drupal\views\ViewEntityInterface $view */
+    $view = $this->viewStorage->load($view_name);
+    if (empty($view)) {
+      return;
+    }
+    $display = &$view->getDisplay('default');
+    $style_type = $display['display_options']['style']['type'];
+    if ($style_type !== 'cohesion_layout') {
+      $display['display_options']['style']['type'] = 'cohesion_layout';
+      $display['display_options']['style']['options'] = [
+        'views_template' => 'view_tpl_' . $view_name,
+        'master_template' => 'master_template_boxed',
+      ];
+      $this->viewStorage->save($view);
+    }
+  }
+
 }
