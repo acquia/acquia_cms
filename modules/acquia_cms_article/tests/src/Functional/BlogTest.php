@@ -39,8 +39,6 @@ class BlogTest extends BrowserTestBase {
     'metatag_twitter_cards',
     'pathauto',
     'schema_article',
-    'cohesion_custom_styles',
-    'cohesion_website_settings',
   ];
 
   /**
