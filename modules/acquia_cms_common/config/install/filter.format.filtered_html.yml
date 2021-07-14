@@ -5,7 +5,6 @@ dependencies:
     - core.entity_view_mode.media.embedded
     - core.entity_view_mode.media.media_library
   module:
-    - cohesion
     - editor
     - media
 name: 'Filtered HTML'
@@ -44,12 +43,6 @@ filters:
       default_view_mode: embedded
       allowed_media_types: {  }
       allowed_view_modes: {  }
-  black_list_html_tags:
-    id: black_list_html_tags
-    provider: cohesion
-    status: false
-    weight: -41
-    settings: {  }
   editor_file_reference:
     id: editor_file_reference
     provider: editor
