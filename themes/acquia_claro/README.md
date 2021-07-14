@@ -1,6 +1,14 @@
 # About
 
-Provides an admin theme using Claro as the base theme.
+A clean, accessible, and powerful Drupal administration theme for Acquia CMS, based on the Claro theme.
+
+## Documentation
+
+User-facing documentation for Acquia CMS lives on
+[Acquia's documentation website](https://docs.acquia.com).
+
+ * Please report issues in the [main Acquia CMS repository](https://github.com/acquia/acquia_cms).
+ * Read our [Contributing](/CONTRIBUTING.md) guide.
 
 # License
 

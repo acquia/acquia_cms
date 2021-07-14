@@ -2,6 +2,14 @@
 
 Provides a Document media type and related configuration.
 
+## Documentation
+
+User-facing documentation for Acquia CMS lives on
+[Acquia's documentation website](https://docs.acquia.com).
+
+* Please report issues in the [main Acquia CMS repository](https://github.com/acquia/acquia_cms).
+* Read our [Contributing](/CONTRIBUTING.md) guide.
+
 # License
 
 Copyright (C) 2021 Acquia, Inc.
