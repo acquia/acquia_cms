@@ -145,12 +145,11 @@ before_install:
   - sudo apt-get update
   - sudo apt-get -y install sqlite3/focal
   - mysql -u root < ./tests/travis/install.sql
-  - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
+  - nvm install 12.13.1; nvm use 12.13.1
+  - composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION"
   - composer self-update
   # Optionally, remove SUT-provided tests with a specific PHPUnit test group.
   - if [ ! -z $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP ]; then find ./ -type f | xargs grep -l "@group $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP$" | xargs rm -v; fi
-  - nvm install 12.13.1; nvm use 12.13.1
-  - composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION"
   - ../orca/bin/travis/before_install.sh
 
 # Create the test fixture and place the SUT.
