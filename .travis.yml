@@ -67,7 +67,7 @@ matrix:
     - { env: ORCA_JOB=STRICT_DEPRECATED_CODE_SCAN, name: "Strict deprecated code scan" }
     - { env: ORCA_JOB=INTEGRATED_TEST_ON_OLDEST_SUPPORTED, if: type = cron, name: "Integrated test on oldest supported Drupal core version" }
     - { env: ORCA_JOB=INTEGRATED_UPGRADE_TEST_FROM_PREVIOUS_MINOR, if: type = cron, name: "Integrated upgrade test from previous minor" }
-    - { env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT ACMS_JOB=base_full, if: type = cron, name: "Isolated test on current Drupal core version" }
+    - { env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT ACMS_JOB=base_full, if: type = push, name: "Isolated test on current Drupal core version" }
     # To send PHPUnit test coverage data to Coveralls (coveralls.io), configure
     # your GitHub repository according to the FAQ below and uncomment the
     # following line. By default this job is allowed to fail (see below) so that
@@ -97,7 +97,7 @@ matrix:
     # The following nine jobs are custom ACMS jobs based on the standard isolated
     # current dev test.
     # Exclude push group tests on this job to exclude low and medium risk tests.
-    - { name: "Isolated test on current dev Drupal core version", if: type = push, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="push" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+#    - { name: "Isolated test on current dev Drupal core version", if: type = push, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="push" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     - { name: "Starter", if: NOT branch = main, env: ACMS_JOB=starter ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     # Exclude pr group tests to exclude only low-risk tests during PR builds.
     - { name: "Isolated test on current dev Drupal core version - PR Tests", if: type = pull_request, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="pr" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
