@@ -3,9 +3,9 @@
 namespace Drush\Commands;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
+use Acquia\Utility\AcquiaTelemetry;
 use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\CommandResult;
-use Drupal\Core\Datetime\DrupalDateTime;
 
 /**
  * Rebuild site studio when site is installed via drush.
@@ -21,15 +21,12 @@ class SiteInstallCommands extends DrushCommands {
     $arguments = $commandData->arguments();
     $moduleHandler = \Drupal::service('module_handler');
     if (isset($arguments['profile'][0]) && $arguments['profile'][0] == 'acquia_cms' && $moduleHandler->moduleExists('cohesion')) {
-      $rebuild_start_time = new DrupalDateTime();
-      $formatted = \Drupal::service('date.formatter')->format(
-        $rebuild_start_time->getTimestamp(), 'custom', 'Y-m-d h:i:s'
-      );
-      \Drupal::state()->set('rebuild_start_time', $formatted);
+      $telemetry = \Drupal::classResolver(AcquiaTelemetry::class);
+      $telemetry->setTime('rebuild_start_time');
       $this->say(dt('Rebuilding all entities.'));
       $result = \Drupal::service('acquia_cms_common.utility')->rebuildSiteStudio();
       $this->yell('Finished rebuilding.');
-      $this->setFinishedTime();
+      $telemetry->setTime('rebuild_end_time');
     }
     // Send data to telemetry based upon certain conditions.
     if (\Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv()) {
@@ -38,18 +35,6 @@ class SiteInstallCommands extends DrushCommands {
       }
     }
     return is_array($result) && isset(array_shift($result)['error']) ? CommandResult::exitCode(self::EXIT_FAILURE) : CommandResult::exitCode(self::EXIT_SUCCESS);
-  }
-
-  /**
-   * Set site studio rebuild time and send data to telemetry.
-   */
-  public function setFinishedTime() {
-    // Set rebuild time.
-    $rebuild_end_time = new DrupalDateTime();
-    $formatted = \Drupal::service('date.formatter')->format(
-      $rebuild_end_time->getTimestamp(), 'custom', 'Y-m-d h:i:s'
-    );
-    \Drupal::state()->set('rebuild_end_time', $formatted);
   }
 
 }
