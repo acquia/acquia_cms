@@ -192,15 +192,18 @@ class PlaceTest extends ContentTypeTestBase {
     // Confirm that the Latitude and Longitude fields are filled.
     $this->drupalGet('/node/5/edit');
     list ($previous_lat, $previous_lon) = $this->getCoordinates();
-
     // Change the ZIP code, which should cause the coordinates to change on
     // save.
     $page->fillField('Zip code', '94050');
     $page->pressButton('Save');
+    $assert_session->statusCodeEquals(200);
+    $assert_session->pageTextContains("Living with video has been updated.");
+    dump(['old_lat' => $previous_lat, 'old_lon' => $previous_lon]);
 
     $this->drupalGet('/node/5/edit');
     list ($new_lat, $new_lon) = $this->getCoordinates();
     $page->pressButton('Save');
+    dump(['new_lat' => $new_lat, 'new_lon' => $new_lon]);
     // Assert that coordinates are updated after address change.
     $this->assertNotSame($previous_lat, $new_lat);
     $this->assertNotSame($previous_lon, $new_lon);
