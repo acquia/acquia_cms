@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_search\Functional;
+namespace Drupal\Tests\acquia_cms_tour\Functional;
 
 use Drupal\search_api\Entity\Index;
 use Drupal\Tests\BrowserTestBase;
@@ -10,7 +10,7 @@ use Drupal\views\Entity\View;
  * Tests integration with Acquia Search Solr.
  *
  * @group acquia_cms
- * @group acquia_cms_search
+ * @group acquia_cms_tour
  * @group low_risk
  * @group pr
  * @group push
@@ -22,6 +22,15 @@ class AcquiaSearchFormIntegrationTest extends BrowserTestBase {
    */
   protected $defaultTheme = 'stark';
 
+  /**
+   * {@inheritdoc}
+   */
+  protected static $modules = [
+    'acquia_cms_search',
+    'acquia_search',
+    'acquia_cms_tour',
+    'search_api_db',
+  ];
   /**
    * Disable strict config schema checks in this test.
    *
@@ -35,18 +44,8 @@ class AcquiaSearchFormIntegrationTest extends BrowserTestBase {
    */
   // @codingStandardsIgnoreStart
   protected $strictConfigSchema = FALSE;
-  // @codingStandardsIgnoreEnd
 
-  /**
-   * {@inheritdoc}
-   */
-  protected static $modules = [
-    'acquia_cms_search',
-    'acquia_search',
-    'acquia_cms_tour',
-    'cohesion',
-    'search_api_db',
-  ];
+  // @codingStandardsIgnoreEnd
 
   /**
    * Tests administrative integration with Acquia Search Solr.

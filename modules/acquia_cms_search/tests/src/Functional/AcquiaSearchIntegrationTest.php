@@ -43,7 +43,6 @@ class AcquiaSearchIntegrationTest extends BrowserTestBase {
   protected static $modules = [
     'acquia_cms_search',
     'acquia_search',
-    'cohesion',
     'search_api_db',
   ];
 
