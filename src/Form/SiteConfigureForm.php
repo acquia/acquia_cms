@@ -4,11 +4,11 @@ namespace Drupal\acquia_cms\Form;
 
 use Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Installer\Form\SiteConfigureForm as CoreSiteConfigureForm;
-use Drupal\Core\Messenger\MessengerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -31,11 +31,11 @@ final class SiteConfigureForm extends ConfigFormBase {
   private $moduleInstaller;
 
   /**
-   * The Messenger service.
+   * The module handler.
    *
-   * @var \Drupal\Core\Messenger\MessengerInterface
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  protected $messenger;
+  private $moduleHandler;
 
   /**
    * The decorated site configuration form object.
@@ -60,18 +60,18 @@ final class SiteConfigureForm extends ConfigFormBase {
    *   The Cohesion API URL.
    * @param \Drupal\Core\Extension\ModuleInstallerInterface $module_installer
    *   The module installer.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    * @param \Drupal\Core\Installer\Form\SiteConfigureForm $site_form
    *   The decorated site configuration form object.
    * @param \Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm $maps_form
    *   The decorated Google Maps configuration form object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, string $api_url, ModuleInstallerInterface $module_installer, MessengerInterface $messenger, CoreSiteConfigureForm $site_form, AcquiaGoogleMapsAPIForm $maps_form) {
+  public function __construct(ConfigFactoryInterface $config_factory, string $api_url, ModuleInstallerInterface $module_installer, ModuleHandlerInterface $module_handler, CoreSiteConfigureForm $site_form, AcquiaGoogleMapsAPIForm $maps_form) {
     parent::__construct($config_factory);
     $this->apiUrl = $api_url;
     $this->moduleInstaller = $module_installer;
-    $this->messenger = $messenger;
+    $this->moduleHandler = $module_handler;
     $this->siteForm = $site_form;
     $this->mapsForm = $maps_form;
   }
@@ -84,7 +84,7 @@ final class SiteConfigureForm extends ConfigFormBase {
       $container->get('config.factory'),
       $container->get('cohesion.api.utils')->getAPIServerURL(),
       $container->get('module_installer'),
-      $container->get('messenger'),
+      $container->get('module_handler'),
       CoreSiteConfigureForm::create($container),
       AcquiaGoogleMapsAPIForm::create($container)
     );
@@ -108,13 +108,6 @@ final class SiteConfigureForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    // Upgrading to drupal core 9.2 causing a regression by cohesion module
-    // which deletes session id for user 1 if there are any messages on
-    // site-install screen, as a workaround we are deleting all messages
-    // available on install screen, we will remove below code once we have
-    // a fix for https://backlog.acquia.com/browse/ACO-1169
-    $this->messenger->deleteAll();
-
     $form = $this->siteForm->buildForm($form, $form_state);
     // Set default value for site name.
     $form['site_information']['site_name']['#default_value'] = $this->t('Acquia CMS');
