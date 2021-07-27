@@ -138,17 +138,12 @@ export DTT_MINK_DRIVER_ARGS=$MINK_DRIVER_ARGS_WEBDRIVER
 To run all Acquia CMS tests (which may take a while), use this command:
 ```
 cd docroot
-../vendor/bin/phpunit -c core profiles/contrib/acquia_cms/modules --debug
+../vendor/bin/phpunit -c core --group acquia_cms --debug
 ```
 To run all tests for a particular module:
 ```
 cd docroot
-../vendor/bin/phpunit -c core profiles/contrib/acquia_cms/modules/<MODULE>  --debug
-```
-Example:
-```
-cd docroot
-../vendor/bin/phpunit -c core profiles/contrib/acquia_cms/modules/acquia_cms_search --debug
+../vendor/bin/phpunit -c core --group MODULE --debug
 ```
 To run a particular test:
 ```
