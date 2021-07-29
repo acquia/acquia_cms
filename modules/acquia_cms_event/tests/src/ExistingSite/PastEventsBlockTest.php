@@ -76,7 +76,7 @@ class PastEventsBlockTest extends ExistingSiteBase {
   protected function getLinks(): array {
     $links = $this->getSession()
       ->getPage()
-      ->findAll('css', '#block-past-events-block .card-outer-container .coh-container .coh-heading');
+      ->findAll('css', '#block-past-events-block article a');
 
     $map = function (ElementInterface $link) {
       return $link->getText();
