@@ -26,5 +26,8 @@ function acquia_cms_search_install() {
 
     Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('articles');
     Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('articles_fallback');
+
+    Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('events');
+    Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('events_fallback');
   }
 }
