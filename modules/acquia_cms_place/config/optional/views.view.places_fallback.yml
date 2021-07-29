@@ -5,7 +5,6 @@ dependencies:
     - core.entity_view_mode.node.teaser
     - node.type.place
   module:
-    - cohesion
     - node
     - user
 id: places_fallback
@@ -69,10 +68,7 @@ display:
             offset_label: Offset
           quantity: 5
       style:
-        type: cohesion_layout
-        options:
-          views_template: view_tpl_places_fallback
-          master_template: master_template_boxed
+        type: default
       row:
         type: 'entity:node'
         options:
