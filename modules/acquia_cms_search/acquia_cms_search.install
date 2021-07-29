@@ -23,5 +23,8 @@ function acquia_cms_search_install() {
   if (\Drupal::moduleHandler()->moduleExists('acquia_cms_site_studio')) {
     Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('search');
     Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('search_fallback');
+
+    Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('articles');
+    Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('articles_fallback');
   }
 }

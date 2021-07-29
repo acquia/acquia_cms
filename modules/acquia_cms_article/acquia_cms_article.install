@@ -5,6 +5,8 @@
  * Install, update and uninstall functions for the acquia_cms_article module.
  */
 
+use Drupal\acquia_cms_search\Facade\SearchFacade;
+
 /**
  * Implements hook_install().
  */
@@ -18,4 +20,11 @@ function acquia_cms_article_install() {
     'edit any article content',
     'delete any article content',
   ]);
+
+  // Update article_cards views display_options's style
+  // type as cohesion_layout and option's views_template & master_template
+  // if acquia_cms_site_studio module is present else use default one.
+  if (\Drupal::moduleHandler()->moduleExists('acquia_cms_site_studio')) {
+    Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('article_cards', 'view_tpl_article_cards_slider');
+  }
 }
