@@ -196,6 +196,10 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
    *   (optional) A set of permissions with which to run this test. If omitted,
    *   the test is run as the anonymous user.
    *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   * @throws \Behat\Mink\Exception\ExpectationException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   *
    * @dataProvider permissionProvider
    */
   public function testListPage(array $permissions = NULL) {
@@ -285,6 +289,9 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
    * @param string[] $permissions
    *   (optional) A set of permissions with which to run this test. If omitted,
    *   the test is run as the anonymous user.
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException
+   * @throws \Drupal\Core\Entity\EntityStorageException
    *
    * @dataProvider permissionProvider
    */
