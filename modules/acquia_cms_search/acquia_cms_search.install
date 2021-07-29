@@ -32,5 +32,8 @@ function acquia_cms_search_install() {
 
     Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('places');
     Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('places_fallback');
+
+    Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('people');
+    Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('people_fallback');
   }
 }
