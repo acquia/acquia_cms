@@ -7,7 +7,6 @@ dependencies:
     - views.view.places_fallback
   module:
     - acquia_cms_search
-    - cohesion
     - search_api
     - user
 id: places
@@ -69,10 +68,7 @@ display:
             offset_label: Offset
           quantity: 5
       style:
-        type: cohesion_layout
-        options:
-          views_template: view_tpl_places
-          master_template: master_template_boxed
+        type: default
       row:
         type: search_api
       fields:
