@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_event\ExistingSite;
+namespace Drupal\Tests\acquia_cms_search\ExistingSite;
 
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\node\Entity\Node;
@@ -11,7 +11,7 @@ use Drupal\views\Entity\View;
  * Tests the "all events" listing page.
  *
  * @group acquia_cms
- * @group acquia_cms_event
+ * @group acquia_cms_search
  * @group low_risk
  * @group pr
  * @group push
