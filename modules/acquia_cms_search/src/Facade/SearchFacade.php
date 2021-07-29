@@ -289,7 +289,7 @@ final class SearchFacade implements ContainerInjectionInterface {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function updateViewDisplayOptionsStyle($view_name) {
+  public function updateViewDisplayOptionsStyle($view_name, $views_template = NULL) {
     /** @var \Drupal\views\ViewEntityInterface $view */
     $view = $this->viewStorage->load($view_name);
     if (empty($view)) {
@@ -300,7 +300,7 @@ final class SearchFacade implements ContainerInjectionInterface {
     if ($style_type !== 'cohesion_layout') {
       $display['display_options']['style']['type'] = 'cohesion_layout';
       $display['display_options']['style']['options'] = [
-        'views_template' => 'view_tpl_' . $view_name,
+        'views_template' => $views_template ?? 'view_tpl_' . $view_name,
         'master_template' => 'master_template_boxed',
       ];
       $this->viewStorage->save($view);
