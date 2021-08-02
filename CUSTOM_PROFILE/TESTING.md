@@ -71,9 +71,3 @@ Example:
 ```
 cp -f phpunit.xml ./docroot/core
 ```
-
-As our testing strategy evolves to shorten Travis build times, lower risk tests
-will move to overnight cron builds. To improve our collective efficiency, it is
-important that developers run tests locally to verify changes while work is in
-progress. See instructions above for running individual tests and group/module
-tests to run tests that are especially relevant to current work in progress.
