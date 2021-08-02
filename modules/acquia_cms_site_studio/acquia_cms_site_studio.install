@@ -5,6 +5,7 @@
  * Contains install-time code for the Acquia CMS profile.
  */
 
+use Drupal\acquia_cms_search\Facade\SearchFacade;
 use Drupal\Core\Installer\InstallerKernel;
 
 /**
@@ -35,6 +36,25 @@ function acquia_cms_site_studio_install() {
     // Invoke site studio rebuild if module is being install via UI.
     if (PHP_SAPI !== 'cli') {
       acquia_cms_site_studio_rebuild_styles();
+    }
+  }
+
+  // Update search & search_fallback views display_options's style
+  // type as cohesion_layout and option's views_template & master_template
+  // if acquia_cms_site_studio module is present else use default one.
+  $module_handler = \Drupal::moduleHandler();
+  if ($module_handler->moduleExists('acquia_cms_search')) {
+    Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('search');
+    Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('search_fallback');
+
+    // Disable acquia_search view provided by Acquia Search Solrmodule,
+    // so that search view provided by acquia_cms_search module can be used
+    // which will allow content's related test to pass in isolation.
+    $view_storage = \Drupal::entityTypeManager()->getStorage('view');
+    if (!empty($view_storage->load('acquia_search'))) {
+      $view_storage->load('acquia_search')
+        ->setStatus(FALSE)
+        ->save();
     }
   }
 }
