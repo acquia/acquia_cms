@@ -41,15 +41,14 @@ class ConfigEventsSubscriber implements EventSubscriberInterface {
     if ($module_handler->moduleExists('acquia_cms_site_studio')) {
       switch ($config->getName()) {
         case 'views.view.event_cards':
-          \Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('event_cards', 'view_tpl_event_cards_slider');
+          \Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('event_cards', 'upcoming_events_block', 'view_tpl_event_cards_slider');
           break;
 
         case 'views.view.article_cards':
-          \Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('article_cards', 'view_tpl_article_cards_slider');
+          \Drupal::classResolver(SearchFacade::class)->updateViewDisplayOptionsStyle('article_cards', 'recent_articles_block', 'view_tpl_article_cards_slider');
           break;
       }
     }
-
     if ($module_handler->moduleExists('acquia_cms_site_studio') && $module_handler->moduleExists('acquia_cms_search')) {
       switch ($config->getName()) {
         case 'views.view.articles':
