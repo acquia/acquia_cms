@@ -1,39 +1,39 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_person\ExistingSite;
+namespace Drupal\Tests\acquia_cms_site_studio\ExistingSite;
 
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Tests\acquia_cms_common\ExistingSite\ContentTypeListTestBase;
 use Drupal\views\Entity\View;
 
 /**
- * Tests the "all people" listing page.
+ * Tests the "all events" listing page.
  *
- * @group acquia_cms_person
  * @group acquia_cms
+ * @group acquia_cms_site_studio
  * @group low_risk
  * @group pr
  * @group push
  */
-class PersonListTest extends ContentTypeListTestBase {
+class EventListTest extends ContentTypeListTestBase {
 
   /**
    * {@inheritdoc}
    */
-  protected $nodeType = 'person';
+  protected $nodeType = 'event';
 
   /**
    * {@inheritdoc}
    */
   protected function getView() : View {
-    return View::load('people');
+    return View::load('events');
   }
 
   /**
    * {@inheritdoc}
    */
   protected function visitListPage($langcode = NULL) : void {
-    $page = $langcode ? "/$langcode/people" : "/people";
+    $page = $langcode ? "/$langcode/events" : "/events";
     $this->drupalGet($page);
   }
 
@@ -41,7 +41,7 @@ class PersonListTest extends ContentTypeListTestBase {
    * {@inheritdoc}
    */
   protected function getQuery() : QueryInterface {
-    return parent::getQuery()->sort('title');
+    return parent::getQuery()->sort('field_event_start')->sort('title');
   }
 
 }

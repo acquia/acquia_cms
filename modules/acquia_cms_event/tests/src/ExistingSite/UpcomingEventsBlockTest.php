@@ -78,7 +78,7 @@ class UpcomingEventsBlockTest extends ExistingSiteBase {
   protected function getLinks() : array {
     $links = $this->getSession()
       ->getPage()
-      ->findAll('css', '#block-upcoming-events-block .view-event-cards .coh-container .coh-heading');
+      ->findAll('css', '#block-upcoming-events-block article a');
 
     $map = function (ElementInterface $link) {
       return $link->getText();

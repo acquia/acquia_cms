@@ -196,3 +196,27 @@ function _acquia_cms_common_rewrite_configuration(string $config, string $module
   $active_storage = \Drupal::service('config.storage');
   $active_storage->write($config, $parsed_yml);
 }
+
+/**
+ * Helper function to update views display_options's style.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function _acquia_cms_common_update_view_display_options_style($view_name, $display_id = 'default', $views_template = NULL) {
+  /** @var \Drupal\views\ViewEntityInterface $view */
+  $view_storage = \Drupal::entityTypeManager()->getStorage('view');
+  $view = $view_storage->load($view_name);
+  if (empty($view)) {
+    return;
+  }
+  $display = &$view->getDisplay($display_id);
+  $style_type = $display['display_options']['style']['type'];
+  if ($style_type !== 'cohesion_layout') {
+    $display['display_options']['style']['type'] = 'cohesion_layout';
+    $display['display_options']['style']['options'] = [
+      'views_template' => $views_template ?? 'view_tpl_' . $view_name,
+      'master_template' => 'master_template_boxed',
+    ];
+    $view_storage->save($view);
+  }
+}
