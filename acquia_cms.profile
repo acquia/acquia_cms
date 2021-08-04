@@ -6,6 +6,7 @@
  */
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
+use Acquia\Utility\AcquiaTelemetry;
 use Drupal\acquia_cms\Facade\CohesionFacade;
 use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
@@ -33,6 +34,27 @@ function acquia_cms_install_tasks_alter(array &$tasks) {
   // Decorate the site configuration form to allow the user to configure their
   // Cohesion keys at install time.
   $tasks['install_configure_form']['function'] = SiteConfigureForm::class;
+  // We want to capture the time when the installation starts.
+  // This code helps capture time right when the drupal bootstrap happens.
+  // The pre start function calls another method that performs the actual logic.
+  $tasks['install_bootstrap_full']['function'] = 'acquia_cms_pre_start';
+}
+
+/**
+ * Method that calls another method to capture the installation start time.
+ */
+function acquia_cms_pre_start($install_state) {
+  $function = $install_state['active_task'];
+  acquia_cms_set_install_time();
+  return $function($install_state);
+}
+
+/**
+ * Set the install start time using state API.
+ */
+function acquia_cms_set_install_time() {
+  $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
+  $telemetry->setTime('install_start_time');
 }
 
 /**
@@ -64,8 +86,15 @@ function acquia_cms_install_tasks(): array {
     'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
   ];
 
-  // Don't include the rebuild task if installing via Drush, we automate that
-  // elsewhere.
+  $tasks['acquia_cms_install_additional_modules'] = [];
+
+  $tasks['install_acms_finished'] = [];
+
+  // Don't include the rebuild task & don't send heartbeat event to telemetry.
+  // if installing site via Drush.
+  // @see src/Commands/SiteInstallCommands.php.
+  // Also send hearbeat event only for UI here.
+  // For cli we are sending it from file mentioned above.
   if (PHP_SAPI !== 'cli') {
     $tasks['acquia_cms_rebuild_site_studio'] = [
       'display_name' => t('Rebuild Site Studio'),
@@ -73,21 +102,23 @@ function acquia_cms_install_tasks(): array {
       'type' => 'batch',
       'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
     ];
+    // If the user has opted in for Acquia Telemetry, send heartbeat event.
+    $tasks['acquia_cms_send_heartbeat_event'] = [
+      'run' => Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+    ];
   }
-
-  $tasks['acquia_cms_install_additional_modules'] = [];
-
-  // If the user has opted in for Acquia Telemetry, send heartbeat event.
-  $tasks['acquia_cms_send_heartbeat_event'] = [
-    'run' => Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
-  ];
   return $tasks;
 }
 
 /**
  * Send heartbeat event after site installation.
+ *
+ * @see src/Commands/SiteInstallCommands.php
  */
 function acquia_cms_send_heartbeat_event() {
+  $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
+  $config = Drupal::config('cohesion.settings');
+  $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
   Drupal::configFactory()
     ->getEditable('acquia_telemetry.settings')
     ->set('api_key', 'e896d8a97a24013cee91e37a35bf7b0b')
@@ -95,6 +126,9 @@ function acquia_cms_send_heartbeat_event() {
   \Drupal::service('acquia.telemetry')->sendTelemetry('acquia_cms_installed', [
     'Application UUID' => Environment::getAhApplicationUuid(),
     'Site Environment' => Environment::getAhEnv(),
+    'Install Time' => $telemetry->calculateTime('install_start_time', 'install_end_time'),
+    'Rebuild Time' => $telemetry->calculateTime('rebuild_start_time', 'rebuild_end_time'),
+    'Site Studio Install Status' => $cohesion_configured ? 1 : 0,
   ]);
 }
 
@@ -173,7 +207,9 @@ function acquia_cms_install_ui_kit(array $install_state) {
   // a total rebuild at the end. This cuts install times approximately in half,
   // especially via Drush.
   $operations = $facade->getAllOperations(TRUE);
-  $batch = ['operations' => $operations];
+  $batch = [
+    'operations' => $operations,
+  ];
 
   // Set batch along with drush backend process if site is being
   // installed via Drush, so that we can show log on the screen during
@@ -185,6 +221,14 @@ function acquia_cms_install_ui_kit(array $install_state) {
   else {
     return $batch;
   }
+}
+
+/**
+ * Method that calls another method to capture the installation end time.
+ */
+function install_acms_finished() {
+  $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
+  $telemetry->setTime('install_end_time');
 }
 
 /**
@@ -239,15 +283,27 @@ function acquia_cms_rebuild_cohesion() {
  *   Batch for rebuild operation.
  */
 function acquia_cms_rebuild_site_studio() {
-
+  $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
+  $telemetry->setTime('rebuild_start_time');
   // Get the batch array filled with operations that should be performed during
   // rebuild. Also, we explicitly do not clear the cache during site install.
   $batch = WebsiteSettingsController::batch(TRUE);
+
   if (isset($batch['error'])) {
     Drupal::messenger()->addError($batch['error']);
   }
-
+  $batch['finished'] = 'acquia_cms_rebuild_site_studio_finished';
   return $batch;
+}
+
+/**
+ * Method for performing functions once the rebuild is finished.
+ */
+function acquia_cms_rebuild_site_studio_finished() {
+  // The 'success' parameter means no fatal PHP errors were detected. All
+  // other error management should be handled using 'results'.
+  $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
+  $telemetry->setTime('rebuild_end_time');
 }
 
 /**
