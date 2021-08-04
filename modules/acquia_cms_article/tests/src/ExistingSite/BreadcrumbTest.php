@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_common\ExistingSite;
+namespace Drupal\Tests\acquia_cms_article\ExistingSite;
 
 use Behat\Mink\Element\ElementInterface;
 use Drupal\taxonomy\Entity\Vocabulary;
@@ -45,30 +45,6 @@ class BreadcrumbTest extends ExistingSiteBase {
         [
           ['Articles', '/articles'],
           ['Blog', '/articles/type/blog'],
-        ],
-      ],
-      [
-        'event',
-        'Party',
-        [
-          ['Events', '/events'],
-          ['Party', '/events/type/party'],
-        ],
-      ],
-      [
-        'place',
-        'Restaurant',
-        [
-          ['Places', '/places'],
-          ['Restaurant', '/places/type/restaurant'],
-        ],
-      ],
-      [
-        'person',
-        'Techno DJ',
-        [
-          ['People', '/people'],
-          ['Techno DJ', '/people/type/techno-dj'],
         ],
       ],
     ];
