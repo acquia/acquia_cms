@@ -1,3 +1,41 @@
+/*
+  How to use
+
+  backstop reference --configPath=backstop-settings.js
+       backstop test --configPath=backstop-settings.js
+
+  backstop reference --configPath=backstop-settings.js --refhost=http://example.com
+       backstop test --configPath=backstop-settings.js --testhost=http://example.com
+
+  backstop reference --configPath=backstop-settings.js --paths=/,/contact
+       backstop test --configPath=backstop-settings.js --paths=/,/contact
+
+  backstop reference --configPath=backstop-settings.js --pathfile=paths
+       backstop test --configPath=backstop-settings.js --pathfile=paths
+
+ */
+
+/*
+  Set up some variables
+ */
+var arguments = require('minimist')(process.argv.slice(2)); // grabs the process arguments
+var defaultPaths = ['/']; // By default is just checks the homepage
+var scenarios = []; // The array that'll have the pages to test
+
+/*
+  Work out the environments that are being compared
+ */
+// The host to test
+if (!arguments.testhost) {
+  arguments.testhost  = "http://127.0.0.1:8080"; // Default test host
+}
+// The host to reference
+if (!arguments.refhost) {
+  arguments.refhost  = "http://127.0.0.1:8080"; // Default test host
+}
+
+// Configuration
+module.exports =
 {
   "id": "backstop_default",
   "viewports": [
@@ -23,7 +61,7 @@
     {
       "label": "ACMS Homepage (Starter)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://127.0.0.1:8080",
+      "url": arguments.testhost,
       "referenceUrl": "",
       "readyEvent": "",
       "readySelector": "",
@@ -42,7 +80,7 @@
     {
       "label": "ACMS Articles (Starter)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://127.0.0.1:8080/articles",
+      "url": arguments.testhost + "/articles",
       "referenceUrl": "",
       "readyEvent": "",
       "readySelector": "",
@@ -61,7 +99,7 @@
     {
       "label": "ACMS Events (Starter)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://127.0.0.1:8080/events",
+      "url": arguments.testhost + "/events",
       "referenceUrl": "",
       "readyEvent": "",
       "readySelector": "",
@@ -80,7 +118,7 @@
     {
       "label": "ACMS People (Starter)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://127.0.0.1:8080/people",
+      "url": arguments.testhost + "/people",
       "referenceUrl": "",
       "readyEvent": "",
       "readySelector": "",
@@ -99,7 +137,7 @@
     {
       "label": "ACMS Places (Starter)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://127.0.0.1:8080/places",
+      "url": arguments.testhost + "/places",
       "referenceUrl": "",
       "readyEvent": "",
       "readySelector": "",
@@ -118,7 +156,7 @@
     {
       "label": "ACMS Person (Starter)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://127.0.0.1:8080/person/operations/alex-kowen",
+      "url": arguments.testhost + "/person/operations/alex-kowen",
       "referenceUrl": "",
       "readyEvent": "",
       "readySelector": "",
@@ -137,7 +175,7 @@
     {
       "label": "ACMS Place (Starter)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://127.0.0.1:8080/place/office/boston-head-office",
+      "url": arguments.testhost + "/place/office/boston-head-office",
       "referenceUrl": "",
       "readyEvent": "",
       "readySelector": "",
@@ -156,7 +194,7 @@
     {
       "label": "ACMS Event (Starter)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://127.0.0.1:8080/event/webinar/2021/07/past-event-five-medium-length-placeholder-heading",
+      "url": arguments.testhost + "/event/webinar/2021/08/past-event-five-medium-length-placeholder-heading",
       "referenceUrl": "",
       "readyEvent": "",
       "readySelector": "",
@@ -175,7 +213,7 @@
     {
       "label": "ACMS Article (Starter)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://127.0.0.1:8080/article/blog/article-nine-medium-length-placeholder-heading",
+      "url": arguments.testhost + "/article/blog/article-nine-medium-length-placeholder-heading",
       "referenceUrl": "",
       "readyEvent": "",
       "readySelector": "",
@@ -209,3 +247,4 @@
   "debug": false,
   "debugWindow": false
 }
+

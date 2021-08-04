@@ -36,11 +36,11 @@ acli --version
 ```
 echo "extension=intl.so" >> ../configs/php/custom.ini
 supervisorctl restart php-fpm
-``` 
+```
 11. Install all dependencies:
 ```
 cd project
-composer install
+composer install && composer run post-update-cmd
 ```
 12. Install Acquia CMS, as detailed in the "Installing Acquia CMS" section below.
 13. In the "Open Drupal Site" menu, choose "Open site in a new tab" and ensure you can see the Drupal site, and log in with the username "admin" and password "admin".
@@ -171,7 +171,13 @@ npm install
 
 ##### Running Existing Tests
 
-To run Backstop tests on Acquia CMS, run the following command:
+To run the backstop tests on Acquia CMS, start the server on another terminal with following command.
+
+```
+drush runserver --default-server=http://127.0.0.1:8080
+```
+
+Once, the server is started, run the following command:
 
 ```
 npm run backstop-starter
