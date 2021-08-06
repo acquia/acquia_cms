@@ -1,9 +1,12 @@
 name: Acquia CMS
 core_version_requirement: ^9
+version: '1.2.4'
 type: profile
 description: "An opinionated implementation of Drupal 9 for running low code websites in the Acquia platform."
 distribution:
+  name: Acquia CMS
   install:
+    theme: acquia_claro
     finish_url: '/admin/tour'
 install:
   - acquia_cms_common
