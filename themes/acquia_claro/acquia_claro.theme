@@ -8,6 +8,25 @@
 use Drupal\acquia_claro\PreRender;
 
 /**
+ * Prepares variables for install page templates.
+ *
+ * Default template: install-page.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - content - An array of page content.
+ *
+ * @see template_preprocess_maintenance_page()
+ */
+function acquia_claro_preprocess_install_page(array &$variables) {
+  $variables['drupal_core_version'] = \Drupal::VERSION;
+  $variables['#attached']['library'][] = 'seven/install-page';
+  $variables['#attached']['library'][] = 'acquia_claro/install-page';
+  $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+  $variables['install_page_logo_path'] = file_create_url($acquia_cms_path . '/acquia_cms.png');
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function acquia_claro_form_media_library_add_form_upload_alter(array &$form) {
