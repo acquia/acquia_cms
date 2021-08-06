@@ -33,6 +33,9 @@ class SiteInstallCommands extends DrushCommands {
       if (isset($arguments['profile'][0]) && $arguments['profile'][0] == 'acquia_cms') {
         $telemetry->setTime('rebuild_end_time');
       }
+      if (function_exists('acquia_cms_print_icon')) {
+        acquia_cms_print_icon();
+      }
     }
     // Send data to telemetry based upon certain conditions.
     if ($moduleHandler->moduleExists('acquia_telemetry') && Environment::isAhEnv()) {
