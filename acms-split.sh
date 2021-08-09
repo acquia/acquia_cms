@@ -11,7 +11,7 @@ set -x
 
 echo -e "${GREEN} Script Running on ${OSTYPE}${NOCOLOR}"
 
-# Sample usage: ./runsplit.sh
+# Sample usage: ./acms-split.sh
 # Commit will be traversed/updated from source to destination repositary.
 
 # Dynamically setting current branch to checked out branch.
