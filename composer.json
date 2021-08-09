@@ -238,7 +238,7 @@
         "post-update-cmd": [
             "Composer\\Config::disableProcessTimeout",
             "@putenv PROFILE_DIR=./docroot/profiles/contrib/acquia_cms",
-            "@putenv MODULES_DIR=./docroot/sites/all",
+            "@putenv PROFILE_MODULES_DIR=./docroot/profiles/contrib/acquia_cms/modules",
             "if [ \"$PIPELINE_ENV\" != \"true\" ]; then composer build:local; fi;"
         ],
         "acms:install": [
@@ -251,12 +251,14 @@
             "cp themes/acquia_claro/css/acquia_cms_toolbar.css modules/acquia_cms_toolbar/css"
         ],
         "build:local": [
-            "mkdir -p $PROFILE_DIR $MODULES_DIR",
+            "mkdir -p $PROFILE_DIR $PROFILE_MODULES_DIR",
             "find $PWD -name 'acquia_cms.*' -type f -maxdepth 1 -exec ln -s -f '{}' $PROFILE_DIR ';'",
             "ln -s -f $PWD/config $PROFILE_DIR",
             "ln -s -f $PWD/misc $PROFILE_DIR",
-            "ln -s -f $PWD/modules $MODULES_DIR",
-            "ln -s -f $PWD/modules $PROFILE_DIR",
+            "ln -s -f $PWD/modules/acquia_cms_development $PROFILE_MODULES_DIR",
+            "ln -s -f $PWD/modules/acquia_cms_starter $PROFILE_MODULES_DIR",
+            "ln -s -f $PWD/modules/acquia_cms_support $PROFILE_MODULES_DIR",
+            "ln -s -f $PWD/modules/acquia_cms_tour $PROFILE_MODULES_DIR",
             "ln -s -f $PWD/themes $PROFILE_DIR",
             "ln -s -f $PWD/src $PROFILE_DIR",
             "ln -s -f $PWD/tests $PROFILE_DIR",
