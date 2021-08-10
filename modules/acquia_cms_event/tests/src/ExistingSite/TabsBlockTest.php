@@ -8,7 +8,7 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
 /**
  * Tests that the Drupal core tabs block behaves as expected.
  *
- * @group acquia_cms_common
+ * @group acquia_cms_event
  * @group acquia_cms
  * @group low_risk
  * @group pr
