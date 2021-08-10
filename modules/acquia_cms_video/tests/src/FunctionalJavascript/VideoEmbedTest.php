@@ -69,7 +69,7 @@ class VideoEmbedTest extends MediaEmbedTestBase {
    */
   protected function addMedia() {
     $this->getSession()
-      ->getPage()->fillField('Add Video via URL', 'https://youtu.be/VHO9uZX9FNU');
+      ->getPage()->fillField('Add Video via URL', 'https://youtu.be/lg879YYbihU');
     $this->getSession()->getPage()->pressButton('Add');
   }
 
