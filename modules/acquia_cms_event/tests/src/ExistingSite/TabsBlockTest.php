@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_common\ExistingSite;
+namespace Drupal\Tests\acquia_cms_event\ExistingSite;
 
 use Drupal\Component\Serialization\Yaml;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
@@ -8,7 +8,7 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
 /**
  * Tests that the Drupal core tabs block behaves as expected.
  *
- * @group acquia_cms_common
+ * @group acquia_cms_event
  * @group acquia_cms
  * @group low_risk
  * @group pr
@@ -54,18 +54,27 @@ class TabsBlockTest extends ExistingSiteBase {
 
     $assert_session = $this->assertSession();
 
-    $node_types = $this->container->get('entity_type.manager')
-      ->getStorage('node_type')
-      ->getQuery()
-      ->execute();
+    $node_types = [
+      'event',
+      'place',
+    ];
 
+    /*
+     * @todo remove the code here and use the node type array above
+     * to fetch and test for thos content type only.
+     */
+
+    // $node_types = $this->container->get('entity_type.manager')
+    // ->getStorage('node_type')
+    // ->getQuery()
+    // ->execute();
     foreach ($node_types as $node_type) {
       $node = $this->createNode([
         'type' => $node_type,
       ]);
       $this->assertSame($account->id(), $node->getOwnerId());
       $this->drupalGet($node->toUrl());
-      $assert_session->elementExists('css', '#block-tabs-2');
+      $assert_session->elementExists('css', 'nav.tabs');
     }
   }
 

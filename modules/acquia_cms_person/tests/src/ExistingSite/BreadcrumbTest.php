@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_common\ExistingSite;
+namespace Drupal\Tests\acquia_cms_person\ExistingSite;
 
 use Behat\Mink\Element\ElementInterface;
 use Drupal\taxonomy\Entity\Vocabulary;
@@ -10,7 +10,7 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
 /**
  * Tests breadcrumbs generated from content type sub-types.
  *
- * @group acquia_cms_common
+ * @group acquia_cms_person
  * @group acquia_cms
  * @group low_risk
  * @group pr
@@ -39,30 +39,6 @@ class BreadcrumbTest extends ExistingSiteBase {
    */
   public function providerBreadcrumb() : array {
     return [
-      [
-        'article',
-        'Blog',
-        [
-          ['Articles', '/articles'],
-          ['Blog', '/articles/type/blog'],
-        ],
-      ],
-      [
-        'event',
-        'Party',
-        [
-          ['Events', '/events'],
-          ['Party', '/events/type/party'],
-        ],
-      ],
-      [
-        'place',
-        'Restaurant',
-        [
-          ['Places', '/places'],
-          ['Restaurant', '/places/type/restaurant'],
-        ],
-      ],
       [
         'person',
         'Techno DJ',
