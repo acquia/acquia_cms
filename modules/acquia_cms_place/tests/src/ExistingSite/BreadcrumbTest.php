@@ -10,7 +10,7 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
 /**
  * Tests breadcrumbs generated from content type sub-types.
  *
- * @group acquia_cms_common
+ * @group acquia_cms_place
  * @group acquia_cms
  * @group low_risk
  * @group pr
