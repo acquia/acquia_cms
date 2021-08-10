@@ -6,13 +6,13 @@
  */
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
+use Acquia\Utility\AcquiaTelemetry;
 use Drupal\acquia_cms\Facade\CohesionFacade;
 use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
 use Drupal\Core\Ajax\CloseDialogCommand;
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\media_library\MediaLibraryState;
@@ -38,7 +38,6 @@ function acquia_cms_install_tasks_alter(array &$tasks) {
   // This code helps capture time right when the drupal bootstrap happens.
   // The pre start function calls another method that performs the actual logic.
   $tasks['install_bootstrap_full']['function'] = 'acquia_cms_pre_start';
-  $tasks['install_finished']['function'] = 'acquia_cms_install_finished';
 }
 
 /**
@@ -54,33 +53,8 @@ function acquia_cms_pre_start($install_state) {
  * Set the install start time using state API.
  */
 function acquia_cms_set_install_time() {
-  // The bootstrap method is called every time on UI installation.
-  // Hence, it is important to check if variable is empty or not.
-  // Set the time value only if variable is empty.
-  // This helps in avoiding to capture incorrect start time.
-  $start_time = \Drupal::state()->get('install_start_time');
-  if (empty($start_time)) {
-    $start_time = new DrupalDateTime();
-    $formatted_time = acquia_cms_format_time($start_time);
-    \Drupal::state()->set('install_start_time', $formatted_time);
-  }
-}
-
-/**
- * Function for formatting date.
- *
- * @param \Drupal\Core\Datetime\DrupalDateTime $time
- *   Parameter that passes raw date value.
- *
- * @return \Drupal\Core\Datetime\DrupalDateTime
- *   The formatted date.
- */
-function acquia_cms_format_time(DrupalDateTime $time) {
-  $formatted = \Drupal::service('date.formatter')->format(
-    $time->getTimestamp(), 'custom', 'Y-m-d h:i:s'
-  );
-
-  return $formatted;
+  $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
+  $telemetry->setTime('install_start_time');
 }
 
 /**
@@ -112,8 +86,15 @@ function acquia_cms_install_tasks(): array {
     'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
   ];
 
-  // Don't include the rebuild task if installing via Drush, we automate that
-  // elsewhere.
+  $tasks['acquia_cms_install_additional_modules'] = [];
+
+  $tasks['install_acms_finished'] = [];
+
+  // Don't include the rebuild task & don't send heartbeat event to telemetry.
+  // if installing site via Drush.
+  // @see src/Commands/SiteInstallCommands.php.
+  // Also send hearbeat event only for UI here.
+  // For cli we are sending it from file mentioned above.
   if (PHP_SAPI !== 'cli') {
     $tasks['acquia_cms_rebuild_site_studio'] = [
       'display_name' => t('Rebuild Site Studio'),
@@ -121,11 +102,6 @@ function acquia_cms_install_tasks(): array {
       'type' => 'batch',
       'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
     ];
-  }
-
-  $tasks['acquia_cms_install_additional_modules'] = [];
-
-  if (PHP_SAPI !== 'cli') {
     // If the user has opted in for Acquia Telemetry, send heartbeat event.
     $tasks['acquia_cms_send_heartbeat_event'] = [
       'run' => Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
@@ -140,16 +116,7 @@ function acquia_cms_install_tasks(): array {
  * @see src/Commands/SiteInstallCommands.php
  */
 function acquia_cms_send_heartbeat_event() {
-  // Get time values and calculate the difference.
-  $time_values = acquia_cms_process_time_values();
-  $install_time_diff = acquia_cms_calculate_time_diff(
-    $time_values['install_start_time'],
-    $time_values['install_end_time']
-  );
-  $rebuild_time_diff = acquia_cms_calculate_time_diff(
-    $time_values['rebuild_start_time'],
-    $time_values['rebuild_end_time']
-  );
+  $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
   $config = Drupal::config('cohesion.settings');
   $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
   Drupal::configFactory()
@@ -159,52 +126,10 @@ function acquia_cms_send_heartbeat_event() {
   \Drupal::service('acquia.telemetry')->sendTelemetry('acquia_cms_installed', [
     'Application UUID' => Environment::getAhApplicationUuid(),
     'Site Environment' => Environment::getAhEnv(),
-    'Install Time' => $install_time_diff,
-    'Rebuild Time' => $rebuild_time_diff,
+    'Install Time' => $telemetry->calculateTime('install_start_time', 'install_end_time'),
+    'Rebuild Time' => $telemetry->calculateTime('rebuild_start_time', 'rebuild_end_time'),
     'Site Studio Install Status' => $cohesion_configured ? 1 : 0,
   ]);
-}
-
-/**
- * Function to process time values.
- *
- * @return array
- *   Returns all the processed time values.
- */
-function acquia_cms_process_time_values() {
-  // Get the install & rebuild time from state API.
-  $install_start_time = \Drupal::state()->get('install_start_time');
-  $install_end_time = \Drupal::state()->get('install_end_time');
-  $rebuild_start_time = \Drupal::state()->get('rebuild_start_time');
-  $rebuild_end_time = \Drupal::state()->get('rebuild_end_time');
-  // Calculate the time diff from the function and pass it to telemetry.
-  $time_values = [
-    'install_start_time' => new DrupalDateTime($install_start_time),
-    'install_end_time' => new DrupalDateTime($install_end_time),
-    'rebuild_start_time' => new DrupalDateTime($rebuild_start_time),
-    'rebuild_end_time' => new DrupalDateTime($rebuild_end_time),
-  ];
-
-  return $time_values;
-}
-
-/**
- * Function to calculate the time difference.
- *
- * @param \Drupal\Core\Datetime\DrupalDateTime $start_time
- *   Variable that stores the start time.
- * @param \Drupal\Core\Datetime\DrupalDateTime $end_time
- *   Variable that stores the end time.
- *
- * @return int
- *   Returns the time difference in seconds.
- */
-function acquia_cms_calculate_time_diff(DrupalDateTime $start_time, DrupalDateTime $end_time) {
-  // Perform the subtraction and return the time in seconds.
-  $timeDiff = $end_time->getTimestamp() - $start_time->getTimestamp();
-
-  // Return the difference.
-  return $timeDiff;
 }
 
 /**
@@ -301,21 +226,9 @@ function acquia_cms_install_ui_kit(array $install_state) {
 /**
  * Method that calls another method to capture the installation end time.
  */
-function acquia_cms_install_finished($install_state) {
-  $function = $install_state['active_task'];
-  acquia_cms_set_install_finished_time();
-  return $function($install_state);
-}
-
-/**
- * Method for performing functions once the install is installed.
- */
-function acquia_cms_set_install_finished_time() {
-  // The 'success' parameter means no fatal PHP errors were detected. All
-  // other error management should be handled using 'results'.
-  $end_time = new DrupalDateTime();
-  $formatted_time = acquia_cms_format_time($end_time);
-  \Drupal::state()->set('install_end_time', $formatted_time);
+function install_acms_finished() {
+  $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
+  $telemetry->setTime('install_end_time');
 }
 
 /**
@@ -370,9 +283,8 @@ function acquia_cms_rebuild_cohesion() {
  *   Batch for rebuild operation.
  */
 function acquia_cms_rebuild_site_studio() {
-  $rebuild_start_time = new DrupalDateTime();
-  $formatted_time = acquia_cms_format_time($rebuild_start_time);
-  \Drupal::state()->set('rebuild_start_time', $formatted_time);
+  $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
+  $telemetry->setTime('rebuild_start_time');
   // Get the batch array filled with operations that should be performed during
   // rebuild. Also, we explicitly do not clear the cache during site install.
   $batch = WebsiteSettingsController::batch(TRUE);
@@ -390,9 +302,8 @@ function acquia_cms_rebuild_site_studio() {
 function acquia_cms_rebuild_site_studio_finished() {
   // The 'success' parameter means no fatal PHP errors were detected. All
   // other error management should be handled using 'results'.
-  $rebuild_end_time = new DrupalDateTime();
-  $formatted_time = acquia_cms_format_time($rebuild_end_time);
-  \Drupal::state()->set('rebuild_end_time', $formatted_time);
+  $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
+  $telemetry->setTime('rebuild_end_time');
 }
 
 /**

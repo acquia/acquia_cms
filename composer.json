@@ -36,7 +36,7 @@
         "drupal/collapsiblock": "^3",
         "drupal/config_ignore": "^2.3",
         "drupal/config_rewrite": "^1.4",
-        "drupal/core": "^9.1.9",
+        "drupal/core": "~9.1.11 || ^9.2.2",
         "drupal/default_content": "^2",
         "drupal/diff": "^1",
         "drupal/entity_clone": "1.0-beta4",
@@ -53,7 +53,7 @@
         "drupal/imce": "2.x-dev",
         "drupal/jsonapi_extras": "^3",
         "drupal/memcache": "^2.2",
-        "drupal/moderation_dashboard": "1.0.0-beta2",
+        "drupal/moderation_dashboard": "1.0.0-beta3",
         "drupal/moderation_sidebar": "^1.4",
         "drupal/mysql56": "^1.0",
         "drupal/password_policy": "3.0-beta1",
@@ -155,7 +155,8 @@
         "patches": {
             "acquia/cohesion": {
                 "Cannot use positional argument after named argument in _batch_process()": "https://raw.githubusercontent.com/acquia/acquia_cms/8d4d4d55fdaead4036cce2595dfacec1af804aec/patches/site-studio-batch-error-php8.patch",
-                "Error: Attempt to modify property 'styles' on array": "https://gist.githubusercontent.com/vishalkhode1/bd7b69d7353bd22b3d766cad726c02ac/raw/76a96fc38310ebdf8e7fc7e755c927a1587d7889/site-studio-styles-error.patch"
+                "Error: Attempt to modify property 'styles' on array": "https://gist.githubusercontent.com/vishalkhode1/bd7b69d7353bd22b3d766cad726c02ac/raw/76a96fc38310ebdf8e7fc7e755c927a1587d7889/site-studio-styles-error.patch",
+                "Site install using UI gives 403 on finish, due to update core 9.2": "https://gist.githubusercontent.com/vishalkhode1/8762f8e2e5569f01a3fdcf3b8d8e2b50/raw/3f916d17b717fd5f3c215bde02e741a9ee7be4e5/site-studio-access-denied.patch"
             },
             "drupal/acquia_telemetry-acquia_telemetry": {
                 "Add check for core index": "https://www.drupal.org/files/issues/2020-08-18/3165473-27.patch"
@@ -175,9 +176,6 @@
             "drupal/geocoder": {
                 "3224364 - Replace deprecated boolean return in uksort() for PHP 8 compatibility.": "https://www.drupal.org/files/issues/2021-07-19/3224364-2.patch"
             },
-            "drupal/moderation_dashboard": {
-                "dashboard_owner return a string value and thus the hasPermission function throws an error": "https://www.drupal.org/files/issues/2020-05-04/user_load_moderation_dashboard_updated_with_DI_for_beta_version_3048782.patch"
-            },
             "drupal/password_policy": {
                 "Field field_last_password_reset is unknown": "https://www.drupal.org/files/issues/2020-07-03/2771129-114.patch",
                 "Register account anonymously, does not validate constraint 'password_username'.": "https://www.drupal.org/files/issues/2020-09-24/password-username-validate--3161012-4.patch"
@@ -191,6 +189,9 @@
         }
     },
     "autoload": {
+        "psr-4": {
+            "Acquia\\Utility\\": "src/Utility"
+        },
         "classmap": [
             "src/Composer/ConfigureProject.php"
         ]
