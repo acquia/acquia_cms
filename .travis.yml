@@ -71,6 +71,7 @@ matrix:
     - { env: ORCA_JOB=INTEGRATED_TEST_ON_PREVIOUS_MINOR, if: type = cron, name: "Integrated test on previous minor Drupal core version" }
     - { env: ORCA_JOB=INTEGRATED_UPGRADE_TEST_FROM_PREVIOUS_MINOR, if: type = cron, name: "Integrated upgrade test from previous minor" }
     - { env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT ACMS_JOB=base_full, if: type = cron, name: "Isolated test on current Drupal core version" }
+    - { env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT, if: type = cron, php: "8.0", dist: focal, name: "Isolated test on current Drupal core version and PHP 8" }
     # To send PHPUnit test coverage data to Coveralls (coveralls.io), configure
     # your GitHub repository according to the FAQ below and uncomment the
     # following line. By default this job is allowed to fail (see below) so that
@@ -147,7 +148,8 @@ before_install:
   - sudo apt-get update
   - sudo apt-get -y install sqlite3/focal
   - mysql -u root < ./tests/travis/install.sql
-  - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
+  - nvm install 12.13.1; nvm use 12.13.1
+  - composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION"
   - composer self-update
   # Optionally, remove SUT-provided tests with a specific PHPUnit test group.
   - if [ ! -z $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP ]; then find ./ -type f | xargs grep -l "@group $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP$" | xargs rm -v; fi
