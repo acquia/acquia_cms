@@ -12,7 +12,6 @@ use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
  * @group acquia_cms_video
  * @group medium_risk
  * @group push
- * @group pr
  */
 class VideoEmbedTest extends MediaEmbedTestBase {
 
@@ -69,7 +68,7 @@ class VideoEmbedTest extends MediaEmbedTestBase {
    */
   protected function addMedia() {
     $this->getSession()
-      ->getPage()->fillField('Add Video via URL', 'https://youtu.be/VHO9uZX9FNU');
+      ->getPage()->fillField('Add Video via URL', 'https://youtu.be/lg879YYbihU');
     $this->getSession()->getPage()->pressButton('Add');
   }
 
