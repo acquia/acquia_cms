@@ -59,22 +59,15 @@ class TabsBlockTest extends ExistingSiteBase {
       'place',
     ];
 
-    /*
-     * @todo remove the code here and use the node type array above
-     * to fetch and test for thos content type only.
-     */
-
-    // $node_types = $this->container->get('entity_type.manager')
-    // ->getStorage('node_type')
-    // ->getQuery()
-    // ->execute();
-    foreach ($node_types as $node_type) {
-      $node = $this->createNode([
-        'type' => $node_type,
-      ]);
-      $this->assertSame($account->id(), $node->getOwnerId());
-      $this->drupalGet($node->toUrl());
-      $assert_session->elementExists('css', 'nav.tabs');
+    if ($this->container->get('module_handler')->moduleExists('acquia_cms_site_studio')) {
+      foreach ($node_types as $node_type) {
+        $node = $this->createNode([
+          'type' => $node_type,
+        ]);
+        $this->assertSame($account->id(), $node->getOwnerId());
+        $this->drupalGet($node->toUrl());
+        $assert_session->elementExists('css', 'nav.tabs');
+      }
     }
   }
 
