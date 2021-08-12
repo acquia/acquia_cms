@@ -77,7 +77,9 @@ class BreadcrumbTest extends ExistingSiteBase {
 
     $this->drupalGet($node->toUrl());
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertBreadcrumb($expected_breadcrumb);
+    if ($this->container->get('module_handler')->moduleExists('acquia_cms_search')) {
+      $this->assertBreadcrumb($expected_breadcrumb);
+    }
   }
 
   /**
@@ -117,7 +119,9 @@ class BreadcrumbTest extends ExistingSiteBase {
 
     $this->drupalGet($node->toUrl());
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertBreadcrumb($expected_breadcrumb);
+    if ($this->container->get('module_handler')->moduleExists('acquia_cms_search')) {
+      $this->assertBreadcrumb($expected_breadcrumb);
+    }
   }
 
   /**
