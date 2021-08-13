@@ -98,7 +98,7 @@ class PageTest extends ContentTypeTestBase {
     // should be selected by default.
     $menu = $assert_session->selectExists('menu[menu_parent]');
     $this->assertSame('main:', $menu->getValue());
-    $this->assertCount(1, $menu->findAll('css', 'option'));
+    $this->assertCount(2, $menu->findAll('css', 'option'));
     // Assert that the fields are in the correct order.
     $this->assertFieldsOrder([
       'title',
