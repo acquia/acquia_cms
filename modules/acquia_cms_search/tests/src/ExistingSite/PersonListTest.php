@@ -1,13 +1,13 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_site_studio\ExistingSite;
+namespace Drupal\Tests\acquia_cms_search\ExistingSite;
 
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Tests\acquia_cms_common\ExistingSite\ContentTypeListTestBase;
 use Drupal\views\Entity\View;
 
 /**
- * Tests the "all articles" listing page.
+ * Tests the "all people" listing page.
  *
  * @group acquia_cms_site_studio
  * @group acquia_cms
@@ -15,33 +15,33 @@ use Drupal\views\Entity\View;
  * @group pr
  * @group push
  */
-class ArticleListTest extends ContentTypeListTestBase {
+class PersonListTest extends ContentTypeListTestBase {
 
   /**
    * {@inheritdoc}
    */
-  protected $nodeType = 'article';
+  protected $nodeType = 'person';
 
   /**
    * {@inheritdoc}
    */
   protected function getView() : View {
-    return View::load('articles');
+    return View::load('people');
   }
 
   /**
    * {@inheritdoc}
    */
   protected function visitListPage($langcode = NULL) : void {
-    $page = $langcode ? "/$langcode/articles" : "/articles";
+    $page = $langcode ? "/$langcode/people" : "/people";
     $this->drupalGet($page);
   }
 
   /**
    * {@inheritdoc}
    */
-  protected function getQuery(): QueryInterface {
-    return parent::getQuery()->sort('created', 'DESC');
+  protected function getQuery() : QueryInterface {
+    return parent::getQuery()->sort('title');
   }
 
 }

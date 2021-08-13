@@ -330,7 +330,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
   protected function getLinks() : array {
     $links = $this->getSession()
       ->getPage()
-      ->findAll('css', 'article a.card-link');
+      ->findAll('css', 'article a');
 
     $map = function (ElementInterface $link) {
       return $link->getText();

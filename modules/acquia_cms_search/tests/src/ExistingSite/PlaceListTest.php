@@ -1,39 +1,39 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_site_studio\ExistingSite;
+namespace Drupal\Tests\acquia_cms_search\ExistingSite;
 
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Tests\acquia_cms_common\ExistingSite\ContentTypeListTestBase;
 use Drupal\views\Entity\View;
 
 /**
- * Tests the "all people" listing page.
+ * Tests the "all places" listing page.
  *
- * @group acquia_cms_site_studio
  * @group acquia_cms
+ * @group acquia_cms_site_studio
  * @group low_risk
  * @group pr
  * @group push
  */
-class PersonListTest extends ContentTypeListTestBase {
+class PlaceListTest extends ContentTypeListTestBase {
 
   /**
    * {@inheritdoc}
    */
-  protected $nodeType = 'person';
+  protected $nodeType = 'place';
 
   /**
    * {@inheritdoc}
    */
   protected function getView() : View {
-    return View::load('people');
+    return View::load('places');
   }
 
   /**
    * {@inheritdoc}
    */
   protected function visitListPage($langcode = NULL) : void {
-    $page = $langcode ? "/$langcode/people" : "/people";
+    $page = $langcode ? "/$langcode/places" : "/places";
     $this->drupalGet($page);
   }
 
