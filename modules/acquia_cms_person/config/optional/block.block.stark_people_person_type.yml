@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.people_person_type
+  module:
+    - collapsiblock
+    - facets
+  theme:
+    - stark
+third_party_settings:
+  collapsiblock:
+    collapse_action: '2'
+id: stark_people_person_type
+theme: stark
+region: sidebar_first
+weight: 0
+provider: null
+plugin: 'facet_block:people_person_type'
+settings:
+  id: 'facet_block:people_person_type'
+  label: 'Person Type'
+  provider: facets
+  label_display: visible
+  block_id: people_person_type
+visibility: {  }

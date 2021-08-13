@@ -1,0 +1,27 @@
+uuid: a2c7a6f9-e0e5-46d5-a415-f60ae2baf369
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.articles_category
+  module:
+    - collapsiblock
+    - facets
+  theme:
+    - stark
+third_party_settings:
+  collapsiblock:
+    collapse_action: '2'
+id: stark_articles_category
+theme: stark
+region: sidebar_first
+weight: 0
+provider: null
+plugin: 'facet_block:articles_category'
+settings:
+  id: 'facet_block:articles_category'
+  label: Category
+  provider: facets
+  label_display: visible
+  block_id: articles_category
+visibility: {  }

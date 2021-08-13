@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - acquia_cms_search
+    - collapsiblock
+  theme:
+    - stark
+third_party_settings:
+  collapsiblock:
+    collapse_action: '0'
+id: stark_clear_facet_filters
+theme: stark
+region: sidebar_first
+weight: 0
+provider: null
+plugin: clear_facet_filters
+settings:
+  id: clear_facet_filters
+  label: 'Clear Facet Filters'
+  provider: acquia_cms_search
+  label_display: '0'
+visibility: {  }
