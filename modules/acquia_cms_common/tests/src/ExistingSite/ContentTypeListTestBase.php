@@ -11,7 +11,6 @@ use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Traits\AssertLinksTrait;
 use Drupal\Tests\acquia_cms_common\Traits\SetBackendAvailabilityTrait;
-use Drupal\views\Entity\View;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -155,7 +154,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
    * @return \Drupal\views\Entity\View
    *   The listing page's view.
    */
-  abstract protected function getView() : View;
+  abstract protected function getView();
 
   /**
    * Visits the listing page.
@@ -208,79 +207,85 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
       $this->drupalLogin($account);
     }
     $this->visitListPage();
+    // Since below tests would require certain module to be present
+    // in order to pass all test, we are adding check instead of
+    // adding the required module as dependencies for excellent
+    // reasons so that we can run the minimum tests in isolation.
+    if ($this->container->get('module_handler')->moduleExists('acquia_cms_search')) {
+      $assert_session = $this->assertSession();
 
-    $assert_session = $this->assertSession();
-    // Assert that all categories facets are available.
-    $assert_session->linkExists('Music (2)');
-    $assert_session->linkExists('Art (2)');
-    $assert_session->linkExists('Literature (1)');
-    $assert_session->linkExists('Math (1)');
+      // Assert that all categories facets are available.
+      $assert_session->linkExists('Music (2)');
+      $assert_session->linkExists('Art (2)');
+      $assert_session->linkExists('Literature (1)');
+      $assert_session->linkExists('Math (1)');
 
-    // Assert all type facets are available.
-    $assert_session->linkExists('Type A (2)');
-    $assert_session->linkExists('Type B (2)');
-    $assert_session->linkExists('Type O (2)');
+      // Assert all type facets are available.
+      $assert_session->linkExists('Type A (2)');
+      $assert_session->linkExists('Type B (2)');
+      $assert_session->linkExists('Type O (2)');
 
-    // All content should be visible except for the secret one.
-    $this->assertLinksExistInOrder();
-    $assert_session->linkNotExists('Secret');
-    $assert_session->linkNotExists('Spanish - Alpha');
+      // All content should be visible except for the secret one.
+      $this->assertLinksExistInOrder();
+      $assert_session->linkNotExists('Secret');
+      $assert_session->linkNotExists('Spanish - Alpha');
 
-    // Filter by a category and ensure that the expected content is visible.
-    $page = $this->getSession()->getPage();
-    $page->clickLink('Art (2)');
-    // Assert that the clear filter is present.
-    $assert_session->linkExists('Clear filter(s)');
+      // Filter by a category and ensure that the expected content is visible.
+      $page = $this->getSession()->getPage();
+      $page->clickLink('Art (2)');
+      // Assert that the clear filter is present.
+      $assert_session->linkExists('Clear filter(s)');
 
-    $assert_session->addressMatches('/.\/category\/art-[0-9]/');
-    $this->assertLinksExistInOrder(['Foxtrot', 'Beta']);
-    $assert_session->linkNotExists('Alpha');
-    $assert_session->linkNotExists('Charlie');
-    $assert_session->linkNotExists('Delta');
-    $assert_session->linkNotExists('Echo');
-    $assert_session->linkNotExists('Secret');
+      $assert_session->addressMatches('/.\/category\/art-[0-9]/');
+      $this->assertLinksExistInOrder(['Foxtrot', 'Beta']);
+      $assert_session->linkNotExists('Alpha');
+      $assert_session->linkNotExists('Charlie');
+      $assert_session->linkNotExists('Delta');
+      $assert_session->linkNotExists('Echo');
+      $assert_session->linkNotExists('Secret');
 
-    // The choice of a category should narrow down the results in the type
-    // facet.
-    $assert_session->linkNotExists('Type A');
-    $assert_session->linkExists('Type B (1)');
-    $assert_session->linkExists('Type O (1)');
+      // The choice of a category should narrow down the results in the type
+      // facet.
+      $assert_session->linkNotExists('Type A');
+      $assert_session->linkExists('Type B (1)');
+      $assert_session->linkExists('Type O (1)');
 
-    // Filtering by type should narrow the results down even more.
-    $page->clickLink('Type O (1)');
-    $assert_session->addressMatches('/.\/type\/type-o-.*\/category\/art-.*/');
-    $assert_session->linkNotExists('Alpha');
-    $assert_session->linkNotExists('Beta');
-    $assert_session->linkNotExists('Charlie');
-    $assert_session->linkNotExists('Delta');
-    $assert_session->linkNotExists('Echo');
-    $assert_session->linkExists('Foxtrot');
-    $assert_session->linkNotExists('Secret');
+      // Filtering by type should narrow the results down even more.
+      $page->clickLink('Type O (1)');
+      $assert_session->addressMatches('/.\/type\/type-o-.*\/category\/art-.*/');
+      $assert_session->linkNotExists('Alpha');
+      $assert_session->linkNotExists('Beta');
+      $assert_session->linkNotExists('Charlie');
+      $assert_session->linkNotExists('Delta');
+      $assert_session->linkNotExists('Echo');
+      $assert_session->linkExists('Foxtrot');
+      $assert_session->linkNotExists('Secret');
 
-    // Removing a facet should widen the results.
-    $page->clickLink('Art (1)');
-    $assert_session->addressMatches('/.\/type\/type-o-.*/');
-    $this->assertLinksExistInOrder(['Foxtrot', 'Charlie']);
-    $assert_session->linkNotExists('Alpha');
-    $assert_session->linkNotExists('Beta');
-    $assert_session->linkNotExists('Delta');
-    $assert_session->linkNotExists('Echo');
-    $assert_session->linkNotExists('Secret');
+      // Removing a facet should widen the results.
+      $page->clickLink('Art (1)');
+      $assert_session->addressMatches('/.\/type\/type-o-.*/');
+      $this->assertLinksExistInOrder(['Foxtrot', 'Charlie']);
+      $assert_session->linkNotExists('Alpha');
+      $assert_session->linkNotExists('Beta');
+      $assert_session->linkNotExists('Delta');
+      $assert_session->linkNotExists('Echo');
+      $assert_session->linkNotExists('Secret');
 
-    // Assert translated items on translated-list page.
-    $this->visitListPage('es');
-    $assert_session->linkExists('Spanish - Alpha');
+      // Assert translated items on translated-list page.
+      $this->visitListPage('es');
+      $assert_session->linkExists('Spanish - Alpha');
 
-    // Assert filtered nodes on search page.
-    $options = [
-      'query' => ['keywords' => 'Alpha'],
-    ];
-    $this->drupalGet('/search', $options);
-    $assert_session->linkExists('Alpha');
-    $assert_session->linkNotExists('Spanish - Alpha');
+      // Assert filtered nodes on search page.
+      $options = [
+        'query' => ['keywords' => 'Alpha'],
+      ];
+      $this->drupalGet('/search', $options);
+      $assert_session->linkExists('Alpha');
+      $assert_session->linkNotExists('Spanish - Alpha');
 
-    $this->drupalGet('/es/search', $options);
-    $assert_session->linkExists('Spanish - Alpha');
+      $this->drupalGet('/es/search', $options);
+      $assert_session->linkExists('Spanish - Alpha');
+    }
   }
 
   /**
@@ -298,30 +303,32 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
   public function testFallback(array $permissions = NULL) {
     // Simulate an unavailable search backend, which is the only condition under
     // which we display the fallback view.
-    $this->setBackendAvailability(FALSE);
+    if ($this->container->get('module_handler')->moduleExists('acquia_cms_search')) {
+      $this->setBackendAvailability(FALSE);
 
-    if (isset($permissions)) {
-      $account = $this->createUser($permissions);
-      $this->drupalLogin($account);
+      if (isset($permissions)) {
+        $account = $this->createUser($permissions);
+        $this->drupalLogin($account);
+      }
+
+      $this->visitListPage();
+      $assert_session = $this->assertSession();
+
+      // Assert that all categories facets are unavailable.
+      $assert_session->linkNotExists('Music (2)');
+      $assert_session->linkNotExists('Art (2)');
+      $assert_session->linkNotExists('Literature (1)');
+      $assert_session->linkNotExists('Math (1)');
+
+      // Assert all type facets are unavailable.
+      $assert_session->linkNotExists('Type A (2)');
+      $assert_session->linkNotExists('Type B (2)');
+      $assert_session->linkNotExists('Type O (2)');
+
+      // All content should be visible except for the secret one.
+      $this->assertLinksExistInOrder();
+      $assert_session->linkNotExists('Secret');
     }
-
-    $this->visitListPage();
-    $assert_session = $this->assertSession();
-
-    // Assert that all categories facets are unavailable.
-    $assert_session->linkNotExists('Music (2)');
-    $assert_session->linkNotExists('Art (2)');
-    $assert_session->linkNotExists('Literature (1)');
-    $assert_session->linkNotExists('Math (1)');
-
-    // Assert all type facets are unavailable.
-    $assert_session->linkNotExists('Type A (2)');
-    $assert_session->linkNotExists('Type B (2)');
-    $assert_session->linkNotExists('Type O (2)');
-
-    // All content should be visible except for the secret one.
-    $this->assertLinksExistInOrder();
-    $assert_session->linkNotExists('Secret');
   }
 
   /**
@@ -374,7 +381,9 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
    * {@inheritdoc}
    */
   public function tearDown() {
-    $this->setBackendAvailability(TRUE);
+    if ($this->container->get('module_handler')->moduleExists('acquia_cms_search')) {
+      $this->setBackendAvailability(TRUE);
+    }
     parent::tearDown();
   }
 
