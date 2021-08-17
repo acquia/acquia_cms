@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_site_studio\ExistingSite;
+namespace Drupal\Tests\acquia_cms_place\ExistingSite;
 
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Tests\acquia_cms_common\ExistingSite\ContentTypeListTestBase;
@@ -10,7 +10,7 @@ use Drupal\views\Entity\View;
  * Tests the "all places" listing page.
  *
  * @group acquia_cms
- * @group acquia_cms_site_studio
+ * @group acquia_cms_place
  * @group low_risk
  * @group pr
  * @group push
