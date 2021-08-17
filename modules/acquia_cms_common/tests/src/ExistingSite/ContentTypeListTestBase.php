@@ -211,7 +211,8 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
     // in order to pass all test, we are adding check instead of
     // adding the required module as dependencies for excellent
     // reasons so that we can run the minimum tests in isolation.
-    if ($this->container->get('module_handler')->moduleExists('acquia_cms_search')) {
+    $module_handler = $this->container->get('module_handler');
+    if ($module_handler->moduleExists('acquia_cms_search') && $module_handler->moduleExists('acquia_cms_site_studio')) {
       $assert_session = $this->assertSession();
 
       // Assert that all categories facets are available.
@@ -303,7 +304,8 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
   public function testFallback(array $permissions = NULL) {
     // Simulate an unavailable search backend, which is the only condition under
     // which we display the fallback view.
-    if ($this->container->get('module_handler')->moduleExists('acquia_cms_search')) {
+    $module_handler = $this->container->get('module_handler');
+    if ($module_handler->moduleExists('acquia_cms_search') && $module_handler->moduleExists('acquia_cms_site_studio')) {
       $this->setBackendAvailability(FALSE);
 
       if (isset($permissions)) {
