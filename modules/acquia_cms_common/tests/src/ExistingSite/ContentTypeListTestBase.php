@@ -209,8 +209,8 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
     $this->visitListPage();
     // Since below tests would require certain module to be present
     // in order to pass all test, we are adding check instead of
-    // adding the required module as dependencies for excellent
-    // reasons so that we can run the minimum tests in isolation.
+    // adding the required module as dependencies
+    // so that we can run the minimum tests in isolation.
     $module_handler = $this->container->get('module_handler');
     if ($module_handler->moduleExists('acquia_cms_search') && $module_handler->moduleExists('acquia_cms_site_studio')) {
       $assert_session = $this->assertSession();
