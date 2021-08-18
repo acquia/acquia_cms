@@ -5,7 +5,6 @@ namespace Drupal\acquia_cms\Form;
 use Drupal\acquia_cms_site_studio\Form\AcquiaCmsSiteStudioSiteConfigureForm;
 use Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsAPIForm;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
