@@ -73,7 +73,6 @@ class SiteConfigureForm extends ConfigFormBase {
     return new static(
       $container->get('config.factory'),
       $container->get('module_installer'),
-      $container->get('module_handler'),
       CoreSiteConfigureForm::create($container),
       AcquiaGoogleMapsAPIForm::create($container),
       AcquiaCmsSiteStudioSiteConfigureForm::create($container)
