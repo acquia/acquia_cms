@@ -2,6 +2,7 @@
     "name": "drupal/acquia_cms_common",
     "type": "drupal-module",
     "description": "Handles shared functionality for Acquia CMS.",
+    "license": "GPL-2.0-or-later",
     "require": {
         "acquia/drupal-environment-detector": "^1.4",
         "drupal/entity_clone": "1.0-beta4",
@@ -18,6 +19,16 @@
             "services": {
                 "drush.services.yml": "^10"
             }
+        }
+    },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
         }
     }
 }
