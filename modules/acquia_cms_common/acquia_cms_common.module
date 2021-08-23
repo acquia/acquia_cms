@@ -210,8 +210,8 @@ function _acquia_cms_common_update_view_display_options_style($view_name, $displ
     return;
   }
   $display = &$view->getDisplay($display_id);
-  $style_type = $display['display_options']['style']['type'];
-  if ($style_type !== 'cohesion_layout') {
+  $style_type = $display['display_options']['style']['type'] ?? NULL;
+  if ($style_type && $style_type !== 'cohesion_layout') {
     $display['display_options']['style']['type'] = 'cohesion_layout';
     $display['display_options']['style']['options'] = [
       'views_template' => $views_template ?? 'view_tpl_' . $view_name,
