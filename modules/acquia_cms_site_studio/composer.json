@@ -2,6 +2,7 @@
     "name": "drupal/acquia_cms_site_studio",
     "type": "drupal-module",
     "description": "Handles code for Site Studio Installation & Related Configurations.",
+    "license": "GPL-2.0-or-later",
     "require": {
         "acquia/cohesion": "^6.5",
         "acquia/cohesion-theme": "^6.5",
@@ -14,6 +15,16 @@
             "services": {
                 "drush.services.yml": "^10"
             }
+        }
+    },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
         }
     }
 }

@@ -2,6 +2,7 @@
     "name": "drupal/acquia_cms_place",
     "type": "drupal-module",
     "description": "Provides a Place content type and related configuration.",
+    "license": "GPL-2.0-or-later",
     "require": {
         "drupal/acquia_cms_image": "^1.0",
         "drupal/address": "^1",
@@ -10,5 +11,15 @@
         "drupal/geofield": "^1",
         "drupal/scheduler": "^1.3",
         "geocoder-php/google-maps-provider": "^4.6"
+    },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
     }
 }

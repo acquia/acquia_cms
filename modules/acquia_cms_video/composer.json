@@ -2,8 +2,19 @@
     "name": "drupal/acquia_cms_video",
     "type": "drupal-module",
     "description": "Provides a Video media type and related configuration.",
+    "license": "GPL-2.0-or-later",
     "require": {
         "drupal/acquia_cms_common": "^1.0",
         "drupal/field_group": "^3"
+    },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
     }
 }
