@@ -25,8 +25,11 @@ class ArticleListTest extends ContentTypeListTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function getView() : View {
-    return View::load('articles');
+  protected function getView() {
+    if ($this->container->get('module_handler')->moduleExists('acquia_cms_search')) {
+      return View::load('articles');
+    }
+    return NULL;
   }
 
   /**

@@ -74,7 +74,7 @@ class RecentArticlesBlockTest extends ExistingSiteBase {
   protected function getLinks() : array {
     $links = $this->getSession()
       ->getPage()
-      ->findAll('css', '#block-recent-articles-block .card-outer-container .coh-container .coh-heading');
+      ->findAll('css', '#block-recent-articles-block article a');
 
     $map = function (ElementInterface $link) {
       return $link->getText();
