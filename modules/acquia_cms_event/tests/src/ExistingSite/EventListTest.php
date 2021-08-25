@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_site_event\ExistingSite;
+namespace Drupal\Tests\acquia_cms_event\ExistingSite;
 
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Tests\acquia_cms_common\ExistingSite\ContentTypeListTestBase;
@@ -10,7 +10,7 @@ use Drupal\views\Entity\View;
  * Tests the "all events" listing page.
  *
  * @group acquia_cms
- * @group acquia_cms_site_event
+ * @group acquia_cms_event
  * @group low_risk
  * @group pr
  * @group push
