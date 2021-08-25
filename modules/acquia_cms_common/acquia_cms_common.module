@@ -14,6 +14,21 @@ use Drupal\Core\Url;
 use Drupal\imce\Imce;
 use Drupal\node\NodeTypeInterface;
 use Drupal\workbench_email\TemplateInterface;
+use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Implements hook_preinstall().
+ */
+function acquia_cms_common_module_preinstall($module) {
+  // Since we have moved config 'workflows.workflow.editorial.yml'
+  // to optional folder just to avoid error when common module
+  // get installed on vanilla drupal with standard profile,
+  // standard profile ship with 'workflows.workflow.editorial.yml'
+  // config by default.
+  if ($module == 'acquia_cms_common') {
+    _acquia_cms_common_rewrite_configuration('workflows.workflow.editorial', 'acquia_cms_common');
+  }
+}
 
 /**
  * Implements hook_ENTITY_TYPE_insert() for node types.
@@ -37,7 +52,7 @@ function acquia_cms_common_workbench_email_template_insert(TemplateInterface $te
  */
 function acquia_cms_common_preprocess_html(&$variables) {
   $path = Drupal::service('path.current')->getPath();
-  if (Imce::access() && $path == '/imce') {
+  if (\Drupal::moduleHandler()->moduleExists('imce') && Imce::access() && $path == '/imce') {
     $variables['attributes']['class'][] = 'acquia-cms';
     $variables['#attached']['library'][] = 'acquia_cms_common/imce';
   }
@@ -162,4 +177,46 @@ function acquia_cms_common_ckeditor_css_alter(&$css, $editor) {
   }
   $css = array_filter($css);
   \Drupal::service('router.builder')->rebuildIfNeeded();
+}
+
+/**
+ * Helper function to write configurations.
+ *
+ * @param string $config
+ *   The name of configuration.
+ * @param string $module
+ *   The name of module.
+ */
+function _acquia_cms_common_rewrite_configuration(string $config, string $module) {
+  $module_path = \Drupal::service('extension.list.module')->getPath($module);
+  $module_path .= '/config/optional/' . $config . '.yml';
+  $content = file_get_contents($module_path);
+  $parsed_yml = Yaml::parse($content);
+
+  $active_storage = \Drupal::service('config.storage');
+  $active_storage->write($config, $parsed_yml);
+}
+
+/**
+ * Helper function to update views display_options's style.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function _acquia_cms_common_update_view_display_options_style($view_name, $display_id = 'default', $views_template = NULL) {
+  /** @var \Drupal\views\ViewEntityInterface $view */
+  $view_storage = \Drupal::entityTypeManager()->getStorage('view');
+  $view = $view_storage->load($view_name);
+  if (empty($view)) {
+    return;
+  }
+  $display = &$view->getDisplay($display_id);
+  $style_type = $display['display_options']['style']['type'] ?? NULL;
+  if ($style_type && $style_type !== 'cohesion_layout') {
+    $display['display_options']['style']['type'] = 'cohesion_layout';
+    $display['display_options']['style']['options'] = [
+      'views_template' => $views_template ?? 'view_tpl_' . $view_name,
+      'master_template' => 'master_template_boxed',
+    ];
+    $view_storage->save($view);
+  }
 }

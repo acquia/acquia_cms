@@ -1,0 +1,38 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.embedded
+    - field.field.media.image.field_categories
+    - field.field.media.image.field_tags
+    - field.field.media.image.image
+    - image.style.large
+    - media.type.image
+  enforced:
+    module:
+      - acquia_cms_image
+  module:
+    - image
+id: media.image.embedded
+targetEntityType: media
+bundle: image
+mode: embedded
+content:
+  image:
+    type: image
+    weight: 0
+    region: content
+    label: visually_hidden
+    settings:
+      image_style: banner
+      image_link: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_categories: true
+  field_tags: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true
