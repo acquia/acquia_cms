@@ -94,7 +94,7 @@ class ConfigEventsSubscriber implements EventSubscriberInterface {
           break;
 
         case 'views.view.people':
-          _acquia_cms_common_update_view_display_options_style('people');
+          _acquia_cms_common_update_view_display_options_style('people', 'default', 'view_tpl_people_grid');
           break;
 
         case 'views.view.people_fallback':
