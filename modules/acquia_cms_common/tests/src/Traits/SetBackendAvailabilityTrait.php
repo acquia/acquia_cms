@@ -3,7 +3,6 @@
 namespace Drupal\Tests\acquia_cms_common\Traits;
 
 use Drupal\Component\Utility\NestedArray;
-use Drupal\views\Entity\View;
 
 /**
  * Provides a framework for setting the backend availability.
@@ -37,10 +36,7 @@ trait SetBackendAvailabilityTrait {
 
   /**
    * Returns the view entity for the listing page.
-   *
-   * @return \Drupal\views\Entity\View
-   *   The listing page's view.
    */
-  abstract protected function getView() : View;
+  abstract protected function getView();
 
 }
