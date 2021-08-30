@@ -67,10 +67,11 @@ function site_studio_import_ui_kit(): array {
  *
  * @return array
  *   Batch for rebuild operation.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
  */
-function install_acms_site_studio_rebuild() {
-  $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
-  $telemetry->setTime('rebuild_start_time');
+function install_acms_site_studio_rebuild(): array {
   // Get the batch array filled with operations that should be performed during
   // rebuild. Also, we explicitly do not clear the cache during site install.
   $batch = WebsiteSettingsController::batch(TRUE);
@@ -78,7 +79,13 @@ function install_acms_site_studio_rebuild() {
   if (isset($batch['error'])) {
     Drupal::messenger()->addError($batch['error']);
   }
-  $batch['finished'] = 'acquia_cms_rebuild_site_studio_finished';
+
+  // Set rebuild start and end time only if class AcquiaTelemetry exists.
+  if (class_exists(AcquiaTelemetry::class)) {
+    $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
+    $telemetry->setTime('rebuild_start_time');
+    $batch['finished'] = 'acquia_cms_rebuild_site_studio_finished';
+  }
   return $batch;
 }
 
