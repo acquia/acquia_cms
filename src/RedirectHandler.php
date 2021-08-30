@@ -88,6 +88,11 @@ final class RedirectHandler implements ContainerInjectionInterface {
    *   The form state.
    */
   protected function handleRedirect(FormStateInterface $form_state) {
+    // Do not attempt to redirect if there is not uid; this prevents
+    // an unexpected error on Too Many Login Attempts.
+    if (empty($uid = $form_state->get('uid'))) {
+      return;
+    }
     // This is set by the user login form.
     // @see \Drupal\user\Form\UserLoginForm::validateAuthentication()
     $user = $this->userStorage->load($form_state->get('uid'));
