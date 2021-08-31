@@ -97,6 +97,9 @@ while :; do
              display_value_error $1
             fi
             ;;
+        --push=?*)
+          PUSH=${1#*=} # Delete everything up to "=" and assign the remainder.
+          ;;
         --) # End of all options.
             shift
             break;;
@@ -279,4 +282,6 @@ if [[ ! -z "$PUSH" ]]; then
         display_incorrect_value_error
       fi
   done
+else
+    add_acquia_remote
 fi
