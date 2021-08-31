@@ -12,13 +12,13 @@ WHITE="\033[1;37m"
 display_help() {
     echo -e "Usage: $0 --{option}={value}"; echo>&2
     echo -e "${YELLOW}Examples:${NOCOLOR}"
-    echo -e "  $0 --branch=develop \t\t Pushes the code to \`develop\` branch on all sub-modules repository."
-    echo -e "  $0 --tag=v1.2.6 \t\t\t Pushes the code to \`v1.2.6\` tag on all sub-modules repository."
-    echo -e "  $0 --tag=v1.2.6 --delete \t Deletes the tag \`v1.2.6\` and then create tag on all sub-modules repository."
-    echo -e "  $0 --branch=develop --force \t Force pushes the code to \`develop\` branch on all sub-modules repository."
-    echo -e "  $0 --branch=develop --dry-run \t Dry run the git commands to check for any errors."
-    echo -e "  $0 --push=drupal --dry-run \t Dry run to push the code to drupal repositories."
-    echo -e "  $0 --push=acquia,drupal --dry-run \t Dry run to push the code to both drupal & acquia repositories."
+    echo -e "  $0 --branch=develop \t\t  Pushes the code to \`develop\` branch on all sub-modules repository."
+    echo -e "  $0 --tag=v1.2.6 \t\t\t  Pushes the code to \`v1.2.6\` tag on all sub-modules repository."
+    echo -e "  $0 --tag=v1.2.6 --delete \t  Deletes the tag \`v1.2.6\` and then create tag on all sub-modules repository."
+    echo -e "  $0 --branch=develop --force \t  Force pushes the code to \`develop\` branch on all sub-modules repository."
+    echo -e "  $0 --branch=develop --dry-run \t  Dry run the git commands to check for any errors."
+    echo -e "  $0 --push=drupal --dry-run \t  Dry run to push the code to drupal repositories."
+    echo -e "  $0 --push=acquia,drupal --dry-run  Dry run to push the code to both drupal & acquia repositories."
     echo
     echo -e "${YELLOW}Options:${NOCOLOR}"
     echo -e "  --branch[=BRANCH] \t Pushes the code to given remote branch."
@@ -26,7 +26,7 @@ display_help() {
     echo -e "  --force \t\t Force push the code to given branch/tag."
     echo -e "  --delete \t\t Deletes the given branch/tag."
     echo -e "  --dry-run \t\t Dry run all git commands to simulate code push."
-    echo -e "  --push[=REPO(acquia/drupal or 'acquia,drupal')] \t Pushes the code to given git repo."
+    echo -e "  --push[=REPO] \t Pushes the code to given git repo. Default value: ${GREEN}acquia${NOCOLOR}."
     echo
     exit 1
 }
@@ -39,7 +39,7 @@ display_value_error() {
 
 # Displays incorrect value error
 display_incorrect_value_error() {
-  echo -e "${RED_BG}${WHITE}ERROR: Option can only accept acquia or drupal (or both) as remote values.${NOCOLOR}\n"
+  echo -e "${RED_BG}${WHITE}ERROR: Option --push can only accept acquia or drupal (or both) as remote values.${NOCOLOR}\n"
   display_help
 }
 
@@ -104,7 +104,7 @@ while :; do
             shift
             break;;
         -?*)
-            echo -e "${RED_BG}ERROR: Unknown option: $1${NOCOLOR}"
+            echo -e "${RED_BG}${WHITE}ERROR: Unknown option: $1${NOCOLOR}"
             echo
             display_help ;;
         *) # Default case: No more options, so break out of the loop.
@@ -114,8 +114,13 @@ while :; do
 done
 
 if [ -z "$BRANCH" -a -z "$TAG" ]; then
-  echo -e "${RED_BG}ERROR: Pass at-least one of the option i.e --branch or --tag.${NOCOLOR}\n"
+  echo -e "${RED_BG}${WHITE}ERROR: Pass at-least one of the option i.e --branch or --tag.${NOCOLOR}\n"
   display_help
+fi
+
+OPTION=$(echo $PUSH | sed "s/,\s*/ /g" | xargs)
+if [[ ! -z $OPTION && ! $OPTION =~ ^(acquia|acquia drupal|drupal acquia|drupal)$ ]]; then
+  display_incorrect_value_error
 fi
 
 # Split method to run the commands for splitting/updating a split and pushing,
@@ -267,20 +272,15 @@ function split_drupal_repo() {
   split 'modules/acquia_cms_video' drupal_acquia_cms_video
 }
 
-GIT="acquia,drupal"
 if [[ ! -z "$PUSH" ]]; then
-  for i in $(echo $PUSH | sed "s/,/ /g")
+  for i in $OPTION
     do
-      if [[ ",$GIT," = *",$i,"* ]]; then
-        if [[ "$i" == "acquia" ]]; then
-          add_acquia_remote
-        fi
-        if [[ "$i" == "drupal" ]]; then
-          add_drupal_remote
-        fi
-      else
-        display_incorrect_value_error
-      fi
+     if [[ "$i" == "acquia" ]]; then
+       add_acquia_remote
+     fi
+     if [[ "$i" == "drupal" ]]; then
+       add_drupal_remote
+     fi
   done
 else
     add_acquia_remote
