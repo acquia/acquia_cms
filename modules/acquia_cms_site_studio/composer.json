@@ -21,6 +21,8 @@
         "enable-patching": true,
         "patches": {
             "acquia/cohesion": {
+                "Cannot use positional argument after named argument in _batch_process()": "https://raw.githubusercontent.com/acquia/acquia_cms/8d4d4d55fdaead4036cce2595dfacec1af804aec/patches/site-studio-batch-error-php8.patch",
+                "Error: Attempt to modify property 'styles' on array": "https://gist.githubusercontent.com/vishalkhode1/bd7b69d7353bd22b3d766cad726c02ac/raw/76a96fc38310ebdf8e7fc7e755c927a1587d7889/site-studio-styles-error.patch",
                 "Site install using UI gives 403 on finish, due to update core 9.2": "https://gist.githubusercontent.com/vishalkhode1/8762f8e2e5569f01a3fdcf3b8d8e2b50/raw/3f916d17b717fd5f3c215bde02e741a9ee7be4e5/site-studio-access-denied.patch"
             }
         }
