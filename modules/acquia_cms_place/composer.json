@@ -4,6 +4,7 @@
     "description": "Provides a Place content type and related configuration.",
     "license": "GPL-2.0-or-later",
     "require": {
+        "cweagans/composer-patches": "^1.7",
         "drupal/acquia_cms_image": "^1.0",
         "drupal/address": "^1",
         "drupal/field_group": "^3",
@@ -11,6 +12,14 @@
         "drupal/geofield": "^1",
         "drupal/scheduler": "^1.3",
         "geocoder-php/google-maps-provider": "^4.6"
+    },
+    "extra": {
+        "enable-patching": true,
+        "patches": {
+            "drupal/geocoder": {
+                "3224364 - Replace deprecated boolean return in uksort() for PHP 8 compatibility.": "https://www.drupal.org/files/issues/2021-07-19/3224364-2.patch"
+            }
+        }
     },
     "repositories": {
         "drupal": {
