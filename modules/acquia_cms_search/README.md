@@ -10,6 +10,10 @@ User-facing documentation for Acquia CMS lives on
 * Please report issues in the [main Acquia CMS repository](https://github.com/acquia/acquia_cms).
 * Read our [Contributing](/CONTRIBUTING.md) guide.
 
+## Known Issues
+
+This module is not compatible with Drupal core search module.
+
 # License
 
 Copyright (C) 2021 Acquia, Inc.

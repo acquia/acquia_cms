@@ -38,6 +38,10 @@ Drupal.org provides excellent documentation for creating custom profiles at http
 
 For custom profiles that include the Acquia CMS Site Studio module, include the contents of the [CUSTOM_PROFILE.profile.example](https://github.com/acquia/acquia_cms/blob/develop/CUSTOM_PROFILE/CUSTOM_PROFILE.profile.example) file to provide install tasks related to Site Studio.
 
+### Known Issues
+
+The module [acquia_cms_search](https://www.drupal.org/project/acquia_cms_search) is not compatible with Drupal core search module.
+
 ### Running Tests
 
 For steps required for running tests related to your custom profile, head towards the testing document [here](TESTING.md) .
