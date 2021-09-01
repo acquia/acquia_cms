@@ -1,0 +1,105 @@
+<?php
+
+/**
+ * @file
+ * Contains install-time code for custom profiles.
+ */
+
+use Drupal\Core\Installer\InstallerKernel;
+
+/**
+ * Implements hook_install_tasks().
+ */
+function starter_install_tasks(): array {
+  $tasks = [];
+
+  // Install acquia cms logo, it's completely optional and can be removed.
+  $tasks['install_import_default_content'] = [];
+
+  // Allow acquia_cms_site_studio module to be install using profile.
+  if (Drupal::service('module_handler')->moduleExists('acquia_cms_site_studio')) {
+    // If the user has configured their sit studio keys,
+    // lets import all site studio's elements.
+    $config = Drupal::config('cohesion.settings');
+    $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
+    $tasks['install_acms_site_studio_initialize'] = [
+      'display_name' => t('Import Site Studio elements'),
+      'display' => $cohesion_configured,
+      'type' => 'batch',
+      'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+    ];
+    $tasks['install_acms_site_studio_ui_kit'] = [
+      'display_name' => t('Import Site Studio components'),
+      'display' => $cohesion_configured,
+      'type' => 'batch',
+      'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+    ];
+    // Include rebuild task if site is being install through UI.
+    if (PHP_SAPI !== 'cli') {
+      $tasks['install_acms_site_studio_rebuild'] = [
+        'display_name' => t('Rebuild Site Studio'),
+        'display' => $cohesion_configured,
+        'type' => 'batch',
+        'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+      ];
+    }
+  }
+  return $tasks;
+}
+
+/**
+ * Import site studio uikit.
+ *
+ * @throws Exception
+ */
+function install_acms_site_studio_ui_kit() {
+  if (PHP_SAPI == 'cli') {
+    batch_set(site_studio_import_ui_kit());
+    drush_backend_batch_process();
+  }
+  else {
+    return site_studio_import_ui_kit();
+  }
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function starter_modules_installed(array $modules) : void {
+  // Don't do anything during site installation, since that can break things in
+  // a big way if modules are being installed due to changes made on the site
+  // configuration form.
+  if (InstallerKernel::installationAttempted()) {
+    return;
+  }
+
+  $module_handler = Drupal::moduleHandler();
+  if ($module_handler->moduleExists('cohesion_sync')) {
+    $module_handler->invoke('cohesion_sync', 'modules_installed', [$modules]);
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function starter_module_implements_alter(array &$implementations, string $hook) : void {
+  // @todo The below code needs to be updated once the memory limit issue is
+  // fixed by site studio.
+  if ($hook === 'modules_installed') {
+    // Prevent cohesion_sync from reacting to module installation, for an
+    // excellent reason: it tries to import all of the new module's sync
+    // packages, at once, in the current request, which leads to memory errors.
+    // We replace it with a slightly smarter implementation that uses the batch
+    // system when installing a module via the UI.
+    unset($implementations['cohesion_sync']);
+  }
+}
+
+/**
+ * Install default content acms log as part of install task.
+ */
+function install_import_default_content() {
+  if (\Drupal::moduleHandler()->moduleExists('acquia_cms_image')) {
+    \Drupal::service('default_content.importer')->importContent('acquia_cms_image');
+  }
+}
