@@ -10,7 +10,7 @@ CONTENTS OF THIS FILE
 * License
 
 # Introduction
-This is core module required by the acquia_cms profile and Acquia CMS component modules.
+This is the core module required by the acquia_cms profile and Acquia CMS component modules.
 
 This module is not intended to be used by itself in the absence of other Acquia CMS modules.
 
