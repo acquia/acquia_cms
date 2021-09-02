@@ -1,14 +1,56 @@
-# About
+CONTENTS OF THIS FILE
+---------------------
 
-This is core module required by the acquia_cms profile and Acquia CMS component modules.
+* Introduction
+* Requirements
+* Recommended modules
+* Installation
+* Configuration
+* Maintainers
+* License
 
-## Documentation
+# Introduction
+This is the core module required by the acquia_cms profile and Acquia CMS component modules.
+
+This module is not intended to be used by itself in the absence of other Acquia CMS modules.
 
 User-facing documentation for Acquia CMS lives on
 [Acquia's documentation website](https://docs.acquia.com).
 
 * Please report issues in the [main Acquia CMS repository](https://github.com/acquia/acquia_cms).
 * Read our [Contributing](/CONTRIBUTING.md) guide.
+
+# Requirements
+This module must be installed using composer. See installation below.
+
+# Recommended modules
+We recommend using this module together with:
+* Acquia CMS Article
+* Acquia CMS Search
+* Acquia CMS Toolbar
+
+# Installation
+Add the necessary repositories in your project's composer.json file.
+
+`composer config repositories.drupal composer https://packages.drupal.org/8`
+
+`composer config repositories.asset-packagist composer https://asset-packagist.org`
+
+Require Acquia CMS Common.
+
+`composer require drupal/acquia_cms_common`
+
+#Configuration
+This module is pre-configured to provide a Page content type using Acquia Site Studio.
+
+# Maintainers
+Current maintainers:
+* Michael Sherron (msherron) - https://www.drupal.org/u/msherron
+* Katherine Druckman (katherined) - https://www.drupal.org/u/katherined
+* Vishal Khode (vishalkhode) - https://www.drupal.org/u/vishalkhode-0
+
+This project has been sponsored by:
+* Acquia
 
 # License
 
