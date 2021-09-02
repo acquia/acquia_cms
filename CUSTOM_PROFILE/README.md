@@ -34,6 +34,10 @@ Note that if you include a .install file in your profile that implements hook_in
 
 Drupal.org provides excellent documentation for creating custom profiles at https://www.drupal.org/docs/distributions/creating-distributions/how-to-write-a-drupal-installation-profile
 
+### Including Acquia CMS Site Studio
+
+For custom profiles that include the Acquia CMS Site Studio module, include the contents of the [CUSTOM_PROFILE.profile.example](https://github.com/acquia/acquia_cms/blob/develop/CUSTOM_PROFILE/CUSTOM_PROFILE.profile.example) file to provide install tasks related to Site Studio.
+
 ### Running Tests
 
 For steps required for running tests related to your custom profile, head towards the testing document [here](TESTING.md) .
