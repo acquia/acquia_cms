@@ -34,6 +34,18 @@ Note that if you include a .install file in your profile that implements hook_in
 
 Drupal.org provides excellent documentation for creating custom profiles at https://www.drupal.org/docs/distributions/creating-distributions/how-to-write-a-drupal-installation-profile
 
+### Additional information:
+
+Acquia CMS components module provides patches for its dependencies,
+in order to use them add following key in your root level composer.json file.
+```
+{
+  "extra": {
+      "enable-patching": true
+  }
+}
+```
+
 ### Including Acquia CMS Site Studio
 
 For custom profiles that include the Acquia CMS Site Studio module, include the contents of the [CUSTOM_PROFILE.profile.example](https://github.com/acquia/acquia_cms/blob/develop/CUSTOM_PROFILE/CUSTOM_PROFILE.profile.example) file to provide install tasks related to Site Studio.
