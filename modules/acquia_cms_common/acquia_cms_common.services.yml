@@ -3,8 +3,23 @@ services:
     class: Drupal\acquia_cms_common\Routing\RouteSubscriber
     tags:
       - { name: event_subscriber }
+
+  acquia_cms_common.event_subscriber:
+    class: '\Drupal\acquia_cms_common\EventSubscriber\ConfigEventsSubscriber'
+    arguments: ['@module_handler']
+    tags:
+      - { name: 'event_subscriber' }
+
   acquia_cms_common.toggle_modules:
     class:  Drupal\acquia_cms_common\Services\ToggleModulesService
+
   acquia_cms_common.utility:
     class:  Drupal\acquia_cms_common\Services\AcmsUtilityService
     arguments: ['@module_handler', '@config.factory']
+
+  acquia_cms_common.uninstall_validator:
+    class: Drupal\acquia_cms_common\AcmsModulesUninstallValidator
+    tags:
+      - { name: module_install.uninstall_validator }
+    arguments: [ '@entity_type.manager', '@string_translation' ]
+    lazy: true
