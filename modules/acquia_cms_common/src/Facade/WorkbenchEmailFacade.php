@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_common\Facade;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ConfigInstallerInterface;
 use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
@@ -25,6 +26,13 @@ final class WorkbenchEmailFacade implements ContainerInjectionInterface {
    * @var \Drupal\Core\Config\ConfigInstallerInterface
    */
   private $configInstaller;
+
+  /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  private $configFactory;
 
   /**
    * The workflow entity storage handler.
@@ -52,6 +60,8 @@ final class WorkbenchEmailFacade implements ContainerInjectionInterface {
    *
    * @param \Drupal\Core\Config\ConfigInstallerInterface $config_installer
    *   The config installer service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory service.
    * @param \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $workflow_storage
    *   The workflow entity storage handler.
    * @param \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $node_type_storage
@@ -59,8 +69,15 @@ final class WorkbenchEmailFacade implements ContainerInjectionInterface {
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The logger channel.
    */
-  public function __construct(ConfigInstallerInterface $config_installer, ConfigEntityStorageInterface $workflow_storage, ConfigEntityStorageInterface $node_type_storage, LoggerChannelInterface $logger) {
+  public function __construct(
+    ConfigInstallerInterface $config_installer,
+    ConfigFactoryInterface $config_factory,
+    ConfigEntityStorageInterface $workflow_storage,
+    ConfigEntityStorageInterface $node_type_storage,
+    LoggerChannelInterface $logger
+  ) {
     $this->configInstaller = $config_installer;
+    $this->configFactory = $config_factory;
     $this->workflowStorage = $workflow_storage;
     $this->nodeTypeStorage = $node_type_storage;
     $this->logger = $logger;
@@ -74,6 +91,7 @@ final class WorkbenchEmailFacade implements ContainerInjectionInterface {
 
     return new static(
       $container->get('config.installer'),
+      $container->get('config.factory'),
       $entity_type_manager->getStorage('workflow'),
       $entity_type_manager->getStorage('node_type'),
       $container->get('logger.factory')->get('acquia_cms')
@@ -90,6 +108,8 @@ final class WorkbenchEmailFacade implements ContainerInjectionInterface {
    *
    * @param \Drupal\workbench_email\TemplateInterface $template
    *   The new workbench email template.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function addTemplate(TemplateInterface $template) {
     // We don't want to do any secondary config writes during a config sync,
@@ -110,7 +130,7 @@ final class WorkbenchEmailFacade implements ContainerInjectionInterface {
     foreach ($node_types as $id => $node_type) {
       $variables['%node_type'] = $node_type->label();
 
-      $email_templates = $node_type->getThirdPartySetting('acquia_cms', 'workbench_email_templates', []);
+      $email_templates = $node_type->getThirdPartySetting('acquia_cms_common', 'workbench_email_templates', []);
       if (array_key_exists($template->id(), $email_templates)) {
         $enabled_bundles["node:$id"] = "node:$id";
       }
@@ -122,7 +142,7 @@ final class WorkbenchEmailFacade implements ContainerInjectionInterface {
 
     // Add the template to the workflow specified in its third-party settings.
     // If the template does not specify a workflow, there's nothing to do.
-    $workflow_id = $template->getThirdPartySetting('acquia_cms', 'workflow_id');
+    $workflow_id = $template->getThirdPartySetting('acquia_cms_common', 'workflow_id');
     if (empty($workflow_id)) {
       return;
     }
@@ -136,7 +156,7 @@ final class WorkbenchEmailFacade implements ContainerInjectionInterface {
     }
 
     $enabled_templates = $workflow->getThirdPartySetting('workbench_email', 'workbench_email_templates', []);
-    $transitions = $template->getThirdPartySetting('acquia_cms', 'workflow_transitions', []);
+    $transitions = $template->getThirdPartySetting('acquia_cms_common', 'workflow_transitions', []);
     foreach ($transitions as $transition_id) {
       // Enable this template for the specified transition, but only if the
       // transition is not already associated with a template.
@@ -147,7 +167,13 @@ final class WorkbenchEmailFacade implements ContainerInjectionInterface {
       ];
     }
     $workflow->setThirdPartySetting('workbench_email', 'workbench_email_templates', $enabled_templates);
+    // Saving this workflow will update config object with required key
+    // along with enforced key after calculating dependencies so, we are going
+    // to update configuration object manually to clear enforced config key
+    // from the configuration that will prevent config deletion.
     $this->workflowStorage->save($workflow);
+    // Update configuration object by clearing dependencies.enforced.config.
+    $this->configFactory->getEditable('workflows.workflow.' . $workflow_id)->clear('dependencies.enforced.config')->save();
   }
 
 }

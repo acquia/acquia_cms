@@ -93,7 +93,7 @@ final class SubtypeBreadcrumb implements BreadcrumbBuilderInterface {
     if ($route_match->getRouteName() === 'entity.node.canonical') {
       /** @var \Drupal\node\NodeInterface $node */
       $node = $route_match->getParameter('node');
-      return $node->type->entity->getThirdPartySetting('acquia_cms', 'subtype', []);
+      return $node->type->entity->getThirdPartySetting('acquia_cms_common', 'subtype', []);
     }
     return [];
   }

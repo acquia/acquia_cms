@@ -4,10 +4,13 @@ dependencies:
   module:
     - node
     - search_api
+  enforced:
+    module:
+      - acquia_cms_search
   config:
     - core.entity_view_mode.node.search_index
 third_party_settings:
-  acquia_cms:
+  acquia_cms_common:
     search_server: database
 id: content
 name: Content

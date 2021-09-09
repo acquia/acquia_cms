@@ -30,7 +30,7 @@
         "drupal/acquia_telemetry-acquia_telemetry": "1.0-alpha5",
         "drupal/acsf": "^2",
         "drupal/address": "^1",
-        "drupal/admin_toolbar": "^2.0",
+        "drupal/admin_toolbar": "^2.5",
         "drupal/autologout": "^1",
         "drupal/checklistapi": "^2.0",
         "drupal/collapsiblock": "^3",
@@ -230,6 +230,7 @@
         "build:local": [
             "mkdir -p $PROFILE_DIR $MODULES_DIR",
             "find $PWD -name 'acquia_cms.*' -type f -maxdepth 1 -exec ln -s -f '{}' $PROFILE_DIR ';'",
+            "find ./docroot/modules/contrib -type d -name \"acquia_cms*\" -exec mv '{}' ./docroot/modules ';'",
             "ln -s -f $PWD/config $PROFILE_DIR",
             "ln -s -f $PWD/misc $PROFILE_DIR",
             "ln -s -f $PWD/modules $MODULES_DIR",
