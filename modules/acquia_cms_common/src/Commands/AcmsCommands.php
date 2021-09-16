@@ -121,7 +121,6 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
    *   Perform update for pending database update.
    */
   public function updateDatabase() {
-    // @todo Need to check that sumologic is adding the logs.
     $selfAlias = $this->siteAliasManager()->getSelf();
     $options = [
       'cache-clear' => TRUE,
