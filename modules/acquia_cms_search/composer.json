@@ -4,6 +4,7 @@
     "description": "Provides powerful search capabilities to the site.",
     "license": "GPL-2.0-or-later",
     "require": {
+        "cweagans/composer-patches": "^1.7",
         "drupal/acquia_cms_article": "^1.0",
         "drupal/acquia_search": "^3.0",
         "drupal/collapsiblock": "^3",
@@ -11,6 +12,14 @@
         "drupal/facets_pretty_paths": "^1.1",
         "drupal/search_api": "1.20",
         "drupal/search_api_autocomplete": "^1.4"
+    },
+    "extra": {
+        "enable-patching": true,
+        "patches": {
+            "drupal/search_api": {
+                "Resolves call to member function preExecute() on null error on site install": "https://www.drupal.org/files/issues/2021-09-20/search_api_condition_cacheable_metadata.patch"
+            }
+        }
     },
     "repositories": {
         "drupal": {
