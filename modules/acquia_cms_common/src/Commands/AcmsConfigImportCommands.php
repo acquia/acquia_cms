@@ -215,7 +215,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    * @throws \Drush\Exceptions\UserAbortException
    */
   private function getPackagesFromUserInput(): array {
-    // Lets get input from user if not provided package with command.
+    // Let's get input from user if not provided package with command.
     $acms_modules = $this->filterModuleForConfig();
     $question_string = 'Choose a module that needs a configuration reset. Separate multiple choices with commas, e.g. "1,2,4".';
     $question = $this->createMultipleChoiceOptions($question_string, $acms_modules);
@@ -242,7 +242,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
     $acms_modules = $this->getAcmsModules();
     $acms_filtered_modules = [];
     foreach ($acms_modules as $module) {
-      $dir = drupal_get_path('module', $module);
+      $dir = $this->moduleHandler->getModule($module)->getPath();
       $install = "$dir/config/install";
       $optional = "$dir/config/optional";
       if (is_dir($install) || is_dir($optional)) {
@@ -371,24 +371,29 @@ final class AcmsConfigImportCommands extends DrushCommands {
    */
   private function getConfigFiles(string $module): array {
     $config_files = [];
-    $source_install = drupal_get_path('module', $module) . '/config/install';
-    $source_optional = drupal_get_path('module', $module) . '/config/optional';
+    $module_path = $this->moduleHandler->getModule($module)->getPath();
+    $source_install = $module_path . '/config/install';
+    $source_optional = $module_path . '/config/optional';
 
     // Get optional configuration list for specified module.
-    $source_storage_dir = ConfigCommands::getDirectory(NULL, $source_optional);
-    $source_storage = new FileStorage($source_storage_dir);
-    foreach ($source_storage->listAll() as $name) {
-      $config_files[$name] = $source_storage->read($name);
+    if (file_exists($source_optional)) {
+      $source_storage_dir = ConfigCommands::getDirectory(NULL, $source_optional);
+      $source_storage = new FileStorage($source_storage_dir);
+      foreach ($source_storage->listAll() as $name) {
+        $config_files[$name] = $source_storage->read($name);
+      }
+      // Remove configuration files where its dependencies cannot be met
+      // in case of optional configurations.
+      $this->removeDependentFiles($config_files);
     }
-    // Remove configuration files where its dependencies cannot be met
-    // in case of optional configurations.
-    $this->removeDependentFiles($config_files);
 
     // Now get default configurations.
-    $source_storage_dir = ConfigCommands::getDirectory(NULL, $source_install);
-    $source_storage = new FileStorage($source_storage_dir);
-    foreach ($source_storage->listAll() as $name) {
-      $config_files[$name] = $source_storage->read($name);
+    if (file_exists($source_install)) {
+      $source_storage_dir = ConfigCommands::getDirectory(NULL, $source_install);
+      $source_storage = new FileStorage($source_storage_dir);
+      foreach ($source_storage->listAll() as $name) {
+        $config_files[$name] = $source_storage->read($name);
+      }
     }
 
     return $config_files;
@@ -399,11 +404,8 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *
    * @param array $config_files
    *   Array of configurations files.
-   *
-   * @return array
-   *   Array of filtered configurations file.
    */
-  private function removeDependentFiles(array &$config_files): array {
+  private function removeDependentFiles(array &$config_files) {
     $enabled_extensions = $this->acmsUtilityService->getEnabledExtensions();
     $all_config = $active_storage = $this->getConfigStorage()->listAll();
     $all_config = array_combine($all_config, $all_config);
@@ -414,7 +416,6 @@ final class AcmsConfigImportCommands extends DrushCommands {
         unset($config_files[$config_name]);
       }
     }
-    return $config_files;
   }
 
   /**
@@ -427,7 +428,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *   The array of site studio package.
    */
   private function getSiteStudioPackage(string $module): array {
-    $dir = drupal_get_path('module', $module);
+    $dir = $this->moduleHandler->getModule($module)->getPath();
     $list = "$dir/config/dx8/packages.yml";
     if (file_exists($list)) {
       $list = file_get_contents($list);
@@ -589,7 +590,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    * @return bool
    *   Boolean indicate true, false.
    */
-  private function validDeleteList(array $config_file, array $delete_list_array) {
+  private function validDeleteList(array $config_file, array $delete_list_array): bool {
     $config_file_list = array_keys($config_file);
     $valid = TRUE;
     foreach ($delete_list_array as $config_name) {
