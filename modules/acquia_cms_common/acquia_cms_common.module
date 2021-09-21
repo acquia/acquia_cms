@@ -5,6 +5,7 @@
  * Contains hook implementations for common, shared Acquia CMS functionality.
  */
 
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\acquia_cms_common\Facade\MetatagFacade;
 use Drupal\acquia_cms_common\Facade\SitemapFacade;
 use Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade;
@@ -218,5 +219,20 @@ function _acquia_cms_common_update_view_display_options_style($view_name, $displ
       'master_template' => 'master_template_boxed',
     ];
     $view_storage->save($view);
+  }
+}
+
+/**
+ * Implements hook_mail_alter().
+ */
+function acquia_cms_common_mail_alter(&$message) {
+  if (strpos($message['key'], 'template::') === 0) {
+    $reroute_mail = \Drupal::config('reroute_email.settings')->get('address');
+    if (AcquiaDrupalEnvironmentDetector::isLocalEnv()) {
+      $message['send'] = 'false';
+    }
+    elseif (strpos($reroute_mail, 'no-reply') === 0) {
+      $message['send'] = 'false';
+    }
   }
 }
