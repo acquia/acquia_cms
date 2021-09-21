@@ -22,7 +22,7 @@ if [ "$target_env" = "ode4" ]; then
     /usr/local/bin/drush9 @$site.$target_env updatedb --no-interaction
 # Install Acquia CMS.
 else
-    /usr/local/bin/drush9 @$site.$target_env site-install acquia_cms --account-pass=admin --yes --account-mail=no-reply@acquia.com --site-mail=no-reply@acquia.com
+    /usr/local/bin/drush9 @$site.$target_env site-install acquia_cms --account-pass=admin --yes --account-mail=no-reply@example.com --site-mail=no-reply@example.com
 fi
 
 # Toggle Modules based on the environment.
