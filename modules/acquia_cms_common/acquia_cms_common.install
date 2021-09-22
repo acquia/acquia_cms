@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the acquia_cms_common module.
+ */
+
+use Drupal\Core\Config\FileStorage;
+
+/**
+ * Add new text format 'Full HTML'.
+ */
+function acquia_cms_common_update_8001() {
+  // Do not override existing full_html, if already provide.
+  $config_full_html = \Drupal::config('filter.format.full_html')->get('name');
+  ;
+  if (!$config_full_html) {
+    $module_path = \Drupal::moduleHandler()->getModule('acquia_cms_common')->getPath();
+    $config_install = $module_path . '/config/install';
+    $config_optional = $module_path . '/config/optional';
+
+    $source_install_dir = new FileStorage($config_install);
+    $source_optional_dir = new FileStorage($config_optional);
+
+    $config_storage = \Drupal::service('config.storage');
+    $config_storage->write('filter.format.full_html', $source_install_dir->read('filter.format.full_html'));
+    $config_storage->write('editor.editor.full_html', $source_optional_dir->read('editor.editor.full_html'));
+
+    // Now update each role's permission to use newly added text format.
+    $role_ids = [
+      'administrator',
+      'content_administrator',
+      'content_author',
+      'content_editor',
+      'developer',
+      'site_builder',
+    ];
+    $user_role = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple($role_ids);
+    foreach ($user_role as $role) {
+      $role->grantPermission('use text format full_html');
+      $role->save();
+    }
+  }
+}
