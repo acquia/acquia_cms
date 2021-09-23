@@ -13,7 +13,6 @@ use Drupal\Core\Config\FileStorage;
 function acquia_cms_common_update_8001() {
   // Do not override existing full_html, if already provide.
   $config_full_html = \Drupal::config('filter.format.full_html')->get('name');
-  ;
   if (!$config_full_html) {
     $module_path = \Drupal::moduleHandler()->getModule('acquia_cms_common')->getPath();
     $config_install = $module_path . '/config/install';
