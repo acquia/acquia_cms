@@ -1,17 +1,19 @@
 langcode: en
 status: true
 dependencies:
+  module:
+    - focal_point
   enforced:
     module:
       - acquia_cms_image
 name: coh_xx_small_landscape
 label: 'XX Small landscape (160x120)'
 effects:
-  0410655e-6d68-4687-b13e-b30b5d4093b1:
-    uuid: 0410655e-6d68-4687-b13e-b30b5d4093b1
-    id: image_scale_and_crop
+  9846c8a0-70c1-4f9b-ae0a-53411f2a6c52:
+    uuid: 9846c8a0-70c1-4f9b-ae0a-53411f2a6c52
+    id: focal_point_scale_and_crop
     weight: 1
     data:
       width: 160
       height: 120
-      anchor: center-center
+      crop_type: focal_point

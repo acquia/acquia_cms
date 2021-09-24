@@ -1,17 +1,19 @@
 langcode: en
 status: true
 dependencies:
+  module:
+    - focal_point
   enforced:
     module:
       - acquia_cms_image
 name: coh_large_super_landscape
 label: 'Large super landscape (1024x480)'
 effects:
-  e9089c93-176a-4841-8fcf-5b7e5e859ab0:
-    uuid: e9089c93-176a-4841-8fcf-5b7e5e859ab0
-    id: image_scale_and_crop
+  8bbe9d4d-cd43-44e9-a209-457a4caaeee4:
+    uuid: 8bbe9d4d-cd43-44e9-a209-457a4caaeee4
+    id: focal_point_scale_and_crop
     weight: 1
     data:
       width: 1024
       height: 480
-      anchor: center-center
+      crop_type: focal_point
