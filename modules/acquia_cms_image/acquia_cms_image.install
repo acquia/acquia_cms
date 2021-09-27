@@ -5,6 +5,7 @@
  * Install, update and uninstall functions for the acquia_cms_image module.
  */
 
+use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Installer\InstallerKernel;
 
 /**
@@ -33,5 +34,32 @@ function acquia_cms_image_module_implements_alter(array &$implementations, strin
     if (InstallerKernel::installationAttempted()) {
       unset($implementations['default_content']);
     }
+  }
+}
+
+/**
+ * Update image style to use 'Focal point scale and crop' effect.
+ */
+function acquia_cms_image_update_8001() {
+  $module_path = \Drupal::moduleHandler()->getModule('acquia_cms_image')->getPath();
+  $config_optional = $module_path . '/config/optional';
+
+  $source_optional_dir = new FileStorage($config_optional);
+  $config_storage = \Drupal::service('config.storage');
+  // Image styles name for updating Focal point scale and crop effect.
+  $image_styles = [
+    'image.style.coh_small_square',
+    'image.style.coh_large_landscape',
+    'image.style.coh_small_landscape',
+    'image.style.coh_medium_landscape',
+    'image.style.coh_x_large_landscape',
+    'image.style.coh_xx_small_landscape',
+    'image.style.coh_xx_large_landscape',
+    'image.style.coh_large_super_landscape',
+    'image.style.coh_medium_super_landscape',
+    'image.style.coh_x_large_super_landscape',
+  ];
+  foreach ($image_styles as $image_style) {
+    $config_storage->write($image_style, $source_optional_dir->read($image_style));
   }
 }
