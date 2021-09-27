@@ -1,17 +1,19 @@
 langcode: en
 status: true
 dependencies:
+  module:
+    - focal_point
   enforced:
     module:
       - acquia_cms_image
 name: coh_xx_large_landscape
 label: 'XX Large landscape (1600x1067)'
 effects:
-  9af59107-7d25-4a0a-97e9-6e2c4c1855b7:
-    uuid: 9af59107-7d25-4a0a-97e9-6e2c4c1855b7
-    id: image_scale_and_crop
+  4fc6f472-7800-4b98-a94d-0e29a3996610:
+    uuid: 4fc6f472-7800-4b98-a94d-0e29a3996610
+    id: focal_point_scale_and_crop
     weight: 1
     data:
       width: 1600
       height: 1067
-      anchor: center-center
+      crop_type: focal_point
