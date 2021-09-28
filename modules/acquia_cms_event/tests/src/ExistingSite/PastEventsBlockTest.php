@@ -66,7 +66,6 @@ class PastEventsBlockTest extends ExistingSiteBase {
    */
   public function testPastEventsBlock() {
     $this->drupalGet('');
-    $this->assertSession()->pageTextContains('Past Events');
     $this->assertLinksExistInOrder();
   }
 
