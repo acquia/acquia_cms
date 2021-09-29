@@ -220,3 +220,14 @@ function _acquia_cms_common_update_view_display_options_style($view_name, $displ
     $view_storage->save($view);
   }
 }
+
+/**
+ * Implements hook_mail_alter().
+ */
+function acquia_cms_common_mail_alter(&$message) {
+  if (strpos($message['key'], 'template::') === 0) {
+    if ((!empty($message['from'])) && ($message['from'] === 'no-reply@example.com')) {
+      $message['send'] = 'false';
+    }
+  }
+}
