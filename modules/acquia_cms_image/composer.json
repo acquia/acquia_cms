@@ -4,10 +4,19 @@
     "description": "Provides an Image media type and related configuration.",
     "license": "GPL-2.0-or-later",
     "require": {
+        "cweagans/composer-patches": "^1.7",
         "drupal/acquia_cms_common": "^1.0",
         "drupal/default_content": "^2",
         "drupal/field_group": "^3",
         "drupal/imce": "^2"
+    },
+    "extra": {
+        "enable-patching": true,
+        "patches": {
+            "drupal/default_content": {
+                "2698425 - Duplicate content issues in default content": "https://git.drupalcode.org/project/default_content/-/merge_requests/5.patch"
+            }
+        }
     },
     "repositories": {
         "drupal": {
