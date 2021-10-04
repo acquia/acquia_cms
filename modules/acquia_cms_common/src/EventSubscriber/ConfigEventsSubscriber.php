@@ -64,7 +64,7 @@ class ConfigEventsSubscriber implements EventSubscriberInterface {
           break;
 
         case 'views.view.article_cards':
-          _acquia_cms_common_update_view_display_options_style('article_cards', 'recent_articles_block', 'view_tpl_article_cards_slider');
+          _acquia_cms_common_update_view_display_options_style('article_cards', 'default', 'view_tpl_article_cards_slider');
           break;
       }
     }
