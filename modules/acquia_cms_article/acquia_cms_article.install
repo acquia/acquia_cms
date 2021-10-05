@@ -19,3 +19,12 @@ function acquia_cms_article_install() {
     'delete any article content',
   ]);
 }
+
+/**
+ * Implements hook_update_N().
+ */
+function acquia_cms_article_update_8001() {
+  if (\Drupal::moduleHandler()->moduleExists('acquia_cms_common') && \Drupal::moduleHandler()->moduleExists('acquia_cms_site_studio')) {
+    _acquia_cms_common_update_view_display_options_style('article_cards', 'default', 'view_tpl_article_cards_slider');
+  }
+}
