@@ -22,9 +22,14 @@ function acquia_cms_article_install() {
 
 /**
  * Implements hook_update_N().
+ *
+ * Forcefully import the Article Cards View configuration
+ * so that the EventSubscriber responsible for updating the
+ * view template format can act accordingly.
  */
 function acquia_cms_article_update_8001() {
-  if (\Drupal::moduleHandler()->moduleExists('acquia_cms_common') && \Drupal::moduleHandler()->moduleExists('acquia_cms_site_studio')) {
-    _acquia_cms_common_update_view_display_options_style('article_cards', 'default', 'view_tpl_article_cards_slider');
+  $config = \Drupal::configFactory()->getEditable('views.view.article_cards');
+  if (!empty($config)) {
+    $config->save();
   }
 }
