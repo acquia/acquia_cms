@@ -15,14 +15,11 @@ function acquia_cms_common_update_8001() {
   $config_full_html = \Drupal::config('filter.format.full_html')->get('name');
   if (!$config_full_html) {
     $module_path = \Drupal::moduleHandler()->getModule('acquia_cms_common')->getPath();
-    $config_install = $module_path . '/config/install';
     $config_optional = $module_path . '/config/optional';
-
-    $source_install_dir = new FileStorage($config_install);
     $source_optional_dir = new FileStorage($config_optional);
 
     $config_storage = \Drupal::service('config.storage');
-    $config_storage->write('filter.format.full_html', $source_install_dir->read('filter.format.full_html'));
+    $config_storage->write('filter.format.full_html', $source_optional_dir->read('filter.format.full_html'));
     $config_storage->write('editor.editor.full_html', $source_optional_dir->read('editor.editor.full_html'));
 
     // Now update each role's permission to use newly added text format.
