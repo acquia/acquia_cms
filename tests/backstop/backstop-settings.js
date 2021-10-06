@@ -194,7 +194,7 @@ module.exports =
     {
       "label": "ACMS Event (Starter)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": arguments.testhost + "/event/webinar/2021/11/past-event-five-medium-length-placeholder-heading",
+      "url": arguments.testhost + "/event/webinar/2021/11/event-five-medium-length-placeholder-heading",
       "referenceUrl": "",
       "readyEvent": "",
       "readySelector": "",
