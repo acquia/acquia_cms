@@ -55,7 +55,7 @@ if [[ "$ACMS_JOB" == "base" ]] && [[ -n "$ACMS_DB_ARTIFACT" ]] && [[ -n "$ACMS_F
   echo "Installing From Artifacts"
   tar -xzf $ACMS_FILES_ARTIFACT
   gunzip $ACMS_DB_ARTIFACT
-  drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms.sql
+  drush sql:cli --db-url=mysql://drupal:drupal@localhost:3306/drupal < $TRAVIS_BUILD_DIR/tests/acms.sql
   drush updatedb --cache-clear --yes -vvv
   drush cr
 fi
@@ -65,7 +65,7 @@ if [[ "$ACMS_JOB" == "starter" ]] && [[ -n "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ 
   echo "Installing Starter From Artifacts"
   tar -xzf $ACMS_STARTER_FILES_ARTIFACT
   gunzip $ACMS_STARTER_DB_ARTIFACT
-  drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms-starter.sql
+  drush sql:cli --db-url=mysql://drupal:drupal@localhost:3306/drupal < $TRAVIS_BUILD_DIR/tests/acms-starter.sql
   drush updatedb --cache-clear --yes -vvv
 fi
 
