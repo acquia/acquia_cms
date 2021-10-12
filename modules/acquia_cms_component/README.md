@@ -1,6 +1,6 @@
 # About
 
-Provides components and related configuration.
+Provides component and related configuration.
 
 ## Documentation
 
