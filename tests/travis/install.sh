@@ -17,8 +17,8 @@ source ../../../orca/bin/travis/_includes.sh
 # If running our custom jobs or isolated test jobs, initialize the fixture.
 # Otherwise, use Orca's installation script.
 if [[ "$ACMS_JOB" == "base" ]] || [[ "$ACMS_JOB" == "starter" ]]; then
-  orca debug:packages CURRENT_DEV
-  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=acquia_cms --no-sqlite --no-site-install --project-template=acquia/drupal-recommended-project
+  orca debug:packages CURRENT
+  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT --dev --profile=acquia_cms --no-sqlite --no-site-install --project-template=acquia/drupal-recommended-project
 elif [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]]; then
   orca debug:packages CURRENT_DEV
   orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=acquia_cms --no-sqlite --project-template=acquia/drupal-recommended-project
