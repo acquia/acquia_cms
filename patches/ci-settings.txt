@@ -1,3 +1,5 @@
 if (getenv('CI')) {
-include __DIR__ . '/settings.acms.php';
+include __DIR__ . '/settings.acms-ci.php';
 }
+
+include __DIR__ . '/settings.acms.php';
