@@ -23,16 +23,15 @@ class SiteInstallCommands extends DrushCommands {
     $config = \Drupal::config('cohesion.settings');
     $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
     if ($moduleHandler->moduleExists('acquia_cms_site_studio') && $cohesion_configured) {
-      $telemetry = \Drupal::classResolver(AcquiaTelemetry::class);
       if (isset($arguments['profile'][0]) && $arguments['profile'][0] == 'acquia_cms') {
+        $telemetry = \Drupal::classResolver(AcquiaTelemetry::class);
         $telemetry->setTime('rebuild_start_time');
-        $this->say(dt('Rebuilding all entities.'));
-        $result = \Drupal::service('acquia_cms_common.utility')->rebuildSiteStudio();
-        $this->yell('Finished rebuilding.');
-        $telemetry->setTime('rebuild_end_time');
       }
-      else {
-        $result = \Drupal::service('acquia_cms_common.utility')->rebuildSiteStudio();
+      $this->say(dt('Rebuilding all entities.'));
+      $result = \Drupal::service('acquia_cms_common.utility')->rebuildSiteStudio();
+      $this->yell('Finished rebuilding.');
+      if (isset($arguments['profile'][0]) && $arguments['profile'][0] == 'acquia_cms') {
+        $telemetry->setTime('rebuild_end_time');
       }
     }
     // Send data to telemetry based upon certain conditions.
