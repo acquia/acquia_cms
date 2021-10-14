@@ -287,3 +287,21 @@ function install_acms_set_favicon() {
     ])
     ->save(TRUE);
 }
+
+/**
+ * Update config ignore settings.
+ */
+function acquia_cms_update_8001() {
+  $config = \Drupal::configFactory()->getEditable('config_ignore.settings');
+  // Get existing ignore config and append the new one.
+  $existing_ignore_config = $config->get('ignored_config_entities');
+  $new_ignore_config = [
+    'cohesion.settings',
+    'purge.plugins',
+    'purge.logger_channels',
+  ];
+  $updated_ignore_config = array_unique(array_merge($existing_ignore_config, $new_ignore_config));
+  $config->set('ignored_config_entities', $updated_ignore_config);
+  $config->set('enable_export_filtering', TRUE);
+  $config->save(TRUE);
+}
