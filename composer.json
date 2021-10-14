@@ -118,6 +118,12 @@
                 "[web-root]/sites/default/default.settings.php": {
                     "append": "./patches/d9-acms-settings.patch"
                 },
+                "[web-root]/sites/default/settings.acms.php": "./patches/settings.acms.php",
+                "[web-root]/sites/default/settings.php": {
+                    "append": "./patches/ci-settings.txt",
+                    "default": "./patches/default-settings.txt",
+                    "force-append": true
+                },
                 "[web-root]/themes/README.txt": false,
                 "[web-root]/web.config": false
             },
