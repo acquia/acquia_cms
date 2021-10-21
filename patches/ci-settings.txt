@@ -1,6 +1,6 @@
-# Include Acquia CMS settings.
+# Include Acquia CMS CI settings.
 if (getenv('CI')) {
 include __DIR__ . '/settings.acms-ci.php';
 }
-
+# Include Acquia CMS custom settings.
 include __DIR__ . '/settings.acms.php';
