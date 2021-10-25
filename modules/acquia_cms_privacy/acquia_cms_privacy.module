@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for Acquia CMS Privacy module.
+ */
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function acquia_cms_privacy_library_info_alter(array &$libraries, $module) {
+  if ($module === 'eu_cookie_compliance' && isset($libraries['eu_cookie_compliance_default'])) {
+    $libraries['eu_cookie_compliance_default']['css']['state'] = [
+      '/' . drupal_get_path('module', 'acquia_cms_privacy') . '/css/cookie-compliance.css' => [],
+    ];
+  }
+}
