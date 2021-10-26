@@ -4,8 +4,25 @@
     "description": "Module for configuring the gdpr and EU cookie compliance modules.",
     "license": "GPL-2.0-or-later",
     "require": {
+        "cweagans/composer-patches": "^1.7",
         "drupal/eu_cookie_compliance": "^1.19",
-        "drupal/gdpr": "^3.0@alpha"
+        "drupal/gdpr": "3.0.0-alpha4"
+    },
+    "extra": {
+        "drush": {
+            "services": {
+                "drush.services.yml": "^10"
+            }
+        },
+        "enable-patching": true,
+        "patches": {
+            "drupal/checklistapi": {
+                "Alter the prgress bar based upon the default value passed": "https://www.drupal.org/files/issues/2021-10-26/checklistapi-count-default-values-forprogress-2311855-2.patch"
+            },
+            "drupal/gdpr": {
+                "Altered the text for Polocies and other Measures tab": "https://gist.githubusercontent.com/panshulK/844666d662ffc2e12f55b66dbfa915bf/raw/f2ff809e9401b2a7fae7c5f1ace791b79968c972/gdpr-module-checklist-acms.patch"
+            }
+        }
     },
     "repositories": {
         "drupal": {
