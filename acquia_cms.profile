@@ -297,8 +297,6 @@ function acquia_cms_update_8001() {
   $existing_ignore_config = $config->get('ignored_config_entities');
   $new_ignore_config = [
     'cohesion.settings',
-    'purge.plugins',
-    'purge.logger_channels',
   ];
   $updated_ignore_config = array_unique(array_merge($existing_ignore_config, $new_ignore_config));
   $config->set('ignored_config_entities', $updated_ignore_config);
