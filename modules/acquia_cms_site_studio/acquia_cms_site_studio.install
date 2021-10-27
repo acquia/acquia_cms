@@ -19,6 +19,9 @@ function acquia_cms_site_studio_install() {
   // Set default theme as cohesion.
   set_theme_site_studio_as_default();
 
+  // Update cohesion.settings during install.
+  update_site_studio_settings();
+
   // Don't do anything during site installation, since that can have unintended
   // side effects. We have separate task in acquia_cms profile which do the same
   // thing if this module is being installed as part of profile.
@@ -70,6 +73,26 @@ function set_site_studio_credentials(string $site_studio_api_key, string $site_s
   \Drupal::configFactory()->getEditable('cohesion.settings')
     ->set('api_key', $site_studio_api_key)
     ->set('organization_key', $site_studio_org_key)
+    ->save(TRUE);
+}
+
+/**
+ * Update cohesion.settings config.
+ */
+function update_site_studio_settings() {
+  \Drupal::configFactory()->getEditable('cohesion.settings')
+    ->set('image_browser', [
+      'config' => [
+        'type' => 'medialib_imagebrowser',
+        'dx8_entity_browser' => 'dx8_entity_browser',
+        'cohesion_media_lib_types' => ['image'],
+      ],
+      'content' => [
+        'type' => 'medialib_imagebrowser',
+        'dx8_entity_browser' => 'dx8_entity_browser',
+        'cohesion_media_lib_types' => ['image'],
+      ],
+    ])
     ->save(TRUE);
 }
 
