@@ -254,6 +254,18 @@ function install_acms_additional_modules() {
         ->save();
     }
   }
+
+  /*
+   * We've to explicitly set purge plugin as acquia_purge, If Acquia Purge
+   * module is enabled, else this would give below error:
+   *
+   * ERROR: Purgers:There is no purger loaded which means that you need a module
+   * enabled to provide a purger plugin to clear your external cache or CDN.
+   */
+  if (Drupal::service('module_handler')->moduleExists('acquia_purge')) {
+    $config = \Drupal::service('purge.purgers');
+    $config->setPluginsEnabled(['cee22bc3fe' => 'acquia_purge']);
+  }
 }
 
 /**
@@ -297,6 +309,8 @@ function acquia_cms_update_8001() {
   $existing_ignore_config = $config->get('ignored_config_entities');
   $new_ignore_config = [
     'cohesion.settings',
+    'purge.plugins',
+    'purge.logger_channels',
   ];
   $updated_ignore_config = array_unique(array_merge($existing_ignore_config, $new_ignore_config));
   $config->set('ignored_config_entities', $updated_ignore_config);
