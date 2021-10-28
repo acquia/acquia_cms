@@ -156,6 +156,7 @@ function install_acms_site_studio_ui_kit() {
   $operations = $facade->getAllOperations(TRUE);
   $batch = [
     'operations' => $operations,
+    'finished' => 'update_site_studio_settings',
   ];
 
   // Set batch along with drush backend process if site is being
