@@ -84,9 +84,9 @@ class CkeditorConfigurationTest extends WebDriverTestBase {
 
       $this->drupalGet("/node/add/$node_type");
 
-      // Ensure that only the filtered_html format exists.
+      // Ensure that text format 'filtered_html' & 'full_html' exists.
       $formats = $session->evaluateScript('Object.keys(drupalSettings.editor.formats)');
-      $this->assertSame(['filtered_html'], $formats);
+      $this->assertSame(['filtered_html', 'full_html'], $formats);
 
       $this->waitForEditor();
       $this->getEditorButton('justifyleft');
