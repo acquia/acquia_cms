@@ -59,7 +59,31 @@ function site_studio_import_ui_kit(): array {
   $facade = Drupal::classResolver(CohesionFacade::class);
 
   $operations = $facade->getAllOperations(TRUE);
-  return ['operations' => $operations];
+  return [
+    'operations' => $operations,
+    'finished' => 'update_site_studio_settings',
+  ];
+}
+
+/**
+ * Update cohesion.settings config.
+ */
+function update_site_studio_settings() {
+  $config = \Drupal::service('config.factory')->getEditable('cohesion.settings');
+  $config->set('image_browser', [
+    'config' => [
+      'type' => 'medialib_imagebrowser',
+      'dx8_entity_browser' => 'media_browser',
+      'cohesion_media_lib_types' => ['image'],
+    ],
+    'content' => [
+      'type' => 'medialib_imagebrowser',
+      'dx8_entity_browser' => 'media_browser',
+      'cohesion_media_lib_types' => ['image'],
+    ],
+  ]);
+  $config->set('use_dx8', 'enable');
+  $config->save();
 }
 
 /**
