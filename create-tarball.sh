@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage run create-tarball.sh and enter the current version to generate a tarball.
+# Usage: run create-tarball.sh and enter the current version to generate a tarball.
 
 read -p "Enter the ACMS version (ex: 1.3.0): " VERSION
 ARCHIVE=acms-${VERSION}
