@@ -1,0 +1,23 @@
+name: Article Block
+description: 'An article block component that list recent articles'
+type: 'block'
+js:
+  'article_block.js' : {}
+css:
+  'article_block.css' : {}
+
+template: 'article_block.htm'
+# All component configuration is passed to the DOM
+# as data attributes on the wrapper around your component.
+form_configuration:
+  display_item:
+    type: select
+    title: 'Number of article to display'
+    options:
+    - '5'
+    - '10'
+    - '20'
+    - '30'
+    - '50'
+    - "All"
+    default_value: [0]
