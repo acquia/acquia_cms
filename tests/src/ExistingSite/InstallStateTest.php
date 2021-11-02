@@ -107,7 +107,7 @@ class InstallStateTest extends ExistingSiteBase {
     $this->assertSame('cee22bc3fe', $purgers[0]['instance_id']);
     $purge_logger_config = $this->config('purge.logger_channels');
     $channels = $purge_logger_config->get('channels');
-    $this->assertSame('purger_acquia_purge_cee22bc3fe', $channels[3]['id']);
+    $this->assertSame('purger_acquia_purge_cee22bc3fe', $channels[2]['id']);
 
     // Acquia CMS provides special configuration for the Entity Clone module in
     // order to allow users to explicitly clone the layout canvas field (which,
