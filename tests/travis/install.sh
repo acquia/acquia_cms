@@ -16,6 +16,7 @@ source ../../../orca/bin/travis/_includes.sh
 
 # If running our custom jobs or isolated test jobs, initialize the fixture.
 # Otherwise, use Orca's installation script.
+composer config extra.patches-ignore --json '{\"acquia/acquia_cms\": {\"drupal/core\": { \"Frontpage View Title for breadcrumb trail\": \"https://www.drupal.org/files/issues/2021-07-01/core_frontpage_views_title_patch.patch\" }}}' --working-dir=$ORCA_FIXTURE_DIR -vvv
 if [[ "$ACMS_JOB" == "base" ]] || [[ "$ACMS_JOB" == "starter" ]]; then
   orca debug:packages CURRENT_DEV
   orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=acquia_cms --no-sqlite --no-site-install
