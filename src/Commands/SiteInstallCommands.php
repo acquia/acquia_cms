@@ -36,8 +36,8 @@ class SiteInstallCommands extends DrushCommands {
     }
     // Send data to telemetry based upon certain conditions.
     if ($moduleHandler->moduleExists('acquia_telemetry') && Environment::isAhEnv()) {
-      if (function_exists('acquia_cms_send_heartbeat_event')) {
-        acquia_cms_send_heartbeat_event();
+      if (function_exists('install_acms_send_heartbeat_event')) {
+        install_acms_send_heartbeat_event();
       }
     }
     return is_array($result) && isset(array_shift($result)['error']) ? CommandResult::exitCode(self::EXIT_FAILURE) : CommandResult::exitCode(self::EXIT_SUCCESS);
