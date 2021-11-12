@@ -2,7 +2,12 @@ name: Article Block
 description: 'An article block component that list recent articles'
 type: 'block'
 js:
-  'article_block.js' : {}
+  #  External react libraries
+  //unpkg.com/react@16.7.0/umd/react.production.min.js: { type: external, minified: true, crossorigin: anonymous }
+  //unpkg.com/react-dom@16.7.0/umd/react-dom.production.min.js: { type: external, minified: true, crossorigin: anonymous }
+  //unpkg.com/create-react-class@15.6.0/create-react-class.min.js: { type: external, minified: true, crossorigin: anonymous }
+  //unpkg.com/babel-standalone@6/babel.min.js: { type: external, minified: true, crossorigin: anonymous }
+  'article_block.js' : {attributes: { type: 'text/babel' }}
 css:
   'article_block.css' : {}
 
