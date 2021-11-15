@@ -44,11 +44,15 @@ function acquia_cms_development_install() {
   // Acquia AND/OR we provide a free maps option.
   // @todo remove this once the above conditions are met.
   $gmaps_key = getenv('GMAPS_KEY');
-  if (isset($gmaps_key)) {
+  if (!empty($gmaps_key)) {
     Drupal::configFactory()
       ->getEditable('geocoder.geocoder_provider.googlemaps')
       ->set('configuration.apiKey', $gmaps_key)
       ->save();
+    Drupal::configFactory()
+      ->getEditable('cohesion.settings')
+      ->set('google_map_api_key', $gmaps_key)
+      ->save(TRUE);
   }
 }
 
