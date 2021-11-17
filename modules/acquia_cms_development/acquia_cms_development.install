@@ -45,11 +45,11 @@ function acquia_cms_development_install() {
   // @todo remove this once the above conditions are met.
   $gmaps_key = getenv('GMAPS_KEY');
   if (!empty($gmaps_key)) {
-    Drupal::configFactory()
+    \Drupal::configFactory()
       ->getEditable('geocoder.geocoder_provider.googlemaps')
       ->set('configuration.apiKey', $gmaps_key)
       ->save();
-    Drupal::configFactory()
+    \Drupal::configFactory()
       ->getEditable('cohesion.settings')
       ->set('google_map_api_key', $gmaps_key)
       ->save(TRUE);
