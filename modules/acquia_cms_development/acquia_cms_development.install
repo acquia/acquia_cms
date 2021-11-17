@@ -9,6 +9,8 @@ use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environm
 use Drupal\acquia_connector\Helper\Storage as ConnectorStorage;
 use Drupal\acquia_connector\Subscription;
 use Drupal\acquia_search\Helper\Storage as SolrStorage;
+use Drupal\cohesion\Form\GoogleMapApiKeyForm;
+use Drupal\Core\Form\FormState;
 
 /**
  * Implements hook_install().
@@ -49,10 +51,18 @@ function acquia_cms_development_install() {
       ->getEditable('geocoder.geocoder_provider.googlemaps')
       ->set('configuration.apiKey', $gmaps_key)
       ->save();
-    \Drupal::configFactory()
-      ->getEditable('cohesion.settings')
-      ->set('google_map_api_key', $gmaps_key)
-      ->save(TRUE);
+
+    // Programmatically submit Site Studio (cohesion) Google Map configuration
+    // form passing the Google Maps key because this will update the cohesion
+    // google-map element templates, updating the asset url with this Google Map
+    // key.So when user visit the content page of place content type, this won't
+    // show the modal popup error i.e The Google Map cannot be loaded.
+    // @see \Drupal\cohesion\Form\GoogleMapApiKeyForm
+    $form = \Drupal::formBuilder()->getForm('\Drupal\cohesion\Form\GoogleMapApiKeyForm');
+    $form_state = new FormState();
+    $values['google_map_api_key'] = $gmaps_key;
+    $form_state->setValues($values);
+    \Drupal::classResolver(GoogleMapApiKeyForm::class)->submitForm($form, $form_state);
   }
 }
 
