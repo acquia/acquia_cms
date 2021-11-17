@@ -5,7 +5,6 @@
  * Install, update and uninstall functions for the acquia_cms_image module.
  */
 
-use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Installer\InstallerKernel;
 
 /**
@@ -41,25 +40,135 @@ function acquia_cms_image_module_implements_alter(array &$implementations, strin
  * Update image style to use 'Focal point scale and crop' effect.
  */
 function acquia_cms_image_update_8001() {
-  $module_path = \Drupal::moduleHandler()->getModule('acquia_cms_image')->getPath();
-  $config_optional = $module_path . '/config/optional';
 
-  $source_optional_dir = new FileStorage($config_optional);
-  $config_storage = \Drupal::service('config.storage');
-  // Image styles name for updating Focal point scale and crop effect.
+  // Image styles for updating Focal point scale and crop effect.
   $image_styles = [
-    'image.style.coh_small_square',
-    'image.style.coh_large_landscape',
-    'image.style.coh_small_landscape',
-    'image.style.coh_medium_landscape',
-    'image.style.coh_x_large_landscape',
-    'image.style.coh_xx_small_landscape',
-    'image.style.coh_xx_large_landscape',
-    'image.style.coh_large_super_landscape',
-    'image.style.coh_medium_super_landscape',
-    'image.style.coh_x_large_super_landscape',
+    'image.style.coh_small_square' => [
+      '34322c52-b7f4-4755-bd49-62d4bb2b8e08' => [
+        'uuid' => '34322c52-b7f4-4755-bd49-62d4bb2b8e08',
+        'id' => 'focal_point_scale_and_crop',
+        'weight' => 1,
+        'data' => [
+          'width' => 568,
+          'height' => 568,
+          'crop_type' => 'focal_point',
+        ],
+      ],
+    ],
+    'image.style.coh_large_landscape' => [
+      '39fc4c54-ae2c-4de4-a02a-d06d882da247' => [
+        'uuid' => '39fc4c54-ae2c-4de4-a02a-d06d882da247',
+        'id' => 'focal_point_scale_and_crop',
+        'weight' => 1,
+        'data' => [
+          'width' => 1024,
+          'height' => 683,
+          'crop_type' => 'focal_point',
+        ],
+      ],
+    ],
+    'image.style.coh_small_landscape' => [
+      'd8e910fc-dc0e-4a7d-bc21-a3be9cb7a560' => [
+        'uuid' => 'd8e910fc-dc0e-4a7d-bc21-a3be9cb7a560',
+        'id' => 'focal_point_scale_and_crop',
+        'weight' => 1,
+        'data' => [
+          'width' => 568,
+          'height' => 352,
+          'crop_type' => 'focal_point',
+        ],
+      ],
+    ],
+    'image.style.coh_medium_landscape' => [
+      '87cf2dba-d703-4f1e-ab98-3f21eb92ecd2' => [
+        'uuid' => '87cf2dba-d703-4f1e-ab98-3f21eb92ecd2',
+        'id' => 'focal_point_scale_and_crop',
+        'weight' => 1,
+        'data' => [
+          'width' => 768,
+          'height' => 512,
+          'crop_type' => 'focal_point',
+        ],
+      ],
+    ],
+    'image.style.coh_x_large_landscape' => [
+      'ff9be98a-6552-4ae0-8687-8bf8e4dc61ef' => [
+        'uuid' => 'ff9be98a-6552-4ae0-8687-8bf8e4dc61ef',
+        'id' => 'focal_point_scale_and_crop',
+        'weight' => 1,
+        'data' => [
+          'width' => 1360,
+          'height' => 908,
+          'crop_type' => 'focal_point',
+        ],
+      ],
+    ],
+    'image.style.coh_xx_small_landscape' => [
+      '9846c8a0-70c1-4f9b-ae0a-53411f2a6c52' => [
+        'uuid' => '9846c8a0-70c1-4f9b-ae0a-53411f2a6c52',
+        'id' => 'focal_point_scale_and_crop',
+        'weight' => 1,
+        'data' => [
+          'width' => 160,
+          'height' => 120,
+          'crop_type' => 'focal_point',
+        ],
+      ],
+    ],
+    'image.style.coh_xx_large_landscape' => [
+      '4fc6f472-7800-4b98-a94d-0e29a3996610' => [
+        'uuid' => '4fc6f472-7800-4b98-a94d-0e29a3996610',
+        'id' => 'focal_point_scale_and_crop',
+        'weight' => 1,
+        'data' => [
+          'width' => 1600,
+          'height' => 1067,
+          'crop_type' => 'focal_point',
+        ],
+      ],
+    ],
+    'image.style.coh_large_super_landscape' => [
+      '8bbe9d4d-cd43-44e9-a209-457a4caaeee4' => [
+        'uuid' => '8bbe9d4d-cd43-44e9-a209-457a4caaeee4',
+        'id' => 'focal_point_scale_and_crop',
+        'weight' => 1,
+        'data' => [
+          'width' => 1024,
+          'height' => 480,
+          'crop_type' => 'focal_point',
+        ],
+      ],
+    ],
+    'image.style.coh_medium_super_landscape' => [
+      'a7be10be-726c-4b2a-8025-9a9b7dd85a00' => [
+        'uuid' => 'a7be10be-726c-4b2a-8025-9a9b7dd85a00',
+        'id' => 'focal_point_scale_and_crop',
+        'weight' => 1,
+        'data' => [
+          'width' => 768,
+          'height' => 360,
+          'crop_type' => 'focal_point',
+        ],
+      ],
+    ],
+    'image.style.coh_x_large_super_landscape' => [
+      'b2c98208-726a-44f9-99de-2624f33ac6bd' => [
+        'uuid' => 'b2c98208-726a-44f9-99de-2624f33ac6bd',
+        'id' => 'focal_point_scale_and_crop',
+        'weight' => 1,
+        'data' => [
+          'width' => 1360,
+          'height' => 640,
+          'crop_type' => 'focal_point',
+        ],
+      ],
+    ],
   ];
-  foreach ($image_styles as $image_style) {
-    $config_storage->write($image_style, $source_optional_dir->read($image_style));
+  $configFactory = \Drupal::service('config.factory');
+  foreach ($image_styles as $image_style => $effects) {
+    $config = $configFactory->getEditable($image_style);
+    $config->set('effects', $effects)->save();
+    // @ todo add dependencies
+    // ->set('dependencies', ['module' => 'focal_point'])
   }
 }
