@@ -5,17 +5,24 @@
       this.state = {
         data: [],
         loaded: false,
-        isToggleOn: true
+        node: {}
       };
       return {};
     },
-    handleClick(e) {
+    loadBody(e) {
       e.preventDefault();
-      this.setState(prevState => ({
-        isToggleOn: !prevState.isToggleOn
-      }));
-      console.log("Clicked");
+      let data = this.state.data;
+      for (let key in data) {
+        if (data[key].id == e.target.id) {
+          this.setState({node : data[key] });
+          break;
+        }
+      }
       return false;
+    },
+    clearBody(e) {
+      e.preventDefault();
+      this.setState({ node : {} });
     },
     componentDidMount() {
       const attributes = this.props.attributes;
@@ -31,7 +38,9 @@
       drupalApiOj.callApi((data) => _this.setState({ data: data.data, loaded: true }));
     },
     render() {
-      const { data, loaded } = this.state;
+      const { data, loaded, node } = this.state;
+      const nodeLoaded = (node && Object.keys(node).length > 0) ? true : false;
+      const nodeSummary = (node && Object.keys(node).length > 0 && node.attributes.body.summary) ? node.attributes.body.summary: "<i>No summary.</i>";
       if (!loaded) {
         return <div className="loader" />;
       }
@@ -40,13 +49,19 @@
       }
       return (
         <div>
-          <ul>
-            {data.map(article =>
-              <li>
-                <a href={article.attributes.path.alias} onClick={this.handleClick}>{article.attributes.title}</a>
-              </li>
-            )}
-          </ul>
+          { (!nodeLoaded) ? (
+            <ul className={(!nodeLoaded) ? 'toggleIn': 'toggleOut'}>
+              {data.map(article =>
+                <li>
+                  <a href={article.attributes.path.alias} onClick={this.loadBody}
+                     id={article.id}>{article.attributes.title}</a>
+                </li>
+              )}
+            </ul>): (<div className={(!nodeLoaded) ? 'toggleOut': 'toggleIn'}>
+            <a onClick={this.clearBody} href="#">Back</a>
+            <div class="node-summary" dangerouslySetInnerHTML={{__html: nodeSummary}} />
+          </div>)
+          }
         </div>
       );
     }
