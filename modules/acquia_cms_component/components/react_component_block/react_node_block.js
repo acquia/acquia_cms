@@ -52,9 +52,9 @@
           { (!nodeLoaded) ? (
             <ul className={(!nodeLoaded) ? 'toggleIn': 'toggleOut'}>
               {data.map(article =>
-                <li>
+                <li class=" article-list coh-style-card-text-light-background">
                   <a href={article.attributes.path.alias} onClick={this.loadBody}
-                     id={article.id}>{article.attributes.title}</a>
+                     id={article.id} class="coh-link card-link titles">{article.attributes.title}</a>
                 </li>
               )}
             </ul>): (<div className={(!nodeLoaded) ? 'toggleOut': 'toggleIn'}>
