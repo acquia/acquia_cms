@@ -5,8 +5,6 @@
  * Install, update and uninstall functions for the acquia_cms_event module.
  */
 
-use Drupal\Core\Config\FileStorage;
-
 /**
  * Implements hook_install().
  */
@@ -26,10 +24,10 @@ function acquia_cms_event_install() {
  * Update past events views display & its title.
  */
 function acquia_cms_event_update_8001() {
-  $module_path = \Drupal::moduleHandler()->getModule('acquia_cms_event')->getPath();
-  $config_optional = $module_path . '/config/optional';
-  $source_optional_dir = new FileStorage($config_optional);
-
-  $config_storage = \Drupal::service('config.storage');
-  $config_storage->write('views.view.event_cards', $source_optional_dir->read('views.view.event_cards'));
+  $configFactory = \Drupal::service('config.factory');
+  $config = $configFactory->getEditable('views.view.event_cards');
+  if (!empty($config)) {
+    $config->set('display.past_events_block.display_title', 'Past Events')
+      ->set('display.past_events_block.display_options.title', '')->save();
+  }
 }
