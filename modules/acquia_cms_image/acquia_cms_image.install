@@ -168,7 +168,10 @@ function acquia_cms_image_update_8001() {
   foreach ($image_styles as $image_style => $effects) {
     $config = $configFactory->getEditable($image_style);
     $config->set('effects', $effects)->save();
-    // @ todo add dependencies
-    // ->set('dependencies', ['module' => 'focal_point'])
+
+    // Flush updated image styles.
+    $imageStyle = \Drupal::entityTypeManager()->getStorage('image_style');
+    $image_style_name = explode(".", $image_style)[2];
+    $imageStyle->load($image_style_name)->flush();
   }
 }
