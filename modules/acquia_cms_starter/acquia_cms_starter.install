@@ -34,17 +34,6 @@ function acquia_cms_starter_requirements(string $phase) : array {
               'severity' => REQUIREMENT_WARNING,
             ];
           }
-          else {
-            // Otherwise, the install is via the UI and we should direct them
-            // to the tour dashboard.
-            $requirements['acquia_cms_starter_google_maps_api_key'] = [
-              'title' => t('Google Maps API Key is missing!'),
-              'description' => t('Acquia CMS Starter requires a Google Maps API key to be set. <a href="@url">Go here to set it.</a>', [
-                '@url' => '/admin/tour/dashboard',
-              ]),
-              'severity' => REQUIREMENT_ERROR,
-            ];
-          }
         }
       }
     }
@@ -70,4 +59,35 @@ function acquia_cms_starter_requirements(string $phase) : array {
 function acquia_cms_starter_install() {
   \Drupal::service('module_installer')->install(['webform']);
   \Drupal::service('module_installer')->install(['webform_ui']);
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function acquia_cms_starter_modules_installed(array $modules) {
+  // Moved the warning display for MAPS key from hook_requirements() above.
+  // The intention behind doing this was to display the warning message,
+  // on successful module installation.
+  // The warning message is ignored on UI installation in hook_requirements
+  // upon setting the severity level to REQUIRMENT_WARNING.
+  // Check issue here -  https://www.drupal.org/project/drupal/issues/2295051
+  $entity_type_manager = Drupal::entityTypeManager();
+  if ($entity_type_manager->hasDefinition('geocoder_provider')) {
+    /** @var \Drupal\geocoder\GeocoderProviderInterface $provider */
+    $provider = $entity_type_manager->getStorage('geocoder_provider')
+      ->load('googlemaps');
+
+    if ($provider) {
+      $configuration = $provider->get('configuration');
+      if (empty($configuration['apiKey'])) {
+        // Tweaked the message to be displayed on UI installation.
+        // The module will be installed with warning messages.
+        if (PHP_SAPI !== 'cli') {
+          \Drupal::messenger()->addWarning(t('The Google API key is not set, and you will see warnings below. They are technically harmless, but the maps will not work. You can set the key later <a href="@url">here</a> and resave your starter content to generate them.', [
+            '@url' => '/admin/tour/dashboard',
+          ]));
+        }
+      }
+    }
+  }
 }
