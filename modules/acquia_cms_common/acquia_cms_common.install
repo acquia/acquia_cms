@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Installer\InstallerKernel;
 
 /**
  * Add new text format 'Full HTML'.
@@ -36,5 +37,17 @@ function acquia_cms_common_update_8001() {
       $role->grantPermission('use text format full_html');
       $role->save();
     }
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function acquia_cms_common_module_implements_alter(&$implementations, $hook) {
+  // Prevent installation of site studio package on module install during
+  // site installation as we are already doing the same the end.
+  // This way we can improve installation time.
+  if ($hook == 'modules_installed' && InstallerKernel::installationAttempted()) {
+    unset($implementations['cohesion_sync']);
   }
 }
