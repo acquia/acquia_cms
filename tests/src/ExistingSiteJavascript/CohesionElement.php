@@ -4,6 +4,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 use Behat\Mink\Element\ElementInterface;
 use Behat\Mink\Element\NodeElement;
+use Behat\Mink\Session;
 use Drupal\Tests\acquia_cms\Traits\AwaitTrait;
 use PHPUnit\Framework\Assert;
 
@@ -11,6 +12,19 @@ use PHPUnit\Framework\Assert;
  * Base wrapper class for interacting with the Cohesion UI.
  */
 abstract class CohesionElement extends NodeElement {
+
+  /**
+   * @var \Behat\Mink\Session
+   */
+  protected $session;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct($xpath, Session $session) {
+    $this->session = $session;
+    parent::__construct($xpath, $session);
+  }
 
   use AwaitTrait {
     waitForElementVisible as traitWaitForElementVisible;
@@ -20,7 +34,7 @@ abstract class CohesionElement extends NodeElement {
    * {@inheritdoc}
    */
   protected function waitForElementVisible(string $selector, $locator, ElementInterface $container = NULL) : ElementInterface {
-    return $this->traitWaitForElementVisible($selector, $locator, $container ?: $this->getSession()->getPage());
+    return $this->traitWaitForElementVisible($selector, $locator, $container ?: $this->session->getPage());
   }
 
   /**
@@ -31,7 +45,7 @@ abstract class CohesionElement extends NodeElement {
    */
   protected function waitForElementBrowser() : ElementBrowser {
     $element = $this->waitForElementVisible('css', '.coh-element-browser-modal');
-    return new ElementBrowser($element->getXpath(), $this->getSession());
+    return new ElementBrowser($element->getXpath(), $this->session);
   }
 
   /**
@@ -47,7 +61,7 @@ abstract class CohesionElement extends NodeElement {
     $selector = sprintf('.coh-layout-canvas-list-item[data-type="%s"]', $label);
     $element = $this->waitForElementVisible('css', $selector, $this);
 
-    return new Component($element->getXpath(), $element->getSession());
+    return new Component($element->getXpath(), $this->session);
   }
 
   /**

@@ -37,7 +37,7 @@ printenv | grep ACMS_ | sort
 cd $ORCA_FIXTURE_DIR
 
 # Rebuild cohesion after install.
-if [[ "$ACMS_JOB" != "base" ]] && [[ "$ACMS_JOB" != "starter" ]] && [[ "$ORCA_JOB" != "LOOSE_DEPRECATED_CODE_SCAN" ]] && [[ "$ORCA_JOB" != "DEPRECATED_CODE_SCAN_W_CONTRIB" ]]; then
+if [[ "$ACMS_JOB" != "base" ]] && [[ "$ACMS_JOB" != "starter" ]] && [[ "$ORCA_JOB" != "LOOSE_DEPRECATED_CODE_SCAN" ]] && [[ "$ORCA_JOB" != "DEPRECATED_CODE_SCAN_W_CONTRIB" ]] && [[ "$ORCA_JOB" != "STRICT_DEPRECATED_CODE_SCAN" ]]; then
   drush cohesion:rebuild -y
 fi
 
