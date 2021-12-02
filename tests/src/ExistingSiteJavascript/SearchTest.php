@@ -293,7 +293,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    */
   protected function getSearch() : Search {
     $element = $this->waitForElementVisible('css', '.search-toggle-button', $this->getSession()->getPage());
-    return new Search($element->getXpath(), $element->getSession());
+    return new Search($element->getXpath(), $this->getSession());
   }
 
 }
