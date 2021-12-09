@@ -9,6 +9,8 @@ use Drupal\Core\Config\ImportStorageTransformer;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Diff\DiffFormatter;
+use Drupal\Core\Extension\ModuleExtensionList;
+use Drupal\Core\Extension\ProfileExtensionList;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
@@ -50,6 +52,20 @@ class AcquiaCmsConfigDiff implements ContainerInjectionInterface {
   protected $diffFormatter;
 
   /**
+   * The profile extension list object.
+   *
+   * @var \Drupal\Core\Extension\ProfileExtensionList
+   */
+  protected $profileExtensionList;
+
+  /**
+   * The module extension list object.
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  protected $moduleExtensionList;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -57,7 +73,9 @@ class AcquiaCmsConfigDiff implements ContainerInjectionInterface {
       $container->get('config.storage'),
       $container->get('config.manager'),
       $container->get('diff.formatter'),
-      $container->get('config.import_transformer')
+      $container->get('config.import_transformer'),
+      $container->get('extension.list.profile'),
+      $container->get('extension.list.module')
     );
   }
 
@@ -72,12 +90,18 @@ class AcquiaCmsConfigDiff implements ContainerInjectionInterface {
    *   The diff formatter.
    * @param \Drupal\Core\Config\ImportStorageTransformer $import_transformer
    *   The import transformer service.
+   * @param \Drupal\Core\Extension\ProfileExtensionList $profile_extension_list
+   *   The profile extension list object.
+   * @param \Drupal\Core\Extension\ModuleExtensionList $module_extension_list
+   *   The module extension list object.
    */
-  public function __construct(StorageInterface $target_storage, ConfigManagerInterface $config_manager, DiffFormatter $diff_formatter, ImportStorageTransformer $import_transformer) {
+  public function __construct(StorageInterface $target_storage, ConfigManagerInterface $config_manager, DiffFormatter $diff_formatter, ImportStorageTransformer $import_transformer, ProfileExtensionList $profile_extension_list, ModuleExtensionList $module_extension_list) {
     $this->targetStorage = $target_storage;
     $this->configManager = $config_manager;
     $this->diffFormatter = $diff_formatter;
     $this->importTransformer = $import_transformer;
+    $this->profileExtensionList = $profile_extension_list;
+    $this->moduleExtensionList = $module_extension_list;
   }
 
   /**
@@ -102,7 +126,13 @@ class AcquiaCmsConfigDiff implements ContainerInjectionInterface {
    */
   public function diff($name, $type, $storage, $source_name, $target_name = NULL) {
 
-    $module_path = \drupal_get_path($type, $name);
+    if ($type == "profile") {
+      $module_path = $this->profileExtensionList->getPath($name);
+    }
+    elseif ($type == "module") {
+      $module_path = $this->moduleExtensionList->getPath($name);
+    }
+
     $path = $module_path . '/config/' . $storage;
     $file = new FileStorage($path);
     $sync_storage = $this->importTransformer->transform($file);

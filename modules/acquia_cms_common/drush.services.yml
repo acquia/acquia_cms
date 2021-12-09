@@ -11,7 +11,7 @@ services:
       - { name: drush.command }
   acquia_cms_common.commands:
     class: 'Drupal\acquia_cms_common\Commands\AcmsCommands'
-    arguments: ['@module_handler','@logger.factory']
+    arguments: ['@module_handler','@logger.factory', '@keyvalue']
     tags:
       - { name: drush.command }
   acquia_cms_common.config_commands:
