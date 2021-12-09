@@ -1,0 +1,30 @@
+name: React Node Component Block
+description: 'A React block component that list the recent nodes.'
+type: 'block'
+js:
+  'react_node_block.js' : { attributes: { type: 'text/babel' } }
+css:
+  'react_node_block.css' : {}
+template: 'react-node-component.html'
+form_configuration:
+  type:
+    type: select
+    title: "Choose the Node type"
+    options:
+      'article': 'Article'
+      'page': 'Page'
+      'people': 'People'
+      'person': 'Person'
+    default_value: ['article']
+  display_item:
+    type: select
+    title: 'Number of items to display'
+    options:
+      5: 5
+      10: 10
+      20: 20
+      30: 30
+    default_value: [5]
+dependencies:
+  - component/react_library
+  - component/api_library
