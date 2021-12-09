@@ -9,7 +9,9 @@ use Drupal\acquia_cms_common\Facade\MetatagFacade;
 use Drupal\acquia_cms_common\Facade\SitemapFacade;
 use Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade;
 use Drupal\acquia_cms_common\Facade\WorkflowFacade;
+use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\imce\Imce;
 use Drupal\node\NodeTypeInterface;
@@ -235,5 +237,25 @@ function acquia_cms_common_mail_alter(&$message) {
     if ((!empty($message['from'])) && ($message['from'] === 'no-reply@example.com')) {
       $message['send'] = 'false';
     }
+  }
+}
+
+/**
+ * Implements hook_system_breadcrumb_alter().
+ *
+ * This fixes the issue: https://www.drupal.org/project/drupal/issues/3220437.
+ *
+ * @todo Remove below & tests (NodeBreadcrumbTest) code once we have the stable working
+ * patch for this issue.
+ */
+function acquia_cms_common_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
+  if ($route_match->getRouteName() == "node.add" || $route_match->getRouteName() == "entity.node.edit_form") {
+    foreach ($breadcrumb->getLinks() as &$link) {
+      if (!$link->getText() && $link->getUrl()->getRouteName() == "view.frontpage.page_1") {
+        $link->setText(t("Node"));
+        break;
+      }
+    }
+    $breadcrumb->addCacheTags(['config:views.view.frontpage']);
   }
 }
