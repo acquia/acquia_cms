@@ -141,8 +141,10 @@ function acquia_cms_common_ckeditor_css_alter(&$css, $editor) {
         $wysiwyg_cache_token = \Drupal::keyValue('cohesion.wysiwyg_cache_token');
         $wysiwyg_cache_buster = $wysiwyg_cache_token->get('cache_token') ? '?_t=' . $wysiwyg_cache_token->get('cache_token') : '';
         // Reset and ckeditor specific styles.
-        $css[] = drupal_get_path('module', 'cohesion') . '/css/reset.css' . $wysiwyg_cache_buster;
-        $css[] = drupal_get_path('module', 'cohesion') . '/css/plugin-styles.css' . $wysiwyg_cache_buster;
+        $cohesionModulePath = \Drupal::service('extension.list.module')->getPath('cohesion');
+        $streamWrapperManager = \Drupal::service('stream_wrapper_manager');
+        $css[] = $cohesionModulePath . '/css/reset.css' . $wysiwyg_cache_buster;
+        $css[] = $cohesionModulePath . '/css/plugin-styles.css' . $wysiwyg_cache_buster;
 
         $default_theme_id = \Drupal::service('theme_handler')->getDefault();
 
@@ -152,12 +154,16 @@ function acquia_cms_common_ckeditor_css_alter(&$css, $editor) {
           $css_theme_filename = \Drupal::service('cohesion.local_files_manager')
             ->getStyleSheetFilename('theme', $default_theme_id, TRUE);
           // Generated stylsheets.
-          $css[] = file_create_url($css_base_filename) . $wysiwyg_cache_buster;
-          $css[] = file_create_url($css_theme_filename) . $wysiwyg_cache_buster;
+          if ($streamWrapperManager->isValidUri($css_base_filename)) {
+            $css[] = $streamWrapperManager->getViaUri($css_base_filename)->getExternalUrl() . $wysiwyg_cache_buster;
+          }
+          if ($streamWrapperManager->isValidUri($css_theme_filename)) {
+            $css[] = $streamWrapperManager->getViaUri($css_theme_filename)->getExternalUrl() . $wysiwyg_cache_buster;
+          }
 
         }
         // Add the body reset stylesheet.
-        $css[] = drupal_get_path('module', 'cohesion') . '/css/cohesion-body-reset.css' . $wysiwyg_cache_buster;
+        $css[] = $cohesionModulePath . '/css/cohesion-body-reset.css' . $wysiwyg_cache_buster;
       }
     }
     catch (\Exception $e) {

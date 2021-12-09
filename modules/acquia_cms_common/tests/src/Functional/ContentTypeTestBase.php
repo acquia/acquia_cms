@@ -443,7 +443,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
 
     $field->setDefaultValue($media->id())->save();
 
-    return file_create_url($file->getFileUri());
+    return $file->createFileUrl(FALSE);
   }
 
   /**
