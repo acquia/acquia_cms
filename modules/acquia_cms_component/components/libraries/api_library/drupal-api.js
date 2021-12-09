@@ -68,10 +68,3 @@ DrupalApi.prototype = {
     });
   }
 };
-
-// let myApi = new DrupalApi();
-// myApi.setEndpoint("node/article");
-// myApi.setParams({ "sort": "created", "page": { "limit": 2, "offset": 5 }});
-// myApi.callApi(function(data) {
-//   console.log(data);
-// });
