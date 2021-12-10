@@ -7,6 +7,7 @@ use Consolidation\AnnotatedCommand\CommandError;
 use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\KeyValueStore\KeyValueFactory;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
@@ -35,16 +36,26 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
   protected $loggerFactory;
 
   /**
+   * The System schema object from KeyValue factory.
+   *
+   * @var \Drupal\Core\KeyValueStore\KeyValueFactory
+   */
+  protected $systemSchema;
+
+  /**
    * Constructs a ModuleHandlerInterface object.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerFactory
    *   The logger factory.
+   * @param \Drupal\Core\KeyValueStore\KeyValueFactory $key_value
+   *   The System schema object from KeyValue factory.
    */
-  public function __construct(ModuleHandlerInterface $module_handler, LoggerChannelFactoryInterface $loggerFactory) {
+  public function __construct(ModuleHandlerInterface $module_handler, LoggerChannelFactoryInterface $loggerFactory, KeyValueFactory $key_value) {
     $this->moduleHandler = $module_handler;
     $this->loggerFactory = $loggerFactory->get('acquia_cms_db_update');
+    $this->systemSchema = $key_value->get('system.schema');
   }
 
   /**
@@ -80,7 +91,7 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
       }
     }
     foreach ($modules as $module) {
-      $version = drupal_get_installed_schema_version($module);
+      $version = $this->systemSchema->get($module);
       $rows[] = [$module, $version];
     }
 
@@ -170,7 +181,7 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
    *   Set the current schema version to the given value.
    */
   public function setSchema(string $module_name, int $schema_version) {
-    drupal_set_installed_schema_version($module_name, $schema_version);
+    $this->systemSchema->set($module_name, $schema_version);
     $this->output()->writeln(dt("Schema version set to $schema_version. now executing updatedb"));
     $selfAlias = $this->siteAliasManager()->getSelf();
     $options = [
@@ -195,7 +206,7 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
       $messages[] = dt("Module [@module_name] is not installed.", ['@module_name' => $args['module_name']]);
     }
     if ($this->moduleHandler->moduleExists($args['module_name'])) {
-      $current_version = drupal_get_installed_schema_version($args['module_name']);
+      $current_version = $this->systemSchema->get($args['module_name']);
       // Do not allow schema version smaller than minimum required version
       // & bigger that currently installed version.
       if ($args['schema_version'] < $min_required_version || $args['schema_version'] > $current_version) {
