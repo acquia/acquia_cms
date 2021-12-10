@@ -257,7 +257,7 @@ function install_acms_additional_modules() {
  * Set the path to the logo file based on install directory.
  */
 function install_acms_set_logo() {
-  $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+  $acquia_cms_path = \Drupal::service('extension.list.profile')->getPath('acquia_cms');
 
   Drupal::configFactory()
     ->getEditable('system.theme.global')
@@ -273,7 +273,7 @@ function install_acms_set_logo() {
  * Set the path to the favicon file based on install directory.
  */
 function install_acms_set_favicon() {
-  $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+  $acquia_cms_path = \Drupal::service('extension.list.profile')->getPath('acquia_cms');
 
   Drupal::configFactory()
     ->getEditable('system.theme.global')
