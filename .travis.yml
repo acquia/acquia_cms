@@ -116,11 +116,6 @@ matrix:
     # running tests.
     - { name: "Isolated test on current dev Drupal core version - Full Install", if: type = cron, env: ACMS_JOB=base_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     - { name: "Starter - Full Install", if: NOT branch = main AND type = cron, env: ACMS_JOB=starter_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
-    # Acquia CMS is going to support both PHP 7.3 and PHP 7.4 until Acquia Cloud
-    # officially stop support for PHP 7.3.
-    # Run the following jobs on PHP 7.3 to make sure it works fine, during cron run.
-    - { php: "7.3", name: "[PHP 7.3] - Isolated test on current dev Drupal core version - Full Install", if: type = cron, env: ACMS_JOB=base_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV }
-    - { php: "7.3", name: "[PHP 7.3] - Starter - Full Install", if: NOT branch = main AND type = cron, env: ACMS_JOB=starter_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV }
     # Uncomment the following four lines to enable the corresponding tests once
     # the next major version of Drupal core has an alpha release or earlier.
     # Until then it's wasteful to use CI jobs on them, even if they exit early.
