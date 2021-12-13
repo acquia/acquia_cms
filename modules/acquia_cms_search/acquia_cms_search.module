@@ -6,6 +6,7 @@
  */
 
 use Drupal\acquia_cms_search\Facade\AcquiaSearchFacade;
+use Drupal\acquia_cms_search\Facade\FacetFacade;
 use Drupal\acquia_cms_search\Facade\SearchFacade;
 use Drupal\acquia_cms_search\Plugin\views\query\SearchApiQuery;
 use Drupal\acquia_search\Helper\Runtime;
@@ -160,4 +161,17 @@ function acquia_cms_search_search_api_server_update(EntityInterface $entity) {
  */
 function acquia_cms_search_form_acquia_cms_solr_search_form_alter(array &$form) {
   $form['#submit'][] = AcquiaSearchFacade::class . '::submitSettingsForm';
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function acquia_cms_search_modules_installed(array $modules) {
+  $acmsModules = ["acquia_cms_person", "acquia_cms_place",
+    "acquia_cms_article", "acquia_cms_event", "acquia_cms_page",
+  ];
+  if (array_intersect($acmsModules, $modules)) {
+    \Drupal::classResolver(FacetFacade::class)->addFacet('search_category', 'Category',
+    'category', 'field_categories', 'taxonomy_term_coder', 'search_api:views_page__search__search');
+  }
 }
