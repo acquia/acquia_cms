@@ -94,17 +94,17 @@ matrix:
     # To generate test coverage data to send somewhere other than Coveralls, use
     # the ORCA_COVERAGE_ENABLE variable instead.
     # - { env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT ORCA_COVERAGE_ENABLE=TRUE, name: "Isolated test on current Drupal core version with test coverage" }
-    - { env: ORCA_JOB=INTEGRATED_TEST_ON_CURRENT, if: type = cron, name: "Integrated test on current Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_CURRENT, name: "Integrated test on current Drupal core version" }
     - { env: ORCA_JOB=INTEGRATED_UPGRADE_TEST_TO_NEXT_MINOR, if: type = cron, name: "Integrated upgrade test to next minor Drupal core version" }
     - { env: ORCA_JOB=INTEGRATED_UPGRADE_TEST_TO_NEXT_MINOR_DEV, if: type = cron, name: "Integrated upgrade test to next minor dev Drupal core version" }
-    - { env: ORCA_JOB=INTEGRATED_TEST_ON_CURRENT_DEV, if: type = cron, name: "Integrated test on current dev Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_CURRENT_DEV, name: "Integrated test on current dev Drupal core version" }
     - { env: ORCA_JOB=LOOSE_DEPRECATED_CODE_SCAN, if: type = cron, name: "Loose deprecated code scan" }
     - { env: ORCA_JOB=STRICT_DEPRECATED_CODE_SCAN, if: type = cron, name: "Strict deprecated code scan" }
     - { env: ORCA_JOB=DEPRECATED_CODE_SCAN_W_CONTRIB, if: type = cron, name: "Deprecated code scan w/ contrib" }
     - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MINOR, if: type = cron, name: "Isolated test on next minor Drupal core version" }
     - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR, if: type = cron, name: "Integrated test on next minor Drupal core version" }
     - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MINOR_DEV, if: type = cron, name: "Isolated test on next minor dev Drupal core version" }
-    - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR_DEV, if: type = cron, name: "Integrated test on next minor dev Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR_DEV, name: "Integrated test on next minor dev Drupal core version" }
     # The following nine jobs are custom ACMS jobs based on the standard isolated
     # current dev test.
     # Exclude push group tests on this job to exclude low and medium risk tests.
@@ -112,7 +112,6 @@ matrix:
     - { name: "Starter", if: NOT branch = main, env: ACMS_JOB=starter ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     # Exclude pr group tests to exclude only low-risk tests during PR builds.
     - { name: "Isolated test on current dev Drupal core version - PR Tests", if: type = pull_request, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="pr" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
-    - { name: "Integrated test on current dev Drupal core version - PR Tests", if: type = pull_request, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="pr" ORCA_JOB=INTEGRATED_TEST_ON_CURRENT_DEV}
     # The following jobs run only during cron runs, and fully install the site before
     # running tests.
     - { name: "Isolated test on current dev Drupal core version - Full Install", if: type = cron, env: ACMS_JOB=base_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
