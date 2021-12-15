@@ -72,9 +72,10 @@ function update_site_studio_settings() {
   $config = \Drupal::service('config.factory')->getEditable('cohesion.settings');
   $config->set('image_browser', [
     'config' => [
-      'type' => 'medialib_imagebrowser',
+      'type' => 'imce_imagebrowser',
       'dx8_entity_browser' => 'media_browser',
       'cohesion_media_lib_types' => ['image'],
+      'dx8_imce_stream_wrapper' => 'public',
     ],
     'content' => [
       'type' => 'medialib_imagebrowser',
