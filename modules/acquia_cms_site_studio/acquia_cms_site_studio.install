@@ -93,13 +93,11 @@ function acquia_cms_site_studio_update_8001() {
   // as the media entity won't be included as Site Studio
   // does not export content entities as part of packages.
   $config = \Drupal::service('config.factory')->getEditable('cohesion.settings');
-  $config->set('image_browser', [
-    'config' => [
-      'type' => 'imce_imagebrowser',
-      'dx8_entity_browser' => 'media_browser',
-      'cohesion_media_lib_types' => ['image'],
-      'dx8_imce_stream_wrapper' => 'public',
-    ],
+  $config->set('image_browser.config', [
+    'type' => 'imce_imagebrowser',
+    'dx8_entity_browser' => 'media_browser',
+    'cohesion_media_lib_types' => ['image'],
+    'dx8_imce_stream_wrapper' => 'public',
   ]);
   $config->save();
 }
