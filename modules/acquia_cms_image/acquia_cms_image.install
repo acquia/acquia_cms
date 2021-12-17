@@ -5,8 +5,8 @@
  * Install, update and uninstall functions for the acquia_cms_image module.
  */
 
-use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Installer\InstallerKernel;
+use Drupal\image\Entity\ImageStyle;
 
 /**
  * Implements hook_install().
@@ -41,25 +41,40 @@ function acquia_cms_image_module_implements_alter(array &$implementations, strin
  * Update image style to use 'Focal point scale and crop' effect.
  */
 function acquia_cms_image_update_8001() {
-  $module_path = \Drupal::moduleHandler()->getModule('acquia_cms_image')->getPath();
-  $config_optional = $module_path . '/config/optional';
 
-  $source_optional_dir = new FileStorage($config_optional);
-  $config_storage = \Drupal::service('config.storage');
-  // Image styles name for updating Focal point scale and crop effect.
+  // Image styles for updating Focal point scale and crop effect.
   $image_styles = [
-    'image.style.coh_small_square',
-    'image.style.coh_large_landscape',
-    'image.style.coh_small_landscape',
-    'image.style.coh_medium_landscape',
-    'image.style.coh_x_large_landscape',
-    'image.style.coh_xx_small_landscape',
-    'image.style.coh_xx_large_landscape',
-    'image.style.coh_large_super_landscape',
-    'image.style.coh_medium_super_landscape',
-    'image.style.coh_x_large_super_landscape',
+    "coh_small_square" => [568, 568],
+    "coh_large_landscape" => [1024, 683],
+    "coh_small_landscape" => [568, 352],
+    "coh_medium_landscape" => [768, 512],
+    "coh_x_large_landscape" => [1360, 908],
+    "coh_xx_small_landscape" => [160, 120],
+    "coh_xx_large_landscape" => [1600, 1067],
+    "coh_large_super_landscape" => [1024, 480],
+    "coh_medium_super_landscape" => [768, 360],
+    "coh_x_large_super_landscape" => [1360, 640],
   ];
-  foreach ($image_styles as $image_style) {
-    $config_storage->write($image_style, $source_optional_dir->read($image_style));
+  foreach ($image_styles as $image_style => $size) {
+    $imageStyle = ImageStyle::load($image_style);
+    if ($imageStyle instanceof ImageStyle) {
+      list ($width, $height) = $size;
+      $imageStyle->addImageEffect([
+        'id' => 'focal_point_scale_and_crop',
+        'weight' => 1,
+        'data' => [
+          'width' => $width,
+          'height' => $height,
+          'crop_type' => 'focal_point',
+        ],
+      ]);
+      foreach ($imageStyle->getEffects() as $effect) {
+        if ($effect->getPluginId() == "image_scale_and_crop") {
+          $imageStyle->deleteImageEffect($effect);
+          break;
+        }
+      }
+      $imageStyle->save();
+    }
   }
 }

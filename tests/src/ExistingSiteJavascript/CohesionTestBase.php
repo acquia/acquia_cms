@@ -25,7 +25,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    */
   protected function getLayoutCanvas() : LayoutCanvas {
     $element = $this->waitForElementVisible('css', '.coh-layout-canvas', $this->getSession()->getPage());
-    return new LayoutCanvas($element->getXpath(), $element->getSession());
+    return new LayoutCanvas($element->getXpath(), $this->getSession());
   }
 
   /**
@@ -127,7 +127,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    */
   protected function getSearch() : Search {
     $element = $this->waitForElementVisible('css', '.search-toggle-button', $this->getSession()->getPage());
-    return new Search($element->getXpath(), $element->getSession());
+    return new Search($element->getXpath(), $this->getSession());
   }
 
   /**

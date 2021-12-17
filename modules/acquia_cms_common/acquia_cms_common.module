@@ -9,7 +9,9 @@ use Drupal\acquia_cms_common\Facade\MetatagFacade;
 use Drupal\acquia_cms_common\Facade\SitemapFacade;
 use Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade;
 use Drupal\acquia_cms_common\Facade\WorkflowFacade;
+use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\imce\Imce;
 use Drupal\node\NodeTypeInterface;
@@ -141,8 +143,10 @@ function acquia_cms_common_ckeditor_css_alter(&$css, $editor) {
         $wysiwyg_cache_token = \Drupal::keyValue('cohesion.wysiwyg_cache_token');
         $wysiwyg_cache_buster = $wysiwyg_cache_token->get('cache_token') ? '?_t=' . $wysiwyg_cache_token->get('cache_token') : '';
         // Reset and ckeditor specific styles.
-        $css[] = drupal_get_path('module', 'cohesion') . '/css/reset.css' . $wysiwyg_cache_buster;
-        $css[] = drupal_get_path('module', 'cohesion') . '/css/plugin-styles.css' . $wysiwyg_cache_buster;
+        $cohesionModulePath = \Drupal::service('extension.list.module')->getPath('cohesion');
+        $streamWrapperManager = \Drupal::service('stream_wrapper_manager');
+        $css[] = $cohesionModulePath . '/css/reset.css' . $wysiwyg_cache_buster;
+        $css[] = $cohesionModulePath . '/css/plugin-styles.css' . $wysiwyg_cache_buster;
 
         $default_theme_id = \Drupal::service('theme_handler')->getDefault();
 
@@ -152,12 +156,16 @@ function acquia_cms_common_ckeditor_css_alter(&$css, $editor) {
           $css_theme_filename = \Drupal::service('cohesion.local_files_manager')
             ->getStyleSheetFilename('theme', $default_theme_id, TRUE);
           // Generated stylsheets.
-          $css[] = file_create_url($css_base_filename) . $wysiwyg_cache_buster;
-          $css[] = file_create_url($css_theme_filename) . $wysiwyg_cache_buster;
+          if ($streamWrapperManager->isValidUri($css_base_filename)) {
+            $css[] = $streamWrapperManager->getViaUri($css_base_filename)->getExternalUrl() . $wysiwyg_cache_buster;
+          }
+          if ($streamWrapperManager->isValidUri($css_theme_filename)) {
+            $css[] = $streamWrapperManager->getViaUri($css_theme_filename)->getExternalUrl() . $wysiwyg_cache_buster;
+          }
 
         }
         // Add the body reset stylesheet.
-        $css[] = drupal_get_path('module', 'cohesion') . '/css/cohesion-body-reset.css' . $wysiwyg_cache_buster;
+        $css[] = $cohesionModulePath . '/css/cohesion-body-reset.css' . $wysiwyg_cache_buster;
       }
     }
     catch (\Exception $e) {
@@ -229,5 +237,25 @@ function acquia_cms_common_mail_alter(&$message) {
     if ((!empty($message['from'])) && ($message['from'] === 'no-reply@example.com')) {
       $message['send'] = 'false';
     }
+  }
+}
+
+/**
+ * Implements hook_system_breadcrumb_alter().
+ *
+ * This fixes the issue: https://www.drupal.org/project/drupal/issues/3220437.
+ *
+ * @todo Remove below & tests (NodeBreadcrumbTest) code once we have the stable working
+ * patch for this issue.
+ */
+function acquia_cms_common_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
+  if ($route_match->getRouteName() == "node.add" || $route_match->getRouteName() == "entity.node.edit_form") {
+    foreach ($breadcrumb->getLinks() as &$link) {
+      if (!$link->getText() && $link->getUrl()->getRouteName() == "view.frontpage.page_1") {
+        $link->setText(t("Node"));
+        break;
+      }
+    }
+    $breadcrumb->addCacheTags(['config:views.view.frontpage']);
   }
 }

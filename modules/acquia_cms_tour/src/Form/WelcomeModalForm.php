@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_tour\Form;
 
+use Drupal\Core\Extension\ProfileExtensionList;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\State\StateInterface;
@@ -27,13 +28,23 @@ class WelcomeModalForm extends FormBase {
   protected $state;
 
   /**
+   * The profile extension list object.
+   *
+   * @var \Drupal\Core\Extension\ProfileExtensionList
+   */
+  protected $profileExtensionList;
+
+  /**
    * The ModalFormExampleController constructor.
    *
    * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
+   * @param \Drupal\Core\State\ProfileExtensionList $profile_extension_list
+   *   The profile extension list object.
    */
-  public function __construct(StateInterface $state) {
+  public function __construct(StateInterface $state, ProfileExtensionList $profile_extension_list) {
     $this->state = $state;
+    $this->profileExtensionList = $profile_extension_list;
   }
 
   /**
@@ -46,7 +57,8 @@ class WelcomeModalForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('state')
+      $container->get('state'),
+      $container->get('extension.list.profile')
     );
   }
 
@@ -54,7 +66,7 @@ class WelcomeModalForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, $options = NULL) {
-    $acms_logo = drupal_get_path('profile', 'acquia_cms') . '/acquia_cms.png';
+    $acms_logo = $this->profileExtensionList->getPath('acquia_cms') . '/acquia_cms.png';
     $form['tour-dashboard'] = [
       '#type' => 'container',
       '#attributes' => [
