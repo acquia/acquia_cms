@@ -212,22 +212,6 @@ function acquia_cms_modules_uninstalled(array $modules) {
 }
 
 /**
- * Implements hook_module_implements_alter().
- */
-function acquia_cms_module_implements_alter(array &$implementations, string $hook) : void {
-  // @todo The below code needs to be updated once the memory limit issue is
-  // fixed by the site studio.
-  if ($hook === 'modules_installed') {
-    // Prevent cohesion_sync from reacting to module installation, for an
-    // excellent reason: it tries to import all of the new module's sync
-    // packages, at once, in the current request, which leads to memory errors.
-    // We replace it with a slightly smarter implementation that uses the batch
-    // system when installing a module via the UI.
-    unset($implementations['cohesion_sync']);
-  }
-}
-
-/**
  * Method that calls another method to capture the installation end time.
  */
 function install_acms_finished() {
@@ -273,7 +257,7 @@ function install_acms_additional_modules() {
  * Set the path to the logo file based on install directory.
  */
 function install_acms_set_logo() {
-  $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+  $acquia_cms_path = \Drupal::service('extension.list.profile')->getPath('acquia_cms');
 
   Drupal::configFactory()
     ->getEditable('system.theme.global')
@@ -289,7 +273,7 @@ function install_acms_set_logo() {
  * Set the path to the favicon file based on install directory.
  */
 function install_acms_set_favicon() {
-  $acquia_cms_path = drupal_get_path('profile', 'acquia_cms');
+  $acquia_cms_path = \Drupal::service('extension.list.profile')->getPath('acquia_cms');
 
   Drupal::configFactory()
     ->getEditable('system.theme.global')
