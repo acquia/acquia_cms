@@ -11,6 +11,7 @@ use Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade;
 use Drupal\acquia_cms_common\Facade\WorkflowFacade;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Installer\InstallerKernel;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\imce\Imce;
@@ -257,5 +258,17 @@ function acquia_cms_common_system_breadcrumb_alter(Breadcrumb &$breadcrumb, Rout
       }
     }
     $breadcrumb->addCacheTags(['config:views.view.frontpage']);
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function acquia_cms_common_module_implements_alter(&$implementations, $hook) {
+  // Prevent installation of site studio package on module install during
+  // site installation as we are already doing the same the end.
+  // This way we can improve installation time.
+  if ($hook == 'modules_installed' && InstallerKernel::installationAttempted()) {
+    unset($implementations['cohesion_sync']);
   }
 }
