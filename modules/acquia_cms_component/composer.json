@@ -1,0 +1,28 @@
+{
+    "name": "drupal/acquia_cms_component",
+    "type": "drupal-module",
+    "description": "Provides component and related configuration for Acquia CMS.",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "drupal/component": "1.0-rc3",
+        "drupal/jsonapi_extras": "^3"
+    },
+    "extra": {
+        "enable-patching": true,
+        "patches": {
+            "drupal/component": {
+                "Missing Use statement creates fatal errors": "https://git.drupalcode.org/project/component/-/merge_requests/2.patch"
+            }
+        }
+    },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    }
+}
