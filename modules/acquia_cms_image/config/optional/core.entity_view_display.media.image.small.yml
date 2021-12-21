@@ -6,12 +6,13 @@ dependencies:
     - field.field.media.image.field_categories
     - field.field.media.image.field_tags
     - field.field.media.image.image
+    - image.style.coh_small
     - media.type.image
+  module:
+    - image
   enforced:
     module:
       - acquia_cms_image
-  module:
-    - image
 id: media.image.small
 targetEntityType: media
 bundle: image
@@ -19,13 +20,13 @@ mode: small
 content:
   image:
     type: image
-    weight: 0
-    region: content
     label: hidden
     settings:
-      image_style: ''
       image_link: ''
+      image_style: coh_small
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   created: true
   field_categories: true

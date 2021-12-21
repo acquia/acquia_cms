@@ -5,6 +5,7 @@
  * Install, update and uninstall functions for the acquia_cms_image module.
  */
 
+use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\image\Entity\ImageStyle;
 
@@ -77,4 +78,21 @@ function acquia_cms_image_update_8001() {
       $imageStyle->save();
     }
   }
+}
+
+/**
+ * Update the Image styles on Manage display pages of Image media.
+ */
+function acquia_cms_image_update_8002() {
+  $module_path = \Drupal::service('extension.path.resolver')->getPath('module', 'acquia_cms_image');
+  $config_path = $module_path . '/config/optional';
+  $source = new FileStorage($config_path);
+  $config_storage = \Drupal::service('config.storage');
+  $config_storage->write('core.entity_view_display.media.image.embedded', $source->read('core.entity_view_display.media.image.embedded'));
+  $config_storage->write('core.entity_view_display.media.image.large', $source->read('core.entity_view_display.media.image.large'));
+  $config_storage->write('core.entity_view_display.media.image.large_landscape', $source->read('core.entity_view_display.media.image.large_landscape'));
+  $config_storage->write('core.entity_view_display.media.image.medium', $source->read('core.entity_view_display.media.image.medium'));
+  $config_storage->write('core.entity_view_display.media.image.medium_landscape', $source->read('core.entity_view_display.media.image.medium_landscape'));
+  $config_storage->write('core.entity_view_display.media.image.small', $source->read('core.entity_view_display.media.image.small'));
+  $config_storage->write('core.entity_view_display.media.image.small_landscape', $source->read('core.entity_view_display.media.image.small_landscape'));
 }
