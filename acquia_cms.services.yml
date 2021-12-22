@@ -4,3 +4,9 @@ services:
     arguments: ['@config.factory', '@cache.config', '@request_stack']
     tags:
       - { name: 'event_subscriber' }
+
+  acquia_cms.theme.negotiator:
+    class: Drupal\acquia_cms\Theme\ThemeNegotiator
+    arguments: ['@state']
+    tags:
+      - { name: theme_negotiator, priority: -50 }
