@@ -30,8 +30,7 @@
       drupalApiOj.setEndpoint("node/" + attributes['data-type']);
       if (attributes.hasOwnProperty('data-display-item')) {
         params['page'] = {
-          "limit": attributes['data-display-item'],
-          "offset": "5"
+          "limit": attributes['data-display-item']
         };
       }
       drupalApiOj.setParams(params);
