@@ -3,7 +3,6 @@
 namespace Drupal\acquia_cms\Theme;
 
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\State\State;
 use Drupal\Core\Theme\ThemeNegotiatorInterface;
 
 /**
@@ -12,27 +11,10 @@ use Drupal\Core\Theme\ThemeNegotiatorInterface;
 class ThemeNegotiator implements ThemeNegotiatorInterface {
 
   /**
-   * The system theme config object.
-   *
-   * @var \Drupal\Core\State\State
-   */
-  protected $state;
-
-  /**
-   * Constructs a DefaultNegotiator object.
-   *
-   * @param \Drupal\Core\State\State $state
-   *   The object State.
-   */
-  public function __construct(State $state) {
-    $this->state = $state;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function applies(RouteMatchInterface $route_match) {
-    if ($route_match->getRouteName() == "system.db_update" || $this->state->get('system.maintenance_mode')) {
+    if ($route_match->getRouteName() == "system.db_update") {
       return TRUE;
     }
   }
