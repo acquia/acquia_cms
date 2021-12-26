@@ -167,11 +167,25 @@ function acquia_cms_search_form_acquia_cms_solr_search_form_alter(array &$form) 
  * Implements hook_modules_installed().
  */
 function acquia_cms_search_modules_installed(array $modules) {
-  $acmsModules = ["acquia_cms_person", "acquia_cms_place",
+  acquia_cms_search_add_category_facet($modules);
+}
+
+/**
+ * Adds search_category facet, if any acms search dependent module is installed.
+ *
+ * @param array $modules
+ *   An array of installed modules.
+ */
+function acquia_cms_search_add_category_facet(array $modules) {
+  $acquiaCmsSearchModules = ["acquia_cms_person", "acquia_cms_place",
     "acquia_cms_article", "acquia_cms_event", "acquia_cms_page",
   ];
-  if (array_intersect($acmsModules, $modules)) {
-    \Drupal::classResolver(FacetFacade::class)->addFacet('search_category', 'Category',
-    'category', 'field_categories', 'taxonomy_term_coder', 'search_api:views_page__search__search');
+  if (array_intersect($acquiaCmsSearchModules, $modules)) {
+    \Drupal::classResolver(FacetFacade::class)->addFacet([
+      'id' => 'search_category',
+      'name' => 'Category',
+      'url_alias' => 'category',
+      'field_identifier' => 'field_categories',
+    ]);
   }
 }
