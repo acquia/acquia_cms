@@ -3,18 +3,14 @@
 namespace Drupal\acquia_cms_search\Facade;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\facets\Entity\Facet;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\facets\FacetInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a facade for integrating with Search API.
- *
- * @internal
- *   This is a totally internal part of Acquia CMS and may be changed in any
- *   way, or removed outright, at any time without warning. External code should
- *   not use this class!
+ * Provides an ACMS facet facade for integrating with Search API.
  */
 final class FacetFacade implements ContainerInjectionInterface {
 
@@ -26,13 +22,33 @@ final class FacetFacade implements ContainerInjectionInterface {
   protected $moduleHandler;
 
   /**
+   * The facets_facet entity object.
+   *
+   * @var \Drupal\facets\Entity\Facet
+   */
+  protected $facetEntity;
+
+  /**
+   * The logger channel interface object.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
    * Constructs a ModuleHandlerInterface object.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   An entity_type_manager service object.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The logger channel service object.
    */
-  public function __construct(ModuleHandlerInterface $module_handler) {
+  public function __construct(ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager, LoggerChannelInterface $logger) {
     $this->moduleHandler = $module_handler;
+    $this->facetEntity = $entity_type_manager->getStorage('facets_facet');
+    $this->logger = $logger;
   }
 
   /**
@@ -40,125 +56,119 @@ final class FacetFacade implements ContainerInjectionInterface {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('entity_type.manager'),
+      $container->get('logger.factory')->get('acquia_cms_search')
     );
   }
 
   /**
-   * Creates a new facet if not created already.
+   * An array of default values to create facet entity.
    *
-   * @param string $facet_id
-   *   Facet ID.
-   * @param string $facet_name
-   *   Facet Name.
-   * @param string $url_alias
-   *   URL Alias of the Facet.
-   * @param string $field_identifier
-   *   Field identifier fo the facet.
-   * @param string $coder
-   *   Coder for the facet field.
-   * @param string $facet_source_id
-   *   Source ID of the Facet.
+   * @return array
+   *   Returns an array of facet config values.
    */
-  public function addFacet(string $facet_id,
-  string $facet_name,
-  string $url_alias,
-  string $field_identifier,
-  string $coder,
-  string $facet_source_id) {
-
-    // Load the category facet if it exists.
-    $facet = Facet::load($facet_id);
-    // Create a new facet if the category facet doesn't exists.
-    if (empty($facet)) {
-      // Programmatically creating the facet.
-      $facet = Facet::create([
-        'id' => $facet_id,
-        'name' => $facet_name,
-        'url_alias' => $url_alias,
-        'field_identifier' => $field_identifier,
-      ]
-      );
-      // Set category widget & related settings.
-      $facet->setWidget('links', [
-        'show_numbers' => TRUE,
-        'soft_limit' => 0,
-        'soft_limit_settings' => [
-          'show_less_label' => 'Show less',
-          'show_more_label' => 'Show more',
+  public function defaultValues() {
+    $defaultValues = [
+      'facet_source_id' => 'search_api:views_page__search__search',
+      'empty_behavior' => ['behavior' => 'none'],
+      'query_operator' => 'or',
+      'use_hierarchy' => FALSE,
+      'keep_hierarchy_parents_active' => FALSE,
+      'expand_hierarchy' => FALSE,
+      'show_title' => FALSE,
+      'enable_parent_when_child_gets_disabled' => TRUE,
+      'hard_limit' => 0,
+      'exclude' => FALSE,
+      'only_visible_when_facet_source_is_visible' => TRUE,
+      'weight' => 0,
+      'widget' => [
+        'type' => 'links',
+        'config' => [
+          'show_numbers' => TRUE,
+          'soft_limit' => 0,
+          'soft_limit_settings' => [
+            'show_less_label' => 'Show less',
+            'show_more_label' => 'Show more',
+          ],
+          'show_reset_links' => 'false',
+          'reset_text' => 'Show all',
+          'hide_reset_when_no_selection' => 0,
         ],
-        'show_reset_links' => 'false',
-        'reset_text' => 'Show all',
-        'hide_reset_when_no_selection' => 0,
-      ]);
-      $facet->setWeight(0);
-
-      // Set default empty behaviour & other settings.
-      $facet->setEmptyBehavior(['behavior' => 'none']);
-      if ($this->moduleHandler->moduleExists('facets_pretty_paths')) {
-        $facet->setThirdPartySetting('facets_pretty_paths', 'coder', $coder);
-      }
-      $facet->setOnlyVisibleWhenFacetSourceIsVisible(TRUE);
-      $facet->setQueryOperator('or');
-      $facet->setHardLimit(0);
-      if (empty($facet->getFacetSourceId())) {
-        $facet->setFacetSourceId($facet_source_id);
-      }
-
-      // Add Facet processors.
-      $this->addFacetProcessor(
-        $facet,
-       'count_widget_order',
-        ['sort' => 30],
-        ['sort' => 'DESC']
-      );
-      $this->addFacetProcessor(
-        $facet,
-        'display_value_widget_order',
-        ['sort' => 40],
-        ['sort' => 'ASC']
-      );
-      $this->addFacetProcessor(
-        $facet,
-        'active_widget_order',
-        ['sort' => 20],
-        ['sort' => 'DESC']
-      );
-      $this->addFacetProcessor(
-        $facet,
-        'url_processor_handler',
-        ['pre_query' => 50, 'build' => 15],
-        []
-      );
-      $this->addFacetProcessor(
-        $facet,
-        'translate_entity',
-        ['build' => 5],
-        []
-      );
-
-      $facet->save();
+      ],
+      'processor_configs' => [
+        'count_widget_order' => [
+          'processor_id' => 'count_widget_order',
+          'weights' => ['sort' => 30],
+          'settings' => ['sort' => 'DESC'],
+        ],
+        'display_value_widget_order' => [
+          'processor_id' => 'display_value_widget_order',
+          'weights' => ['sort' => 40],
+          'settings' => ['sort' => 'ASC'],
+        ],
+        'active_widget_order' => [
+          'processor_id' => 'active_widget_order',
+          'weights' => ['sort' => 20],
+          'settings' => ['sort' => 'DESC'],
+        ],
+        'url_processor_handler' => [
+          'processor_id' => 'url_processor_handler',
+          'weights' => ['pre_query' => 50, 'build' => 15],
+          'settings' => [],
+        ],
+        'translate_entity' => [
+          'processor_id' => 'translate_entity',
+          'weights' => ['build' => 5],
+          'settings' => [],
+        ],
+      ],
+    ];
+    if ($this->moduleHandler->moduleExists('facets_pretty_paths')) {
+      $defaultValues['third_party_settings'] = [
+        'facets_pretty_paths' => ['coder' => 'taxonomy_term_coder'],
+      ];
     }
+    return $defaultValues;
   }
 
   /**
-   * Function that adds the processor to the facet.
+   * Merges passed values & default values.
    *
-   * @param \Drupal\facets\Entity\FacetInterface $facet
-   *   Facet Object that helps add processors.
-   * @param string $processor_id
-   *   Processor Name or ID for identification.
-   * @param array $weights
-   *   Weight setting array.
-   * @param array $settings
-   *   Facet Processor Settings.
+   * @param array $values
+   *   An array of values to create facet entity.
+   *
+   * @return array
+   *   Returns an array of values.
    */
-  private function addFacetProcessor(FacetInterface $facet, string $processor_id, array $weights, array $settings) {
-    $facet->addProcessor([
-      'processor_id' => $processor_id,
-      'weights' => $weights,
-      'settings' => $settings,
-    ]);
+  public function mergeValues(array $values) {
+    return $values + $this->defaultValues();
+  }
+
+  /**
+   * Create a facet entity object (if not exist).
+   *
+   * @param array $values
+   *   An array of values to create facet.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function addFacet(array $values) {
+    if (!isset($values['id'])) {
+      $this->logger->error('Facet id `@facet` not defined.', [
+        '@facet' => $values['id'],
+      ]);
+      return;
+    }
+    // Load the facet (if it exists).
+    $facet = $this->facetEntity->load($values['id']);
+
+    if ($facet instanceof FacetInterface) {
+      return;
+    }
+    $values = $this->mergeValues($values);
+    $this->facetEntity->create($values)->save();
+    $this->logger->info('Created new facet with id: `@id`.', ['@id' => $values['id']]);
   }
 
 }
