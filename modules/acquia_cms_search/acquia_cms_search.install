@@ -15,4 +15,7 @@ function acquia_cms_search_install() {
   // this module was installed.
   $node_types = NodeType::loadMultiple();
   array_walk($node_types, 'acquia_cms_search_node_type_insert');
+  $enabled_modules = \Drupal::service('module_handler')->getModuleList();
+  $enabled_modules = array_keys($enabled_modules);
+  acquia_cms_search_add_category_facet($enabled_modules);
 }
