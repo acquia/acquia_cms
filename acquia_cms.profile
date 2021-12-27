@@ -56,7 +56,7 @@ function acquia_cms_print_icon() {
   $profile_path = \Drupal::service('extension.path.resolver')->getPath('profile', 'acquia_cms');
   $icon_path = DRUPAL_ROOT . '/' . $profile_path . '/acquia_cms.icon.ascii';
   // For local development, we've created symlink. So, get symlink file path.
-  $icon_path = !is_link($icon_path) ?: readlink($icon_path);
+  $icon_path = !is_link($icon_path) ? $icon_path : readlink($icon_path);
   if (file_exists($icon_path)) {
     $output->writeln('<info>' . file_get_contents($icon_path) . '</info>');
   }
