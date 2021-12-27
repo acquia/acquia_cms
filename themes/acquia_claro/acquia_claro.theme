@@ -22,7 +22,7 @@ function acquia_claro_preprocess_install_page(array &$variables) {
   $variables['drupal_core_version'] = \Drupal::VERSION;
   $variables['#attached']['library'][] = 'seven/install-page';
   $variables['#attached']['library'][] = 'acquia_claro/install-page';
-  $acquia_cms_path = \Drupal::service('extension.path.resolver')->getPath('profile', 'acquia_cms');
+  $acquia_cms_path = \Drupal::service('extension.list.profile')->getPath('acquia_cms');
   $variables['install_page_logo_path'] = '/' . $acquia_cms_path . '/acquia_cms.png';
 }
 
@@ -41,8 +41,7 @@ function acquia_claro_preprocess_maintenance_page(array &$variables) {
   $variables['#attached']['library'][] = 'seven/install-page';
   $variables['#attached']['library'][] = 'acquia_claro/install-page';
   $acquia_cms_path = \Drupal::service('extension.list.profile')->getPath('acquia_cms');
-  $absolutePath = \Drupal::service('file_url_generator')->generateAbsoluteString($acquia_cms_path);
-  $variables['install_page_logo_path'] = $absolutePath . '/acquia_cms.png';
+  $variables['install_page_logo_path'] = '/' . $acquia_cms_path . '/acquia_cms.png';
 }
 
 /**
