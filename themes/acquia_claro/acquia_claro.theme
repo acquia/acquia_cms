@@ -23,7 +23,7 @@ function acquia_claro_preprocess_install_page(array &$variables) {
   $variables['#attached']['library'][] = 'seven/install-page';
   $variables['#attached']['library'][] = 'acquia_claro/install-page';
   $acquia_cms_path = \Drupal::service('extension.path.resolver')->getPath('profile', 'acquia_cms');
-  $variables['install_page_logo_path'] = \Drupal::service('file_url_generator')->generateAbsoluteString($acquia_cms_path . '/acquia_cms.png');
+  $variables['install_page_logo_path'] = '/' . $acquia_cms_path . '/acquia_cms.png';
 }
 
 /**
