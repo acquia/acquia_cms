@@ -330,3 +330,21 @@ function acquia_cms_update_8001() {
   $config->set('enable_export_filtering', TRUE);
   $config->save(TRUE);
 }
+
+/**
+ * Prepares variables for maintenance page templates.
+ *
+ * Default template: maintenance-page.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - content - An array of page content.
+ *
+ * @see template_preprocess_maintenance_page()
+ */
+function cohesion_theme_preprocess_maintenance_page(array &$variables) {
+  $variables['#attached']['library'][] = 'seven/install-page';
+  $variables['#attached']['library'][] = 'acquia_claro/install-page';
+  $acquia_cms_path = \Drupal::service('extension.list.profile')->getPath('acquia_cms');
+  $variables['install_page_logo_path'] = '/' . $acquia_cms_path . '/acquia_cms.png';
+}
