@@ -78,3 +78,38 @@ function acquia_cms_image_update_8001() {
     }
   }
 }
+
+/**
+ * Update the Image styles on Manage display pages of Image media.
+ */
+function acquia_cms_image_update_8002() {
+  $configFactory = \Drupal::service('config.factory');
+  $viewModes = [
+    'core.entity_view_display.media.image.embedded' => '',
+    'core.entity_view_display.media.image.large' => 'coh_large',
+    'core.entity_view_display.media.image.large_landscape' => 'coh_large_super_landscape',
+    'core.entity_view_display.media.image.medium' => 'coh_medium',
+    'core.entity_view_display.media.image.medium_landscape' => 'coh_medium_landscape',
+    'core.entity_view_display.media.image.small' => 'coh_small',
+    'core.entity_view_display.media.image.small_landscape' => 'coh_small_landscape',
+  ];
+  foreach ($viewModes as $mode => $style) {
+    $config = $configFactory->getEditable($mode);
+    $content = [
+      'image' => [
+        'type' => 'image',
+        'weight' => 0,
+        'region' => 'content',
+        'label' => 'hidden',
+        'settings' => [
+          'image_style' => $style,
+          'image_link' => '',
+        ],
+        'third_party_settings' => [],
+      ],
+    ];
+    if (!empty($config)) {
+      $config->set('content', $content)->save();
+    }
+  }
+}
