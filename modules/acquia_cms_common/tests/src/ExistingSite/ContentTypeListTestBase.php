@@ -265,7 +265,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
       // Removing a facet should widen the results.
       $page->clickLink('Art (1)');
       $assert_session->addressMatches('/.\/type\/type-o-.*/');
-      $this->assertLinksExistInOrder(['Foxtrot', 'Charlie']);
+      $this->assertLinksExistInOrder(['Foxtrot']);
       $assert_session->linkNotExists('Alpha');
       $assert_session->linkNotExists('Beta');
       $assert_session->linkNotExists('Delta');
