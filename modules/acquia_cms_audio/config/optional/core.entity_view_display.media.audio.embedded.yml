@@ -3,13 +3,15 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.embedded
+    - field.field.media.audio.field_categories
     - field.field.media.audio.field_media_soundcloud
+    - field.field.media.audio.field_tags
     - media.type.audio
+  module:
+    - media_entity_soundcloud
   enforced:
     module:
       - acquia_cms_audio
-  module:
-    - media_entity_soundcloud
 id: media.audio.embedded
 targetEntityType: media
 bundle: audio
@@ -28,6 +30,8 @@ content:
     region: content
 hidden:
   created: true
+  field_categories: true
+  field_tags: true
   langcode: true
   name: true
   search_api_excerpt: true
