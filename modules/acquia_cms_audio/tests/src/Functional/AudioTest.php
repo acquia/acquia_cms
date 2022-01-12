@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_audio\Functional;
 
+use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
 
 /**
@@ -60,11 +61,17 @@ class AudioTest extends MediaTypeTestBase {
     // Assert that the expected fields show up.
     $assert_session->fieldExists('Name');
     $assert_session->fieldExists('Soundcloud audio URL');
+    $assert_session->fieldExists('Categories');
+    $assert_session->fieldExists('Tags');
+    // The standard Categories and Tags fields should be present.
+    $this->assertCategoriesAndTagsFieldsExist();
 
     // Assert that the fields are in the correct order.
     $this->assertFieldsOrder([
       'name',
       'field_media_soundcloud',
+      'field_categories',
+      'field_tags',
     ]);
 
     // Submit the form and ensure that we see the expected error message(s).
@@ -74,8 +81,20 @@ class AudioTest extends MediaTypeTestBase {
     // Fill in the required fields and assert that things went as expected.
     $page->fillField('Name', 'Decoupled Drupal Podcast with Third & Grove and Acquia');
     $page->fillField('Soundcloud audio URL', 'https://soundcloud.com/user-64782202/decoupled-drupal-podcast-with-third-grove-and-acquia?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing');
+    // For convenience, the parent class creates a few categories during set-up.
+    // @see \Drupal\Tests\acquia_cms_common\Functional\ContentModelTestBase::setUp()
+    $page->selectFieldOption('Categories', 'Music');
+    $page->fillField('Tags', 'techno');
     $page->pressButton('Save');
     $assert_session->pageTextContains('Audio Decoupled Drupal Podcast with Third & Grove and Acquia has been created.');
+
+    // Assert that the techno tag was created dynamically in the correct
+    // vocabulary.
+    /** @var \Drupal\taxonomy\TermInterface $tag */
+    $tag = Term::load(4);
+    $this->assertInstanceOf(Term::class, $tag);
+    $this->assertSame('tags', $tag->bundle());
+    $this->assertSame('techno', $tag->getName());
 
     // Media items are not normally exposed at standalone URLs, so assert that
     // the URL alias field does not show up.
