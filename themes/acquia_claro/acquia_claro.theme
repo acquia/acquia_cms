@@ -34,3 +34,10 @@ function acquia_claro_preprocess_image_widget(array &$variables) {
     $variables['data']['preview']['#access'] = $variables['element']['preview']['#access'];
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function acquia_claro_preprocess_status_report_general_info(&$variables) {
+  $variables['acquia_cms']['value'] = drupal_install_profile_distribution_version();
+}
