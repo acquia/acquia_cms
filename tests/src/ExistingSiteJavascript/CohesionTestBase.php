@@ -14,7 +14,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
 
   use AwaitTrait;
   use MediaTestTrait {
-    createMedia as traitCreateMedia;
+    MediaTestTrait::createMedia as traitCreateMedia;
   }
 
   /**
@@ -24,7 +24,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    *   A wrapper object for interacting with the layout canvas.
    */
   protected function getLayoutCanvas() : LayoutCanvas {
-    $element = $this->waitForElementVisible('css', '.coh-layout-canvas', $this->getSession()->getPage());
+    $element = $this->waitForElementVisible('css', '.ssa-layout-canvas', $this->getSession()->getPage());
     return new LayoutCanvas($element->getXpath(), $this->getSession());
   }
 
