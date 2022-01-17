@@ -35,13 +35,29 @@ final class Component extends CohesionElement {
    */
   public function edit() : ElementInterface {
     $this->pressAriaButton('More actions');
-    $this->waitForElementVisible('css', '.coh-layout-canvas-utils-dropdown-menu .coh-edit-btn')->press();
+    $this->waitForElementVisible('css', '.ssa-dropdown-menu .ssa-dropdown-item')->press();
+
+    $this->getIframeElements();
 
     // Wait for the form wrapper to appear...
     $form = $this->waitForElementVisible('css', '.coh-layout-canvas-settings');
     // ...then wait the form wrapper to load the actual settings form.
     $this->waitForElementVisible('css', 'coh-component-form', $form);
     return $form;
+  }
+
+  /**
+   * In site studio 6.8 onwards component edit page open in iframe.
+   */
+  public function getIframeElements() {
+    $selector = 'iframe[title="Edit component"]';
+    $frame = $this->waitForElementVisible('css', $selector, $this->session->getPage());
+    $name = $frame->getAttribute('name');
+    if (empty($name)) {
+      $name = 'edit_component_iframe';
+      $this->session->executeScript("document.querySelector('$selector').setAttribute('name', '$name')");
+    }
+    $this->session->switchToIFrame($name);
   }
 
 }

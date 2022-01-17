@@ -58,7 +58,7 @@ abstract class CohesionElement extends NodeElement {
    *   The expected component.
    */
   public function assertComponent(string $label) : Component {
-    $selector = sprintf('.ssa-layout-canvas-list-item-type-component[data-type="%s"]', $label);
+    $selector = sprintf('.ssa-layout-canvas-list-item-type-component[data-title="%s"]', $label);
     $element = $this->waitForElementVisible('css', $selector, $this);
 
     return new Component($element->getXpath(), $this->session);
