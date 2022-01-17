@@ -17,9 +17,9 @@ final class ElementBrowser extends CohesionElement {
    *   The called object, for chaining.
    */
   public function select(string $label) : self {
-    $selector = sprintf('.coh-layout-canvas-list-item[data-title="%s"]', $label);
+    $selector = sprintf('#ssa-sidebar-browser .components[data-ssa-name="%s"]', $label);
     $item = $this->waitForElementVisible('css', $selector, $this);
-    $this->pressAriaButton('add to canvas', $item);
+    $this->pressAriaButton('Add to canvas', $item);
     return $this;
   }
 
@@ -27,7 +27,7 @@ final class ElementBrowser extends CohesionElement {
    * Closes the element browser.
    */
   public function close() : void {
-    $this->pressAriaButton('Close sidebar browser');
+    $this->pressAriaButton('Close');
   }
 
   /**

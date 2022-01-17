@@ -19,9 +19,10 @@ final class Component extends CohesionElement {
    *   The component that was added to the dropzone.
    */
   public function drop(string $label) : self {
-    $dropzone = $this->waitForElementVisible('css', '.coh-layout-canvas-list-dropzone', $this);
+    $dropzone = $this->waitForElementVisible('css', '.ssa-layout-canvas-list-item-type-container', $this);
     $dropzone->mouseOver();
-    $this->waitForElementVisible('css', '.coh-add-btn', $dropzone)->press();
+    $this->waitForElementVisible('css', '.ssa-btn-canvas-node', $dropzone);
+    $this->pressAriaButton('Insert here');
     $this->waitForElementBrowser()->select($label)->close();
     return $this->assertComponent($label);
   }
