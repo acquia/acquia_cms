@@ -17,9 +17,13 @@ final class ElementBrowser extends CohesionElement {
    *   The called object, for chaining.
    */
   public function select(string $label) : self {
-    $selector = sprintf('.coh-layout-canvas-list-item[data-title="%s"]', $label);
+    $selector = sprintf('#ssa-sidebar-browser [data-ssa-name="%s"]', $label);
     $item = $this->waitForElementVisible('css', $selector, $this);
-    $this->pressAriaButton('add to canvas', $item);
+    $this->pressAriaButton('Add to canvas', $item);
+
+    // Let's wait for component/helper to be added in the layout
+    // canvas field before we close the sidebar.
+    $this->waitForElementVisible('css', '.ssa-icon-plus-circle', $item);
     return $this;
   }
 
@@ -27,7 +31,7 @@ final class ElementBrowser extends CohesionElement {
    * Closes the element browser.
    */
   public function close() : void {
-    $this->pressAriaButton('Close sidebar browser');
+    $this->pressAriaButton('Close');
   }
 
   /**
@@ -40,9 +44,8 @@ final class ElementBrowser extends CohesionElement {
    *   The called object, for chaining.
    */
   public function switchToGroup(string $group) : self {
-    $this->waitForElementVisible('css', '.coh-layout-canvas-menu');
-    $this->waitForElementVisible('css', '.coh-nav-dropdown')->click();
-    $this->waitForElementVisible('css', "a.nav-link:contains('$group')")->press();
+    $this->waitForElementVisible('css', '.ssa-dropdown-toggle')->press();
+    $this->waitForElementVisible('css', ".ssa-dropdown-item:contains('$group')")->press();
     return $this;
   }
 

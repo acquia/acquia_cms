@@ -15,6 +15,8 @@ class ButtonComponentTest extends CohesionComponentTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testComponent() {
     $account = $this->createUser();
@@ -48,6 +50,8 @@ class ButtonComponentTest extends CohesionComponentTestBase {
    *   The ID of the user role to test with.
    *
    * @dataProvider providerEditAccess
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testEditAccess(string $role) {
     $account = $this->createUser();

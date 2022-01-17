@@ -27,7 +27,7 @@ abstract class CohesionElement extends NodeElement {
   }
 
   use AwaitTrait {
-    waitForElementVisible as traitWaitForElementVisible;
+    AwaitTrait::waitForElementVisible as traitWaitForElementVisible;
   }
 
   /**
@@ -44,7 +44,7 @@ abstract class CohesionElement extends NodeElement {
    *   A wrapper object for interacting with the element browser.
    */
   protected function waitForElementBrowser() : ElementBrowser {
-    $element = $this->waitForElementVisible('css', '.coh-element-browser-modal');
+    $element = $this->waitForElementVisible('css', '#ssa-sidebar-browser');
     return new ElementBrowser($element->getXpath(), $this->session);
   }
 
@@ -58,7 +58,7 @@ abstract class CohesionElement extends NodeElement {
    *   The expected component.
    */
   public function assertComponent(string $label) : Component {
-    $selector = sprintf('.coh-layout-canvas-list-item[data-type="%s"]', $label);
+    $selector = sprintf('.ssa-layout-canvas-list-item-type-component[data-title="%s"]', $label);
     $element = $this->waitForElementVisible('css', $selector, $this);
 
     return new Component($element->getXpath(), $this->session);
