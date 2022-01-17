@@ -30,10 +30,6 @@ class ContactInformationCardComponentTest extends CohesionComponentTestBase {
 
     // Add the component to the layout canvas.
     $edit_form = $this->getLayoutCanvas()->add('Contact information card')->edit();
-    $this->openMediaLibrary($edit_form, 'Select image');
-    $this->selectMedia(0);
-    $this->insertSelectedMedia();
-
     $edit_form->fillField('Card heading element', 'string:h3');
     $edit_form->fillField('Card heading', 'This is the Heading');
     $edit_form->fillField('Contact name', 'Leia Organa');
@@ -41,6 +37,10 @@ class ContactInformationCardComponentTest extends CohesionComponentTestBase {
     $edit_form->fillField('Address', 'City Hall,200 main ST,Acquiaville');
     $edit_form->fillField('Telephone', '9820964326');
     $edit_form->fillField('Email', 'acquiaindia@test.com');
+
+    $this->openMediaLibrary($edit_form, 'Select image');
+    $this->selectMedia(0);
+    $this->insertSelectedMedia();
   }
 
   /**
@@ -50,6 +50,8 @@ class ContactInformationCardComponentTest extends CohesionComponentTestBase {
    *   The ID of the user role to test with.
    *
    * @dataProvider providerEditAccess
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testEditAccess(string $role) {
     $account = $this->createUser();
