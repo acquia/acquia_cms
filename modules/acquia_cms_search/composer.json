@@ -8,7 +8,7 @@
         "drupal/acquia_cms_article": "^1.0",
         "drupal/acquia_search": "^3.0.3",
         "drupal/collapsiblock": "^3",
-        "drupal/facets": "^2.0",
+        "drupal/facets": "2.0",
         "drupal/facets_pretty_paths": "^1.2",
         "drupal/search_api": "1.20",
         "drupal/search_api_autocomplete": "^1.4"
@@ -16,6 +16,9 @@
     "extra": {
         "enable-patching": true,
         "patches": {
+            "drupal/facets": {
+                "Fix the select/deselect facet link issue": "https://www.drupal.org/files/issues/2022-01-18/3259123-search-facet-reset-link.patch"
+            },
             "drupal/search_api": {
                 "Resolves call to member function preExecute() on null error on site install": "https://www.drupal.org/files/issues/2021-09-20/search_api_condition_cacheable_metadata.patch"
             }
