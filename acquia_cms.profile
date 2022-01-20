@@ -332,6 +332,15 @@ function acquia_cms_update_8001() {
 }
 
 /**
+ * Uninstall page_cache module.
+ */
+function acquia_cms_update_8002() {
+  if (\Drupal::moduleHandler()->moduleExists('page_cache')) {
+    \Drupal::service('module_installer')->uninstall(['page_cache']);
+  }
+}
+
+/**
  * Prepares variables for maintenance page templates.
  *
  * Default template: maintenance-page.html.twig.
