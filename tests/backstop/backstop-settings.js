@@ -74,7 +74,7 @@ module.exports =
       "selectors": [],
       "selectorExpansion": true,
       "expect": 0,
-      "misMatchThreshold" : 10.0,
+      "misMatchThreshold" : 0.5,
       "requireSameDimensions": true
     },
     {
@@ -93,7 +93,7 @@ module.exports =
       "selectors": [],
       "selectorExpansion": true,
       "expect": 0,
-      "misMatchThreshold": 12.0,
+      "misMatchThreshold": 2,
       "requireSameDimensions": false
     },
     {
@@ -104,7 +104,7 @@ module.exports =
       "readyEvent": "",
       "readySelector": "",
       "delay": 0,
-      "hideSelectors": [],
+      "hideSelectors": [".card-date"],
       "removeSelectors": [],
       "hoverSelector": "",
       "clickSelector": "",
@@ -112,7 +112,7 @@ module.exports =
       "selectors": [],
       "selectorExpansion": true,
       "expect": 0,
-      "misMatchThreshold": 10.0,
+      "misMatchThreshold": 0.1,
       "requireSameDimensions": false
     },
     {
@@ -131,7 +131,7 @@ module.exports =
       "selectors": [],
       "selectorExpansion": true,
       "expect": 0,
-      "misMatchThreshold": 10.0,
+      "misMatchThreshold": 0.1,
       "requireSameDimensions": true
     },
     {
@@ -150,7 +150,7 @@ module.exports =
       "selectors": [],
       "selectorExpansion": true,
       "expect": 0,
-      "misMatchThreshold": 10.0,
+      "misMatchThreshold": 2,
       "requireSameDimensions": true
     },
     {
@@ -169,7 +169,7 @@ module.exports =
       "selectors": [],
       "selectorExpansion": true,
       "expect": 0,
-      "misMatchThreshold": 10.0,
+      "misMatchThreshold": 0.1,
       "requireSameDimensions": true
     },
     {
@@ -188,7 +188,7 @@ module.exports =
       "selectors": [],
       "selectorExpansion": true,
       "expect": 0,
-      "misMatchThreshold": 10.0,
+      "misMatchThreshold": 2,
       "requireSameDimensions": true
     },
     {
@@ -199,7 +199,7 @@ module.exports =
       "readyEvent": "",
       "readySelector": "",
       "delay": 0,
-      "hideSelectors": [],
+      "hideSelectors": ['time'],
       "removeSelectors": [],
       "hoverSelector": "",
       "clickSelector": "",
@@ -207,7 +207,7 @@ module.exports =
       "selectors": [],
       "selectorExpansion": true,
       "expect": 0,
-      "misMatchThreshold": 12.0,
+      "misMatchThreshold": 0.1,
       "requireSameDimensions": true
     },
     {
@@ -226,7 +226,7 @@ module.exports =
       "selectors": [],
       "selectorExpansion": true,
       "expect": 0,
-      "misMatchThreshold": 12.0,
+      "misMatchThreshold": 0.1,
       "requireSameDimensions": false
     }
   ],
