@@ -11,6 +11,7 @@ use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
 use Drupal\acquia_cms_site_studio\Facade\CohesionFacade;
 use Drupal\Core\Installer\InstallerKernel;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -31,13 +32,40 @@ function acquia_cms_install_tasks_alter(array &$tasks) {
   // We want to capture the time when the installation starts.
   // This code helps capture time right when the drupal bootstrap happens.
   // The pre start function calls another method that performs the actual logic.
-  $tasks['install_bootstrap_full']['function'] = 'acquia_cms_pre_start';
+  if (PHP_SAPI == 'cli') {
+    $first_key = key($tasks);
+    $tasks[$first_key]['function'] = 'install_acms_pre_start_print_icon';
+  }
+  $tasks['install_bootstrap_full']['function'] = 'install_acms_pre_start';
+}
+
+/**
+ * Print acquia cms icon on terminal and then start first active install task.
+ */
+function install_acms_pre_start_print_icon($install_state) {
+  $function = $install_state['active_task'];
+  acquia_cms_print_icon();
+  return $function($install_state);
+}
+
+/**
+ * Prints the acquia cms icon on terminal.
+ */
+function acquia_cms_print_icon() {
+  $output = new ConsoleOutput();
+  $profile_path = \Drupal::service('extension.path.resolver')->getPath('profile', 'acquia_cms');
+  $icon_path = DRUPAL_ROOT . '/' . $profile_path . '/acquia_cms.icon.ascii';
+  // For local development, we've created symlink. So, get symlink file path.
+  $icon_path = !is_link($icon_path) ? $icon_path : readlink($icon_path);
+  if (file_exists($icon_path)) {
+    $output->writeln('<info>' . file_get_contents($icon_path) . '</info>');
+  }
 }
 
 /**
  * Method that calls another method to capture the installation start time.
  */
-function acquia_cms_pre_start($install_state) {
+function install_acms_pre_start($install_state) {
   $function = $install_state['active_task'];
   acquia_cms_set_install_time();
   return $function($install_state);
@@ -301,4 +329,41 @@ function acquia_cms_update_8001() {
   $config->set('ignored_config_entities', $updated_ignore_config);
   $config->set('enable_export_filtering', TRUE);
   $config->save(TRUE);
+}
+
+/**
+ * Prepares variables for maintenance page templates.
+ *
+ * Default template: maintenance-page.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - content - An array of page content.
+ *
+ * @see template_preprocess_maintenance_page()
+ */
+function acquia_cms_preprocess_maintenance_page(array &$variables) {
+  $variables['#attached']['library'][] = 'seven/install-page';
+  $variables['#attached']['library'][] = 'acquia_claro/install-page';
+  $acquia_cms_path = \Drupal::service('extension.list.profile')->getPath('acquia_cms');
+  $variables['install_page_logo_path'] = '/' . $acquia_cms_path . '/acquia_cms.png';
+}
+
+/**
+ * Prepares variables for install page templates.
+ *
+ * Default template: install-page.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - content - An array of page content.
+ *
+ * @see template_preprocess_install_page()
+ */
+function acquia_cms_preprocess_install_page(array &$variables) {
+  $variables['drupal_core_version'] = \Drupal::VERSION;
+  $variables['#attached']['library'][] = 'seven/install-page';
+  $variables['#attached']['library'][] = 'acquia_claro/install-page';
+  $acquia_cms_path = \Drupal::service('extension.list.profile')->getPath('acquia_cms');
+  $variables['install_page_logo_path'] = '/' . $acquia_cms_path . '/acquia_cms.png';
 }

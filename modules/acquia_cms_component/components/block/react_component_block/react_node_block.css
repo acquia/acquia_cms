@@ -1,0 +1,68 @@
+.loader {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #26a3dd;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+.article-list .coh-style-card-text-light-background .card-link:hover {
+  color: #26a3dd;
+}
+
+.titles {
+  font-size: 1rem;
+  line-height: 1.25;
+  font-weight: bold;
+}
+
+.node-summary {
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+li {
+  margin-bottom: 0rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.toggleOut {
+  animation: fadeout 500ms;
+  opacity: 0;
+}
+
+.toggleIn {
+  animation: fadein 500ms;
+  opacity: 1;
+}

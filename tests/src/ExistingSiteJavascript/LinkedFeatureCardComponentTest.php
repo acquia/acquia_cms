@@ -30,14 +30,14 @@ class LinkedFeatureCardComponentTest extends CohesionComponentTestBase {
 
     // Add the component to the layout canvas.
     $edit_form = $this->getLayoutCanvas()->add('Linked feature card')->edit();
-    $this->openMediaLibrary($edit_form, 'Select image');
-    $this->selectMedia(0);
-    $this->insertSelectedMedia();
-
     $edit_form->fillField('Card heading', 'Example component 123');
     $edit_form->fillField('Description', 'Example');
     $edit_form->fillField('Link to page or URL', 'https://www.acquia.com');
     $this->assertSession()->optionExists('Card heading element', 'Heading 3');
+
+    $this->openMediaLibrary($edit_form, 'Select image');
+    $this->selectMedia(0);
+    $this->insertSelectedMedia();
   }
 
   /**
