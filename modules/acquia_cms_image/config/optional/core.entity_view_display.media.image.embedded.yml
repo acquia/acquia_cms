@@ -6,13 +6,12 @@ dependencies:
     - field.field.media.image.field_categories
     - field.field.media.image.field_tags
     - field.field.media.image.image
-    - image.style.large
     - media.type.image
+  module:
+    - image
   enforced:
     module:
       - acquia_cms_image
-  module:
-    - image
 id: media.image.embedded
 targetEntityType: media
 bundle: image
@@ -20,13 +19,13 @@ mode: embedded
 content:
   image:
     type: image
-    weight: 0
-    region: content
     label: visually_hidden
     settings:
-      image_style: banner
       image_link: ''
+      image_style: ''
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   created: true
   field_categories: true

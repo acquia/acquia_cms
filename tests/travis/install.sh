@@ -41,6 +41,9 @@ if [[ "$ACMS_JOB" != "base" ]] && [[ "$ACMS_JOB" != "starter" ]] && [[ "$ORCA_JO
   drush cohesion:rebuild -y
 fi
 
+# Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.
+composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms"]'
+
 # Install dev dependencies.
 composer require --dev weitzman/drupal-test-traits phpspec/prophecy-phpunit:^2
 
