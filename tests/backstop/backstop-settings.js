@@ -1,37 +1,13 @@
-/*
-  How to use
+// grabs the process arguments
+let arguments = require('minimist')(process.argv.slice(2));
 
-  backstop reference --configPath=backstop-settings.js
-       backstop test --configPath=backstop-settings.js
-
-  backstop reference --configPath=backstop-settings.js --refhost=http://example.com
-       backstop test --configPath=backstop-settings.js --testhost=http://example.com
-
-  backstop reference --configPath=backstop-settings.js --paths=/,/contact
-       backstop test --configPath=backstop-settings.js --paths=/,/contact
-
-  backstop reference --configPath=backstop-settings.js --pathfile=paths
-       backstop test --configPath=backstop-settings.js --pathfile=paths
-
- */
-
-/*
-  Set up some variables
- */
-var arguments = require('minimist')(process.argv.slice(2)); // grabs the process arguments
-var defaultPaths = ['/']; // By default is just checks the homepage
-var scenarios = []; // The array that'll have the pages to test
-
-/*
-  Work out the environments that are being compared
- */
-// The host to test
+// The default test host
 if (!arguments.testhost) {
-  arguments.testhost  = "http://127.0.0.1:8080"; // Default test host
+  arguments.testhost  = "http://127.0.0.1:8080";
 }
-// The host to reference
+// The default reference host
 if (!arguments.refhost) {
-  arguments.refhost  = "http://127.0.0.1:8080"; // Default test host
+  arguments.refhost  = "http://127.0.0.1:8080";
 }
 
 // Configuration
@@ -194,7 +170,7 @@ module.exports =
     {
       "label": "ACMS Event (Starter)",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": arguments.testhost + "/event/webinar/2022/01/event-five-medium-length-placeholder-heading",
+      "url": arguments.testhost + "/node/10000",
       "referenceUrl": "",
       "readyEvent": "",
       "readySelector": "",
