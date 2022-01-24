@@ -50,7 +50,7 @@ module.exports =
       "selectors": [],
       "selectorExpansion": true,
       "expect": 0,
-      "misMatchThreshold" : 0.5,
+      "misMatchThreshold" : 0.1,
       "requireSameDimensions": true
     },
     {
@@ -69,7 +69,7 @@ module.exports =
       "selectors": [],
       "selectorExpansion": true,
       "expect": 0,
-      "misMatchThreshold": 2,
+      "misMatchThreshold": 0.1,
       "requireSameDimensions": false
     },
     {
@@ -126,7 +126,7 @@ module.exports =
       "selectors": [],
       "selectorExpansion": true,
       "expect": 0,
-      "misMatchThreshold": 2,
+      "misMatchThreshold": 0.1,
       "requireSameDimensions": true
     },
     {
@@ -164,7 +164,7 @@ module.exports =
       "selectors": [],
       "selectorExpansion": true,
       "expect": 0,
-      "misMatchThreshold": 2,
+      "misMatchThreshold": 0.1,
       "requireSameDimensions": true
     },
     {
