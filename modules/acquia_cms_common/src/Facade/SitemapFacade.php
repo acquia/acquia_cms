@@ -6,8 +6,8 @@ use Drupal\Core\Config\ConfigInstallerInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\node\NodeTypeInterface;
-use Drupal\simple_sitemap\Simplesitemap;
-use Drupal\simple_sitemap\SimplesitemapManager;
+use Drupal\simple_sitemap\Manager\EntityManager;
+use Drupal\simple_sitemap\Manager\VariantSetterTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -20,6 +20,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 final class SitemapFacade implements ContainerInjectionInterface {
 
+  use VariantSetterTrait;
+
   /**
    * The config installer service.
    *
@@ -28,16 +30,9 @@ final class SitemapFacade implements ContainerInjectionInterface {
   private $configInstaller;
 
   /**
-   * The sitemap generator service.
-   *
-   * @var \Drupal\simple_sitemap\Simplesitemap
-   */
-  private $generator;
-
-  /**
    * The sitemap manager service.
    *
-   * @var \Drupal\simple_sitemap\SimplesitemapManager
+   * @var \Drupal\simple_sitemap\Manager\EntityManager
    */
   private $sitemapManager;
 
@@ -53,16 +48,13 @@ final class SitemapFacade implements ContainerInjectionInterface {
    *
    * @param \Drupal\Core\Config\ConfigInstallerInterface $config_installer
    *   The config installer service.
-   * @param \Drupal\simple_sitemap\Simplesitemap $generator
-   *   The sitemap generator service.
-   * @param \Drupal\simple_sitemap\SimplesitemapManager $sitemap_manager
+   * @param \Drupal\simple_sitemap\Manager\EntityManager $sitemap_manager
    *   The sitemap manager service.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The logger channel.
    */
-  public function __construct(ConfigInstallerInterface $config_installer, Simplesitemap $generator, SimplesitemapManager $sitemap_manager, LoggerChannelInterface $logger) {
+  public function __construct(ConfigInstallerInterface $config_installer, EntityManager $sitemap_manager, LoggerChannelInterface $logger) {
     $this->configInstaller = $config_installer;
-    $this->generator = $generator;
     $this->sitemapManager = $sitemap_manager;
     $this->logger = $logger;
   }
@@ -73,8 +65,7 @@ final class SitemapFacade implements ContainerInjectionInterface {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.installer'),
-      $container->get('simple_sitemap.generator'),
-      $container->get('simple_sitemap.manager'),
+      $container->get('simple_sitemap.entity_manager'),
       $container->get('logger.factory')->get('acquia_cms')
     );
   }
@@ -101,11 +92,10 @@ final class SitemapFacade implements ContainerInjectionInterface {
     if (empty($sitemap_variant)) {
       return;
     }
-
     // Check if the entity type is enabled and variant exists for the sitemap.
-    $all_default_variants = $this->sitemapManager->getSitemapVariants(SimplesitemapManager::DEFAULT_SITEMAP_TYPE);
-    if ($this->generator->entityTypeIsEnabled('node') && array_key_exists($sitemap_variant, $all_default_variants)) {
-      $this->generator->setBundleSettings('node', $node_type->id());
+    $all_default_variants = $this->getVariants();
+    if ($this->sitemapManager->entityTypeIsEnabled('node') && in_array($sitemap_variant, $all_default_variants)) {
+      $this->sitemapManager->setBundleSettings('node', $node_type->id());
     }
     else {
       $this->logger->debug('The node entity type is not enabled or the variant doesn\'t exits in the sitemap');
