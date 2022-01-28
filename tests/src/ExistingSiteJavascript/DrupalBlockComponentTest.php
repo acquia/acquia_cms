@@ -71,19 +71,4 @@ class DrupalBlockComponentTest extends CohesionComponentTestBase {
     $this->editDefinition('Dynamic components', 'Drupal blocks');
   }
 
-  /**
-   * We are overriding this method due to JS issue.
-   *
-   * @return array[]
-   *   Sets of arguments to pass to the test method.
-   */
-  public function providerAddComponentToLayoutCanvas() {
-    // @todo Find a solution and remove this function from here.
-    return [
-      [
-        ['administrator', 'site_builder'],
-      ],
-    ];
-  }
-
 }
