@@ -103,3 +103,10 @@ function acquia_cms_site_studio_update_8001() {
     $config->save();
   }
 }
+
+/**
+ * Install site studio page builder module.
+ */
+function acquia_cms_site_studio_update_8002() {
+  \Drupal::service('module_installer')->install(['sitestudio_page_builder']);
+}
