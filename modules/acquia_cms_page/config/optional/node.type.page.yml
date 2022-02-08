@@ -37,6 +37,10 @@ third_party_settings:
     unpublish_enable: true
     unpublish_required: false
     unpublish_revision: false
+  node_revision_delete:
+    minimum_revisions_to_keep: 30
+    minimum_age_to_delete: 0
+    when_to_delete: 0
 name: Page
 type: page
 description: 'An unstructured content type that provides unique landing pages - e.g., a homepage, or marketing event landing page.'

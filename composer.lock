@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8d170e8dcad670d5f0a10540162f2628",
+    "content-hash": "cc3dc1bc2ea2bb35e847a838851ce7be",
     "packages": [
         {
             "name": "acquia/acsf-contenthub-console",
@@ -2860,6 +2860,10 @@
             ],
             "authors": [
                 {
+                    "name": "Centarro",
+                    "homepage": "https://www.drupal.org/user/3661446"
+                },
+                {
                     "name": "bojanz",
                     "homepage": "https://www.drupal.org/user/86106"
                 },
@@ -5074,8 +5078,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.4+6-dev",
-                    "datestamp": "1632140426",
+                    "version": "8.x-2.4+7-dev",
+                    "datestamp": "1637281190",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -5722,6 +5726,79 @@
             "homepage": "https://www.drupal.org/project/mysql56",
             "support": {
                 "source": "https://git.drupalcode.org/project/mysql56"
+            }
+        },
+        {
+            "name": "drupal/node_revision_delete",
+            "version": "1.0.0-rc3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/node_revision_delete.git",
+                "reference": "8.x-1.0-rc3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/node_revision_delete-8.x-1.0-rc3.zip",
+                "reference": "8.x-1.0-rc3",
+                "shasum": "5c539e9ac8e4af276cc558a33f1da2a5ad57ac79"
+            },
+            "require": {
+                "drupal/core": "^8.7.7 || ^9.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0-rc3",
+                    "datestamp": "1600878567",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Adrian Cid Almaguer (adriancid)",
+                    "homepage": "https://www.drupal.org/u/adriancid",
+                    "email": "adriancid@gmail.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Diosbel Mezquía (diosbelmezquia)",
+                    "homepage": "https://www.drupal.org/u/diosbelmezquia",
+                    "email": "dmezquiam@gmail.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Robert Ngo (Robert Ngo)",
+                    "homepage": "https://www.drupal.org/u/robert-ngo",
+                    "email": "robertngo.18@gmail.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "kaushalkishorejaiswal",
+                    "homepage": "https://www.drupal.org/user/2228850"
+                }
+            ],
+            "description": "Track and prune node revisions.",
+            "homepage": "https://www.drupal.org/project/node_revision_delete",
+            "keywords": [
+                "Drupal",
+                "Nodes",
+                "Revisions"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/node_revision_delete",
+                "issues": "https://www.drupal.org/project/issues/node_revision_delete"
             }
         },
         {
@@ -6597,7 +6674,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.22",
-                    "datestamp": "1641999545",
+                    "datestamp": "1642935792",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9585,12 +9662,12 @@
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "DeepCopy\\": "src/DeepCopy/"
-                },
                 "files": [
                     "src/DeepCopy/deep_copy.php"
-                ]
+                ],
+                "psr-4": {
+                    "DeepCopy\\": "src/DeepCopy/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -11350,11 +11427,11 @@
                 }
             },
             "autoload": {
-                "classmap": [
-                    "src/"
-                ],
                 "files": [
                     "src/Framework/Assert/Functions.php"
+                ],
+                "classmap": [
+                    "src/"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -18566,12 +18643,12 @@
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "React\\Promise\\": "src/"
-                },
                 "files": [
                     "src/functions_include.php"
-                ]
+                ],
+                "psr-4": {
+                    "React\\Promise\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -19276,7 +19353,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "drupal/imce": 20
+        "drupal/imce": 20,
+        "drupal/node_revision_delete": 5
     },
     "prefer-stable": true,
     "prefer-lowest": false,
