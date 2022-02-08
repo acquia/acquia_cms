@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Installer\InstallerKernel;
+use Drupal\node\Entity\NodeType;
 
 /**
  * Implements hook_install().
@@ -109,4 +110,33 @@ function acquia_cms_site_studio_update_8001() {
  */
 function acquia_cms_site_studio_update_8002() {
   \Drupal::service('module_installer')->install(['sitestudio_page_builder']);
+}
+
+/**
+ * Install Node Revision Delete module with default configuration.
+ *
+ * Site Studio 6.8.x has a soft dependency on node_revision_delete module,
+ * Install module with default configuration.
+ */
+function acquia_cms_site_studio_update_8003() {
+  // Install node revision delete module and set default configurations.
+  \Drupal::service('module_installer')->install(['node_revision_delete']);
+  $config = \Drupal::service('config.factory')->getEditable('node_revision_delete.settings');
+  if (!empty($config)) {
+    $config->set('node_revision_delete_cron', '50')
+      ->set('node_revision_delete_time', '604800')
+      ->save();
+  }
+  // Set default node revision delete configuration for
+  // Article, Event, Page, Person, Place content type.
+  $moduleHandler = \Drupal::service('module_handler');
+  if ($moduleHandler->moduleExists('acquia_cms_page')) {
+    $type = NodeType::load('page');
+    if ($type) {
+      $type->setThirdPartySetting('node_revision_delete', 'minimum_revisions_to_keep', '30');
+      $type->setThirdPartySetting('node_revision_delete', 'minimum_age_to_delete', '0');
+      $type->setThirdPartySetting('node_revision_delete', 'when_to_delete', '0');
+      $type->save();
+    }
+  }
 }
