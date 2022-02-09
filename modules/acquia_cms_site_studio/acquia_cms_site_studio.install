@@ -57,6 +57,13 @@ function acquia_cms_site_studio_install() {
         ->save();
     }
   }
+  // Set default configurations for node revision delete module.
+  $config = \Drupal::service('config.factory')->getEditable('node_revision_delete.settings');
+  if (!empty($config)) {
+    $config->set('node_revision_delete_cron', '50')
+      ->set('node_revision_delete_time', '604800')
+      ->save();
+  }
 }
 
 /**
@@ -127,8 +134,7 @@ function acquia_cms_site_studio_update_8003() {
       ->set('node_revision_delete_time', '604800')
       ->save();
   }
-  // Set default node revision delete configuration for
-  // Article, Event, Page, Person, Place content type.
+  // Set default node revision delete configuration for Place content type.
   $moduleHandler = \Drupal::service('module_handler');
   if ($moduleHandler->moduleExists('acquia_cms_page')) {
     $type = NodeType::load('page');
