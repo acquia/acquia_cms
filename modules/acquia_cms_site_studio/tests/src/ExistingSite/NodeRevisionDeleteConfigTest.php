@@ -23,11 +23,7 @@ class NodeRevisionDeleteConfigTest extends ExistingSiteBase {
    * {@inheritdoc}
    */
   protected static $modules = [
-    'acquia_cms_article',
-    'acquia_cms_event',
     'acquia_cms_page',
-    'acquia_cms_person',
-    'acquia_cms_place',
     'acquia_cms_site_studio',
     'node',
     'node_revision_delete',
