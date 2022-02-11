@@ -4,5 +4,16 @@
     "description": "Provides a tour page for Acquia CMS.",
     "require": {
         "drupal/acquia_cms_common": "^1.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "ergebnis/composer-normalize": true,
+            "drupal/core-composer-scaffold": true,
+            "phpro/grumphp-shim": true,
+            "oomphinc/composer-installers-extender": true
+        }
     }
 }

@@ -1,5 +1,16 @@
 {
     "name": "drupal/acquia_claro",
     "type": "drupal-theme",
-    "description": "A clean, accessible, and powerful Drupal administration theme."
+    "description": "A clean, accessible, and powerful Drupal administration theme.",
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "ergebnis/composer-normalize": true,
+            "drupal/core-composer-scaffold": true,
+            "phpro/grumphp-shim": true,
+            "oomphinc/composer-installers-extender": true
+        }
+    }
 }
