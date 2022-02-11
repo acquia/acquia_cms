@@ -6,6 +6,17 @@
     "require": {
         "drupal/acquia_cms_place": "^1.0"
     },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-composer-scaffold": true,
+            "ergebnis/composer-normalize": true,
+            "oomphinc/composer-installers-extender": true,
+            "phpro/grumphp-shim": true
+        }
+    },
     "repositories": {
         "drupal": {
             "type": "composer",
@@ -14,17 +25,6 @@
         "assets": {
             "type": "composer",
             "url": "https://asset-packagist.org"
-        }
-    },
-    "config": {
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "composer/installers": true,
-            "cweagans/composer-patches": true,
-            "ergebnis/composer-normalize": true,
-            "drupal/core-composer-scaffold": true,
-            "phpro/grumphp-shim": true,
-            "oomphinc/composer-installers-extender": true
         }
     }
 }
