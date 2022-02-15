@@ -44,6 +44,10 @@ fi
 # Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.
 composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms"]'
 
+# Allow third party plugins so that they are not blocked when CI jobs run by ORCA.
+composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true;
+composer config --no-plugins allow-plugins.ergebnis/composer-normalize true;
+
 # Install dev dependencies.
 composer require --dev weitzman/drupal-test-traits phpspec/prophecy-phpunit:^2
 
