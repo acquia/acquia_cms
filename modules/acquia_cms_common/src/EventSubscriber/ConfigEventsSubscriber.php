@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_common\EventSubscriber;
 
+use Drupal\acquia_cms_common\Services\AcmsUtilityService;
 use Drupal\Core\Config\ConfigCrudEvent;
 use Drupal\Core\Config\ConfigEvents;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -23,13 +24,23 @@ class ConfigEventsSubscriber implements EventSubscriberInterface {
   protected $moduleHandler;
 
   /**
+   * The acms utility service.
+   *
+   * @var \Drupal\acquia_cms_common\Services\AcmsUtilityService
+   */
+  protected $acmsUtilityService;
+
+  /**
    * Constructs a new ConfigEventsSubscriber object.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The ModuleHandlerInterface.
+   * @param \Drupal\acquia_cms_common\Services\AcmsUtilityService $acms_utility_service
+   *   The acms utility service.
    */
-  public function __construct(ModuleHandlerInterface $module_handler) {
+  public function __construct(ModuleHandlerInterface $module_handler, AcmsUtilityService $acms_utility_service) {
     $this->moduleHandler = $module_handler;
+    $this->acmsUtilityService = $acms_utility_service;
   }
 
   /**
@@ -53,7 +64,7 @@ class ConfigEventsSubscriber implements EventSubscriberInterface {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function configSave(ConfigCrudEvent $event) {
-    $moduleInstallTriggered = \Drupal::service('acquia_cms_common.utility')->getModulePreinstallTriggered();
+    $moduleInstallTriggered = $this->acmsUtilityService->getModulePreinstallTriggered();
     if (InstallerKernel::installationAttempted() || $moduleInstallTriggered) {
       $config = $event->getConfig();
       // During site install or module install Update views display_options's
