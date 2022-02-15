@@ -7,6 +7,18 @@
         "drupal/component": "1.0-rc3",
         "drupal/jsonapi_extras": "^3"
     },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-composer-scaffold": true,
+            "ergebnis/composer-normalize": true,
+            "oomphinc/composer-installers-extender": true,
+            "phpro/grumphp-shim": true,
+            "webdriver-binary/binary-chromedriver": true
+        }
+    },
     "extra": {
         "enable-patching": true,
         "patches": {
