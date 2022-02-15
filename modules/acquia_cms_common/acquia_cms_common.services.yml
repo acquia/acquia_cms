@@ -6,7 +6,7 @@ services:
 
   acquia_cms_common.event_subscriber:
     class: '\Drupal\acquia_cms_common\EventSubscriber\ConfigEventsSubscriber'
-    arguments: ['@module_handler']
+    arguments: ['@module_handler', '@acquia_cms_common.utility']
     tags:
       - { name: 'event_subscriber' }
 
