@@ -21,6 +21,13 @@ function acquia_cms_article_install() {
 }
 
 /**
+ * Implements hook_module_preinstall().
+ */
+function acquia_cms_article_module_preinstall($module) {
+  \Drupal::service('acquia_cms_common.utility')->setModulePreinstallTriggered($module);
+}
+
+/**
  * Implements hook_update_N().
  *
  * Forcefully import the Article Cards View configuration

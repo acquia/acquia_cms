@@ -26,6 +26,21 @@ class AcmsUtilityService {
   protected $configFactory;
 
   /**
+   * The module preinstall triggered status.
+   *
+   * @var string
+   *
+   * @see \Drupal\acquia_cms_common\Services\AcmsUtilityService::setModulePreinstallTriggered()
+   * @see acquia_cms_article_modules_installed()
+   * @see acquia_cms_event_modules_installed()
+   * @see acquia_cms_person_modules_installed()
+   * @see acquia_cms_place_modules_installed()
+   * @see acquia_cms_search_modules_installed()
+   */
+
+  private static $modulePreinstallTriggered;
+
+  /**
    * Constructs a new AcmsService object.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
@@ -168,6 +183,32 @@ class AcmsUtilityService {
     // Core can provide configuration.
     $enabled_extensions['core'] = 'core';
     return array_keys($enabled_extensions);
+  }
+
+  /**
+   * Set module preinstall triggered state variable.
+   *
+   * As service will be rebuild during the module install,
+   * set a private static variable is used to store this information.
+   *
+   * @param string $module
+   *   The module name.
+   */
+  public function setModulePreinstallTriggered(string $module) {
+    static::$modulePreinstallTriggered = $module;
+  }
+
+  /**
+   * Get module preinstall triggered state variable.
+   *
+   * @return string|null
+   *   The module name or null.
+   */
+  public function getModulePreinstallTriggered(): ?string {
+    if (static::$modulePreinstallTriggered !== NULL) {
+      return static::$modulePreinstallTriggered;
+    }
+    return NULL;
   }
 
 }

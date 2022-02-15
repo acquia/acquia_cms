@@ -19,3 +19,10 @@ function acquia_cms_place_install() {
     'delete any place content',
   ]);
 }
+
+/**
+ * Implements hook_module_preinstall().
+ */
+function acquia_cms_place_module_preinstall($module) {
+  \Drupal::service('acquia_cms_common.utility')->setModulePreinstallTriggered($module);
+}
