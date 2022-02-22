@@ -1,5 +1,5 @@
 diff --git a/modules/cohesion_sync/src/Commands/CohesionSyncExportCommand.php b/modules/cohesion_sync/src/Commands/CohesionSyncExportCommand.php
-index 2d06e56904..6b6f11443b 100644
+index 2d06e56904..d472d540af 100644
 --- a/modules/cohesion_sync/src/Commands/CohesionSyncExportCommand.php
 +++ b/modules/cohesion_sync/src/Commands/CohesionSyncExportCommand.php
 @@ -191,9 +191,9 @@ class CohesionSyncExportCommand extends DrushCommands {
@@ -9,12 +9,12 @@ index 2d06e56904..6b6f11443b 100644
 -
 -    if (count(glob($this->destinationDir . '*')) > 0) {
 -      if (!$this->io()->confirm(t('The .yml files in your export directory (@target) will be deleted and replaced with the package config and files.', ['@target' => $this->destinationDir]))) {
-+    $destination_dir = new \FilesystemIterator($this->destinationDir);
-+    if (iterator_count($destination_dir) > 0) {
++    $destination_dir = is_dir($this->destinationDir) ?? new \FilesystemIterator($this->destinationDir);
++    if (is_iterable($destination_dir) && iterator_count($destination_dir) > 0) {
 +      if (!$this->io()->confirm(t('Files in your export directory (@target) will be deleted and replaced with the package config and files.', ['@target' => $this->destinationDir]))) {
          throw new UserAbortException();
        }
- 
+
 diff --git a/modules/cohesion_sync/src/Controller/PackageExportGenerateController.php b/modules/cohesion_sync/src/Controller/PackageExportGenerateController.php
 index c541a3a3af..649540b709 100644
 --- a/modules/cohesion_sync/src/Controller/PackageExportGenerateController.php
