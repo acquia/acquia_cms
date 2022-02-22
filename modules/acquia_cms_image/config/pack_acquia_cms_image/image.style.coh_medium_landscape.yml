@@ -1,0 +1,22 @@
+uuid: 5b646b79-56b9-456a-9816-38904f679c16
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+  enforced:
+    module:
+      - acquia_cms_image
+_core:
+  default_config_hash: MPooU2NAT0Sqi7j39-IaxenaFnhoMrEK-L7TB7Efl20
+name: coh_medium_landscape
+label: 'Medium landscape (768x512)'
+effects:
+  87cf2dba-d703-4f1e-ab98-3f21eb92ecd2:
+    uuid: 87cf2dba-d703-4f1e-ab98-3f21eb92ecd2
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 768
+      height: 512
+      crop_type: focal_point

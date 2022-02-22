@@ -1,0 +1,117 @@
+uuid: 79b0b53c-9adc-4cb6-8f5e-436476be3d4a
+langcode: en
+status: true
+dependencies:
+  config:
+    - cohesion_templates.cohesion_master_templates.mstr_tpl_master_template_boxed
+label: 'Full content (Media, Video)'
+id: media_video_full
+json_values: |
+  {
+      "canvas": [
+          {
+              "type": "item",
+              "uid": "video",
+              "title": "Video",
+              "selected": false,
+              "status": {
+                  "collapsed": true,
+                  "isopen": false
+              },
+              "uuid": "d6310279-3de0-48dd-96e1-e486cdb068e0",
+              "parentUid": "root",
+              "children": []
+          }
+      ],
+      "mapper": {
+          "d6310279-3de0-48dd-96e1-e486cdb068e0": {}
+      },
+      "model": {
+          "d6310279-3de0-48dd-96e1-e486cdb068e0": {
+              "settings": {
+                  "title": "Video",
+                  "customStyle": [
+                      {
+                          "customStyle": ""
+                      }
+                  ],
+                  "videoAutoplay": false,
+                  "videoLoop": false,
+                  "videoMute": false,
+                  "videoRewind": true,
+                  "videoClickPlaypause": true,
+                  "videoPauseOthers": true,
+                  "videoPlayOnHover": false,
+                  "videoShowControls": false,
+                  "videoShowControlsLoad": true,
+                  "videoShowControlsPause": true,
+                  "videoShowPlayCenter": true,
+                  "videoShowPlayPause": true,
+                  "videoShowCurrent": true,
+                  "videoShowProgress": true,
+                  "videoShowDuration": true,
+                  "videoShowVolume": true,
+                  "videoShowFullscreen": true,
+                  "settings": {
+                      "videoPreload": "none",
+                      "videoAutoplay": false,
+                      "videoLoop": false,
+                      "videoMute": false,
+                      "videoRewind": true,
+                      "videoClickPlaypause": true,
+                      "videoPauseOthers": true,
+                      "videoPlayOnHover": false,
+                      "videoShowControls": false,
+                      "videoShowControlsLoad": true,
+                      "videoShowControlsPause": true,
+                      "videoShowPlayCenter": true,
+                      "videoShowPlayPause": true,
+                      "videoShowCurrent": true,
+                      "videoShowProgress": true,
+                      "videoShowDuration": true,
+                      "videoShowVolume": true,
+                      "videoShowFullscreen": true,
+                      "customStyle": [
+                          {
+                              "customStyle": ""
+                          }
+                      ]
+                  },
+                  "videoPreload": "none",
+                  "videoUrl": "[media:field_media_oembed_video:value]"
+              },
+              "context-visibility": {
+                  "contextVisibility": {
+                      "condition": "ALL"
+                  }
+              },
+              "styles": {
+                  "settings": {
+                      "element": "media"
+                  }
+              }
+          }
+      },
+      "previewModel": {
+          "d6310279-3de0-48dd-96e1-e486cdb068e0": {}
+      },
+      "variableFields": {
+          "d6310279-3de0-48dd-96e1-e486cdb068e0": [
+              "settings.videoUrl"
+          ]
+      },
+      "meta": {
+          "fieldHistory": []
+      }
+  }
+json_mapper: '{}'
+last_entity_update: entityupdate_0035
+modified: true
+selectable: true
+custom: false
+twig_template: media--cohesion--media-video-full
+default: true
+entity_type: media
+bundle: video
+view_mode: full
+master_template: __none__

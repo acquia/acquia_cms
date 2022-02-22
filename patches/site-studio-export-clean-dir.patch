@@ -1,0 +1,33 @@
+diff --git a/modules/cohesion_sync/src/Commands/CohesionSyncExportCommand.php b/modules/cohesion_sync/src/Commands/CohesionSyncExportCommand.php
+index 2d06e56904..6b6f11443b 100644
+--- a/modules/cohesion_sync/src/Commands/CohesionSyncExportCommand.php
++++ b/modules/cohesion_sync/src/Commands/CohesionSyncExportCommand.php
+@@ -191,9 +191,9 @@ class CohesionSyncExportCommand extends DrushCommands {
+    */
+   protected function getTargetStorage(): FileStorage {
+     $target_storage = new CohesionFileStorage($this->destinationDir);
+-
+-    if (count(glob($this->destinationDir . '*')) > 0) {
+-      if (!$this->io()->confirm(t('The .yml files in your export directory (@target) will be deleted and replaced with the package config and files.', ['@target' => $this->destinationDir]))) {
++    $destination_dir = new \FilesystemIterator($this->destinationDir);
++    if (iterator_count($destination_dir) > 0) {
++      if (!$this->io()->confirm(t('Files in your export directory (@target) will be deleted and replaced with the package config and files.', ['@target' => $this->destinationDir]))) {
+         throw new UserAbortException();
+       }
+ 
+diff --git a/modules/cohesion_sync/src/Controller/PackageExportGenerateController.php b/modules/cohesion_sync/src/Controller/PackageExportGenerateController.php
+index c541a3a3af..649540b709 100644
+--- a/modules/cohesion_sync/src/Controller/PackageExportGenerateController.php
++++ b/modules/cohesion_sync/src/Controller/PackageExportGenerateController.php
+@@ -250,9 +250,9 @@ class PackageExportGenerateController extends ControllerBase {
+   /**
+    * Handles fle download from temporary storage.
+    *
+-   * @param string $type
++   * @param string $entity_type
+    *   Entity type.
+-   * @param string $uuid
++   * @param string $entity_uuid
+    *   Entity uuid.
+    */
+   public function exportSingleEntityPackage(string $entity_type, string $entity_uuid) {

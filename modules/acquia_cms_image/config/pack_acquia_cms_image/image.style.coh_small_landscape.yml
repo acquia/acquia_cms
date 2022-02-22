@@ -1,0 +1,22 @@
+uuid: 044c396a-3c3f-4a80-a133-8fc40879b231
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+  enforced:
+    module:
+      - acquia_cms_image
+_core:
+  default_config_hash: 4vzuRGL8VkHH-3ACf07WrVkagqqDVFnXkcg5xPUtQxo
+name: coh_small_landscape
+label: 'Small landscape (568x352)'
+effects:
+  d8e910fc-dc0e-4a7d-bc21-a3be9cb7a560:
+    uuid: d8e910fc-dc0e-4a7d-bc21-a3be9cb7a560
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 568
+      height: 352
+      crop_type: focal_point

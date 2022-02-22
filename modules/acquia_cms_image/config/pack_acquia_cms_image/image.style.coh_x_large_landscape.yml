@@ -1,0 +1,22 @@
+uuid: 4f9166d5-f082-4e1f-83aa-6296f52dcdae
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+  enforced:
+    module:
+      - acquia_cms_image
+_core:
+  default_config_hash: i6RuVntWIJTPfs4fdMI63hN1BZxO6jlQQspGh7BF6po
+name: coh_x_large_landscape
+label: 'X Large landscape (1360x908)'
+effects:
+  ff9be98a-6552-4ae0-8687-8bf8e4dc61ef:
+    uuid: ff9be98a-6552-4ae0-8687-8bf8e4dc61ef
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1360
+      height: 908
+      crop_type: focal_point
