@@ -145,7 +145,7 @@ final class CohesionFacade implements ContainerInjectionInterface {
    *   A list of all installed modules. The acquia_cms profile and its modules
    *   will be the last items in the list.
    */
-  private function getSortedModules() : array {
+  public function getSortedModules() : array {
     $module_list = $this->moduleHandler->getModuleList();
     $acms_module_list = [];
 

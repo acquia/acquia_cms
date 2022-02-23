@@ -173,7 +173,8 @@ function install_acms_site_studio_ui_kit() {
   if (getenv('COHESION_ARTIFACT')) {
     return [];
   }
-
+  $site_studio_api_key = getenv('SITESTUDIO_API_KEY');
+  $site_studio_org_key = getenv('SITESTUDIO_ORG_KEY');
   /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
   $facade = Drupal::classResolver(CohesionFacade::class);
 
@@ -181,8 +182,15 @@ function install_acms_site_studio_ui_kit() {
   // on import. Passing this bool as TRUE will skip the rebuild, since we force
   // a total rebuild at the end. This cuts install times approximately in half,
   // especially via Drush.
-  $operations = $facade->getAllOperations(TRUE);
+  //  $operations = $facade->getAllOperations(TRUE);
+  $modules = [];
+  $operations[] = ['set_site_studio_credentials', [$site_studio_api_key, $site_studio_org_key]];
+  foreach ($facade->getSortedModules() as $extension) {
+    $modules[] = $extension->getName();
+  }
+  $operations[] = ['trigger_module_install_hook', [$modules]];
   $batch = [
+    'title' => 'Importing site studio package from all modules',
     'operations' => $operations,
     'finished' => 'update_site_studio_settings',
   ];
@@ -197,6 +205,13 @@ function install_acms_site_studio_ui_kit() {
   else {
     return $batch;
   }
+}
+
+/**
+ * Trigger module installed hook from cohesion_sync.
+ */
+function trigger_module_install_hook($modules) {
+  Drupal::moduleHandler()->invoke('cohesion_sync', 'modules_installed', [$modules]);
 }
 
 /**
