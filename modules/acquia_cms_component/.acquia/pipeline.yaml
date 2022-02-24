@@ -1,0 +1,367 @@
+---
+type: default
+team: ACMS
+group: R&D
+service: acquia_cms_component
+# Valid groups: platform, drupal-cloud, marketing-cloud, acquia-shared
+
+
+# Validate the formatting of the pipeline.yaml file.
+validate_config: true
+
+# The environment container image is used to prepare code versions
+# and tooling for tests during pre, post and build stages.
+environment_image:
+  file: ".acquia/Dockerfile.ci"
+  context: "."
+  # Only required to pass special docker build options.
+  args: ""
+  # The cache_from resource speeds up image building by reusing the defined image
+  # When using matrix base_images a diferent image can be seen in the example below.
+  cache_from: ''
+  # The build_matrix is only required for testing multiple versions.
+  # build_matrix:
+  #   base_images:
+  #     # First image is the default.
+  #     - python:3.9-slim
+  #     # Secondary image for the matrix cached from 3.8-slim
+  #     - python:3.8-slim, cache_from:devops-hellomicro-environment:3.8-slim
+  build_args:
+    - "EXAMPLE_ARG=PASSED_TO_CONTAINER_BUILD"
+    # - secrets:
+    #     - type: vault
+    #       key: test_key
+    #       value: API-KEY
+    #       path: secret/acquia_cms_component/test_key
+
+# -- Continuous Integration --
+# Pre-build runs after building the environment image, and relies on it to
+# run its sub-stages' steps inside of the environment container.
+pre_build:
+  before: # Runs before pre_build
+    start_mysql-5.6:
+      - steps:
+          - |
+            echo "${JFROG_READONLY}"| docker login ${REPO_LOCATION} -u devops.readonly --password-stdin
+            docker run --name ${BUILD_TAG}-5.6 -e MYSQL_ROOT_PASSWORD=secret -d ${REPO_LOCATION}mysql:5.6
+        args: -v /var/run/docker.sock:/var/run/docker.sock --net=host
+        secrets:
+          - type: vault
+            key: JFROG_READONLY
+            value: JFROG_READONLY
+            path: secret/pipeline-default/JFROG_READONLY
+    start_mysql-5.7:
+      - steps:
+          - |
+            echo "${JFROG_READONLY}"| docker login ${REPO_LOCATION} -u devops.readonly --password-stdin
+            docker run --name ${BUILD_TAG}-5.7 -e MYSQL_ROOT_PASSWORD=secret -d ${REPO_LOCATION}mysql:5.7
+        args: -v /var/run/docker.sock:/var/run/docker.sock --net=host
+        secrets:
+          - type: vault
+            key: JFROG_READONLY
+            value: JFROG_READONLY
+            path: secret/pipeline-default/JFROG_READONLY
+  after: # Runs after pre_build
+    stop_mysql-5.6:
+      - steps:
+          - docker rm -f ${BUILD_TAG}-5.6 || true
+        args: -v /var/run/docker.sock:/var/run/docker.sock --net=host
+    stop_mysql-5.7:
+      - steps:
+          - docker rm -f ${BUILD_TAG}-5.7 || true
+        args: -v /var/run/docker.sock:/var/run/docker.sock --net=host
+  test_mysql-5.6_query:
+    - steps:
+        - docker exec ${BUILD_TAG}-5.6 mysqlshow -psecret
+      args: -v /var/run/docker.sock:/var/run/docker.sock --net=host
+
+  static_lint:
+    # Steps can be individual shell sessions, or grouped together to
+    # run in a single session, as shown below.
+    - steps:
+        - echo static_analysis_lint isolated step
+        - - echo step as part of a group
+          - echo step also as part of a group
+          # Tests should run in the WORKDIR defined in Dockerfile.ci
+          # the app code was added to "/usr/src/app" in this case
+          - cd /usr/src/app && pylama && env
+  tty_test:
+    - allocate_tty: true
+      shell: bash -xet
+      steps:
+        -
+          - /usr/bin/tty
+          - echo some jobs require a tty to run
+  unit_tests:
+    - allocate_tty: true
+      shell: bash -xet
+      steps:
+        # Example: try `ls` 2 times before hard failing the pipeline.
+        - 'for i in 1 2; do echo "Try $i"; ls && break || true; done'
+        # Example: Using conditionals in multiline, using variables explained in:
+        # https://core.cloudbees.ais.acquia.io/devops-pipeline-jenkins/env-vars.html/
+        - |
+          set -xe
+          if [ "$BRANCH_NAME" = "main" ] || [ "$BRANCH_NAME" = "master" ];
+          then
+            echo unittest when branch is $BRANCH_NAME;
+            cd /usr/src/app && python -m unittest *.py;
+          else
+            echo pytest when branch is $GIT_BRANCH;
+            cd /usr/src/app && python -m pytest *.py;
+          fi
+  code_coverage:
+    - steps:
+        - |
+          set -xe
+          cd app
+          coverage run -m unittest
+          coverage report -m
+          coverage xml -i
+          COVERALLS_REPO_TOKEN=$COVERALLS_TOKEN coveralls || true
+      secrets:
+        - type: vault
+          key: COVERALLS_TOKEN
+          value: COVERALLS_TOKEN
+          path: secret/devops-hellomicro/COVERALLS_TOKEN
+  security_composition_analysis:
+    required: false
+    directory: "."
+    language:
+      - python
+      - js
+    before:
+      - steps:
+          - echo "security_composition_analysis before step"
+    after:
+      - steps:
+          - echo "security_composition_analysis after step"
+
+  # SonarQube section reporting to https://sonarqube.ais.acquia.io
+  # project_key is provided by engineering services team.
+  code_analysis:
+    required: true
+    project_key: acquia.platform.devops:acquia_cms_component
+    quality_gate:
+      wait_for_quality_gate: false
+      max_time_limit: 10
+      abort_pipeline: false
+
+# -- Service Containers (if applicable) --
+# This stage builds and publishes to Jfrog/ECR one or more service images.
+# https://github.com/acquia/devops-pipeline/blob/master/consumer/pipeline_get_started.md
+# build:
+#   service_image:
+#     - name: hellomicro
+#       file: "Dockerfile"
+#       context: "."
+#       args: ""
+#       cache_from: hellomicro:3.9-slim-${BRANCH_NAME}
+# # When custom_tags are provided then only these tags would be applied to this image.
+#       custom_tags:
+#         - 3.9-slim-${BRANCH_NAME}
+#         - 3.9-slim-${GIT_COMMIT}
+#       build_args:
+#         - "BASE_IMAGE=python"
+#         - "BASE_IMAGE_VERSION=3.9-slim"
+#         - "EXAMPLE_ARG=PASSED_TO_CONTAINER_BUILD"
+#         - secrets:
+#             - type: vault
+#               key: test_key
+#               value: API-KEY
+#               path: secret/devops-hellomicro/test_key
+#     - name: hellomicro
+#       file: "Dockerfile"
+#       context: "."
+#       args: ""
+#       cache_from: "hellomicro:3.8-slim-${BRANCH_NAME}"
+#       custom_tags:
+#         - 3.8-slim-${BRANCH_NAME}
+#         - 3.8-slim-${GIT_COMMIT}
+#       build_args:
+#         - "BASE_IMAGE=python"
+#         - "BASE_IMAGE_VERSION=3.8-slim"
+#         - "EXAMPLE_ARG=PASSED_TO_CONTAINER_BUILD"
+#         - secrets:
+#             - type: vault
+#               key: test_key
+#               value: API-KEY
+#               path: secret/devops-hellomicro/test_key
+#     - name: hellomicro
+#       file: "Dockerfile"
+#       context: "."
+#       args: ""
+#       cache_from: "hellomicro"
+#       build_args:
+#         - "BASE_IMAGE=python"
+#         - "BASE_IMAGE_VERSION=3.8-slim"
+#         - "EXAMPLE_ARG=PASSED_TO_CONTAINER_BUILD"
+#         - secrets:
+#             - type: vault
+#               key: test_key
+#               value: API-KEY
+#               path: secret/devops-hellomicro/test_key
+#   service_package:
+#     - pattern: "hellomicro-*.deb"
+#       type: "debian"
+#       props:
+#         - "maintainer=devops"
+#
+# # This step performs container image security scan in Jfrog Xray via Artifactory
+# # Build will fail whenever a vulnerability is found unless set to true.
+# security_scan:
+#   ignore_failures: true
+#
+# # -- Progressive Testing over Automated Environments --
+# # Post-build has access to the service container deployed and already running,
+# # so it is ideal for testing called from the pipeline into a cluster.
+# post_build:
+#   dev:
+#     functional_tests:
+#       - steps:
+#           - echo functional_tests
+#           - set
+#     integration_tests:
+#       - steps:
+#           - echo integration_tests
+#           - "[ $test_key = ThisIsaTestKey ]"
+#         secrets:
+#           - type: vault
+#             key: test_key
+#             value: API-KEY
+#             path: secret/devops-hellomicro/test_key
+#   qa:
+#     e2e_tests:
+#       - steps:
+#           - echo "end_to_end tests"
+#     performance_tests:
+#       - steps:
+#           - echo "performance_tests"
+#     security_static_analysis:
+#       required: true
+#       directory: "app"
+#       before:
+#         - steps:
+#             - echo "security_static_analysis before step"
+#       after:
+#         - steps:
+#             - echo "security_static_analysis after step"
+#   staging:
+#     acceptance_tests:
+#       - steps:
+#           - echo "acceptance_tests"
+#
+# # -- Continuous Delivery & Deployment --
+# # Cut a Release Tag automatically?
+# cut_release_tag: false
+#
+# # To publish JUnits on "qTest manager"
+# qtest_release:
+#   projectID: 106498
+#   containerID: 2236871
+#   parseTestResultsPattern: "**.xml"
+#   qtestURL: "https://acquia.qtestnet.com"
+#   containerType: 'test-cycle'
+#   createNewTestRunsEveryBuildDate: false
+#   createTestCaseForEachJUnitTestClass: true
+#   createTestCaseForEachJUnitTestMethod: false
+#   environmentID: 48784
+#   overwriteExistingTestSteps: true
+#   parseTestResultsFromTestingTools: true
+#   submitToAReleaseAsSettingFromQtest: false
+#   submitToExistingContainer: true
+#   utilizeTestResultsFromCITool: false
+#   secrets:
+#     type: vault
+#     value: QTEST_ACCESS_TOKEN
+#     path: secret/devops-hellomicro/QTEST_ACCESS_TOKEN
+#
+# # Publish a release on GitHub by creating a release on the UI
+# # The devops-jenkins bot requires permissions to write in the repository.
+# github_release:
+#   secrets:
+#     type: vault
+#     value: GITHUB_ACCESS_TOKEN
+#     path: secret/pipeline-default/GITHUB_ACCESS_TOKEN
+#   release_notes: true
+#   release_name: 'Hello-Micro ${TAG_NAME}'
+#   files:
+#     - README.md
+#
+# # Simply deploy to Kaas using "acd" and platform.yaml
+# deploy:
+#   - component: acd
+#     require_production_approval: false
+#
+# # Alternatively to Kaas Teams can use their "custom" deployments
+# # deploy:
+# #   - component: custom
+# #     dev:
+# #       - steps:
+# #           - echo custom deployment steps
+# #           - echo start a container for dev environment tests and others
+# #           - docker run -d --name hellomicro-${BUILD_TAG} ${REPO_LOCATION}hellomicro:3.9-slim-${GIT_COMMIT}
+# #         secrets:
+# #           - type: vault
+# #             key: test_key
+# #             value: API-KEY
+# #             path: secret/devops-hellomicro/test_key
+# #         args: -v /var/run/docker.sock:/var/run/docker.sock --net=host
+# #     qa:
+# #       - steps:
+# #         - echo start environment on QA
+# #     staging:
+# #       - steps:
+# #         - echo start environment on Staging
+# #     prod:
+# #       - steps:
+# #         - echo start environment on Prod
+#
+# # These stages ensure that after every success or failure
+# # the mentioned steps will always run
+# after_failure:
+#   - steps:
+#       - echo "After failure step cleanup containers"
+#       - docker ps
+#       - docker rm -f ${BUILD_TAG}-5.6 || true
+#       - docker rm -f ${BUILD_TAG}-5.7 || true
+#     args: -v /var/run/docker.sock:/var/run/docker.sock --net=host
+#
+# after_success:
+#   - steps:
+#       - echo "After successful step"
+#
+#   # Trigger remote jenkins job on after pipeline success
+#   - trigger_jobs:
+#     - job_url: 'https://core.cloudbees.ais.acquia.io/devops-pipeline-jenkins/job/DEVOPS-ACD-CLEANUP-JOB'
+#       job_auth_params:
+#         secret_key: 'CANARY_REMOTE_TRIGGER'
+#         secret_path: 'secret/devops-hellomicro/CANARY_REMOTE_TRIGGER'
+#       job_config_params:
+#         - 'SERVICE_REPO_NAME=devops-hellomicro'
+#         - 'SERVICE_REPO_BRANCH_NAME=main'
+#         - 'DEV_DEPLOYMENT_CREDENTIALS=devops-hellomicro-pipeline-deployment-argoCD'
+#       block_build_until_complete: true
+#       enhanced_logging: true
+#
+# # -- Slack Bot Integration --
+# notify:
+#   channel: test-jenkins-notifications
+#   on_success: change
+#   on_failure: always
+# #  on_branch:
+# #    - main
+# #    - DEVOPS-12
+#
+#   approvers:
+#     - "abhishek.ratnawat@acquia.com"
+#     - "aman.joshi@acquia.com"
+#     - "andrew.wood@acquia.com"
+#     - "ashritha.goramane@acquia.com"
+#     - "navneet.verma@acquia.com"
+#     - "ricardo.amaro@acquia.com"
+#     - "saransh.ambarte@acquia.com"
+#     - "shalin.badole@acquia.com"
+#     - "shane.vanhart@acquia.com"
+#     - "shreyas.subhedar@acquia.com"
+#     - "vishnu.chegondi@acquia.com"
