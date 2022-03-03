@@ -23,6 +23,15 @@ class AcquiaSearchIntegrationTest extends BrowserTestBase {
   protected $defaultTheme = 'stark';
 
   /**
+   * {@inheritdoc}
+   */
+  protected static $modules = [
+    'acquia_cms_search',
+    'acquia_cms_common',
+    'acquia_search',
+    'search_api_db',
+  ];
+  /**
    * Disable strict config schema checks in this test.
    *
    * Cohesion has a lot of config schema errors, and until they are all fixed,
@@ -35,16 +44,8 @@ class AcquiaSearchIntegrationTest extends BrowserTestBase {
    */
   // @codingStandardsIgnoreStart
   protected $strictConfigSchema = FALSE;
-  // @codingStandardsIgnoreEnd
 
-  /**
-   * {@inheritdoc}
-   */
-  protected static $modules = [
-    'acquia_cms_search',
-    'acquia_search',
-    'search_api_db',
-  ];
+  // @codingStandardsIgnoreEnd
 
   /**
    * Tests administrative integration with Acquia Search Solr.
