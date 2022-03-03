@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_tour\Controller;
 
+use Drupal\acquia_cms_tour\Annotation\AcquiaCmsTour;
 use Drupal\acquia_cms_tour\Form\AcquiaConnectorForm;
 use Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsApiDashboardForm;
 use Drupal\acquia_cms_tour\Form\AcquiaSearchForm;
@@ -48,6 +49,8 @@ final class DashboardController extends ControllerBase {
    */
   protected $state;
 
+  protected $acquiaCmsTour;
+
   /**
    * The sub-controllers to invoke in order to build the tour page.
    *
@@ -75,6 +78,7 @@ final class DashboardController extends ControllerBase {
   public function __construct(StateInterface $state, ClassResolverInterface $class_resolver) {
     $this->state = $state;
     $this->classResolver = $class_resolver;
+//    $this->acquiaCmsTour = $acquia_cms_tour->getDefinitions();
   }
 
   /**
@@ -99,6 +103,7 @@ final class DashboardController extends ControllerBase {
     return new static(
       $container->get('state'),
       $container->get('class_resolver')
+//      $container->get('plugin.manager.acquia_cms_tour')
     );
   }
 
@@ -159,7 +164,7 @@ final class DashboardController extends ControllerBase {
     $form['help_text'] = [
       '#type' => 'markup',
       '#markup' => $this->t("ACMS organizes its features into individual components called modules.
-       The configuration dashboard/wizard setup will help you setup the pre-requisties.
+       The configuration dashboard/wizard setup will help you setup the pre-requisites.
        Please note, not all modules in ACMS are required by default, and some optional modules
        are left disabled on install. A checklist is provided to help you keep track of the tasks
        needed to complete configuration."),
@@ -172,16 +177,26 @@ final class DashboardController extends ControllerBase {
 
     // Delegate building each section to sub-controllers, in order to keep all
     // extension-specific logic cleanly encapsulated.
-    foreach (static::SECTIONS as $key => $controller) {
-      $instance_definition = $this->classResolver->getInstanceFromDefinition($controller);
-      if ($instance_definition->isModuleEnabled()) {
-        $total++;
-        $build['wrapper'][$key] = $this->getSectionOutput($controller);
-        if ($instance_definition->getConfigurationState()) {
-          $completed++;
-        }
-      }
+//    foreach (static::SECTIONS as $key => $controller) {
+//      $instance_definition = $this->classResolver->getInstanceFromDefinition($controller);
+//      if ($instance_definition->isModuleEnabled()) {
+//        $total++;
+//        $build['wrapper'][$key] = $this->getSectionOutput($controller);
+//        if ($instance_definition->getConfigurationState()) {
+//          $completed++;
+//        }
+//      }
+//    }
+
+    $plugin_manager = \Drupal::service('plugin.manager.acquia_cms_tour');
+    $plugin_definitions = $plugin_manager->getDefinitions();
+    foreach ($plugin_definitions as $plugin) {
+//      $instance_definition = $this->classResolver->getInstanceFromDefinition($plugin['class']);
+//      $data[$plugin['id']] = $plugin['class']::buildConfigurationForm();
+      $total++;
+      $build['wrapper'][$plugin['id']] = \Drupal::classResolver()->getInstanceFromDefinition($plugin['class'])->buildConfigurationForm(); //$this->classResolver->getInstanceFromDefinition($plugin['class'])->buildConfigurationForm();
     }
+
     $form['check_total']['#value'] = $total;
     $form['check_count']['#value'] = $completed;
     array_unshift($build, $form);
