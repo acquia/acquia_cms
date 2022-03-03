@@ -7,10 +7,22 @@
         "drupal/acquia_cms_image": "^1.0",
         "drupal/address": "^1",
         "drupal/field_group": "^3",
-        "drupal/geocoder": "3.24",
+        "drupal/geocoder": "3.25",
         "drupal/geofield": "^1",
         "drupal/scheduler": "^1.3",
         "geocoder-php/google-maps-provider": "^4.6"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-composer-scaffold": true,
+            "ergebnis/composer-normalize": true,
+            "oomphinc/composer-installers-extender": true,
+            "phpro/grumphp-shim": true,
+            "webdriver-binary/binary-chromedriver": true
+        }
     },
     "extra": {
         "enable-patching": true,
