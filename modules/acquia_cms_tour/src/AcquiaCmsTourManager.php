@@ -9,10 +9,10 @@ use Drupal\Core\Plugin\DefaultPluginManager;
 /**
  * AcquiaCmsTour plugin manager.
  */
-class AcquiaCmsTourPluginManager extends DefaultPluginManager {
+class AcquiaCmsTourManager extends DefaultPluginManager {
 
   /**
-   * Constructs AcquiaCmsTourPluginManager object.
+   * Constructs AcquiaCmsTourManager object.
    *
    * @param \Traversable $namespaces
    *   An object that implements \Traversable which contains the root paths
@@ -32,6 +32,18 @@ class AcquiaCmsTourPluginManager extends DefaultPluginManager {
     );
     $this->alterInfo('acquia_cms_tour_info');
     $this->setCacheBackend($cache_backend, 'acquia_cms_tour_plugins');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAllForms() {
+    $options = [];
+    // @todo write code to sort the getDefinitions() in the order of plugin weight.
+    foreach ($this->getDefinitions() as $definition) {
+      $options[$definition['id']] = \Drupal::formBuilder()->getForm('\Drupal\acquia_cms_site_studio\Plugin\AcquiaCmsTour\SiteStudioCoreForm');
+    }
+    return $options;
   }
 
 }

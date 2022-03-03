@@ -2,12 +2,10 @@
 
 namespace Drupal\acquia_cms_tour;
 
-use Drupal\Core\Plugin\PluginFormInterface;
-
 /**
  * Interface for acquia_cms_tour plugins.
  */
-interface AcquiaCmsTourInterface extends PluginFormInterface {
+interface AcquiaCmsTourInterface {
 
   /**
    * Returns the translated plugin label.

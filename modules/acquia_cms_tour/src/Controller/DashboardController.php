@@ -2,7 +2,6 @@
 
 namespace Drupal\acquia_cms_tour\Controller;
 
-use Drupal\acquia_cms_tour\Annotation\AcquiaCmsTour;
 use Drupal\acquia_cms_tour\Form\AcquiaConnectorForm;
 use Drupal\acquia_cms_tour\Form\AcquiaGoogleMapsApiDashboardForm;
 use Drupal\acquia_cms_tour\Form\AcquiaSearchForm;
@@ -78,7 +77,7 @@ final class DashboardController extends ControllerBase {
   public function __construct(StateInterface $state, ClassResolverInterface $class_resolver) {
     $this->state = $state;
     $this->classResolver = $class_resolver;
-//    $this->acquiaCmsTour = $acquia_cms_tour->getDefinitions();
+    // $this->acquiaCmsTour = $acquia_cms_tour->getDefinitions();
   }
 
   /**
@@ -103,7 +102,7 @@ final class DashboardController extends ControllerBase {
     return new static(
       $container->get('state'),
       $container->get('class_resolver')
-//      $container->get('plugin.manager.acquia_cms_tour')
+    // $container->get('plugin.manager.acquia_cms_tour')
     );
   }
 
@@ -177,25 +176,18 @@ final class DashboardController extends ControllerBase {
 
     // Delegate building each section to sub-controllers, in order to keep all
     // extension-specific logic cleanly encapsulated.
-//    foreach (static::SECTIONS as $key => $controller) {
-//      $instance_definition = $this->classResolver->getInstanceFromDefinition($controller);
-//      if ($instance_definition->isModuleEnabled()) {
-//        $total++;
-//        $build['wrapper'][$key] = $this->getSectionOutput($controller);
-//        if ($instance_definition->getConfigurationState()) {
-//          $completed++;
-//        }
-//      }
-//    }
-
+    //    foreach (static::SECTIONS as $key => $controller) {
+    //      $instance_definition = $this->classResolver->getInstanceFromDefinition($controller);
+    //      if ($instance_definition->isModuleEnabled()) {
+    //        $total++;
+    //        $build['wrapper'][$key] = $this->getSectionOutput($controller);
+    //        if ($instance_definition->getConfigurationState()) {
+    //          $completed++;
+    //        }
+    //      }
+    //    }.
     $plugin_manager = \Drupal::service('plugin.manager.acquia_cms_tour');
-    $plugin_definitions = $plugin_manager->getDefinitions();
-    foreach ($plugin_definitions as $plugin) {
-//      $instance_definition = $this->classResolver->getInstanceFromDefinition($plugin['class']);
-//      $data[$plugin['id']] = $plugin['class']::buildConfigurationForm();
-      $total++;
-      $build['wrapper'][$plugin['id']] = \Drupal::classResolver()->getInstanceFromDefinition($plugin['class'])->buildConfigurationForm(); //$this->classResolver->getInstanceFromDefinition($plugin['class'])->buildConfigurationForm();
-    }
+    $build = $plugin_definitions = $plugin_manager->getAllForms();
 
     $form['check_total']['#value'] = $total;
     $form['check_count']['#value'] = $completed;

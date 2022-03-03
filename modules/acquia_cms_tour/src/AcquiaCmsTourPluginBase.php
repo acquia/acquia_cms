@@ -2,12 +2,10 @@
 
 namespace Drupal\acquia_cms_tour;
 
-use Drupal\Component\Plugin\PluginBase;
-
 /**
  * Base class for acquia_cms_tour plugins.
  */
-abstract class AcquiaCmsTourPluginBase extends PluginBase implements AcquiaCmsTourInterface {
+abstract class AcquiaCmsTourPluginBase implements AcquiaCmsTourInterface {
 
   /**
    * {@inheritdoc}
@@ -21,7 +19,7 @@ abstract class AcquiaCmsTourPluginBase extends PluginBase implements AcquiaCmsTo
    * {@inheritdoc}
    */
   public function weight() {
-    return  $this->pluginDefinition['weight'];
+    return $this->pluginDefinition['weight'];
   }
 
 }
