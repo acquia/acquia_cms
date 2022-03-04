@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "550f61873a1b899b68e85cc8c98a9404",
+    "content-hash": "7cf16d8a43d13874c96a7587af94d075",
     "packages": [
         {
             "name": "acquia/acsf-contenthub-console",
@@ -2478,24 +2478,12 @@
             ],
             "authors": [
                 {
-                    "name": "Nick_vh",
-                    "homepage": "https://www.drupal.org/user/122682"
-                },
-                {
                     "name": "acquia",
                     "homepage": "https://www.drupal.org/user/1231722"
                 },
                 {
-                    "name": "dmitrii",
-                    "homepage": "https://www.drupal.org/user/411965"
-                },
-                {
                     "name": "japerry",
                     "homepage": "https://www.drupal.org/user/45640"
-                },
-                {
-                    "name": "pwolanin",
-                    "homepage": "https://www.drupal.org/user/49851"
                 }
             ],
             "description": "Provides integration between your Drupal site and Acquia's hosted search service.",
@@ -9654,6 +9642,9 @@
             },
             "require": {
                 "php": "^7.1 || ^8.0"
+            },
+            "replace": {
+                "myclabs/deep-copy": "self.version"
             },
             "require-dev": {
                 "doctrine/collections": "^1.0",
@@ -19487,5 +19478,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.0.0"
 }
