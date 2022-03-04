@@ -65,7 +65,7 @@ final class DashboardController extends ControllerBase {
   }
 
   /**
-   * Invokes a sub-controller and returns its output.
+   * Invokes a plugin and returns its output.
    *
    * @param string $plugin_class
    *   The plugin class.
