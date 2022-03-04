@@ -37,13 +37,14 @@ class AcquiaCmsTourManager extends DefaultPluginManager {
   /**
    * {@inheritdoc}
    */
-  public function getAllForms() {
-    $options = [];
-    // @todo write code to sort the getDefinitions() in the order of plugin weight.
-    foreach ($this->getDefinitions() as $definition) {
-      $options[$definition['id']] = \Drupal::formBuilder()->getForm('\Drupal\acquia_cms_site_studio\Plugin\AcquiaCmsTour\SiteStudioCoreForm');
-    }
-    return $options;
+  protected function findDefinitions(): array {
+    // Sort plugin by its weight.
+    $definitions = parent::findDefinitions();
+    uasort($definitions, [
+      'Drupal\Component\Utility\SortArray',
+      'sortByWeightElement',
+    ]);
+    return $definitions;
   }
 
 }

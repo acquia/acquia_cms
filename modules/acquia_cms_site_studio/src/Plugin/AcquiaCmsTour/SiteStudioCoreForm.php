@@ -11,7 +11,8 @@ use Drupal\Core\Url;
  *
  * @AcquiaCmsTour(
  *   id = "site_studio",
- *   label = @Translation("Site studio")
+ *   label = @Translation("Site studio"),
+ *   weight = 8
  * )
  */
 class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
