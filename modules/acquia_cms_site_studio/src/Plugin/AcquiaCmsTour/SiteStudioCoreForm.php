@@ -10,7 +10,7 @@ use Drupal\Core\Url;
  * Plugin implementation of the acquia_cms_tour.
  *
  * @AcquiaCmsTour(
- *   id = "site_studio",
+ *   id = "cohesion",
  *   label = @Translation("Site studio"),
  *   weight = 8
  * )
