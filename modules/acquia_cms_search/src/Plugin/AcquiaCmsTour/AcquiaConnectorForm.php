@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acquia_cms_tour\Plugin\AcquiaCmsTour;
+namespace Drupal\acquia_cms_search\Plugin\AcquiaCmsTour;
 
 use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
 use Drupal\Core\Form\FormStateInterface;
