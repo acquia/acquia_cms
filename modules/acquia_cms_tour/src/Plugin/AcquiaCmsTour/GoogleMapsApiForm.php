@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   weight = 2
  * )
  */
-class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
+class GoogleMapsApiForm extends AcquiaCMSDashboardBase {
 
   /**
    * Provides module name.
@@ -51,7 +51,7 @@ class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'acquia_google_maps_api_form';
+    return 'google_maps_api_form';
   }
 
   /**
@@ -70,7 +70,7 @@ class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
     // enabled in ACMS, but Place may not.
     $module = $this->module;
     if ($this->isModuleEnabled()) {
-      $module_path = $this->module_handler->getModule($module)->getPathname();
+      $module_path = $this->moduleHandler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
       $maps_api_key = $this->config('cohesion.settings')
         ->get('google_map_api_key');
@@ -99,7 +99,7 @@ class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
           '#type' => 'textfield',
           '#required' => TRUE,
           '#title' => $this->t('Maps API key'),
-          '#placeholder' => '1234abcd',
+          '#placeholder' => 'xxx-xxx-xxx',
           '#description' => $this->t('Enter your Google Maps API Key to automatically generate maps for Place content in Acquia CMS.'),
           '#default_value' => $maps_api_key,
           '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],

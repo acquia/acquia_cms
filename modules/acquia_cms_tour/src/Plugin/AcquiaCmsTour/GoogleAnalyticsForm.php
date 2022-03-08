@@ -55,7 +55,7 @@ class GoogleAnalyticsForm extends AcquiaCMSDashboardBase {
         ];
       }
 
-      $module_path = $this->module_handler->getModule($module)->getPathname();
+      $module_path = $this->moduleHandler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
       $form[$module] = [
         '#type' => 'details',
@@ -68,7 +68,7 @@ class GoogleAnalyticsForm extends AcquiaCMSDashboardBase {
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Web Property ID'),
-        '#placeholder' => 'UA-',
+        '#placeholder' => 'UA-xxx-xxx-xxx',
         '#default_value' => $this->config('google_analytics.settings')->get('account'),
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
         '#suffix' => "</div>",

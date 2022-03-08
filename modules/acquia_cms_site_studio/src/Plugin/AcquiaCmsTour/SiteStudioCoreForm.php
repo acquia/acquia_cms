@@ -11,7 +11,7 @@ use Drupal\Core\Url;
  *
  * @AcquiaCmsTour(
  *   id = "cohesion",
- *   label = @Translation("Site studio"),
+ *   label = @Translation("Site Studio Core"),
  *   weight = 8
  * )
  */
@@ -47,7 +47,7 @@ class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
     $form['#tree'] = FALSE;
     $module = $this->module;
     if ($this->isModuleEnabled()) {
-      $module_path = $this->module_handler->getModule($module)->getPathname();
+      $module_path = $this->moduleHandler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
 
       $configured = $this->getConfigurationState();
@@ -67,7 +67,7 @@ class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('API key'),
-        '#placeholder' => '1234abcd',
+        '#placeholder' => 'xxx-xxx-xxx',
         '#default_value' => $this->config('cohesion.settings')->get('api_key'),
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
       ];
@@ -75,7 +75,7 @@ class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Agency key'),
-        '#placeholder' => '1234abcd',
+        '#placeholder' => 'xxx-xxx-xxx',
         '#default_value' => $this->config('cohesion.settings')->get('organization_key'),
         '#suffix' => "</div>",
       ];

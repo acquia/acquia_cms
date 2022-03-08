@@ -431,7 +431,7 @@ class InstallationWizardForm extends FormBase {
     $plugin = $this->getCurrentFormController();
     $key = $plugin['id'];
     $formControllerDefinition = $this->classResolver->getInstanceFromDefinition($plugin['class']);
-    $module_title = $plugin['label'];
+    $module_title = $formControllerDefinition->getModuleName();
     $form = $formControllerDefinition->buildForm($form, $form_state);
     $form[$key]['title_markup'] = [
       '#type' => 'markup',
@@ -456,7 +456,8 @@ class InstallationWizardForm extends FormBase {
     $steps = $this->getSteps();
     foreach ($steps as $key => $plugin) {
       $module_machine_name = $plugin['id'];
-      $module_title = $plugin['label'];
+      $formControllerDefinition = $this->classResolver->getInstanceFromDefinition($plugin['class']);
+      $module_title = $formControllerDefinition->getModuleName();
       $sr_no = $key + 1;
       if ($sr_no < ($this->currentStep) + 1) {
         $current_class = ['item', 'step-complete'];

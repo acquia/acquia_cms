@@ -37,10 +37,7 @@ class AcquiaTelemetryForm extends AcquiaCMSDashboardBase {
    */
   public static function create(ContainerInterface $container) {
     $instance = parent::create($container);
-
-    $module_installer = $container->get('module_installer');
-    $instance->moduleInstaller = $module_installer;
-
+    $instance->moduleInstaller = $container->get('module_installer');
     return $instance;
   }
 
@@ -66,7 +63,7 @@ class AcquiaTelemetryForm extends AcquiaCMSDashboardBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
     $module = $this->module;
-    $module_path = $this->module_handler->getModule($module)->getPathname();
+    $module_path = $this->moduleHandler->getModule($module)->getPathname();
     $module_info = $this->infoParser->parse($module_path);
     if ($this->getConfigurationState()) {
       $form['check_icon'] = [

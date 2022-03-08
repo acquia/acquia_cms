@@ -47,7 +47,7 @@ class AcquiaSearchForm extends AcquiaCMSDashboardBase {
     $form['#tree'] = FALSE;
     $module = $this->module;
     if ($this->isModuleEnabled()) {
-      $module_path = $this->module_handler->getModule($module)->getPathname();
+      $module_path = $this->moduleHandler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
       $configured = $this->getConfigurationState();
       if ($configured) {

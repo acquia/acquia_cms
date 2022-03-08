@@ -55,7 +55,7 @@ class RecaptchaForm extends AcquiaCMSDashboardBase {
           '#suffix' => "</span>",
         ];
       }
-      $module_path = $this->module_handler->getModule($module)->getPathname();
+      $module_path = $this->moduleHandler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
       $form[$module] = [
         '#type' => 'details',
@@ -67,7 +67,7 @@ class RecaptchaForm extends AcquiaCMSDashboardBase {
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Site key'),
-        '#placeholder' => '1234abcd',
+        '#placeholder' => 'xxx-xxx-xxx',
         '#default_value' => $this->config('recaptcha.settings')->get('site_key'),
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
       ];
@@ -75,7 +75,7 @@ class RecaptchaForm extends AcquiaCMSDashboardBase {
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Secret key'),
-        '#placeholder' => '1234abcd',
+        '#placeholder' => 'xxx-xxx-xxx',
         '#default_value' => $this->config('recaptcha.settings')->get('secret_key'),
         '#suffix' => "</div>",
       ];
