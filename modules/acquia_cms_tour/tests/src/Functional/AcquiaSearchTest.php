@@ -23,6 +23,7 @@ class AcquiaSearchTest extends BrowserTestBase {
    */
   protected static $modules = [
     'acquia_cms_tour',
+    'acquia_cms_search',
     'acquia_search',
   ];
 

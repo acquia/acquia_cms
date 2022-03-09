@@ -22,6 +22,7 @@ class AcquiaConnectorTest extends BrowserTestBase {
    */
   protected static $modules = [
     'acquia_cms_tour',
+    'acquia_cms_search',
     'acquia_connector',
   ];
 
