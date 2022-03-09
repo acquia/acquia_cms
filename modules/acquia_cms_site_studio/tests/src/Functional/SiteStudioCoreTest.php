@@ -1,16 +1,17 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_tour\Functional;
+namespace Drupal\Tests\acquia_cms_site_studio\Functional;
 
 use Drupal\Tests\BrowserTestBase;
 
 /**
- * Tests the Acquia CMS Connector form.
+ * Tests the Site Studio Core Form.
  *
  * @group acquia_cms
  * @group acquia_cms_tour
+ * @group acquia_cms_site_studio
  */
-class AcquiaConnectorTest extends BrowserTestBase {
+class SiteStudioCoreTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
@@ -22,8 +23,7 @@ class AcquiaConnectorTest extends BrowserTestBase {
    */
   protected static $modules = [
     'acquia_cms_tour',
-    'acquia_cms_search',
-    'acquia_connector',
+    'acquia_cms_site_studio',
   ];
 
   /**
@@ -42,9 +42,9 @@ class AcquiaConnectorTest extends BrowserTestBase {
   // @codingStandardsIgnoreEnd
 
   /**
-   * Tests the Acquia CMS Connector form.
+   * Tests the Site Studio Core Form.
    */
-  public function testAcquiaConnector() {
+  public function testSiteStudioCore() {
     $assert_session = $this->assertSession();
 
     $account = $this->drupalCreateUser(['access acquia cms tour dashboard']);
@@ -53,10 +53,25 @@ class AcquiaConnectorTest extends BrowserTestBase {
     // Visit the tour page.
     $this->drupalGet('/admin/tour/dashboard');
     $assert_session->statusCodeEquals(200);
-    // Assert that the expected fields show up.
-    $assert_session->fieldExists('Name');
+    $container = $assert_session->elementExists('css', '.acquia-cms-site-studio-core-form');
     // Assert that save and advanced buttons are present on form.
     $assert_session->buttonExists('Save');
+    // Assert that the expected fields show up.
+    $assert_session->fieldExists('API key');
+    $assert_session->fieldExists('Agency key');
+    // Save API key.
+    $dummy_api_key = 'test-key-13fdnj32';
+    $container->fillField('edit-api-key', $dummy_api_key);
+    // Save Agency key.
+    $dummy_agency_key = 'test-agency-13fdnj32';
+    $container->fillField('edit-agency-key', $dummy_agency_key);
+    $container->pressButton('Save');
+    $assert_session->pageTextContains('The configuration options have been saved.');
+    // Test that the config values we expect are set correctly.
+    $cohesion_api_key = $this->config('cohesion.settings')->get('api_key');
+    $this->assertSame($cohesion_api_key, $dummy_api_key);
+    $cohesion_agency_key = $this->config('cohesion.settings')->get('organization_key');
+    $this->assertSame($cohesion_agency_key, $dummy_agency_key);
   }
 
 }
