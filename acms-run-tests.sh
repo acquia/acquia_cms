@@ -48,7 +48,7 @@ installchromedriver() {
 # Start PHP's built-in http server on port "${WEBSERVER_PORT}".
 runwebserver() {
   echo -e "${YELLOW}Starting PHP's built-in http server on "${WEBSERVER_PORT}".${NOCOLOR}"
-  nohup drush runserver "${WEBSERVER_PORT}" &
+  nohup ./vendor/bin/drush runserver "${WEBSERVER_PORT}" &
   echo -e "${GREEN}Drush server started on port "${WEBSERVER_PORT}".${NOCOLOR}"
 }
 
