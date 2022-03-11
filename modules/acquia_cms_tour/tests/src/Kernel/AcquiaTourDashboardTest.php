@@ -1,22 +1,19 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_tour\Functional;
+namespace Drupal\Tests\acquia_cms_tour\Kernel;
 
-use Drupal\Tests\BrowserTestBase;
+use Drupal\KernelTests\KernelTestBase;
 
 /**
  * Tests Acquia CMS Tour module's dashboard implementation using plugin system.
  *
  * @group acquia_cms
  * @group acquia_cms_tour
- * @group risky
+ * @group low_risk
+ * @group pr
+ * @group push
  */
-class AcquiaTourDashboardTest extends BrowserTestBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $defaultTheme = 'stark';
+class AcquiaTourDashboardTest extends KernelTestBase {
 
   /**
    * {@inheritdoc}
