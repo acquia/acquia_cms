@@ -47,4 +47,15 @@ class AcquiaCmsTourManager extends DefaultPluginManager {
     return $definitions;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getTourManagerPlugin(): array {
+    $options = [];
+    foreach ($this->getDefinitions() as $definition) {
+      $options[$definition['id']] = $definition;
+    }
+    return $options;
+  }
+
 }
