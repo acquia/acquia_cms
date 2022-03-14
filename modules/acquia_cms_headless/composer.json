@@ -17,6 +17,16 @@
         "webdriver-binary/binary-chromedriver": true
         }
     },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    },
     "extra": {
         "patches": {
             "drupal/subrequests": {
