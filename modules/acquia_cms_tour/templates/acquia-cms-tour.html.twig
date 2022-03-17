@@ -1,4 +1,3 @@
-{% set module_path = _self|split('/templates') %}
 <div class="tour-page">
   <div class="section-hero">
     <h2>Welcome to Acquia CMS</h2>
@@ -30,10 +29,12 @@
           Academy, our learning platform.
         </p>
       </div>
-      <div class="button-section">
-        <a class="button button--primary" href="/admin/tour/dashboard">Get started</a>
-        <p><strong>Click here to get started!</strong></p>
-      </div>
+      {% if data.showButton == 1 %}
+        <div class="button-section">
+          <a class="button button--primary" href="/admin/tour/dashboard">Get started</a>
+          <p><strong>Click here to get started!</strong></p>
+        </div>
+      {% endif %}
     </div>
   </div>
   <div class="layout-container section-content">
