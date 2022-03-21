@@ -37,7 +37,7 @@
         "drupal/component": "1.0-rc3",
         "drupal/config_ignore": "2.3.0",
         "drupal/config_rewrite": "^1.4",
-        "drupal/core": "~9.2.15 || ~9.3.8",
+        "drupal/core": "~9.2.6 || ~9.3.7",
         "drupal/default_content": "2.0.0-alpha1",
         "drupal/diff": "^1",
         "drupal/entity_clone": "1.0-beta6",
@@ -58,6 +58,7 @@
         "drupal/moderation_dashboard": "1.0.0-beta3",
         "drupal/moderation_sidebar": "^1.4",
         "drupal/mysql56": "^1.0",
+        "drupal/next": "1.0.0",
         "drupal/node_revision_delete": "^1.0@RC",
         "drupal/password_policy": "^3.0",
         "drupal/pathauto": "^1",
@@ -171,28 +172,28 @@
                 "Error: Attempt to modify property 'styles' on array": "https://gist.githubusercontent.com/panshulK/86e53ac29386142b4204ab885018b36c/raw/c05e9c959cd8102534ccc1923809f90bc735785c/site-studio-updated-style.patch"
             },
             "drupal/acquia_telemetry-acquia_telemetry": {
-                "3165473 - Add check for core index": "https://www.drupal.org/files/issues/2020-08-18/3165473-27.patch",
-                "3267344 - Use markup to render text on status report page": "https://git.drupalcode.org/project/acquia_telemetry/-/merge_requests/1.diff"
+                "Add check for core index": "https://www.drupal.org/files/issues/2020-08-18/3165473-27.patch",
+                "Use markup to render text on status report page": "https://git.drupalcode.org/project/acquia_telemetry/-/merge_requests/1.diff"
             },
             "drupal/component": {
-                "3236462 - Missing Use statement creates fatal errors": "https://git.drupalcode.org/project/component/-/merge_requests/2.patch"
+                "Missing Use statement creates fatal errors": "https://git.drupalcode.org/project/component/-/merge_requests/2.patch"
             },
             "drupal/config_ignore": {
-                "2857247 - Support for export filtering via Drush": "https://www.drupal.org/files/issues/2021-08-18/config_ignore_2857247-75.patch"
+                "Support for export filtering via Drush": "https://www.drupal.org/files/issues/2021-08-18/config_ignore_2857247-75.patch"
             },
             "drupal/core": {
-                "3059955 - It is possible to overflow the number of items allowed in Media Library": "https://www.drupal.org/files/issues/2019-12-28/3082690-80.patch",
-                "3160238 - Media Library widget produces \"This value should not be null\" error when field is required": "https://www.drupal.org/files/issues/2020-10-08/3160238-25.patch",
-                "3160238 - SQLite database locking errors cause fatal errors": "https://www.drupal.org/files/issues/1120020-59.patch"
+                "It is possible to overflow the number of items allowed in Media Library": "https://www.drupal.org/files/issues/2019-12-28/3082690-80.patch",
+                "Media Library widget produces error this value should not be null when field is required": "https://www.drupal.org/files/issues/2020-10-08/3160238-25.patch",
+                "SQLite database locking errors cause fatal errors": "https://www.drupal.org/files/issues/1120020-59.patch"
             },
             "drupal/default_content": {
-                "2698425 - Do not reimport existing entities": "https://git.drupalcode.org/project/default_content/-/merge_requests/5.patch"
+                "2698425 - Duplicate content issues in default content": "https://git.drupalcode.org/project/default_content/-/merge_requests/5.patch"
             },
             "drupal/entity_clone": {
-                "3013286 - Allow fields implementing EntityReferenceFieldItemListInterface to clone their referenced entities": "https://www.drupal.org/files/issues/2021-04-14/3013286-19.patch"
+                "Allow fields implementing EntityReferenceFieldItemListInterface to clone their referenced entities": "https://www.drupal.org/files/issues/2021-04-14/3013286-19.patch"
             },
             "drupal/facets": {
-                "3259123 - ViewsDisplayBase::isRenderedInCurrentRequest() doesn't let the facet link to reset to original URL": "https://www.drupal.org/files/issues/2022-01-18/3259123-search-facet-reset-link.patch"
+                "Fix the select/deselect facet link issue": "https://www.drupal.org/files/issues/2022-01-18/3259123-search-facet-reset-link.patch"
             },
             "drupal/focal_point": {
                 "3162210 - Preview link accidentally closes the media library": "https://www.drupal.org/files/issues/2020-10-06/3162210-17.patch"
@@ -201,10 +202,16 @@
                 "3224364 - Replace deprecated boolean return in uksort() for PHP 8 compatibility.": "https://www.drupal.org/files/issues/2021-07-19/3224364-2.patch"
             },
             "drupal/reroute_email": {
-                "3254806 - Invalid argument supplied for foreach() in reroute_email_check_email_by_permission() (line 316)": "https://git.drupalcode.org/project/reroute_email/-/commit/438a67caeb0b0cc47d1deb0cee50afda9a907dc8.diff"
+                "Invalid argument supplied for foreach() in reroute_email_check_email_by_permission() (line 316)": "https://git.drupalcode.org/project/reroute_email/-/commit/438a67caeb0b0cc47d1deb0cee50afda9a907dc8.diff"
             },
             "drupal/search_api": {
-                "3236696 - Call to a member function preExecute() on null in SearchApiTagCache->alterCacheMetadata()": "https://www.drupal.org/files/issues/2021-09-20/search_api_condition_cacheable_metadata.patch"
+                "Resolves call to member function preExecute() on null error on site install": "https://www.drupal.org/files/issues/2021-09-20/search_api_condition_cacheable_metadata.patch"
+            },
+            "drupal/subrequests": {
+                "Get same results on different request": "https://www.drupal.org/files/issues/2019-07-18/change_request_type-63049395-09.patch"
+            },
+            "drupal/decoupled_router": {
+                "Unable to resolve path on node in other language than default": "https://www.drupal.org/files/issues/2021-05-05/3111456-34.patch"
             }
         }
     },
