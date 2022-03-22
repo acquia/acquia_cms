@@ -1,21 +1,18 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_tour\Functional;
+namespace Drupal\Tests\acquia_cms_search\Functional;
 
-use Drupal\search_api\Entity\Index;
 use Drupal\Tests\BrowserTestBase;
-use Drupal\views\Entity\View;
 
 /**
- * Tests integration with Acquia Search Solr.
+ * Tests the Acquia Search Solr Form.
  *
  * @group acquia_cms
  * @group acquia_cms_tour
- * @group low_risk
- * @group pr
- * @group push
+ * @group acquia_cms_search
  */
-class AcquiaSearchFormIntegrationTest extends BrowserTestBase {
+class AcquiaSearchTest extends BrowserTestBase {
+
 
   /**
    * {@inheritdoc}
@@ -26,11 +23,11 @@ class AcquiaSearchFormIntegrationTest extends BrowserTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
+    'acquia_cms_tour',
     'acquia_cms_search',
     'acquia_search',
-    'acquia_cms_tour',
-    'search_api_db',
   ];
+
   /**
    * Disable strict config schema checks in this test.
    *
@@ -44,44 +41,46 @@ class AcquiaSearchFormIntegrationTest extends BrowserTestBase {
    */
   // @codingStandardsIgnoreStart
   protected $strictConfigSchema = FALSE;
-
   // @codingStandardsIgnoreEnd
 
   /**
-   * Tests administrative integration with Acquia Search Solr.
+   * Tests the Acquia Search Solr Form.
    */
-  public function testAcquiaSearchFormIntegration() {
+  public function testAcquiaSearch() {
     $assert_session = $this->assertSession();
-    $account = $this->drupalCreateUser([
-      'administer site configuration',
-      'administer search_api',
-      'access acquia cms tour dashboard',
-    ]);
+
+    $account = $this->drupalCreateUser(['access acquia cms tour dashboard']);
     $this->drupalLogin($account);
+
     // Visit the tour page.
     $this->drupalGet('/admin/tour/dashboard');
     $assert_session->statusCodeEquals(200);
-
     $container = $assert_session->elementExists('css', '.acquia-cms-search-form');
-    // Assert that save button is present on form.
+    // Assert that save and advanced buttons are present on form.
     $assert_session->buttonExists('Save');
     // Assert that the expected fields show up.
     $assert_session->fieldExists('Acquia Subscription identifier');
-    $assert_session->fieldExists('Acquia Connector key');
+    $assert_session->fieldExists('Acquia Search API hostname');
     $assert_session->fieldExists('Acquia Application UUID');
-
-    // Save Fields.
-    $container->fillField('Acquia Subscription identifier', 'ABCD-12345');
-    $container->fillField('Acquia Connector key', $this->randomString());
-    $container->fillField('Acquia Application UUID', $this->container->get('uuid')->generate());
+    // Save Subscription identifier.
+    $dummy_identifier = getenv('CONNECTOR_ID');
+    $container->fillField('edit-identifier', $dummy_identifier);
+    // Save Search API hostname.
+    $dummy_hostname = 'https://api.sr-prod02.acquia.com';
+    $container->fillField('edit-api-host', $dummy_hostname);
+    // Save Application UUID.
+    $dummy_uuid = getenv('SEARCH_UUID');
+    $container->fillField('edit-uuid', $dummy_uuid);
     $container->pressButton('Save');
-
     $assert_session->pageTextContains('The configuration options have been saved.');
-
-    // Our index should be using the database server.
-    $this->assertSame('database', Index::load('content')->getServerId());
-    // The search view of acquia search should be enabled.
-    $this->assertTrue(View::load('search')->status());
+    // Test that the config values we expect are set correctly.
+    $state = $this->container->get('state');
+    $solr_identifier = $state->get('acquia_search.identifier');
+    $this->assertSame($solr_identifier, $dummy_identifier);
+    $solr_api_host = $this->config('acquia_search.settings')->get('api_host');
+    $this->assertSame($solr_api_host, $dummy_hostname);
+    $solr_uuid = $state->get('acquia_search.uuid');
+    $this->assertSame($solr_uuid, $dummy_uuid);
   }
 
 }

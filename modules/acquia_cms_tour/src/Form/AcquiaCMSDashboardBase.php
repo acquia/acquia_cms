@@ -15,6 +15,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class AcquiaCMSDashboardBase extends ConfigFormBase implements AcquiaDashboardInterface {
 
   /**
+   * The state interface.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
+
+  /**
    * Module name which is responsible for this form.
    *
    * @var string
@@ -57,7 +64,7 @@ abstract class AcquiaCMSDashboardBase extends ConfigFormBase implements AcquiaDa
    */
   public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser) {
     $this->state = $state;
-    $this->module_handler = $module_handler;
+    $this->moduleHandler = $module_handler;
     $this->linkGenerator = $link_generator;
     $this->infoParser = $info_parser;
   }
@@ -78,7 +85,7 @@ abstract class AcquiaCMSDashboardBase extends ConfigFormBase implements AcquiaDa
    * {@inheritdoc}
    */
   public function isModuleEnabled() {
-    if ($this->module_handler->moduleExists($this->module)) {
+    if ($this->moduleHandler->moduleExists($this->module)) {
       return TRUE;
     }
   }
@@ -94,7 +101,7 @@ abstract class AcquiaCMSDashboardBase extends ConfigFormBase implements AcquiaDa
    * Get human readable module name.
    */
   public function getModuleName() {
-    return $this->module_handler->getName($this->module);
+    return $this->moduleHandler->getName($this->module);
   }
 
   /**
