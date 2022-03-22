@@ -1,16 +1,23 @@
 <?php
 
-namespace Drupal\acquia_cms_tour\Form;
+namespace Drupal\acquia_cms_tour\Plugin\AcquiaCmsTour;
 
+use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\geocoder\GeocoderProviderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a form to configure the API key for Google Maps.
+ * Plugin implementation of the acquia_cms_tour.
+ *
+ * @AcquiaCmsTour(
+ *   id = "geocoder",
+ *   label = @Translation("Geocoder"),
+ *   weight = 2
+ * )
  */
-final class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
+class GoogleMapsApiForm extends AcquiaCMSDashboardBase {
 
   /**
    * Provides module name.
@@ -44,7 +51,7 @@ final class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'acquia_google_maps_api_form';
+    return 'google_maps_api_form';
   }
 
   /**
@@ -63,7 +70,7 @@ final class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
     // enabled in ACMS, but Place may not.
     $module = $this->module;
     if ($this->isModuleEnabled()) {
-      $module_path = $this->module_handler->getModule($module)->getPathname();
+      $module_path = $this->moduleHandler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
       $maps_api_key = $this->config('cohesion.settings')
         ->get('google_map_api_key');
@@ -92,7 +99,7 @@ final class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
           '#type' => 'textfield',
           '#required' => TRUE,
           '#title' => $this->t('Maps API key'),
-          '#placeholder' => '1234abcd',
+          '#placeholder' => 'xxx-xxx-xxx',
           '#description' => $this->t('Enter your Google Maps API Key to automatically generate maps for Place content in Acquia CMS.'),
           '#default_value' => $maps_api_key,
           '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
@@ -180,14 +187,13 @@ final class AcquiaGoogleMapsApiDashboardForm extends AcquiaCMSDashboardBase {
   /**
    * {@inheritdoc}
    */
-  public function checkMinConfiguration() {
+  public function checkMinConfiguration(): bool {
     $maps_api_key = $this->config('cohesion.settings')->get('google_map_api_key');
     $provider = $this->loadProvider();
     if ($provider) {
       $configuration = $provider->get('configuration');
       $maps_api_key = $configuration['apiKey'];
     }
-
     return !empty($maps_api_key);
   }
 

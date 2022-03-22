@@ -1,14 +1,21 @@
 <?php
 
-namespace Drupal\acquia_cms_tour\Form;
+namespace Drupal\acquia_cms_search\Plugin\AcquiaCmsTour;
 
+use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
- * Provides a form to configure Acquia Solr Search module.
+ * Plugin implementation of the acquia_cms_tour.
+ *
+ * @AcquiaCmsTour(
+ *   id = "acquia_search",
+ *   label = @Translation("Acquia Search"),
+ *   weight = 3
+ * )
  */
-final class AcquiaSearchForm extends AcquiaCMSDashboardBase {
+class AcquiaSearchForm extends AcquiaCMSDashboardBase {
 
   /**
    * Provides module name.
@@ -40,7 +47,7 @@ final class AcquiaSearchForm extends AcquiaCMSDashboardBase {
     $form['#tree'] = FALSE;
     $module = $this->module;
     if ($this->isModuleEnabled()) {
-      $module_path = $this->module_handler->getModule($module)->getPathname();
+      $module_path = $this->moduleHandler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
       $configured = $this->getConfigurationState();
       if ($configured) {

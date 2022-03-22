@@ -1,15 +1,22 @@
 <?php
 
-namespace Drupal\acquia_cms_tour\Form;
+namespace Drupal\acquia_cms_tour\Plugin\AcquiaCmsTour;
 
+use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a form to toggle the Acquia Telemetry module.
+ * Plugin implementation of the acquia_cms_tour.
+ *
+ * @AcquiaCmsTour(
+ *   id = "acquia_telemetry",
+ *   label = @Translation("Acquia Telemetry"),
+ *   weight = 1
+ * )
  */
-final class AcquiaTelemetryForm extends AcquiaCMSDashboardBase {
+class AcquiaTelemetryForm extends AcquiaCMSDashboardBase {
 
   /**
    * The module installer.
@@ -30,10 +37,7 @@ final class AcquiaTelemetryForm extends AcquiaCMSDashboardBase {
    */
   public static function create(ContainerInterface $container) {
     $instance = parent::create($container);
-
-    $module_installer = $container->get('module_installer');
-    $instance->moduleInstaller = $module_installer;
-
+    $instance->moduleInstaller = $container->get('module_installer');
     return $instance;
   }
 
@@ -59,7 +63,7 @@ final class AcquiaTelemetryForm extends AcquiaCMSDashboardBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
     $module = $this->module;
-    $module_path = $this->module_handler->getModule($module)->getPathname();
+    $module_path = $this->moduleHandler->getModule($module)->getPathname();
     $module_info = $this->infoParser->parse($module_path);
     if ($this->getConfigurationState()) {
       $form['check_icon'] = [
