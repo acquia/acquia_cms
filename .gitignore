@@ -1,15 +1,28 @@
-bower_components/
+# Composer.
 docroot/
 keys/*
-.DS_Store
-.ddev/
-.vscode
-.idea/
+nohup.out
+vendor/
+
+# Theme
+bower_components/
 node_modules/
 /package-lock.json
 .sass-cache/
-vendor/
-nohup.out
+
 # Backstop Reference
 tests/backstop/bitmaps_test
 tests/backstop/html_report/config.js
+
+# Editors and IDEs.
+.vscode
+.idea/
+*.deb
+
+# Local VMs, etc.
+.ddev/
+.lando*
+dockerfiles/
+
+# Misc.
+.DS_Store
