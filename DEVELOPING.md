@@ -183,6 +183,49 @@ Once, the server is started, run the following command:
 npm run backstop-starter
 ```
 
+### Running backstop tests on Cloud IDE
+
+To run the backstop tests on Acquia CMS on Cloud IDE, on starting the server using the runserver command given above, you will notice that all the backstop tests are failing due to following host related error.
+
+```
+The provided host name is not valid for this server
+```
+
+This happens because of the setting - trusted host pattern in cloud IDE settings.inc file under the following path -
+
+```
+/var/www/site-php/<cloudIDEdirectory>/<cloudIDEdirectory.settings.inc>.
+```
+
+To resolve, we will have to add a pattern to the allowed host pattern list, ex -
+
+```
+$settings['trusted_host_patterns'] = array(
+  '^localhost$',
+  '127\.0\.0\.1',
+);
+```
+
+Once added, restart the server with following command -
+
+```
+supervisorctl restart apache2
+```
+
+and then, run -
+
+```
+drush runserver --default-server=http://127.0.0.1:8080
+```
+
+Once, the server is started, run the following command:
+
+```
+npm run backstop-starter
+```
+
+Notice that the tests are now executing without any issues.
+
 ##### Adding New Test Cases / Scenarios
 
 All of the Backstop tests are configured in tests/backstop/backstop.js. The reference images are stored in tests/backstop/bitmaps_reference.
