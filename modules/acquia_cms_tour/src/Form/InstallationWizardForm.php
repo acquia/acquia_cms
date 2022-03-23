@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_tour\Form;
 
+use Drupal\acquia_cms_tour\AcquiaCmsTourManager;
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -15,23 +16,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class InstallationWizardForm extends FormBase {
 
-  private const SECTIONS = [
-    'acquia_telemetry' => AcquiaTelemetryForm::class,
-    'geocoder' => AcquiaGoogleMapsApiDashboardForm::class,
-    'acquia_search' => AcquiaSearchForm::class,
-    'google_analytics' => GoogleAnalyticsForm::class,
-    'google_tag' => GoogleTagManagerForm::class,
-    'recaptcha' => RecaptchaForm::class,
-    'acquia_connector' => AcquiaConnectorForm::class,
-    'cohesion' => SiteStudioCoreForm::class,
-  ];
-
   /**
    * All steps of the multistep form.
    *
    * @var array
    */
   protected $steps;
+
+  /**
+   * All steps of the multistep form.
+   *
+   * @var array
+   */
+  protected $storage;
 
   /**
    * All steps of the multistep form.
@@ -69,6 +66,13 @@ class InstallationWizardForm extends FormBase {
   protected $state;
 
   /**
+   * The acquia cms tour manager.
+   *
+   * @var \Drupal\acquia_cms_tour\AcquiaCmsTourManager
+   */
+  protected $acquiaCmsTourManager;
+
+  /**
    * {@inheritdoc}
    */
   public function getFormId() {
@@ -84,11 +88,14 @@ class InstallationWizardForm extends FormBase {
    *   The renderer service.
    * @param \Drupal\Core\State\StateInterface $state
    *   The state interface.
+   * @param \Drupal\acquia_cms_tour\AcquiaCmsTourManager $acquia_cms_tour_manager
+   *   The acquia cms tour manager class.
    */
-  public function __construct(ClassResolverInterface $class_resolver, Renderer $renderer, StateInterface $state) {
+  public function __construct(ClassResolverInterface $class_resolver, Renderer $renderer, StateInterface $state, AcquiaCmsTourManager $acquia_cms_tour_manager) {
     $this->classResolver = $class_resolver;
     $this->renderer = $renderer;
     $this->state = $state;
+    $this->acquiaCmsTourManager = $acquia_cms_tour_manager;
   }
 
   /**
@@ -98,7 +105,8 @@ class InstallationWizardForm extends FormBase {
     return new static(
       $container->get('class_resolver'),
       $container->get('renderer'),
-      $container->get('state')
+      $container->get('state'),
+      $container->get('plugin.manager.acquia_cms_tour')
     );
   }
 
@@ -153,7 +161,7 @@ class InstallationWizardForm extends FormBase {
   /**
    * Returns the actions form element for the specific step.
    */
-  protected function actionsElement(array $form, FormStateInterface $form_state) {
+  protected function actionsElement(array $form, FormStateInterface $form_state): array {
     $element = $this->stepActions($form, $form_state);
 
     if (isset($element['submit'])) {
@@ -166,7 +174,7 @@ class InstallationWizardForm extends FormBase {
       $element[$action] += [
         '#weight' => ++$count * 5,
       ];
-      // Lets remove ajax call for last step.
+      // Let's remove ajax call for last step.
       if ($this->useAjax && $action != 'submit' && !$this->isCurrentStepLast()) {
         $element[$action] += [
           '#ajax' => [
@@ -174,7 +182,7 @@ class InstallationWizardForm extends FormBase {
           ],
         ];
       }
-      // Lets add ajax call for back button on last step.
+      // Let's add ajax call for back button on last step.
       if ($this->useAjax && $action == 'back' && $this->isCurrentStepLast()) {
         $element[$action] += [
           '#ajax' => [
@@ -194,7 +202,7 @@ class InstallationWizardForm extends FormBase {
   /**
    * Returns an array of supported actions for the specific step form.
    */
-  protected function stepActions(array $form, FormStateInterface $form_state) {
+  protected function stepActions(array $form, FormStateInterface $form_state): array {
     // Do not show 'back' button on the first step.
     if (!$this->isCurrentStepFirst()) {
       $actions['back'] = [
@@ -251,7 +259,7 @@ class InstallationWizardForm extends FormBase {
     $this->copyFormValuesToStorage($form, $form_state);
 
     // Call submitForm of corresponding form.
-    $formController = $this->getCurrentFormController()['formController'];
+    $formController = $this->getCurrentFormController()['class'];
     $this->classResolver->getInstanceFromDefinition($formController)->submitForm($form, $form_state);
 
     $this->currentStep += 1;
@@ -269,7 +277,7 @@ class InstallationWizardForm extends FormBase {
     }
     else {
       // Call ignoreConfig of corresponding form.
-      $formController = $this->getCurrentFormController()['formController'];
+      $formController = $this->getCurrentFormController()['class'];
       $this->classResolver->getInstanceFromDefinition($formController)->ignoreConfig($form, $form_state);
 
       $this->currentStep += 1;
@@ -350,19 +358,14 @@ class InstallationWizardForm extends FormBase {
    *   A field value.
    */
   protected function getFieldValueFromStorage(string $field_name, $empty_value = NULL) {
-    if (isset($this->storage[$field_name])) {
-      return $this->storage[$field_name];
-    }
-    else {
-      return $empty_value;
-    }
+    return $this->storage[$field_name] ?? $empty_value;
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $formController = $this->getCurrentFormController()['formController'];
+    $formController = $this->getCurrentFormController()['class'];
     $this->classResolver->getInstanceFromDefinition($formController)->submitForm($form, $form_state);
     $this->state->set('wizard_completed', TRUE);
     $this->state->set('current_wizard_step', 'completed');
@@ -388,9 +391,9 @@ class InstallationWizardForm extends FormBase {
    * Steps for the multistep form.
    *
    * The class FormMultistepBase provide two steps,
-   * considering that the multi step form must consists minimum
+   * considering that the multistep form must consists minimum
    * from two steps. In class the callbacks of the steps are an
-   * abstract methods, which means required to implemantation in child class.
+   * abstract methods, which means required to implementation in child class.
    * If you need more then two steps inherit and implement this method
    * in your child class like it done in example module and implement
    * the callbacks defined in this method.
@@ -398,14 +401,14 @@ class InstallationWizardForm extends FormBase {
    * @return array
    *   An array of elements (steps), where key of element is
    *   a numeric representation of the step and value is a callback
-   *   which will be called to return a $form by the numeric represantation.
+   *   which will be called to return a $form by the numeric representation.
    */
-  public function getSteps() {
+  public function getSteps(): array {
     $steps = [];
-    foreach (static::SECTIONS as $controller) {
-      $isModuleEnabled = $this->classResolver->getInstanceFromDefinition($controller)->isModuleEnabled();
+    foreach ($this->acquiaCmsTourManager->getDefinitions() as $definition) {
+      $isModuleEnabled = $this->classResolver->getInstanceFromDefinition($definition['class'])->isModuleEnabled();
       if ($isModuleEnabled) {
-        $steps[] = $controller;
+        $steps[] = $definition;
       }
     }
     return $steps;
@@ -424,11 +427,10 @@ class InstallationWizardForm extends FormBase {
    *
    * @throws \Exception
    */
-  public function stepForm(array &$form, FormStateInterface $form_state) {
-    $helper = $this->getCurrentFormController();
-    $formController = $helper['formController'];
-    $key = $helper['moduleName'];
-    $formControllerDefinition = $this->classResolver->getInstanceFromDefinition($formController);
+  public function stepForm(array &$form, FormStateInterface $form_state): array {
+    $plugin = $this->getCurrentFormController();
+    $key = $plugin['id'];
+    $formControllerDefinition = $this->classResolver->getInstanceFromDefinition($plugin['class']);
     $module_title = $formControllerDefinition->getModuleName();
     $form = $formControllerDefinition->buildForm($form, $form_state);
     $form[$key]['title_markup'] = [
@@ -446,18 +448,16 @@ class InstallationWizardForm extends FormBase {
   /**
    * Helper method for sidebar nav item list.
    *
-   * @return string
+   * @return array
    *   The render array defining the markup of the sidebar.
-   *
-   * @throws \Exception
    */
   protected function getItemList(): array {
     $items = [];
     $steps = $this->getSteps();
-    foreach ($steps as $key => $controller) {
-      $instance_definition = $this->classResolver->getInstanceFromDefinition($controller);
-      $module_machine_name = $instance_definition->getmodule();
-      $module_title = $instance_definition->getModuleName();
+    foreach ($steps as $key => $plugin) {
+      $module_machine_name = $plugin['id'];
+      $formControllerDefinition = $this->classResolver->getInstanceFromDefinition($plugin['class']);
+      $module_title = $formControllerDefinition->getModuleName();
       $sr_no = $key + 1;
       if ($sr_no < ($this->currentStep) + 1) {
         $current_class = ['item', 'step-complete'];
@@ -482,7 +482,7 @@ class InstallationWizardForm extends FormBase {
    * Helper method for adding title markup.
    *
    * @param string $module_title
-   *   The module human readable name.
+   *   The module human-readable name.
    * @param int $current_step
    *   The forms current step.
    *
@@ -507,10 +507,7 @@ class InstallationWizardForm extends FormBase {
    *   The array of module name & Form class object.
    */
   private function getCurrentFormController() {
-    $formController = $this->steps[$this->currentStep];
-    $sections = \array_flip(self::SECTIONS);
-    $key = $sections[$formController];
-    return ['moduleName' => $key, 'formController' => $formController];
+    return $this->steps[$this->currentStep];
   }
 
 }
