@@ -87,7 +87,7 @@ class AcquiaCmsSiteStudioSiteConfigureForm extends ConfigFormBase {
     $org_key = $form_state->getValue(['cohesion', 'organization_key']);
 
     if ($api_key && $org_key) {
-      // For reasons I can't fathom, not resetting the config factory causes
+      // For reasons, I can't fathom, not resetting the config factory causes
       // a non-interactive install (i.e., drush site:install) to be unable to
       // load the API and organization keys in acquia_cms_install_tasks(), which
       // in turn results in Cohesion's stuff not getting imported. So, although

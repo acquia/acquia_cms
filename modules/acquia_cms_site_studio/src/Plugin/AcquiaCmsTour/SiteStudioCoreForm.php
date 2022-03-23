@@ -1,14 +1,21 @@
 <?php
 
-namespace Drupal\acquia_cms_tour\Form;
+namespace Drupal\acquia_cms_site_studio\Plugin\AcquiaCmsTour;
 
+use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
- * Provides a form to configure SiteStudioCore.
+ * Plugin implementation of the acquia_cms_tour.
+ *
+ * @AcquiaCmsTour(
+ *   id = "cohesion",
+ *   label = @Translation("Site Studio Core"),
+ *   weight = 8
+ * )
  */
-final class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
+class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
 
   /**
    * Provides module name.
@@ -40,7 +47,7 @@ final class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
     $form['#tree'] = FALSE;
     $module = $this->module;
     if ($this->isModuleEnabled()) {
-      $module_path = $this->module_handler->getModule($module)->getPathname();
+      $module_path = $this->moduleHandler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
 
       $configured = $this->getConfigurationState();
@@ -60,7 +67,7 @@ final class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('API key'),
-        '#placeholder' => '1234abcd',
+        '#placeholder' => 'xxx-xxx-xxx',
         '#default_value' => $this->config('cohesion.settings')->get('api_key'),
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
       ];
@@ -68,7 +75,7 @@ final class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Agency key'),
-        '#placeholder' => '1234abcd',
+        '#placeholder' => 'xxx-xxx-xxx',
         '#default_value' => $this->config('cohesion.settings')->get('organization_key'),
         '#suffix' => "</div>",
       ];
@@ -87,8 +94,8 @@ final class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
       $form[$module]['actions']['advanced'] = [
         '#prefix' => '<div class= "dashboard-tooltiptext">',
         '#markup' => $this->linkGenerator->generate(
-            'Advanced',
-            Url::fromRoute('cohesion.configuration.account_settings')
+          'Advanced',
+          Url::fromRoute('cohesion.configuration.account_settings')
         ),
         '#suffix' => "</div>",
       ];
@@ -118,13 +125,6 @@ final class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
     }
     $this->setConfigurationState();
     $this->messenger()->addStatus('The configuration options have been saved.');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function ignoreConfig(array &$form, FormStateInterface $form_state) {
-    $this->setConfigurationState();
   }
 
   /**
