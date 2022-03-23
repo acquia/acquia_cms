@@ -58,7 +58,7 @@ function acquia_cms_image_update_8001() {
   foreach ($image_styles as $image_style => $size) {
     $imageStyle = ImageStyle::load($image_style);
     if ($imageStyle instanceof ImageStyle) {
-      list ($width, $height) = $size;
+      [$width, $height] = $size;
       $imageStyle->addImageEffect([
         'id' => 'focal_point_scale_and_crop',
         'weight' => 1,
