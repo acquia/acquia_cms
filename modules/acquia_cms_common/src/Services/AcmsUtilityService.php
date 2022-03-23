@@ -103,7 +103,7 @@ class AcmsUtilityService {
   public function validateDependencies(string $config_name, array $data, array $enabled_extensions, array $all_config): bool {
     if (!isset($data['dependencies'])) {
       // Simple config or a config entity without dependencies.
-      list($provider) = explode('.', $config_name, 2);
+      [$provider] = explode('.', $config_name, 2);
       return in_array($provider, $enabled_extensions, TRUE);
     }
 
@@ -131,7 +131,7 @@ class AcmsUtilityService {
   protected function getMissingDependencies(string $config_name, array $data, array $enabled_extensions, array $all_config): array {
     $missing = [];
     if (isset($data['dependencies'])) {
-      list($provider) = explode('.', $config_name, 2);
+      [$provider] = explode('.', $config_name, 2);
       $all_dependencies = $data['dependencies'];
 
       // Ensure enforced dependencies are included.
