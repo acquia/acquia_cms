@@ -27,7 +27,9 @@ function acquia_cms_tour_menu_links_discovered_alter(array &$links) {
 function acquia_cms_tour_theme() {
   return [
     'acquia_cms_tour' => [
-      'variables' => [],
+      'variables' => [
+        'data' => [],
+      ],
     ],
     'acquia_cms_tour_checklist_form' => [
       'render element' => 'form',
