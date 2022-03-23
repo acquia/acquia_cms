@@ -99,7 +99,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
     $assert_session = $this->assertSession();
 
     foreach ($destination_map as $destination) {
-      list ($destination_parameter, $expected_destination_after_login) = str_replace('{uid}', $account->id(), $destination);
+      [$destination_parameter, $expected_destination_after_login] = str_replace('{uid}', $account->id(), $destination);
 
       $options = [];
       if ($destination_parameter) {
