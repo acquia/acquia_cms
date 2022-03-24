@@ -1,22 +1,24 @@
 #!/bin/bash
 
-ARCHIVE=acms-$1
+# Create tarball with acms version specific.
+if [ $1 ] ; then
+  ARCHIVE=acms-$1
+# Create tarball with latest version of acquia CMS
+else
+  ARCHIVE=acms
+fi
 
-composer create-project --stability beta --no-install drupal/legacy-project:~9.1.0 $ARCHIVE
+composer create-project --no-install acquia/acquia-cms-project $ARCHIVE
 composer dump-autoload
 composer configure-tarball $ARCHIVE
 
 cd $ARCHIVE
-composer config minimum-stability dev
-composer config prefer-stable true
-composer config repositories.assets composer https://asset-packagist.org
-
-composer config repositories.acms vcs git@github.com:acquia/acquia_cms.git
-composer require --no-update "ext-dom:*" "acquia/acquia_cms:$1" cweagans/composer-patches
+if [ $1 ] ; then
+  composer require --no-update "ext-dom:*" "acquia/acquia_cms:$1"
+else
+  composer require --no-update "ext-dom:*"
+fi
 composer update
-
-# Add the version number to the info file.
-echo "version: $1" >> ./profiles/contrib/acquia_cms/acquia_cms.info.yml
 
 # Wrap it all up in a nice compressed tarball.
 cd ..
