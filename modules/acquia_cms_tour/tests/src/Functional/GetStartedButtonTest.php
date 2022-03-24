@@ -44,7 +44,7 @@ class GetStartedButtonTest extends BrowserTestBase {
     $this->drupalGet('/admin/tour');
     $assert_session->statusCodeEquals(200);
 
-    $container = $assert_session->elementNotExists('css', '.button-section');
+    $assert_session->elementNotExists('css', '.button-section');
   }
 
   /**
@@ -67,7 +67,7 @@ class GetStartedButtonTest extends BrowserTestBase {
     $this->drupalGet('/admin/tour');
     $assert_session->statusCodeEquals(200);
 
-    $container = $assert_session->elementExists('css', '.button-section');
+    $assert_session->elementExists('css', '.button-section');
   }
 
   /**
