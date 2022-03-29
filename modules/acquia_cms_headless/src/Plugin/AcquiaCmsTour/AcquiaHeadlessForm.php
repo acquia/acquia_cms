@@ -44,11 +44,12 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
     $module = $this->module;
-    $config = $this->config('acquia_cms_headless.settings');
 
     if ($this->isModuleEnabled()) {
-
+      $config = $this->config('acquia_cms_headless.settings');
+      dpm($config);
       $configured = $this->getConfigurationState();
+
       if ($configured) {
         $form['check_icon'] = [
           '#prefix' => '<span class= "dashboard-check-icon">',
@@ -66,7 +67,7 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
         '#required' => FALSE,
         '#title' => $this->t('Enable robust API capabilities (Next.js Drupal)'),
         '#description' => $this->t('@todo Input description of what happens when Robust API is enabled.'),
-        '#default_value' => $config->get('robust_api'),
+        '#default_value' => $config->get('robust_api') ? $config->get('robust_api') : 0,
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $this->t('@todo Provide better description of these options, etc.'),
       ];
       $form[$module]['headless_mode'] = [
@@ -74,7 +75,7 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
         '#required' => FALSE,
         '#title' => $this->t('Enable "Pure Headless" mode'),
         '#description' => $this->t('@todo Input description of what happens when Pure Headless mode is enabled.'),
-        '#default_value' => $config->get('headless_mode'),
+        '#default_value' => $config->get('headless_mode') ? $config->get('headless_mode') : 0,
         '#suffix' => "</div>",
       ];
       $form[$module]['actions']['submit'] = [
@@ -118,13 +119,17 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    // Get form state values.
     $acms_robust_api = $form_state->getValue(['robust_api']);
     $acms_headless_mode = $form_state->getValue(['headless_mode']);
-    if ($acms_robust_api && $acms_headless_mode) {
-      $this->config('acquia_cms_headless.settings')->set('robust_api', $acms_robust_api)->save();
-      $this->config('acquia_cms_headless.settings')->set('headless_mode', $acms_headless_mode)->save();
-    }
+
+    // Set and save the form values.
+    $this->config('acquia_cms_headless.settings')->set('robust_api', $acms_robust_api)->save();
+    $this->config('acquia_cms_headless.settings')->set('headless_mode', $acms_headless_mode)->save();
+
+    // Set the config state.
     $this->setConfigurationState();
+    // Add status message for user.
     $this->messenger()->addStatus('The configuration options have been saved.');
   }
 
