@@ -113,3 +113,42 @@ function acquia_cms_image_update_8002() {
     }
   }
 }
+
+/**
+ * Update image style to add 'webp image conversion' effect.
+ */
+function acquia_cms_image_update_8003() {
+
+  // Image styles for updating the effect.
+  $image_styles = [
+    "coh_large_landscape",
+    "coh_large_super_landscape",
+    "coh_large",
+    "coh_medium_landscape",
+    "coh_medium_super_landscape",
+    "coh_medium",
+    "coh_small_landscape",
+    "coh_small_square",
+    "coh_small",
+    "coh_x_large_landscape",
+    "coh_x_large_super_landscape",
+    "coh_x_large",
+    "coh_x_small",
+    "coh_xx_large_landscape",
+    "coh_xx_small_landscape",
+    "coh_xx_small",
+  ];
+  foreach ($image_styles as $image_style) {
+    $imageStyle = ImageStyle::load($image_style);
+    if ($imageStyle instanceof ImageStyle) {
+      $imageStyle->addImageEffect([
+        'id' => 'image_convert',
+        'weight' => 2,
+        'data' => [
+          'extension' => 'webp',
+        ],
+      ]);
+      $imageStyle->save();
+    }
+  }
+}
