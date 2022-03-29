@@ -47,7 +47,6 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
 
     if ($this->isModuleEnabled()) {
       $config = $this->config('acquia_cms_headless.settings');
-      dpm($config);
       $configured = $this->getConfigurationState();
 
       if ($configured) {
