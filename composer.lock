@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "62b42bf2adc4ec1239e5bf92c11ff7d4",
+    "content-hash": "1f4918b1f3207b18c25f0c6a6250cb66",
     "packages": [
         {
             "name": "acquia/acsf-contenthub-console",
@@ -2331,8 +2331,8 @@
                     "homepage": "https://www.drupal.org/user/3602433"
                 },
                 {
-                    "name": "ankitsingh0188",
-                    "homepage": "https://www.drupal.org/user/3268690"
+                    "name": "amarlata",
+                    "homepage": "https://www.drupal.org/user/3504572"
                 },
                 {
                     "name": "attilatilman",
@@ -2343,16 +2343,8 @@
                     "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
-                    "name": "jmoreira",
-                    "homepage": "https://www.drupal.org/user/2374486"
-                },
-                {
                     "name": "kaynen",
                     "homepage": "https://www.drupal.org/user/733308"
-                },
-                {
-                    "name": "looking4justice",
-                    "homepage": "https://www.drupal.org/user/3607847"
                 },
                 {
                     "name": "pajor",
@@ -6063,6 +6055,222 @@
             }
         },
         {
+            "name": "drupal/openapi",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/openapi.git",
+                "reference": "8.x-2.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/openapi-8.x-2.0.zip",
+                "reference": "8.x-2.0",
+                "shasum": "4562a072dde9d1b5f3249b292d49ee0c489ace7a"
+            },
+            "require": {
+                "drupal/core": "^8.7.0 || ^9"
+            },
+            "require-dev": {
+                "vijaycs85/drupal-quality-checker": "^1.2"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.0",
+                    "datestamp": "1632637188",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "e0ipso",
+                    "homepage": "https://www.drupal.org/user/550110"
+                },
+                {
+                    "name": "mrjmd",
+                    "homepage": "https://www.drupal.org/user/1800446"
+                },
+                {
+                    "name": "phenaproxima",
+                    "homepage": "https://www.drupal.org/user/205645"
+                },
+                {
+                    "name": "richgerdes",
+                    "homepage": "https://www.drupal.org/user/3437973"
+                },
+                {
+                    "name": "rogierbom",
+                    "homepage": "https://www.drupal.org/user/1352176"
+                },
+                {
+                    "name": "tedbow",
+                    "homepage": "https://www.drupal.org/user/240860"
+                }
+            ],
+            "description": "Creates OpenAPI specification for Drupal resources.",
+            "homepage": "https://www.drupal.org/project/openapi",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/openapi",
+                "issues": "http://drupal.org/project/issues/openapi"
+            }
+        },
+        {
+            "name": "drupal/openapi_jsonapi",
+            "version": "3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/openapi_jsonapi.git",
+                "reference": "3.0.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/openapi_jsonapi-3.0.2.zip",
+                "reference": "3.0.2",
+                "shasum": "8e027d581270702fc3ed075759336457cc567a92"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drupal/openapi": "^2",
+                "drupal/schemata": "^1",
+                "drupal/schemata_json_schema": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "3.0.2",
+                    "datestamp": "1632062730",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Mateu Aguiló Bosch",
+                    "homepage": "https://www.drupal.org/user/3616626",
+                    "email": "mateu.aguilo.bosch@gmail.com"
+                },
+                {
+                    "name": "e0ipso",
+                    "homepage": "https://www.drupal.org/user/550110"
+                },
+                {
+                    "name": "richgerdes",
+                    "homepage": "https://www.drupal.org/user/3437973"
+                }
+            ],
+            "description": "OpenAPI support for the JSON:API module.",
+            "homepage": "https://www.drupal.org/project/openapi_jsonapi",
+            "support": {
+                "source": "https://git.drupalcode.org/project/openapi_jsonapi"
+            }
+        },
+        {
+            "name": "drupal/openapi_ui",
+            "version": "1.0.0-rc3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/openapi_ui.git",
+                "reference": "8.x-1.0-rc3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/openapi_ui-8.x-1.0-rc3.zip",
+                "reference": "8.x-1.0-rc3",
+                "shasum": "31f0dee0242b29aa90310b486c3d5fb441ceb44d"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0-rc3",
+                    "datestamp": "1598462015",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "richgerdes",
+                    "homepage": "https://www.drupal.org/user/3437973"
+                }
+            ],
+            "description": "Provides plugin system for OpenAPI/Swagger Interface libraries.",
+            "homepage": "https://www.drupal.org/project/openapi_ui",
+            "support": {
+                "source": "https://git.drupalcode.org/project/openapi_ui"
+            }
+        },
+        {
+            "name": "drupal/openapi_ui_redoc",
+            "version": "1.0.0-rc3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/openapi_ui_redoc.git",
+                "reference": "8.x-1.0-rc3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/openapi_ui_redoc-8.x-1.0-rc3.zip",
+                "reference": "8.x-1.0-rc3",
+                "shasum": "453028a4c5474ed9e372d1bc435952ea90133902"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drupal/openapi_ui": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0-rc3",
+                    "datestamp": "1598462000",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "richgerdes",
+                    "homepage": "https://www.drupal.org/user/3437973"
+                }
+            ],
+            "description": "Provides display of OpenAPI docs using the ReDoc library.",
+            "homepage": "https://www.drupal.org/project/openapi_ui_redoc",
+            "support": {
+                "source": "https://git.drupalcode.org/project/openapi_ui_redoc"
+            }
+        },
+        {
             "name": "drupal/page_manager",
             "version": "4.0.0-beta6",
             "source": {
@@ -6833,8 +7041,12 @@
                     "homepage": "https://www.drupal.org/user/404865"
                 },
                 {
-                    "name": "thunderbot",
-                    "homepage": "https://www.drupal.org/user/3511180"
+                    "name": "jonathan1055",
+                    "homepage": "https://www.drupal.org/user/92645"
+                },
+                {
+                    "name": "smustgrave",
+                    "homepage": "https://www.drupal.org/user/3252890"
                 },
                 {
                     "name": "volkerk",
@@ -6909,6 +7121,168 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/schema_metatag",
                 "issues": "https://www.drupal.org/project/issues/schema_metatag"
+            }
+        },
+        {
+            "name": "drupal/schemata",
+            "version": "1.0.0-beta2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/schemata.git",
+                "reference": "8.x-1.0-beta2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/schemata-8.x-1.0-beta2.zip",
+                "reference": "8.x-1.0-beta2",
+                "shasum": "c50bc45c370073224877a8c72e6d8d5b2ec732d3"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "require-dev": {
+                "drupal/coder": "^8.2",
+                "jakub-onderka/php-parallel-lint": "^0.9.2",
+                "league/json-guard": "^1.0",
+                "league/json-reference": "^1.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0-beta2",
+                    "datestamp": "1585777919",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "scripts": {
+                "phpcs": [
+                    "phpcs --standard=tests/phpcs.xml"
+                ],
+                "phpcbf": [
+                    "phpcbf --standard=tests/phpcs.xml"
+                ],
+                "lint": [
+                    "parallel-lint -e php,module,install,profile,theme,inc --exclude vendor/ --blame ."
+                ],
+                "quality": [
+                    "@lint",
+                    "@phpcs"
+                ]
+            },
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Adam Ross",
+                    "homepage": "https://www.drupal.org/user/346868",
+                    "email": "grayside@gmail.com"
+                },
+                {
+                    "name": "HalfChem",
+                    "homepage": "https://www.drupal.org/user/1608382"
+                },
+                {
+                    "name": "e0ipso",
+                    "homepage": "https://www.drupal.org/user/550110"
+                },
+                {
+                    "name": "febbraro",
+                    "homepage": "https://www.drupal.org/user/43670"
+                },
+                {
+                    "name": "jhedstrom",
+                    "homepage": "https://www.drupal.org/user/208732"
+                },
+                {
+                    "name": "mpotter",
+                    "homepage": "https://www.drupal.org/user/616192"
+                },
+                {
+                    "name": "richgerdes",
+                    "homepage": "https://www.drupal.org/user/3437973"
+                },
+                {
+                    "name": "tekante",
+                    "homepage": "https://www.drupal.org/user/640024"
+                }
+            ],
+            "description": "Facilitate generation of schema definitions of Drupal 8 data models.",
+            "homepage": "https://drupal.org/project/schemata",
+            "keywords": [
+                "Drupal",
+                "json",
+                "schema"
+            ],
+            "support": {
+                "source": "https://cgit.drupalcode.org/schemata",
+                "issues": "https://drupal.org/project/issues/schemata"
+            }
+        },
+        {
+            "name": "drupal/schemata_json_schema",
+            "version": "1.0.0-beta2",
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drupal/schemata": "*"
+            },
+            "type": "metapackage",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0-beta2",
+                    "datestamp": "1585777919",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Grayside",
+                    "homepage": "https://www.drupal.org/user/346868"
+                },
+                {
+                    "name": "HalfChem",
+                    "homepage": "https://www.drupal.org/user/1608382"
+                },
+                {
+                    "name": "e0ipso",
+                    "homepage": "https://www.drupal.org/user/550110"
+                },
+                {
+                    "name": "febbraro",
+                    "homepage": "https://www.drupal.org/user/43670"
+                },
+                {
+                    "name": "jhedstrom",
+                    "homepage": "https://www.drupal.org/user/208732"
+                },
+                {
+                    "name": "mpotter",
+                    "homepage": "https://www.drupal.org/user/616192"
+                },
+                {
+                    "name": "richgerdes",
+                    "homepage": "https://www.drupal.org/user/3437973"
+                },
+                {
+                    "name": "tekante",
+                    "homepage": "https://www.drupal.org/user/640024"
+                }
+            ],
+            "description": "Provides a data models for entity types and bundles in JSON schema format.",
+            "homepage": "https://www.drupal.org/project/schemata",
+            "support": {
+                "source": "https://git.drupalcode.org/project/schemata"
             }
         },
         {
@@ -20199,7 +20573,8 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "drupal/imce": 20,
-        "drupal/node_revision_delete": 5
+        "drupal/node_revision_delete": 5,
+        "drupal/openapi_ui_redoc": 5
     },
     "prefer-stable": true,
     "prefer-lowest": false,
