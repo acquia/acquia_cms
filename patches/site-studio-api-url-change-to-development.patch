@@ -1,0 +1,14 @@
+diff --git a/src/ApiUtils.php b/src/ApiUtils.php
+index 401ad31..474a03a 100644
+--- a/src/ApiUtils.php
++++ b/src/ApiUtils.php
+@@ -37,7 +37,8 @@ class ApiUtils {
+       return $config ? $config->get('api_url') : '';
+     }
+     else {
+-      return 'https://api.cohesiondx.com';
++      // return 'https://api.cohesiondx.com';
++      return 'https://eu-development-api.sitestudio.acquia.com';
+     }
+   }
+ 
