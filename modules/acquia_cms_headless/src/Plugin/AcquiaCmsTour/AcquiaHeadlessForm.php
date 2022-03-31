@@ -3,6 +3,8 @@
 namespace Drupal\acquia_cms_headless\Plugin\AcquiaCmsTour;
 
 use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
+use Drupal\Core\Extension\ExtensionNameLengthException;
+use Drupal\Core\Extension\MissingDependencyException;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -61,7 +63,8 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
     $module = $this->module;
-
+    // $headless = 'acquia_cms_headless_ui';
+    // $robustapi = 'acquia_cms_headless_robustapi';
     if ($this->isModuleEnabled()) {
       $config = $this->config('acquia_cms_headless.settings');
       $configured = $this->getConfigurationState();
@@ -92,7 +95,10 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
           users with the ability to use Drupal as a backend for a decoupled
           NodeJS app while also retaining Drupal’s default front-end.
           E.g., with a custom theme.'),
-        '#default_value' => $config->get('robust_api') ? $config->get('robust_api') : 0,
+        '#default_value' => (bool) $config->get('robust_api'),
+        // @todo remove current #default_value in favor of this for ACMS-1073
+        // '#default_value' =>
+        // $this->moduleHandler->moduleExists($robustapi) ? 1 : 0,
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
       ];
       // @todo This option will enable a submodule, so we'll need to check to
@@ -110,7 +116,10 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
           <strong>Warning</strong>: This will remove any data related to Site
           Studio, Layout Builder, etc. Proceed with caution and backup any
           necessary data prior to enabling.'),
-        '#default_value' => $config->get('headless_mode') ? $config->get('headless_mode') : 0,
+        '#default_value' => (bool) $config->get('headless_mode'),
+        // @todo remove current #default_value in favor of this for ACMS-1062
+        // '#default_value' =>
+        // $this->moduleHandler->moduleExists($headless) ? 1 : 0,
         '#suffix' => "</div>",
       ];
       $form[$module]['actions']['submit'] = [
@@ -154,26 +163,68 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // @todo Refactor part of this form submit on ACMS-1062, 1073, & 1099.
+    // Get existing Acquia CMS Headless config settings.
+    $config = $this->config('acquia_cms_headless.settings');
+
+    // Get current form values so that we have something to compare against.
+    $config_robustapi = $config->get('robust_api');
+    $config_headless = $config->get('headless_mode');
+
     // Get form state values.
-    $acms_robust_api = $form_state->getValue(['robust_api']);
+    $acms_robustapi = $form_state->getValue(['robust_api']);
     $acms_headless_mode = $form_state->getValue(['headless_mode']);
 
-    // @todo When $acms_robust_api is enabled, we need to install our submodule.
-    // See ACMS-1073.
-    // $this->moduleInstaller->install(['acquia_cms_headless_robustapi']);
-    // @todo When $acms_headless_mode is enabled, we need to install our
-    // submodule. See ACMS-1062 & 1099.
-    // $this->moduleInstaller->install(['acquia_cms_headless_ui']);
+    // Check to see on submit, if this is actually changing.  If yes, then we
+    // either need to enable or disable modules related to robust api.
+    if ($config_robustapi != $acms_robustapi) {
+      if ($acms_robustapi) {
+        // @todo Complete tasks to install robust api when turned on.
+        // See ACMS-1073.
+        try {
+          // $this->moduleInstaller->install(['acquia_cms_headless_robustapi']);
+          $this->messenger()->addStatus($this->t('Acquia CMS Robust API has been enabled.'));
+        }
+        catch (ExtensionNameLengthException | MissingDependencyException $e) {
+          $this->messenger()->addError($e);
+        }
+      }
+      else {
+        // @todo Complete tasks to uninstall robust api when turned off.
+        // See ACMS-1073.
+        // $this->moduleInstaller->uninstall(['acquia_cms_headless_robustapi']);
+        $this->messenger()->addStatus($this->t('Acquia CMS Robust API has been disabled.'));
+      }
+    }
+
+    // Check to see on submit, if this is actually changing.  If yes, then we
+    // either need to enable or disable modules related to pure headless mode.
+    if ($config_headless != $acms_headless_mode) {
+      if ($acms_headless_mode) {
+        // @todo Complete tasks to install pure headless when turned on.
+        // See ACMS-1062.
+        try {
+          // $this->moduleInstaller->install(['acquia_cms_headless_ui']);
+          $this->messenger()->addStatus($this->t('Acquia CMS Pure Headless has been enabled.'));
+        }
+        catch (ExtensionNameLengthException | MissingDependencyException $e) {
+          $this->messenger()->addError($e);
+        }
+      }
+      else {
+        // @todo Complete tasks to uninstall pure headless when turned off.
+        // See ACMS-1062.
+        // $this->moduleInstaller->uninstall(['acquia_cms_headless_ui']);
+        $this->messenger()->addStatus($this->t('Acquia CMS Pure Headless has been disabled.'));
+      }
+    }
+
+    // Proceed with form save and configuration settings actions.
     // Set and save the form values.
-    $this->config('acquia_cms_headless.settings')->set('robust_api', $acms_robust_api)->save();
+    $this->config('acquia_cms_headless.settings')->set('robust_api', $acms_robustapi)->save();
     $this->config('acquia_cms_headless.settings')->set('headless_mode', $acms_headless_mode)->save();
 
     // Set the config state.
     $this->setConfigurationState();
-
-    // Add status message for user.
-    $this->messenger()->addStatus($this->t('Acquia CMS Robust API and/or Pure Headless mode options have been updated.'));
   }
 
   /**
