@@ -5,6 +5,7 @@ namespace Drupal\acquia_cms_headless\Plugin\AcquiaCmsTour;
 use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the acquia_cms_tour.
@@ -18,11 +19,27 @@ use Drupal\Core\Url;
 class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
 
   /**
+   * The module installer.
+   *
+   * @var \Drupal\Core\Extension\ModuleInstallerInterface
+   */
+  private $moduleInstaller;
+
+  /**
    * Provides module name.
    *
    * @var string
    */
   protected $module = 'acquia_cms_headless';
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    $instance = parent::create($container);
+    $instance->moduleInstaller = $container->get('module_installer');
+    return $instance;
+  }
 
   /**
    * {@inheritdoc}
@@ -63,6 +80,9 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
       ];
+      // @todo This option will enable a submodule, so we'll need to check to
+      // see if the module is already enabled prior to reaching the tour
+      // dashboard.
       $form[$module]['robust_api'] = [
         '#type' => 'checkbox',
         '#required' => FALSE,
@@ -75,6 +95,9 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
         '#default_value' => $config->get('robust_api') ? $config->get('robust_api') : 0,
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
       ];
+      // @todo This option will enable a submodule, so we'll need to check to
+      // see if the module is already enabled prior to reaching the tour
+      // dashboard.
       $form[$module]['headless_mode'] = [
         '#type' => 'checkbox',
         '#required' => FALSE,
@@ -131,10 +154,17 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    // @todo Refactor part of this form submit on ACMS-1062, 1073, & 1099.
     // Get form state values.
     $acms_robust_api = $form_state->getValue(['robust_api']);
     $acms_headless_mode = $form_state->getValue(['headless_mode']);
 
+    // @todo When $acms_robust_api is enabled, we need to install our submodule.
+    // See ACMS-1073.
+    // $this->moduleInstaller->install(['acquia_cms_headless_robustapi']);
+    // @todo When $acms_headless_mode is enabled, we need to install our
+    // submodule. See ACMS-1062 & 1099.
+    // $this->moduleInstaller->install(['acquia_cms_headless_ui']);
     // Set and save the form values.
     $this->config('acquia_cms_headless.settings')->set('robust_api', $acms_robust_api)->save();
     $this->config('acquia_cms_headless.settings')->set('headless_mode', $acms_headless_mode)->save();
