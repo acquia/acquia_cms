@@ -5,6 +5,8 @@
  * Install, update and uninstall functions for the acquia_cms_article module.
  */
 
+use Drupal\field\Entity\FieldConfig;
+
 /**
  * Implements hook_install().
  */
@@ -38,5 +40,18 @@ function acquia_cms_article_update_8001() {
   $config = \Drupal::configFactory()->getEditable('views.view.article_cards');
   if (!empty($config)) {
     $config->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Make Display Author field optional.
+ */
+function acquia_cms_article_update_8002() {
+  $field = FieldConfig::loadByName('node', 'article', 'field_display_author');
+  if ($field instanceof FieldConfig && $field->isRequired()) {
+    $field->setRequired(FALSE);
+    $field->save();
   }
 }
