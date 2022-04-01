@@ -1,0 +1,83 @@
+<?php
+
+/**
+ * @file
+ * Contains installation and update routines for acquia_cms_headless_ui.
+ */
+
+use Drupal\path_alias\Entity\PathAlias;
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_headless_ui_install() {
+  \Drupal::messenger()->addStatus(__FUNCTION__);
+  // Update Aliases.
+  $aliases = [
+    '/admin/config/people/simple_oauth' => '/admin/access/settings',
+    '/admin/config/people/simple_oauth/oauth2_client' => '/admin/access/clients',
+    '/admin/people/roles' => '/admin/access/roles',
+    '/admin/config/people/simple_oauth/oauth2_token' => '/admin/access/tokens',
+    '/admin/people' => '/admin/access/users',
+    '/admin/structure/types' => '/admin/content-models/content',
+    '/admin/structure/media' => '/admin/content-models/media',
+    '/admin/structure/taxonomy' => '/admin/content-models/categories',
+    '/admin/config/people/accounts' => '/admin/content-models/users',
+  ];
+  foreach ($aliases as $path => $alias) {
+    PathAlias::create([
+      'path' => $path,
+      'alias' => $alias,
+    ])->save();
+  }
+
+  // Reset default theme.
+  \Drupal::configFactory()
+    ->getEditable('system.theme')
+    ->set('default', 'acquia_claro')
+    ->save();
+
+  // Update 403 and Frontpage values in Site Settings.
+  \Drupal::configFactory()
+    ->getEditable('system.site')
+    ->set('page.403', '/user/login')
+    ->set('page.front', '/frontpage')
+    ->save();
+
+  // Uninstall the following modules.
+  \Drupal::service('module_installer')->uninstall([
+    'acquia_cms_site_studio',
+    'block',
+    'block_content',
+    'cohesion',
+    'layout_builder',
+  ]);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function acquia_cms_headless_uninstall() {
+  \Drupal::messenger()->addStatus(__FUNCTION__);
+
+  // Update 403 and Frontpage values in Site Settings.
+  \Drupal::configFactory()
+    ->getEditable('system.site')
+    ->set('page.403', '')
+    ->save();
+
+  // Reset default theme.
+  \Drupal::configFactory()
+    ->getEditable('system.theme')
+    ->set('default', 'cohesion_theme')
+    ->save();
+
+  // Uninstall the following modules.
+  \Drupal::service('module_installer')->install([
+    'acquia_cms_site_studio',
+    'block',
+    'block_content',
+    'cohesion',
+    'layout_builder',
+  ]);
+}

@@ -1,0 +1,294 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for acquia_cms_headless_ui.
+ */
+
+use Drupal\acquia_cms_headless_ui\Menu\ViewJsonTask;
+use Drupal\acquia_cms_headless_ui\Redirect;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Template\Attribute;
+use Drupal\node\NodeTypeInterface;
+use Drupal\views\ViewEntityInterface;
+
+/**
+ * Implements hook_help().
+ */
+function acquia_cms_headless_ui_help($route_name) {
+  switch ($route_name) {
+    case 'admin.access_control':
+      return t('<p>Anonymous access to the API is allowed in the same way that Drupal allows anonymous access to content. Generally, published content is available while unpublished content is not. If your application needs more privileged access (for example, accessing unpublished or creating new content) you will need to authenticate. Authentication involves a client, which is associated with a role, and a user which is assigned the same role as the client. Once you have a client and user set up, you can obtain an access token like this:</p><pre><code>curl -X POST -d "grant_type=password&client_id=api_test{CLIENT_ID}&client_secret={SECRET}&username={USERNAME}&password={PASSWORD}" https://{YOURDOMAIN}/oauth/token</code></pre>');
+
+    default:
+      return NULL;
+  }
+}
+
+/**
+ * {@inheritdoc}
+ */
+function acquia_cms_headless_ui_view_presave(ViewEntityInterface $view) {
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+  elseif ($view->isNew()) {
+    $display = &$view->getDisplay('default');
+
+    $fields = &$display['display_options']['fields'];
+
+    switch ($view->id()) {
+      case 'content':
+        if (isset($fields['title'])) {
+          $fields['title']['settings']['link_to_entity'] = FALSE;
+        }
+        if (isset($fields['name'])) {
+          $fields['name']['settings']['link_to_entity'] = FALSE;
+        }
+        break;
+
+      case 'user_admin_people':
+      case 'media':
+        if (isset($fields['name'])) {
+          $fields['name']['settings']['link_to_entity'] = FALSE;
+        }
+        break;
+
+      default:
+        break;
+    }
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function acquia_cms_headless_ui_form_node_form_alter(array &$form, FormStateInterface $form_state) {
+  Redirect::entityForm($form, $form_state);
+
+  // Remove the Promote and Sticky checkboxes.
+  if (isset($form['#type'])) {
+    $form += [
+      '#process' => Drupal::service('element_info')->getInfoProperty($form['#type'], '#process', []),
+    ];
+  }
+  $form['#process'][] = 'acquia_cms_headless_ui_process_node_type_workflow_options';
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function acquia_cms_headless_ui_form_media_form_alter(array &$form, FormStateInterface $form_state) {
+  Redirect::entityForm($form, $form_state);
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function acquia_cms_headless_ui_form_user_form_alter(array &$form, FormStateInterface $form_state) {
+  Redirect::entityForm($form, $form_state);
+}
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function acquia_cms_headless_ui_entity_operation_alter(array &$operations, EntityInterface $entity) {
+  unset($operations['manage-display']);
+
+  if (isset($operations['edit'])) {
+    // Add the title of the node to the Edit link so our tests have something to
+    // target.
+    $operations['edit']['attributes']['title'] = t('Edit @title', [
+      '@title' => $entity->label(),
+    ]);
+  }
+}
+
+/**
+ * Implements hook_local_tasks_alter().
+ */
+function acquia_cms_headless_ui_local_tasks_alter(array &$local_tasks) {
+  $media_url = Drupal::config('media.settings')->get('standalone_url');
+
+  foreach (array_keys($local_tasks) as $id) {
+    $matches = [];
+
+    if (strpos($id, 'field_ui.fields:display_overview_') === 0) {
+      unset($local_tasks[$id]);
+    }
+
+    // JSON:API is not capable of showing specific revisions, so we need to
+    // remove the Latest Revision tab if it exists. Once
+    // https://www.drupal.org/project/jsonapi/issues/2795279 is resolved, we
+    // should be able to provide a link to the latest revision.
+    if (preg_match('/^content_moderation\.workflows\:(\S*)\.latest_version_tab$/', $id)) {
+      unset($local_tasks[$id]);
+    }
+    // If standalone URLs are not enabled for media items, the "canonical" route
+    // is actually the edit form, so don't modify the corresponding local task.
+    elseif ($id === 'media.tasks:entity.media.canonical' && empty($media_url)) {
+      continue;
+    }
+    // If there is a link to the canonical view of an entity, override it so
+    // that it points to its JSON:API representation instead. The 'media.tasks:'
+    // prefix accounts for the fact that Media module exposes the canonical
+    // route conditionally based on a config switch, and therefore creates the
+    // Edit and View tasks with a deriver (which is why it's prefixed).
+    elseif (preg_match('/^(media\.tasks:)?entity\.(\S*)\.canonical$/', $id, $matches)) {
+      $local_tasks[$id]['title'] = t('View JSON');
+      $local_tasks[$id]['class'] = ViewJsonTask::class;
+      $local_tasks[$id]['entity_type_id'] = $matches[2];
+    }
+  }
+
+  $local_tasks['oauth2_token.settings_tab']['title'] = t('API Settings');
+  $local_tasks['oauth2_token.settings_tab']['base_route'] = 'admin.access_control';
+  $local_tasks['oauth2_token.settings_tab']['weight'] = 1;
+
+  $local_tasks['entity.consumer.collection']['base_route'] = 'admin.access_control';
+  $local_tasks['entity.consumer.collection']['weight'] = 2;
+
+  $local_tasks['entity.user_role.collection']['base_route'] = 'admin.access_control';
+  $local_tasks['entity.user_role.collection']['weight'] = 3;
+
+  $local_tasks['entity.oauth2_token.collection']['base_route'] = 'admin.access_control';
+  $local_tasks['entity.oauth2_token.collection']['weight'] = 4;
+
+  $local_tasks['entity.user.collection']['title'] = t('Users');
+  $local_tasks['entity.user.collection']['base_route'] = 'admin.access_control';
+  $local_tasks['entity.user.collection']['weight'] = 5;
+
+  $local_tasks['entity.node_type.collection']['title'] = t('Content Types');
+  $local_tasks['entity.node_type.collection']['base_route'] = 'admin.content_models';
+  $local_tasks['entity.node_type.collection']['weight'] = 1;
+
+  $local_tasks['entity.media_type.collection']['title'] = t('Media Types');
+  $local_tasks['entity.media_type.collection']['base_route'] = 'admin.content_models';
+  $local_tasks['entity.media_type.collection']['weight'] = 2;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_create().
+ */
+function acquia_cms_headless_ui_node_type_create(NodeTypeInterface $node_type) {
+  $node_type->setDisplaySubmitted(FALSE);
+  $node_type->setPreviewMode(DRUPAL_DISABLED);
+  $node_type->unsetThirdPartySetting('menu_ui', 'available_menus');
+  $node_type->unsetThirdPartySetting('menu_ui', 'parent');
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function acquia_cms_headless_ui_form_node_type_add_form_alter(array &$form) {
+  $form['display']['#access'] = FALSE;
+  $form['submission']['preview_mode']['#access'] = FALSE;
+
+  $options = &$form['workflow']['options'];
+  if (isset($options['#type'])) {
+    $options += [
+      '#process' => Drupal::service('element_info')->getInfoProperty($options['#type'], '#process', []),
+    ];
+  }
+  $options['#process'][] = 'acquia_cms_headless_ui_process_node_type_workflow_options';
+}
+
+/**
+ * Modifies workflow options on a node type form.
+ *
+ * @param array $element
+ *   The element containing the workflow options.
+ *
+ * @return array
+ *   The modified element.
+ */
+function acquia_cms_headless_ui_process_node_type_workflow_options(array $element) {
+  $element['promote']['#access'] = FALSE;
+  $element['sticky']['#access'] = FALSE;
+  return $element;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function acquia_cms_headless_ui_form_taxonomy_overview_terms_alter(array &$form) {
+  foreach (Element::children($form['terms']) as $key) {
+    $term = &$form['terms'][$key]['term'];
+
+    $term['#type'] = 'markup';
+    $term['#markup'] = $term['#title'];
+  }
+}
+
+/**
+ * Implements template_preprocess_admin_block_content().
+ */
+function acquia_cms_headless_ui_preprocess_admin_block_content(array &$variables) {
+  template_preprocess_admin_block_content($variables);
+
+  foreach ($variables['content'] as &$item) {
+    if (isset($item['options']['attributes'])) {
+      $item['attributes'] = new Attribute($item['options']['attributes']);
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function acquia_cms_headless_ui_theme_registry_alter(array &$theme_registry) {
+  $hook = &$theme_registry['admin_block_content'];
+
+  $hook['preprocess functions'] = array_diff(
+    $hook['preprocess functions'],
+    ['template_preprocess_admin_block_content']
+  );
+
+  $seven_path = \Drupal::service('extension.list.theme')->getPath('seven') . '/templates';
+  if ($hook['path'] == $seven_path) {
+    $hook['path'] = \Drupal::service('extension.list.module')->getPath('acquia_cms_headless') . '/templates';
+  }
+}
+
+/**
+ * Implements hook_menu_links_discovered_alter().
+ */
+function acquia_cms_headless_ui_menu_links_discovered_alter(array &$links) {
+  $links['system.themes_page']['enabled'] = FALSE;
+  $links['system.admin_structure']['enabled'] = FALSE;
+
+  foreach ($links as &$link) {
+    if (isset($link['icon'])) {
+      $icon = \Drupal::service('extension.path.resolver')->getPath('module', $link['provider']) . '/' . $link['icon'];
+      $icon = \Drupal::service('file_url_generator')->generateAbsoluteString($icon);
+      $icon = \Drupal::service('file_url_generator')->transformRelative($icon);
+
+      $link['options']['attributes']['style'][] = "background-image: url($icon);";
+    }
+  }
+
+  $links['oauth2_token.admin.config.people.settings']['title'] = t('API Settings');
+  $links['oauth2_token.admin.config.people.settings']['parent'] = 'admin.access_control';
+  $links['oauth2_token.admin.config.people.settings']['description'] = t('Allows you to configure certain settings for the API, including token expiration and the location of your keys.');
+  $links['oauth2_token.admin.config.people.settings']['weight'] = 1;
+
+  $links['entity.user.collection']['title'] = t('Users');
+  $links['entity.user.collection']['parent'] = 'admin.access_control';
+  $links['entity.user.collection']['description'] = t('In addition to providing the ability to login to this site, users are employed to authenticate with the API. API users should be assigned the same role as the client they are using.');
+  $links['entity.user.collection']['weight'] = 5;
+}
+
+/**
+ * Implements hook_toolbar().
+ */
+function acquia_cms_headless_ui_toolbar_alter(array &$items) {
+  // The front page redirects to admin/content and content is generally not
+  // viewed outside of the API so this link makes no sense.
+  unset($items['home']);
+
+  if (isset($items['administration'])) {
+    $items['administration']['tray']['#attached']['library'][] = 'acquia_cms_headless_ui/toolbar';
+  }
+}

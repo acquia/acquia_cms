@@ -1,0 +1,7 @@
+services:
+  acquia_cms_headless_ui.config_subscriber:
+    class: 'Drupal\acquia_cms_headless_ui\Event\ConfigSubscriber'
+    arguments:
+      - '@plugin.manager.menu.local_task'
+    tags:
+      - { name: event_subscriber }
