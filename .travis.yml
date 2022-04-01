@@ -61,6 +61,7 @@ env:
     # "AcquiaDrupalTransitional". Defaults to "AcquiaDrupalTransitional".
     # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_PHPCS_STANDARD
     - ORCA_PHPCS_STANDARD=AcquiaPHP
+    - AWS_S3_BUCKET_PATH=s3://acquia-cms-artifacts
 
 # Execution time is drastically reduced by splitting the build into multiple
 # concurrent jobs.
@@ -70,8 +71,8 @@ matrix:
   include:
     # The standard ORCA jobs provide broad out-of-the-box coverage.
     # @see https://github.com/acquia/orca/blob/master/docs/understanding-orca.md#continuous-integration
-    - { env: ORCA_JOB=STATIC_CODE_ANALYSIS, name: "Static code analysis" }
-    - { env: ORCA_JOB=STRICT_DEPRECATED_CODE_SCAN, name: "Strict deprecated code scan" }
+    #- { env: ORCA_JOB=STATIC_CODE_ANALYSIS, name: "Static code analysis" }
+    #- { env: ORCA_JOB=STRICT_DEPRECATED_CODE_SCAN, name: "Strict deprecated code scan" }
     # The following two jobs are not applicable because Acquia CMS does not support versions prior to Drupal 9.1.x.
     # - { env: ORCA_JOB=INTEGRATED_TEST_ON_OLDEST_SUPPORTED, name: "Integrated test on oldest supported Drupal core version" }
     # - { env: ORCA_JOB=INTEGRATED_TEST_ON_LATEST_LTS, name: "Integrated test on latest LTS Drupal core version" }
@@ -108,10 +109,10 @@ matrix:
     # The following nine jobs are custom ACMS jobs based on the standard isolated
     # current dev test.
     # Exclude push group tests on this job to exclude low and medium risk tests.
-    - { name: "Isolated test on current dev Drupal core version", if: type = push, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="push" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    #- { name: "Isolated test on current dev Drupal core version", if: type = push, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="push" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     - { name: "Starter", if: NOT branch = main, env: ACMS_JOB=starter ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     # Exclude pr group tests to exclude only low-risk tests during PR builds.
-    - { name: "Isolated test on current dev Drupal core version - PR Tests", if: type = pull_request, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="pr" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
+    #- { name: "Isolated test on current dev Drupal core version - PR Tests", if: type = pull_request, env: ACMS_JOB=base ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP="pr" ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
     # The following jobs run only during cron runs, and fully install the site before
     # running tests.
     - { name: "Isolated test on current dev Drupal core version - Full Install", if: type = cron, env: ACMS_JOB=base_full ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV}
@@ -154,10 +155,14 @@ before_install:
   - nvm install 12.13.1; nvm use 12.13.1
   - composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION"
   - composer self-update
+  - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"; unzip awscliv2.zip; sudo ./aws/install;
   # Optionally, remove SUT-provided tests with a specific PHPUnit test group.
   - if [ ! -z $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP ]; then find ./ -type f | xargs grep -l "@group $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP$" | xargs rm -v; fi
   - sed -i 's/<\/ruleset>/ <rule ref="Drupal.InfoFiles.AutoAddedKeys.Version">\n <exclude-pattern>acquia_cms\.info\.yml<\/exclude-pattern>\n <\/rule>\n\n<\/ruleset>/' ../orca/phpcs.xml.dist && cat ../orca/phpcs.xml.dist
   - ../orca/bin/travis/before_install.sh
+  - php -r "var_dump(function_exists('imagewebp'));"
+  - php -r "var_dump(gd_info());"
+  - which php
 
 # Create the test fixture and place the SUT.
 install: ./tests/travis/install.sh
@@ -175,7 +180,10 @@ before_cache: ../orca/bin/travis/before_cache.sh
 after_success: ../orca/bin/travis/after_success.sh
 
 # Display debugging information in case of failure.
-after_failure: ../orca/bin/travis/after_failure.sh
+after_failure:
+  - echo ${AWS_S3_BUCKET_PATH}/${TRAVIS_BUILD_ID} && echo "${TRAVIS_BUILD_DIR}/tests/backstop/bitmaps_test/" && echo $ACMS_JOB
+  - if [ "$ACMS_JOB" = "starter" ]; then aws s3 cp --recursive "${TRAVIS_BUILD_DIR}/tests/backstop/bitmaps_test/" "${AWS_S3_BUCKET_PATH}/${TRAVIS_BUILD_ID}"; fi
+  - ./orca/bin/travis/after_failure.sh
 
 # Reserved for future use.
 after_script: ../orca/bin/travis/after_script.sh
