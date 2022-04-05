@@ -2007,6 +2007,637 @@
             "time": "2020-10-27T21:46:55+00:00"
         },
         {
+            "name": "drupal/acquia_claro",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia_claro.git",
+                "reference": "b2b2e26965fc0849ca92dac48d16572fb99615b3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_claro/zipball/b2b2e26965fc0849ca92dac48d16572fb99615b3",
+                "reference": "b2b2e26965fc0849ca92dac48d16572fb99615b3",
+                "shasum": ""
+            },
+            "type": "drupal-theme",
+            "description": "A clean, accessible, and powerful Drupal administration theme.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_claro/tree/1.3.x",
+                "issues": "https://github.com/acquia/acquia_claro/issues"
+            },
+            "time": "2022-02-15T11:22:48+00:00"
+        },
+        {
+            "name": "drupal/acquia_cms_article",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia_cms_article.git",
+                "reference": "4ed06ae1edeea898153e357e4a40988a8499ce79"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_cms_article/zipball/4ed06ae1edeea898153e357e4a40988a8499ce79",
+                "reference": "4ed06ae1edeea898153e357e4a40988a8499ce79",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/acquia_cms_person": "1.4.x-dev"
+            },
+            "type": "drupal-module",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Provides an Article content type and related configuration.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_cms_article/tree/1.4.x",
+                "issues": "https://github.com/acquia/acquia_cms_article/issues"
+            },
+            "time": "2022-04-07T12:37:03+00:00"
+        },
+        {
+            "name": "drupal/acquia_cms_audio",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia_cms_audio.git",
+                "reference": "00c72bf532b57eaad5dc5678ab9ae90906287d4b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_cms_audio/zipball/00c72bf532b57eaad5dc5678ab9ae90906287d4b",
+                "reference": "00c72bf532b57eaad5dc5678ab9ae90906287d4b",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/acquia_cms_common": "1.4.x-dev",
+                "drupal/media_entity_soundcloud": "^3.0"
+            },
+            "type": "drupal-module",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Provides an Audio media type and related configuration.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_cms_audio/tree/1.4.x",
+                "issues": "https://github.com/acquia/acquia_cms_audio/issues"
+            },
+            "time": "2022-04-07T12:37:03+00:00"
+        },
+        {
+            "name": "drupal/acquia_cms_common",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia_cms_common.git",
+                "reference": "2881060cc2843b60f387b49067197c62f181e6e3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_cms_common/zipball/2881060cc2843b60f387b49067197c62f181e6e3",
+                "reference": "2881060cc2843b60f387b49067197c62f181e6e3",
+                "shasum": ""
+            },
+            "require": {
+                "acquia/drupal-environment-detector": "^1.4",
+                "acquia/memcache-settings": "^1",
+                "cweagans/composer-patches": "^1.7",
+                "drupal/acquia_connector": "^3",
+                "drupal/acquia_contenthub": "^2.25",
+                "drupal/acquia_lift": "^4.2",
+                "drupal/acquia_purge": "^1",
+                "drupal/acquia_telemetry-acquia_telemetry": "1.0-alpha5",
+                "drupal/acsf": "^2",
+                "drupal/autologout": "^1",
+                "drupal/checklistapi": "^2.0",
+                "drupal/config_ignore": "2.3.0",
+                "drupal/config_rewrite": "^1.4",
+                "drupal/core": "~9.2.16 || ~9.3.9",
+                "drupal/default_content": "2.0.0-alpha1",
+                "drupal/entity_clone": "1.0-beta6",
+                "drupal/field_group": "^3",
+                "drupal/focal_point": "1.5",
+                "drupal/google_analytics": "^4.0",
+                "drupal/google_tag": "^1",
+                "drupal/honeypot": "^2.0",
+                "drupal/imagemagick": "^3",
+                "drupal/jsonapi_extras": "^3",
+                "drupal/memcache": "^2.2",
+                "drupal/moderation_dashboard": "1.0.0-beta3",
+                "drupal/moderation_sidebar": "^1.4",
+                "drupal/mysql56": "^1.0",
+                "drupal/password_policy": "^3.0",
+                "drupal/pathauto": "^1",
+                "drupal/recaptcha": "^3",
+                "drupal/redirect": "^1",
+                "drupal/reroute_email": "2.1.0",
+                "drupal/responsive_preview": "^1.0",
+                "drupal/scheduler_content_moderation_integration": "^1.3",
+                "drupal/schema_metatag": "^2.2",
+                "drupal/seckit": "^2",
+                "drupal/shield": "^1",
+                "drupal/simple_sitemap": "^4.0",
+                "drupal/smart_trim": "^1.3",
+                "drupal/social_media_links": "^2.7",
+                "drupal/username_enumeration_prevention": "^1.2",
+                "drupal/workbench_email": "^2.2"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^10"
+                    }
+                },
+                "enable-patching": true,
+                "patches": {
+                    "drupal/acquia_telemetry-acquia_telemetry": {
+                        "3165473 - Add check for core index": "https://www.drupal.org/files/issues/2020-08-18/3165473-27.patch",
+                        "3267344 - Use markup to render text on status report page": "https://git.drupalcode.org/project/acquia_telemetry/-/merge_requests/1.diff"
+                    },
+                    "drupal/config_ignore": {
+                        "2857247 - Support for export filtering via Drush": "https://www.drupal.org/files/issues/2021-08-18/config_ignore_2857247-75.patch"
+                    },
+                    "drupal/core": {
+                        "3059955 - It is possible to overflow the number of items allowed in Media Library": "https://www.drupal.org/files/issues/2019-12-28/3082690-80.patch",
+                        "3160238 - Media Library widget produces \"This value should not be null\" error when field is required": "https://www.drupal.org/files/issues/2020-10-08/3160238-25.patch",
+                        "3160238 - SQLite database locking errors cause fatal errors": "https://www.drupal.org/files/issues/1120020-59.patch"
+                    },
+                    "drupal/default_content": {
+                        "2698425 - Duplicate content issues in default content": "https://git.drupalcode.org/project/default_content/-/merge_requests/5.patch"
+                    },
+                    "drupal/entity_clone": {
+                        "Allow fields implementing EntityReferenceFieldItemListInterface to clone their referenced entities": "https://www.drupal.org/files/issues/2021-04-14/3013286-19.patch"
+                    },
+                    "drupal/focal_point": {
+                        "3162210 - Preview link accidentally closes the media library": "https://www.drupal.org/files/issues/2020-10-06/3162210-17.patch"
+                    },
+                    "drupal/reroute_email": {
+                        "3254806 - Invalid argument supplied for foreach() in reroute_email_check_email_by_permission() (line 316)": "https://git.drupalcode.org/project/reroute_email/-/commit/438a67caeb0b0cc47d1deb0cee50afda9a907dc8.diff"
+                    }
+                }
+            },
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Handles shared functionality for Acquia CMS.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_cms_common/tree/1.4.x",
+                "issues": "https://github.com/acquia/acquia_cms_common/issues"
+            },
+            "time": "2022-04-05T13:46:32+00:00"
+        },
+        {
+            "name": "drupal/acquia_cms_development",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:acquia/acquia_cms_development.git",
+                "reference": "b50f78a5e22c71c36edacff1895da2cfad692b30"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_cms_development/zipball/b50f78a5e22c71c36edacff1895da2cfad692b30",
+                "reference": "b50f78a5e22c71c36edacff1895da2cfad692b30",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/acquia_cms_search": "^1.0",
+                "drupal/acquia_connector": "^3",
+                "drupal/acquia_search": "^3.0.3",
+                "drupal/config_rewrite": "^1.4"
+            },
+            "type": "drupal-module",
+            "description": "Contains development configuration.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_cms_development/tree/1.3.x",
+                "issues": "https://github.com/acquia/acquia_cms_development/issues"
+            },
+            "time": "2022-02-15T11:22:48+00:00"
+        },
+        {
+            "name": "drupal/acquia_cms_document",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia_cms_document.git",
+                "reference": "e473596a0dd9a3f3a1109ae4beecb28ced8796cc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_cms_document/zipball/e473596a0dd9a3f3a1109ae4beecb28ced8796cc",
+                "reference": "e473596a0dd9a3f3a1109ae4beecb28ced8796cc",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/acquia_cms_common": "1.4.x-dev"
+            },
+            "type": "drupal-module",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Provides a Document media type and related configuration.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_cms_document/tree/1.4.x",
+                "issues": "https://github.com/acquia/acquia_cms_document/issues"
+            },
+            "time": "2022-04-07T12:37:03+00:00"
+        },
+        {
+            "name": "drupal/acquia_cms_event",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia_cms_event.git",
+                "reference": "0f98230038151cf7e811a9939a5344ae705b89b8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_cms_event/zipball/0f98230038151cf7e811a9939a5344ae705b89b8",
+                "reference": "0f98230038151cf7e811a9939a5344ae705b89b8",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/acquia_cms_place": "1.4.x-dev"
+            },
+            "type": "drupal-module",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Provides an Event content type and related configuration.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_cms_event/tree/1.4.x",
+                "issues": "https://github.com/acquia/acquia_cms_event/issues"
+            },
+            "time": "2022-04-07T12:37:03+00:00"
+        },
+        {
+            "name": "drupal/acquia_cms_image",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia_cms_image.git",
+                "reference": "1fa17e37803456502df0982eef24aa088c9045fa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_cms_image/zipball/1fa17e37803456502df0982eef24aa088c9045fa",
+                "reference": "1fa17e37803456502df0982eef24aa088c9045fa",
+                "shasum": ""
+            },
+            "require": {
+                "cweagans/composer-patches": "^1.7",
+                "drupal/acquia_cms_common": "1.4.x-dev",
+                "drupal/imce": "2.x-dev"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "enable-patching": true,
+                "patches": []
+            },
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Provides an Image media type and related configuration.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_cms_image/tree/1.4.x",
+                "issues": "https://github.com/acquia/acquia_cms_image/issues"
+            },
+            "time": "2022-04-07T12:37:03+00:00"
+        },
+        {
+            "name": "drupal/acquia_cms_page",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia_cms_page.git",
+                "reference": "13938cd076020aeeb209c85a3639f6163da21a19"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_cms_page/zipball/13938cd076020aeeb209c85a3639f6163da21a19",
+                "reference": "13938cd076020aeeb209c85a3639f6163da21a19",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/acquia_cms_image": "1.4.x-dev",
+                "drupal/acquia_cms_site_studio": "1.4.x-dev"
+            },
+            "type": "drupal-module",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Provides an unstructured Page content type and related configuration.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_cms_page/tree/1.4.x",
+                "issues": "https://github.com/acquia/acquia_cms_page/issues"
+            },
+            "time": "2022-04-07T12:37:03+00:00"
+        },
+        {
+            "name": "drupal/acquia_cms_person",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia_cms_person.git",
+                "reference": "759a75b2e85e145db77b98e4b5ad64e23c4e825a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_cms_person/zipball/759a75b2e85e145db77b98e4b5ad64e23c4e825a",
+                "reference": "759a75b2e85e145db77b98e4b5ad64e23c4e825a",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/acquia_cms_place": "1.4.x-dev",
+                "drupal/scheduler": "^1.3"
+            },
+            "type": "drupal-module",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Provides a Person content type, a structured data representation of people associated with a website or organization.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_cms_person/tree/1.4.x",
+                "issues": "https://github.com/acquia/acquia_cms_person/issues"
+            },
+            "time": "2022-04-07T12:37:03+00:00"
+        },
+        {
+            "name": "drupal/acquia_cms_place",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia_cms_place.git",
+                "reference": "919f650a5002c4989c0842d2b86c8e762a98e2bf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_cms_place/zipball/919f650a5002c4989c0842d2b86c8e762a98e2bf",
+                "reference": "919f650a5002c4989c0842d2b86c8e762a98e2bf",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/acquia_cms_image": "1.4.x-dev",
+                "drupal/address": "^1",
+                "drupal/geocoder": "3.25",
+                "drupal/geofield": "^1",
+                "drupal/scheduler": "^1.3",
+                "geocoder-php/google-maps-provider": "^4.6"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "enable-patching": true,
+                "patches": {
+                    "drupal/geocoder": {
+                        "3224364 - Replace deprecated boolean return in uksort() for PHP 8 compatibility.": "https://www.drupal.org/files/issues/2021-07-19/3224364-2.patch"
+                    }
+                }
+            },
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Provides a Place content type and related configuration.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_cms_place/tree/1.4.x",
+                "issues": "https://github.com/acquia/acquia_cms_place/issues"
+            },
+            "time": "2022-04-07T12:37:03+00:00"
+        },
+        {
+            "name": "drupal/acquia_cms_search",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia_cms_search.git",
+                "reference": "daf7fa60426acfb9af35243263239c0a44de0a8e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_cms_search/zipball/daf7fa60426acfb9af35243263239c0a44de0a8e",
+                "reference": "daf7fa60426acfb9af35243263239c0a44de0a8e",
+                "shasum": ""
+            },
+            "require": {
+                "cweagans/composer-patches": "^1.7",
+                "drupal/acquia_search": "^3.0.3",
+                "drupal/collapsiblock": "^3",
+                "drupal/facets": "2.0.1",
+                "drupal/facets_pretty_paths": "^1.2",
+                "drupal/search_api": "1.23",
+                "drupal/search_api_autocomplete": "^1.6"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "enable-patching": true,
+                "patches": {
+                    "drupal/facets": {
+                        "Fix the select/deselect facet link issue": "https://www.drupal.org/files/issues/2022-01-18/3259123-search-facet-reset-link.patch"
+                    },
+                    "drupal/search_api": {
+                        "Resolves call to member function preExecute() on null error on site install": "https://www.drupal.org/files/issues/2021-09-20/search_api_condition_cacheable_metadata.patch"
+                    }
+                }
+            },
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Provides powerful search capabilities to the site.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_cms_search/tree/1.3.x",
+                "issues": "https://github.com/acquia/acquia_cms_search/issues"
+            },
+            "time": "2022-03-22T17:49:33+00:00"
+        },
+        {
+            "name": "drupal/acquia_cms_site_studio",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia_cms_site_studio.git",
+                "reference": "c5f3b28fbd2726a0f5cfda6fe24ccc8cc4ffb14f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_cms_site_studio/zipball/c5f3b28fbd2726a0f5cfda6fe24ccc8cc4ffb14f",
+                "reference": "c5f3b28fbd2726a0f5cfda6fe24ccc8cc4ffb14f",
+                "shasum": ""
+            },
+            "require": {
+                "acquia/cohesion": "6.8.1",
+                "acquia/cohesion-theme": "^6.8",
+                "drupal/acquia_cms_common": "1.4.x-dev",
+                "drupal/collapsiblock": "^3",
+                "drupal/node_revision_delete": "^1.0@RC"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^10"
+                    }
+                },
+                "enable-patching": true,
+                "patches": {
+                    "acquia/cohesion": {
+                        "Error: Attempt to modify property 'styles' on array": "https://gist.githubusercontent.com/panshulK/86e53ac29386142b4204ab885018b36c/raw/c05e9c959cd8102534ccc1923809f90bc735785c/site-studio-updated-style.patch"
+                    }
+                }
+            },
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Handles code for Site Studio Installation & Related Configurations.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_cms_site_studio/tree/1.4.x",
+                "issues": "https://github.com/acquia/acquia_cms_site_studio/issues"
+            },
+            "time": "2022-04-07T12:37:03+00:00"
+        },
+        {
+            "name": "drupal/acquia_cms_starter",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:acquia/acquia_cms_starter.git",
+                "reference": "de49d0754487e4043681c8bbfa7b504f4ea282e6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_cms_starter/zipball/de49d0754487e4043681c8bbfa7b504f4ea282e6",
+                "reference": "de49d0754487e4043681c8bbfa7b504f4ea282e6",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/acquia_cms_document": "1.4.x-dev",
+                "drupal/acquia_cms_event": "1.4.x-dev",
+                "drupal/acquia_cms_page": "1.4.x-dev",
+                "drupal/acquia_cms_search": "1.4.x-dev",
+                "drupal/acquia_cms_video": "1.4.x-dev",
+                "drupal/webform": "^6.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "enable-patching": true,
+                "patches": []
+            },
+            "description": "Contains the example content for demonstration.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_cms_starter/tree/1.4.x",
+                "issues": "https://github.com/acquia/acquia_cms_starter/issues"
+            },
+            "time": "2022-04-07T12:37:03+00:00"
+        },
+        {
+            "name": "drupal/acquia_cms_support",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:acquia/acquia_cms_support.git",
+                "reference": "873a9131b08168b66a0ef3fd3880ed0d68cd70e5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_cms_support/zipball/873a9131b08168b66a0ef3fd3880ed0d68cd70e5",
+                "reference": "873a9131b08168b66a0ef3fd3880ed0d68cd70e5",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/acquia_cms_common": "1.4.x-dev",
+                "drupal/diff": "^1"
+            },
+            "type": "drupal-module",
+            "description": "Compare the config that ships with Acquia CMS with the active config on the site.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_cms_support/tree/1.4.x",
+                "issues": "https://github.com/acquia/acquia_cms_support/issues"
+            },
+            "time": "2022-04-07T12:37:03+00:00"
+        },
+        {
+            "name": "drupal/acquia_cms_toolbar",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia_cms_toolbar.git",
+                "reference": "c0826550642e9470a47709f8953bcc37f8100a9a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_cms_toolbar/zipball/c0826550642e9470a47709f8953bcc37f8100a9a",
+                "reference": "c0826550642e9470a47709f8953bcc37f8100a9a",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/acquia_cms_common": "1.4.x-dev",
+                "drupal/admin_toolbar": "^3.0"
+            },
+            "type": "drupal-module",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Acquia CMS styling brought to admin toolbar.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_cms_toolbar/tree/1.4.x",
+                "issues": "https://github.com/acquia/acquia_cms_toolbar/issues"
+            },
+            "time": "2022-04-07T12:37:03+00:00"
+        },
+        {
+            "name": "drupal/acquia_cms_tour",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia_cms_tour.git",
+                "reference": "f67264adba55952bdff2cfd2e1ced701c6b9c2b6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_cms_tour/zipball/f67264adba55952bdff2cfd2e1ced701c6b9c2b6",
+                "reference": "f67264adba55952bdff2cfd2e1ced701c6b9c2b6",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/acquia_cms_common": "1.4.x-dev"
+            },
+            "type": "drupal-module",
+            "description": "Provides a tour page for Acquia CMS.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_cms_tour/tree/1.4.x",
+                "issues": "https://github.com/acquia/acquia_cms_tour/issues"
+            },
+            "time": "2022-04-07T12:37:03+00:00"
+        },
+        {
+            "name": "drupal/acquia_cms_video",
+            "version": "1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia_cms_video.git",
+                "reference": "18c2521b8c1400f2b7c97988937f53a40920f30d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia_cms_video/zipball/18c2521b8c1400f2b7c97988937f53a40920f30d",
+                "reference": "18c2521b8c1400f2b7c97988937f53a40920f30d",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/acquia_cms_common": "1.4.x-dev"
+            },
+            "type": "drupal-module",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Provides a Video media type and related configuration.",
+            "support": {
+                "source": "https://github.com/acquia/acquia_cms_video/tree/1.4.x",
+                "issues": "https://github.com/acquia/acquia_cms_video/issues"
+            },
+            "time": "2022-04-07T12:37:03+00:00"
+        },
+        {
             "name": "drupal/acquia_connector",
             "version": "3.0.4",
             "source": {
@@ -2026,12 +2657,16 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev",
+                    "dev-8.x-2.x": "2.x-dev"
+                },
                 "drupal": {
                     "version": "3.0.4",
                     "datestamp": "1632414112",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 },
                 "branch-alias": {
@@ -3162,56 +3797,6 @@
             "homepage": "https://www.drupal.org/project/collapsiblock",
             "support": {
                 "source": "https://git.drupalcode.org/project/collapsiblock"
-            }
-        },
-        {
-            "name": "drupal/component",
-            "version": "1.0.0-rc3",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/component.git",
-                "reference": "1.0.0-rc3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/component-1.0.0-rc3.zip",
-                "reference": "1.0.0-rc3",
-                "shasum": "fbce913910be7bf7a70ee82cffd1208d6a5d8ac0"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "1.0.0-rc3",
-                    "datestamp": "1611794825",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Ron Northcutt (rlnorthcutt)",
-                    "homepage": "https://www.drupal.org/u/rlnorthcutt",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "rlnorthcutt",
-                    "homepage": "https://www.drupal.org/user/116893"
-                }
-            ],
-            "description": "Easily add JS components to Drupal as blocks, with only a single yml file.",
-            "homepage": "https://drupal.org/project/component",
-            "support": {
-                "source": "https://git.drupalcode.org/project/component",
-                "issues": "https://drupal.org/project/issues/component"
             }
         },
         {
@@ -6220,17 +6805,17 @@
         },
         {
             "name": "drupal/reroute_email",
-            "version": "2.1.1",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/reroute_email.git",
-                "reference": "2.1.1"
+                "reference": "2.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/reroute_email-2.1.1.zip",
-                "reference": "2.1.1",
-                "shasum": "a3ed4920867d04aa446a75f349ade90e31fd1926"
+                "url": "https://ftp.drupal.org/files/projects/reroute_email-2.1.0.zip",
+                "reference": "2.1.0",
+                "shasum": "ef36513957d3f719f409b0a228cbf4ad053bc8fa"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9"
@@ -6238,8 +6823,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.1.1",
-                    "datestamp": "1648587118",
+                    "version": "2.1.0",
+                    "datestamp": "1639497528",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7412,22 +7997,22 @@
         },
         {
             "name": "drush/drush",
-            "version": "11.0.9",
+            "version": "11.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drush-ops/drush.git",
-                "reference": "88b2293ded84f67aad96ad6dbd64cacd84bcd6fe"
+                "reference": "6991a3b8f6827d0bab13005402730fc50d130a50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drush-ops/drush/zipball/88b2293ded84f67aad96ad6dbd64cacd84bcd6fe",
-                "reference": "88b2293ded84f67aad96ad6dbd64cacd84bcd6fe",
+                "url": "https://api.github.com/repos/drush-ops/drush/zipball/6991a3b8f6827d0bab13005402730fc50d130a50",
+                "reference": "6991a3b8f6827d0bab13005402730fc50d130a50",
                 "shasum": ""
             },
             "require": {
                 "chi-teck/drupal-code-generator": "^2.4",
                 "composer/semver": "^1.4 || ^3",
-                "consolidation/annotated-command": "^4.5.3",
+                "consolidation/annotated-command": "^4.5",
                 "consolidation/config": "^2",
                 "consolidation/filter-via-dot-access-data": "^2",
                 "consolidation/robo": "^3.0.9",
@@ -7546,7 +8131,7 @@
                 "irc": "irc://irc.freenode.org/drush",
                 "issues": "https://github.com/drush-ops/drush/issues",
                 "slack": "https://drupal.slack.com/messages/C62H9CWQM",
-                "source": "https://github.com/drush-ops/drush/tree/11.0.9"
+                "source": "https://github.com/drush-ops/drush/tree/11.0.7"
             },
             "funding": [
                 {
@@ -7554,7 +8139,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-04-16T12:01:55+00:00"
+            "time": "2022-03-09T19:32:53+00:00"
         },
         {
             "name": "e0ipso/shaper",
@@ -8015,7 +8600,9 @@
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.2"
+                "ext-json": "*",
+                "justinrainbow/json-schema": "^5.2.10",
+                "php": "^7.4 || ^8.0"
             },
             "type": "library",
             "autoload": {
@@ -17048,16 +17635,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "2.2.12",
+            "version": "2.2.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "ba61e768b410736efe61df01b61f1ec44f51474f"
+                "reference": "2f5bcf0480c13b4fa1ac490aa9344e4402507538"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/ba61e768b410736efe61df01b61f1ec44f51474f",
-                "reference": "ba61e768b410736efe61df01b61f1ec44f51474f",
+                "url": "https://api.github.com/repos/composer/composer/zipball/2f5bcf0480c13b4fa1ac490aa9344e4402507538",
+                "reference": "2f5bcf0480c13b4fa1ac490aa9344e4402507538",
                 "shasum": ""
             },
             "require": {
@@ -17127,7 +17714,7 @@
             "support": {
                 "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/composer/issues",
-                "source": "https://github.com/composer/composer/tree/2.2.12"
+                "source": "https://github.com/composer/composer/tree/2.2.11"
             },
             "funding": [
                 {
@@ -17143,20 +17730,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-04-13T14:42:25+00:00"
+            "time": "2022-04-01T20:00:52+00:00"
         },
         {
             "name": "composer/installers",
-            "version": "v2.1.1",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "af93ba6e52236418f07a278033eba6959ee5b983"
+                "reference": "75e5ef05436c90ac565a48176cc7465991908352"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/af93ba6e52236418f07a278033eba6959ee5b983",
-                "reference": "af93ba6e52236418f07a278033eba6959ee5b983",
+                "url": "https://api.github.com/repos/composer/installers/zipball/75e5ef05436c90ac565a48176cc7465991908352",
+                "reference": "75e5ef05436c90ac565a48176cc7465991908352",
                 "shasum": ""
             },
             "require": {
@@ -17271,7 +17858,7 @@
             ],
             "support": {
                 "issues": "https://github.com/composer/installers/issues",
-                "source": "https://github.com/composer/installers/tree/v2.1.1"
+                "source": "https://github.com/composer/installers/tree/v2.1.0"
             },
             "funding": [
                 {
@@ -17287,7 +17874,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-04-13T09:13:00+00:00"
+            "time": "2022-03-18T12:27:54+00:00"
         },
         {
             "name": "composer/metadata-minifier",
@@ -17697,7 +18284,7 @@
         },
         {
             "name": "drupal/core-composer-scaffold",
-            "version": "9.3.11",
+            "version": "9.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-composer-scaffold.git",
@@ -17741,13 +18328,13 @@
                 "drupal"
             ],
             "support": {
-                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.3.11"
+                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.3.9"
             },
             "time": "2022-02-24T17:40:56+00:00"
         },
         {
             "name": "drupal/core-dev",
-            "version": "9.3.11",
+            "version": "9.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-dev.git",
@@ -17791,7 +18378,7 @@
             ],
             "description": "require-dev dependencies from drupal/drupal; use in addition to drupal/core-recommended to run tests from drupal/core.",
             "support": {
-                "source": "https://github.com/drupal/core-dev/tree/9.3.11"
+                "source": "https://github.com/drupal/core-dev/tree/9.3.9"
             },
             "time": "2021-11-30T05:41:29+00:00"
         },
@@ -18042,16 +18629,16 @@
         },
         {
             "name": "instaclick/php-webdriver",
-            "version": "1.4.13",
+            "version": "1.4.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/instaclick/php-webdriver.git",
-                "reference": "623eb02be728185110587e4259780e5f7f9f3983"
+                "reference": "608e8b20a9072f84cac4f2fddb4420893d69eb83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/instaclick/php-webdriver/zipball/623eb02be728185110587e4259780e5f7f9f3983",
-                "reference": "623eb02be728185110587e4259780e5f7f9f3983",
+                "url": "https://api.github.com/repos/instaclick/php-webdriver/zipball/608e8b20a9072f84cac4f2fddb4420893d69eb83",
+                "reference": "608e8b20a9072f84cac4f2fddb4420893d69eb83",
                 "shasum": ""
             },
             "require": {
@@ -18099,9 +18686,9 @@
             ],
             "support": {
                 "issues": "https://github.com/instaclick/php-webdriver/issues",
-                "source": "https://github.com/instaclick/php-webdriver/tree/1.4.13"
+                "source": "https://github.com/instaclick/php-webdriver/tree/1.4.11"
             },
-            "time": "2022-04-15T10:40:37+00:00"
+            "time": "2022-03-30T01:28:33+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -18532,16 +19119,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.4.4",
+            "version": "1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "d8e9fd97ca11f2f24fc1aafbcfb1f78bce762267"
+                "reference": "4cb3021a4e10ffe3d5f94a4c34cf4b3f6de2fa3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/d8e9fd97ca11f2f24fc1aafbcfb1f78bce762267",
-                "reference": "d8e9fd97ca11f2f24fc1aafbcfb1f78bce762267",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/4cb3021a4e10ffe3d5f94a4c34cf4b3f6de2fa3d",
+                "reference": "4cb3021a4e10ffe3d5f94a4c34cf4b3f6de2fa3d",
                 "shasum": ""
             },
             "require": {
@@ -18570,9 +19157,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.4.4"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.4.2"
             },
-            "time": "2022-04-14T12:24:06+00:00"
+            "time": "2022-03-30T13:33:37+00:00"
         },
         {
             "name": "react/promise",
@@ -19442,8 +20029,19 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "drupal/imce": 20,
-        "drupal/node_revision_delete": 5
+        "drupal/acquia_claro": 20,
+        "drupal/acquia_cms_article": 20,
+        "drupal/acquia_cms_audio": 20,
+        "drupal/acquia_cms_development": 20,
+        "drupal/acquia_cms_document": 20,
+        "drupal/acquia_cms_event": 20,
+        "drupal/acquia_cms_page": 20,
+        "drupal/acquia_cms_search": 20,
+        "drupal/acquia_cms_starter": 20,
+        "drupal/acquia_cms_support": 20,
+        "drupal/acquia_cms_toolbar": 20,
+        "drupal/acquia_cms_tour": 20,
+        "drupal/acquia_cms_video": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
