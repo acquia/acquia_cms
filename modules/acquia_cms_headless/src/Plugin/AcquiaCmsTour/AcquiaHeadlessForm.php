@@ -111,11 +111,7 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
         '#description' => $this->t('When Headless Mode is enabled, it
           turns on all the capabilities that allows Drupal to be used as a
           backend for a decoupled Node JS app AND turns off all of Drupal’s
-          front-end features so that the application is <em>purely headless</em>.
-          <br><br>
-          <strong>Warning</strong>: This will remove any data related to Site
-          Studio, Layout Builder, etc. Proceed with caution and backup any
-          necessary data prior to enabling.'),
+          front-end features so that the application is<em>purelyheadless</em>.'),
         '#default_value' => $this->moduleHandler->moduleExists($headless) ? 1 : 0,
         '#suffix' => "</div>",
       ];
