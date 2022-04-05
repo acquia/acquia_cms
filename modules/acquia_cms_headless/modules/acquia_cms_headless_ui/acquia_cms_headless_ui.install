@@ -33,13 +33,10 @@ function acquia_cms_headless_ui_install() {
     ])->save();
   }
 
-  // Install the seven theme.
-  \Drupal::service('theme_installer')->install(['seven']);
-
   // Reset default theme to seven`.
   \Drupal::configFactory()
     ->getEditable('system.theme')
-    ->set('default', 'seven')
+    ->set('default', 'acquia_claro')
     ->save();
 
   // Update 403 and Frontpage values in Site Settings.
@@ -47,6 +44,20 @@ function acquia_cms_headless_ui_install() {
     ->getEditable('system.site')
     ->set('page.403', '/user/login')
     ->set('page.front', '/frontpage')
+    ->save();
+
+  // Turn off moderation dashboard redirect as it interferes with our on custom
+  // login redirect handling.
+  \Drupal::configFactory()
+    ->getEditable('moderation_dashboard.settings')
+    ->set('redirect_on_login', FALSE)
+    ->save();
+
+  // Remove link to entity setting from Content list view in order to disable
+  // access to node/[node_id] type routes.
+  \Drupal::configFactory()
+    ->getEditable('views.view.content')
+    ->set('display.default.display_options.fields.title.settings.link_to_entity', FALSE)
     ->save();
 }
 
@@ -66,5 +77,18 @@ function acquia_cms_headless_ui_uninstall() {
   \Drupal::configFactory()
     ->getEditable('system.theme')
     ->set('default', 'cohesion_theme')
+    ->save();
+
+  // Restore moderation dashboard redirect settings back to its default state.
+  \Drupal::configFactory()
+    ->getEditable('moderation_dashboard.settings')
+    ->set('redirect_on_login', TRUE)
+    ->save();
+
+  // Restore link to entity setting from Content list view in order to allow
+  // access to node/[node_id] type routes.
+  \Drupal::configFactory()
+    ->getEditable('views.view.content')
+    ->set('display.default.display_options.fields.title.settings.link_to_entity', TRUE)
     ->save();
 }
