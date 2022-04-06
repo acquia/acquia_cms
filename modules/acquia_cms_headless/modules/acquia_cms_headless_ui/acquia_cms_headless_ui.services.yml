@@ -5,3 +5,9 @@ services:
       - '@plugin.manager.menu.local_task'
     tags:
       - { name: event_subscriber }
+  acquia_cms_headless_ui.redirect_anonymous_subscriber:
+    class: Drupal\acquia_cms_headless_ui\EventSubscriber\RedirectAnonymousSubscriber
+    arguments:
+      - '@current_user'
+    tags:
+      - { name: event_subscriber }
