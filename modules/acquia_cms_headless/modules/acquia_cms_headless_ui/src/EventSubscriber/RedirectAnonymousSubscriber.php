@@ -39,7 +39,7 @@ class RedirectAnonymousSubscriber implements EventSubscriberInterface {
     // Get current path.
     $current_path = $request->getPathInfo();
     // Check if this is /user/rest path.
-    $user_reset = preg_match('/user/reset/*', $current_path);
+    $user_reset = strpos($current_path, '/user/reset/');
 
     if ($this->currentUser->isAnonymous()
       && $current_path != '/user/login'
