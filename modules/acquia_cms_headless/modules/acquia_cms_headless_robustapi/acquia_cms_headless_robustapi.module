@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Drupal\Core\Form\FormStateInterface.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_entity_type_alter().
+ *
+ * See https://drupal.stackexchange.com/a/192813/13414.
+ */
+function acquia_cms_headless_robustapi_entity_type_alter(array &$entity_types) {
+  /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
+  $entity_types['consumer']->setListBuilderClass('Drupal\acquia_cms_headless_robustapi\HeadlessRobustConsumerListBuilder');
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function acquia_cms_headless_robustapi_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'consumer-edit-form') {
+  }
+  // Mothing to see here.
+}
