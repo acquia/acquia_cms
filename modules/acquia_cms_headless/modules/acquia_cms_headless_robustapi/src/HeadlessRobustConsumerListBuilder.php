@@ -20,7 +20,7 @@ class HeadlessRobustConsumerListBuilder extends ConsumerListBuilder {
     $header['description'] = $this->t('Description');
     $header['secret'] = $this->t('New Secret');
     $header['user_id'] = $this->t('User');
-    $context = ['type' => 'header'];
+    // $context = ['type' => 'header'];
     $header = $header + parent::buildHeader();
     return $header;
   }
@@ -30,12 +30,13 @@ class HeadlessRobustConsumerListBuilder extends ConsumerListBuilder {
    */
   public function buildRow(EntityInterface $entity) {
     $user_storage = \Drupal::service('entity_type.manager')->getStorage('user');
-    $query = $user_storage->getQuery('user');
-    $result = $query->execute();
-    $uids = array_keys($result['user']);
-
+    $result = $user_storage->getQuery();
+    $uids = $result
+      ->condition('status', '1')
+      ->execute();
+    $uids = array_keys(['user']);
     // THIS IS YOUR ARRAY OF UIDS.
-    $users = User::loadMultiple();
+    $users = User::loadMultiple($uids);
     // EXTRA CODE.
     foreach ($users as $user) {
       $name = $user->name;
@@ -44,9 +45,8 @@ class HeadlessRobustConsumerListBuilder extends ConsumerListBuilder {
     $row['label'] = $entity->toLink();
     $row['description'] = $entity->get('description')->value;
     $row['secret'] = $entity->get('secret')->value;
-    // $row['user_id'] = $entity->get('user_id')->getString();
-    // $row['user_id'] = $user->get('name')->value;
-    $row['user_id'] = $user->get('name')->value;
+    // Stuck here.
+    $row['user_id'] = $name->name;
     $ops = [
       '#type' => 'operations',
       '#links' => [
@@ -62,7 +62,7 @@ class HeadlessRobustConsumerListBuilder extends ConsumerListBuilder {
       ? ['data' => $this->t('Default')]
       : ['data' => $ops];
 
-    $context = ['type' => 'row', 'entity' => $entity];
+    // $context = ['type' => 'row', 'entity' => $entity];
     $row = $row + parent::buildRow($entity);
     return $row;
   }
