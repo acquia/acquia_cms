@@ -14,6 +14,13 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class RedirectAnonymousSubscriber implements EventSubscriberInterface {
 
   /**
+   * Drupal\Core\Session\AccountProxy definition.
+   *
+   * @var \Drupal\Core\Session\AccountProxy
+   */
+  protected $currentUser;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(AccountInterface $current_user) {
