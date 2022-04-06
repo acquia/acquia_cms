@@ -164,7 +164,7 @@ module.exports =
       "selectors": [],
       "selectorExpansion": true,
       "expect": 0,
-      "misMatchThreshold": 2,
+      "misMatchThreshold": 18,
       "requireSameDimensions": true
     },
     {
