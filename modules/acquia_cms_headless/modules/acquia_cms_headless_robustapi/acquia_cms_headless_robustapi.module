@@ -15,13 +15,14 @@ use Drupal\Core\Form\FormStateInterface;
 function acquia_cms_headless_robustapi_entity_type_alter(array &$entity_types) {
   /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
   $entity_types['consumer']->setListBuilderClass('Drupal\acquia_cms_headless_robustapi\HeadlessRobustConsumerListBuilder');
+  $entity_types['next_site']->setListBuilderClass('Drupal\acquia_cms_headless_robustapi\HeadlessRobustNextSiteListBuilder');
 }
 
 /**
  * Implements hook_form_alter().
  */
 function acquia_cms_headless_robustapi_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if ($form_id == 'consumer-edit-form') {
+  if ($form_id == 'next_site_edit_form') {
   }
-  // Mothing to see here.
+  // Mothing to see here. For debugging purposes. Delete before merging.
 }
