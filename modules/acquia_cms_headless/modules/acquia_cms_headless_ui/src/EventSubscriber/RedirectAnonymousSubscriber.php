@@ -34,6 +34,7 @@ class RedirectAnonymousSubscriber implements EventSubscriberInterface {
    *   Passes in the event request.
    */
   public function checkAnonymous(RequestEvent $event) {
+    // @todo Make sure this doesn't not interfere with access by headless apps.
     // Get current request.
     $request = $event->getRequest();
     // Get current path.
