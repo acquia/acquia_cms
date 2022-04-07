@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acquia_cms_headless_ui\Event;
+namespace Drupal\acquia_cms_headless_ui\EventSubscriber;
 
 use Drupal\Core\Config\ConfigCrudEvent;
 use Drupal\Core\Config\ConfigEvents;
