@@ -19,6 +19,9 @@ function acquia_cms_headless_robustapi_install() {
   // Programmatically create a new "headless" user.
   $robustApi->createHeadlessUser();
 
+  // Generate Public & Private OAUTH keys.
+  $robustApi->generateOauthKeys();
+
   // Remove "is default" status from Default Consumer.
   $robustApi->updateDefaultConsumer(FALSE);
 
