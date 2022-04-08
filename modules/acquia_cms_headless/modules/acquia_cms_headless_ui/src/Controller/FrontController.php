@@ -2,8 +2,8 @@
 
 namespace Drupal\acquia_cms_headless_ui\Controller;
 
-use Drupal\acquia_cms_headless_ui\Form\UserLoginForm;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\user\Form\UserLoginForm;
 
 /**
  * Defines a controller for the front page of the site.

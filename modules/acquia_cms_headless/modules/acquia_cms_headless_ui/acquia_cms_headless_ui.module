@@ -11,7 +11,9 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Template\Attribute;
+use Drupal\Core\Url;
 use Drupal\node\NodeTypeInterface;
+use Drupal\user\UserInterface;
 use Drupal\views\ViewEntityInterface;
 
 /**
@@ -24,6 +26,25 @@ function acquia_cms_headless_ui_help($route_name) {
 
     default:
       return NULL;
+  }
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function acquia_cms_headless_ui_user_login(UserInterface $account) {
+  // Ignore password reset.
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name !== 'user.reset.login') {
+    // Do not interfere if a destination was already set.
+    $current_request = \Drupal::service('request_stack')->getCurrentRequest();
+    if (!$current_request->query->get('destination')) {
+      // Default login destination to the dashboard.
+      $current_request->query->set(
+        'destination',
+        Url::fromRoute('<front>')->toString()
+      );
+    }
   }
 }
 
