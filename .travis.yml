@@ -153,7 +153,8 @@ before_install:
   - sudo apt-get -y install sqlite3/focal
   - mysql -u root < ./tests/travis/install.sql
   - nvm install 12.13.1; nvm use 12.13.1
-  - composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION"
+  #- composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION"
+  - git clone https://github.com/vishalkhode1/orca.git ../orca --branch=v3.16.1
   - composer self-update
   # Download AWS cli, only for starter jobs as we store tests artifacts on s3 buckets.
   - if [ "${ACMS_JOB}" = "starter" ] || [ "${ACMS_JOB}" = "starter_full" ] || [ "${ACMS_JOB}" = "base" ]; then curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo ./aws/install && rm -fr aws && aws s3 cp --recursive ${AWS_S3_BUCKET_PATH}/artifacts/ ${TRAVIS_BUILD_DIR}/tests/; fi
