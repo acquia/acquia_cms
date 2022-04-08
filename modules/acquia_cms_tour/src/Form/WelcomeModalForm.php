@@ -3,6 +3,7 @@
 namespace Drupal\acquia_cms_tour\Form;
 
 use Drupal\Core\Extension\ProfileExtensionList;
+use Drupal\Core\File\FileUrlGenerator;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\State\StateInterface;
@@ -35,16 +36,26 @@ class WelcomeModalForm extends FormBase {
   protected $profileExtensionList;
 
   /**
+   * The state interface.
+   *
+   * @var \Drupal\Core\File\FileUrlGenerator
+   */
+  protected $file;
+
+  /**
    * The ModalFormExampleController constructor.
    *
    * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
    * @param \Drupal\Core\State\ProfileExtensionList $profile_extension_list
    *   The profile extension list object.
+   * @param \Drupal\Core\File\FileUrlGenerator $file
+   *   File Generator.
    */
-  public function __construct(StateInterface $state, ProfileExtensionList $profile_extension_list) {
+  public function __construct(StateInterface $state, ProfileExtensionList $profile_extension_list, FileUrlGenerator $file) {
     $this->state = $state;
     $this->profileExtensionList = $profile_extension_list;
+    $this->file = $file;
   }
 
   /**
@@ -58,7 +69,8 @@ class WelcomeModalForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('state'),
-      $container->get('extension.list.profile')
+      $container->get('extension.list.profile'),
+      $container->get('file_url_generator')
     );
   }
 
@@ -66,7 +78,8 @@ class WelcomeModalForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, $options = NULL) {
-    $acms_logo = $this->profileExtensionList->getPath('acquia_cms') . '/acquia_cms.png';
+    $acms_logo = $this->file->generateString(theme_get_setting('logo.url'));
+    $logo = $this->file->transformRelative($acms_logo);
     $form['tour-dashboard'] = [
       '#type' => 'container',
       '#attributes' => [
@@ -77,7 +90,7 @@ class WelcomeModalForm extends FormBase {
     ];
     $form['tour-dashboard']['logo'] = [
       '#type' => 'markup',
-      '#markup' => '<img src="/' . $acms_logo . '" width="80">',
+      '#markup' => '<img src="' . $logo . '" width="80">',
     ];
     $form['tour-dashboard']['title'] = [
       '#type' => 'markup',
