@@ -85,7 +85,7 @@ class HeadlessRobustApiInstallHandler {
 
   /**
    * Creates a new headless Next.js site entity.
-   * 
+   *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
@@ -218,26 +218,6 @@ class HeadlessRobustApiInstallHandler {
     $next_site = $this->entityTypeManager->getStorage('next_site')->load('headless');
 
     return !empty($next_site);
-  }
-
-  /**
-   * Set permission for the Headless role.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   */
-  public function setHeadlessPermissions() {
-    $role_object = $this->entityTypeManager->getStorage('user_role')->load('headless');
-    if (empty($role_object)) {
-      $role_object->grantPermission('access acquia cms headless');
-      $role_object->grantPermission('access acquia cms headless api dashboard');
-      $role_object->grantPermission('access user profiles');
-      $role_object->grantPermission('administer acquia_cms_headless configuration');
-      $role_object->grantPermission('bypass node access');
-      $role_object->grantPermission('issue subrequests');
-      $role_object->save();
-    }
   }
 
   /**
