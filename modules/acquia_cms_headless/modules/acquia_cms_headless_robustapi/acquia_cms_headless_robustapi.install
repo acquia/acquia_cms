@@ -2,70 +2,31 @@
 
 /**
  * @file
- * Install, update and uninstall functions for Consumers.
- */
-
-use Drupal\consumers\Entity\Consumer;
-use Drupal\user\Entity\User;
-
-/**
- * @file
  * Install, update and uninstall functions for ACMS robust module.
  */
 
 /**
  * Implements hook_install().
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
  */
 function acquia_cms_headless_robustapi_install() {
   \Drupal::messenger()->addStatus(__FUNCTION__);
-  $userStorage = \Drupal::entityTypeManager()->getStorage('user');
 
-  $ids = \Drupal::entityQuery('user')
-    ->condition('name', 'Headless')
-    ->range(0, 1)
-    ->execute();
-  if (!empty($ids)) {
-    // Then this name already exists.
-  }
-  else {
-    $user = User::create();
-    // You can set your language.
-    $language = 'en';
-    $email = 'no-reply@example.com';
-    $user_name = 'Headless';
-    $user->enforceIsNew();
-    $user->setPassword('Password');
-    $user->setEmail($email);
-    // This username must be unique and accept only a-Z,0-9, - _ @ .
-    $user->setUsername($user_name);
-    $user->set("langcode", $language);
-    // Optional settings.
-    $user->set('timezone', '');
-    $user->set("init", $email);
-    $user->set("preferred_langcode", $language);
-    $user->activate();
-    // Add a role to user.
-    $user->addRole('headless');
-    $user->set("user_id", 'Headless');
-    // Save user.
-    $user->save();
-  }
-  // ->id() function: list of users id here using Entity Storage, create $var1
-  $userStorage = \Drupal::entityTypeManager()->getStorage('user');
+  // Call the robust api install handler service.
+  $robustApi = \Drupal::service('acquia_cms_headless_robustapi.install_handler');
 
-  $query = $userStorage->getQuery();
-  $uid = $query
-    ->condition('name', 'Headless')
-    ->execute();
+  // Set Permissions to new headless role.
+  $robustApi->setHeadlessPermissions();
 
-  Consumer::create([
-    'label' => 'Headless Site 1',
-    'description' => 'This client is provided by the acquia_cms_headless_robustapi module.',
-    'is_default' => TRUE,
-    'redirect' => 'http://localhost:3000',
-    'roles' => 'headless',
-    'user_id' => $uid,
-  ])->save();
+  // Programmatically create a new "headless" user.
+  $robustApi->createHeadlessUser();
+
+  // Remove "is default" status from Default Consumer.
+  $robustApi->updateDefaultConsumer(FALSE);
+
+  // Create a new Next.js Consumer.
+  $robustApi->createHeadlessConsumer();
 }
 
 /**
@@ -73,19 +34,18 @@ function acquia_cms_headless_robustapi_install() {
  */
 function acquia_cms_headless_robustapi_uninstall() {
   \Drupal::messenger()->addStatus(__FUNCTION__);
-  // Get all users with username containing "Headless".
-  $query = \Drupal::entityQuery('consumer')
-    ->condition('label', "Headless Site 1", 'CONTAINS');
-  $ids = $query->execute();
+  // Call the robust api install handler service.
+  $robustApi = \Drupal::service('acquia_cms_headless_robustapi.install_handler');
 
-  // Load these entities ($uids) in our case using storage controller.
-  // We call loadMultiple method and give $uids array as argument.
-  $itemsToDelete = \Drupal::entityTypeManager()->getStorage('consumer')
-    ->loadMultiple($ids);
+  // Remove the headless user if it exists.
+  $robustApi->deleteHeadlessUser();
 
-  // Loop through our entities and deleting them by calling by delete method.
-  foreach ($itemsToDelete as $item) {
-    $item->delete();
-  }
+  // Remove the headless user role.
+  $robustApi->deleteHeadlessRoll();
 
+  // Get all consumer entities other than the Default Consumer.
+  $robustApi->deleteHeadlessConsumers();
+
+  // Restore "is default" status from Default Consumer.
+  $robustApi->updateDefaultConsumer(TRUE);
 }
