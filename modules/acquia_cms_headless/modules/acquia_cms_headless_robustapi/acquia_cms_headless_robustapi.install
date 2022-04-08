@@ -27,6 +27,9 @@ function acquia_cms_headless_robustapi_install() {
 
   // Create a new Next.js Consumer.
   $robustApi->createHeadlessConsumer();
+
+  // Create a Next.js Site.
+  $robustApi->createHeadlessSite();
 }
 
 /**
@@ -41,7 +44,7 @@ function acquia_cms_headless_robustapi_uninstall() {
   $robustApi->deleteHeadlessUser();
 
   // Remove the headless user role.
-  $robustApi->deleteHeadlessRoll();
+  $robustApi->deleteHeadlessRole();
 
   // Get all consumer entities other than the Default Consumer.
   $robustApi->deleteHeadlessConsumers();

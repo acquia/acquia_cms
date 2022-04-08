@@ -9,6 +9,7 @@ use Drupal\next\NextSiteListBuilder;
  * Defines a class to build a listing of next_site entities.
  *
  * @see \Drupal\next\Entity\NextSite
+ * @todo Remove?
  */
 class HeadlessRobustNextSiteListBuilder extends NextSiteListBuilder {
 
