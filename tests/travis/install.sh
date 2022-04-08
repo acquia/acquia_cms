@@ -84,12 +84,12 @@ fi
 # Drupal core (10 year old issue) that shows no signs of being fixed
 # any time soon. We do a similar workaround in our composer.json's
 # post-install-cmd script.
-cd docroot/sites
-mkdir -p ./all/modules
-cd ./all/modules
-find ../../../profiles/contrib/acquia_cms/modules -maxdepth 1 -mindepth 1 -type d -exec ln -s -f '{}' ';'
-# Ensure the symlinks are included in the ORCA fixture snapshot.
-git add .
+#cd docroot/sites
+#mkdir -p ./all/modules
+#cd ./all/modules
+#find ../../../profiles/contrib/acquia_cms/modules -maxdepth 1 -mindepth 1 -type d -exec ln -s -f '{}' ';'
+## Ensure the symlinks are included in the ORCA fixture snapshot.
+#git add .
 
 # Enable Starter on full installs if Appropriate.
 if [[ "$ACMS_JOB" == "starter_full" ]]; then
