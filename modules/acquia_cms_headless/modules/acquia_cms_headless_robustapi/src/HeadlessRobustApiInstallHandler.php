@@ -9,12 +9,14 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * RobustApiInstallHandler provides helper functions when Robust API is enabled.
+ * Install handlers for Headless Robust API.
+ *
+ * Provides a series of helper functions for setting up the Robust API and
+ * the various entity types used by it.
  */
 class HeadlessRobustApiInstallHandler {
 
@@ -78,6 +80,29 @@ class HeadlessRobustApiInstallHandler {
     }
     catch (EntityStorageException | InvalidPluginDefinitionException | PluginNotFoundException $e) {
       $this->messenger->addError($e);
+    }
+  }
+
+  /**
+   * Creates a new headless Next.js site entity.
+   * 
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function createHeadlessSite() {
+    $next_site_id = $this->getHeadlessSiteId();
+    $next_object = $this->entityTypeManager->getStorage('next_site');
+
+    if (!$next_site_id) {
+      $next_object->create([
+        'id' => 'headless',
+        'label' => 'Headless Site 1',
+        'base_url' => 'http://localhost:3000/',
+        'preview_url' => '/api/preview',
+        // @todo do something with the preview secret.
+        'preview_secret' => '',
+      ])->save();
     }
   }
 
@@ -178,6 +203,21 @@ class HeadlessRobustApiInstallHandler {
     $uid = array_keys($uids);
 
     return !empty($uid) ? $userStorage->load($uid[0])->id() : NULL;
+  }
+
+  /**
+   * Check to see if our default next.js site exists.
+   *
+   * @return bool
+   *   Returns a True/False value.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function getHeadlessSiteId() {
+    $next_site = $this->entityTypeManager->getStorage('next_site')->load('headless');
+
+    return !empty($next_site);
   }
 
   /**

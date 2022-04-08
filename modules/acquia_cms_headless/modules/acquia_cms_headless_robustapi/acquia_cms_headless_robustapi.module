@@ -5,24 +5,15 @@
  * Drupal\Core\Form\FormStateInterface.
  */
 
-use Drupal\Core\Form\FormStateInterface;
-
 /**
  * Implements hook_entity_type_alter().
  *
  * See https://drupal.stackexchange.com/a/192813/13414.
  */
 function acquia_cms_headless_robustapi_entity_type_alter(array &$entity_types) {
+  // @todo We can probably remove this as I don't believe we need to alter
+  // the entity list views for consumers or next js sites.
   /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
-  $entity_types['consumer']->setListBuilderClass('Drupal\acquia_cms_headless_robustapi\HeadlessRobustConsumerListBuilder');
-  $entity_types['next_site']->setListBuilderClass('Drupal\acquia_cms_headless_robustapi\HeadlessRobustNextSiteListBuilder');
-}
-
-/**
- * Implements hook_form_alter().
- */
-function acquia_cms_headless_robustapi_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if ($form_id == 'next_site_edit_form') {
-  }
-  // Mothing to see here. For debugging purposes. Delete before merging.
+  // $entity_types['consumer']->setListBuilderClass('Drupal\acquia_cms_headless_robustapi\HeadlessRobustConsumerListBuilder');
+  // $entity_types['next_site']->setListBuilderClass('Drupal\acquia_cms_headless_robustapi\HeadlessRobustNextSiteListBuilder');
 }
