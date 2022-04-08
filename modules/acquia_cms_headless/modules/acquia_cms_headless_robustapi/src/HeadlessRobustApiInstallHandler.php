@@ -9,6 +9,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\simple_oauth\Service\KeyGeneratorService;
 use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -35,6 +36,13 @@ class HeadlessRobustApiInstallHandler {
   protected $entityTypeManager;
 
   /**
+   * The Simple OAUTH Key Generator service.
+   *
+   * @var \Drupal\simple_oauth\Service\KeyGeneratorService
+   */
+  protected $keyGeneratorService;
+
+  /**
    * Include the messenger service.
    *
    * @var \Drupal\Core\Messenger\MessengerInterface
@@ -44,9 +52,10 @@ class HeadlessRobustApiInstallHandler {
   /**
    * {@inheritdoc}
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, MessengerInterface $messenger) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, KeyGeneratorService $key_generator_service, MessengerInterface $messenger) {
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;
+    $this->keyGeneratorService = $key_generator_service;
     $this->messenger = $messenger;
   }
 
@@ -57,6 +66,7 @@ class HeadlessRobustApiInstallHandler {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('config.factory'),
+      $container->get('simple_oauth.key.generator'),
       $container->get('messenger')
     );
   }
@@ -206,7 +216,7 @@ class HeadlessRobustApiInstallHandler {
   }
 
   /**
-   * Delete the headless roll.
+   * Delete the headless role.
    */
   public function deleteHeadlessRole() {
     $config = $this->configFactory->getEditable('user.role.headless');
@@ -252,6 +262,26 @@ class HeadlessRobustApiInstallHandler {
       $uid = $userStorage->load($user);
       $uid->delete();
     }
+  }
+
+  /**
+   * Generates OAuth keys and Updates OAuth Settings.
+   *
+   * @throws \Drupal\simple_oauth\Service\Exception\FilesystemValidationException
+   * @throws \Drupal\simple_oauth\Service\Exception\ExtensionNotLoadedException
+   */
+  public function generateOauthKeys() {
+    // Generate a public and private oauth key.
+    // @todo Revisit where these key files are stored.
+    $dir = '../config/oauth/';
+    $this->keyGeneratorService->generateKeys($dir);
+
+    // Update oauth settings.
+    $oauthObject = $this->configFactory->getEditable('simple_oauth.settings');
+    $oauthObject
+      ->set('public_key', "$dir/public.key")
+      ->set('private_key', "$dir/private.key")
+      ->save();
   }
 
   /**
