@@ -194,8 +194,8 @@ fi
 
 # Run all automated PHPUnit tests.
 # If --stop-on-failure is passed as an argument $1 will handle it.
-echo -e "${YELLOW}Running phpunit tests for acquia_cms. ${NOCOLOR}"
-COMPOSER_PROCESS_TIMEOUT=0 ./vendor/bin/phpunit -c docroot/core docroot/profiles/contrib/acquia_cms --debug -v $1
+echo -e "${YELLOW}Running phpunit tests for acquia_cms modules. ${NOCOLOR}"
+COMPOSER_PROCESS_TIMEOUT=0 ./vendor/bin/phpunit -c docroot/core docroot/sites/all/modules --debug -v $1
 
 # Terminate all the processes
 if [ $? -ne 0 ] ;
