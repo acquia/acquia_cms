@@ -107,6 +107,52 @@ class HeadlessRobustApiInstallHandler {
   }
 
   /**
+   * Creates Next.js headless site entity types.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function createHeadlessSiteEntities() {
+    // Init the sites object variable.
+    $sitesObject = [];
+
+    // Get entity storage for our content types.
+    $types = $this->entityTypeManager->getStorage('node_type')->loadMultiple();
+    $sites = $this->entityTypeManager->getStorage('next_site')->loadMultiple();
+
+    // Check to see if any next js site entities are available.
+    if (!empty($sites)) {
+      // Iterate through each next js site so that we can build a new sites
+      // array to pass into our next_entity_type_config.confuration.sites array.
+      foreach ($sites as $site) {
+        // Add to the sites object where both the key and the value is the next
+        // js site entity id.
+        $sitesObject[$site->id()] = $site->id();
+      }
+    }
+    // Check to see if any content types are available.
+    if (!empty($types)) {
+      // Iterate through each content type so that we can create the next entity
+      // types.
+      foreach ($types as $type) {
+        // Set a variable for our content type machinename.
+        $nodeTypeId = $type->id();
+        // Get the storage for the Next entity type.
+        $nextEntityObject = $this->entityTypeManager->getStorage('next_entity_type_config');
+        // Create a Next.js Entity type for each content type that's available.
+        $nextEntityObject->create([
+          'id' => "node.$nodeTypeId",
+          'site_resolver' => 'site_selector',
+          'configuration' => [
+            'sites' => $sitesObject,
+          ],
+        ])->save();
+      }
+    }
+  }
+
+  /**
    * Creates a new user for Headless Role.
    */
   public function createHeadlessUser() {
@@ -165,6 +211,30 @@ class HeadlessRobustApiInstallHandler {
   public function deleteHeadlessRole() {
     $config = $this->configFactory->getEditable('user.role.headless');
     $config->delete();
+  }
+
+  /**
+   * Delete Next js sites and site entity types.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function deleteHeadlessSites() {
+    $sites = $this->entityTypeManager->getStorage('next_site')->loadMultiple();
+    $entities = $this->entityTypeManager->getStorage('next_entity_type_config')->loadMultiple();
+
+    if (!empty($sites)) {
+      foreach ($sites as $site) {
+        $site->delete();
+      }
+    }
+
+    if (!empty($sites)) {
+      foreach ($entities as $entity) {
+        $entity->delete();
+      }
+    }
   }
 
   /**

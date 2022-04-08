@@ -27,6 +27,9 @@ function acquia_cms_headless_robustapi_install() {
 
   // Create a Next.js Site.
   $robustApi->createHeadlessSite();
+
+  // Create a set of Next.js Entity types based on available Node Types.
+  $robustApi->createHeadlessSiteEntities();
 }
 
 /**
@@ -48,4 +51,7 @@ function acquia_cms_headless_robustapi_uninstall() {
 
   // Restore "is default" status from Default Consumer.
   $robustApi->updateDefaultConsumer(TRUE);
+
+  // Remove any next.js sites and site entity types.
+  $robustApi->deleteHeadlessSites();
 }
