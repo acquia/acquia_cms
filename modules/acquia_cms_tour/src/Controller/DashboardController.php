@@ -28,13 +28,6 @@ final class DashboardController extends ControllerBase {
   protected $classResolver;
 
   /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
    * The state interface.
    *
    * @var \Drupal\Core\State\StateInterface
@@ -114,10 +107,6 @@ final class DashboardController extends ControllerBase {
       '#type' => 'value',
       '#value' => 0,
     ];
-    $form['show_progress'] = [
-      '#type' => 'value',
-      '#value' => TRUE,
-    ];
     $total = 0;
     $completed = 0;
 
@@ -144,30 +133,45 @@ final class DashboardController extends ControllerBase {
         ]),
       ],
     ]);
-    $form['help_text'] = [
-      '#type' => 'markup',
-      '#markup' => $this->t("ACMS organizes its features into individual components called modules.
-       The configuration dashboard/wizard setup will help you setup the pre-requisites.
-       Please note, not all modules in ACMS are required by default, and some optional modules
-       are left disabled on install. A checklist is provided to help you keep track of the tasks
-       needed to complete configuration."),
-    ];
-    $form['modal_link'] = [
-      '#type' => 'link',
-      '#title' => 'Wizard set-up',
-      '#url' => $link_url,
-    ];
 
     // Delegate building each section using plugin class.
+    $show = 0;
     foreach ($this->acquiaCmsTourManager->getDefinitions() as $definition) {
       $instance_definition = $this->classResolver->getInstanceFromDefinition($definition['class']);
       if ($instance_definition->isModuleEnabled()) {
         $total++;
+        $show = 1;
         $build['wrapper'][$definition['id']] = $this->getSectionOutput($definition['class']);
         if ($instance_definition->getConfigurationState()) {
           $completed++;
         }
       }
+    }
+    if ($show == 1) {
+      $form['help_text'] = [
+        '#type' => 'markup',
+        '#markup' => $this->t("ACMS organizes its features into individual components called modules.
+        The configuration dashboard/wizard setup will help you setup the pre-requisites.
+        Please note, not all modules in ACMS are required by default, and some optional modules
+        are left disabled on install. A checklist is provided to help you keep track of the tasks
+        needed to complete configuration."),
+      ];
+      $form['modal_link'] = [
+        '#type' => 'link',
+        '#title' => 'Wizard set-up',
+        '#url' => $link_url,
+      ];
+      $form['show_progress'] = [
+        '#type' => 'value',
+        '#value' => TRUE,
+      ];
+    }
+    else {
+      $form['help_text'] = [
+        '#type' => 'markup',
+        '#markup' => $this->t("Please enable any of the following modules to be able to access the forms
+        (ex. google_analytics, google_tag, gecoder, captcha, acquia_telemetry, cohesion)."),
+      ];
     }
     $form['check_total']['#value'] = $total;
     $form['check_count']['#value'] = $completed;
