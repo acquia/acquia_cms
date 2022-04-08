@@ -1,0 +1,4 @@
+services:
+  acquia_cms_headless_robustapi.install_handler:
+    class: Drupal\acquia_cms_headless_robustapi\HeadlessRobustApiInstallHandler
+    arguments: ['@entity_type.manager', '@config.factory', '@messenger']
