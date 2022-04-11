@@ -215,7 +215,10 @@ function acquia_cms_headless_ui_theme_registry_alter(array &$theme_registry) {
  */
 function acquia_cms_headless_ui_local_tasks_alter(array &$local_tasks) {
   $moduleHandler = \Drupal::service('module_handler');
-  $media_url = Drupal::config('media.settings')->get('standalone_url');
+
+  if ($moduleHandler->moduleExists('media')) {
+    $media_url = Drupal::config('media.settings')->get('standalone_url');
+  }
 
   foreach (array_keys($local_tasks) as $id) {
     $matches = [];
@@ -236,7 +239,7 @@ function acquia_cms_headless_ui_local_tasks_alter(array &$local_tasks) {
     }
     // If standalone URLs are not enabled for media items, the "canonical" route
     // is actually the edit form, so don't modify the corresponding local task.
-    elseif ($id === 'media.tasks:entity.media.canonical' && empty($media_url)) {
+    elseif ($moduleHandler->moduleExists('media') && $id === 'media.tasks:entity.media.canonical' && empty($media_url)) {
       continue;
     }
     // If there is a link to the canonical view of an entity, override it so
