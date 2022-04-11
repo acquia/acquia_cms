@@ -4,7 +4,6 @@ namespace Drupal\acquia_cms\Commands;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
 use Drupal\Core\State\StateInterface;
 use Drush\Commands\DrushCommands;
@@ -18,13 +17,6 @@ use Drush\Exceptions\UserAbortException;
  * of the services file to use.
  */
 class SwitchAcquiaCms extends DrushCommands {
-
-  /**
-   * The module installer.
-   *
-   * @var \Drupal\Core\Extension\ModuleInstallerInterface
-   */
-  protected $moduleInstaller;
 
   /**
    * The module handler.
@@ -57,8 +49,6 @@ class SwitchAcquiaCms extends DrushCommands {
   /**
    * Constructs a ModuleHandlerInterface object.
    *
-   * @param \Drupal\Core\Extension\ModuleInstallerInterface $module_installer
-   *   The module installer.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -68,12 +58,10 @@ class SwitchAcquiaCms extends DrushCommands {
    * @param \Drupal\Core\State\StateInterface $state
    *   The state.
    */
-  public function __construct(ModuleInstallerInterface $module_installer,
-  ModuleHandlerInterface $module_handler,
+  public function __construct(ModuleHandlerInterface $module_handler,
   ConfigFactoryInterface $config_factory,
   KeyValueFactoryInterface $keyvalue,
   StateInterface $state) {
-    $this->moduleInstaller = $module_installer;
     $this->moduleHandler = $module_handler;
     $this->configFactory = $config_factory;
     $this->keyvalue = $keyvalue;
@@ -96,9 +84,6 @@ class SwitchAcquiaCms extends DrushCommands {
       if (!$this->io()->confirm(dt('Do you want to continue?'))) {
         throw new UserAbortException();
       }
-      // Install profile switcher module.
-      // $this->moduleInstaller->install(['profile_switcher']);
-      // \Drupal::service('profile_switcher.profile_switcher')->switchProfile($profile_to_install);
       // Forces ExtensionDiscovery to rerun for profiles.
       $this->state->delete('system.profile.files');
 
@@ -128,27 +113,24 @@ class SwitchAcquiaCms extends DrushCommands {
 
       // Clear caches again.
       drupal_flush_all_caches();
-
       $this->output()->writeln(dt("Profile switched from !profile_to_remove to !profile_to_install.", [
         '!profile_to_remove' => $profile_to_remove,
         '!profile_to_install' => $this->configFactory->getEditable('core.extension')->get('profile'),
       ]));
       // Update logo and favicon path.
-      $acquia_cms_common_path = drupal_get_path('module', 'acquia_cms_common');
+      $acquia_cms_common_path = $this->moduleHandler->getModule('acquia_cms_common')->getPath();
+      // Update favicon path.
       if ($this->configFactory->getEditable('system.theme.global')->get('favicon.path') == 'profiles/contrib/acquia_cms/acquia_cms.png') {
         $this->configFactory->getEditable('system.theme.global')
           ->set('favicon.path', '/' . $acquia_cms_common_path . '/acquia_cms.png')
           ->save();
       }
+      // Update logo path.
       if ($this->configFactory->getEditable('system.theme.global')->get('logo.path') == 'profiles/contrib/acquia_cms/acquia_cms.png') {
         $this->configFactory->getEditable('system.theme.global')
           ->set('logo.path', '/' . $acquia_cms_common_path . '/acquia_cms.png')
           ->save();
       }
-      // Clear caches.
-      drupal_flush_all_caches();
-      // Uninstall profile switcher module.
-      // $this->moduleInstaller->uninstall(['profile_switcher']);
       // Clear caches.
       drupal_flush_all_caches();
     }
