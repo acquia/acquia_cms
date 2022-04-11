@@ -6,6 +6,6 @@ services:
       - { name: 'event_subscriber' }
   acms.switch:
     class: \Drupal\acquia_cms\Commands\SwitchAcquiaCms
-    arguments: ['@module_installer', '@module_handler', '@config.factory', '@keyvalue', '@state']
+    arguments: ['@module_handler', '@config.factory', '@keyvalue', '@state']
     tags:
       - { name: drush.command }
