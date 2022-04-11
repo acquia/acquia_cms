@@ -214,7 +214,7 @@
         "post-update-cmd": [
             "Composer\\Config::disableProcessTimeout",
             "@putenv PROFILE_DIR=./docroot/profiles/contrib/acquia_cms",
-            "@putenv MODULES_DIR=./docroot/sites/all/modules",
+            "@putenv MODULES_DIR=./docroot/profiles/contrib/acquia_cms/modules",
             "if [ \"$PIPELINE_ENV\" != \"true\" ]; then composer build:local; fi;"
         ],
         "acms:install": [
