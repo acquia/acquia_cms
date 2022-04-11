@@ -12,6 +12,7 @@ use Drupal\path_alias\Entity\PathAlias;
  */
 function acquia_cms_headless_ui_install() {
   \Drupal::messenger()->addStatus(__FUNCTION__);
+  $moduleHandler = \Drupal::service('module_handler');
   // Update Aliases.
   $aliases = [
     '/admin/config/people/simple_oauth' => '/admin/access/settings',
@@ -48,10 +49,12 @@ function acquia_cms_headless_ui_install() {
 
   // Turn off moderation dashboard redirect as it interferes with our on custom
   // login redirect handling.
-  \Drupal::configFactory()
-    ->getEditable('moderation_dashboard.settings')
-    ->set('redirect_on_login', FALSE)
-    ->save();
+  if ($moduleHandler->moduleExists('moderation_dashboard')) {
+    \Drupal::configFactory()
+      ->getEditable('moderation_dashboard.settings')
+      ->set('redirect_on_login', FALSE)
+      ->save();
+  }
 
   // Remove link to entity setting from Content list view in order to disable
   // access to node/[node_id] type routes.
@@ -66,6 +69,7 @@ function acquia_cms_headless_ui_install() {
  */
 function acquia_cms_headless_ui_uninstall() {
   \Drupal::messenger()->addStatus(__FUNCTION__);
+  $moduleHandler = \Drupal::service('module_handler');
 
   // Update 403 and Frontpage values in Site Settings.
   \Drupal::configFactory()
@@ -74,10 +78,12 @@ function acquia_cms_headless_ui_uninstall() {
     ->save();
 
   // Restore moderation dashboard redirect settings back to its default state.
-  \Drupal::configFactory()
-    ->getEditable('moderation_dashboard.settings')
-    ->set('redirect_on_login', TRUE)
-    ->save();
+  if ($moduleHandler->moduleExists('moderation_dashboard')) {
+    \Drupal::configFactory()
+      ->getEditable('moderation_dashboard.settings')
+      ->set('redirect_on_login', TRUE)
+      ->save();
+  }
 
   // Restore link to entity setting from Content list view in order to allow
   // access to node/[node_id] type routes.
