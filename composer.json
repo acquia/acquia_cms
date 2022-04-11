@@ -1,8 +1,9 @@
 {
     "name": "acquia/acquia_cms",
-    "description": "An implementation of Drupal 9 for running custom, low code websites on the Acquia platform.",
-    "license": "GPL-2.0-or-later",
     "type": "drupal-profile",
+    "description": "An implementation of Drupal 9 for running custom, low code websites on the Acquia platform.",
+    "homepage": "https://github.com/acquia/acquia_cms",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Michael Sherron",
@@ -15,7 +16,6 @@
             "role": "Maintainer"
         }
     ],
-    "homepage": "https://github.com/acquia/acquia_cms",
     "require": {
         "drupal/acquia_claro": "1.4.x-dev",
         "drupal/acquia_cms_article": "1.4.x-dev",
@@ -43,6 +43,89 @@
         "oomphinc/composer-installers-extender": "^1.1 || ^2",
         "phpunit/phpunit": "~9.4.0",
         "weitzman/drupal-test-traits": "^1.5"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-composer-scaffold": true,
+            "ergebnis/composer-normalize": true,
+            "oomphinc/composer-installers-extender": true,
+            "phpro/grumphp-shim": true,
+            "webdriver-binary/binary-chromedriver": true
+        },
+        "preferred-install": {
+            "drupal/core": "dist"
+        },
+        "process-timeout": 0,
+        "sort-packages": true
+    },
+    "extra": {
+        "drupal-scaffold": {
+            "allowed-packages": [
+                "drupal/core"
+            ],
+            "file-mapping": {
+                "[project-root]/.editorconfig": false,
+                "[project-root]/.gitattributes": false,
+                "[web-root]/.csslintrc": false,
+                "[web-root]/INSTALL.txt": false,
+                "[web-root]/drush/Commands/SiteInstallCommands.php": "src/Commands/SiteInstallCommands.php",
+                "[web-root]/drush/drush.yml": "drush/drush.yml",
+                "[web-root]/example.gitignore": false,
+                "[web-root]/modules/README.txt": false,
+                "[web-root]/profiles/README.txt": false,
+                "[web-root]/robots.txt": false,
+                "[web-root]/sites/README.txt": false,
+                "[web-root]/sites/default/default.settings.php": {
+                    "append": "./patches/d9-acms-settings.patch"
+                },
+                "[web-root]/themes/README.txt": false,
+                "[web-root]/themes/contrib/cohesion-theme/templates/maintenance-page.html.twig": "./patches/maintenance-page.patch",
+                "[web-root]/web.config": false
+            },
+            "locations": {
+                "project-root": ".",
+                "web-root": "./docroot"
+            }
+        },
+        "enable-patching": true,
+        "installer-paths": {
+            "docroot/core": [
+                "type:drupal-core"
+            ],
+            "docroot/libraries/{$name}": [
+                "type:drupal-library",
+                "type:bower-asset",
+                "type:npm-asset"
+            ],
+            "docroot/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "docroot/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "docroot/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ]
+        },
+        "installer-types": [
+            "bower-asset",
+            "npm-asset"
+        ],
+        "patchLevel": {
+            "drupal/core": "-p2"
+        },
+        "patches": {}
+    },
+    "autoload": {
+        "psr-4": {
+            "Acquia\\Utility\\": "src/Utility"
+        },
+        "classmap": [
+            "src/Composer/ConfigureProject.php"
+        ]
     },
     "repositories": {
         "drupal/acquia_cms_article": {
@@ -128,89 +211,6 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "autoload": {
-        "psr-4": {
-            "Acquia\\Utility\\": "src/Utility"
-        },
-        "classmap": [
-            "src/Composer/ConfigureProject.php"
-        ]
-    },
-    "config": {
-        "allow-plugins": {
-            "composer/installers": true,
-            "cweagans/composer-patches": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "drupal/core-composer-scaffold": true,
-            "ergebnis/composer-normalize": true,
-            "oomphinc/composer-installers-extender": true,
-            "phpro/grumphp-shim": true,
-            "webdriver-binary/binary-chromedriver": true
-        },
-        "preferred-install": {
-            "drupal/core": "dist"
-        },
-        "process-timeout": 0,
-        "sort-packages": true
-    },
-    "extra": {
-        "drupal-scaffold": {
-            "allowed-packages": [
-                "drupal/core"
-            ],
-            "file-mapping": {
-                "[project-root]/.editorconfig": false,
-                "[project-root]/.gitattributes": false,
-                "[web-root]/.csslintrc": false,
-                "[web-root]/INSTALL.txt": false,
-                "[web-root]/drush/Commands/SiteInstallCommands.php": "src/Commands/SiteInstallCommands.php",
-                "[web-root]/drush/drush.yml": "drush/drush.yml",
-                "[web-root]/example.gitignore": false,
-                "[web-root]/modules/README.txt": false,
-                "[web-root]/profiles/README.txt": false,
-                "[web-root]/robots.txt": false,
-                "[web-root]/sites/README.txt": false,
-                "[web-root]/sites/default/default.settings.php": {
-                    "append": "./patches/d9-acms-settings.patch"
-                },
-                "[web-root]/themes/README.txt": false,
-                "[web-root]/themes/contrib/cohesion-theme/templates/maintenance-page.html.twig": "./patches/maintenance-page.patch",
-                "[web-root]/web.config": false
-            },
-            "locations": {
-                "project-root": ".",
-                "web-root": "./docroot"
-            }
-        },
-        "enable-patching": true,
-        "installer-paths": {
-            "docroot/core": [
-                "type:drupal-core"
-            ],
-            "docroot/libraries/{$name}": [
-                "type:drupal-library",
-                "type:bower-asset",
-                "type:npm-asset"
-            ],
-            "docroot/modules/contrib/{$name}": [
-                "type:drupal-module"
-            ],
-            "docroot/profiles/contrib/{$name}": [
-                "type:drupal-profile"
-            ],
-            "docroot/themes/contrib/{$name}": [
-                "type:drupal-theme"
-            ]
-        },
-        "installer-types": [
-            "bower-asset",
-            "npm-asset"
-        ],
-        "patchLevel": {
-            "drupal/core": "-p2"
-        },
-        "patches": {}
-    },
     "scripts": {
         "pre-update-cmd": [
             "@putenv COMPOSER_MEMORY_LIMIT=2G"
