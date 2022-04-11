@@ -4,8 +4,8 @@ services:
     arguments: ['@config.factory', '@cache.config', '@request_stack']
     tags:
       - { name: 'event_subscriber' }
-  acms.deprecate:
-    class: \Drupal\acquia_cms\Commands\DeprecateAcquiaCms
-    arguments: ['@module_handler']
+  acms.switch:
+    class: \Drupal\acquia_cms\Commands\SwitchAcquiaCms
+    arguments: ['@module_installer', '@module_handler', '@config.factory', '@keyvalue', '@state']
     tags:
       - { name: drush.command }
