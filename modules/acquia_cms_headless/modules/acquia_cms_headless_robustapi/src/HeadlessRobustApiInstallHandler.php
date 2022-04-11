@@ -109,7 +109,7 @@ class HeadlessRobustApiInstallHandler {
         'id' => 'headless',
         'label' => 'Headless Site 1',
         'base_url' => 'http://localhost:3000/',
-        'preview_url' => '/api/preview',
+        'preview_url' => 'http://localhost:3000/api/preview/',
         // @todo do something with the preview secret.
         'preview_secret' => '',
       ])->save();
