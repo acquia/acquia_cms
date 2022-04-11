@@ -5,3 +5,8 @@ services:
       - '@plugin.manager.menu.local_task'
     tags:
       - { name: event_subscriber }
+
+  acquia_cms_headless_ui.install_handler:
+    class: Drupal\acquia_cms_headless_ui\HeadlessUiInstallHandler
+    arguments: [ '@path_alias.manager', '@config.factory', '@entity_type.manager',
+                 '@messenger', '@module_handler', '@theme_handler' ]
