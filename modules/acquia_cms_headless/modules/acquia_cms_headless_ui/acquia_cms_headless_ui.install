@@ -11,7 +11,6 @@ use Drupal\path_alias\Entity\PathAlias;
  * Implements hook_install().
  */
 function acquia_cms_headless_ui_install() {
-  \Drupal::messenger()->addStatus(__FUNCTION__);
   $moduleHandler = \Drupal::service('module_handler');
   $themeHandler = \Drupal::service('theme_handler');
   // Update Aliases.
@@ -71,7 +70,6 @@ function acquia_cms_headless_ui_install() {
  * Implements hook_uninstall().
  */
 function acquia_cms_headless_ui_uninstall() {
-  \Drupal::messenger()->addStatus(__FUNCTION__);
   $moduleHandler = \Drupal::service('module_handler');
 
   // Update 403 and Frontpage values in Site Settings.
