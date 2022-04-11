@@ -376,19 +376,3 @@ function acquia_cms_preprocess_install_page(array &$variables) {
   $acquia_cms_path = \Drupal::service('extension.list.profile')->getPath('acquia_cms');
   $variables['install_page_logo_path'] = '/' . $acquia_cms_path . '/acquia_cms.png';
 }
-
-/**
- * Switch profile from ACMS to Minimal.
- */
-function switch_profile_to_minimal() {
-  // Install profile switcher module.
-  \Drupal::service('module_installer')->install(['profile_switcher']);
-  // Switch profile from Acquia CMS to Minimal.
-  \Drupal::service('profile_switcher.profile_switcher')->switchProfile('minimal');
-  // Clear caches.
-  drupal_flush_all_caches();
-  // Uninstall profile switcher module.
-  \Drupal::service('module_installer')->uninstall(['profile_switcher']);
-  // Clear caches.
-  drupal_flush_all_caches();
-}
