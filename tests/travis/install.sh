@@ -78,6 +78,11 @@ if [[ "$ACMS_JOB" == "starter" ]] && [[ -n "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ 
   drush updatedb --cache-clear --yes -vvv
 fi
 
+# Move acquia_cms modules from contrib to profile directory
+# so that we can run PHPUnit test for modules as well using ORCA SUT.
+mkdir -p ./docroot/profiles/contrib/acquia_cms/modules
+find ./docroot/modules/contrib -type d -maxdepth 1 -name "acquia_cms*" -exec mv '{}' ./docroot/profiles/contrib/acquia_cms/modules ';'
+
 # In order for PHPUnit tests belonging to profile modules to even be
 # runnable, the profile's modules need to be symlinked into the
 # sites/all/modules directory. This is a long-standing limitation of
@@ -88,7 +93,7 @@ cd docroot/sites
 mkdir -p ./all/modules
 cd ./all/modules
 find ../../../profiles/contrib/acquia_cms/modules -maxdepth 1 -mindepth 1 -type d -exec ln -s -f '{}' ';'
-# Ensure the symlinks are included in the ORCA fixture snapshot.
+## Ensure the symlinks are included in the ORCA fixture snapshot.
 git add .
 
 # Enable Starter on full installs if Appropriate.
