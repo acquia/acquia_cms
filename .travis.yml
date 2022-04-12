@@ -33,7 +33,7 @@ env:
     # Specify the name of the nearest Git version branch, e.g., 1.x or 8.x-1.x.
     # This may be the destination branch of a pull request or the nearest
     # ancestor of a topic branch.
-    - ORCA_SUT_BRANCH=develop
+    - ORCA_SUT_BRANCH=ACMS-853
     # Specify the version of ORCA to use. Use dev-master to track the latest
     # release, dev-develop to track Dev/HEAD, or any other Composer version
     # string.
@@ -152,8 +152,10 @@ before_install:
   - sudo apt-get -y install sqlite3/focal
   - mysql -u root < ./tests/travis/install.sql
   - nvm install 12.13.1; nvm use 12.13.1
-  - composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION"
+  #- composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION"
+  - git clone https://github.com/vishalkhode1/orca.git ../orca --branch=v3.16.1
   - composer self-update
+  - composer config -g github-oauth.github.com "$GITHUB_OAUTH_TOKEN"
   # Optionally, remove SUT-provided tests with a specific PHPUnit test group.
   - if [ ! -z $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP ]; then find ./ -type f | xargs grep -l "@group $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP$" | xargs rm -v; fi
   - sed -i 's/<\/ruleset>/ <rule ref="Drupal.InfoFiles.AutoAddedKeys.Version">\n <exclude-pattern>acquia_cms\.info\.yml<\/exclude-pattern>\n <\/rule>\n\n<\/ruleset>/' ../orca/phpcs.xml.dist && cat ../orca/phpcs.xml.dist

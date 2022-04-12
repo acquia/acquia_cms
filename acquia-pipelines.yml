@@ -1,5 +1,9 @@
 # This file is used by Acquia Pipelines continuous integration. Upon success, an
 # artifact is deployed to the `orionacms` subscription on Acquia Cloud.
+variables:
+  global:
+    GITHUB_OAUTH_TOKEN:
+      secure: 2acBhv/qQ9I4jej4N1JrYZ5xZ5979GqdkKhUedLezguYzdpyy/y0kFN0GgclFkqYM+/SUe+P76qg/VGkCIZ96swRvVAtmFroHjKoknCkdD4oRV+tr/LQyIUJn1+aCtsUXH7t2AkXF/ZQudcAd0/V/cv+pdB6LT7vkkCiD3IvmaaS0NfU3pe7rN7RNsURCXr2ssaJQYz9//e30w2M+oxoVzR8RO0U5KpNTuFnPcPYXprfOzieeEIOFSf+xsx1q33w71HxVHJ0zptrDApMg3GNUYnpVQVFd37ddB6QtntKjC3NWvlfZmq5LF7T4ten8V9Z92yqFFIVC+GORqKDXg9maXLBqfSQE8+IEuo4NPZapHqcqpvA9yL+CNA2Ia7cUDArCeFwH3dMQ5vX1sJnVjjCF3kuiU6OmvHdJUmnNpckOpElykLzq7jX2XIUEOP8cw8pXz6wI3tLg3cjzTjEAPXztV0KZYn4asuLz08xcKL3ibDE9arLDdURuGadoPkUImTP0EYbm8LWPPge3IopNk2LbpXVFZ8ULFibG4TdGse90Ynid484veajLldWXu9+WNndw5XFki6U6862w7BGaahzPl2TX/Ga6SeSntnYQlQy1nNDorbf70kzIDJw1C/l3dQpyzaK3sauUS3oAy37tw5x416e0/iDkCmoNrASx51BYLLQh0=4agk8+AwN+7+N+611oSLjMiIPrieLROvimxEI/tEt5vTy96eHU25b3pK8I66lLS4wSYOPig0wXAp7yc4KfiTXKNQdy+YX9x2reHzNRigEC0U1ervcSqFnP6tYSIpInd8bQs3C1LPGYcBmcUoMw8z1AH31uGqvmQGbCvmWVLlvD4=
 version: 1.3.0
 services:
   - composer:
@@ -14,6 +18,7 @@ events:
           type: script
           script:
             - composer validate --no-check-all --ansi --no-interaction
+            - composer config -g github-oauth.github.com "$GITHUB_OAUTH_TOKEN"
             - composer install
             - mkdir -p docroot/profiles/acquia_cms
             - composer archive --format zip --file acquia_cms
@@ -22,20 +27,8 @@ events:
             # but we DO want to deploy it to our Cloud environment for testing.
             # We can probably remove this, along with the acquia_cms_development module
             # itself, once we have a permanent demo site in place.
-            - cp -R modules/acquia_cms_development docroot/profiles/acquia_cms/modules
+            # - cp -R modules/acquia_cms_development docroot/profiles/acquia_cms/modules
             - cp config/optional/views.view.acquia_search.yml docroot/profiles/acquia_cms/config/optional
-      - front-end:
-          type: script
-          script:
-            - cd themes/acquia_claro
-            - npm install
-            - npm run build
-            - cd -
-           # Theme directory is already copied to profiles in previous step without compiled css.
-           # So we need to copy compile css to theme in this step.
-            - cp -R themes/acquia_claro/css docroot/profiles/acquia_cms/themes/acquia_claro
-            - mkdir -p docroot/profiles/acquia_cms/modules/acquia_cms_tour/css
-            - cp modules/acquia_cms_tour/css/acquia_cms_tour.css docroot/profiles/acquia_cms/modules/acquia_cms_tour/css
       - cleanup:
           type: script
           script:

@@ -139,7 +139,7 @@ esac
 # Compile scss and run css analysis tests.
 echo -e "${GREEN} Installing npm & analysing css ${NOCOLOR}"
 # Install npm & run front end gulp task test.
-cd themes/acquia_claro && npm install && npm run test && cd -
+cd docroot/themes/contrib/acquia_claro && npm install && npm run test && cd -
 
 # Run code quality checks.
 vendor/bin/grumphp run
@@ -194,8 +194,8 @@ fi
 
 # Run all automated PHPUnit tests.
 # If --stop-on-failure is passed as an argument $1 will handle it.
-echo -e "${YELLOW}Running phpunit tests for acquia_cms. ${NOCOLOR}"
-COMPOSER_PROCESS_TIMEOUT=0 ./vendor/bin/phpunit -c docroot/core docroot/profiles/contrib/acquia_cms --debug -v $1
+echo -e "${YELLOW}Running phpunit tests for acquia_cms modules. ${NOCOLOR}"
+COMPOSER_PROCESS_TIMEOUT=0 ./vendor/bin/phpunit -c docroot/core docroot/sites/all/modules --debug -v $1
 
 # Terminate all the processes
 if [ $? -ne 0 ] ;
