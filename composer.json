@@ -20,13 +20,11 @@
         "drupal/acquia_claro": "1.4.x-dev",
         "drupal/acquia_cms_article": "1.4.x-dev",
         "drupal/acquia_cms_audio": "1.4.x-dev",
-        "drupal/acquia_cms_development": "1.4.x-dev",
         "drupal/acquia_cms_document": "1.4.x-dev",
         "drupal/acquia_cms_event": "1.4.x-dev",
         "drupal/acquia_cms_page": "1.4.x-dev",
         "drupal/acquia_cms_search": "1.4.x-dev",
         "drupal/acquia_cms_starter": "1.4.x-dev",
-        "drupal/acquia_cms_support": "1.4.x-dev",
         "drupal/acquia_cms_toolbar": "1.4.x-dev",
         "drupal/acquia_cms_tour": "1.4.x-dev",
         "drupal/acquia_cms_video": "1.4.x-dev",
@@ -180,14 +178,6 @@
             "type": "vcs",
             "url": "https://github.com/acquia/acquia_cms_video.git"
         },
-        "drupal/acquia_cms_development": {
-            "type": "vcs",
-            "url": "https://github.com/acquia/acquia_cms_development.git"
-        },
-        "drupal/acquia_cms_support": {
-            "type": "vcs",
-            "url": "https://github.com/acquia/acquia_cms_support.git"
-        },
         "drupal/acquia_cms_starter": {
             "type": "vcs",
             "url": "https://github.com/acquia/acquia_cms_starter.git"
@@ -229,7 +219,7 @@
         "build:local": [
             "mkdir -p $PROFILE_DIR $MODULES_DIR",
             "find $PWD -name 'acquia_cms.*' -type f -maxdepth 1 -exec ln -s -f '{}' $PROFILE_DIR ';'",
-            "find ./docroot/modules/contrib -type d -maxdepth 1 -name \"acquia_cms*\" -exec mv '{}' $MODULES_DIR ';'",
+            "find ./docroot/modules/contrib -type d -maxdepth 1 -name \"acquia_cms*\" -exec cp -r '{}' $MODULES_DIR ';'",
             "ln -s -f $PWD/config $PROFILE_DIR",
             "ln -s -f $PWD/misc $PROFILE_DIR",
             "ln -s -f $PWD/src $PROFILE_DIR",
