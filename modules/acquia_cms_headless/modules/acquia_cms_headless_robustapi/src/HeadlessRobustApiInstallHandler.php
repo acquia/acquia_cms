@@ -9,6 +9,9 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Password\DefaultPasswordGenerator;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Drupal\simple_oauth\Service\KeyGeneratorService;
 use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -20,6 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * the various entity types used by it.
  */
 class HeadlessRobustApiInstallHandler {
+  use StringTranslationTrait;
 
   /**
    * The config factory.
@@ -27,6 +31,13 @@ class HeadlessRobustApiInstallHandler {
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
+
+  /**
+   * Default Password Generator.
+   *
+   * @var \Drupal\Core\Password\DefaultPasswordGenerator
+   */
+  protected $defaultPasswordGenerator;
 
   /**
    * The EntityTypeManager service.
@@ -52,9 +63,10 @@ class HeadlessRobustApiInstallHandler {
   /**
    * {@inheritdoc}
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, KeyGeneratorService $key_generator_service, MessengerInterface $messenger) {
-    $this->entityTypeManager = $entity_type_manager;
+  public function __construct(ConfigFactoryInterface $config_factory, DefaultPasswordGenerator $defaultPasswordGenerator, EntityTypeManagerInterface $entity_type_manager, KeyGeneratorService $key_generator_service, MessengerInterface $messenger) {
     $this->configFactory = $config_factory;
+    $this->defaultPasswordGenerator = $defaultPasswordGenerator;
+    $this->entityTypeManager = $entity_type_manager;
     $this->keyGeneratorService = $key_generator_service;
     $this->messenger = $messenger;
   }
@@ -64,8 +76,9 @@ class HeadlessRobustApiInstallHandler {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity_type.manager'),
       $container->get('config.factory'),
+      $container->get('password_generator'),
+      $container->get('entity_type.manager'),
       $container->get('simple_oauth.key.generator'),
       $container->get('messenger')
     );
@@ -76,21 +89,40 @@ class HeadlessRobustApiInstallHandler {
    */
   public function createHeadlessConsumer() {
     try {
+      $secret = $this->createHeadlessSecret();
       $user = $this->getHeadlessUserId();
       if (!empty($user)) {
-        Consumer::create([
-          'label' => 'Headless Site 1',
-          'description' => 'This client is provided by the acquia_cms_headless_robustapi module.',
-          'is_default' => TRUE,
-          'redirect' => 'http://localhost:3000',
-          'roles' => 'headless',
-          'user_id' => $user,
-        ])->save();
+        $consumer = Consumer::create();
+        $consumer->set('label', 'Headless Site 1');
+        $consumer->set('secret', $secret);
+        $consumer->set('description', 'This client is provided by the acquia_cms_headless_robustapi module.');
+        $consumer->set('is_default', TRUE);
+        $consumer->set('redirect', 'http://localhost:3000');
+        $consumer->set('roles', 'headless');
+        $consumer->set('user_id', $user);
+        $consumer->save();
+
+        // Provide a one time message to the admin so they can save the
+        // consumer secret before it's stored in a hash key.
+        $this->messenger->addStatus($this->t('Your Oauth consumer secret has been generated for you and is: <h2>@secret</h2> Please store this value as it cannot be retrieved. Alternatively you can generate a new secret via the <a href="@link">Consumer UI</a>', [
+          '@secret' => $secret,
+          '@link' => Url::fromRoute('consumers.admin.config.services'),
+        ]));
       }
     }
     catch (EntityStorageException | InvalidPluginDefinitionException | PluginNotFoundException $e) {
       $this->messenger->addError($e);
     }
+  }
+
+  /**
+   * Creates a Headless secret key.
+   *
+   * @return string
+   *   Returns a 21 character secret key string.
+   */
+  public function createHeadlessSecret(): string {
+    return $this->defaultPasswordGenerator->generate(21);
   }
 
   /**
@@ -103,15 +135,14 @@ class HeadlessRobustApiInstallHandler {
   public function createHeadlessSite() {
     $next_site_id = $this->getHeadlessSiteId();
     $next_object = $this->entityTypeManager->getStorage('next_site');
-
+    $preview_secret = $this->createHeadlessSecret();
     if (!$next_site_id) {
       $next_object->create([
         'id' => 'headless',
         'label' => 'Headless Site 1',
         'base_url' => 'http://localhost:3000/',
         'preview_url' => 'http://localhost:3000/api/preview/',
-        // @todo do something with the preview secret.
-        'preview_secret' => '',
+        'preview_secret' => $preview_secret,
       ])->save();
     }
   }

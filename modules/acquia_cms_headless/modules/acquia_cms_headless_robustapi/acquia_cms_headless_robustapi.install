@@ -11,8 +11,6 @@
  * @throws \Drupal\Core\Entity\EntityStorageException
  */
 function acquia_cms_headless_robustapi_install() {
-  \Drupal::messenger()->addStatus(__FUNCTION__);
-
   // Call the robust api install handler service.
   $robustApi = \Drupal::service('acquia_cms_headless_robustapi.install_handler');
 
@@ -39,7 +37,6 @@ function acquia_cms_headless_robustapi_install() {
  * Implements hook_uninstall().
  */
 function acquia_cms_headless_robustapi_uninstall() {
-  \Drupal::messenger()->addStatus(__FUNCTION__);
   // Call the robust api install handler service.
   $robustApi = \Drupal::service('acquia_cms_headless_robustapi.install_handler');
 
