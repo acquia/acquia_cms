@@ -94,7 +94,7 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
           users with the ability to use Drupal as a backend for a decoupled
           NodeJS app while also retaining Drupal’s default front-end.
           E.g., with a custom theme.'),
-        '#default_value' => $this->moduleHandler->moduleExists($robustapi) ? 1 : 0,
+        '#default_value' => $this->moduleHandler->moduleExists($robustapi),
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
       ];
       // @todo This option will enable a submodule, so we'll need to check to
