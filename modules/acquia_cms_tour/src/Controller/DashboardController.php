@@ -135,19 +135,17 @@ final class DashboardController extends ControllerBase {
     ]);
 
     // Delegate building each section using plugin class.
-    $show = 0;
     foreach ($this->acquiaCmsTourManager->getDefinitions() as $definition) {
       $instance_definition = $this->classResolver->getInstanceFromDefinition($definition['class']);
       if ($instance_definition->isModuleEnabled()) {
         $total++;
-        $show = 1;
         $build['wrapper'][$definition['id']] = $this->getSectionOutput($definition['class']);
         if ($instance_definition->getConfigurationState()) {
           $completed++;
         }
       }
     }
-    if ($show == 1) {
+    if ($total > 0) {
       $form['help_text'] = [
         '#type' => 'markup',
         '#markup' => $this->t("ACMS organizes its features into individual components called modules.
@@ -161,16 +159,12 @@ final class DashboardController extends ControllerBase {
         '#title' => 'Wizard set-up',
         '#url' => $link_url,
       ];
-      $form['show_progress'] = [
-        '#type' => 'value',
-        '#value' => TRUE,
-      ];
     }
     else {
       $form['help_text'] = [
         '#type' => 'markup',
-        '#markup' => $this->t("Please enable any of the following modules to be able to access the forms
-        (ex. google_analytics, google_tag, gecoder, captcha, acquia_telemetry, cohesion)."),
+        '#markup' => $this->t("<i><h3>It seems like you have installed minimal Acquia CMS, which does not have any specific configurations. You are all set. Once you enable any of the modules supported by the wizard, they should start appearing here.
+        (ex. google_analytics, gecoder, recaptcha, acquia_telemetry, cohesion etc.).</h3></i>"),
       ];
     }
     $form['check_total']['#value'] = $total;
