@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Password\DefaultPasswordGenerator;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Drupal\simple_oauth\Service\KeyGeneratorService;
 use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -88,6 +89,7 @@ class HeadlessRobustApiInstallHandler {
    */
   public function createHeadlessConsumer() {
     try {
+      $consumer_route = Url::fromRoute('entity.consumer.collection')->toString();
       $secret = $this->createHeadlessSecret();
       $user = $this->getHeadlessUserId();
       if (!empty($user)) {
@@ -105,7 +107,7 @@ class HeadlessRobustApiInstallHandler {
         // consumer secret before it's stored in a hash key.
         $this->messenger->addStatus($this->t('Your Oauth consumer secret has been generated for you and is: <h2>@secret</h2> Please store this value as it cannot be retrieved. Alternatively you can generate a new secret via the <a href="@link">Consumer UI</a>', [
           '@secret' => $secret,
-          '@link' => ('config/services/consumer'),
+          '@link' => $consumer_route,
         ]));
       }
     }
