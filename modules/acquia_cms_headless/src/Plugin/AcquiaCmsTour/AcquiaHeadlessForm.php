@@ -112,7 +112,7 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
           turns on all the capabilities that allows Drupal to be used as a
           backend for a decoupled Node JS app AND turns off all of Drupal’s
           front-end features so that the application is<em>purelyheadless</em>.'),
-        '#default_value' => $this->moduleHandler->moduleExists($headless) ? 1 : 0,
+        '#default_value' => $this->moduleHandler->moduleExists($headless),
         '#suffix' => "</div>",
       ];
       $form[$module]['actions']['submit'] = [
