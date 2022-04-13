@@ -28,13 +28,6 @@ final class DashboardController extends ControllerBase {
   protected $classResolver;
 
   /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
    * The state interface.
    *
    * @var \Drupal\Core\State\StateInterface
@@ -114,10 +107,6 @@ final class DashboardController extends ControllerBase {
       '#type' => 'value',
       '#value' => 0,
     ];
-    $form['show_progress'] = [
-      '#type' => 'value',
-      '#value' => TRUE,
-    ];
     $total = 0;
     $completed = 0;
 
@@ -144,19 +133,6 @@ final class DashboardController extends ControllerBase {
         ]),
       ],
     ]);
-    $form['help_text'] = [
-      '#type' => 'markup',
-      '#markup' => $this->t("ACMS organizes its features into individual components called modules.
-       The configuration dashboard/wizard setup will help you setup the pre-requisites.
-       Please note, not all modules in ACMS are required by default, and some optional modules
-       are left disabled on install. A checklist is provided to help you keep track of the tasks
-       needed to complete configuration."),
-    ];
-    $form['modal_link'] = [
-      '#type' => 'link',
-      '#title' => 'Wizard set-up',
-      '#url' => $link_url,
-    ];
 
     // Delegate building each section using plugin class.
     foreach ($this->acquiaCmsTourManager->getDefinitions() as $definition) {
@@ -168,6 +144,28 @@ final class DashboardController extends ControllerBase {
           $completed++;
         }
       }
+    }
+    if ($total > 0) {
+      $form['help_text'] = [
+        '#type' => 'markup',
+        '#markup' => $this->t("ACMS organizes its features into individual components called modules.
+        The configuration dashboard/wizard setup will help you setup the pre-requisites.
+        Please note, not all modules in ACMS are required by default, and some optional modules
+        are left disabled on install. A checklist is provided to help you keep track of the tasks
+        needed to complete configuration."),
+      ];
+      $form['modal_link'] = [
+        '#type' => 'link',
+        '#title' => 'Wizard set-up',
+        '#url' => $link_url,
+      ];
+    }
+    else {
+      $form['help_text'] = [
+        '#type' => 'markup',
+        '#markup' => $this->t("<i><h3>It seems like you have installed minimal Acquia CMS, which does not have any specific configurations. You are all set. Once you enable any of the modules supported by the wizard, they should start appearing here.
+        (ex. google_analytics, gecoder, recaptcha, acquia_telemetry, cohesion etc.).</h3></i>"),
+      ];
     }
     $form['check_total']['#value'] = $total;
     $form['check_count']['#value'] = $completed;
