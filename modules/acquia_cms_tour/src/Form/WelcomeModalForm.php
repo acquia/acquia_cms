@@ -2,8 +2,9 @@
 
 namespace Drupal\acquia_cms_tour\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\Exception\UnknownExtensionException;
 use Drupal\Core\Extension\ProfileExtensionList;
-use Drupal\Core\File\FileUrlGenerator;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\State\StateInterface;
@@ -36,11 +37,11 @@ class WelcomeModalForm extends FormBase {
   protected $profileExtensionList;
 
   /**
-   * The state interface.
+   * The config factory service object.
    *
-   * @var \Drupal\Core\File\FileUrlGenerator
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  protected $file;
+  protected $configFactory;
 
   /**
    * The ModalFormExampleController constructor.
@@ -49,13 +50,13 @@ class WelcomeModalForm extends FormBase {
    *   The state service.
    * @param \Drupal\Core\State\ProfileExtensionList $profile_extension_list
    *   The profile extension list object.
-   * @param \Drupal\Core\File\FileUrlGenerator $file
-   *   File Generator.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config.factory service object.
    */
-  public function __construct(StateInterface $state, ProfileExtensionList $profile_extension_list, FileUrlGenerator $file) {
+  public function __construct(StateInterface $state, ProfileExtensionList $profile_extension_list, ConfigFactoryInterface $config_factory) {
     $this->state = $state;
     $this->profileExtensionList = $profile_extension_list;
-    $this->file = $file;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -70,7 +71,7 @@ class WelcomeModalForm extends FormBase {
     return new static(
       $container->get('state'),
       $container->get('extension.list.profile'),
-      $container->get('file_url_generator')
+      $container->get('config.factory'),
     );
   }
 
@@ -78,8 +79,7 @@ class WelcomeModalForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, $options = NULL) {
-    $acms_logo = $this->file->generateString(theme_get_setting('logo.url'));
-    $logo = $this->file->transformRelative($acms_logo);
+    $logo = $this->getLogoPath();
     $form['tour-dashboard'] = [
       '#type' => 'container',
       '#attributes' => [
@@ -139,6 +139,25 @@ class WelcomeModalForm extends FormBase {
     $this->state->set('show_wizard_modal', FALSE);
     $this->state->set('show_welcome_modal', FALSE);
     $form_state->setRedirect('acquia_cms_tour.enabled_modules');
+  }
+
+  /**
+   * Function to get the logo path (Fallback to use site logo).
+   *
+   * @return string
+   *   Returns the logo path.
+   */
+  protected function getLogoPath() :string {
+    try {
+      $logo = "/" . $this->profileExtensionList->getPath('acquia_cms') . '/acquia_cms.png';
+    }
+    catch (UnknownExtensionException $e) {
+    }
+    if (!isset($logo)) {
+      $defaultTheme = $this->configFactory->get('system.theme')->get('default');
+      $logo = theme_get_setting('logo.url', $defaultTheme);
+    }
+    return $logo;
   }
 
 }
