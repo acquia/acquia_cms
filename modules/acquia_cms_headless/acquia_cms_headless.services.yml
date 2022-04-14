@@ -1,0 +1,9 @@
+services:
+  acquia_cms_headless.robustapi:
+    class: Drupal\acquia_cms_headless\Service\RobustApiService
+    arguments:
+    - '@config.factory'
+    - '@password_generator'
+    - '@entity_type.manager'
+    - '@simple_oauth.key.generator'
+    - '@messenger'
