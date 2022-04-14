@@ -305,8 +305,12 @@ function acquia_cms_headless_ui_menu_links_discovered_alter(array &$links) {
   foreach ($links as &$link) {
     if (isset($link['icon'])) {
       $icon = \Drupal::service('extension.path.resolver')->getPath('module', $link['provider']) . '/' . $link['icon'];
-      $icon = \Drupal::service('file_url_generator')->generateAbsoluteString($icon);
-      $icon = \Drupal::service('file_url_generator')->transformRelative($icon);
+      // The functions, file_create_uri() and file_transform() are marked as
+      // deprecated in Drupal 9.3x. Use service('file_url_generator') with
+      // generateAbsoluteString() and transformRelative() respectively.
+      // See https://www.drupal.org/node/2940031 for details.
+      $icon = file_create_url($icon);
+      $icon = file_url_transform_relative($icon);
 
       $link['options']['attributes']['style'][] = "background-image: url($icon);";
     }
