@@ -323,7 +323,7 @@ class RobustApiService {
   public function generateOauthKeys() {
     // Generate a public and private oauth key.
     // @todo Revisit where these key files are stored.
-    $dir = '../config/oauth';
+    $dir = '../oauth';
     $this->keyGeneratorService->generateKeys($dir);
 
     // Update oauth settings.
