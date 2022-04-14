@@ -3,10 +3,15 @@
 namespace Drupal\acquia_cms_headless\Plugin\AcquiaCmsTour;
 
 use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
+use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Extension\ExtensionNameLengthException;
 use Drupal\Core\Extension\MissingDependencyException;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\simple_oauth\Service\Exception\ExtensionNotLoadedException;
+use Drupal\simple_oauth\Service\Exception\FilesystemValidationException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -35,11 +40,20 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
   protected $module = 'acquia_cms_headless';
 
   /**
+   * Provides Robust API Service.
+   *
+   * @var \Drupal\acquia_cms_headless\Service\RobustApiService
+   */
+  protected $robustApiService;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     $instance = parent::create($container);
     $instance->moduleInstaller = $container->get('module_installer');
+    $instance->robustApiService = $container->get('acquia_cms_headless.robustapi');
+
     return $instance;
   }
 
@@ -64,8 +78,6 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
     $form['#tree'] = FALSE;
     $module = $this->module;
     // $headless = 'acquia_cms_headless_ui';
-    $robustapi = 'acquia_cms_headless_robustapi';
-
     if ($this->isModuleEnabled()) {
       $config = $this->config('acquia_cms_headless.settings');
       $configured = $this->getConfigurationState();
@@ -94,7 +106,7 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
           users with the ability to use Drupal as a backend for a decoupled
           NodeJS app while also retaining Drupal’s default front-end.
           E.g., with a custom theme.'),
-        '#default_value' => $this->moduleHandler->moduleExists($robustapi),
+        '#default_value' => (bool) $config->get('robust_api'),
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
       ];
       // @todo This option will enable a submodule, so we'll need to check to
@@ -175,15 +187,17 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
     if ($config_robustapi != $acms_robustapi) {
       if ($acms_robustapi) {
         try {
-          $this->moduleInstaller->install(['acquia_cms_headless_robustapi']);
+          // Run the Robust API Initialization service.
+          $this->robustApiService->initRobustApi();
+
+          // Return a message to the user that the set has completed.
           $this->messenger()->addStatus($this->t('Acquia CMS Robust API has been enabled.'));
         }
-        catch (ExtensionNameLengthException | MissingDependencyException $e) {
+        catch (InvalidPluginDefinitionException | PluginNotFoundException | EntityStorageException | ExtensionNotLoadedException | FilesystemValidationException $e) {
           $this->messenger()->addError($e);
         }
       }
       else {
-        $this->moduleInstaller->uninstall(['acquia_cms_headless_robustapi']);
         $this->messenger()->addStatus($this->t('Acquia CMS Robust API has been disabled.'));
       }
     }

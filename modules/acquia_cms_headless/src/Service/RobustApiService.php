@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acquia_cms_headless_robustapi;
+namespace Drupal\acquia_cms_headless\Service;
 
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
@@ -17,12 +17,12 @@ use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Install handlers for Headless Robust API.
+ * A service for the initialization of the Headless Robust API.
  *
  * Provides a series of helper functions for setting up the Robust API and
  * the various entity types used by it.
  */
-class HeadlessRobustApiInstallHandler {
+class RobustApiService {
   use StringTranslationTrait;
 
   /**
@@ -61,7 +61,18 @@ class HeadlessRobustApiInstallHandler {
   protected $messenger;
 
   /**
-   * {@inheritdoc}
+   * Injects various services used in the Robust API Service.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Gets config data.
+   * @param \Drupal\Core\Password\DefaultPasswordGenerator $defaultPasswordGenerator
+   *   Calls the core password generator in order to create secret keys.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Used to obtain data from various entity types.
+   * @param \Drupal\simple_oauth\Service\KeyGeneratorService $key_generator_service
+   *   Allows us to programmatically generate public and private oauth keys.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   Allows us to pass messages to the user.
    */
   public function __construct(ConfigFactoryInterface $config_factory, DefaultPasswordGenerator $defaultPasswordGenerator, EntityTypeManagerInterface $entity_type_manager, KeyGeneratorService $key_generator_service, MessengerInterface $messenger) {
     $this->configFactory = $config_factory;
@@ -72,7 +83,12 @@ class HeadlessRobustApiInstallHandler {
   }
 
   /**
-   * {@inheritdoc}
+   * Sets the container for our injected services.
+   *
+   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   *   Uses the container interface.
+   *
+   * @return static
    */
   public static function create(ContainerInterface $container) {
     return new static(
@@ -89,10 +105,12 @@ class HeadlessRobustApiInstallHandler {
    */
   public function createHeadlessConsumer() {
     try {
+      $consumers = $this->getHeadlessConsumerData();
       $consumer_route = Url::fromRoute('entity.consumer.collection')->toString();
       $secret = $this->createHeadlessSecret();
-      $user = $this->getHeadlessUserId();
-      if (!empty($user)) {
+      $user = $this->getHeadlessUserData();
+
+      if (!empty($user) && empty($consumers)) {
         $consumer = Consumer::create();
         $consumer->set('label', 'Headless Site 1');
         $consumer->set('secret', $secret);
@@ -100,7 +118,7 @@ class HeadlessRobustApiInstallHandler {
         $consumer->set('is_default', TRUE);
         $consumer->set('redirect', 'http://localhost:3000');
         $consumer->set('roles', 'headless');
-        $consumer->set('user_id', $user);
+        $consumer->set('user_id', $user->id());
         $consumer->save();
 
         // Provide a one time message to the admin so they can save the
@@ -199,7 +217,7 @@ class HeadlessRobustApiInstallHandler {
    */
   public function createHeadlessUser() {
     try {
-      $user = $this->getHeadlessUserId();
+      $user = $this->getHeadlessUserData();
       if (empty($user)) {
         $language = 'en';
         $email = 'no-reply@example.com';
@@ -288,10 +306,10 @@ class HeadlessRobustApiInstallHandler {
    */
   public function deleteHeadlessUser() {
     $userStorage = $this->entityTypeManager->getStorage('user');
-    $user = $this->getHeadlessUserId();
+    $user = $this->getHeadlessUserData();
 
     if ($user) {
-      $uid = $userStorage->load($user);
+      $uid = $userStorage->load($user->id());
       $uid->delete();
     }
   }
@@ -317,15 +335,36 @@ class HeadlessRobustApiInstallHandler {
   }
 
   /**
-   * Get User ID for Headless user.
+   * A function that obtains our init headless consumer data.
    *
-   * @return int|string|null
-   *   Returns a user id or a NULL value.
+   * @return \Drupal\Core\Entity\EntityInterface|null
+   *   Returns a user object or a NULL response.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getHeadlessUserId() {
+  public function getHeadlessConsumerData() {
+    $consumerStorage = $this->entityTypeManager->getStorage('consumer');
+    $query = $consumerStorage->getQuery();
+    $cids = $query
+      ->condition('label', 'Headless Site 1')
+      ->range(0, 1)
+      ->execute();
+    $cid = array_keys($cids);
+
+    return !empty($cid) ? $consumerStorage->load($cid[0]) : NULL;
+  }
+
+  /**
+   * Get User ID for Headless user.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface|null
+   *   Returns a data user or a NULL value.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function getHeadlessUserData() {
     $userStorage = $this->entityTypeManager->getStorage('user');
     $query = $userStorage->getQuery();
     $uids = $query
@@ -334,7 +373,7 @@ class HeadlessRobustApiInstallHandler {
       ->execute();
     $uid = array_keys($uids);
 
-    return !empty($uid) ? $userStorage->load($uid[0])->id() : NULL;
+    return !empty($uid) ? $userStorage->load($uid[0]) : NULL;
   }
 
   /**
@@ -346,7 +385,7 @@ class HeadlessRobustApiInstallHandler {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getHeadlessSiteId() {
+  public function getHeadlessSiteId(): bool {
     $next_site = $this->entityTypeManager->getStorage('next_site')->load('headless');
 
     return !empty($next_site);
@@ -379,6 +418,74 @@ class HeadlessRobustApiInstallHandler {
         ->set('is_default', $isDefault)
         ->save();
     }
+  }
+
+  /**
+   * A method that initializes the Robust Api.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Drupal\simple_oauth\Service\Exception\ExtensionNotLoadedException
+   * @throws \Drupal\simple_oauth\Service\Exception\FilesystemValidationException
+   */
+  public function initRobustApi() {
+    // Check to see if Headless user still exists, and if not, recreate it.
+    $this->createHeadlessUser();
+
+    // Generate Public & Private OAUTH keys.
+    $this->generateOauthKeys();
+
+    // Remove "is default" status from Default Consumer.
+    $this->updateDefaultConsumer(FALSE);
+
+    // Create a new Next.js Consumer.
+    $this->createHeadlessConsumer();
+
+    // Create a Next.js Site.
+    $this->createHeadlessSite();
+
+    // Create a set of Next.js Entity types based on available Node Types.
+    $this->createHeadlessSiteEntities();
+
+    // Add User and Consumer UUIDs to headless config.
+    $config = $this->configFactory->getEditable('acquia_cms_headless.settings');
+    if (!empty($this->getHeadlessConsumerData())) {
+      $config->set('consumer_uuid', $this->getHeadlessConsumerData()->uuid());
+    }
+    if (!empty($this->getHeadlessUserData())) {
+      $config->set('user_uuid', $this->getHeadlessUserData()->uuid());
+    }
+  }
+
+  /**
+   * A method resets the Robust API to its pre init state.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function resetRobustApi() {
+    $config = $this->configFactory->getEditable('acquia_cms_headless.settings');
+
+    // Remove the headless user if it exists.
+    $this->deleteHeadlessUser();
+
+    // Remove the headless user role.
+    $this->deleteHeadlessRole();
+
+    // Get all consumer entities other than the Default Consumer.
+    $this->deleteHeadlessConsumers();
+
+    // Restore "is default" status from Default Consumer.
+    $this->updateDefaultConsumer(TRUE);
+
+    // Remove any next.js sites and site entity types.
+    $this->deleteHeadlessSites();
+
+    // Remove consumer and user uuids from headless config.
+    $config->set('consumer_uuid', '');
+    $config->set('user_uuid', '');
   }
 
 }
