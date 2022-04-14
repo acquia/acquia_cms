@@ -15,7 +15,7 @@ This module is part of the Acquia CMS project.
 npx create-next-app -e https://github.com/acquia/next-acms
 ```
 
-Once Acquia CMS and ACMS.NEXT library are installed, in your drupal site go to the "Tour" link in the top menu bar, which takes you to the "Get Started" page. Click the "Get Started" button. You will see your dashboard. Locate the "headless" section to reveal two checkbox options: 
+Once Acquia CMS and ACMS.NEXT library are installed, in your drupal site go to the Extend menu and enable Acquia CMS Headless module. In the top bar menu link select "Tour", which takes you to the "Get Started" page. Click the "Get Started" button. You will see your dashboard. Locate the "Headless" section to reveal two checkbox options: 
 
 * **Enable Robust API capabilities** When the Robust API option is enabled, dependencies related to the Next.js module will be enabled providing users with the ability to use Drupal as a backend for a decoupled NodeJS app while also retaining Drupal’s default front-end. E.g., with a custom theme.
  
@@ -26,14 +26,13 @@ Once Acquia CMS and ACMS.NEXT library are installed, in your drupal site go to t
 ### Enable Robust API capabilities
 **Important** When you click the save button, the initialization service is run and you will be presented with your secret and additional information. 
 
-This is an opinionated architecture and automates the many steps required to set up a partially headless site. This option will automatically create a consumer, keys, user with role and permissions, and a next js site. However, you will need to set your env.local file manually per the following:
-
+This is an opinionated architecture and automates the many steps required to set up a partially headless site. This option will automatically create a consumer, keys, user with role and permissions, and a next js site. However, you will need to set your env.local file manually. Rename the env.example file in your local filesystem inside your next project folder to env.local and per the following (see /admin/config/services/next/sites/headless/env):
 
 ```
 Required 
-NEXT_PUBLIC_DRUPAL_BASE_URL=automatically generated. 
-NEXT_IMAGE_DOMAIN=automatically generated. 
-DRUPAL_PREVIEW_SECRET=preview secret found on admin/config/services/next
+NEXT_PUBLIC_DRUPAL_BASE_URL=automatically fetched 
+NEXT_IMAGE_DOMAIN=automatically fetched
+DRUPAL_PREVIEW_SECRET=automatically fetched
 DRUPAL_CLIENT_ID=the UUID found on admin/config/services/consumer
 DRUPAL_CLIENT_SECRET=Presented to you on initialization
 ```
