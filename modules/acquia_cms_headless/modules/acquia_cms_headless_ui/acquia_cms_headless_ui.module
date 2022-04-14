@@ -309,6 +309,7 @@ function acquia_cms_headless_ui_menu_links_discovered_alter(array &$links) {
       // deprecated in Drupal 9.3x. Use service('file_url_generator') with
       // generateAbsoluteString() and transformRelative() respectively.
       // See https://www.drupal.org/node/2940031 for details.
+      // @todo Remove deprecated functions set in 9.3x.
       $icon = file_create_url($icon);
       $icon = file_url_transform_relative($icon);
 
