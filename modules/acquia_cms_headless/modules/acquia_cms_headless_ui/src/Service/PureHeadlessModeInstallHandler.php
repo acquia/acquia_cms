@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acquia_cms_headless_ui;
+namespace Drupal\acquia_cms_headless_ui\Service;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a series of helper functions for setting up the Robust API and
  * the various entity types used by it.
  */
-class HeadlessUiInstallHandler {
+class PureHeadlessModeInstallHandler {
 
   /**
    * The path alias manager.
