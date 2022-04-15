@@ -10,7 +10,7 @@
  */
 function acquia_cms_headless_ui_install() {
   // Call the headless ui install handler service.
-  $headlessUi = \Drupal::service('acquia_cms_headless_ui.install_handler');
+  $headlessUi = \Drupal::service('acquia_cms_headless.pure_headless_mode');
 
   // Add Aliases.
   $headlessUi->createHeadlessUiPaths();
@@ -24,7 +24,7 @@ function acquia_cms_headless_ui_install() {
  */
 function acquia_cms_headless_ui_uninstall() {
   // Call the headless ui install handler service.
-  $headlessUi = \Drupal::service('acquia_cms_headless_ui.install_handler');
+  $headlessUi = \Drupal::service('acquia_cms_headless.pure_headless_mode');
 
   // Remove Aliases.
   $headlessUi->deleteHeadlessUiPaths();
