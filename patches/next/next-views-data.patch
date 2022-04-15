@@ -1,0 +1,14 @@
+diff --git a/modules/next/src/Entity/NextSite.php b/modules/next/src/Entity/NextSite.php
+index 7199bbe..bf40bc8 100644
+--- a/modules/next/src/Entity/NextSite.php
++++ b/modules/next/src/Entity/NextSite.php
+@@ -33,7 +33,8 @@ use Drupal\jsonapi\ResourceType\ResourceType;
+  *     "route_provider" = {
+  *       "html" = "Drupal\next\Routing\NextSiteHtmlRouteProvider"
+  *     },
+- *   },
++ *     "views_data" = "\Drupal\views\EntityViewsData"
++*   },
+  *   config_prefix = "next_site",
+  *   admin_permission = "administer site configuration",
+  *   static_cache = TRUE,
