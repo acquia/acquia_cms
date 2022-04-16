@@ -1,0 +1,24 @@
+diff --git a/src/Entity/NextEntityTypeConfig.php b/src/Entity/NextEntityTypeConfig.php
+index 7f6cf4e..cbcd397 100644
+--- a/src/Entity/NextEntityTypeConfig.php
++++ b/src/Entity/NextEntityTypeConfig.php
+@@ -31,6 +31,7 @@ use Drupal\next\SiteResolverPluginCollection;
+  *     "route_provider" = {
+  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider"
+  *     },
++ *     "views_data" = "Drupal\views\EntityViewsData"
+  *   },
+  *   config_prefix = "next_entity_type_config",
+  *   admin_permission = "administer site configuration",
+diff --git a/src/Entity/NextSite.php b/src/Entity/NextSite.php
+index 7199bbe..1144557 100644
+--- a/src/Entity/NextSite.php
++++ b/src/Entity/NextSite.php
+@@ -33,6 +33,7 @@ use Drupal\jsonapi\ResourceType\ResourceType;
+  *     "route_provider" = {
+  *       "html" = "Drupal\next\Routing\NextSiteHtmlRouteProvider"
+  *     },
++ *     "views_data" = "Drupal\views\EntityViewsData"
+  *   },
+  *   config_prefix = "next_site",
+  *   admin_permission = "administer site configuration",
