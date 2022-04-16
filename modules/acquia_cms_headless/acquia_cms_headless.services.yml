@@ -7,3 +7,6 @@ services:
     - '@entity_type.manager'
     - '@simple_oauth.key.generator'
     - '@messenger'
+  plugin.manager.acquia_cms_headless:
+    class: Drupal\acquia_cms_headless\AcquiaCmsHeadlessManager
+    parent: default_plugin_manager
