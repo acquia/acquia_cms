@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - acquia_cms_headless
+  enforced:
+    module:
+      - acquia_cms_headless
+id: headless
+label: Headless
+weight: 3
+is_admin: false
+permissions:
+  - 'access acquia cms headless'
+  - 'access acquia cms headless api dashboard'
+  - 'access user profiles'
+  - 'administer acquia_cms_headless configuration'
+  - 'bypass node access'
+  - 'issue subrequests'

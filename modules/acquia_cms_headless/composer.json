@@ -4,6 +4,7 @@
     "description": "Provides a Headless/Decoupled functionality for Acquia CMS.",
     "require": {
         "drupal/acquia_cms_tour": "^1",
+        "drupal/jsonapi_menu_items": "^1.2",
         "drupal/next": "^1",
         "drupal/openapi_jsonapi": "^3.0",
         "drupal/openapi_ui_redoc": "^1.0@RC",
@@ -52,9 +53,6 @@
         "patches": {
             "drupal/decoupled_router": {
                 "Unable to resolve path on node in other language than default": "https://www.drupal.org/files/issues/2021-05-05/3111456-34.patch"
-            },
-            "drupal/next": {
-                "Makes Next.js entities available to views.": "patches/next/next-views-data.patch"
             },
             "drupal/subrequests": {
                 "Get same results on different request": "https://www.drupal.org/files/issues/2019-07-18/change_request_type-63049395-09.patch"
