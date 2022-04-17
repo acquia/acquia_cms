@@ -100,8 +100,7 @@ final class HeadlessDashboardController extends ControllerBase {
       ],
     ];
     $form = [];
-    // $form['#theme'] = 'acquia_cms_headless_checklist_form';
-    $form['#attached']['library'][] = 'acquia_cms_headless/styling';
+    $form['#attached']['library'][] = 'acquia_cms_tour/styling';
     $form['#tree'] = TRUE;
     // Set initial state of the checklist progress.
     $form['check_count'] = [
@@ -146,7 +145,9 @@ final class HeadlessDashboardController extends ControllerBase {
     // Attach acquia_cms_tour_dashboard library.
     $build['#attached'] = [
       'library' => [
+        'core/drupal.ajax',
         'acquia_cms_tour/acquia_cms_tour_dashboard',
+        'acquia_cms_headless/acquia_cms_headless_dashboard',
       ],
     ];
     return $build;

@@ -16,12 +16,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Plugin implementation of the acquia_cms_tour.
  *
  * @AcquiaCmsHeadless(
- *   id = "headless_api_url",
- *   label = @Translation("Acquia CMS Headless API URL"),
- *   weight = 8
+ *   id = "headless_next_sites",
+ *   label = @Translation("Acquia CMS Headless Next.js Sites List"),
+ *   weight = 3
  * )
  */
-class AcquiaHeadlessNextSites extends AcquiaCMSDashboardBase {
+class HeadlessNextSites extends AcquiaCMSDashboardBase {
   /**
    * The state interface.
    *
@@ -187,24 +187,28 @@ class AcquiaHeadlessNextSites extends AcquiaCMSDashboardBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
     $form['#tree'] = FALSE;
-    $module = $this->module;
+    $module = $this->module . '_sites';
     $header = $this->buildEntityHeader();
     $rows = $this->buildEntityRows();
 
     $form[$module] = [
       '#type' => 'fieldset',
-      '#title' => $this->t('API URL'),
+      '#title' => $this->t('Next.js Sites'),
+      '#attributes' => [
+        'class' => ['use-ajax'],
+      ],
     ];
 
     $form[$module]['table'] = [
       '#type' => 'table',
       '#header' => $header,
       '#rows' => $rows,
-      '#empty' => $this->t('No users found'),
+      '#empty' => $this->t('No next.js sites currently exist.'),
     ];
 
     $form[$module]['pager'] = [
       '#type' => 'pager',
+      '#element' => 0,
     ];
 
     return $form;
