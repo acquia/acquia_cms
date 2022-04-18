@@ -3,6 +3,7 @@
 namespace Drupal\acquia_cms_tour\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Session\AccountProxy;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -24,10 +25,18 @@ final class TourController extends ControllerBase {
   protected $currentUser;
 
   /**
+   * The extension.list.module service.
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  protected $moduleList;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(AccountProxy $current_user) {
+  public function __construct(AccountProxy $current_user, ModuleExtensionList $moduleList) {
     $this->currentUser = $current_user;
+    $this->moduleList = $moduleList;
   }
 
   /**
@@ -35,7 +44,8 @@ final class TourController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('extension.list.module')
     );
   }
 
@@ -44,6 +54,7 @@ final class TourController extends ControllerBase {
    */
   public function build() {
     $showButton = 0;
+    $module_path = $this->moduleList->getPath("acquia_cms_tour");
     if ($this->currentUser->hasPermission('access acquia cms tour dashboard')) {
       $showButton = 1;
     }
@@ -56,6 +67,7 @@ final class TourController extends ControllerBase {
       ],
       '#data' => [
         'showButton' => $showButton,
+        'modulePath' => $module_path,
       ],
     ];
   }
