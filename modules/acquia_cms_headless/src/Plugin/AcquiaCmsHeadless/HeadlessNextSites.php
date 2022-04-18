@@ -191,6 +191,10 @@ class HeadlessNextSites extends AcquiaCMSDashboardBase {
     $header = $this->buildEntityHeader();
     $rows = $this->buildEntityRows();
 
+    // Add prefix and suffix markup to implement a column layout.
+    $form['#prefix'] = '<div class="layout-column layout-column--half">';
+    $form['#suffix'] = '</div>';
+
     $form[$module] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Next.js Sites'),

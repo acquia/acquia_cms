@@ -96,30 +96,20 @@ final class HeadlessDashboardController extends ControllerBase {
     $build['wrapper'] = [
       '#type' => 'container',
       '#attributes' => [
-        'class' => ['acms-dashboard-form-wrapper'],
+        'class' => [
+          'acms-dashboard-form-wrapper',
+          'layout-row',
+          'clearfix',
+        ],
       ],
     ];
     $form = [];
     $form['#attached']['library'][] = 'acquia_cms_tour/styling';
     $form['#tree'] = TRUE;
-    // Set initial state of the checklist progress.
-    $form['check_count'] = [
-      '#type' => 'value',
-      '#value' => 0,
-    ];
-    $form['check_total'] = [
-      '#type' => 'value',
-      '#value' => 0,
-    ];
-    $form['show_progress'] = [
-      '#type' => 'value',
-      '#value' => TRUE,
-    ];
-    $total = 0;
-    $completed = 0;
 
     $form['help_text'] = [
       '#type' => 'markup',
+      // @todo Update description for the API Dashboard.
       '#markup' => $this->t("ACMS organizes its features into individual components called modules.
        The configuration dashboard/wizard setup will help you setup the pre-requisites.
        Please note, not all modules in ACMS are required by default, and some optional modules
@@ -131,15 +121,10 @@ final class HeadlessDashboardController extends ControllerBase {
     foreach ($this->acquiaCmsHeadlessManager->getDefinitions() as $definition) {
       $instance_definition = $this->classResolver->getInstanceFromDefinition($definition['class']);
       if ($instance_definition->isModuleEnabled()) {
-        $total++;
         $build['wrapper'][$definition['id']] = $this->getSectionOutput($definition['class']);
-        if ($instance_definition->getConfigurationState()) {
-          $completed++;
-        }
       }
     }
-    $form['check_total']['#value'] = $total;
-    $form['check_count']['#value'] = $completed;
+
     array_unshift($build, $form);
 
     // Attach acquia_cms_tour_dashboard library.

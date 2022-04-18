@@ -173,11 +173,9 @@ class HeadlessNextEntityTypes extends AcquiaCMSDashboardBase {
     $entities = $storage->loadMultiple($next_entities);
 
     foreach ($entities as $entity) {
-      dpm($entity);
+      // @todo Add data to display on table.
       $row = [
         'id' => $entity->id(),
-//        'label' => $entity->label(),
-//        'base_url' => $entity->getTypedData()->get('base_url')->getValue(),
       ];
 
       $rows[$entity->uuid()] = $row;
@@ -194,6 +192,10 @@ class HeadlessNextEntityTypes extends AcquiaCMSDashboardBase {
     $module = $this->module . '_entity_types';
     $header = $this->buildEntityHeader();
     $rows = $this->buildEntityRows();
+
+    // Add prefix and suffix markup to implement a column layout.
+    $form['#prefix'] = '<div class="layout-column layout-column--half">';
+    $form['#suffix'] = '</div>';
 
     $form[$module] = [
       '#type' => 'fieldset',
