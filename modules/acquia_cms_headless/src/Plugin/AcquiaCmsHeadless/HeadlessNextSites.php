@@ -13,7 +13,7 @@ use Drupal\Core\Utility\LinkGeneratorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Plugin implementation of the acquia_cms_tour.
+ * Plugin implementation of the acquia_cms_headless.
  *
  * @AcquiaCmsHeadless(
  *   id = "headless_next_sites",
