@@ -164,11 +164,13 @@ class HeadlessNextSites extends AcquiaCMSDashboardBase {
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   public function buildEntityRows(): array {
+    // @todo Add operations links.
     $rows = [];
     $next_sites = $this->getEntityData();
     $storage = $this->entityTypeManager->getStorage('next_site');
     $sites = $storage->loadMultiple($next_sites);
 
+    // Match the data with the columns.
     foreach ($sites as $site) {
       $row = [
         'id' => $site->id(),

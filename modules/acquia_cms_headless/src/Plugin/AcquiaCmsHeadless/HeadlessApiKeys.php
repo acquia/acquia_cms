@@ -15,12 +15,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Plugin implementation of the acquia_cms_tour.
  *
  * @AcquiaCmsHeadless(
- *   id = "headless_next_entity_types",
- *   label = @Translation("Acquia CMS Headless Next.js Entity Types"),
- *   weight = 5
+ *   id = "headless_api_keys",
+ *   label = @Translation("Acquia CMS Headless Consumer API Keys"),
+ *   weight = 4
  * )
  */
-class HeadlessNextEntityTypes extends AcquiaCMSDashboardBase {
+class HeadlessApiKeys extends AcquiaCMSDashboardBase {
   /**
    * The state interface.
    *
@@ -62,7 +62,7 @@ class HeadlessNextEntityTypes extends AcquiaCMSDashboardBase {
    *
    * @var string
    */
-  protected $module = 'next';
+  protected $module = 'consumers';
 
   /**
    * {@inheritdoc}
@@ -89,7 +89,7 @@ class HeadlessNextEntityTypes extends AcquiaCMSDashboardBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'acquia_cms_headless_next_entity_types';
+    return 'acquia_cms_headless_api_keys';
   }
 
   /**
@@ -110,7 +110,7 @@ class HeadlessNextEntityTypes extends AcquiaCMSDashboardBase {
    */
   public function getEntityData() {
     $header = $this->buildEntityHeader();
-    $storage = $this->entityTypeManager->getStorage('next_entity_type_config');
+    $storage = $this->entityTypeManager->getStorage('consumer');
     $query = $storage->getQuery();
     $query->tableSort($header);
     $query->pager(2);
@@ -126,19 +126,19 @@ class HeadlessNextEntityTypes extends AcquiaCMSDashboardBase {
    */
   public function buildEntityHeader(): array {
     return [
-      'entity_type' => [
-        'data' => $this->t('Entity Type'),
-        'specifier' => 'entity_type',
-      ],
-      'bundle' => [
-        'data' => $this->t('Bundle'),
-        'specifier' => 'bundle',
+      'label' => [
+        'data' => $this->t('Label'),
+        'specifier' => 'label',
         'field' => 't.alpha',
         'sort' => 'asc',
       ],
-      'site' => [
-        'data' => $this->t('Site'),
-        'specifier' => 'site',
+      'client_id' => [
+        'data' => $this->t('Client ID'),
+        'specifier' => 'client_id',
+      ],
+      'secret' => [
+        'data' => $this->t('Secret'),
+        'specifier' => 'secret',
       ],
     ];
   }
@@ -156,46 +156,23 @@ class HeadlessNextEntityTypes extends AcquiaCMSDashboardBase {
   public function buildEntityRows(): array {
     // @todo Add operations links.
     $rows = [];
-    $next_entities = $this->getEntityData();
-    $next_type_storage = $this->entityTypeManager->getStorage('next_entity_type_config');
-    $next_types = $next_type_storage->loadMultiple($next_entities);
-    $next_sites = $this->entityTypeManager->getStorage('next_site');
-    $node_types = $this->entityTypeManager->getStorage('node_type');
+    $consumer_data = $this->getEntityData();
+    $storage = $this->entityTypeManager->getStorage('consumer');
+    $consumers = $storage->loadMultiple($consumer_data);
 
-    foreach ($next_types as $next_type) {
-      // Init some variables.
-      $site_data = '';
-      $sites = $next_type->getTypedData()->get('configuration')->getValue()['sites'];
-
-      // The Next Entity Type id is formatted as EntityType.Bundle.  We need
-      // to separate these values into something more usable.
-      $entity_data = explode('.', $next_type->id());
-
-      // Iterate through site data via referenced site id in order to get
-      // labels, etc. from next sites.
-      if (!empty($sites)) {
-        foreach ($sites as $site) {
-          $site_data = $next_sites->load($site)->label();
-        }
-      }
-
-      // If the entity type is a node, get the entity type label.
-      if (!empty($node_types)) {
-        $bundle = $node_types->load($entity_data[1])->label();
-      }
-      // Else return a capitalized version of the bundle id.
-      else {
-        $bundle = ucwords($entity_data[1]);
-      }
-
-      // Match the data with the columns.
+    // Match the data with the columns.
+    foreach ($consumers as $consumer) {
+      $secret = $consumer->getTypedData()->get('secret')->getValue();
       $row = [
-        'entity_type' => ucfirst($entity_data[0]),
-        'bundle' => $bundle,
-        'site' => "Site: $site_data",
+        'label' => $consumer->label(),
+        'client_id' => $consumer->uuid(),
+        // @todo Determine purpose of the secret here as only a hashed version
+        // is accessible via $secret[0]['value'].  Placeholder set for now to
+        // show which consumers have a secret and which don't.
+        'secret' => !empty($secret) ? '**********' : 'N/A',
       ];
 
-      $rows[$next_type->uuid()] = $row;
+      $rows[$consumer->uuid()] = $row;
     }
 
     return $rows;
@@ -206,7 +183,7 @@ class HeadlessNextEntityTypes extends AcquiaCMSDashboardBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
     $form['#tree'] = FALSE;
-    $module = $this->module . '_entity_types';
+    $module = $this->module . '_api_keys';
     $header = $this->buildEntityHeader();
     $rows = $this->buildEntityRows();
 
@@ -216,7 +193,7 @@ class HeadlessNextEntityTypes extends AcquiaCMSDashboardBase {
 
     $form[$module] = [
       '#type' => 'fieldset',
-      '#title' => $this->t('Next.js Entity Types'),
+      '#title' => $this->t('API Keys'),
       '#attributes' => [
         'class' => ['use-ajax'],
       ],
@@ -226,12 +203,12 @@ class HeadlessNextEntityTypes extends AcquiaCMSDashboardBase {
       '#type' => 'table',
       '#header' => $header,
       '#rows' => $rows,
-      '#empty' => $this->t('No next.js entity types currently exist.'),
+      '#empty' => $this->t('No next.js sites currently exist.'),
     ];
 
     $form[$module]['pager'] = [
       '#type' => 'pager',
-      '#element' => 2,
+      '#element' => 1,
     ];
 
     return $form;

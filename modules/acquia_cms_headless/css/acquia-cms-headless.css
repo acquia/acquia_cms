@@ -5,9 +5,9 @@
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-flex-wrap: nowrap;
-  -ms-flex-wrap: nowrap;
-  flex-wrap: nowrap;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
   -webkit-justify-content: center;
   -ms-flex-pack: center;
   justify-content: center;
@@ -18,6 +18,26 @@
   -ms-flex-align: start;
   align-items: flex-start;
   width: 100%;
+}
+
+.acms-dashboard-form-wrapper .fieldset__label {
+  background-color: #0e68a7;
+  color: #ffffff;
+}
+
+.acms-dashboard-form-wrapper .status--active,
+.acms-dashboard-form-wrapper .status--inactive {
+  display: block;
+  height: 16px;
+  width: 16px;
+}
+
+.acms-dashboard-form-wrapper .status--active {
+  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 13'%3e%3cpath d='M2 6.571L5.6 10 14 2' fill='none' stroke='%2342a877' stroke-width='3'/%3e%3c/svg%3e") no-repeat center left;
+}
+
+.acms-dashboard-form-wrapper .status--inactive {
+  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 14 14'%3e%3cpath d='M3 11.193L11.45 3' stroke='%23e34f4f' stroke-width='2'/%3e%3ccircle cx='7' cy='7' r='6' fill='none' stroke='%23e34f4f' stroke-width='2'/%3e%3c/svg%3e") no-repeat center left;
 }
 
 .acms-dashboard-form-wrapper .layout-column--half {
