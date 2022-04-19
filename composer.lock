@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2482e200d7aad52fbf7bd170625bf682",
+    "content-hash": "39199b9c01e73aad34d4c4c7c26b5221",
     "packages": [
         {
             "name": "acquia/acsf-contenthub-console",
@@ -2190,19 +2190,19 @@
                 "drupal/field_group": "^3",
                 "drupal/focal_point": "1.5",
                 "drupal/google_analytics": "^4.0",
-                "drupal/google_tag": "^1",
+                "drupal/google_tag": "^1.5",
                 "drupal/honeypot": "^2.0",
                 "drupal/imagemagick": "^3",
                 "drupal/jsonapi_extras": "^3",
                 "drupal/memcache": "^2.2",
                 "drupal/moderation_dashboard": "1.0.0-beta3",
-                "drupal/moderation_sidebar": "^1.4",
+                "drupal/moderation_sidebar": "^1.5",
                 "drupal/mysql56": "^1.0",
                 "drupal/password_policy": "^3.0",
                 "drupal/pathauto": "^1",
                 "drupal/recaptcha": "^3",
                 "drupal/redirect": "^1",
-                "drupal/reroute_email": "2.1.0",
+                "drupal/reroute_email": "^2.1",
                 "drupal/responsive_preview": "^1.0",
                 "drupal/scheduler_content_moderation_integration": "^1.3",
                 "drupal/schema_metatag": "^2.2",
@@ -2220,8 +2220,8 @@
                     "dev-1.3.x": "1.3.x-dev"
                 },
                 "drupal": {
-                    "version": "1.3.4+3-dev",
-                    "datestamp": "1650012417",
+                    "version": "1.3.4+4-dev",
+                    "datestamp": "1650369126",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -2254,9 +2254,6 @@
                     },
                     "drupal/focal_point": {
                         "3162210 - Preview link accidentally closes the media library": "https://www.drupal.org/files/issues/2020-10-06/3162210-17.patch"
-                    },
-                    "drupal/reroute_email": {
-                        "3254806 - Invalid argument supplied for foreach() in reroute_email_check_email_by_permission() (line 316)": "https://git.drupalcode.org/project/reroute_email/-/commit/438a67caeb0b0cc47d1deb0cee50afda9a907dc8.diff"
                     }
                 }
             },
@@ -2678,7 +2675,7 @@
                 "reference": "0354c0cb8e2aede1e8ba45fa770f47f90da593b4"
             },
             "require": {
-                "acquia/cohesion": "6.8.1",
+                "acquia/cohesion": "6.8.2",
                 "acquia/cohesion-theme": "^6.8",
                 "drupal/acquia_cms_common": "1.3.x-dev",
                 "drupal/collapsiblock": "^3",
@@ -2691,8 +2688,8 @@
                     "dev-1.3.x": "1.3.x-dev"
                 },
                 "drupal": {
-                    "version": "1.3.3+4-dev",
-                    "datestamp": "1650013836",
+                    "version": "1.3.3+6-dev",
+                    "datestamp": "1650374137",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -2759,7 +2756,7 @@
                 },
                 "drupal": {
                     "version": "1.3.x-dev",
-                    "datestamp": "1650025997",
+                    "datestamp": "1650369672",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -2948,16 +2945,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev",
-                    "dev-8.x-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "3.0.4",
                     "datestamp": "1632414112",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "branch-alias": {
@@ -9211,9 +9204,7 @@
                 "shasum": ""
             },
             "require": {
-                "ext-json": "*",
-                "justinrainbow/json-schema": "^5.2.10",
-                "php": "^7.4 || ^8.0"
+                "php": ">=5.2"
             },
             "type": "library",
             "autoload": {
