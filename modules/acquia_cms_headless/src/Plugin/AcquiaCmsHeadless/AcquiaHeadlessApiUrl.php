@@ -4,6 +4,7 @@ namespace Drupal\acquia_cms_headless\Plugin\AcquiaCmsHeadless;
 
 use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Plugin implementation of the acquia_cms_headless.
@@ -43,6 +44,9 @@ class AcquiaHeadlessApiUrl extends AcquiaCMSDashboardBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
     $module = $this->module;
+    $part = 'jsonapi';
+    $base = Url::fromRoute('<front>')->setAbsolute(TRUE)->toString();
+    $url = Url::fromUri($base . $part)->toString();
 
     // Add prefix and suffix markup to implement a column layout.
     $form['#prefix'] = '<div class="layout-column layout-column--half">';
@@ -52,6 +56,15 @@ class AcquiaHeadlessApiUrl extends AcquiaCMSDashboardBase {
       '#type' => 'fieldset',
       '#title' => $this->t('API URL'),
     ];
+
+    $form[$module]['links'] = [
+      '#type' => 'link',
+      '#title' => $url,
+      '#url' => Url::fromUri('internal:/jsonapi'),
+      '#attributes' => ['target' => '_blank'],
+    ];
+
+    $form[$module]['text']['#markup'] = '<br />The base API Url.<br />';
 
     return $form;
   }
