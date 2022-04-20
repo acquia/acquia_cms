@@ -1,0 +1,23 @@
+{
+    "name": "drupal/acquia_cms_headless_ui",
+    "type": "drupal-module",
+    "description": "Implements Pure Headless mode, disabling the Drupal Front-End and updating the admin experience.",
+    "license": "GPL-2.0-or-later",
+    "require": {},
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-composer-scaffold": true,
+            "ergebnis/composer-normalize": true,
+            "oomphinc/composer-installers-extender": true,
+            "phpro/grumphp-shim": true,
+            "webdriver-binary/binary-chromedriver": true
+        }
+    },
+    "extra": {
+        "enable-patching": true,
+        "patches": {}
+    }
+}
