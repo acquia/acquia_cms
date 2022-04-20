@@ -44,6 +44,8 @@ class AcquiaHeadlessApiUrl extends AcquiaCMSDashboardBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
     $module = $this->module;
+    $header = [];
+    $rows = [];
     $part = 'jsonapi';
     $base = Url::fromRoute('<front>')->setAbsolute(TRUE)->toString();
     $url = Url::fromUri($base . $part)->toString();
@@ -56,7 +58,11 @@ class AcquiaHeadlessApiUrl extends AcquiaCMSDashboardBase {
       '#type' => 'fieldset',
       '#title' => $this->t('API URL'),
     ];
-
+    $form[$module]['table'] = [
+      '#type' => 'table',
+      '#header' => $header,
+      '#rows' => $rows,
+    ];
     $form[$module]['links'] = [
       '#type' => 'link',
       '#title' => $url,
