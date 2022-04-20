@@ -156,7 +156,7 @@ module.exports =
       "readyEvent": "",
       "readySelector": "",
       "delay": 0,
-      "hideSelectors": [".coh-google-map"],
+      "hideSelectors": [],
       "removeSelectors": [],
       "hoverSelector": "",
       "clickSelector": "",
@@ -164,7 +164,7 @@ module.exports =
       "selectors": [],
       "selectorExpansion": true,
       "expect": 0,
-      "misMatchThreshold": 0.1,
+      "misMatchThreshold": 18,
       "requireSameDimensions": true
     },
     {
