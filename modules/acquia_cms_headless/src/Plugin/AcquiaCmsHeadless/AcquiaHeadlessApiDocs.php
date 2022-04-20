@@ -4,6 +4,7 @@ namespace Drupal\acquia_cms_headless\Plugin\AcquiaCmsHeadless;
 
 use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Plugin implementation of the acquia_cms_headless.
@@ -43,6 +44,8 @@ class AcquiaHeadlessApiDocs extends AcquiaCMSDashboardBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
     $module = $this->module;
+    $header = [];
+    $rows = [];
 
     // Add prefix and suffix markup to implement a column layout.
     $form['#prefix'] = '<div class="layout-column layout-column--half">';
@@ -52,7 +55,17 @@ class AcquiaHeadlessApiDocs extends AcquiaCMSDashboardBase {
       '#type' => 'fieldset',
       '#title' => $this->t('API Documentation'),
     ];
-
+    $form[$module]['table'] = [
+      '#type' => 'table',
+      '#header' => $header,
+      '#rows' => $rows,
+    ];
+    $form[$module]['links'] = [
+      '#type' => 'link',
+      '#title' => 'Explore with Redoc',
+      '#url' => Url::fromUri('internal:/admin/config/services/openapi/redoc/jsonapi'),
+      '#attributes' => ['target' => '_blank'],
+    ];
     return $form;
   }
 
