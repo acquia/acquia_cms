@@ -130,6 +130,13 @@ class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
   /**
    * {@inheritdoc}
    */
+  public function ignoreConfig(array &$form, FormStateInterface $form_state) {
+    $this->setConfigurationState();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function checkMinConfiguration() {
     $api_key = $this->config('cohesion.settings')->get('api_key');
     $agency_key = $this->config('cohesion.settings')->get('organization_key');
