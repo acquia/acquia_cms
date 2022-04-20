@@ -1,0 +1,17 @@
+services:
+  acquia_cms_headless.config_subscriber:
+    class: 'Drupal\acquia_cms_headless_ui\EventSubscriber\ConfigSubscriber'
+    arguments:
+      - '@plugin.manager.menu.local_task'
+    tags:
+      - { name: event_subscriber }
+
+  acquia_cms_headless.pure_headless_mode:
+    class: 'Drupal\acquia_cms_headless_ui\Service\PureHeadlessModeInstallHandler'
+    arguments:
+      - '@path_alias.manager'
+      - '@config.factory'
+      - '@entity_type.manager'
+      - '@messenger'
+      - '@module_handler'
+      - '@theme_handler'
