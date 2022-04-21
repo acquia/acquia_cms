@@ -271,15 +271,15 @@ class InstallationWizardForm extends FormBase {
    * Skip the current state and mark it as completed.
    */
   public function skipStepSubmit(array &$form, FormStateInterface $form_state) {
-    // Call ignoreConfig of corresponding form.
-    $formController = $this->getCurrentFormController()['class'];
-    $this->classResolver->getInstanceFromDefinition($formController)->ignoreConfig($form, $form_state);
 
     // Call default submitForm in case of last step.
     if ($this->isCurrentStepLast()) {
       $this->submitForm($form, $form_state);
     }
     else {
+      // Call ignoreConfig of corresponding form.
+      $formController = $this->getCurrentFormController()['class'];
+      $this->classResolver->getInstanceFromDefinition($formController)->ignoreConfig($form, $form_state);
       $this->currentStep += 1;
       $this->state->set('current_wizard_step', $this->currentStep);
       $form_state->setRebuild(TRUE);
