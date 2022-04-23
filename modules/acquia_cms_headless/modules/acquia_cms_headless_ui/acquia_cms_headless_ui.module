@@ -343,27 +343,29 @@ function acquia_cms_headless_ui_menu_links_discovered_alter(array &$links) {
 
   // Unset any other admin menu items.
   foreach ($links as $link_key => $link_value) {
-    if ($link_value['parent'] == "system.admin_structure") {
-      unset($links[$link_key]);
-    }
-    if ($link_value['parent'] == "system.themes_page") {
-      unset($links[$link_key]);
-    }
-    if ($link_value['parent'] == "system.theme_install") {
-      unset($links[$link_key]);
-    }
-    if ($link_value['parent'] == "system.theme_uninstall") {
-      unset($links[$link_key]);
-    }
-    if ($link_value['parent'] == "system.theme_settings") {
-      unset($links[$link_key]);
+    if (isset($link_value['parent'])) {
+      if ($link_value['parent'] == "system.admin_structure") {
+        unset($links[$link_key]);
+      }
+      if ($link_value['parent'] == "system.themes_page") {
+        unset($links[$link_key]);
+      }
+      if ($link_value['parent'] == "system.theme_install") {
+        unset($links[$link_key]);
+      }
+      if ($link_value['parent'] == "system.theme_uninstall") {
+        unset($links[$link_key]);
+      }
+      if ($link_value['parent'] == "system.theme_settings") {
+        unset($links[$link_key]);
+      }
     }
   }
   unset($links['system.admin_structure']);
   unset($links['system.themes_page']);
   unset($links['system.theme_install']);
   unset($links['system.theme_uninstall']);
-  unset($links['system.theme_settings:']);
+  unset($links['system.theme_settings']);
   unset($links['entity.entity_form_mode.collection']);
   unset($links['entity.entity_view_mode.collection']);
 }
