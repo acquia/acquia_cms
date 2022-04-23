@@ -8,6 +8,7 @@ use Drupal\consumers\Entity\Consumer;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Password\DefaultPasswordGenerator;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -61,6 +62,20 @@ class RobustApiService {
   protected $messenger;
 
   /**
+   * The site path.
+   *
+   * @var string
+   */
+  protected $sitePath;
+
+  /**
+   * The file system interface.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
    * Injects various services used in the Robust API Service.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -73,13 +88,19 @@ class RobustApiService {
    *   Allows us to programmatically generate public and private oauth keys.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   Allows us to pass messages to the user.
+   * @param string $site_path
+   *   Gets the site path, useful in cases of multi-site arrangements.
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   *   Lets us create a directory.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, DefaultPasswordGenerator $defaultPasswordGenerator, EntityTypeManagerInterface $entity_type_manager, KeyGeneratorService $key_generator_service, MessengerInterface $messenger) {
+  public function __construct(ConfigFactoryInterface $config_factory, DefaultPasswordGenerator $defaultPasswordGenerator, EntityTypeManagerInterface $entity_type_manager, KeyGeneratorService $key_generator_service, MessengerInterface $messenger, string $site_path, FileSystemInterface $file_system) {
     $this->configFactory = $config_factory;
     $this->defaultPasswordGenerator = $defaultPasswordGenerator;
     $this->entityTypeManager = $entity_type_manager;
     $this->keyGeneratorService = $key_generator_service;
     $this->messenger = $messenger;
+    $this->sitePath = $site_path;
+    $this->fileSystem = $file_system;
   }
 
   /**
@@ -96,7 +117,9 @@ class RobustApiService {
       $container->get('password_generator'),
       $container->get('entity_type.manager'),
       $container->get('simple_oauth.key.generator'),
-      $container->get('messenger')
+      $container->get('messenger'),
+      $container->get('site.path'),
+      $container->get('file_system')
     );
   }
 
@@ -190,24 +213,29 @@ class RobustApiService {
         // js site entity id.
         $sitesObject[$site->id()] = $site->id();
       }
-    }
-    // Check to see if any content types are available.
-    if (!empty($types)) {
-      // Iterate through each content type so that we can create the next entity
-      // types.
-      foreach ($types as $type) {
-        // Set a variable for our content type machinename.
-        $nodeTypeId = $type->id();
-        // Get the storage for the Next entity type.
-        $nextEntityObject = $this->entityTypeManager->getStorage('next_entity_type_config');
-        // Create a Next.js Entity type for each content type that's available.
-        $nextEntityObject->create([
-          'id' => "node.$nodeTypeId",
-          'site_resolver' => 'site_selector',
-          'configuration' => [
-            'sites' => $sitesObject,
-          ],
-        ])->save();
+
+      // Check to see if any content types are available.
+      if (!empty($types)) {
+        // Iterate through each content type so that we can create the next
+        // entity types.
+        foreach ($types as $type) {
+          // Set a variable for our content type machinename.
+          $nodeTypeId = $type->id();
+          // Get the storage for the Next entity type.
+          $nextEntityObject = $this->entityTypeManager->getStorage('next_entity_type_config');
+          // Check to see if the next.js entity type already exists.
+          if (empty($nextEntityObject->load("node.$nodeTypeId"))) {
+            // Create a Next.js Entity type for each content type that's
+            // available.
+            $nextEntityObject->create([
+              'id' => "node.$nodeTypeId",
+              'site_resolver' => 'site_selector',
+              'configuration' => [
+                'sites' => $sitesObject,
+              ],
+            ])->save();
+          }
+        }
       }
     }
   }
@@ -321,9 +349,18 @@ class RobustApiService {
    * @throws \Drupal\simple_oauth\Service\Exception\ExtensionNotLoadedException
    */
   public function generateOauthKeys() {
+    // Create the directory.
+    $file_system = $this->fileSystem;
+
+    // Set the base path of the keys directory.
+    $dir = "../oauth/$this->sitePath";
+
+    // Create the directory if it doesn't already exist.
+    if (!is_dir($dir)) {
+      $file_system->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY);
+    }
+
     // Generate a public and private oauth key.
-    // @todo Revisit where these key files are stored.
-    $dir = '../oauth';
     $this->keyGeneratorService->generateKeys($dir);
 
     // Update oauth settings.
