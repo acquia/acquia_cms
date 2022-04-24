@@ -3,3 +3,7 @@ acquia_cms_headless_dashboard:
     theme:
       ../acquia_cms_tour/css/acquia_cms_tour.css: { }
       css/acquia-cms-headless.css: {}
+  dependencies:
+    - core/jquery #Just to be safe
+    - core/drupal.dialog.ajax #Required for dialogs
+    - core/jquery.form #If you also want to use Ajax for form operations

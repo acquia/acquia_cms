@@ -44,8 +44,9 @@ class AcquiaHeadlessApiDocs extends AcquiaCMSDashboardBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
     $module = $this->module;
-    $header = [];
-    $rows = [];
+    $site_path = Url::fromRoute('<front>')->setAbsolute(TRUE)->toString();
+    $headless_path = $this->moduleHandler->getModule('acquia_cms_headless')->getPath();
+    $open_api_image = $site_path . $headless_path . '/assets/images/OpenAPI_Logo_Pantone-1.png';
 
     // Add prefix and suffix markup to implement a column layout.
     $form['#prefix'] = '<div class="layout-column layout-column--half">';
@@ -55,17 +56,59 @@ class AcquiaHeadlessApiDocs extends AcquiaCMSDashboardBase {
       '#type' => 'fieldset',
       '#title' => $this->t('API Documentation'),
     ];
-    $form[$module]['table'] = [
-      '#type' => 'table',
-      '#header' => $header,
-      '#rows' => $rows,
+
+    $form[$module]['openapi'] = [
+      '#type' => 'link',
+      '#title' => $this->t('<img width="300" height="91" alt="OpenAPI Initiative" src="@image">', ['@image' => $open_api_image]),
+      '#url' => Url::fromUri('https://www.openapis.org/', ['external' => TRUE]),
+      '#attributes' => [
+        'target' => '_blank',
+        'class' => [],
+      ],
+      '#prefix' => '<div class="headless-dashboard-openapi-logo">',
+      '#suffix' => '</div>',
     ];
-    $form[$module]['links'] = [
+
+    $form[$module]['redoc'] = [
       '#type' => 'link',
       '#title' => 'Explore with Redoc',
       '#url' => Url::fromUri('internal:/admin/config/services/openapi/redoc/jsonapi'),
-      '#attributes' => ['target' => '_blank'],
+      '#attributes' => [
+        'target' => '_blank',
+        'class' => [
+          'button',
+          'button--primary',
+        ],
+      ],
+      '#prefix' => '<div class="headless-dashboard-openapi-links">',
     ];
+
+    $form[$module]['swagger'] = [
+      '#type' => 'link',
+      '#title' => 'Explore with Swagger UI',
+      '#url' => Url::fromUri('internal:/admin/config/services/openapi/swagger/jsonapi'),
+      '#attributes' => [
+        'target' => '_blank',
+        'class' => [
+          'button',
+          'button--primary',
+        ],
+      ],
+      '#suffix' => '</div>',
+    ];
+
+    $form[$module]['resources'] = [
+      '#type' => 'link',
+      '#title' => 'OpenAPI Resources',
+      '#url' => Url::fromUri('internal:/admin/config/services/openapi'),
+      '#attributes' => [
+        'target' => '_blank',
+        'class' => [],
+      ],
+      '#prefix' => '<div class="headless-dashboard-openapi-resources"><p>',
+      '#suffix' => '</p></div>',
+    ];
+
     return $form;
   }
 

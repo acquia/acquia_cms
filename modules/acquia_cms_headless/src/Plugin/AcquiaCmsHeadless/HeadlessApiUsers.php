@@ -2,12 +2,14 @@
 
 namespace Drupal\acquia_cms_headless\Plugin\AcquiaCmsHeadless;
 
+use Drupal\acquia_cms_headless\Service\RobustApiService;
 use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\InfoParserInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\State\StateInterface;
+use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGeneratorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -58,6 +60,13 @@ class HeadlessApiUsers extends AcquiaCMSDashboardBase {
   protected $entityTypeManager;
 
   /**
+   * Provides Robust API Service.
+   *
+   * @var \Drupal\acquia_cms_headless\Service\RobustApiService
+   */
+  protected $robustApiService;
+
+  /**
    * Provides module name.
    *
    * @var string
@@ -67,9 +76,10 @@ class HeadlessApiUsers extends AcquiaCMSDashboardBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser, EntityTypeManagerInterface $entity_type_manager, RobustApiService $robust_api_serivce) {
     parent::__construct($state, $module_handler, $link_generator, $info_parser);
     $this->entityTypeManager = $entity_type_manager;
+    $this->robustApiService = $robust_api_serivce;
   }
 
   /**
@@ -81,7 +91,8 @@ class HeadlessApiUsers extends AcquiaCMSDashboardBase {
       $container->get('module_handler'),
       $container->get('link_generator'),
       $container->get('info_parser'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('acquia_cms_headless.robustapi')
     );
   }
 
@@ -142,7 +153,64 @@ class HeadlessApiUsers extends AcquiaCMSDashboardBase {
         'data' => $this->t('Status'),
         'specifier' => 'status',
       ],
+      $this->t('Operations'),
     ];
+  }
+
+  /**
+   * A function that builds an array of entity operation links.
+   *
+   * @param string $entityType
+   *   Accepts an entity type id string value.
+   *
+   * @return array
+   *   Return an array of operation links.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityMalformedException
+   */
+  public function createOperationLinks(string $entityType): array {
+    // Initialize the array that we will eventually return.
+    $operations = [];
+
+    // Set some service variables.
+    $user_data = $this->getEntityData();
+    $storage = $this->entityTypeManager;
+    $entityStorage = $storage->getStorage($entityType);
+    $entities = $entityStorage->loadMultiple($user_data);
+    $destination = $this->robustApiService->dashboardDestination();
+
+    // Set an array of URI Relationships that will be used to build the
+    // operations links.
+    $operationLinks = [
+      'view' => [
+        'title' => $this->t('View'),
+        'route' => 'canonical',
+      ],
+      'edit' => [
+        'title' => $this->t('Edit'),
+        'route' => 'edit-form',
+      ],
+      'clone' => [
+        'title' => $this->t('Clone'),
+        'route' => 'clone-form',
+      ],
+    ];
+    foreach ($entities as $entity) {
+      $operation = [];
+      foreach ($operationLinks as $key => $operationLink) {
+        $route_name = $entity->toUrl($operationLink['route'])->getRouteName();
+        $operation[$key] = [
+          'url' => Url::fromRoute($route_name, ['user' => $entity->id()], $destination),
+          'title' => $operationLink['title'],
+        ];
+      }
+
+      $operations[$entity->id()] = $operation;
+    }
+
+    return $operations;
   }
 
   /**
@@ -154,28 +222,38 @@ class HeadlessApiUsers extends AcquiaCMSDashboardBase {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
+   * @throws \Drupal\Core\Entity\EntityMalformedException
+   * @throws \Exception
    */
   public function buildEntityRows(): array {
-    // @todo Add operations links.
     $rows = [];
+    $entity_type = 'user';
     $user_data = $this->getEntityData();
-    $storage = $this->entityTypeManager->getStorage('user');
+    $storage = $this->entityTypeManager->getStorage($entity_type);
     $users = $storage->loadMultiple($user_data);
+    $operations = $this->createOperationLinks($entity_type);
 
     // Match the data with the columns.
     foreach ($users as $user) {
-
       if ($user->getTypedData()->get('status')->getValue()[0]['value']) {
         $status = 'status--active';
       }
       else {
         $status = 'status--inactive';
       }
+
       $row = [
         'name' => $user->label(),
         // Currently only displaying the headless user role.
         'role' => $this->t('Headless Role'),
         'status' => $this->t('<span class="@status"></span>', ['@status' => $status]),
+        'operations' => [
+          'data' => [
+            '#type' => 'dropbutton',
+            '#dropbutton_type' => 'small',
+            '#links' => $operations[$user->id()],
+          ],
+        ],
       ];
 
       $rows[$user->uuid()] = $row;
@@ -192,6 +270,7 @@ class HeadlessApiUsers extends AcquiaCMSDashboardBase {
     $module = $this->module . '_api_users';
     $header = $this->buildEntityHeader();
     $rows = $this->buildEntityRows();
+    $destination = $this->robustApiService->dashboardDestination();
 
     // Add prefix and suffix markup to implement a column layout.
     $form['#prefix'] = '<div class="layout-column layout-column--half">';
@@ -201,8 +280,30 @@ class HeadlessApiUsers extends AcquiaCMSDashboardBase {
       '#type' => 'fieldset',
       '#title' => $this->t('API Users'),
       '#attributes' => [
-        'class' => ['use-ajax'],
+        'class' => [],
       ],
+    ];
+
+    $form[$module]['info_text'] = [
+      '#type' => 'markup',
+      '#markup' => $this->t('<p>Only users assigned the <strong>Headless</strong> user role will appear in this list.  If adding new Headless users, make sure to assign the <strong>Headless</strong> role.</p>'),
+      '#prefix' => '<div class="headless-dashboard-admin-heading"><div class="headless-dashboard-user-info">',
+      '#suffix' => '</div>',
+    ];
+
+    $form[$module]['admin_links'] = [
+      '#type' => 'link',
+      '#title' => 'Add API User',
+      '#url' => Url::fromRoute('user.admin_create', [], $destination),
+      '#attributes' => [
+        'class' => [
+          'button',
+          'button--action',
+          'button--primary',
+        ],
+      ],
+      '#prefix' => '<div class="headless-dashboard-admin-links">',
+      '#suffix' => '</div></div>',
     ];
 
     $form[$module]['table'] = [

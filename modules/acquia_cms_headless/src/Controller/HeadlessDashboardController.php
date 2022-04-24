@@ -97,7 +97,7 @@ final class HeadlessDashboardController extends ControllerBase {
       '#type' => 'container',
       '#attributes' => [
         'class' => [
-          'acms-dashboard-form-wrapper',
+          'acms-headless-dashboard-wrapper',
           'layout-row',
           'clearfix',
         ],
@@ -110,11 +110,10 @@ final class HeadlessDashboardController extends ControllerBase {
     $form['help_text'] = [
       '#type' => 'markup',
       // @todo Update description for the API Dashboard.
-      '#markup' => $this->t("ACMS organizes its features into individual components called modules.
-       The configuration dashboard/wizard setup will help you setup the pre-requisites.
-       Please note, not all modules in ACMS are required by default, and some optional modules
-       are left disabled on install. A checklist is provided to help you keep track of the tasks
-       needed to complete configuration."),
+      '#markup' => $this->t(
+        "ACMS organizes its features into individual components. The API
+        dashboard, organizes the necessary components for operating a partially
+        or fully decoupled site."),
     ];
 
     // Delegate building each section using plugin class.
@@ -130,11 +129,11 @@ final class HeadlessDashboardController extends ControllerBase {
     // Attach acquia_cms_tour_dashboard library.
     $build['#attached'] = [
       'library' => [
-        'core/drupal.ajax',
         'acquia_cms_tour/acquia_cms_tour_dashboard',
         'acquia_cms_headless/acquia_cms_headless_dashboard',
       ],
     ];
+
     return $build;
   }
 

@@ -8,7 +8,9 @@
         "drupal/next": "^1",
         "drupal/openapi_jsonapi": "^3.0",
         "drupal/openapi_ui_redoc": "^1.0@RC",
-        "drupal/restui": "^1.20"
+        "drupal/openapi_ui_swagger": "^1.0@R",
+        "drupal/restui": "^1.20",
+        "swagger-api/swagger-ui": "^3.0.17"
     },
     "config": {
         "allow-plugins": {
@@ -64,9 +66,20 @@
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         },
-        "assets": {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
+        "swagger-api": {
+            "type": "package",
+            "package": {
+                "name": "swagger-api/swagger-ui",
+                "version": "3.0.17",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v3.0.17.zip",
+                    "type": "zip"
+                },
+                "require": {
+                    "composer/installers": "^2.1.1"
+                }
+            }
         }
     }
 }

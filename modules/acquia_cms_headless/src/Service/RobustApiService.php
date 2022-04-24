@@ -488,4 +488,19 @@ class RobustApiService {
     $config->set('user_uuid', '');
   }
 
+  /**
+   * Dashboard destination helper function.
+   *
+   * @return array[]
+   *   Returns a destination query array.
+   */
+  public function dashboardDestination(): array {
+    // Set the destination query array.
+    return [
+      'query' => [
+        'destination' => Url::fromRoute('acquia_cms_headless.dashboard')->toString(),
+      ],
+    ];
+  }
+
 }

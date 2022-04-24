@@ -5,6 +5,7 @@ namespace Drupal\acquia_cms_headless\Plugin\AcquiaCmsHeadless;
 use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the acquia_cms_headless.
@@ -23,6 +24,23 @@ class AcquiaHeadlessApiUrl extends AcquiaCMSDashboardBase {
    * @var string
    */
   protected $module = 'jsonapi_extras';
+
+  /**
+   * Provides Robust API Service.
+   *
+   * @var \Drupal\acquia_cms_headless\Service\RobustApiService
+   */
+  protected $robustApiService;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    $instance = parent::create($container);
+    $instance->robustApiService = $container->get('acquia_cms_headless.robustapi');
+
+    return $instance;
+  }
 
   /**
    * {@inheritdoc}
@@ -44,11 +62,15 @@ class AcquiaHeadlessApiUrl extends AcquiaCMSDashboardBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#tree'] = FALSE;
     $module = $this->module;
-    $header = [];
-    $rows = [];
-    $part = 'jsonapi';
-    $base = Url::fromRoute('<front>')->setAbsolute(TRUE)->toString();
-    $url = Url::fromUri($base . $part)->toString();
+
+    // Get the JSON API URI.
+    $json_preview_url = Url::fromUri('internal:/jsonapi');
+    $site_path = Url::fromRoute('<front>')->setAbsolute(TRUE)->toString();
+    $headless_path = $this->moduleHandler->getModule('acquia_cms_headless')->getPath();
+    $jsonapi_image = $site_path . $headless_path . '/assets/images/json-api.png';
+
+    // Set the destination query array.
+    $destination = $this->robustApiService->dashboardDestination();
 
     // Add prefix and suffix markup to implement a column layout.
     $form['#prefix'] = '<div class="layout-column layout-column--half">';
@@ -58,19 +80,43 @@ class AcquiaHeadlessApiUrl extends AcquiaCMSDashboardBase {
       '#type' => 'fieldset',
       '#title' => $this->t('API URL'),
     ];
-    $form[$module]['table'] = [
-      '#type' => 'table',
-      '#header' => $header,
-      '#rows' => $rows,
-    ];
-    $form[$module]['links'] = [
+
+    $form[$module]['jsonapi'] = [
       '#type' => 'link',
-      '#title' => $url,
-      '#url' => Url::fromUri('internal:/jsonapi'),
-      '#attributes' => ['target' => '_blank'],
+      '#title' => $this->t('<img alt="json:api Initiative" src="@image">', ['@image' => $jsonapi_image]),
+      '#url' => Url::fromUri('https://jsonapi.org/', ['external' => TRUE]),
+      '#attributes' => [
+        'target' => '_blank',
+        'class' => [],
+      ],
+      '#prefix' => '<div class="headless-dashboard-openapi-logo">',
+      '#suffix' => '</div>',
     ];
 
-    $form[$module]['text']['#markup'] = '<br />The base API Url.<br />';
+    $form[$module]['api_link'] = [
+      '#type' => 'link',
+      '#title' => $json_preview_url->setAbsolute(TRUE)->toString(),
+      '#url' => $json_preview_url,
+      '#attributes' => [
+        'target' => '_blank',
+      ],
+      '#prefix' => '<div class="headless-dashboard-api-url"><p><strong>Base API Url: </strong><span>',
+      '#suffix' => '</span></p></div>',
+    ];
+
+    $form[$module]['update_api'] = [
+      '#type' => 'link',
+      '#title' => 'Update Base API URL',
+      '#url' => Url::fromRoute('jsonapi_extras.settings', [], $destination),
+      '#attributes' => [
+        'class' => [
+          'button',
+          'button--primary',
+        ],
+      ],
+      '#prefix' => '<div class="headless-dashboard-api-update">',
+      '#suffix' => '</div>',
+    ];
 
     return $form;
   }

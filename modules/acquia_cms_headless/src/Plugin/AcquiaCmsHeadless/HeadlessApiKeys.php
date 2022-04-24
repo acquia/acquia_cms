@@ -2,12 +2,15 @@
 
 namespace Drupal\acquia_cms_headless\Plugin\AcquiaCmsHeadless;
 
+use Drupal\acquia_cms_headless\Service\RobustApiService;
 use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\InfoParserInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\State\StateInterface;
+use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGeneratorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -58,6 +61,13 @@ class HeadlessApiKeys extends AcquiaCMSDashboardBase {
   protected $entityTypeManager;
 
   /**
+   * Provides Robust API Service.
+   *
+   * @var \Drupal\acquia_cms_headless\Service\RobustApiService
+   */
+  protected $robustApiService;
+
+  /**
    * Provides module name.
    *
    * @var string
@@ -67,9 +77,10 @@ class HeadlessApiKeys extends AcquiaCMSDashboardBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser, EntityTypeManagerInterface $entity_type_manager, RobustApiService $robust_api_serivce) {
     parent::__construct($state, $module_handler, $link_generator, $info_parser);
     $this->entityTypeManager = $entity_type_manager;
+    $this->robustApiService = $robust_api_serivce;
   }
 
   /**
@@ -81,7 +92,8 @@ class HeadlessApiKeys extends AcquiaCMSDashboardBase {
       $container->get('module_handler'),
       $container->get('link_generator'),
       $container->get('info_parser'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('acquia_cms_headless.robustapi')
     );
   }
 
@@ -140,7 +152,88 @@ class HeadlessApiKeys extends AcquiaCMSDashboardBase {
         'data' => $this->t('Secret'),
         'specifier' => 'secret',
       ],
+      $this->t('Operations'),
     ];
+  }
+
+  /**
+   * A function that builds an array of entity operation links.
+   *
+   * @param string $entityType
+   *   Accepts an entity type id string value.
+   *
+   * @return array
+   *   Return an array of operation links.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityMalformedException
+   */
+  public function createOperationLinks(string $entityType): array {
+    // Initialize the array that we will eventually return.
+    $operations = [];
+
+    // Set some service variables.
+    $user_data = $this->getEntityData();
+    $storage = $this->entityTypeManager;
+    $entityStorage = $storage->getStorage($entityType);
+    $entities = $entityStorage->loadMultiple($user_data);
+    $destination = $this->robustApiService->dashboardDestination();
+
+    // Set an array of URI Relationships that will be used to build the
+    // operations links.
+    $operationLinks = [
+      'edit' => [
+        'title' => $this->t('Edit'),
+        'route' => 'edit-form',
+      ],
+      'delete' => [
+        'title' => $this->t('Title'),
+        'route' => 'delete-form',
+      ],
+      'clone' => [
+        'title' => $this->t('Clone'),
+        'route' => 'clone-form',
+      ],
+      'generate_secret' => [
+        'title' => $this->t('New Secret'),
+        'route' => 'acquia_cms_headless.generate_secret',
+      ],
+    ];
+
+    foreach ($entities as $entity) {
+      $operation = [];
+      foreach ($operationLinks as $key => $operationLink) {
+        if ($key == 'generate_secret') {
+          $operation[$key] = [
+            'url' => Url::fromRoute($operationLink['route'], ['consumer' => $entity->id()], $destination),
+            'title' => $operationLink['title'],
+            'attributes' => [
+              'class' => [
+                'use-ajax',
+              ],
+              'data-dialog-options' => Json::encode([
+                'minHeight' => 400,
+                'width' => 912,
+              ]),
+              'data-dialog-type' => 'modal',
+              'data-ajax-progress' => "fullscreen",
+            ],
+          ];
+        }
+        else {
+          $route_name = $entity->toUrl($operationLink['route'])->getRouteName();
+          $operation[$key] = [
+            'url' => Url::fromRoute($route_name, ['consumer' => $entity->id()], $destination),
+            'title' => $operationLink['title'],
+          ];
+        }
+      }
+
+      $operations[$entity->id()] = $operation;
+    }
+
+    return $operations;
   }
 
   /**
@@ -152,13 +245,15 @@ class HeadlessApiKeys extends AcquiaCMSDashboardBase {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
+   * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   public function buildEntityRows(): array {
-    // @todo Add operations links.
     $rows = [];
+    $entity_type = 'consumer';
     $consumer_data = $this->getEntityData();
-    $storage = $this->entityTypeManager->getStorage('consumer');
+    $storage = $this->entityTypeManager->getStorage($entity_type);
     $consumers = $storage->loadMultiple($consumer_data);
+    $operations = $this->createOperationLinks($entity_type);
 
     // Match the data with the columns.
     foreach ($consumers as $consumer) {
@@ -170,6 +265,13 @@ class HeadlessApiKeys extends AcquiaCMSDashboardBase {
         // is accessible via $secret[0]['value'].  Placeholder set for now to
         // show which consumers have a secret and which don't.
         'secret' => !empty($secret) ? '**********' : 'N/A',
+        'operations' => [
+          'data' => [
+            '#type' => 'dropbutton',
+            '#dropbutton_type' => 'small',
+            '#links' => $operations[$consumer->id()],
+          ],
+        ],
       ];
 
       $rows[$consumer->uuid()] = $row;
@@ -195,8 +297,30 @@ class HeadlessApiKeys extends AcquiaCMSDashboardBase {
       '#type' => 'fieldset',
       '#title' => $this->t('API Keys'),
       '#attributes' => [
-        'class' => ['use-ajax'],
+        'class' => [],
       ],
+    ];
+
+    $form[$module]['admin_links'] = [
+      '#type' => 'link',
+      '#title' => 'Generate New API Keys',
+      '#url' => Url::fromRoute('acquia_cms_headless.generate_keys'),
+      '#attributes' => [
+        'class' => [
+          'use-ajax',
+          'button',
+          'button--action',
+          'button--primary',
+        ],
+        'data-dialog-options' => Json::encode([
+          'minHeight' => 400,
+          'width' => 912,
+        ]),
+        'data-dialog-type' => 'modal',
+        'data-ajax-progress' => "fullscreen",
+      ],
+      '#prefix' => '<div class="headless-dashboard-admin-links">',
+      '#suffix' => '</div>',
     ];
 
     $form[$module]['table'] = [
