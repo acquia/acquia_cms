@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\InfoParserInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGeneratorInterface;
@@ -126,7 +127,7 @@ class HeadlessApiUsers extends AcquiaCMSDashboardBase {
     $query->condition('roles', 'headless');
     $query->range(0, 1);
     $query->tableSort($header);
-    $query->pager(2);
+    $query->pager(10);
 
     return $query->execute();
   }
@@ -243,8 +244,8 @@ class HeadlessApiUsers extends AcquiaCMSDashboardBase {
       }
 
       $row = [
-        'name' => $user->label(),
-        // Currently only displaying the headless user role.
+        'name' => Link::fromTextAndUrl($user->label(), $operations[$user->id()]['edit']['url']),
+        // Currently only displaying users assigned the headless role.
         'role' => $this->t('Headless Role'),
         'status' => $this->t('<span class="@status"></span>', ['@status' => $status]),
         'operations' => [

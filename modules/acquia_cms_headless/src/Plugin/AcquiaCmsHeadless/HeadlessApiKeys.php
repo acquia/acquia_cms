@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\InfoParserInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGeneratorInterface;
@@ -125,7 +126,7 @@ class HeadlessApiKeys extends AcquiaCMSDashboardBase {
     $storage = $this->entityTypeManager->getStorage('consumer');
     $query = $storage->getQuery();
     $query->tableSort($header);
-    $query->pager(2);
+    $query->pager(10);
 
     return $query->execute();
   }
@@ -192,7 +193,7 @@ class HeadlessApiKeys extends AcquiaCMSDashboardBase {
         'route' => 'edit-form',
       ],
       'delete' => [
-        'title' => $this->t('Title'),
+        'title' => $this->t('Delete'),
         'route' => 'delete-form',
       ],
       'clone' => [
@@ -259,11 +260,8 @@ class HeadlessApiKeys extends AcquiaCMSDashboardBase {
     foreach ($consumers as $consumer) {
       $secret = $consumer->getTypedData()->get('secret')->getValue();
       $row = [
-        'label' => $consumer->label(),
+        'label' => Link::fromTextAndUrl($consumer->label(), $operations[$consumer->id()]['edit']['url']),
         'client_id' => $consumer->uuid(),
-        // @todo Determine purpose of the secret here as only a hashed version
-        // is accessible via $secret[0]['value'].  Placeholder set for now to
-        // show which consumers have a secret and which don't.
         'secret' => !empty($secret) ? '**********' : 'N/A',
         'operations' => [
           'data' => [
@@ -301,6 +299,13 @@ class HeadlessApiKeys extends AcquiaCMSDashboardBase {
       ],
     ];
 
+    $form[$module]['info_text'] = [
+      '#type' => 'markup',
+      '#markup' => $this->t('<p>Consumer secrets are encrypted and cannot be displayed. Reset a consumer secret to obtain a new known value.</p>'),
+      '#prefix' => '<div class="headless-dashboard-admin-heading"><div class="headless-dashboard-user-info">',
+      '#suffix' => '</div>',
+    ];
+
     $form[$module]['admin_links'] = [
       '#type' => 'link',
       '#title' => 'Generate New API Keys',
@@ -320,7 +325,7 @@ class HeadlessApiKeys extends AcquiaCMSDashboardBase {
         'data-ajax-progress' => "fullscreen",
       ],
       '#prefix' => '<div class="headless-dashboard-admin-links">',
-      '#suffix' => '</div>',
+      '#suffix' => '</div></div>',
     ];
 
     $form[$module]['table'] = [

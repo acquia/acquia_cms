@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\InfoParserInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGeneratorInterface;
@@ -135,7 +136,7 @@ class HeadlessNextSites extends AcquiaCMSDashboardBase {
     $storage = $this->entityTypeManager->getStorage('next_site');
     $query = $storage->getQuery();
     $query->tableSort($header);
-    $query->pager(2);
+    $query->pager(10);
 
     return $query->execute();
   }
@@ -202,7 +203,7 @@ class HeadlessNextSites extends AcquiaCMSDashboardBase {
         'route' => 'edit-form',
       ],
       'delete' => [
-        'title' => $this->t('Title'),
+        'title' => $this->t('Delete'),
         'route' => 'delete-form',
       ],
       'clone' => [
@@ -272,10 +273,13 @@ class HeadlessNextSites extends AcquiaCMSDashboardBase {
 
     // Match the data with the columns.
     foreach ($sites as $site) {
+      $site_link = $site->getTypedData()->get('base_url')->getValue();
+      $site_uri = Url::fromUri($site_link, ['external' => TRUE]);
+
       $row = [
-        'id' => $site->id(),
+        'id' => Link::fromTextAndUrl($site->id(), $operations[$site->id()]['edit']['url']),
         'label' => $site->label(),
-        'base_url' => $site->getTypedData()->get('base_url')->getValue(),
+        'base_url' => Link::fromTextAndUrl($site_link, $site_uri),
         'operations' => [
           'data' => [
             '#type' => 'dropbutton',

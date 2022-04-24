@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\InfoParserInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGeneratorInterface;
@@ -124,7 +125,7 @@ class HeadlessNextEntityTypes extends AcquiaCMSDashboardBase {
     $storage = $this->entityTypeManager->getStorage('next_entity_type_config');
     $query = $storage->getQuery();
     $query->tableSort($header);
-    $query->pager(2);
+    $query->pager(10);
 
     return $query->execute();
   }
@@ -151,7 +152,65 @@ class HeadlessNextEntityTypes extends AcquiaCMSDashboardBase {
         'data' => $this->t('Site'),
         'specifier' => 'site',
       ],
+      $this->t('Operations'),
     ];
+  }
+
+  /**
+   * A function that builds an array of entity operation links.
+   *
+   * @param string $entityType
+   *   Accepts an entity type id string value.
+   *
+   * @return array
+   *   Return an array of operation links.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityMalformedException
+   */
+  public function createOperationLinks(string $entityType): array {
+    // Initialize the array that we will eventually return.
+    $operations = [];
+
+    // Set some service variables.
+    $user_data = $this->getEntityData();
+    $storage = $this->entityTypeManager;
+    $entityStorage = $storage->getStorage($entityType);
+    $entities = $entityStorage->loadMultiple($user_data);
+    $destination = $this->robustApiService->dashboardDestination();
+
+    // Set an array of URI Relationships that will be used to build the
+    // operations links.
+    $operationLinks = [
+      'edit' => [
+        'title' => $this->t('Edit'),
+        'route' => 'edit-form',
+      ],
+      'delete' => [
+        'title' => $this->t('Delete'),
+        'route' => 'delete-form',
+      ],
+      'clone' => [
+        'title' => $this->t('Clone'),
+        'route' => 'clone-form',
+      ],
+    ];
+
+    foreach ($entities as $entity) {
+      $operation = [];
+      foreach ($operationLinks as $key => $operationLink) {
+        $route_name = $entity->toUrl($operationLink['route'])->getRouteName();
+        $operation[$key] = [
+          'url' => Url::fromRoute($route_name, [$entityType => $entity->id()], $destination),
+          'title' => $operationLink['title'],
+        ];
+      }
+
+      $operations[$entity->id()] = $operation;
+    }
+
+    return $operations;
   }
 
   /**
@@ -163,15 +222,19 @@ class HeadlessNextEntityTypes extends AcquiaCMSDashboardBase {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
+   * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   public function buildEntityRows(): array {
-    // @todo Add operations links.
     $rows = [];
+    $entity_type = 'next_entity_type_config';
     $next_entities = $this->getEntityData();
     $next_type_storage = $this->entityTypeManager->getStorage('next_entity_type_config');
     $next_types = $next_type_storage->loadMultiple($next_entities);
     $next_sites = $this->entityTypeManager->getStorage('next_site');
     $node_types = $this->entityTypeManager->getStorage('node_type');
+    $operations = $this->createOperationLinks($entity_type);
+    // Call the dashboard destination service.
+    $destination = $this->robustApiService->dashboardDestination();
 
     foreach ($next_types as $next_type) {
       // Init some variables.
@@ -192,7 +255,10 @@ class HeadlessNextEntityTypes extends AcquiaCMSDashboardBase {
 
       // If the entity type is a node, get the entity type label.
       if (!empty($node_types)) {
-        $bundle = $node_types->load($entity_data[1])->label();
+        $node_type = $node_types->load($entity_data[1]);
+        $bundle_label = $node_type->label();
+        $bundle_uri = $node_type->toUrl('edit-form', $destination);
+        $bundle = Link::fromTextAndUrl($bundle_label, $bundle_uri);
       }
       // Else return a capitalized version of the bundle id.
       else {
@@ -201,9 +267,16 @@ class HeadlessNextEntityTypes extends AcquiaCMSDashboardBase {
 
       // Match the data with the columns.
       $row = [
-        'entity_type' => ucfirst($entity_data[0]),
+        'entity_type' => Link::fromTextAndUrl(ucfirst($entity_data[0]), $operations[$next_type->id()]['edit']['url']),
         'bundle' => $bundle,
         'site' => "Site: $site_data",
+        'operations' => [
+          'data' => [
+            '#type' => 'dropbutton',
+            '#dropbutton_type' => 'small',
+            '#links' => $operations[$next_type->id()],
+          ],
+        ],
       ];
 
       $rows[$next_type->uuid()] = $row;
