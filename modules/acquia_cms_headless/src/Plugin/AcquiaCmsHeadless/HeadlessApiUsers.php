@@ -202,7 +202,7 @@ class HeadlessApiUsers extends AcquiaCMSDashboardBase {
       foreach ($operationLinks as $key => $operationLink) {
         $route_name = $entity->toUrl($operationLink['route'])->getRouteName();
         $operation[$key] = [
-          'url' => Url::fromRoute($route_name, ['user' => $entity->id()], $destination),
+          'url' => Url::fromRoute($route_name, [$entityType => $entity->id()], $destination),
           'title' => $operationLink['title'],
         ];
       }

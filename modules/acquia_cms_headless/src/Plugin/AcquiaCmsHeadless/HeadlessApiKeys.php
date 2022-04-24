@@ -183,6 +183,10 @@ class HeadlessApiKeys extends AcquiaCMSDashboardBase {
     // Set an array of URI Relationships that will be used to build the
     // operations links.
     $operationLinks = [
+      'consumer_secret' => [
+        'title' => $this->t('New Secret'),
+        'route' => 'acquia_cms_headless.generate_consumer_secret',
+      ],
       'edit' => [
         'title' => $this->t('Edit'),
         'route' => 'edit-form',
@@ -195,18 +199,14 @@ class HeadlessApiKeys extends AcquiaCMSDashboardBase {
         'title' => $this->t('Clone'),
         'route' => 'clone-form',
       ],
-      'generate_secret' => [
-        'title' => $this->t('New Secret'),
-        'route' => 'acquia_cms_headless.generate_secret',
-      ],
     ];
 
     foreach ($entities as $entity) {
       $operation = [];
       foreach ($operationLinks as $key => $operationLink) {
-        if ($key == 'generate_secret') {
+        if ($key == 'consumer_secret') {
           $operation[$key] = [
-            'url' => Url::fromRoute($operationLink['route'], ['consumer' => $entity->id()], $destination),
+            'url' => Url::fromRoute($operationLink['route'], [$entityType => $entity->id()], $destination),
             'title' => $operationLink['title'],
             'attributes' => [
               'class' => [

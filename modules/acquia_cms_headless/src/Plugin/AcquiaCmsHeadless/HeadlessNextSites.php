@@ -4,6 +4,7 @@ namespace Drupal\acquia_cms_headless\Plugin\AcquiaCmsHeadless;
 
 use Drupal\acquia_cms_headless\Service\RobustApiService;
 use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\InfoParserInterface;
@@ -68,18 +69,18 @@ class HeadlessNextSites extends AcquiaCMSDashboardBase {
   protected $entityTypeManager;
 
   /**
-   * Provides module name.
-   *
-   * @var string
-   */
-  protected $module = 'next';
-
-  /**
    * Provides Robust API Service.
    *
    * @var \Drupal\acquia_cms_headless\Service\RobustApiService
    */
   protected $robustApiService;
+
+  /**
+   * Provides module name.
+   *
+   * @var string
+   */
+  protected $module = 'next';
 
   /**
    * {@inheritdoc}
@@ -161,7 +162,93 @@ class HeadlessNextSites extends AcquiaCMSDashboardBase {
         'data' => $this->t('Site URL'),
         'specifier' => 'base_url',
       ],
+      $this->t('Operations'),
     ];
+  }
+
+  /**
+   * A function that builds an array of entity operation links.
+   *
+   * @param string $entityType
+   *   Accepts an entity type id string value.
+   *
+   * @return array
+   *   Return an array of operation links.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityMalformedException
+   */
+  public function createOperationLinks(string $entityType): array {
+    // Initialize the array that we will eventually return.
+    $operations = [];
+
+    // Set some service variables.
+    $user_data = $this->getEntityData();
+    $storage = $this->entityTypeManager;
+    $entityStorage = $storage->getStorage($entityType);
+    $entities = $entityStorage->loadMultiple($user_data);
+    $destination = $this->robustApiService->dashboardDestination();
+
+    // Set an array of URI Relationships that will be used to build the
+    // operations links.
+    $operationLinks = [
+      'env_vars' => [
+        'title' => $this->t('Environment variables'),
+        'route' => 'environment-variables',
+      ],
+      'edit' => [
+        'title' => $this->t('Edit'),
+        'route' => 'edit-form',
+      ],
+      'delete' => [
+        'title' => $this->t('Title'),
+        'route' => 'delete-form',
+      ],
+      'clone' => [
+        'title' => $this->t('Clone'),
+        'route' => 'clone-form',
+      ],
+      'preview_secret' => [
+        'title' => $this->t('New preview secret'),
+        'route' => 'acquia_cms_headless.generate_preview_secret',
+      ],
+    ];
+
+    foreach ($entities as $entity) {
+      $operation = [];
+      foreach ($operationLinks as $key => $operationLink) {
+        if ($key == 'preview_secret' || 'env_vars') {
+          $route_name = ($key == 'preview_secret') ? $operationLink['route'] : $entity->toUrl($operationLink['route'])->getRouteName();
+          $operation[$key] = [
+            'url' => Url::fromRoute($route_name, [$entityType => $entity->id()], $destination),
+            'title' => $operationLink['title'],
+            'attributes' => [
+              'class' => [
+                'use-ajax',
+              ],
+              'data-dialog-options' => Json::encode([
+                'minHeight' => 400,
+                'width' => 912,
+              ]),
+              'data-dialog-type' => 'modal',
+              'data-ajax-progress' => "fullscreen",
+            ],
+          ];
+        }
+        else {
+          $route_name = $entity->toUrl($operationLink['route'])->getRouteName();
+          $operation[$key] = [
+            'url' => Url::fromRoute($route_name, [$entityType => $entity->id()], $destination),
+            'title' => $operationLink['title'],
+          ];
+        }
+      }
+
+      $operations[$entity->id()] = $operation;
+    }
+
+    return $operations;
   }
 
   /**
@@ -173,13 +260,15 @@ class HeadlessNextSites extends AcquiaCMSDashboardBase {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
+   * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   public function buildEntityRows(): array {
-    // @todo Add operations links.
     $rows = [];
+    $entity_type = 'next_site';
     $next_sites = $this->getEntityData();
-    $storage = $this->entityTypeManager->getStorage('next_site');
+    $storage = $this->entityTypeManager->getStorage($entity_type);
     $sites = $storage->loadMultiple($next_sites);
+    $operations = $this->createOperationLinks($entity_type);
 
     // Match the data with the columns.
     foreach ($sites as $site) {
@@ -187,6 +276,13 @@ class HeadlessNextSites extends AcquiaCMSDashboardBase {
         'id' => $site->id(),
         'label' => $site->label(),
         'base_url' => $site->getTypedData()->get('base_url')->getValue(),
+        'operations' => [
+          'data' => [
+            '#type' => 'dropbutton',
+            '#dropbutton_type' => 'small',
+            '#links' => $operations[$site->id()],
+          ],
+        ],
       ];
 
       $rows[$site->uuid()] = $row;
@@ -220,16 +316,15 @@ class HeadlessNextSites extends AcquiaCMSDashboardBase {
     ];
 
     $form[$module]['admin_links'] = [
-      '#type' => 'dropbutton',
+      '#type' => 'link',
       '#dropbutton_type' => 'small',
-      '#links' => [
-        'add' => [
-          'title' => 'Add Next.js site',
-          'url' => Url::fromUri('internal:/admin/config/services/next/sites/add', $destination),
-        ],
-        'settings' => [
-          'title' => 'Next.js Settings',
-          'url' => Url::fromRoute('next.settings', [], $destination),
+      '#title' => 'Add Next.js site',
+      '#url' => Url::fromRoute('entity.next_site.add_form', [], $destination),
+      '#attributes' => [
+        'class' => [
+          'button',
+          'button--action',
+          'button--primary',
         ],
       ],
       '#prefix' => '<div class="headless-dashboard-admin-links">',
