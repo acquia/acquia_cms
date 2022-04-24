@@ -118,7 +118,7 @@ class RobustApiService {
       $container->get('entity_type.manager'),
       $container->get('simple_oauth.key.generator'),
       $container->get('messenger'),
-      $container->get('site.path'),
+      $container->getParameter('site.path'),
       $container->get('file_system')
     );
   }
@@ -351,9 +351,13 @@ class RobustApiService {
   public function generateOauthKeys() {
     // Create the directory.
     $file_system = $this->fileSystem;
+    // Call the site path service.
+    $site_path = $this->sitePath;
+    // Separate the site path array.
+    $site_path = explode('/', $site_path);
 
     // Set the base path of the keys directory.
-    $dir = "../oauth/$this->sitePath";
+    $dir = "../oauth_keys/$site_path[0]/$site_path[1]";
 
     // Create the directory if it doesn't already exist.
     if (!is_dir($dir)) {
