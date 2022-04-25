@@ -9,14 +9,11 @@
  * Implements hook_install().
  */
 function acquia_cms_headless_install() {
-  \Drupal::messenger()->addStatus(__FUNCTION__);
-}
+  // Call the headless service.
+  $headless_user = \Drupal::service('acquia_cms_headless.robustapi');
 
-/**
- * Implements hook_uninstall().
- */
-function acquia_cms_headless_uninstall() {
-  \Drupal::messenger()->addStatus(__FUNCTION__);
+  // Programmatically create a new "headless" user.
+  $headless_user->createHeadlessUser();
 }
 
 /**
