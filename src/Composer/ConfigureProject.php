@@ -15,6 +15,8 @@ final class ConfigureProject {
    *
    * @param \Composer\Script\Event $event
    *   The script event.
+   *
+   * @throws \Seld\JsonLint\ParsingException
    */
   public static function execute(Event $event) {
     $arguments = $event->getArguments();
@@ -22,7 +24,7 @@ final class ConfigureProject {
     $target = new JsonFile($arguments[0] . '/composer.json');
     $project = $target->read();
 
-    $project['name'] = 'acquia/acquia-cms-project';
+    $project['name'] = 'acquia/drupal-recommended-project';
     $project['extra']['installer-paths']['libraries/{$name}'] = [
       'type:drupal-library',
       'type:bower-asset',
