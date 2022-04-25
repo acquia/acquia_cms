@@ -197,8 +197,6 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
     // either need to enable or disable modules related to pure headless mode.
     if ($config_headless != $acms_headless_mode) {
       if ($acms_headless_mode) {
-        // @todo Complete tasks to install pure headless when turned on.
-        // See ACMS-1062.
         try {
           // Install the Acquia CMS Pure headless module.
           $this->moduleInstaller->install(['acquia_cms_headless_ui']);
@@ -209,8 +207,6 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
         }
       }
       else {
-        // @todo Complete tasks to uninstall pure headless when turned off.
-        // See ACMS-1062.
         $this->moduleInstaller->uninstall(['acquia_cms_headless_ui']);
         $this->messenger()->addStatus($this->t('Acquia CMS Pure Headless has been disabled.'));
       }

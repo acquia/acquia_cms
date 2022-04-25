@@ -17,6 +17,9 @@ function acquia_cms_headless_ui_install() {
 
   // Update configurations for the Headless UI.
   $headlessUi->updateHeadlessUiConfig(TRUE);
+
+  // Clear caches to make sure updates are reflected.
+  drupal_flush_all_caches();
 }
 
 /**
@@ -31,4 +34,7 @@ function acquia_cms_headless_ui_uninstall() {
 
   // Update configurations for the Headless UI.
   $headlessUi->updateHeadlessUiConfig(FALSE);
+
+  // Clear caches to ensure all headless ui changes are reversed.
+  drupal_flush_all_caches();
 }
