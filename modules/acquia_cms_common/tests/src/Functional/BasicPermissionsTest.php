@@ -112,6 +112,25 @@ class BasicPermissionsTest extends BrowserTestBase {
       'view the administration theme',
     ]);
 
+    // Site Studio element permissions test.
+    $site_studio_elements_permissions = [
+      'access cpt_cat_accordion_components cohesion_component_category group',
+      'access cpt_cat_basic_components cohesion_component_category group',
+      'access cpt_cat_card_components cohesion_component_category group',
+      'access cpt_cat_feature_sections cohesion_component_category group',
+      'access cpt_cat_read_more_components cohesion_component_category group',
+      'access cpt_cat_slider_components cohesion_component_category group',
+      'access cpt_cat_tab_components cohesion_component_category group',
+      'access hlp_cat_hero_sections cohesion_helper_category group',
+      'access hlp_cat_miscellaneous cohesion_helper_category group',
+      'access hlp_cat_page_layouts cohesion_helper_category group',
+      'access hlp_cat_slider_sections cohesion_helper_category group',
+      'access hlp_cat_text_sections cohesion_helper_category group',
+      'access visual page builder',
+    ];
+    $this->assertPermissions('content_author', $site_studio_elements_permissions);
+    $this->assertPermissions('content_administrator', $site_studio_elements_permissions);
+
     $cohesion_permissions = [
       'use text format cohesion',
       'access cohesion sync',

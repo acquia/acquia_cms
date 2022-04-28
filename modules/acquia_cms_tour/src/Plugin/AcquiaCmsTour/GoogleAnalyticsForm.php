@@ -112,10 +112,11 @@ class GoogleAnalyticsForm extends AcquiaCMSDashboardBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $property_id = $form_state->getValue(['web_property_id']);
-    $this->config('google_analytics.settings')->set('account', $property_id)->save();
-    $this->state->set('google_analytics_progress', TRUE);
-    $this->messenger()->addStatus('The configuration options have been saved.');
-
+    if ($property_id) {
+      $this->config('google_analytics.settings')->set('account', $property_id)->save();
+      $this->state->set('google_analytics_progress', TRUE);
+      $this->messenger()->addStatus('The configuration options have been saved.');
+    }
     // Update state.
     $this->setConfigurationState();
   }

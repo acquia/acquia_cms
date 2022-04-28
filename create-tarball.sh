@@ -8,16 +8,20 @@ else
   ARCHIVE=acms
 fi
 
-composer create-project --no-install acquia/acquia-cms-project $ARCHIVE
+composer create-project --no-install drupal/legacy-project $ARCHIVE
 composer dump-autoload
 composer configure-tarball $ARCHIVE
 
 cd $ARCHIVE
 if [ $1 ] ; then
-  composer require --no-update "ext-dom:*" "acquia/acquia_cms:$1"
+  composer require --no-update "ext-dom:*" "acquia/acquia_cms:$1" cweagans/composer-patches
 else
-  composer require --no-update "ext-dom:*"
+  composer require --no-update "ext-dom:*" "acquia/acquia_cms" cweagans/composer-patches
 fi
+composer config minimum-stability dev
+# Allow scaffolding from acquia_cms
+composer config --json --merge extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms"]'
+composer config prefer-stable true
 composer update
 
 # Wrap it all up in a nice compressed tarball.
