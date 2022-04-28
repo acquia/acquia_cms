@@ -17,13 +17,13 @@ npx create-next-app -e https://github.com/acquia/next-acms
 
 Once Acquia CMS and ACMS.NEXT library are installed, in your drupal site go to the Extend menu and enable Acquia CMS Headless module. In the top bar menu link select "Tour", which takes you to the "Get Started" page. Click the "Get Started" button. You will see your dashboard. Locate the "Headless" section to reveal two checkbox options: 
 
-* **Enable Robust API capabilities** When the Robust API option is enabled, dependencies related to the Next.js module will be enabled providing users with the ability to use Drupal as a backend for a decoupled NodeJS app while also retaining Drupal’s default front-end. E.g., with a custom theme.
+* **Enable Next.js starter kit** When the Next.js starter kit option is enabled, dependencies related to the Next.js module will be enabled providing users with the ability to use Drupal as a backend for a decoupled NodeJS app while also retaining Drupal’s default front-end. E.g., with a custom theme.
  
 * **Enable Headless mode** When Headless Mode is enabled, it turns on all the capabilities that allows Drupal to be used as a backend for a decoupled Node JS app AND turns off all of Drupal’s front-end features so that the application is purely headless.
 
 	_Unchecking these boxes will revert any changes_
 
-### Enable Robust API capabilities
+### Enable Next.js starter kit
 **Important** When you click the save button, the initialization service is run and you will be presented with your secret and additional information. 
 
 This is an opinionated architecture and automates the many steps required to set up a partially headless site. This option will automatically create a consumer, keys, user with role and permissions, and a next js site. However, you will need to set your env.local file manually. Rename the env.example file in your local filesystem inside your next project folder to env.local and per the following (see /admin/config/services/next/sites/headless/env):

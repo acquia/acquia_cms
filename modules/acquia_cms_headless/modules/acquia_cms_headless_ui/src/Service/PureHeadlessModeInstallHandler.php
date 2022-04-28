@@ -12,9 +12,9 @@ use Drupal\path_alias\Entity\PathAlias;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Install handlers for Headless Robust API.
+ * Install handlers for Headless Next.js Starterkit.
  *
- * Provides a series of helper functions for setting up the Robust API and
+ * Provides a series of helper functions for setting up the Next.js Starterkit and
  * the various entity types used by it.
  */
 class PureHeadlessModeInstallHandler {

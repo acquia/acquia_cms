@@ -10,7 +10,7 @@
  */
 function acquia_cms_headless_install() {
   // Call the headless service.
-  $headless_user = \Drupal::service('acquia_cms_headless.robustapi');
+  $headless_user = \Drupal::service('acquia_cms_headless.starterkit_nextjs');
 
   // Programmatically create a new "headless" user.
   $headless_user->createHeadlessUser();

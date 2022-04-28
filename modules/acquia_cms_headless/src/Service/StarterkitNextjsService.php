@@ -16,14 +16,18 @@ use Drupal\Core\Url;
 use Drupal\simple_oauth\Service\KeyGeneratorService;
 use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Drupal\Core\Http\RequestStack;
+use Drupal\next\Entity\NextSite;
+use Drupal\Core\Render\Markup;
 
 /**
- * A service for the initialization of the Headless Robust API.
+ * A service for the initialization of the Headless Next.js starter kit.
  *
- * Provides a series of helper functions for setting up the Robust API and
+ * Provides a series of helper functions for setting up the Next.js starter kit and
  * the various entity types used by it.
  */
-class RobustApiService {
+class StarterkitNextjsService {
   use StringTranslationTrait;
 
   /**
@@ -76,7 +80,21 @@ class RobustApiService {
   protected $fileSystem;
 
   /**
-   * Injects various services used in the Robust API Service.
+   * The current request.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
+   * Generated consumer secret.
+   *
+   * @var string
+   */
+  protected $consumerSecret;
+
+  /**
+   * Injects various services used in the Next.js starter kit Service.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Gets config data.
@@ -92,8 +110,10 @@ class RobustApiService {
    *   Gets the site path, useful in cases of multi-site arrangements.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   Lets us create a directory.
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The current request.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, DefaultPasswordGenerator $defaultPasswordGenerator, EntityTypeManagerInterface $entity_type_manager, KeyGeneratorService $key_generator_service, MessengerInterface $messenger, string $site_path, FileSystemInterface $file_system) {
+  public function __construct(ConfigFactoryInterface $config_factory, DefaultPasswordGenerator $defaultPasswordGenerator, EntityTypeManagerInterface $entity_type_manager, KeyGeneratorService $key_generator_service, MessengerInterface $messenger, string $site_path, FileSystemInterface $file_system, RequestStack $request_stack) {
     $this->configFactory = $config_factory;
     $this->defaultPasswordGenerator = $defaultPasswordGenerator;
     $this->entityTypeManager = $entity_type_manager;
@@ -101,6 +121,7 @@ class RobustApiService {
     $this->messenger = $messenger;
     $this->sitePath = $site_path;
     $this->fileSystem = $file_system;
+    $this->request = $request_stack->getCurrentRequest();
   }
 
   /**
@@ -119,7 +140,8 @@ class RobustApiService {
       $container->get('simple_oauth.key.generator'),
       $container->get('messenger'),
       $container->getParameter('site.path'),
-      $container->get('file_system')
+      $container->get('file_system'),
+      $container->get('request_stack')->getCurrentRequest()
     );
   }
 
@@ -130,26 +152,21 @@ class RobustApiService {
     try {
       $consumers = $this->getHeadlessConsumerData();
       $consumer_route = Url::fromRoute('entity.consumer.collection')->toString();
-      $secret = $this->createHeadlessSecret();
       $user = $this->getHeadlessUserData();
 
       if (!empty($user) && empty($consumers)) {
+        $this->consumerSecret = $this->createHeadlessSecret();
         $consumer = Consumer::create();
         $consumer->set('label', 'Headless Site 1');
-        $consumer->set('secret', $secret);
-        $consumer->set('description', 'This client is provided by the acquia_cms_headless_robustapi module.');
+        $consumer->set('secret', $this->consumerSecret);
+        $consumer->set('description', 'This client is provided by the acquia_cms_headless_starterkit_nextjs module.');
         $consumer->set('is_default', TRUE);
         $consumer->set('redirect', 'http://localhost:3000');
         $consumer->set('roles', 'headless');
         $consumer->set('user_id', $user->id());
         $consumer->save();
 
-        // Provide a one time message to the admin so they can save the
-        // consumer secret before it's stored in a hash key.
-        $this->messenger->addStatus($this->t('Your Oauth consumer secret has been generated for you and is: <h2>@secret</h2> Please store this value as it cannot be retrieved. Alternatively you can generate a new secret via the <a href="@link">Consumer UI</a>', [
-          '@secret' => $secret,
-          '@link' => $consumer_route,
-        ]));
+        return $consumer;
       }
     }
     catch (EntityStorageException | InvalidPluginDefinitionException | PluginNotFoundException $e) {
@@ -175,10 +192,10 @@ class RobustApiService {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function createHeadlessSite() {
-    $next_site_id = $this->getHeadlessSiteId();
+    $next_site = $this->getHeadlessSite();
     $next_object = $this->entityTypeManager->getStorage('next_site');
     $preview_secret = $this->createHeadlessSecret();
-    if (!$next_site_id) {
+    if (!$next_site) {
       $next_object->create([
         'id' => 'headless',
         'label' => 'Headless Site 1',
@@ -187,6 +204,7 @@ class RobustApiService {
         'preview_secret' => $preview_secret,
       ])->save();
     }
+    return $this->getHeadlessSite();
   }
 
   /**
@@ -420,16 +438,11 @@ class RobustApiService {
   /**
    * Check to see if our default next.js site exists.
    *
-   * @return bool
-   *   Returns a True/False value.
-   *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getHeadlessSiteId(): bool {
-    $next_site = $this->entityTypeManager->getStorage('next_site')->load('headless');
-
-    return !empty($next_site);
+  public function getHeadlessSite() {
+    return $this->entityTypeManager->getStorage('next_site')->load('headless');
   }
 
   /**
@@ -462,7 +475,7 @@ class RobustApiService {
   }
 
   /**
-   * A method that initializes the Robust Api.
+   * A method that initializes the Next.js starter kit.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -470,7 +483,7 @@ class RobustApiService {
    * @throws \Drupal\simple_oauth\Service\Exception\ExtensionNotLoadedException
    * @throws \Drupal\simple_oauth\Service\Exception\FilesystemValidationException
    */
-  public function initRobustApi() {
+  public function initStarterkitNextjs() {
     // Check to see if Headless user still exists, and if not, recreate it.
     $this->createHeadlessUser();
 
@@ -484,7 +497,7 @@ class RobustApiService {
     $this->createHeadlessConsumer();
 
     // Create a Next.js Site.
-    $this->createHeadlessSite();
+    $site = $this->createHeadlessSite();
 
     // Create a set of Next.js Entity types based on available Node Types.
     $this->createHeadlessSiteEntities();
@@ -497,16 +510,53 @@ class RobustApiService {
     if (!empty($this->getHeadlessUserData())) {
       $config->set('user_uuid', $this->getHeadlessUserData()->uuid());
     }
+    $this->buildEnvironmentVariables($site);
+  }
+
+  protected function buildEnvironmentVariables(NextSite $next_site) {
+    $variables = [
+      'NEXT_PUBLIC_DRUPAL_BASE_URL' => $this->request->getSchemeAndHttpHost(),
+      'NEXT_IMAGE_DOMAIN' => $this->request->getHost(),
+      'DRUPAL_SITE_ID' => $next_site->id(),
+      'DRUPAL_FRONT_PAGE' => $this->configFactory->get('system.site')->get('page.front'),
+    ];
+
+    if ($secret = $next_site->getPreviewSecret()) {
+      $variables += [
+        'DRUPAL_PREVIEW_SECRET' => $secret,
+        'DRUPAL_CLIENT_ID' => $this->getHeadlessConsumerData()->uuid(),
+        'DRUPAL_CLIENT_SECRET' => $this->consumerSecret ?? 'insert secret here',
+      ];
+    }
+    $code = '';
+    foreach ($variables as $key => $value) {
+      $code .= $this->t("@key=@value\n", [
+        '@key' => $key,
+        '@value' => $value,
+      ]);
+    }
+    $this->messenger->addStatus($this->t("Use these environment variables for your Next.js application. Place them in your .env file: <pre class='codesnippet'>@code</pre>", [
+      '@code' => $code
+    ]));
+
+    if (!isset($this->consumerSecret)) {
+      $this->messenger->addWarning($this->t("The consumer secret cannot be retrieved. If you do not know this value, you can <a href=':link'>set a new secret</a>.", [
+        ':link' => Url::fromRoute('entity.consumer.edit_form',
+          ['consumer' => $this->getHeadlessConsumerData()->id(),
+          ['destination' => Url::createFromRequest($this->request)->toString()]
+        ])->toString()
+      ]));
+    }
   }
 
   /**
-   * A method resets the Robust API to its pre init state.
+   * A method resets the Next.js starter kit to its pre init state.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function resetRobustApi() {
+  public function resetStarterkitNextjs() {
     $config = $this->configFactory->getEditable('acquia_cms_headless.settings');
 
     // Remove the headless user if it exists.
