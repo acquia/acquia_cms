@@ -159,14 +159,12 @@ class StarterkitNextjsService {
         $consumer = Consumer::create();
         $consumer->set('label', 'Headless Site 1');
         $consumer->set('secret', $this->consumerSecret);
-        $consumer->set('description', 'This client is provided by the acquia_cms_headless_starterkit_nextjs module.');
+        $consumer->set('description', 'This client is provided by the acquia_cms_headless module.');
         $consumer->set('is_default', TRUE);
         $consumer->set('redirect', 'http://localhost:3000');
         $consumer->set('roles', 'headless');
         $consumer->set('user_id', $user->id());
         $consumer->save();
-
-        return $consumer;
       }
     }
     catch (EntityStorageException | InvalidPluginDefinitionException | PluginNotFoundException $e) {
@@ -513,6 +511,11 @@ class StarterkitNextjsService {
     $this->buildEnvironmentVariables($site);
   }
 
+  /**
+   * Build the Next.js environment variables for the generated NextSite.
+   *
+   * @param Drupal\next\Entity\NextSite $next_site 
+   */
   protected function buildEnvironmentVariables(NextSite $next_site) {
     $variables = [
       'NEXT_PUBLIC_DRUPAL_BASE_URL' => $this->request->getSchemeAndHttpHost(),
