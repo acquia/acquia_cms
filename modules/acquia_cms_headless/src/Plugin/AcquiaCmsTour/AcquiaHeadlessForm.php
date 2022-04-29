@@ -114,7 +114,6 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
         '#type' => 'checkbox',
         '#required' => FALSE,
         '#title' => $this->t('Enable Headless mode'),
-        // @todo Update description of Pure Headless enabling.
         '#description' => $this->t('When Headless Mode is enabled, it
           turns on all the capabilities that allows Drupal to be used as a
           backend for a decoupled Node JS app AND turns off all of Drupal’s
@@ -181,6 +180,7 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
         try {
           // Run the Robust API Initialization service.
           $this->robustApiService->initRobustApi();
+
           // Return a message to the user that the set has completed.
           $this->messenger()->addStatus($this->t('Acquia CMS Robust API has been enabled.'));
         }
