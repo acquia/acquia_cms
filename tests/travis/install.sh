@@ -42,7 +42,7 @@ if [[ "$ACMS_JOB" != "base" ]] && [[ "$ACMS_JOB" != "starter" ]] && [[ "$ORCA_JO
 fi
 
 # Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.
-composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms"]'
+composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms"]' --merge
 
 # Allow third party plugins so that they are not blocked when CI jobs run by ORCA.
 composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true;

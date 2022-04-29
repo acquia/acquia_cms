@@ -28,10 +28,10 @@
         "enable-patching": true,
         "patches": {
             "drupal/facets": {
-                "Fix the select/deselect facet link issue": "https://www.drupal.org/files/issues/2022-01-18/3259123-search-facet-reset-link.patch"
+                "3259123 - ViewsDisplayBase::isRenderedInCurrentRequest() doesn't let the facet link to reset to original URL": "https://www.drupal.org/files/issues/2022-01-18/3259123-search-facet-reset-link.patch"
             },
             "drupal/search_api": {
-                "Resolves call to member function preExecute() on null error on site install": "https://www.drupal.org/files/issues/2021-09-20/search_api_condition_cacheable_metadata.patch"
+                "3236696 - Call to a member function preExecute() on null in SearchApiTagCache->alterCacheMetadata()": "https://www.drupal.org/files/issues/2021-09-20/search_api_condition_cacheable_metadata.patch"
             }
         }
     },
