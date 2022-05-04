@@ -163,7 +163,7 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
           '#tag' => 'style',
           '#value' => $css,
         ],
-        'code-css'
+        'code-css',
       ];
 
       return $form;

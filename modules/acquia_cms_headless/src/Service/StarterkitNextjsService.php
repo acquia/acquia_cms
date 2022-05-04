@@ -9,23 +9,21 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Http\RequestStack;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Password\DefaultPasswordGenerator;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\next\Entity\NextSite;
 use Drupal\simple_oauth\Service\KeyGeneratorService;
 use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Drupal\Core\Http\RequestStack;
-use Drupal\next\Entity\NextSite;
-use Drupal\Core\Render\Markup;
 
 /**
  * A service for the initialization of the Headless Next.js starter kit.
  *
- * Provides a series of helper functions for setting up the Next.js starter kit and
- * the various entity types used by it.
+ * Provides a series of helper functions for setting up the Next.js starter kit
+ * and the various entity types used by it.
  */
 class StarterkitNextjsService {
   use StringTranslationTrait;
@@ -110,7 +108,7 @@ class StarterkitNextjsService {
    *   Gets the site path, useful in cases of multi-site arrangements.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   Lets us create a directory.
-   * @param \Symfony\Component\HttpFoundation\Request $request
+   * @param \Drupal\Core\Http\RequestStack $request_stack
    *   The current request.
    */
   public function __construct(ConfigFactoryInterface $config_factory, DefaultPasswordGenerator $defaultPasswordGenerator, EntityTypeManagerInterface $entity_type_manager, KeyGeneratorService $key_generator_service, MessengerInterface $messenger, string $site_path, FileSystemInterface $file_system, RequestStack $request_stack) {
@@ -151,7 +149,6 @@ class StarterkitNextjsService {
   public function createHeadlessConsumer() {
     try {
       $consumers = $this->getHeadlessConsumerData();
-      $consumer_route = Url::fromRoute('entity.consumer.collection')->toString();
       $user = $this->getHeadlessUserData();
 
       if (!empty($user) && empty($consumers)) {
@@ -514,7 +511,8 @@ class StarterkitNextjsService {
   /**
    * Build the Next.js environment variables for the generated NextSite.
    *
-   * @param Drupal\next\Entity\NextSite $next_site 
+   * @param Drupal\next\Entity\NextSite $next_site
+   *   The NextSite to build environment variables for.
    */
   protected function buildEnvironmentVariables(NextSite $next_site) {
     $variables = [
@@ -539,15 +537,16 @@ class StarterkitNextjsService {
       ]);
     }
     $this->messenger->addStatus($this->t("Use these environment variables for your Next.js application. Place them in your .env file: <pre class='codesnippet'>@code</pre>", [
-      '@code' => $code
+      '@code' => $code,
     ]));
 
     if (!isset($this->consumerSecret)) {
       $this->messenger->addWarning($this->t("The consumer secret cannot be retrieved. If you do not know this value, you can <a href=':link'>set a new secret</a>.", [
         ':link' => Url::fromRoute('entity.consumer.edit_form',
-          ['consumer' => $this->getHeadlessConsumerData()->id(),
-          ['destination' => Url::createFromRequest($this->request)->toString()]
-        ])->toString()
+          [
+            'consumer' => $this->getHeadlessConsumerData()->id(),
+          ['destination' => Url::createFromRequest($this->request)->toString()],
+          ])->toString(),
       ]));
     }
   }
