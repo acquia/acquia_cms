@@ -1,6 +1,6 @@
 services:
-  acquia_cms_headless.robustapi:
-    class: Drupal\acquia_cms_headless\Service\RobustApiService
+  acquia_cms_headless.starterkit_nextjs:
+    class: Drupal\acquia_cms_headless\Service\StarterkitNextjsService
     arguments:
     - '@config.factory'
     - '@password_generator'
@@ -9,3 +9,4 @@ services:
     - '@messenger'
     - '%site.path%'
     - '@file_system'
+    - '@request_stack'

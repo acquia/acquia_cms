@@ -40,11 +40,11 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
   protected $module = 'acquia_cms_headless';
 
   /**
-   * Provides Robust API Service.
+   * Provides Next.js starter kit Service.
    *
-   * @var \Drupal\acquia_cms_headless\Service\RobustApiService
+   * @var \Drupal\acquia_cms_headless\Service\StarterkitNextjsService
    */
-  protected $robustApiService;
+  protected $starterkitNextjsService;
 
   /**
    * {@inheritdoc}
@@ -52,7 +52,7 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
   public static function create(ContainerInterface $container) {
     $instance = parent::create($container);
     $instance->moduleInstaller = $container->get('module_installer');
-    $instance->robustApiService = $container->get('acquia_cms_headless.robustapi');
+    $instance->starterkitNextjsService = $container->get('acquia_cms_headless.starterkit_nextjs');
 
     return $instance;
   }
@@ -97,17 +97,16 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
       ];
-      $form[$module]['robust_api'] = [
+      $form[$module]['starterkit_nextjs'] = [
         '#type' => 'checkbox',
         '#required' => FALSE,
-        '#title' => $this->t('Enable Robust API capabilities'),
-        // @todo Update description of Robust API enabling.
-        '#description' => $this->t('When the Robust API option is enabled,
-          dependencies related to the Next.js module will be enabled providing
-          users with the ability to use Drupal as a backend for a decoupled
-          NodeJS app while also retaining Drupal’s default front-end.
-          E.g., with a custom theme.'),
-        '#default_value' => (bool) $config->get('robust_api'),
+        '#title' => $this->t('Enable Next.js starter kit'),
+        // @todo Update description of Next.js starter kit enabling.
+        '#description' => $this->t('When the Next.js starter kit option is enabled,
+          dependencies related to the Next.js module will be enabled and a default
+          configuration will be initialized to ready Drupal to be connected with
+          a next.js application.'),
+        '#default_value' => (bool) $config->get('starterkit_nextjs'),
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
       ];
       $form[$module]['headless_mode'] = [
@@ -154,6 +153,19 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
         ];
       }
 
+      $css = '.messages pre.codesnippet { border: 1px solid white;
+        border-radius: 0.5em;
+        padding: 1em;
+        margin: 1em 0;
+        background-color: #333;';
+      $form['#attached']['html_head'][] = [
+        [
+          '#tag' => 'style',
+          '#value' => $css,
+        ],
+        'code-css',
+      ];
+
       return $form;
     }
   }
@@ -166,30 +178,30 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
     $config = $this->config('acquia_cms_headless.settings');
 
     // Get current form values so that we have something to compare against.
-    $config_robustapi = $config->get('robust_api');
+    $config_starterkit_nextjs = $config->get('starterkit_nextjs');
     $config_headless = $config->get('headless_mode');
 
     // Get form state values.
-    $acms_robustapi = $form_state->getValue(['robust_api']);
+    $acms_starterkit_nextjs = $form_state->getValue(['starterkit_nextjs']);
     $acms_headless_mode = $form_state->getValue(['headless_mode']);
 
     // Check to see on submit, if this is actually changing.  If yes, then we
-    // either need to enable or disable modules related to robust api.
-    if ($config_robustapi != $acms_robustapi) {
-      if ($acms_robustapi) {
+    // either need to enable or disable modules related to starterkit nextjs.
+    if ($config_starterkit_nextjs != $acms_starterkit_nextjs) {
+      if ($acms_starterkit_nextjs) {
         try {
-          // Run the Robust API Initialization service.
-          $this->robustApiService->initRobustApi();
+          // Run the Next.js starter kit Initialization service.
+          $this->starterkitNextjsService->initStarterkitNextjs();
 
           // Return a message to the user that the set has completed.
-          $this->messenger()->addStatus($this->t('Acquia CMS Robust API has been enabled.'));
+          $this->messenger()->addStatus($this->t('Acquia CMS Next.js starter kit has been enabled.'));
         }
         catch (InvalidPluginDefinitionException | PluginNotFoundException | EntityStorageException | ExtensionNotLoadedException | FilesystemValidationException $e) {
           $this->messenger()->addError($e);
         }
       }
       else {
-        $this->messenger()->addStatus($this->t('Acquia CMS Robust API has been disabled.'));
+        $this->messenger()->addStatus($this->t('Acquia CMS Next.js starter kit has been disabled.'));
       }
     }
 
@@ -214,7 +226,7 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
 
     // Proceed with form save and configuration settings actions.
     // Set and save the form values.
-    $this->config('acquia_cms_headless.settings')->set('robust_api', $acms_robustapi)->save();
+    $this->config('acquia_cms_headless.settings')->set('starterkit_nextjs', $acms_starterkit_nextjs)->save();
     $this->config('acquia_cms_headless.settings')->set('headless_mode', $acms_headless_mode)->save();
 
     // Set the config state.
@@ -232,9 +244,9 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
    * {@inheritdoc}
    */
   public function checkMinConfiguration(): bool {
-    $robust_api = (bool) $this->config('acquia_cms_headless.settings')->get('robust_api');
+    $starterkit_nextjs = (bool) $this->config('acquia_cms_headless.settings')->get('starterkit_nextjs');
     $headless_mode = (bool) $this->config('acquia_cms_headless.settings')->get('headless_mode');
-    return $robust_api && $headless_mode;
+    return $starterkit_nextjs && $headless_mode;
   }
 
 }
