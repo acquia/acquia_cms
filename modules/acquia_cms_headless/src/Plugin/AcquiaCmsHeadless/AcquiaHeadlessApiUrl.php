@@ -26,18 +26,18 @@ class AcquiaHeadlessApiUrl extends AcquiaCMSDashboardBase {
   protected $module = 'jsonapi_extras';
 
   /**
-   * Provides Robust API Service.
+   * Provides Starter Kit Next.js Service.
    *
-   * @var \Drupal\acquia_cms_headless\Service\RobustApiService
+   * @var \Drupal\acquia_cms_headless\Service\StarterkitNextjsService
    */
-  protected $robustApiService;
+  protected $starterKitNextjsService;
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     $instance = parent::create($container);
-    $instance->robustApiService = $container->get('acquia_cms_headless.robustapi');
+    $instance->starterKitNextjsService = $container->get('acquia_cms_headless.starterkit_nextjs');
 
     return $instance;
   }
@@ -70,7 +70,7 @@ class AcquiaHeadlessApiUrl extends AcquiaCMSDashboardBase {
     $jsonapi_image = $site_path . $headless_path . '/assets/images/json-api.png';
 
     // Set the destination query array.
-    $destination = $this->robustApiService->dashboardDestination();
+    $destination = $this->starterKitNextjsService->dashboardDestination();
 
     // Add prefix and suffix markup to implement a column layout.
     $form['#prefix'] = '<div class="layout-column layout-column--half">';

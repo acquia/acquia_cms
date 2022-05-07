@@ -2,7 +2,7 @@
 
 namespace Drupal\acquia_cms_headless\Plugin\AcquiaCmsHeadless;
 
-use Drupal\acquia_cms_headless\Service\RobustApiService;
+use Drupal\acquia_cms_headless\Service\StarterkitNextjsService;
 use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\InfoParserInterface;
@@ -61,11 +61,11 @@ class HeadlessApiUsers extends AcquiaCMSDashboardBase {
   protected $entityTypeManager;
 
   /**
-   * Provides Robust API Service.
+   * Provides Starter Kit Next.js Service.
    *
-   * @var \Drupal\acquia_cms_headless\Service\RobustApiService
+   * @var \Drupal\acquia_cms_headless\Service\StarterkitNextjsService
    */
-  protected $robustApiService;
+  protected $starterKitNextjsService;
 
   /**
    * Provides module name.
@@ -77,10 +77,10 @@ class HeadlessApiUsers extends AcquiaCMSDashboardBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser, EntityTypeManagerInterface $entity_type_manager, RobustApiService $robust_api_serivce) {
+  public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser, EntityTypeManagerInterface $entity_type_manager, StarterkitNextjsService $starterkit_nextjs_service) {
     parent::__construct($state, $module_handler, $link_generator, $info_parser);
     $this->entityTypeManager = $entity_type_manager;
-    $this->robustApiService = $robust_api_serivce;
+    $this->starterKitNextjsService = $starterkit_nextjs_service;
   }
 
   /**
@@ -93,7 +93,7 @@ class HeadlessApiUsers extends AcquiaCMSDashboardBase {
       $container->get('link_generator'),
       $container->get('info_parser'),
       $container->get('entity_type.manager'),
-      $container->get('acquia_cms_headless.robustapi')
+      $container->get('acquia_cms_headless.starterkit_nextjs')
     );
   }
 
@@ -180,7 +180,7 @@ class HeadlessApiUsers extends AcquiaCMSDashboardBase {
     $storage = $this->entityTypeManager;
     $entityStorage = $storage->getStorage($entityType);
     $entities = $entityStorage->loadMultiple($user_data);
-    $destination = $this->robustApiService->dashboardDestination();
+    $destination = $this->starterKitNextjsService->dashboardDestination();
 
     // Set an array of URI Relationships that will be used to build the
     // operations links.
@@ -271,7 +271,7 @@ class HeadlessApiUsers extends AcquiaCMSDashboardBase {
     $module = $this->module . '_api_users';
     $header = $this->buildEntityHeader();
     $rows = $this->buildEntityRows();
-    $destination = $this->robustApiService->dashboardDestination();
+    $destination = $this->starterKitNextjsService->dashboardDestination();
 
     // Add prefix and suffix markup to implement a column layout.
     $form['#prefix'] = '<div class="layout-column layout-column--half">';

@@ -2,7 +2,7 @@
 
 namespace Drupal\acquia_cms_headless\Controller;
 
-use Drupal\acquia_cms_headless\Service\RobustApiService;
+use Drupal\acquia_cms_headless\Service\StarterkitNextjsService;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -22,11 +22,11 @@ class HeadlessKeyGenerator extends ControllerBase {
   use stringtranslationtrait;
 
   /**
-   * Provides Robust API Service.
+   * Provides Starter Kit Next.js Service.
    *
-   * @var \Drupal\acquia_cms_headless\Service\RobustApiService
+   * @var \Drupal\acquia_cms_headless\Service\StarterkitNextjsService
    */
-  protected $robustApiService;
+  protected $starterKitNextjsService;
 
   /**
    * Include the messenger service.
@@ -66,8 +66,8 @@ class HeadlessKeyGenerator extends ControllerBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(RobustApiService $robustApiService, MessengerInterface $messenger, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, string $site_path) {
-    $this->robustApiService = $robustApiService;
+  public function __construct(StarterkitNextjsService $starterKitNextjsService, MessengerInterface $messenger, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, string $site_path) {
+    $this->starterKitNextjsService = $starterKitNextjsService;
     $this->messenger = $messenger;
     $this->routeMatch = $route_match;
     $this->entityTypeManager = $entity_type_manager;
@@ -85,7 +85,7 @@ class HeadlessKeyGenerator extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('acquia_cms_headless.robustapi'),
+      $container->get('acquia_cms_headless.starterkit_nextjs'),
       $container->get('messenger'),
       $container->get('current_route_match'),
       $container->get('entity_type.manager'),
@@ -110,13 +110,13 @@ class HeadlessKeyGenerator extends ControllerBase {
     // Set the path variable.
     $key_path = "/oauth_keys/$site_path[0]/$site_path[1]";
     // Call the dashboard destination service.
-    $destination = $this->robustApiService->dashboardDestination();
+    $destination = $this->starterKitNextjsService->dashboardDestination();
     // Create a link to the the oauth settings page.
     $oauth_link = Url::fromRoute('oauth2_token.settings', [], $destination)->toString();
 
     // Generate the Oauth Keys.
     try {
-      $this->robustApiService->generateOauthKeys();
+      $this->starterKitNextjsService->generateOauthKeys();
     }
     catch (ExtensionNotLoadedException | FilesystemValidationException $e) {
       $this->messenger->addError($e);
@@ -157,7 +157,7 @@ class HeadlessKeyGenerator extends ControllerBase {
     // $entity type id.
     $entity_type = 'consumer';
     // Generate a new secret key.
-    $secret = $this->robustApiService->createHeadlessSecret();
+    $secret = $this->starterKitNextjsService->createHeadlessSecret();
     // Get the consumer id from the route.
     $cid = $this->routeMatch->getParameter($entity_type)->id();
     // Get the Consumer name.
@@ -172,7 +172,7 @@ class HeadlessKeyGenerator extends ControllerBase {
     // Render the content.
     $build['content'] = [
       '#markup' => $this->t(
-        'A secret has been generated for the <strong>@name</strong> consumer: <h2>@secret</h2> Please store this value as it cannot be retrieved.'
+        'A secret has been generated for the <strong>@name</strong> consumer: <h2>@secret</h2> Update this value in your .env file.'
       ),
       '#attached' => [
         'placeholders' => [
@@ -206,9 +206,9 @@ class HeadlessKeyGenerator extends ControllerBase {
     // Get the config service.
     $config = $this->configFactory;
     // Call the dashboard destination service.
-    $destination = $this->robustApiService->dashboardDestination();
+    $destination = $this->starterKitNextjsService->dashboardDestination();
     // Generate a new secret key.
-    $secret = $this->robustApiService->createHeadlessSecret();
+    $secret = $this->starterKitNextjsService->createHeadlessSecret();
     // Get the next.js site id from the route.
     $next_id = $this->routeMatch->getParameter($entity_type)->id();
     // Get the next.js site name.
