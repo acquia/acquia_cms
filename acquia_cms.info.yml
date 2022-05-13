@@ -1,75 +1,14 @@
-name: Acquia CMS
-core_version_requirement: ^9
-version: '1.4.9'
-type: profile
+name: "Acquia CMS"
+package: "Acquia CMS"
 description: "An opinionated implementation of Drupal 9 for running low code websites in the Acquia platform."
-distribution:
-  name: Acquia CMS
-  install:
-    theme: acquia_claro
-    finish_url: '/admin/tour'
-install:
-  - acquia_cms_article
-  - acquia_cms_document
-  - acquia_cms_event
-  - acquia_cms_page
-  - acquia_cms_search
-  - acquia_cms_site_studio
-  - acquia_cms_toolbar
-  - acquia_cms_tour
-  - acquia_cms_video
-  - acquia_purge
-  - address
-  - admin_toolbar_tools
-  - captcha
-  - collapsiblock
-  - config
-  - config_ignore
-  - config_translation
-  - content_translation
-  - datetime
-  - datetime_range
-  - default_content
-  - diff
-  - entity_clone
-  - facets_pretty_paths
-  - field_ui
-  - focal_point
-  - google_analytics
-  - google_tag
-  - history
-  - honeypot
-  - menu_ui
-  - metatag_open_graph
-  - metatag_twitter_cards
-  - moderation_dashboard
-  - moderation_sidebar
-  - options
-  - password_policy_character_types
-  - password_policy_length
-  - password_policy_username
-  - pathauto
-  - purge_processor_cron
-  - purge_processor_lateruntime
-  - purge_queuer_coretags
-  - purge_ui
-  - recaptcha
-  - redirect
-  - responsive_preview
-  - scheduler_content_moderation_integration
-  - schema_article
-  - schema_person
-  - schema_place
-  - search_api_autocomplete
-  - search_api_db
-  - seckit
-  - simple_sitemap
-  - social_media_links
-  - taxonomy
-  - telephone
-  - username_enumeration_prevention
-  - views_ui
-  - workbench_email
-themes:
-  - cohesion_theme
-  - acquia_claro
+type: module
+core_version_requirement: ^9
+dependencies:
+  - drupal:acquia_cms_article
+  - drupal:acquia_cms_document
+  - drupal:acquia_cms_event
+  - drupal:acquia_cms_page
+  - drupal:acquia_cms_search
+  - drupal:acquia_cms_toolbar
+  - drupal:acquia_cms_tour
+  - drupal:acquia_cms_video
