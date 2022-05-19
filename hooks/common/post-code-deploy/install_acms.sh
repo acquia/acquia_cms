@@ -34,18 +34,18 @@ fi
 echo "Enabling Acquia CMS Starter in $target_env"
 case $target_env in
   ode1)
-    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_starter --yes
+    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_demo_content --yes
     ;;
 
   ode3)
-    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_starter --yes
+    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_demo_content --yes
     ;;
 
   ode5)
-    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_starter --yes
+    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_demo_content --yes
     ;;
 
   stage)
-    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_starter --yes
+    /usr/local/bin/drush9 @$site.$target_env pm-enable acquia_cms_demo_content --yes
     ;;
 esac

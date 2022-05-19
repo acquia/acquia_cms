@@ -96,7 +96,7 @@ if [[ "$ACMS_JOB" == "starter_full" ]]; then
     echo "Installing Starter Kit"
     drush en acquia_cms_development -y
     drush pmu shield -y
-    drush en acquia_cms_starter -y
+    drush en acquia_cms_demo_content -y
 fi
 
 # Set the fixture state to reset to between tests.

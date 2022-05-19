@@ -62,7 +62,7 @@ class AcmsModulesUninstallValidator implements ModuleUninstallValidatorInterface
         '@type' => $type,
       ]);
     }
-    elseif ($module == 'acquia_cms_starter'  && $type = $this->hasMediaAndContent()) {
+    elseif (($module == 'acquia_cms_starter' || $module == 'acquia_cms_demo_content') && $type = $this->hasMediaAndContent()) {
       $reasons[] = $this->t('There are content/media available for type [@type], please manually delete content before uninstallation.', [
         '@type' => $type,
       ]);

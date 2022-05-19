@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Contains installation and update hooks for Acquia CMS Demo Content.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function acquia_cms_demo_content_requirements(string $phase) : array {
+
+  $requirements = [];
+
+  if ($phase === 'install') {
+    // Prevent installation if acquia_cms_site_studio is not install,
+    // this will give error when default content get imported before
+    // site studio install, so let warn user for the same.
+    if (!\Drupal::moduleHandler()->moduleExists('acquia_cms_site_studio')) {
+      $requirements['acquia_cms_starter_site_studio'] = [
+        'title' => t('Module [acquia_cms_site_studio] is missing!'),
+        'description' => t('Please install module [acquia_cms_site_studio] first.'),
+        'severity' => REQUIREMENT_ERROR,
+      ];
+    }
+  }
+
+  return $requirements;
+}
