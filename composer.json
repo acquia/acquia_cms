@@ -63,6 +63,7 @@
         "drupal/node_revision_delete": "^1.0@RC",
         "drupal/openapi_jsonapi": "^3.0",
         "drupal/openapi_ui_redoc": "^1.0@RC",
+        "drupal/openapi_ui_swagger": "^1.0@RC",
         "drupal/password_policy": "^3.0",
         "drupal/pathauto": "^1",
         "drupal/recaptcha": "^3",
@@ -70,6 +71,7 @@
         "drupal/reroute_email": "^2.1",
         "drupal/responsive_preview": "^1.0",
         "drupal/restui": "^1.20",
+        "drupal/scheduler": "^1.4",
         "drupal/scheduler_content_moderation_integration": "^1.3",
         "drupal/schema_metatag": "^2.2",
         "drupal/search_api": "1.23",
@@ -86,7 +88,8 @@
         "drush/drush": "^10 || ^11",
         "ergebnis/composer-normalize": "~2.15.0",
         "geocoder-php/google-maps-provider": "^4.6",
-        "phpspec/prophecy-phpunit": "^2.0"
+        "phpspec/prophecy-phpunit": "^2.0",
+        "swagger-api/swagger-ui": "^3.0.17"
     },
     "require-dev": {
         "acquia/coding-standards": "^0.7.0",
@@ -183,6 +186,7 @@
                 "3236462 - Missing Use statement creates fatal errors": "https://git.drupalcode.org/project/component/-/merge_requests/2.patch"
             },
             "drupal/core": {
+                "3026636 - Allow AJAX links to replace a specific selector": "https://www.drupal.org/files/issues/2022-02-10/3026636-47.patch",
                 "3059955 - It is possible to overflow the number of items allowed in Media Library": "https://www.drupal.org/files/issues/2019-12-28/3082690-80.patch",
                 "3160238 - Media Library widget produces \"This value should not be null\" error when field is required": "https://www.drupal.org/files/issues/2020-10-08/3160238-25.patch",
                 "3160238 - SQLite database locking errors cause fatal errors": "https://www.drupal.org/files/issues/1120020-59.patch"
@@ -225,6 +229,21 @@
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
+        },
+        "swagger-api": {
+            "type": "package",
+            "package": {
+                "name": "swagger-api/swagger-ui",
+                "version": "3.0.17",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v3.0.17.zip",
+                    "type": "zip"
+                },
+                "require": {
+                    "composer/installers": "^2.1.1"
+                }
+            }
         }
     },
     "minimum-stability": "dev",

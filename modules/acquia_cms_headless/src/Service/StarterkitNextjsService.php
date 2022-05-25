@@ -17,7 +17,6 @@ use Drupal\Core\Url;
 use Drupal\next\Entity\NextSite;
 use Drupal\simple_oauth\Service\KeyGeneratorService;
 use Drupal\user\Entity\User;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * A service for the initialization of the Headless Next.js starter kit.
@@ -579,6 +578,21 @@ class StarterkitNextjsService {
     // Remove consumer and user uuids from headless config.
     $config->set('consumer_uuid', '');
     $config->set('user_uuid', '');
+  }
+
+  /**
+   * Dashboard destination helper function.
+   *
+   * @return array[]
+   *   Returns a destination query array.
+   */
+  public function dashboardDestination(): array {
+    // Set the destination query array.
+    return [
+      'query' => [
+        'destination' => Url::fromRoute('acquia_cms_headless.dashboard')->toString(),
+      ],
+    ];
   }
 
 }

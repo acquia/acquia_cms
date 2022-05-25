@@ -132,13 +132,12 @@ class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
         '#limit_validation_errors' => [],
         '#submit' => ['::ignoreConfig'],
       ];
-      if (isset($module_info['configure'])) {
-        // @todo Link to API dashboard. Will be added via AMCS-1083.
+      if ($config->get('starterkit_nextjs')) {
         $form[$module]['actions']['advanced'] = [
           '#prefix' => '<div class= "dashboard-tooltiptext">',
           '#markup' => $this->linkGenerator->generate(
             'Advanced',
-            Url::fromRoute('cohesion.configuration.account_settings')
+            Url::fromRoute('acquia_cms_headless.dashboard')
           ),
           '#suffix' => "</div>",
         ];
