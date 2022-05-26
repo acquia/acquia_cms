@@ -10,6 +10,7 @@
  */
 function acquia_cms_install() {
   putenv('UNSET_COHESION_SYNC=1');
+  \Drupal::service('theme_installer')->install(['acquia_claro']);
 }
 
 /**
