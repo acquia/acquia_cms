@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the acquia_cms module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_install() {
+  putenv('UNSET_COHESION_SYNC=1');
+  \Drupal::service('theme_installer')->install(['acquia_claro']);
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function acquia_cms_modules_installed(array $modules) {
+  if (in_array('acquia_cms_site_studio', $modules)) {
+    \Drupal::service('acquia_cms_common.utility')->siteStudioPackageImport();
+    \Drupal::service('acquia_cms_common.utility')->rebuildSiteStudio();
+  }
+}
