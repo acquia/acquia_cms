@@ -134,8 +134,6 @@
         ],
         "post-update-cmd": [
             "Composer\\Config::disableProcessTimeout",
-            "@putenv PROFILE_DIR=./docroot/profiles/contrib/acquia_cms",
-            "@putenv MODULES_DIR=./docroot/profiles/contrib/acquia_cms/modules",
             "if [ \"$PIPELINE_ENV\" != \"true\" ]; then composer build:local; fi;"
         ],
         "acms:install": [
@@ -143,18 +141,9 @@
         ],
         "build:frontend": [
             "Composer\\Config::disableProcessTimeout",
-            "cd themes/acquia_claro && npm run build",
-            "mkdir -p modules/acquia_cms_toolbar/css",
-            "cp themes/acquia_claro/css/acquia_cms_toolbar.css modules/acquia_cms_toolbar/css"
+            "cd docroot/themes/contrib/acquia_claro && npm run build"
         ],
         "build:local": [
-            "mkdir -p $PROFILE_DIR $MODULES_DIR",
-            "find $PWD -name 'acquia_cms.*' -type f -maxdepth 1 -exec ln -s -f '{}' $PROFILE_DIR ';'",
-            "find ./docroot/modules/contrib -type d -maxdepth 1 -name \"acquia_cms*\" -exec cp -r '{}' $MODULES_DIR ';'",
-            "ln -s -f $PWD/config $PROFILE_DIR",
-            "ln -s -f $PWD/misc $PROFILE_DIR",
-            "ln -s -f $PWD/src $PROFILE_DIR",
-            "ln -s -f $PWD/tests $PROFILE_DIR",
             "cp -f phpunit.xml ./docroot/core"
         ],
         "cohesion:fixture": [
@@ -168,7 +157,7 @@
         "configure-tarball": "Drupal\\acquia_cms\\Composer\\ConfigureProject::execute",
         "install:frontend": [
             "Composer\\Config::disableProcessTimeout",
-            "cd themes/acquia_claro && npm install"
+            "cd docroot/themes/contrib/acquia_claro && npm install"
         ],
         "nuke": "rm -r -f docroot vendor"
     }
