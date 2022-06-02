@@ -132,12 +132,6 @@
         "pre-update-cmd": [
             "@putenv COMPOSER_MEMORY_LIMIT=2G"
         ],
-        "post-update-cmd": [
-            "Composer\\Config::disableProcessTimeout",
-            "@putenv PROFILE_DIR=./docroot/profiles/contrib/acquia_cms",
-            "@putenv MODULES_DIR=./docroot/profiles/contrib/acquia_cms/modules",
-            "if [ \"$PIPELINE_ENV\" != \"true\" ]; then composer build:local; fi;"
-        ],
         "acms:install": [
             "bash install-acms"
         ],
@@ -148,22 +142,14 @@
             "cp themes/acquia_claro/css/acquia_cms_toolbar.css modules/acquia_cms_toolbar/css"
         ],
         "build:local": [
-            "mkdir -p $PROFILE_DIR $MODULES_DIR",
-            "find $PWD -name 'acquia_cms.*' -type f -maxdepth 1 -exec ln -s -f '{}' $PROFILE_DIR ';'",
-            "find ./docroot/modules/contrib -type d -maxdepth 1 -name \"acquia_cms*\" -exec cp -r '{}' $MODULES_DIR ';'",
-            "ln -s -f $PWD/config $PROFILE_DIR",
-            "ln -s -f $PWD/misc $PROFILE_DIR",
-            "ln -s -f $PWD/src $PROFILE_DIR",
-            "ln -s -f $PWD/tests $PROFILE_DIR",
+            "find ./docroot/modules/contrib -type d -maxdepth 1 -name \"acquia_cms*\" -exec rm -fr '{}' ';'",
+            "rm -fr ./docroot/themes/contrib/acquia_claro",
+            "composer install --prefer-source",
+            "rm -fr ./modules && mkdir -p ./modules",
+            "rm -fr ./themes && mkdir -p ./themes",
+            "find ./docroot/modules/contrib -type d -maxdepth 1 -name \"acquia_cms*\" -exec mv '{}' ./modules ';'",
+            "mv ./docroot/themes/contrib/acquia_claro ./themes",
             "cp -f phpunit.xml ./docroot/core"
-        ],
-        "cohesion:fixture": [
-            "@putenv FILES_DIR=./docroot/sites/default/files",
-            "drush config:export --yes --quiet --destination $TMPDIR/cex",
-            "mkdir -p $FILES_DIR/cohesion/config",
-            "cp -f $TMPDIR/cex/cohesion_* $FILES_DIR/cohesion/config",
-            "tar -c -z -f ./tests/cohesion.tar.gz --directory $FILES_DIR cohesion",
-            "rm -rf $TMPDIR/cex"
         ],
         "configure-tarball": "Drupal\\acquia_cms\\Composer\\ConfigureProject::execute",
         "install:frontend": [
