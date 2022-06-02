@@ -10,7 +10,20 @@
  */
 function acquia_cms_install() {
   putenv('UNSET_COHESION_SYNC=1');
-  \Drupal::service('theme_installer')->install(['acquia_claro']);
+  // Set logo and favicon path if blank.
+  $acquia_cms_common_path = \Drupal::moduleHandler()->getModule('acquia_cms_common')->getPath();
+  // Update favicon path.
+  if (\Drupal::configFactory()->getEditable('system.theme.global')->get('favicon.path') == '') {
+    \Drupal::configFactory()->getEditable('system.theme.global')
+      ->set('favicon.path', '/' . $acquia_cms_common_path . '/acquia_cms.png')
+      ->save();
+  }
+  // Update logo path.
+  if (\Drupal::configFactory()->getEditable('system.theme.global')->get('logo.path') == '') {
+    \Drupal::configFactory()->getEditable('system.theme.global')
+      ->set('logo.path', '/' . $acquia_cms_common_path . '/acquia_cms.png')
+      ->save();
+  }
 }
 
 /**
