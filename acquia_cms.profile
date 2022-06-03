@@ -14,12 +14,10 @@ use Drupal\Core\Installer\InstallerKernel;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_preprocess_HOOK().
  */
-function acquia_cms_form_user_login_form_alter(array &$form) {
-  if (Drupal::config('acquia_cms.settings')->get('user_login_redirection')) {
-    $form['#submit'][] = '\Drupal\acquia_cms\RedirectHandler::submitForm';
-  }
+function acquia_cms_preprocess_status_report_general_info(&$variables) {
+  $variables['acquia_cms']['value'] = drupal_install_profile_distribution_version();
 }
 
 /**
@@ -314,33 +312,6 @@ function install_acms_set_favicon() {
 }
 
 /**
- * Update config ignore settings.
- */
-function acquia_cms_update_8001() {
-  $config = \Drupal::configFactory()->getEditable('config_ignore.settings');
-  // Get existing ignore config and append the new one.
-  $existing_ignore_config = $config->get('ignored_config_entities');
-  $new_ignore_config = [
-    'cohesion.settings',
-    'purge.plugins',
-    'purge.logger_channels',
-  ];
-  $updated_ignore_config = array_unique(array_merge($existing_ignore_config, $new_ignore_config));
-  $config->set('ignored_config_entities', $updated_ignore_config);
-  $config->set('enable_export_filtering', TRUE);
-  $config->save(TRUE);
-}
-
-/**
- * Uninstall page_cache module.
- */
-function acquia_cms_update_8002() {
-  if (\Drupal::moduleHandler()->moduleExists('page_cache')) {
-    \Drupal::service('module_installer')->uninstall(['page_cache']);
-  }
-}
-
-/**
  * Prepares variables for maintenance page templates.
  *
  * Default template: maintenance-page.html.twig.
@@ -375,4 +346,48 @@ function acquia_cms_preprocess_install_page(array &$variables) {
   $variables['#attached']['library'][] = 'acquia_claro/install-page';
   $acquia_cms_path = \Drupal::service('extension.list.profile')->getPath('acquia_cms');
   $variables['install_page_logo_path'] = '/' . $acquia_cms_path . '/acquia_cms.png';
+}
+
+/**
+ * Update config ignore settings.
+ */
+function acquia_cms_update_8001() {
+  $config = \Drupal::configFactory()->getEditable('config_ignore.settings');
+  // Get existing ignore config and append the new one.
+  $existing_ignore_config = $config->get('ignored_config_entities');
+  $new_ignore_config = [
+    'cohesion.settings',
+    'purge.plugins',
+    'purge.logger_channels',
+  ];
+  $updated_ignore_config = array_unique(array_merge($existing_ignore_config, $new_ignore_config));
+  $config->set('ignored_config_entities', $updated_ignore_config);
+  $config->set('enable_export_filtering', TRUE);
+  $config->save(TRUE);
+}
+
+/**
+ * Uninstall page_cache module.
+ */
+function acquia_cms_update_8002() {
+  if (\Drupal::moduleHandler()->moduleExists('page_cache')) {
+    \Drupal::service('module_installer')->uninstall(['page_cache']);
+  }
+}
+
+/**
+ * Rename acquia_cms.settings to acquia_cms_common.settings.
+ */
+function acquia_cms_update_8003() {
+  // Move config acquia_cms.setting to acquia_cms_common.setting.
+  $acms = \Drupal::configFactory()->getEditable('acquia_cms.settings');
+  $acms_common = \Drupal::configFactory()->getEditable('acquia_cms_common.settings');
+  $acms_common->set('user_login_redirection', $acms->get('user_login_redirection'))->save();
+  if ($acms->get('acquia_cms_https')) {
+    $acms_common->set('acquia_cms_https', $acms->get('acquia_cms_https'))->save();
+  }
+  // Delete acquia_cms.setting config.
+  \Drupal::configFactory()->getEditable('acquia_cms.settings')->delete();
+  // Clear caches.
+  drupal_flush_all_caches();
 }
