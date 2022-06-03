@@ -283,12 +283,12 @@ function install_acms_additional_modules() {
  * Set the path to the logo file based on install directory.
  */
 function install_acms_set_logo() {
-  $acquia_cms_path = \Drupal::service('extension.list.profile')->getPath('acquia_cms');
+  $acquia_cms_common_path = \Drupal::moduleHandler()->getModule('acquia_cms_common')->getPath();
 
   Drupal::configFactory()
     ->getEditable('system.theme.global')
     ->set('logo', [
-      'path' => $acquia_cms_path . '/acquia_cms.png',
+      'path' => $acquia_cms_common_path . '/acquia_cms.png',
       'url' => '',
       'use_default' => FALSE,
     ])
@@ -299,12 +299,12 @@ function install_acms_set_logo() {
  * Set the path to the favicon file based on install directory.
  */
 function install_acms_set_favicon() {
-  $acquia_cms_path = \Drupal::service('extension.list.profile')->getPath('acquia_cms');
+  $acquia_cms_common_path = \Drupal::moduleHandler()->getModule('acquia_cms_common')->getPath();
 
   Drupal::configFactory()
     ->getEditable('system.theme.global')
     ->set('favicon', [
-      'path' => $acquia_cms_path . '/acquia_cms.png',
+      'path' => $acquia_cms_common_path . '/acquia_cms.png',
       'url' => '',
       'use_default' => FALSE,
     ])
@@ -325,8 +325,8 @@ function install_acms_set_favicon() {
 function acquia_cms_preprocess_maintenance_page(array &$variables) {
   $variables['#attached']['library'][] = 'seven/install-page';
   $variables['#attached']['library'][] = 'acquia_claro/install-page';
-  $acquia_cms_path = \Drupal::service('extension.list.profile')->getPath('acquia_cms');
-  $variables['install_page_logo_path'] = '/' . $acquia_cms_path . '/acquia_cms.png';
+  $acquia_cms_common_path = \Drupal::moduleHandler()->getModule('acquia_cms_common')->getPath();
+  $variables['install_page_logo_path'] = '/' . $acquia_cms_common_path . '/acquia_cms.png';
 }
 
 /**
@@ -344,8 +344,8 @@ function acquia_cms_preprocess_install_page(array &$variables) {
   $variables['drupal_core_version'] = \Drupal::VERSION;
   $variables['#attached']['library'][] = 'seven/install-page';
   $variables['#attached']['library'][] = 'acquia_claro/install-page';
-  $acquia_cms_path = \Drupal::service('extension.list.profile')->getPath('acquia_cms');
-  $variables['install_page_logo_path'] = '/' . $acquia_cms_path . '/acquia_cms.png';
+  $acquia_cms_common_path = \Drupal::moduleHandler()->getModule('acquia_cms_common')->getPath();
+  $variables['install_page_logo_path'] = '/' . $acquia_cms_common_path . '/acquia_cms.png';
 }
 
 /**
@@ -390,4 +390,24 @@ function acquia_cms_update_8003() {
   \Drupal::configFactory()->getEditable('acquia_cms.settings')->delete();
   // Clear caches.
   drupal_flush_all_caches();
+}
+
+/**
+ * Update logo and favicon path if used acquia_cms.png file.
+ */
+function acquia_cms_update_8004() {
+  // Update logo and favicon path.
+  $acquia_cms_common_path = \Drupal::moduleHandler()->getModule('acquia_cms_common')->getPath();
+  // Update favicon path.
+  if (\Drupal::configFactory()->getEditable('system.theme.global')->get('favicon.path') == 'profiles/contrib/acquia_cms/acquia_cms.png') {
+    \Drupal::configFactory()->getEditable('system.theme.global')
+      ->set('favicon.path', '/' . $acquia_cms_common_path . '/acquia_cms.png')
+      ->save();
+  }
+  // Update logo path.
+  if (\Drupal::configFactory()->getEditable('system.theme.global')->get('logo.path') == 'profiles/contrib/acquia_cms/acquia_cms.png') {
+    \Drupal::configFactory()->getEditable('system.theme.global')
+      ->set('logo.path', '/' . $acquia_cms_common_path . '/acquia_cms.png')
+      ->save();
+  }
 }
