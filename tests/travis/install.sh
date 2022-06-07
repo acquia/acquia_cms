@@ -18,12 +18,12 @@ source ../../../orca/bin/travis/_includes.sh
 # Otherwise, use Orca's installation script.
 if [[ "$ACMS_JOB" == "base" ]] || [[ "$ACMS_JOB" == "starter" ]]; then
   orca debug:packages CURRENT_DEV
-  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=acquia_cms --no-sqlite --no-site-install
+  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=minimal --no-sqlite --no-site-install
   cat ../../patches/ci-settings.txt >> $ORCA_FIXTURE_DIR/docroot/sites/default/settings.php
 
 elif [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]]; then
   orca debug:packages CURRENT_DEV
-  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=acquia_cms --no-sqlite
+  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=minimal --no-sqlite
 else
 # Run ORCA's standard installation script.
   ../../../orca/bin/travis/install.sh
@@ -77,24 +77,6 @@ if [[ "$ACMS_JOB" == "starter" ]] && [[ -n "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ 
   drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms-starter.sql
   drush updatedb --cache-clear --yes -vvv
 fi
-
-# Move acquia_cms modules from contrib to profile directory
-# so that we can run PHPUnit test for modules as well using ORCA SUT.
-mkdir -p ./docroot/profiles/contrib/acquia_cms/modules
-find ./docroot/modules/contrib -type d -maxdepth 1 -name "acquia_cms*" -exec mv '{}' ./docroot/profiles/contrib/acquia_cms/modules ';'
-
-# In order for PHPUnit tests belonging to profile modules to even be
-# runnable, the profile's modules need to be symlinked into the
-# sites/all/modules directory. This is a long-standing limitation of
-# Drupal core (10 year old issue) that shows no signs of being fixed
-# any time soon. We do a similar workaround in our composer.json's
-# post-install-cmd script.
-cd docroot/sites
-mkdir -p ./all/modules
-cd ./all/modules
-find ../../../profiles/contrib/acquia_cms/modules -maxdepth 1 -mindepth 1 -type d -exec ln -s -f '{}' ';'
-## Ensure the symlinks are included in the ORCA fixture snapshot.
-git add .
 
 # Enable Starter on full installs if Appropriate.
 if [[ "$ACMS_JOB" == "starter_full" ]]; then
