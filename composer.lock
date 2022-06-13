@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ceb9e04c5680e1a462dba59f409f3794",
+    "content-hash": "3d907f28f705b7e2261a679308056805",
     "packages": [
         {
             "name": "acquia/acsf-contenthub-console",
@@ -221,11 +221,11 @@
                 "acquia/http-hmac-php": ">=3.4",
                 "ext-json": "*",
                 "guzzlehttp/guzzle": "~6.0",
-                "php": ">=7.1",
+                "php": ">=7.3",
                 "psr/log": "~1.0",
-                "symfony/event-dispatcher": "^3.4 || ^4.3",
-                "symfony/http-foundation": "^3.4 || ^4.3",
-                "symfony/serializer": "^3.4 || ^4.3"
+                "symfony/event-dispatcher": ">=4.4",
+                "symfony/http-foundation": ">=4.4",
+                "symfony/serializer": ">=4.4"
             },
             "require-dev": {
                 "drupal/coder": "dev-8.x-3.x",
@@ -233,7 +233,7 @@
                 "pdepend/pdepend": "~1.0",
                 "phploc/phploc": "~2.0",
                 "phpmd/phpmd": "~1.0",
-                "phpunit/phpunit": "^7",
+                "phpunit/phpunit": "^8",
                 "scrutinizer/ocular": "~1.0",
                 "sebastian/phpcpd": "~2.0",
                 "squizlabs/php_codesniffer": "^3.5"
@@ -267,7 +267,7 @@
             "homepage": "https://github.com/acquia/content-hub-php",
             "support": {
                 "issues": "https://github.com/acquia/content-hub-php/issues",
-                "source": "https://github.com/acquia/content-hub-php/tree/2.1.2"
+                "source": "https://github.com/acquia/content-hub-php/tree/2.x"
             },
             "time": "2022-03-24T09:08:45+00:00"
         },
@@ -2132,8 +2132,8 @@
                     "dev-8.x-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.32+1-dev",
-                    "datestamp": "1652167270",
+                    "version": "8.x-2.32+4-dev",
+                    "datestamp": "1652860137",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -3884,7 +3884,7 @@
                 "reference": "0222983ff1e9aa1805ca13ecfc58e6078f36a0d4"
             },
             "require": {
-                "drupal/core": "^8.7.7 || ^9"
+                "drupal/core": ">=9.2"
             },
             "require-dev": {
                 "drupal/entity_embed": "^1.0"
@@ -3896,8 +3896,8 @@
                     "dev-8.x-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.11+1-dev",
-                    "datestamp": "1651738896",
+                    "version": "8.x-1.12+1-dev",
+                    "datestamp": "1654254345",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -6368,7 +6368,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.4",
-                    "datestamp": "1637145565",
+                    "datestamp": "1654699160",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7619,13 +7619,14 @@
             "require": {
                 "consolidation/config": "^1.0@dev || ^2",
                 "ext-json": "*",
-                "symfony/config": "^3.4 || ^4.3@dev",
-                "symfony/console": "^3.4 || ^4.2",
-                "symfony/dependency-injection": "^3.4 || ^4.3@dev",
-                "symfony/event-dispatcher": "^3.4 || ^4.3@dev",
-                "symfony/filesystem": "^3.4 || ^4.3@dev",
-                "symfony/process": "^3.4 || ^4.3@dev",
-                "symfony/yaml": "^3.4 || ^4.2"
+                "php": ">=7.3",
+                "symfony/config": ">=4.4",
+                "symfony/console": ">=4.4",
+                "symfony/dependency-injection": ">=4.4",
+                "symfony/event-dispatcher": ">=4.4",
+                "symfony/filesystem": ">=4.4",
+                "symfony/process": ">=4.4",
+                "symfony/yaml": ">=4.4"
             },
             "require-dev": {
                 "phpspec/prophecy-phpunit": "^2.0@dev",
@@ -7648,7 +7649,7 @@
             "description": "A Common Console base application.",
             "support": {
                 "issues": "https://github.com/EclipseGc/CommonConsole/issues",
-                "source": "https://github.com/EclipseGc/CommonConsole/tree/0.0.4"
+                "source": "https://github.com/EclipseGc/CommonConsole/tree/0.0.x"
             },
             "time": "2022-04-05T19:35:47+00:00"
         },
@@ -13513,6 +13514,7 @@
                     "type": "tidelift"
                 }
             ],
+            "abandoned": "symfony/error-handler",
             "time": "2022-04-12T15:19:55+00:00"
         },
         {
