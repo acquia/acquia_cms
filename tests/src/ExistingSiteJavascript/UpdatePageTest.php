@@ -29,8 +29,8 @@ class UpdatePageTest extends ExistingSiteSelenium2DriverTestBase {
 
     $this->drupalGet('/update.php');
     $assert_session = $this->assertSession();
-    $banner_container = $assert_session->elementExists('css', '.banner-title-img > img');
-    $this->assertSame('/profiles/contrib/acquia_cms/acquia_cms.png', $banner_container->getAttribute('src'));
+    $site_name = $assert_session->elementExists('css', 'header .site-name');
+    $this->assertSame('Acquia CMS', $site_name->getText());
     $assert_session->pageTextContains("Drupal database update");
   }
 
