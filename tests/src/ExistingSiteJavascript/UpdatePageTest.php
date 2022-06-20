@@ -25,12 +25,13 @@ class UpdatePageTest extends ExistingSiteSelenium2DriverTestBase {
     $account = $this->createUser();
     $account->addRole('administrator');
     $account->save();
+    $site_name = $this->container->get('config.factory')->get('system.site')->get('name');
     $this->drupalLogin($account);
 
     $this->drupalGet('/update.php');
     $assert_session = $this->assertSession();
-    $site_name = $assert_session->elementExists('css', 'header .site-name');
-    $this->assertSame('Acquia CMS', $site_name->getText());
+    $site_name_element = $assert_session->elementExists('css', 'header .site-name');
+    $this->assertSame($site_name, $site_name_element->getText());
     $assert_session->pageTextContains("Drupal database update");
   }
 
