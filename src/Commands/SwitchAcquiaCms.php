@@ -76,7 +76,7 @@ class SwitchAcquiaCms extends DrushCommands {
    */
   public function switchAcmsToMinimal($profile_to_install = "minimal") {
     $profile_to_remove = $this->configFactory->getEditable('core.extension')->get('profile');
-    if ($profile_to_remove = 'acquia_cms') {
+    if ($profile_to_remove == 'acquia_cms') {
       $this->output()->writeln(dt("The site's install profile will be switched from !profile_to_remove to !profile_to_install.", [
         '!profile_to_remove' => $profile_to_remove,
         '!profile_to_install' => $profile_to_install,
