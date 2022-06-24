@@ -17,7 +17,7 @@ if [ "$target_env" = "ode4" ]; then
 # Install Acquia CMS.
 else
     /usr/local/bin/drush9 @$site.$target_env site-install minimal --account-pass=admin --yes --account-mail=no-reply@example.com --site-mail=no-reply@example.com
-    /usr/local/bin/drush9 @$site.$target_env in acquia_cms --yes
+    /usr/local/bin/drush9 @$site.$target_env en acquia_cms_article acquia_cms_document acquia_cms_event acquia_cms_page acquia_cms_search acquia_cms_site_studio acquia_cms_toolbar acquia_cms_tour acquia_cms_video google_analytics google_tag history honeypot recaptcha --yes
 fi
 
 # Toggle Modules based on the environment.
