@@ -344,28 +344,30 @@
         },
         {
             "name": "acquia/contenthub-console",
-            "version": "1.5",
+            "version": "1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/contenthub-console.git",
-                "reference": "220900a03e5e94d00928dd4f63d0b0d5b6f31f3c"
+                "reference": "306b609120b37f7c0d87d13001d00fb10912c03e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/contenthub-console/zipball/220900a03e5e94d00928dd4f63d0b0d5b6f31f3c",
-                "reference": "220900a03e5e94d00928dd4f63d0b0d5b6f31f3c",
+                "url": "https://api.github.com/repos/acquia/contenthub-console/zipball/306b609120b37f7c0d87d13001d00fb10912c03e",
+                "reference": "306b609120b37f7c0d87d13001d00fb10912c03e",
                 "shasum": ""
             },
             "require": {
                 "acquia/acsf-contenthub-console": "^1.4",
                 "ext-json": "*",
+                "ext-simplexml": "*",
                 "spatie/ssl-certificate": "1.21|1.22.1",
                 "zumba/amplitude-php": "^1"
             },
             "require-dev": {
                 "drupal/coder": "dev-8.x-3.x",
                 "php-coveralls/php-coveralls": "^2.4",
-                "phpunit/phpunit": "^8",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpunit/phpunit": "^9",
                 "squizlabs/php_codesniffer": "^3.5"
             },
             "type": "project",
@@ -388,9 +390,9 @@
             "description": "A package providing Acquia ContentHub commands for the CommonConsole command line interface.",
             "support": {
                 "issues": "https://github.com/acquia/contenthub-console/issues",
-                "source": "https://github.com/acquia/contenthub-console/tree/1.5"
+                "source": "https://github.com/acquia/contenthub-console/tree/1.6"
             },
-            "time": "2022-06-14T12:13:57+00:00"
+            "time": "2022-07-04T07:27:28+00:00"
         },
         {
             "name": "acquia/contenthub-console-helpers",
@@ -2166,16 +2168,16 @@
         },
         {
             "name": "doctrine/annotations",
-            "version": "1.13.2",
+            "version": "1.13.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "5b668aef16090008790395c02c893b1ba13f7e08"
+                "reference": "648b0343343565c4a056bfc8392201385e8d89f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/5b668aef16090008790395c02c893b1ba13f7e08",
-                "reference": "5b668aef16090008790395c02c893b1ba13f7e08",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/648b0343343565c4a056bfc8392201385e8d89f0",
+                "reference": "648b0343343565c4a056bfc8392201385e8d89f0",
                 "shasum": ""
             },
             "require": {
@@ -2187,9 +2189,10 @@
             "require-dev": {
                 "doctrine/cache": "^1.11 || ^2.0",
                 "doctrine/coding-standard": "^6.0 || ^8.1",
-                "phpstan/phpstan": "^0.12.20",
+                "phpstan/phpstan": "^1.4.10 || ^1.8.0",
                 "phpunit/phpunit": "^7.5 || ^8.0 || ^9.1.5",
-                "symfony/cache": "^4.4 || ^5.2"
+                "symfony/cache": "^4.4 || ^5.2",
+                "vimeo/psalm": "^4.10"
             },
             "type": "library",
             "autoload": {
@@ -2232,9 +2235,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/annotations/issues",
-                "source": "https://github.com/doctrine/annotations/tree/1.13.2"
+                "source": "https://github.com/doctrine/annotations/tree/1.13.3"
             },
-            "time": "2021-08-05T19:00:23+00:00"
+            "time": "2022-07-02T10:48:51+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -2621,17 +2624,17 @@
         },
         {
             "name": "drupal/acquia_cms_common",
-            "version": "1.4.3",
+            "version": "1.4.5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/acquia_cms_common.git",
-                "reference": "1.4.3"
+                "reference": "1.4.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_cms_common-1.4.3.zip",
-                "reference": "1.4.3",
-                "shasum": "a7a7f1cee0fd89661749cb606223d746830d909f"
+                "url": "https://ftp.drupal.org/files/projects/acquia_cms_common-1.4.5.zip",
+                "reference": "1.4.5",
+                "shasum": "65b3b4b27b6d32be240b035d73744460be596fb6"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.4",
@@ -2681,8 +2684,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.4.3",
-                    "datestamp": "1656411142",
+                    "version": "1.4.5",
+                    "datestamp": "1656927189",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -2705,7 +2708,8 @@
                     "drupal/core": {
                         "3059955 - It is possible to overflow the number of items allowed in Media Library": "https://www.drupal.org/files/issues/2019-12-28/3082690-80.patch",
                         "3160238 - Media Library widget produces \"This value should not be null\" error when field is required": "https://www.drupal.org/files/issues/2020-10-08/3160238-25.patch",
-                        "1120020 - SQLite database locking errors cause fatal errors": "https://www.drupal.org/files/issues/2022-03-30/1120020-91.patch"
+                        "1120020 - SQLite database locking errors cause fatal errors": "https://www.drupal.org/files/issues/2022-03-30/1120020-91.patch",
+                        "REMOVE: Allow installation profile to be changed from Acquia CMS to minimal during config sync ": "https://gist.githubusercontent.com/rajeshreeputra/ae198ea15a2584f00de3327067056fe0/raw/3d69baaa16bfcc7b2af41deef102eaebd4291906/profile-change-acms-to-minimal.patch"
                     },
                     "drupal/default_content": {
                         "2698425 - Duplicate content issues in default content": "https://git.drupalcode.org/project/default_content/-/merge_requests/5.patch"
@@ -4587,27 +4591,27 @@
         },
         {
             "name": "drupal/checklistapi",
-            "version": "2.0.0",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/checklistapi.git",
-                "reference": "2.0.0"
+                "reference": "2.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/checklistapi-2.0.0.zip",
-                "reference": "2.0.0",
-                "shasum": "32aa1590ab68d41cf9f54c073a22bfd2f27abe36"
+                "url": "https://ftp.drupal.org/files/projects/checklistapi-2.1.0.zip",
+                "reference": "2.1.0",
+                "shasum": "2e077c1b83deb02f908939aa786c6f8ab4f47cc5"
             },
             "require": {
-                "drupal/core": "^8 || ^9",
+                "drupal/core": "^9.3 || ^10",
                 "php": ">=5.6.0"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0",
-                    "datestamp": "1595476219",
+                    "version": "2.1.0",
+                    "datestamp": "1656794092",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5245,17 +5249,17 @@
         },
         {
             "name": "drupal/ctools",
-            "version": "3.7.0",
+            "version": "3.8.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ctools.git",
-                "reference": "8.x-3.7"
+                "reference": "8.x-3.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ctools-8.x-3.7.zip",
-                "reference": "8.x-3.7",
-                "shasum": "b11c0981a1d2ab3cc9e8e614a337d8e2a2a70c0e"
+                "url": "https://ftp.drupal.org/files/projects/ctools-8.x-3.8.zip",
+                "reference": "8.x-3.8",
+                "shasum": "514fdf5c221ead030cc407c39c2950029cea4eb3"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9"
@@ -5263,8 +5267,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.7",
-                    "datestamp": "1623860918",
+                    "version": "8.x-3.8",
+                    "datestamp": "1656633722",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -12915,16 +12919,16 @@
         },
         {
             "name": "solarium/solarium",
-            "version": "6.2.3",
+            "version": "6.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/solariumphp/solarium.git",
-                "reference": "f91185d07d9d3f40ef92810e182e621c51635e8b"
+                "reference": "fcec5684ee3f2d73a8f06a9fbd0e25d2537e1ab2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solariumphp/solarium/zipball/f91185d07d9d3f40ef92810e182e621c51635e8b",
-                "reference": "f91185d07d9d3f40ef92810e182e621c51635e8b",
+                "url": "https://api.github.com/repos/solariumphp/solarium/zipball/fcec5684ee3f2d73a8f06a9fbd0e25d2537e1ab2",
+                "reference": "fcec5684ee3f2d73a8f06a9fbd0e25d2537e1ab2",
                 "shasum": ""
             },
             "require": {
@@ -12933,7 +12937,7 @@
                 "psr/event-dispatcher": "^1.0",
                 "psr/http-client": "^1.0",
                 "psr/http-factory": "^1.0",
-                "symfony/event-dispatcher-contracts": "^1.0 || ^2.0"
+                "symfony/event-dispatcher-contracts": "^1.0 || ^2.0 || ^3.0"
             },
             "require-dev": {
                 "escapestudios/symfony2-coding-standard": "^3.11",
@@ -12941,11 +12945,11 @@
                 "nyholm/psr7": "^1.2",
                 "php-http/guzzle7-adapter": "^0.1",
                 "phpstan/extension-installer": "^1.0",
-                "phpstan/phpstan": "^0.12",
-                "phpstan/phpstan-phpunit": "^0.12",
+                "phpstan/phpstan": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^9.5",
                 "roave/security-advisories": "dev-master",
-                "symfony/event-dispatcher": "^4.3 || ^5.0"
+                "symfony/event-dispatcher": "^4.3 || ^5.0 || ^6.0"
             },
             "type": "library",
             "autoload": {
@@ -12972,9 +12976,9 @@
             ],
             "support": {
                 "issues": "https://github.com/solariumphp/solarium/issues",
-                "source": "https://github.com/solariumphp/solarium/tree/6.2.3"
+                "source": "https://github.com/solariumphp/solarium/tree/6.2.4"
             },
-            "time": "2022-01-31T15:37:35+00:00"
+            "time": "2022-06-30T10:48:47+00:00"
         },
         {
             "name": "spatie/macroable",
