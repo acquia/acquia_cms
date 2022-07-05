@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e06fb9c68634ace53ae7451c1ced677c",
+    "content-hash": "6a18f092b3d48b76077c864f21213151",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
-            "version": "dev-develop",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/acquia-cms-starterkit.git",
-                "reference": "bc098dfd977d6115fdfd0139bd582cc2e225ac34"
+                "reference": "03081bc4da0b4674f2c00f6e2c0e21f7f086630f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/acquia-cms-starterkit/zipball/bc098dfd977d6115fdfd0139bd582cc2e225ac34",
-                "reference": "bc098dfd977d6115fdfd0139bd582cc2e225ac34",
+                "url": "https://api.github.com/repos/acquia/acquia-cms-starterkit/zipball/03081bc4da0b4674f2c00f6e2c0e21f7f086630f",
+                "reference": "03081bc4da0b4674f2c00f6e2c0e21f7f086630f",
                 "shasum": ""
             },
             "require": {
@@ -41,7 +41,6 @@
                 "phpstan/phpstan": "^1.5",
                 "phpunit/phpunit": "^9"
             },
-            "default-branch": true,
             "bin": [
                 "bin/acms"
             ],
@@ -51,6 +50,7 @@
                     "AcquiaCMS\\Cli\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -75,10 +75,10 @@
                 "starterkit"
             ],
             "support": {
-                "source": "https://github.com/acquia/acquia-cms-starterkit/tree/develop",
-                "issues": "https://github.com/acquia/acquia-cms-starterkit/issues"
+                "issues": "https://github.com/acquia/acquia-cms-starterkit/issues",
+                "source": "https://github.com/acquia/acquia-cms-starterkit/tree/v1.0.0"
             },
-            "time": "2022-06-29T11:35:12+00:00"
+            "time": "2022-07-04T19:34:41+00:00"
         },
         {
             "name": "acquia/acsf-contenthub-console",
@@ -3543,17 +3543,17 @@
         },
         {
             "name": "drupal/acquia_cms_tour",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/acquia_cms_tour.git",
-                "reference": "2.0.0"
+                "reference": "2.0.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_cms_tour-2.0.0.zip",
-                "reference": "2.0.0",
-                "shasum": "6db9aeaf28c1e62afd81e72316f089938e0bc55c"
+                "url": "https://ftp.drupal.org/files/projects/acquia_cms_tour-2.0.1.zip",
+                "reference": "2.0.1",
+                "shasum": "797515a9af1315f0afd3260b9e1d10961f6491ba"
             },
             "require": {
                 "drupal/acquia_cms_common": "^1.3.5",
@@ -3562,8 +3562,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0",
-                    "datestamp": "1656311813",
+                    "version": "2.0.1",
+                    "datestamp": "1656958566",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -22633,7 +22633,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "acquia/acquia-cms-starterkit": 20,
         "drupal/acquia_cms_headless": 10
     },
     "prefer-stable": true,
