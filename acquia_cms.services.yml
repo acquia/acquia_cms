@@ -1,0 +1,6 @@
+services:
+  acms.switch:
+    class: \Drupal\acquia_cms\Commands\SwitchAcquiaCms
+    arguments: ['@module_handler', '@config.factory', '@keyvalue', '@state']
+    tags:
+      - { name: drush.command }
