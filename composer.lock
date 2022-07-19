@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8c588ec6435d92b50abeea617414accb",
+    "content-hash": "991bcb420517201d70423962ab60c190",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2790,11 +2790,11 @@
         },
         {
             "name": "drupal/acquia_cms_headless",
-            "version": "1.3.0-beta2",
+            "version": "dev-ACMS-000",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_headless",
-                "reference": "42e9b995030bcc8648344145915cf338cc17cf4d"
+                "reference": "452432257c4c138bba57f8a6cdce98cce2155eab"
             },
             "require": {
                 "drupal/acquia_cms_tour": "^2",
@@ -2842,6 +2842,14 @@
                     "drupal/subrequests": {
                         "Get same results on different request": "https://www.drupal.org/files/issues/2019-07-18/change_request_type-63049395-09.patch"
                     }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^10.6 || ^11"
+                    }
+                },
+                "branch-alias": {
+                    "dev-ACMS-000": "1.3.0-beta2-dev"
                 }
             },
             "description": "Provides a Headless/Decoupled functionality for Acquia CMS.",
@@ -21845,7 +21853,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "drupal/acquia_cms_headless": 10
+        "drupal/acquia_cms_headless": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
