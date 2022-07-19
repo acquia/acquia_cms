@@ -26,13 +26,13 @@
         "drupal/acquia_cms_starter": "^1.3.0",
         "drupal/acquia_cms_toolbar": "^1.3.3",
         "drupal/acquia_cms_tour": "^2.0.0",
+        "drupal/core-composer-scaffold": "^9.0.0",
         "drush/drush": "^10 || ^11",
-        "ergebnis/composer-normalize": "^2.9"
+        "ergebnis/composer-normalize": "~2.15.0"
     },
     "require-dev": {
         "acquia/coding-standards": "^0.7.0",
         "axelerant/drupal-quality-checker": "^1.1",
-        "drupal/core-composer-scaffold": "^9.0.0",
         "drupal/core-dev": "^9",
         "friendsoftwig/twigcs": "^4.0",
         "oomphinc/composer-installers-extender": "^1.1 || ^2",
@@ -52,7 +52,24 @@
             "webdriver-binary/binary-chromedriver": true
         },
         "preferred-install": {
-            "drupal/core": "dist"
+            "drupal/core": "dist",
+            "drupal/acquia_cms_article": "source",
+            "drupal/acquia_cms_audio": "source",
+            "drupal/acquia_cms_common": "source",
+            "drupal/acquia_cms_component": "source",
+            "drupal/acquia_cms_document": "source",
+            "drupal/acquia_cms_image": "source",
+            "drupal/acquia_cms_page": "source",
+            "drupal/acquia_cms_person": "source",
+            "drupal/acquia_cms_place": "source",
+            "drupal/acquia_cms_search": "source",
+            "drupal/acquia_cms_site_studio": "source",
+            "drupal/acquia_cms_starter": "source",
+            "drupal/acquia_cms_toolbar": "source",
+            "drupal/acquia_cms_tour": "source",
+            "drupal/acquia_cms_video": "source",
+            "drupal/acquia_cms_event": "source",
+            "drupal/acquia_cms_headless": "source"
         },
         "process-timeout": 0,
         "sort-packages": true
@@ -123,20 +140,28 @@
         ]
     },
     "repositories": {
+        "local-libs": {
+            "type": "path",
+            "url": "modules/*"
+        },
         "drupal": {
             "type": "composer",
-            "url": "https://packages.drupal.org/8"
+            "url": "https://packages.drupal.org/8",
+            "exclude": [
+                "drupal/acquia_cms*"
+            ]
         }
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
         "pre-update-cmd": [
+            "git submodule foreach bash ../../create_branch_alias.sh > /dev/null",
             "@putenv COMPOSER_MEMORY_LIMIT=2G"
         ],
         "post-update-cmd": [
             "Composer\\Config::disableProcessTimeout",
-            "if [ \"$PIPELINE_ENV\" != \"true\" ]; then composer build:local; fi;"
+            "git submodule foreach git reset --hard > /dev/null"
         ],
         "acms:install": [
             "bash install-acms"
@@ -146,6 +171,8 @@
             "cd docroot/themes/contrib/acquia_claro && npm run build"
         ],
         "build:local": [
+            "./git-submodule.sh > /dev/null 2>&1 &",
+            "git submodule foreach bash ../../update-submodule-remote.sh > /dev/null",
             "cp -f phpunit.xml ./docroot/core"
         ],
         "cohesion:fixture": [
