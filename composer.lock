@@ -2623,11 +2623,11 @@
         },
         {
             "name": "drupal/acquia_cms_common",
-            "version": "dev-ACMS-000",
+            "version": "dev-ACMS-1319",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_common",
-                "reference": "64288e8fd718c6b2b2de1a99f78d1ff08bef298c"
+                "reference": "7d57beddb0829579999a2cc97254b254d8e4af1c"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.4",
@@ -2691,9 +2691,9 @@
                         "2857247 - Support for export filtering via Drush": "https://www.drupal.org/files/issues/2021-08-18/config_ignore_2857247-75.patch"
                     },
                     "drupal/core": {
+                        "1120020 - SQLite database locking errors cause fatal errors": "https://www.drupal.org/files/issues/2022-03-30/1120020-91.patch",
                         "3059955 - It is possible to overflow the number of items allowed in Media Library": "https://www.drupal.org/files/issues/2019-12-28/3082690-80.patch",
                         "3160238 - Media Library widget produces \"This value should not be null\" error when field is required": "https://www.drupal.org/files/issues/2020-10-08/3160238-25.patch",
-                        "1120020 - SQLite database locking errors cause fatal errors": "https://www.drupal.org/files/issues/2022-03-30/1120020-91.patch",
                         "REMOVE: Allow installation profile to be changed from Acquia CMS to minimal during config sync ": "https://gist.githubusercontent.com/rajeshreeputra/ae198ea15a2584f00de3327067056fe0/raw/3d69baaa16bfcc7b2af41deef102eaebd4291906/profile-change-acms-to-minimal.patch"
                     },
                     "drupal/default_content": {
@@ -2719,7 +2719,7 @@
                     }
                 },
                 "branch-alias": {
-                    "dev-ACMS-000": "1.4.6-dev"
+                    "dev-ACMS-1319": "1.4.6-dev"
                 }
             },
             "license": [
@@ -2863,7 +2863,7 @@
         },
         {
             "name": "drupal/acquia_cms_image",
-            "version": "1.3.6",
+            "version": "1.3.5-alpha3",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_image",
@@ -2889,17 +2889,22 @@
         },
         {
             "name": "drupal/acquia_cms_page",
-            "version": "1.3.5",
+            "version": "dev-ACMS-1319",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_page",
-                "reference": "0171a06836b4eaf44384d589b7b71e8a51e83652"
+                "reference": "8e9edf1a5b7e412e8181dcd77bc6beba1da8fa56"
             },
             "require": {
                 "drupal/acquia_cms_image": "^1.3.5",
                 "drupal/acquia_cms_site_studio": "^1.3.5"
             },
             "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-ACMS-1319": "1.3.5-dev"
+                }
+            },
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -2931,7 +2936,7 @@
         },
         {
             "name": "drupal/acquia_cms_place",
-            "version": "1.3.x-dev",
+            "version": "dev-ACMS-000",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_place",
@@ -3008,11 +3013,11 @@
         },
         {
             "name": "drupal/acquia_cms_site_studio",
-            "version": "dev-ACMS-1180",
+            "version": "dev-ACMS-000",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_site_studio",
-                "reference": "87be00a0702d7f83bfc8996cf667df989ff5f8a5"
+                "reference": "f3d4e6091b961d897438449545e90f501d2a2836"
             },
             "require": {
                 "acquia/cohesion": "~6.9.0",
@@ -3035,7 +3040,7 @@
                     }
                 },
                 "branch-alias": {
-                    "dev-ACMS-1180": "1.3.6-dev"
+                    "dev-ACMS-000": "1.3.6-dev"
                 }
             },
             "license": [
@@ -3093,16 +3098,21 @@
         },
         {
             "name": "drupal/acquia_cms_tour",
-            "version": "2.0.1",
+            "version": "dev-ACMS-1319",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_tour",
-                "reference": "3289b867add2a2806234a785401982b14dd415bb"
+                "reference": "398e2a57cf201c6bdefac9936ea66069e9450330"
             },
             "require": {
                 "drupal/acquia_cms_common": "^1.3.5"
             },
             "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-ACMS-1319": "2.0.1-dev"
+                }
+            },
             "description": "Provides a tour page for Acquia CMS.",
             "transport-options": {
                 "relative": true
@@ -4110,17 +4120,17 @@
         },
         {
             "name": "drupal/captcha",
-            "version": "1.3.0",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/captcha.git",
-                "reference": "8.x-1.3"
+                "reference": "8.x-1.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/captcha-8.x-1.3.zip",
-                "reference": "8.x-1.3",
-                "shasum": "d059a8c052246d28f62735e8a3e6912c508cd19f"
+                "url": "https://ftp.drupal.org/files/projects/captcha-8.x-1.4.zip",
+                "reference": "8.x-1.4",
+                "shasum": "bd340d1c62e9960cebbf482ecc5ef24421542ec6"
             },
             "require": {
                 "drupal/core": ">=8.9 <11"
@@ -4128,8 +4138,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.3",
-                    "datestamp": "1655312421",
+                    "version": "8.x-1.4",
+                    "datestamp": "1658338565",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4145,10 +4155,6 @@
             ],
             "authors": [
                 {
-                    "name": "RobLoach",
-                    "homepage": "https://www.drupal.org/user/61114"
-                },
-                {
                     "name": "elachlan",
                     "homepage": "https://www.drupal.org/user/1021502"
                 },
@@ -4163,6 +4169,10 @@
                 {
                     "name": "podarok",
                     "homepage": "https://www.drupal.org/user/116002"
+                },
+                {
+                    "name": "RobLoach",
+                    "homepage": "https://www.drupal.org/user/61114"
                 },
                 {
                     "name": "soxofaan",
@@ -4577,16 +4587,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "9.4.2",
+            "version": "9.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "5a4d6acc99e279f70a914804ff3dd08111707de1"
+                "reference": "7b1a403c093c7abc89ef3df1a6b05bdb19b3ffad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/5a4d6acc99e279f70a914804ff3dd08111707de1",
-                "reference": "5a4d6acc99e279f70a914804ff3dd08111707de1",
+                "url": "https://api.github.com/repos/drupal/core/zipball/7b1a403c093c7abc89ef3df1a6b05bdb19b3ffad",
+                "reference": "7b1a403c093c7abc89ef3df1a6b05bdb19b3ffad",
                 "shasum": ""
             },
             "require": {
@@ -4829,9 +4839,9 @@
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
             "support": {
-                "source": "https://github.com/drupal/core/tree/9.4.2"
+                "source": "https://github.com/drupal/core/tree/9.4.3"
             },
-            "time": "2022-07-07T01:18:39+00:00"
+            "time": "2022-07-20T15:11:38+00:00"
         },
         {
             "name": "drupal/core-composer-scaffold",
@@ -6129,16 +6139,16 @@
             "authors": [
                 {
                     "name": "Jeff Geerling",
-                    "homepage": "https://www.drupal.org/user/213194",
+                    "homepage": "https://www.drupal.org/user/389011",
                     "email": "geerlingguy@mac.com"
+                },
+                {
+                    "name": "Manuel Garcia",
+                    "homepage": "https://www.drupal.org/user/213194"
                 },
                 {
                     "name": "TR",
                     "homepage": "https://www.drupal.org/user/202830"
-                },
-                {
-                    "name": "geerlingguy",
-                    "homepage": "https://www.drupal.org/user/389011"
                 },
                 {
                     "name": "vijaycs85",
@@ -7995,16 +8005,16 @@
                     "homepage": "https://www.drupal.org/user/407852"
                 },
                 {
-                    "name": "DYdave",
-                    "homepage": "https://www.drupal.org/user/467284"
+                    "name": "bohart",
+                    "homepage": "https://www.drupal.org/user/289861"
                 },
                 {
                     "name": "Devaraj johnson",
                     "homepage": "https://www.drupal.org/user/2698767"
                 },
                 {
-                    "name": "bohart",
-                    "homepage": "https://www.drupal.org/user/289861"
+                    "name": "DYdave",
+                    "homepage": "https://www.drupal.org/user/467284"
                 },
                 {
                     "name": "kbahey",
@@ -11196,23 +11206,22 @@
         },
         {
             "name": "laminas/laminas-servicemanager",
-            "version": "3.15.0",
+            "version": "3.15.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-servicemanager.git",
-                "reference": "65910ef6a8066b0369fab77fbec9e030be59c866"
+                "reference": "216f972b179191b14c33a79337947b63bf7808ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/65910ef6a8066b0369fab77fbec9e030be59c866",
-                "reference": "65910ef6a8066b0369fab77fbec9e030be59c866",
+                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/216f972b179191b14c33a79337947b63bf7808ff",
+                "reference": "216f972b179191b14c33a79337947b63bf7808ff",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^2.0",
                 "laminas/laminas-stdlib": "^3.2.1",
                 "php": "~7.4.0 || ~8.0.0 || ~8.1.0",
-                "psr/container": "^1.1 || ^2.0.2"
+                "psr/container": "^1.0"
             },
             "conflict": {
                 "ext-psr": "*",
@@ -11221,14 +11230,16 @@
                 "zendframework/zend-servicemanager": "*"
             },
             "provide": {
-                "psr/container-implementation": "^1.1 || ^2.0"
+                "psr/container-implementation": "^1.0"
             },
             "replace": {
                 "container-interop/container-interop": "^1.2.0"
             },
             "require-dev": {
+                "composer/package-versions-deprecated": "^1.0",
                 "laminas/laminas-coding-standard": "~2.3.0",
                 "laminas/laminas-container-config-test": "^0.6",
+                "laminas/laminas-dependency-plugin": "^2.1.2",
                 "mikey179/vfsstream": "^1.6.10@alpha",
                 "ocramius/proxy-manager": "^2.11",
                 "phpbench/phpbench": "^1.1",
@@ -11282,7 +11293,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-07-18T21:18:56+00:00"
+            "time": "2022-07-20T09:48:45+00:00"
         },
         {
             "name": "laminas/laminas-stdlib",
@@ -13843,19 +13854,20 @@
         },
         {
             "name": "solarium/solarium",
-            "version": "6.2.4",
+            "version": "6.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/solariumphp/solarium.git",
-                "reference": "fcec5684ee3f2d73a8f06a9fbd0e25d2537e1ab2"
+                "reference": "cefde7709ba6290b78bb98d4ca11899cc0eb956e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solariumphp/solarium/zipball/fcec5684ee3f2d73a8f06a9fbd0e25d2537e1ab2",
-                "reference": "fcec5684ee3f2d73a8f06a9fbd0e25d2537e1ab2",
+                "url": "https://api.github.com/repos/solariumphp/solarium/zipball/cefde7709ba6290b78bb98d4ca11899cc0eb956e",
+                "reference": "cefde7709ba6290b78bb98d4ca11899cc0eb956e",
                 "shasum": ""
             },
             "require": {
+                "composer-runtime-api": ">=2.0",
                 "ext-json": "*",
                 "php": "^7.3 || ^8.0",
                 "psr/event-dispatcher": "^1.0",
@@ -13900,9 +13912,9 @@
             ],
             "support": {
                 "issues": "https://github.com/solariumphp/solarium/issues",
-                "source": "https://github.com/solariumphp/solarium/tree/6.2.4"
+                "source": "https://github.com/solariumphp/solarium/tree/6.2.6"
             },
-            "time": "2022-06-30T10:48:47+00:00"
+            "time": "2022-07-22T10:29:01+00:00"
         },
         {
             "name": "spatie/macroable",
@@ -21298,27 +21310,27 @@
         },
         {
             "name": "sirbrillig/phpcs-variable-analysis",
-            "version": "v2.11.3",
+            "version": "v2.11.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sirbrillig/phpcs-variable-analysis.git",
-                "reference": "c921498b474212fe4552928bbeb68d70250ce5e8"
+                "reference": "e9c99cda31b21ccb4da4c2124b57c8355ddce48e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sirbrillig/phpcs-variable-analysis/zipball/c921498b474212fe4552928bbeb68d70250ce5e8",
-                "reference": "c921498b474212fe4552928bbeb68d70250ce5e8",
+                "url": "https://api.github.com/repos/sirbrillig/phpcs-variable-analysis/zipball/e9c99cda31b21ccb4da4c2124b57c8355ddce48e",
+                "reference": "e9c99cda31b21ccb4da4c2124b57c8355ddce48e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4.0",
-                "squizlabs/php_codesniffer": "^3.5"
+                "squizlabs/php_codesniffer": "^3.5.6"
             },
             "require-dev": {
                 "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
-                "limedeck/phpunit-detailed-printer": "^3.1 || ^4.0 || ^5.0",
-                "phpstan/phpstan": "^0.11.8",
-                "phpunit/phpunit": "^5.0 || ^6.5 || ^7.0 || ^8.0",
+                "phpcsstandards/phpcsdevcs": "^1.1",
+                "phpstan/phpstan": "^1.7",
+                "phpunit/phpunit": "^4.8.36 || ^5.7.21 || ^6.5 || ^7.0 || ^8.0 || ^9.0",
                 "sirbrillig/phpcs-import-detection": "^1.1"
             },
             "type": "phpcodesniffer-standard",
@@ -21347,7 +21359,7 @@
                 "source": "https://github.com/sirbrillig/phpcs-variable-analysis",
                 "wiki": "https://github.com/sirbrillig/phpcs-variable-analysis/wiki"
             },
-            "time": "2022-02-21T17:01:13+00:00"
+            "time": "2022-06-13T13:49:41+00:00"
         },
         {
             "name": "slevomat/coding-standard",
