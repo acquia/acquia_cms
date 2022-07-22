@@ -161,7 +161,7 @@ before_install:
   # Optionally, remove SUT-provided tests with a specific PHPUnit test group.
   - if [ ! -z $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP ]; then find ./ -type f | xargs grep -l "@group $ACMS__JOB_EXCLUDE_PHPUNIT_TEST_GROUP$" | xargs rm -v; fi
   - sed -i 's/<\/ruleset>/ <rule ref="Drupal.InfoFiles.AutoAddedKeys.Version">\n <exclude-pattern>acquia_cms\.info\.yml<\/exclude-pattern>\n <\/rule>\n\n<\/ruleset>/' ../orca/phpcs.xml.dist && cat ../orca/phpcs.xml.dist
-  - git submodule foreach bash ../../create_branch_alias.sh
+  - if [ "${ORCA_JOB}" != "STATIC_CODE_ANALYSIS" ]; then git submodule foreach bash ../../create_branch_alias.sh; fi
   - ../orca/bin/travis/before_install.sh
 
 # Create the test fixture and place the SUT.
