@@ -2623,11 +2623,11 @@
         },
         {
             "name": "drupal/acquia_cms_common",
-            "version": "dev-ACMS-1185",
+            "version": "dev-ACMS-000",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_common",
-                "reference": "7fe5ef10b0578a63dd7ad010b0a1f8de581487cb"
+                "reference": "64288e8fd718c6b2b2de1a99f78d1ff08bef298c"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.4",
@@ -2662,7 +2662,7 @@
                 "drupal/pathauto": "^1",
                 "drupal/recaptcha": "^3",
                 "drupal/redirect": "^1",
-                "drupal/reroute_email": "^2.1",
+                "drupal/reroute_email": "2.1.1",
                 "drupal/responsive_preview": "^1.0",
                 "drupal/scheduler_content_moderation_integration": "^1.3",
                 "drupal/schema_metatag": "^2.2",
@@ -2707,10 +2707,19 @@
                     },
                     "drupal/google_analytics": {
                         "3246597 - Add dependency on drupal:path_alias": "https://www.drupal.org/files/issues/2021-11-25/google_analytics-3246597-7.patch"
+                    },
+                    "drupal/purge": {
+                        "3259320 - Fix deprecated php 8.1 errors for drupal:purge": "https://www.drupal.org/files/issues/2022-02-24/3259320-10.patch"
+                    },
+                    "drupal/reroute_email": {
+                        "3275956 - Fix deprecated preg_split() with php 8.1 for drupal:reroute_email": "https://www.drupal.org/files/issues/2022-04-19/reroute_email-preg_split--3275956-1.patch"
+                    },
+                    "guzzlehttp/guzzle": {
+                        "GuzzleHttp deprecation fix with PHP 8.1 support": "https://gist.githubusercontent.com/alpha1892/a6f283f354c15fba03a47454b08c3b10/raw/11e188f94e8e57c31fc2cf401d2a8c6757fada72/guzzle-cookie-cookiejar-deprecation.patch"
                     }
                 },
                 "branch-alias": {
-                    "dev-ACMS-1185": "1.4.6-dev"
+                    "dev-ACMS-000": "1.4.6-dev"
                 }
             },
             "license": [
@@ -2922,11 +2931,11 @@
         },
         {
             "name": "drupal/acquia_cms_place",
-            "version": "dev-ACMS-1185",
+            "version": "1.3.x-dev",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_place",
-                "reference": "9f1f55875301c8648ebf9c0f3326dee0393084fd"
+                "reference": "30c6ad1e9f4e90c457cdcf9ddf13c5a5ce9668b3"
             },
             "require": {
                 "drupal/acquia_cms_image": "^1.3.5",
@@ -2945,7 +2954,7 @@
                     }
                 },
                 "branch-alias": {
-                    "dev-ACMS-1185": "1.3.4-dev"
+                    "dev-ACMS-000": "1.3.4-dev"
                 }
             },
             "license": [
@@ -2958,11 +2967,11 @@
         },
         {
             "name": "drupal/acquia_cms_search",
-            "version": "dev-ACMS-1185",
+            "version": "dev-ACMS-000",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_search",
-                "reference": "94aaa31f9831c51823c21be685f2bbedacb52f11"
+                "reference": "53384083a236a5ca38d15e4f0a2fa871cffadc6c"
             },
             "require": {
                 "cweagans/composer-patches": "^1.7",
@@ -2986,7 +2995,7 @@
                     }
                 },
                 "branch-alias": {
-                    "dev-ACMS-1185": "1.3.5-dev"
+                    "dev-ACMS-000": "1.3.5-dev"
                 }
             },
             "license": [
@@ -2999,11 +3008,11 @@
         },
         {
             "name": "drupal/acquia_cms_site_studio",
-            "version": "1.3.6",
+            "version": "dev-ACMS-1180",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_site_studio",
-                "reference": "431a5096d8f67592b10c31bcd3af0d8e06564b61"
+                "reference": "87be00a0702d7f83bfc8996cf667df989ff5f8a5"
             },
             "require": {
                 "acquia/cohesion": "~6.9.0",
@@ -3024,6 +3033,9 @@
                     "acquia/cohesion": {
                         "Error: Attempt to modify property 'styles' on array": "https://gist.githubusercontent.com/panshulK/86e53ac29386142b4204ab885018b36c/raw/c05e9c959cd8102534ccc1923809f90bc735785c/site-studio-updated-style.patch"
                     }
+                },
+                "branch-alias": {
+                    "dev-ACMS-1180": "1.3.6-dev"
                 }
             },
             "license": [
