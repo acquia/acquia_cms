@@ -7,8 +7,17 @@ LATEST_TAG=$(git describe --abbrev=0 --tags | head -n 1);
   NEW_TAG="$(echo $NEW_TAG | sed 's/\-.*//')"
   CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
   if [ "$CURRENT_BRANCH" = "HEAD" ]; then
-    git checkout -b ACMS-000
-    CURRENT_BRANCH=ACMS-000
+    MODULE=$(pwd | sed 's/.*\///')
+    if [ "$MODULE" = "acquia_cms_common" ]; then
+      git fetch origin develop-1.4.x
+      git checkout develop-1.4.x
+    elif [ "$MODULE" = "acquia_cms_tour" ]; then
+        git fetch origin develop-2.0.x
+        git checkout develop-2.0.x
+    else
+      git fetch origin develop
+      git checkout develop
+    fi
   fi
   echo "$NEW_TAG, dev-$CURRENT_BRANCH"
   ALIAS="{\"dev-$CURRENT_BRANCH\": \"$NEW_TAG-dev\"}"
