@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8c588ec6435d92b50abeea617414accb",
+    "content-hash": "a8430e166fee1af66ea3baea0d9de755",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -900,16 +900,16 @@
         },
         {
             "name": "composer/ca-bundle",
-            "version": "1.3.2",
+            "version": "1.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "fd5dd441932a7e10ca6e5b490e272d34c8430640"
+                "reference": "30897edbfb15e784fe55587b4f73ceefd3c4d98c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/fd5dd441932a7e10ca6e5b490e272d34c8430640",
-                "reference": "fd5dd441932a7e10ca6e5b490e272d34c8430640",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/30897edbfb15e784fe55587b4f73ceefd3c4d98c",
+                "reference": "30897edbfb15e784fe55587b4f73ceefd3c4d98c",
                 "shasum": ""
             },
             "require": {
@@ -956,7 +956,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/ca-bundle/issues",
-                "source": "https://github.com/composer/ca-bundle/tree/1.3.2"
+                "source": "https://github.com/composer/ca-bundle/tree/1.3.3"
             },
             "funding": [
                 {
@@ -972,7 +972,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-24T11:56:16+00:00"
+            "time": "2022-07-20T07:14:26+00:00"
         },
         {
             "name": "composer/composer",
@@ -2582,16 +2582,21 @@
         },
         {
             "name": "drupal/acquia_cms_article",
-            "version": "1.3.4",
+            "version": "dev-develop",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_article",
-                "reference": "9fa60eb7fb37a54a1b68827561e949a993028d24"
+                "reference": "32fbc9a3e97dc343a04dec539825baaf22fad7c0"
             },
             "require": {
                 "drupal/acquia_cms_person": "^1.3.4"
             },
             "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.3.4-dev"
+                }
+            },
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -2602,17 +2607,22 @@
         },
         {
             "name": "drupal/acquia_cms_audio",
-            "version": "1.3.2",
+            "version": "dev-develop",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_audio",
-                "reference": "bb167204efcd794dc0cb18e679dc3fdd46ed716b"
+                "reference": "fba0d3a0215b506edcbb23fc0748d487b9698006"
             },
             "require": {
                 "drupal/acquia_cms_common": "^1.3.5",
                 "drupal/media_entity_soundcloud": "^3.0"
             },
             "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.3.2-dev"
+                }
+            },
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -2623,11 +2633,11 @@
         },
         {
             "name": "drupal/acquia_cms_common",
-            "version": "dev-ACMS-1319",
+            "version": "dev-develop-1.4.x",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_common",
-                "reference": "7d57beddb0829579999a2cc97254b254d8e4af1c"
+                "reference": "d93060596b4de684021b3864eb6eb85d840130c2"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.4",
@@ -2719,7 +2729,7 @@
                     }
                 },
                 "branch-alias": {
-                    "dev-ACMS-1319": "1.4.6-dev"
+                    "dev-develop-1.4.x": "1.4.6-dev"
                 }
             },
             "license": [
@@ -2732,11 +2742,11 @@
         },
         {
             "name": "drupal/acquia_cms_component",
-            "version": "1.3.1",
+            "version": "dev-develop",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_component",
-                "reference": "e2404f89032ecfeb18af2f05589d12332a76bfe9"
+                "reference": "255e37b3c2909c6a3b40710ecf774fbbf00b2d8a"
             },
             "require": {
                 "drupal/acquia_cms_common": "^1.3.5",
@@ -2750,6 +2760,9 @@
                     "drupal/component": {
                         "3236462 - Missing Use statement creates fatal errors": "https://git.drupalcode.org/project/component/-/merge_requests/2.patch"
                     }
+                },
+                "branch-alias": {
+                    "dev-develop": "1.3.1-dev"
                 }
             },
             "license": [
@@ -2762,16 +2775,21 @@
         },
         {
             "name": "drupal/acquia_cms_document",
-            "version": "1.3.3",
+            "version": "dev-develop",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_document",
-                "reference": "b111d02ee631b53f5c86d09aad730c3d95f14c6a"
+                "reference": "de483e8b85091bf12db47dea5028732bcb739523"
             },
             "require": {
                 "drupal/acquia_cms_common": "^1.3.5"
             },
             "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.3.3-dev"
+                }
+            },
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -2782,16 +2800,21 @@
         },
         {
             "name": "drupal/acquia_cms_event",
-            "version": "1.3.4",
+            "version": "dev-develop",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_event",
-                "reference": "8c37f38baa8a2d48f8dd9d27bd60faeb62896540"
+                "reference": "f320a7cf1e0a90b63279c9abc97f8042767192a9"
             },
             "require": {
                 "drupal/acquia_cms_place": "^1.3.4"
             },
             "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.3.4-dev"
+                }
+            },
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -2802,11 +2825,11 @@
         },
         {
             "name": "drupal/acquia_cms_headless",
-            "version": "1.3.0-beta2",
+            "version": "dev-develop",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_headless",
-                "reference": "42e9b995030bcc8648344145915cf338cc17cf4d"
+                "reference": "88e5b86a2e0afa35c71ebf9e2442a64a98556af9"
             },
             "require": {
                 "drupal/acquia_cms_tour": "^2",
@@ -2854,6 +2877,9 @@
                     "drupal/subrequests": {
                         "Get same results on different request": "https://www.drupal.org/files/issues/2019-07-18/change_request_type-63049395-09.patch"
                     }
+                },
+                "branch-alias": {
+                    "dev-develop": "1.3.0-dev"
                 }
             },
             "description": "Provides a Headless/Decoupled functionality for Acquia CMS.",
@@ -2863,11 +2889,11 @@
         },
         {
             "name": "drupal/acquia_cms_image",
-            "version": "1.3.5-alpha3",
+            "version": "dev-develop",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_image",
-                "reference": "bee5a99f62d8f219c28b487602710e534ced0935"
+                "reference": "fa537b5f896d00f310ec8b696c6f2125887ca915"
             },
             "require": {
                 "cweagans/composer-patches": "^1.7",
@@ -2877,7 +2903,10 @@
             "type": "drupal-module",
             "extra": {
                 "enable-patching": true,
-                "patches": []
+                "patches": [],
+                "branch-alias": {
+                    "dev-develop": "1.3.5-dev"
+                }
             },
             "license": [
                 "GPL-2.0-or-later"
@@ -2889,11 +2918,11 @@
         },
         {
             "name": "drupal/acquia_cms_page",
-            "version": "dev-ACMS-1319",
+            "version": "dev-develop",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_page",
-                "reference": "8e9edf1a5b7e412e8181dcd77bc6beba1da8fa56"
+                "reference": "6b083c1ac892ce8316c3d0b79463b000064a48b8"
             },
             "require": {
                 "drupal/acquia_cms_image": "^1.3.5",
@@ -2902,7 +2931,7 @@
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-ACMS-1319": "1.3.5-dev"
+                    "dev-develop": "1.3.5-dev"
                 }
             },
             "license": [
@@ -2915,17 +2944,22 @@
         },
         {
             "name": "drupal/acquia_cms_person",
-            "version": "1.3.4",
+            "version": "dev-develop",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_person",
-                "reference": "64e281f19d66b5764774075ada783d1c5c9e3a31"
+                "reference": "638a1190cd17c7b138df3cb2fe6a3e4095e8c566"
             },
             "require": {
                 "drupal/acquia_cms_place": "^1.3.4",
                 "drupal/scheduler": "^1.3"
             },
             "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.3.4-dev"
+                }
+            },
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -2936,11 +2970,11 @@
         },
         {
             "name": "drupal/acquia_cms_place",
-            "version": "dev-ACMS-000",
+            "version": "dev-develop",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_place",
-                "reference": "30c6ad1e9f4e90c457cdcf9ddf13c5a5ce9668b3"
+                "reference": "5ab86036f7170b0782057c89393ab4acf1ec5b8f"
             },
             "require": {
                 "drupal/acquia_cms_image": "^1.3.5",
@@ -2959,7 +2993,7 @@
                     }
                 },
                 "branch-alias": {
-                    "dev-ACMS-000": "1.3.4-dev"
+                    "dev-develop": "1.3.4-dev"
                 }
             },
             "license": [
@@ -2972,18 +3006,18 @@
         },
         {
             "name": "drupal/acquia_cms_search",
-            "version": "dev-ACMS-000",
+            "version": "dev-develop",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_search",
-                "reference": "53384083a236a5ca38d15e4f0a2fa871cffadc6c"
+                "reference": "1631396aedc8f58b623118fc8aadcaa7d2a0ee12"
             },
             "require": {
                 "cweagans/composer-patches": "^1.7",
                 "drupal/acquia_cms_common": "^1.3.5",
                 "drupal/acquia_search": "^3.0.3",
                 "drupal/collapsiblock": "^3",
-                "drupal/facets": "2.0.2",
+                "drupal/facets": "2.0.4",
                 "drupal/facets_pretty_paths": "^1.2",
                 "drupal/search_api": "1.23",
                 "drupal/search_api_autocomplete": "^1.6"
@@ -3000,7 +3034,7 @@
                     }
                 },
                 "branch-alias": {
-                    "dev-ACMS-000": "1.3.5-dev"
+                    "dev-develop": "1.3.5-dev"
                 }
             },
             "license": [
@@ -3013,11 +3047,11 @@
         },
         {
             "name": "drupal/acquia_cms_site_studio",
-            "version": "dev-ACMS-000",
+            "version": "dev-develop",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_site_studio",
-                "reference": "f3d4e6091b961d897438449545e90f501d2a2836"
+                "reference": "e497c20a2c7d951ceceaeb62fded9849745a2cc6"
             },
             "require": {
                 "acquia/cohesion": "~6.9.0",
@@ -3040,7 +3074,7 @@
                     }
                 },
                 "branch-alias": {
-                    "dev-ACMS-000": "1.3.6-dev"
+                    "dev-develop": "1.3.6-dev"
                 }
             },
             "license": [
@@ -3053,11 +3087,11 @@
         },
         {
             "name": "drupal/acquia_cms_starter",
-            "version": "1.3.0",
+            "version": "dev-develop",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_starter",
-                "reference": "4bb6a7838abae5c1e3f7da14aadfef3b6fe043c6"
+                "reference": "0c2baac50ea88b5abc4e1f25a67892958cd08c0f"
             },
             "require": {
                 "drupal/acquia_cms_article": "^1.3.4",
@@ -3070,6 +3104,11 @@
                 "drupal/webform": "^6.0"
             },
             "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.3.0-dev"
+                }
+            },
             "description": "Contains the example content for demonstration.",
             "transport-options": {
                 "relative": true
@@ -3077,17 +3116,22 @@
         },
         {
             "name": "drupal/acquia_cms_toolbar",
-            "version": "1.3.3",
+            "version": "dev-develop",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_toolbar",
-                "reference": "6505792a4497d5dfc24c3fb5f59b7a9ed2f4f7bc"
+                "reference": "922563cc35e66e3ba679b9bda8fe357b737b02da"
             },
             "require": {
                 "drupal/acquia_cms_common": "^1.3.5",
                 "drupal/admin_toolbar": "^3.0"
             },
             "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.3.3-dev"
+                }
+            },
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -3098,11 +3142,11 @@
         },
         {
             "name": "drupal/acquia_cms_tour",
-            "version": "dev-ACMS-1319",
+            "version": "dev-develop-2.0.x",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_tour",
-                "reference": "398e2a57cf201c6bdefac9936ea66069e9450330"
+                "reference": "6e7d96c8034aed6df2a092d0f54302cfb54ddaea"
             },
             "require": {
                 "drupal/acquia_cms_common": "^1.3.5"
@@ -3110,7 +3154,7 @@
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-ACMS-1319": "2.0.1-dev"
+                    "dev-develop-2.0.x": "2.0.1-dev"
                 }
             },
             "description": "Provides a tour page for Acquia CMS.",
@@ -3120,16 +3164,21 @@
         },
         {
             "name": "drupal/acquia_cms_video",
-            "version": "1.3.3",
+            "version": "dev-develop",
             "dist": {
                 "type": "path",
                 "url": "modules/acquia_cms_video",
-                "reference": "d237f7b12b2e215f0583a3e30141aeddcf94d680"
+                "reference": "48a97dc43a555c3605148a595f3f3bd5bc0eeb51"
             },
             "require": {
                 "drupal/acquia_cms_common": "^1.3.5"
             },
             "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.3.3-dev"
+                }
+            },
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -4845,7 +4894,7 @@
         },
         {
             "name": "drupal/core-composer-scaffold",
-            "version": "9.4.2",
+            "version": "9.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-composer-scaffold.git",
@@ -4889,7 +4938,7 @@
                 "drupal"
             ],
             "support": {
-                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.4.2"
+                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.4.3"
             },
             "time": "2022-06-19T16:14:23+00:00"
         },
@@ -5453,20 +5502,20 @@
         },
         {
             "name": "drupal/facets",
-            "version": "2.0.2",
+            "version": "2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/facets.git",
-                "reference": "2.0.2"
+                "reference": "2.0.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/facets-2.0.2.zip",
-                "reference": "2.0.2",
-                "shasum": "17afc46d3f4e4300e8e69f23b3b01a4935b57104"
+                "url": "https://ftp.drupal.org/files/projects/facets-2.0.4.zip",
+                "reference": "2.0.4",
+                "shasum": "7735fa8d4422fa320a36a122a35adee5b5192f34"
             },
             "require": {
-                "drupal/core": "^9.2 || ^10.0"
+                "drupal/core": "^9.3 || ^10.0"
             },
             "conflict": {
                 "drupal/search_api": "<1.14"
@@ -5474,7 +5523,7 @@
             "require-dev": {
                 "drupal/jquery_ui_slider": "~1.1",
                 "drupal/jquery_ui_touch_punch": "~1.0",
-                "drupal/search_api": "~1.21"
+                "drupal/search_api": "^1.24||1.x-dev"
             },
             "suggest": {
                 "drupal/jquery_ui_slider": "Required for the 'Facets Range Widget' module to work",
@@ -5483,8 +5532,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.2",
-                    "datestamp": "1649151557",
+                    "version": "2.0.4",
+                    "datestamp": "1657367469",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8985,8 +9034,8 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "gbyte",
-                    "homepage": "https://www.drupal.org/user/2381352"
+                    "name": "WalkingDexter",
+                    "homepage": "https://www.drupal.org/user/3251330"
                 }
             ],
             "description": "Creates a standard conform hreflang XML sitemap of the site content and provides a framework for developing other sitemap types.",
@@ -18587,7 +18636,7 @@
         },
         {
             "name": "drupal/core-dev",
-            "version": "9.4.2",
+            "version": "9.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-dev.git",
@@ -18631,7 +18680,7 @@
             ],
             "description": "require-dev dependencies from drupal/drupal; use in addition to drupal/core-recommended to run tests from drupal/core.",
             "support": {
-                "source": "https://github.com/drupal/core-dev/tree/9.4.2"
+                "source": "https://github.com/drupal/core-dev/tree/9.4.3"
             },
             "time": "2022-04-14T00:37:13+00:00"
         },
@@ -21974,7 +22023,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "drupal/acquia_cms_headless": 10
+        "drupal/acquia_cms_headless": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
