@@ -154,7 +154,7 @@ before_install:
   - mysql -u root < ./tests/travis/install.sql
   - nvm install 12.13.1; nvm use 12.13.1
   - composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION"
-  #curl https://gist.githubusercontent.com/vishalkhode1/49951b9eedef7ec57d55b3d969194d38/raw/bcfaf486bc29fe383a56102804287771c12dbe4a/gistfile1.txt | git -C ../orca apply
+  - curl https://gist.githubusercontent.com/vishalkhode1/49951b9eedef7ec57d55b3d969194d38/raw/bcfaf486bc29fe383a56102804287771c12dbe4a/gistfile1.txt | git -C ../orca apply
   - composer self-update
   # Download AWS cli, only for starter jobs as we store tests artifacts on s3 buckets.
   - if [ "${ACMS_JOB}" = "starter" ] || [ "${ACMS_JOB}" = "starter_full" ] || [ "${ACMS_JOB}" = "base" ]; then curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo ./aws/install && rm -fr aws && aws s3 cp --recursive ${AWS_S3_BUCKET_PATH}/artifacts/ ${TRAVIS_BUILD_DIR}/tests/; fi
