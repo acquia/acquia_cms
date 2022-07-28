@@ -19,15 +19,28 @@
     "require": {
         "acquia/acquia-cms-starterkit": "^1.0",
         "drupal/acquia_claro": "^1.3.2",
-        "drupal/acquia_cms_audio": "^1.3.2",
-        "drupal/acquia_cms_component": "^1.3.1",
-        "drupal/acquia_cms_headless": "^1.3@beta",
-        "drupal/acquia_cms_site_studio": "~1.3.6",
-        "drupal/acquia_cms_starter": "^1.3.0",
-        "drupal/acquia_cms_toolbar": "^1.3.3",
-        "drupal/acquia_cms_tour": "^2.0.0",
         "drush/drush": "^10 || ^11",
-        "ergebnis/composer-normalize": "^2.9"
+        "ergebnis/composer-normalize": "~2.15.0",
+        "wikimedia/composer-merge-plugin": "^2.0"
+    },
+    "replace": {
+        "drupal/acquia_cms_article": "*",
+        "drupal/acquia_cms_audio": "*",
+        "drupal/acquia_cms_common": "*",
+        "drupal/acquia_cms_component": "*",
+        "drupal/acquia_cms_document": "*",
+        "drupal/acquia_cms_event": "*",
+        "drupal/acquia_cms_headless": "*",
+        "drupal/acquia_cms_image": "*",
+        "drupal/acquia_cms_page": "*",
+        "drupal/acquia_cms_person": "*",
+        "drupal/acquia_cms_place": "*",
+        "drupal/acquia_cms_search": "*",
+        "drupal/acquia_cms_site_studio": "*",
+        "drupal/acquia_cms_starter": "*",
+        "drupal/acquia_cms_toolbar": "*",
+        "drupal/acquia_cms_tour": "*",
+        "drupal/acquia_cms_video": "*"
     },
     "require-dev": {
         "acquia/coding-standards": "^0.7.0",
@@ -49,7 +62,8 @@
             "ergebnis/composer-normalize": true,
             "oomphinc/composer-installers-extender": true,
             "phpro/grumphp-shim": true,
-            "webdriver-binary/binary-chromedriver": true
+            "webdriver-binary/binary-chromedriver": true,
+            "wikimedia/composer-merge-plugin": true
         },
         "preferred-install": {
             "drupal/core": "dist"
@@ -109,6 +123,18 @@
             "bower-asset",
             "npm-asset"
         ],
+        "merge-plugin": {
+            "ignore-duplicates": false,
+            "include": [
+                "modules/*/composer.json"
+            ],
+            "merge-dev": true,
+            "merge-extra": true,
+            "merge-extra-deep": false,
+            "merge-scripts": false,
+            "recurse": true,
+            "replace": false
+        },
         "patchLevel": {
             "drupal/core": "-p2"
         },
