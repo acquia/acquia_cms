@@ -1,0 +1,39 @@
+acquia_cms_headless_ui.frontpage:
+  path: '/frontpage'
+  defaults:
+    _title: 'Login'
+    _controller: '\Drupal\acquia_cms_headless_ui\Controller\FrontController::frontpage'
+  requirements:
+    # Set to true so that all users can access the front page.
+    _access: 'TRUE'
+
+admin.access_control:
+  path: '/admin/access'
+  defaults:
+    _controller: '\Drupal\acquia_cms_headless\Controller\HeadlessDashboardController::content'
+  requirements:
+    _permission: 'access acquia cms headless dashboard'
+
+acquia_cms_headless_ui.users:
+  path: '/admin/access/users'
+  defaults:
+    _entity_list: 'user'
+    _title: 'User accounts'
+  requirements:
+    _permission: 'administer users'
+
+admin.content_models:
+  path: '/admin/content-models'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: Content Models
+  requirements:
+    _permission: 'administer site configuration'
+
+admin.cms:
+  path: '/admin/cms'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: System administration
+  requirements:
+    _permission: 'administer site configuration'

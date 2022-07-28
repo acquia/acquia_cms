@@ -1,0 +1,181 @@
+.acms-headless-dashboard-wrapper {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-content: stretch;
+  -ms-flex-line-pack: stretch;
+  align-content: stretch;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.acms-headless-dashboard-wrapper .fieldset__label {
+  background-color: #0e68a7;
+  color: #ffffff;
+}
+
+.acms-headless-dashboard-wrapper .status--active,
+.acms-headless-dashboard-wrapper .status--inactive {
+  display: block;
+  height: 16px;
+  width: 16px;
+}
+
+.acms-headless-dashboard-wrapper .status--active {
+  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 13'%3e%3cpath d='M2 6.571L5.6 10 14 2' fill='none' stroke='%2342a877' stroke-width='3'/%3e%3c/svg%3e") no-repeat center left;
+}
+
+.acms-headless-dashboard-wrapper .status--inactive {
+  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 14 14'%3e%3cpath d='M3 11.193L11.45 3' stroke='%23e34f4f' stroke-width='2'/%3e%3ccircle cx='7' cy='7' r='6' fill='none' stroke='%23e34f4f' stroke-width='2'/%3e%3c/svg%3e") no-repeat center left;
+}
+
+.acms-headless-dashboard-wrapper .layout-column--half {
+  float: none !important;
+  -webkit-order: 0;
+  -ms-flex-order: 0;
+  order: 0;
+  -webkit-flex: 1 1 50%;
+  -ms-flex: 1 1 50%;
+  flex: 1 1 50%;
+  -webkit-align-self: stretch;
+  -ms-flex-item-align: stretch;
+  align-self: stretch;
+}
+
+@media all and (max-width: 48em) {
+  .acms-headless-dashboard-wrapper .layout-column--half {
+    -webkit-flex: 1 1 100%;
+    -ms-flex: 1 1 100%;
+    flex: 1 1 100%;
+  }
+}
+
+.acms-headless-dashboard-wrapper .layout-column--half form {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.acms-headless-dashboard-wrapper .layout-column--half form fieldset {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.headless-dashboard-api-url {
+  text-align: center;
+}
+
+.headless-dashboard-api-update,
+.headless-dashboard-openapi-links,
+.headless-dashboard-openapi-logo {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-content: center;
+  -ms-flex-line-pack: center;
+  align-content: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.headless-dashboard-api-update {
+  border-top: 1px solid #dedfe4;
+  margin-top: 1rem;
+}
+
+.headless-dashboard-openapi-logo {
+  border-bottom: 1px solid #dedfe4;
+  margin-bottom: 1rem;
+  padding: 1rem 0;
+}
+
+.headless-dashboard-openapi-logo a {
+  display: block;
+  text-align: center;
+}
+
+.headless-dashboard-openapi-resources {
+  border-top: 1px solid #dedfe4;
+  display: block;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  text-align: center;
+}
+
+.headless-dashboard-admin-links {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  padding-top: 1.5rem;
+}
+
+.headless-dashboard-admin-links .button {
+  padding: calc(0.625rem - 1px) calc(1rem - 1px);
+  font-size: 0.79rem;
+  line-height: 0.75rem;
+}
+
+.headless-dashboard-admin-links .dropbutton__item:first-of-type > *,
+.headless-dashboard-admin-links .dropbutton__toggle {
+  background: #168ec4;
+  color: #ffffff;
+}
+
+.headless-dashboard-admin-links .dropbutton__toggle::before {
+  background: url("data:image/svg+xml,%3csvg width='14' height='9' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M.238 1.938L1.647.517 7 5.819 12.354.517l1.408 1.421L7 8.636z' fill='%23ffffff'/%3e%3c/svg%3e") no-repeat center;
+}
+
+.headless-dashboard-modal {
+  padding: 3rem 0;
+}
+
+.headless-dashboard-admin-heading {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  padding: 0 0 1rem;
+}
+
+.headless-dashboard-admin-heading > .headless-dashboard-user-info {
+  flex: 1 1 60%;
+  padding: 1rem 0 0;
+  width: 60%;
+}
+
+.headless-dashboard-admin-heading > .headless-dashboard-admin-links {
+  flex: 1 1 40%;
+  width: 40%;
+}

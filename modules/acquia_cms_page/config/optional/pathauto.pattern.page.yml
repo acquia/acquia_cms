@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.page
+id: page
+label: "Page path"
+type: "canonical_entities:node"
+pattern: "[node:title]"
+selection_criteria:
+  f857cec1-a605-4339-ade9-00dc7145597c:
+    id: node_type
+    bundles:
+      page: page
+    negate: false
+    context_mapping:
+      node: node
+    uuid: f857cec1-a605-4339-ade9-00dc7145597c
+selection_logic: and
+weight: -5
+relationships: {}

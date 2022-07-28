@@ -1,0 +1,15 @@
+services:
+  acquia_cms_headless.starterkit_nextjs:
+    class: Drupal\acquia_cms_headless\Service\StarterkitNextjsService
+    arguments:
+      - '@config.factory'
+      - '@password_generator'
+      - '@entity_type.manager'
+      - '@simple_oauth.key.generator'
+      - '@messenger'
+      - '%site.path%'
+      - '@file_system'
+      - '@request_stack'
+  plugin.manager.acquia_cms_headless:
+    class: Drupal\acquia_cms_headless\AcquiaCmsHeadlessManager
+    parent: default_plugin_manager

@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the acquia_cms_headless module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_headless_install() {
+  // Call the headless service.
+  $headless_user = \Drupal::service('acquia_cms_headless.starterkit_nextjs');
+
+  // Programmatically create a new "headless" user.
+  $headless_user->createHeadlessUser();
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function acquia_cms_headless_requirements($phase) {
+  $requirements = [];
+
+  if ($phase == 'runtime') {
+    $value = mt_rand(0, 100);
+    $requirements['acquia_cms_headless_status'] = [
+      'title' => t('acquia_cms_headless status'),
+      'value' => t('acquia_cms_headless value: @value', ['@value' => $value]),
+      'severity' => $value > 50 ? REQUIREMENT_INFO : REQUIREMENT_WARNING,
+    ];
+  }
+
+  return $requirements;
+}

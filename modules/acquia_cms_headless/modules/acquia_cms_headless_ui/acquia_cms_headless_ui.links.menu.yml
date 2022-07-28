@@ -1,0 +1,54 @@
+admin.access_control:
+  title: API
+  description: 'Manage user accounts, API clients, and access tokens.'
+  route_name: admin.access_control
+  parent: system.admin
+  weight: -9
+
+admin.access_control.clients:
+  title: OAuth clients
+  description: 'Clients allow API users to interact with content. Clients have relationships to one or more roles via scopes and inherit the permissions assigned to those roles.'
+  route_name: entity.consumer.collection
+  parent: admin.access_control
+  weight: 2
+
+admin.access_control.roles:
+  title: Roles
+  description: 'Roles are groups of permissions and can be assigned to regular users, API users, and clients (via scopes).'
+  route_name: entity.user_role.collection
+  parent: admin.access_control
+  weight: 3
+
+admin.access_control.tokens:
+  title: Tokens
+  description: 'Tokens are granted when an API user successfully authenticates with a client.'
+  route_name: entity.oauth2_token.collection
+  parent: admin.access_control
+  weight: 4
+
+admin.access_control.user_accounts:
+  title: User accounts
+  description: 'In addition to providing the ability to login to this site, users are employed to authenticate with the API. API users should be assigned the same role as the client they are using.'
+  route_name: acquia_cms_headless_ui.users
+  parent: admin.access_control
+  weight: 5
+
+admin.content_models:
+  title: Data model
+  description: 'Manage content models that define the data in your API.'
+  route_name: admin.content_models
+  parent: system.admin
+  weight: -9
+  options:
+    attributes:
+      class: ['toolbar-icon', 'toolbar-icon-system-admin-structure']
+
+admin.cms:
+  title: System administration
+  description: 'Administer the content management system.'
+  route_name: admin.cms
+  parent: system.admin
+  weight: 5
+  options:
+    attributes:
+      class: ['toolbar-icon', 'toolbar-icon-system-admin-config']

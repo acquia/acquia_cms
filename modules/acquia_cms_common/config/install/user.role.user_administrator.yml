@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies: {  }
+id: user_administrator
+label: 'User Administrator'
+weight: -4
+is_admin: null
+permissions:
+  - 'access toolbar'
+  - 'administer CAPTCHA settings'
+  - 'administer honeypot'
+  - 'administer recaptcha'
+  - 'administer seckit'
+  - 'administer shield'
+  # This permission is required to configure password policies.
+  - 'administer site configuration'
+  - 'administer users'
+  - 'manage password reset'
+  - 'view the administration theme'

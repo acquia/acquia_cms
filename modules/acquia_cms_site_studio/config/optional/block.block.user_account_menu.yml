@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.account
+  module:
+    - cohesion
+    - system
+  theme:
+    - cohesion_theme
+id: user_account_menu
+theme: cohesion_theme
+region: dx8_hidden
+weight: 0
+provider: null
+plugin: 'system_menu_block:account'
+settings:
+  id: 'system_menu_block:account'
+  label: 'User account menu'
+  provider: system
+  label_display: '0'
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  cohesion_master_template:
+    id: cohesion_master_template
+    using_master_template: 0
+    negate: false

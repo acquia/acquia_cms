@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the acquia_cms_event module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_event_install() {
+  user_role_grant_permissions('content_author', [
+    'create event content',
+    'edit own event content',
+    'delete own event content',
+  ]);
+  user_role_grant_permissions('content_editor', [
+    'edit any event content',
+    'delete any event content',
+  ]);
+}
+
+/**
+ * Implements hook_module_preinstall().
+ */
+function acquia_cms_event_module_preinstall($module) {
+  \Drupal::service('acquia_cms_common.utility')->setModulePreinstallTriggered($module);
+}
+
+/**
+ * Update past events views display & its title.
+ */
+function acquia_cms_event_update_8001() {
+  $configFactory = \Drupal::service('config.factory');
+  $config = $configFactory->getEditable('views.view.event_cards');
+  if (!empty($config)) {
+    $config->set('display.past_events_block.display_title', 'Past Events')
+      ->set('display.past_events_block.display_options.title', '')->save();
+  }
+}

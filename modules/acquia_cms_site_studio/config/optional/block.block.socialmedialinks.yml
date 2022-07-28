@@ -1,0 +1,128 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - cohesion
+    - social_media_links
+  theme:
+    - cohesion_theme
+id: socialmedialinks
+theme: cohesion_theme
+region: dx8_hidden
+weight: 0
+provider: null
+plugin: social_media_links_block
+settings:
+  id: social_media_links_block
+  label: 'Social Media Links'
+  provider: social_media_links
+  label_display: '0'
+  platforms:
+    behance:
+      value: ''
+      description: ''
+      weight: '-33'
+    vimeo:
+      value: ''
+      description: ''
+      weight: '-32'
+    rss:
+      value: ''
+      description: ''
+      weight: '-31'
+    contact:
+      value: ''
+      description: ''
+      weight: '-30'
+    email:
+      value: ''
+      description: ''
+      weight: '-29'
+    drupal:
+      value: ''
+      description: ''
+      weight: '-28'
+    github:
+      value: ''
+      description: ''
+      weight: '-27'
+    youtube_channel:
+      value: ''
+      description: ''
+      weight: '-26'
+    xing:
+      value: ''
+      description: ''
+      weight: '-25'
+    pinterest:
+      value: ''
+      description: ''
+      weight: '-24'
+    bitbucket:
+      value: ''
+      description: ''
+      weight: '-23'
+    whatsapp:
+      value: ''
+      description: ''
+      weight: '-22'
+    slideshare:
+      value: ''
+      description: ''
+      weight: '-21'
+    flickr:
+      value: ''
+      description: ''
+      weight: '-20'
+    website:
+      value: ''
+      description: ''
+      weight: '-19'
+    facebook:
+      value: acquia
+      description: Facebook
+      weight: '-18'
+    twitter:
+      value: acquia
+      description: Twitter
+      weight: '-17'
+    youtube:
+      value: user/AcquiaTV
+      description: Youtube
+      weight: '-16'
+    instagram:
+      value: acquia
+      description: Instagram
+      weight: '-15'
+    googleplus:
+      value: ''
+      description: ''
+      weight: '-14'
+    vkontakte:
+      value: ''
+      description: ''
+      weight: '-13'
+    linkedin:
+      value: ''
+      description: ''
+      weight: '-12'
+    tumblr:
+      value: ''
+      description: ''
+      weight: '-10'
+  appearance:
+    orientation: h
+    show_name: 0
+  link_attributes:
+    target: _blank
+    rel: '<none>'
+  iconset:
+    style: 'fontawesome:lg'
+    installed_iconsets:
+      fontawesome:
+        examples: ''
+visibility:
+  cohesion_master_template:
+    id: cohesion_master_template
+    using_master_template: 0
+    negate: false
