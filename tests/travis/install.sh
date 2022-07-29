@@ -41,16 +41,16 @@ if [[ "$ACMS_JOB" != "base" ]] && [[ "$ACMS_JOB" != "starter" ]] && [[ "$ORCA_JO
   drush cohesion:rebuild -y
 fi
 
-# Allow third party plugins so that they are not blocked when CI jobs run by ORCA.
-composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true;
-composer config --no-plugins allow-plugins.ergebnis/composer-normalize true;
-composer config --no-plugins allow-plugins.wikimedia/composer-merge-plugin true;
+## Allow third party plugins so that they are not blocked when CI jobs run by ORCA.
+#composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true;
+#composer config --no-plugins allow-plugins.ergebnis/composer-normalize true;
+#composer config --no-plugins allow-plugins.wikimedia/composer-merge-plugin true;
 
 # Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.
 composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms"]' --merge
 
 # Install dev dependencies.
-composer require --dev weitzman/drupal-test-traits phpspec/prophecy-phpunit:^2
+#composer require --dev weitzman/drupal-test-traits phpspec/prophecy-phpunit:^2
 
 # If there is a pre-built archive of code, assets, and templates for
 # Cohesion, import that instead of calling out to Cohesion's API.
@@ -66,6 +66,12 @@ if [[ "$ACMS_JOB" == "base" ]] && [[ -n "$ACMS_DB_ARTIFACT" ]] && [[ -n "$ACMS_F
   tar -xzf $ACMS_FILES_ARTIFACT
   gunzip $ACMS_DB_ARTIFACT
   drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms.sql
+
+  # Workaround to switch profile from acquia_cms to minimal.
+  # @todo Remove this after we update tests artifacts, which is created based on release 2.0.x.
+  drush sqlq 'UPDATE `config` SET `data` = replace(data, "s:10:\"acquia_cms\"", "s:7:\"minimal\"") where name="core.extension";'
+  drush cr
+
   drush updatedb --cache-clear --yes -vvv
   drush cr
 fi
@@ -76,6 +82,12 @@ if [[ "$ACMS_JOB" == "starter" ]] && [[ -n "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ 
   tar -xzf $ACMS_STARTER_FILES_ARTIFACT
   gunzip $ACMS_STARTER_DB_ARTIFACT
   drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms-starter.sql
+
+  # Workaround to switch profile from acquia_cms to minimal.
+  # @todo Remove this after we update tests artifacts, which is created based on release 2.0.x.
+  drush sqlq 'UPDATE `config` SET `data` = replace(data, "s:10:\"acquia_cms\"", "s:7:\"minimal\"") where name="core.extension";'
+  drush cr
+
   drush updatedb --cache-clear --yes -vvv
 fi
 
