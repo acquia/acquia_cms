@@ -23,7 +23,7 @@ if [[ "$ACMS_JOB" == "base" ]] || [[ "$ACMS_JOB" == "starter" ]]; then
   orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT --dev --profile=minimal --no-sqlite --no-site-install
   cat ../../patches/ci-settings.txt >> $ORCA_FIXTURE_DIR/docroot/sites/default/settings.php
 
-elif [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]]; then
+elif [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]]; [[ "$ACMS_JOB" == "PHP_job" ]]; then
   # Temporarily changing core from CURRENT_DEV to CURRENT so that CI tests start passing.
   # @todo revert back the above changes.
   orca debug:packages CURRENT
