@@ -33,12 +33,12 @@ env:
     # Specify the name of the nearest Git version branch, e.g., 1.x or 8.x-1.x.
     # This may be the destination branch of a pull request or the nearest
     # ancestor of a topic branch.
-    - ORCA_SUT_BRANCH=develop
+    - ORCA_SUT_BRANCH=develop_new
     # Specify the version of ORCA to use. Use dev-master to track the latest
     # release, dev-develop to track Dev/HEAD, or any other Composer version
     # string.
     # @see https://getcomposer.org/doc/articles/versions.md
-    - ORCA_VERSION=v3.18.0
+    - ORCA_VERSION=^3
     # If your package isn't in in ORCA's packages.yml or conflicts with details
     # that are, you can modify the active packages configuration at runtime by
     # uncommenting the following line and specifying your own alter file.
