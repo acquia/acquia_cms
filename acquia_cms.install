@@ -1,0 +1,83 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the acquia_cms module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_install() {
+  putenv('UNSET_COHESION_SYNC=1');
+  // Set logo and favicon path if blank.
+  $acquia_cms_common_path = \Drupal::moduleHandler()->getModule('acquia_cms_common')->getPath();
+  // Update favicon path.
+  if (\Drupal::configFactory()->getEditable('system.theme.global')->get('favicon.path') == '') {
+    \Drupal::configFactory()->getEditable('system.theme.global')
+      ->set('favicon.path', '/' . $acquia_cms_common_path . '/acquia_cms.png')
+      ->save();
+  }
+  // Update logo path.
+  if (\Drupal::configFactory()->getEditable('system.theme.global')->get('logo.path') == '') {
+    \Drupal::configFactory()->getEditable('system.theme.global')
+      ->set('logo.path', '/' . $acquia_cms_common_path . '/acquia_cms.png')
+      ->save();
+  }
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function acquia_cms_modules_installed(array $modules) {
+  if (in_array('acquia_cms_site_studio', $modules)) {
+    \Drupal::service('acquia_cms_common.utility')->siteStudioPackageImport();
+    \Drupal::service('acquia_cms_common.utility')->rebuildSiteStudio();
+  }
+}
+
+/**
+ * Update config ignore settings.
+ */
+function acquia_cms_update_8001() {
+  $config = \Drupal::configFactory()->getEditable('config_ignore.settings');
+  // Get existing ignore config and append the new one.
+  $existing_ignore_config = $config->get('ignored_config_entities');
+  $new_ignore_config = [
+    'cohesion.settings',
+    'purge.plugins',
+    'purge.logger_channels',
+  ];
+  $updated_ignore_config = array_unique(array_merge($existing_ignore_config, $new_ignore_config));
+  $config->set('ignored_config_entities', $updated_ignore_config);
+  $config->set('enable_export_filtering', TRUE);
+  $config->save(TRUE);
+}
+
+/**
+ * Uninstall page_cache module.
+ */
+function acquia_cms_update_8002() {
+  if (\Drupal::moduleHandler()->moduleExists('page_cache')) {
+    \Drupal::service('module_installer')->uninstall(['page_cache']);
+  }
+}
+
+/**
+ * Rename acquia_cms.settings to acquia_cms_common.settings.
+ */
+function acquia_cms_update_8003() {
+  // Move config acquia_cms.setting to acquia_cms_common.setting.
+  $acms = \Drupal::configFactory()->getEditable('acquia_cms.settings');
+  if ($acms) {
+    $acms_common = \Drupal::configFactory()->getEditable('acquia_cms_common.settings');
+    $acms_common->set('user_login_redirection', $acms->get('user_login_redirection'))->save();
+    if ($acms->get('acquia_cms_https')) {
+      $acms_common->set('acquia_cms_https', $acms->get('acquia_cms_https'))->save();
+    }
+    // Delete acquia_cms.setting config.
+    \Drupal::configFactory()->getEditable('acquia_cms.settings')->delete();
+  }
+  // Clear caches.
+  drupal_flush_all_caches();
+}

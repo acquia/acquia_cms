@@ -1,9 +1,8 @@
 {
     "name": "acquia/acquia_cms",
-    "type": "drupal-profile",
     "description": "An implementation of Drupal 9 for running custom, low code websites on the Acquia platform.",
-    "homepage": "https://github.com/acquia/acquia_cms",
     "license": "GPL-2.0-or-later",
+    "type": "drupal-module",
     "authors": [
         {
             "name": "Michael Sherron",
@@ -16,13 +15,17 @@
             "role": "Maintainer"
         }
     ],
+    "homepage": "https://github.com/acquia/acquia_cms",
     "require": {
+        "acquia/acquia-cms-starterkit": "^1.0",
         "drupal/acquia_claro": "^1.3.2",
         "drupal/acquia_cms_audio": "^1.3.2",
         "drupal/acquia_cms_component": "^1.3.1",
+        "drupal/acquia_cms_headless": "^1.3@beta",
+        "drupal/acquia_cms_site_studio": "~1.3.6",
         "drupal/acquia_cms_starter": "^1.3.0",
         "drupal/acquia_cms_toolbar": "^1.3.3",
-        "drupal/acquia_cms_tour": "^1.3.0",
+        "drupal/acquia_cms_tour": "^2.0.0",
         "drush/drush": "^10 || ^11",
         "ergebnis/composer-normalize": "^2.9"
     },
@@ -36,6 +39,22 @@
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "~9.4.0 || ~9.5.0",
         "weitzman/drupal-test-traits": "^1.5"
+    },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Acquia\\Utility\\": "src/Utility"
+        },
+        "classmap": [
+            "src/Composer/ConfigureProject.php"
+        ]
     },
     "config": {
         "allow-plugins": {
@@ -64,7 +83,6 @@
                 "[project-root]/.gitattributes": false,
                 "[web-root]/.csslintrc": false,
                 "[web-root]/INSTALL.txt": false,
-                "[web-root]/drush/Commands/SiteInstallCommands.php": "src/Commands/SiteInstallCommands.php",
                 "[web-root]/drush/drush.yml": "drush/drush.yml",
                 "[web-root]/example.gitignore": false,
                 "[web-root]/modules/README.txt": false,
@@ -112,30 +130,12 @@
         },
         "patches": {}
     },
-    "autoload": {
-        "psr-4": {
-            "Acquia\\Utility\\": "src/Utility"
-        },
-        "classmap": [
-            "src/Composer/ConfigureProject.php"
-        ]
-    },
-    "repositories": {
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "scripts": {
         "pre-update-cmd": [
             "@putenv COMPOSER_MEMORY_LIMIT=2G"
         ],
         "post-update-cmd": [
             "Composer\\Config::disableProcessTimeout",
-            "@putenv PROFILE_DIR=./docroot/profiles/contrib/acquia_cms",
-            "@putenv MODULES_DIR=./docroot/profiles/contrib/acquia_cms/modules",
             "if [ \"$PIPELINE_ENV\" != \"true\" ]; then composer build:local; fi;"
         ],
         "acms:install": [
@@ -143,18 +143,9 @@
         ],
         "build:frontend": [
             "Composer\\Config::disableProcessTimeout",
-            "cd themes/acquia_claro && npm run build",
-            "mkdir -p modules/acquia_cms_toolbar/css",
-            "cp themes/acquia_claro/css/acquia_cms_toolbar.css modules/acquia_cms_toolbar/css"
+            "cd docroot/themes/contrib/acquia_claro && npm run build"
         ],
         "build:local": [
-            "mkdir -p $PROFILE_DIR $MODULES_DIR",
-            "find $PWD -name 'acquia_cms.*' -type f -maxdepth 1 -exec ln -s -f '{}' $PROFILE_DIR ';'",
-            "find ./docroot/modules/contrib -type d -maxdepth 1 -name \"acquia_cms*\" -exec cp -r '{}' $MODULES_DIR ';'",
-            "ln -s -f $PWD/config $PROFILE_DIR",
-            "ln -s -f $PWD/misc $PROFILE_DIR",
-            "ln -s -f $PWD/src $PROFILE_DIR",
-            "ln -s -f $PWD/tests $PROFILE_DIR",
             "cp -f phpunit.xml ./docroot/core"
         ],
         "cohesion:fixture": [
@@ -168,7 +159,7 @@
         "configure-tarball": "Drupal\\acquia_cms\\Composer\\ConfigureProject::execute",
         "install:frontend": [
             "Composer\\Config::disableProcessTimeout",
-            "cd themes/acquia_claro && npm install"
+            "cd docroot/themes/contrib/acquia_claro && npm install"
         ],
         "nuke": "rm -r -f docroot vendor"
     }
