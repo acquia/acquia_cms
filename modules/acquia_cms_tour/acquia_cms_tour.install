@@ -5,9 +5,62 @@
  * Install, update and uninstall functions for the acquia_cms_tour module.
  */
 
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_tour_install() {
+  $roles = Role::loadMultiple();
+  if (isset($roles['content_administrator'])) {
+    user_role_grant_permissions('content_administrator', [
+      'access acquia cms tour',
+      'access acquia cms tour dashboard',
+    ]);
+  }
+  $roles_author_editor = [
+    'content_author',
+    'content_editor',
+  ];
+  foreach ($roles_author_editor as $role) {
+    if (isset($roles[$role])) {
+      user_role_grant_permissions($role, [
+        'access acquia cms tour',
+      ]);
+    }
+  }
+}
+
 /**
  * Add state key for existing sites with Acquia CMS profile.
  */
 function acquia_cms_tour_update_8001() {
   \Drupal::state()->set('existing_site_acquia_cms', TRUE);
+}
+
+/**
+ * Update role permissions.
+ */
+function acquia_cms_tour_update_8002() {
+  $moduleHandler = \Drupal::service('module_handler');
+  if ($moduleHandler->moduleExists('acquia_cms_tour')) {
+    $roles = Role::loadMultiple();
+    if (isset($roles['content_administrator'])) {
+      user_role_grant_permissions('content_administrator', [
+        'access acquia cms tour',
+        'access acquia cms tour dashboard',
+      ]);
+    }
+    $roles_author_editor = [
+      'content_author',
+      'content_editor',
+    ];
+    foreach ($roles_author_editor as $role) {
+      if (isset($roles[$role])) {
+        user_role_grant_permissions($role, [
+          'access acquia cms tour',
+        ]);
+      }
+    }
+  }
 }
