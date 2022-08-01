@@ -47,7 +47,7 @@ class PageWithSiteStudioTest extends ContentTypeTestBase {
   // @codingStandardsIgnoreStart
   protected $strictConfigSchema = FALSE;
   // @codingStandardsIgnoreEnd
-  
+
   /**
    * {@inheritdoc}
    */
@@ -56,10 +56,10 @@ class PageWithSiteStudioTest extends ContentTypeTestBase {
     // Disable js cache to prevent failure of site studio test.
     $this->container->get('config.factory')
       ->getEditable('system.performance')
-      ->set('js.preprocess', false)
+      ->set('js.preprocess', FALSE)
       ->save(TRUE);
   }
-  
+
   /**
    * {@inheritdoc}
    */

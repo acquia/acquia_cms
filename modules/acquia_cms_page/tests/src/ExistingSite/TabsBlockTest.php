@@ -47,6 +47,7 @@ class TabsBlockTest extends ExistingSiteBase {
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    * @throws \Drupal\Core\Entity\EntityMalformedException
    * @throws \Drupal\Core\Entity\EntityStorageException
+   *
    * @dataProvider providerTabsBlock
    */
   public function testTabsBlock(string $role) {

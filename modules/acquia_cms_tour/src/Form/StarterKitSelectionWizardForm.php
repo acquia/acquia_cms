@@ -70,7 +70,7 @@ class StarterKitSelectionWizardForm extends FormBase {
    *
    * @var \Drupal\acquia_cms_tour\AcquiaCmsStarterKitManager
    */
-  protected $AcquiaCmsStarterKitManager;
+  protected $acquiaCmsStarterKitManager;
 
   /**
    * {@inheritdoc}
@@ -99,7 +99,7 @@ class StarterKitSelectionWizardForm extends FormBase {
     $this->classResolver = $class_resolver;
     $this->renderer = $renderer;
     $this->state = $state;
-    $this->AcquiaCmsStarterKitManager = $acquia_cms_tour_manager;
+    $this->acquiaCmsStarterKitManager = $acquia_cms_tour_manager;
   }
 
   /**
@@ -135,7 +135,7 @@ class StarterKitSelectionWizardForm extends FormBase {
       $this->initMultistepForm($form, $form_state);
       // If the user resumes the wizard later, lets take them
       // to the appropriate config form.
-      $current_wizard_step = $this->state->get('current_wizard_step', NULL);
+      $current_wizard_step = $this->state->get('starter_kit_wizard_step', NULL);
       if ($current_wizard_step && $current_wizard_step != 'completed') {
         $this->setCurrentStep($current_wizard_step);
       }
@@ -151,7 +151,6 @@ class StarterKitSelectionWizardForm extends FormBase {
     }
 
     $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
-
     return $form;
   }
 
@@ -248,7 +247,7 @@ class StarterKitSelectionWizardForm extends FormBase {
     $this->classResolver->getInstanceFromDefinition($formController)->submitForm($form, $form_state);
 
     $this->currentStep += 1;
-    $this->state->set('current_wizard_step', $this->currentStep);
+    $this->state->set('starter_kit_wizard_step', $this->currentStep);
     $form_state->setRebuild(TRUE);
   }
 
@@ -332,7 +331,7 @@ class StarterKitSelectionWizardForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $formController = $this->getCurrentFormController()['class'];
     $this->classResolver->getInstanceFromDefinition($formController)->submitForm($form, $form_state);
-    $this->state->set('current_wizard_step', 'completed');
+    $this->state->set('starter_kit_wizard_step', 'completed');
     $this->messenger()->addStatus($this->t('The configuration options have been saved.'));
     $form_state->setRedirect('acquia_cms_tour.enabled_modules');
   }
@@ -369,7 +368,7 @@ class StarterKitSelectionWizardForm extends FormBase {
    */
   public function getSteps(): array {
     $steps = [];
-    foreach ($this->AcquiaCmsStarterKitManager->getDefinitions() as $definition) {
+    foreach ($this->acquiaCmsStarterKitManager->getDefinitions() as $definition) {
       $steps[] = $definition;
     }
     return $steps;
@@ -417,7 +416,6 @@ class StarterKitSelectionWizardForm extends FormBase {
     foreach ($steps as $key => $plugin) {
       $machine_name = $plugin['id'];
       $label = $plugin['label'];
-      $formControllerDefinition = $this->classResolver->getInstanceFromDefinition($plugin['class']);
       $sr_no = $key + 1;
       if ($sr_no < ($this->currentStep) + 1) {
         $current_class = ['item', 'step-complete'];
@@ -466,4 +464,5 @@ class StarterKitSelectionWizardForm extends FormBase {
   private function getCurrentFormController() {
     return $this->steps[$this->currentStep];
   }
+
 }

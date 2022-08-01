@@ -3,6 +3,7 @@
 namespace Drupal\acquia_cms_tour\Services;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Extension\ThemeInstallerInterface;
 
@@ -33,22 +34,33 @@ class StarterKitService {
   protected $configFactory;
 
   /**
+   * The module extension list.
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  protected $moduleExtensionList;
+
+  /**
    * Constructs a new AcmsService object.
    *
-   * @param \Drupal\Core\Extension\ModuleInstallerInterface $moduleHandler
+   * @param \Drupal\Core\Extension\ModuleInstallerInterface $module_installer
    *   The ModuleHandlerInterface.
-   * @param \Drupal\Core\Extension\ThemeInstallerInterface $themeInstaller
+   * @param \Drupal\Core\Extension\ThemeInstallerInterface $theme_installer
    *   The ThemeInstallerInterface.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
+   * @param \Drupal\Core\Extension\ModuleExtensionList $extension_list_module
+   *   The module extension list.
    */
   public function __construct(
-    ModuleInstallerInterface $moduleInstaller,
-    ThemeInstallerInterface $themeInstaller,
-    ConfigFactoryInterface $config_factory) {
-    $this->moduleInstaller = $moduleInstaller;
-    $this->themeInstaller = $themeInstaller;
+  ModuleInstallerInterface $module_installer,
+  ThemeInstallerInterface $theme_installer,
+  ConfigFactoryInterface $config_factory,
+  ModuleExtensionList $extension_list_module) {
+    $this->moduleInstaller = $module_installer;
+    $this->themeInstaller = $theme_installer;
     $this->configFactory = $config_factory;
+    $this->moduleExtensionList = $extension_list_module;
   }
 
   /**
@@ -66,7 +78,7 @@ class StarterKitService {
     if (!empty($modulesAndThemes['enableModules'])) {
       $this->moduleInstaller->install($modulesAndThemes['enableModules']);
     }
-    foreach ($modulesAndThemes['enableThemes'] as $key => $theme) {
+    foreach ($modulesAndThemes['enableThemes'] as $theme) {
       $this->themeInstaller->install([$theme]);
     }
     $this->configFactory
@@ -98,60 +110,67 @@ class StarterKitService {
           'acquia_cms_search',
           'acquia_cms_site_studio',
           'acquia_cms_toolbar',
-          'acquia_cms_tour'
+          'acquia_cms_tour',
         ];
         $enableThemes = [
           'admin'   => 'acquia_claro',
           'default' => 'cohesion_theme',
         ];
         break;
+
       case 'acquia_cms_community':
         $enableModules = [
           'acquia_cms_search',
           'acquia_cms_toolbar',
-          'acquia_cms_tour'
+          'acquia_cms_tour',
         ];
         $enableThemes = [
           'admin'   => 'acquia_claro',
           'default' => 'olivero',
         ];
         break;
+
       case 'acquia_cms_headless':
         $enableModules = [
           'acquia_cms_headless',
           'acquia_cms_search',
           'acquia_cms_toolbar',
-          'acquia_cms_tour'
+          'acquia_cms_tour',
         ];
         $enableThemes = [
           'admin'   => 'acquia_claro',
           'default' => 'olivero',
         ];
         break;
+
       default:
         $enableThemes = [
           'admin'   => 'acquia_claro',
           'default' => 'olivero',
         ];
-        $enableModules = ['acquia_cms_search', 'acquia_cms_toolbar', 'acquia_cms_tour'];
+        $enableModules = [
+          'acquia_cms_search',
+          'acquia_cms_toolbar',
+          'acquia_cms_tour',
+        ];
     }
-    if($demo_question == 'Yes'){
+    if ($demo_question == 'Yes') {
       $enableModules = array_merge(
         $enableModules, ['acquia_cms_starter'],
       );
     }
-    elseif($content_model == 'Yes'){
+    elseif ($content_model == 'Yes') {
       $enableModules = array_merge(
         $enableModules, [
           'acquia_cms_article',
           'acquia_cms_page',
-          'acquia_cms_event'
+          'acquia_cms_event',
         ],
       );
     }
     return [
       'enableModules' => $enableModules,
-      'enableThemes' => $enableThemes
+      'enableThemes' => $enableThemes,
     ];
   }
 
@@ -166,23 +185,23 @@ class StarterKitService {
    *   Variable holding the content model option selected.
    */
   public function getMissingModules(string $starter_kit, string $demo_question = NULL, string $content_model = NULL) {
-    $modulesAndThemes = \Drupal::service('acquia_cms_tour.starter_kit')->getModulesAndThemes($starter_kit, $demo_question, $content_model);
+    $modulesAndThemes = $this->getModulesAndThemes($starter_kit, $demo_question, $content_model);
     $modules = $modulesAndThemes['enableModules'];
-    $moduleList = array_keys(\Drupal::service('extension.list.module')->getList());
-    $missingModules = implode(', ',array_diff($modules,$moduleList)) ?? '';
+    $moduleList = array_keys($this->moduleExtensionList->getList());
+    $missingModules = implode(', ', array_diff($modules, $moduleList)) ?? '';
     return $missingModules;
   }
 
   /**
    * Handler for Missing Modules Command modules.
    *
-   * @param array $missing_modules
+   * @param string $missing_modules
    *   Variable holding the starter kit selected.
    */
   public function getMissingModulesCommand(string $missing_modules) {
-    if($missing_modules){
+    if ($missing_modules) {
       $missing_modules = 'drupal/' . $missing_modules;
-      $missing_modules = str_replace(', ',' drupal/',$missing_modules);
+      $missing_modules = str_replace(', ', ' drupal/', $missing_modules);
     }
     return $missing_modules;
   }

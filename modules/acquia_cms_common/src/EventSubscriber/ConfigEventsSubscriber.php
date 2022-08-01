@@ -85,51 +85,51 @@ class ConfigEventsSubscriber implements EventSubscriberInterface {
           case 'field.field.node.page.body':
             _acquia_cms_common_update_page_configurations('field.field.node.page.body', [
               'label' => 'Search Description',
-              'description' => 'A short description or teaser which will be displayed in search results.'
+              'description' => 'A short description or teaser which will be displayed in search results.',
             ]);
             break;
 
           case 'core.entity_form_display.node.page.default':
             _acquia_cms_common_update_page_configurations('core.entity_form_display.node.page.default', [
               'content.field_layout_canvas' => [
-                'type'=> 'cohesion_layout_builder_widget',
+                'type' => 'cohesion_layout_builder_widget',
                 'weight' => 2,
                 'settings' => [],
                 'third_party_settings' => [],
-                'region' => 'content'
-              ]
+                'region' => 'content',
+              ],
             ]);
             break;
 
           case 'core.entity_view_display.node.page.default':
             _acquia_cms_common_update_page_configurations('core.entity_view_display.node.page.default', [
               'content.field_layout_canvas' => [
-                'type'=> 'cohesion_entity_reference_revisions_entity_view',
+                'type' => 'cohesion_entity_reference_revisions_entity_view',
                 'weight' => 2,
                 'label' => 'hidden',
                 'settings' => [
                   'view_mode' => 'default',
-                  'link'  => false
+                  'link'  => FALSE,
                 ],
                 'third_party_settings' => [],
-                'region' => 'content'
-              ]
+                'region' => 'content',
+              ],
             ]);
             break;
 
           case 'core.entity_view_display.node.page.horizontal_card':
             _acquia_cms_common_update_page_configurations('core.entity_view_display.node.page.horizontal_card', [
               'content.field_layout_canvas' => [
-                'type'=> 'cohesion_entity_reference_revisions_entity_view',
+                'type' => 'cohesion_entity_reference_revisions_entity_view',
                 'weight' => 2,
                 'label' => 'hidden',
                 'settings' => [
                   'view_mode' => 'default',
-                  'link'  => false
+                  'link'  => FALSE,
                 ],
                 'third_party_settings' => [],
-                'region' => 'content'
-              ]
+                'region' => 'content',
+              ],
             ]);
             break;
         }
@@ -190,11 +190,11 @@ class ConfigEventsSubscriber implements EventSubscriberInterface {
               'content_author' => 'content_author',
               'content_editor' => 'content_editor',
               'user_administrator' => 'user_administrator',
-            ]
+            ],
           ]);
         }
       }
-    } 
+    }
   }
 
 }

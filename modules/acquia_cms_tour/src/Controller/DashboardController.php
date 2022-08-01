@@ -3,12 +3,14 @@
 namespace Drupal\acquia_cms_tour\Controller;
 
 use Drupal\acquia_cms_tour\AcquiaCmsTourManager;
+use Drupal\acquia_cms_tour\Services\StarterKitService;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Defines a route controller providing a simple tour dashboard of Acquia CMS.
@@ -35,11 +37,25 @@ final class DashboardController extends ControllerBase {
   protected $state;
 
   /**
+   * The request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
    * The acquia cms tour manager.
    *
    * @var \Drupal\acquia_cms_tour\AcquiaCmsTourManager
    */
   protected $acquiaCmsTourManager;
+
+  /**
+   * The acquia cms tour manager.
+   *
+   * @var \Drupal\acquia_cms_tour\Services\StarterKitService
+   */
+  protected $starterKitService;
 
   /**
    * Constructs a new ProgressBarForm.
@@ -48,13 +64,25 @@ final class DashboardController extends ControllerBase {
    *   The state service.
    * @param \Drupal\Core\DependencyInjection\ClassResolverInterface $class_resolver
    *   The class resolver.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The class resolver.
    * @param \Drupal\acquia_cms_tour\AcquiaCmsTourManager $acquia_cms_tour_manager
-   *   The acquia cms tour manager class.
+   *   The acquia cms tour manager.
+   * @param \Drupal\acquia_cms_tour\Services\StarterKitService $starter_kit_service
+   *   The class resolver.
    */
-  public function __construct(StateInterface $state, ClassResolverInterface $class_resolver, AcquiaCmsTourManager $acquia_cms_tour_manager) {
+  public function __construct(
+  StateInterface $state,
+  ClassResolverInterface $class_resolver,
+  RequestStack $request_stack,
+  AcquiaCmsTourManager $acquia_cms_tour_manager,
+  StarterKitService $starter_kit_service
+  ) {
     $this->state = $state;
     $this->classResolver = $class_resolver;
+    $this->requestStack = $request_stack;
     $this->acquiaCmsTourManager = $acquia_cms_tour_manager;
+    $this->starterKitService = $starter_kit_service;
   }
 
   /**
@@ -79,7 +107,9 @@ final class DashboardController extends ControllerBase {
     return new static(
       $container->get('state'),
       $container->get('class_resolver'),
-      $container->get('plugin.manager.acquia_cms_tour')
+      $container->get('request_stack'),
+      $container->get('plugin.manager.acquia_cms_tour'),
+      $container->get('acquia_cms_tour.starter_kit')
     );
   }
 
@@ -110,20 +140,18 @@ final class DashboardController extends ControllerBase {
     $total = 0;
     $completed = 0;
     $existing_site_acquia_cms = $this->state->get('existing_site_acquia_cms', FALSE);
-    $show_starter_kit_modal = \Drupal::request()->get('show_starter_kit_modal') ?? FALSE;
+    $show_starter_kit_modal = $this->requestStack->getCurrentRequest()->get('show_starter_kit_modal') ?? FALSE;
     $show_welcome_dialog = $this->state->get('show_welcome_modal', TRUE);
     $show_wizard_modal = $this->state->get('show_wizard_modal', TRUE);
     $wizard_completed = $this->state->get('wizard_completed', FALSE);
     $starter_kit_wizard_completed = $this->state->get('starter_kit_wizard_completed', FALSE);
-    $starter_kit = $this->state->get('starter_kit', FALSE);
     $selected_starter_kit = $this->state->get('acquia_cms.starter_kit');
     $hide_starter_kit_intro_dialog = $this->state->get('hide_starter_kit_intro_dialog');
     $starter_link_url = Url::fromRoute('acquia_cms_tour.starter_kit_welcome_modal_form');
     $link_url = Url::fromRoute('acquia_cms_tour.welcome_modal_form');
-    $service = \Drupal::service('acquia_cms_tour.starter_kit');
-    $acquia_cms_enterprise_low_code = $service->getMissingModules('acquia_cms_enterprise_low_code');
-    $acquia_cms_community = $service->getMissingModules('acquia_cms_community');
-    $acquia_cms_headless = $service->getMissingModules('acquia_cms_headless');
+    $acquia_cms_enterprise_low_code = $this->starterKitService->getMissingModules('acquia_cms_enterprise_low_code');
+    $acquia_cms_community = $this->starterKitService->getMissingModules('acquia_cms_community');
+    $acquia_cms_headless = $this->starterKitService->getMissingModules('acquia_cms_headless');
     if (!$show_welcome_dialog) {
       $link_url = Url::fromRoute('acquia_cms_tour.installation_wizard');
     }
@@ -143,7 +171,7 @@ final class DashboardController extends ControllerBase {
         ]),
       ],
     ]);
-    if(!$existing_site_acquia_cms && !$starter_kit_wizard_completed){
+    if (!$existing_site_acquia_cms && !$starter_kit_wizard_completed) {
       $starter_link_url->setOptions([
         'attributes' => [
           'class' => [
@@ -165,7 +193,6 @@ final class DashboardController extends ControllerBase {
         '#title' => $this->t('Starter kit set-up'),
         '#url' => $starter_link_url,
       ];
-      $form['starter_kit_wizard_completed'] = $starter_kit_wizard_completed;
     }
 
     // Delegate building each section using plugin class.

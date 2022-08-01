@@ -229,11 +229,9 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
       $value = $this->generateSourceFieldValue($media_type);
     }
 
-    /**
-    * Get the field name from subclases if missing use fallback value
-    */
+    // Get the field name from subclases if missing use fallback value.
     $field = $this->fieldName;
-    if(empty($field)){
+    if (empty($field)) {
       $field = $media_type->getSource()
         ->getSourceFieldDefinition($media_type)
         ->getLabel();

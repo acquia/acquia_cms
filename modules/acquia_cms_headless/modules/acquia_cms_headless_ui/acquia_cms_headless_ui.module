@@ -302,7 +302,7 @@ function acquia_cms_headless_ui_menu_links_discovered_alter(array &$links) {
       'admin.content_models',
       'acquia_cms_tour.tour',
       'system.admin_content',
-      'admin_toolbar_tools.help'
+      'admin_toolbar_tools.help',
     ];
     if (in_array($name, $bypass)) {
       continue;

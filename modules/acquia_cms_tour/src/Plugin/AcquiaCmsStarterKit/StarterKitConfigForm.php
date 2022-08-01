@@ -2,10 +2,9 @@
 
 namespace Drupal\acquia_cms_tour\Plugin\AcquiaCmsStarterKit;
 
-use Drupal\acquia_cms_tour\Form\AcquiaCMSStarterKitBase;
+use Drupal\acquia_cms_tour\Form\AcquiaCmsStarterKitBase;
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
-use Drupal\geocoder\GeocoderProviderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -17,14 +16,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   weight = 2
  * )
  */
-class StarterKitConfigForm extends AcquiaCMSStarterKitBase {
+class StarterKitConfigForm extends AcquiaCmsStarterKitBase {
 
   /**
    * Provides module name.
    *
    * @var string
    */
-  protected $form_name = 'acquia_cms_starter_kit_config';
+  protected $formName = 'acquia_cms_starter_kit_config';
 
   /**
    * {@inheritdoc}
@@ -49,94 +48,136 @@ class StarterKitConfigForm extends AcquiaCMSStarterKitBase {
     // Text input for Google Maps. ACMS can use the Gmaps API in two totally
     // different features (Site Studio and Place nodes). Site Studio is always
     // enabled in ACMS, but Place may not.
-    // Initialize an empty array
+    // Initialize an empty array.
     $service = \Drupal::service('acquia_cms_tour.starter_kit');
     $starter_kit = $this->state->get('acquia_cms.starter_kit');
     $starterKit = [
-      'acquia_cms_demo_content' => $service->getMissingModules($starter_kit, 'Yes','No'),
+      'acquia_cms_demo_content' => $service->getMissingModules($starter_kit, 'Yes', 'No'),
       'acquia_cms_content_model' => $service->getMissingModules($starter_kit, 'No', 'Yes'),
       'acquia_cms_starter_kit_only' => $service->getMissingModules($starter_kit, 'No', 'No'),
     ];
-    $form_name = $this->form_name;
-    $form[$form_name] = [
+    $formName = $this->formName;
+    $form[$formName] = [
       '#type' => 'details',
       '#title' => $this->t('Extend Starter Kit'),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
     ];
-    $form[$form_name]['demo'] = [
+    $form[$formName]['demo'] = [
       '#type' => 'select',
       '#title' => $this->t('Do you want to enable demo content?'),
-      '#options' => ['none' => 'Please select', 'No' => 'No', 'Yes' => 'Yes'],
+      '#options' => [
+        'none' => $this->t('Please select'),
+        'No' => $this->t('No'),
+        'Yes' => $this->t('Yes'),
+      ],
     ];
-    $form[$form_name]['content_model'] = [
+    $form[$formName]['content_model'] = [
       '#type' => 'select',
       '#title' => $this->t('Do you want to enable the content model?'),
-      '#options' => ['none' => 'Please select', 'No' => 'No', 'Yes' => 'Yes'],
+      '#options' => [
+        'none' => $this->t('Please select'),
+        'No' => $this->t('No'),
+        'Yes' => $this->t('Yes'),
+      ],
       '#states' => [
         'visible' => [
           ':input[name="demo"]' => ['value' => 'No'],
         ],
       ],
     ];
-    $form[$form_name]['declaration'] = [
+    $form[$formName]['declaration'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('I am aware that I can not change starter kit once selected.'),
       '#required' => TRUE,
       '#prefix' => '<div class= "dashboard-fields-wrapper">',
       '#suffix' => "</div>",
     ];
-    $message = "<div class='messages messages--error'><p>It seems that the
-    following modules are missing from the codebase.</p> <p>We suggest running
-    the below command to add the missing modules and visiting this page again.
-    </p> <p><b style='font-size:1.2rem'>
-    <i style='color:gray'>composer require -W ";
-    if($starterKit['acquia_cms_demo_content']){
-      $form[$form_name]['requirement_message_demo_content'] = [
-          '#type' => 'item',
-          '#markup' => $this->t($message . "{$service->getMissingModulesCommand($starterKit['acquia_cms_demo_content'])}" . '</i></b></p></div>'),
-          '#states' => [
-            'visible' => [
-              ':input[name="demo"]' => ['value' => 'Yes'],
-              ':input[name="content_model"]' => ['value' => 'Yes'],
-            ],
+    $formattedMessage = new FormattableMarkup(
+      '<div class="messages messages--error">
+        <p>@message1</p>
+        <p>@message2</p>
+        <p><b style="font-size:1.2rem"><i style="color:gray"> @message3',
+      [
+        '@message1' => 'It seems that thefollowing modules are missing from the codebase',
+        '@message2' => 'We suggest running the below command to add the missing modules and visiting this page again.',
+        '@message3' => 'composer require -W ',
+      ]
+    );
+    if ($starterKit['acquia_cms_demo_content']) {
+      $message = new FormattableMarkup(
+        '@message @missingModules </i></b></p></div>',
+        [
+          '@message' => $formattedMessage,
+          '@missingModules' => $service->getMissingModulesCommand($starterKit['acquia_cms_demo_content']),
+        ]
+      );
+      $form[$formName]['requirement_message_demo_content'] = [
+        '#type' => 'item',
+        '#markup' => $this->t('@message', ['@message' => $message]),
+        '#states' => [
+          'visible' => [
+            ':input[name="demo"]' => ['value' => 'Yes'],
+            ':input[name="content_model"]' => ['value' => 'Yes'],
           ],
+        ],
       ];
     }
-    if($starterKit['acquia_cms_demo_content']){
-      $form[$form_name]['requirement_message_demo_no_content_model'] = [
-          '#type' => 'item',
-          '#markup' => $this->t($message . "{$service->getMissingModulesCommand($starterKit['acquia_cms_demo_content'])}" . '</i></b></p></div>'),
-          '#states' => [
-            'visible' => [
-              ':input[name="demo"]' => ['value' => 'Yes'],
-              ':input[name="content_model"]' => ['!value' => 'Yes'],
-            ],
+    if ($starterKit['acquia_cms_demo_content']) {
+      $message = new FormattableMarkup(
+        '@message @missingModules </i></b></p></div>',
+        [
+          '@message' => $formattedMessage,
+          '@missingModules' => $service->getMissingModulesCommand($starterKit['acquia_cms_demo_content']),
+        ]
+      );
+      $form[$formName]['requirement_message_demo_no_content_model'] = [
+        '#type' => 'item',
+        '#markup' => $this->t('@message', ['@message' => $message]),
+        '#states' => [
+          'visible' => [
+            ':input[name="demo"]' => ['value' => 'Yes'],
+            ':input[name="content_model"]' => ['!value' => 'Yes'],
           ],
+        ],
       ];
     }
-    if($starterKit['acquia_cms_content_model']){
-      $form[$form_name]['requirement_message_content_model'] = [
-          '#type' => 'item',
-          '#markup' => $this->t($message . "{$service->getMissingModulesCommand($starterKit['acquia_cms_content_model'])}" . '</i></b></p></div>'),
-          '#states' => [
-            'visible' => [
-              ':input[name="demo"]' => ['!value' => 'Yes'],
-              ':input[name="content_model"]' => ['value' => 'Yes'],
-            ],
+    if ($starterKit['acquia_cms_content_model']) {
+      $message = new FormattableMarkup(
+        '@message @missingModules </i></b></p></div>',
+        [
+          '@message' => $formattedMessage,
+          '@missingModules' => $service->getMissingModulesCommand($starterKit['acquia_cms_content_model']),
+        ]
+      );
+      $form[$formName]['requirement_message_content_model'] = [
+        '#type' => 'item',
+        '#markup' => $this->t('@message', ['@message' => $message]),
+        '#states' => [
+          'visible' => [
+            ':input[name="demo"]' => ['!value' => 'Yes'],
+            ':input[name="content_model"]' => ['value' => 'Yes'],
           ],
+        ],
       ];
     }
-    if($starterKit['acquia_cms_starter_kit_only']){
-      $form[$form_name]['requirement_message_starter_kit_only'] = [
-          '#type' => 'item',
-          '#markup' => $this->t($message . "{$service->getMissingModulesCommand($starterKit['acquia_cms_starter_kit_only'])}" . '</i></b></p></div>'),
-          '#states' => [
-            'visible' => [
-              ':input[name="demo"]' => ['!value' => 'Yes'],
-              ':input[name="content_model"]' => ['!value' => 'Yes'],
-            ],
+    if ($starterKit['acquia_cms_starter_kit_only']) {
+      $message = new FormattableMarkup(
+        '@message @missingModules </i></b></p></div>',
+        [
+          '@message' => $formattedMessage,
+          '@missingModules' => $service->getMissingModulesCommand($starterKit['acquia_cms_starter_kit_only']),
+        ]
+      );
+      $form[$formName]['requirement_message_starter_kit_only'] = [
+        '#type' => 'item',
+        '#markup' => $this->t('@message', ['@message' => $message]),
+        '#states' => [
+          'visible' => [
+            ':input[name="demo"]' => ['!value' => 'Yes'],
+            ':input[name="content_model"]' => ['!value' => 'Yes'],
           ],
+        ],
       ];
     }
     $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
@@ -159,13 +200,13 @@ class StarterKitConfigForm extends AcquiaCMSStarterKitBase {
     $starter_kit = $this->state->get('acquia_cms.starter_kit');
     $service = \Drupal::service('acquia_cms_tour.starter_kit');
     $missingModules = $service->getMissingModules($starter_kit, $starter_kit_demo, $starter_kit_content_model);
-    if(!$missingModules){
+    if (!$missingModules) {
       $this->state->set('show_starter_kit_modal', FALSE);
       $this->state->set('starter_kit_wizard_completed', TRUE);
       $service->enableModules($starter_kit, $starter_kit_demo, $starter_kit_content_model);
       $this->messenger()->addStatus('The required starter kit has been installed. Also, the related modules & themes have been enabled.');
     }
-    else{
+    else {
       $this->messenger()->addStatus("It seems that the following modules are missing from the codebase. We suggest running the below command to add the missing modules and visiting this page again. Use 'composer require -W {$missingModules}'");
     }
     // Update state.
