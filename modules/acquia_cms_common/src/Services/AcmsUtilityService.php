@@ -5,7 +5,6 @@ namespace Drupal\acquia_cms_common\Services;
 use Drupal\cohesion\Drush\DX8CommandHelpers;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\State\StateInterface;
 
 /**
  * Defines a service for ACMS.
