@@ -5,6 +5,7 @@
  * Contains hook implementations for common, shared Acquia CMS functionality.
  */
 
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
 use Drupal\acquia_cms_common\Facade\MetatagFacade;
 use Drupal\acquia_cms_common\Facade\SitemapFacade;
 use Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade;
@@ -18,7 +19,6 @@ use Drupal\imce\Imce;
 use Drupal\node\NodeTypeInterface;
 use Drupal\workbench_email\TemplateInterface;
 use Symfony\Component\Yaml\Yaml;
-use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
 
 /**
  * Implements hook_preinstall().
@@ -244,9 +244,11 @@ function _acquia_cms_common_update_view_display_options_style($view_name, $displ
  * Helper function to update configuration for specified key.
  *
  * This is being used for updating page CT configurations.
+ *
  * @param string $config_name
  *   The configuration name which needs to be updated.
  * @param array $configurations
+ *   The configuration provided.
  */
 function _acquia_cms_common_update_page_configurations(string $config_name, array $configurations) {
   $configFactory = \Drupal::service('config.factory');
@@ -327,7 +329,7 @@ function acquia_cms_common_preprocess_status_report_general_info(&$variables) {
   }
 }
 
-/** 
+/**
  * Implements hook_modules_installed().
  */
 function acquia_cms_common_modules_installed($modules) {
