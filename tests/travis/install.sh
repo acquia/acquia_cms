@@ -65,6 +65,12 @@ if [[ "$ACMS_JOB" == "base" ]] && [[ -n "$ACMS_DB_ARTIFACT" ]] && [[ -n "$ACMS_F
   tar -xzf $ACMS_FILES_ARTIFACT
   gunzip $ACMS_DB_ARTIFACT
   drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms.sql
+
+  # Workaround to switch profile from acquia_cms to minimal.
+  # @todo Remove this after we update tests artifacts, which is created based on release 2.0.x.
+  drush sqlq 'UPDATE `config` SET `data` = replace(data, "s:10:\"acquia_cms\"", "s:7:\"minimal\"") where name="core.extension";'
+  drush cr
+
   drush updatedb --cache-clear --yes -vvv
   drush cr
 fi
@@ -75,6 +81,12 @@ if [[ "$ACMS_JOB" == "starter" ]] && [[ -n "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ 
   tar -xzf $ACMS_STARTER_FILES_ARTIFACT
   gunzip $ACMS_STARTER_DB_ARTIFACT
   drush sql:cli < $TRAVIS_BUILD_DIR/tests/acms-starter.sql
+
+  # Workaround to switch profile from acquia_cms to minimal.
+  # @todo Remove this after we update tests artifacts, which is created based on release 2.0.x.
+  drush sqlq 'UPDATE `config` SET `data` = replace(data, "s:10:\"acquia_cms\"", "s:7:\"minimal\"") where name="core.extension";'
+  drush cr
+
   drush updatedb --cache-clear --yes -vvv
 fi
 

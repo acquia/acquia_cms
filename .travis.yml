@@ -156,6 +156,10 @@ before_install:
   - mysql -u root < ./tests/travis/install.sql
   - nvm install 12.13.1; nvm use 12.13.1
   - composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION"
+  # Add patch in ORCA to include merge-plugin to composer.
+  - curl https://gist.githubusercontent.com/vishalkhode1/56497e23daa300d0634139828e98cb04/raw/bb6ecb370acb2c73d70bff4d77ae39ba17f51b23/merge_plugin.patch | git -C ../orca apply
+  # Remove internal module dependencies, so that ORCA CI doesn't report error.
+  - if [ "${ORCA_JOB}" != "STATIC_CODE_ANALYSIS" ]; then for path in $(find modules -type f -maxdepth 2 -name "composer.json" -exec ls '{}' ';'); do sed -i '/\"drupal\/acquia_cms.*\":.*\".*\"/d' $path; done; fi
   - composer self-update
   # Download AWS cli, only for starter jobs as we store tests artifacts on s3 buckets.
   - if [ "${ACMS_JOB}" = "starter" ] || [ "${ACMS_JOB}" = "starter_full" ] || [ "${ACMS_JOB}" = "base" ]; then curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo ./aws/install && rm -fr aws && aws s3 cp --recursive ${AWS_S3_BUCKET_PATH}/artifacts/ ${TRAVIS_BUILD_DIR}/tests/; fi
