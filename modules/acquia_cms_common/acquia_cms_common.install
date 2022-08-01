@@ -24,12 +24,12 @@ function acquia_cms_common_install() {
   $themesList = \Drupal::service('extension.list.theme')->getList();
   $themesInstall = ["olivero"];
   if (isset($themesList['acquia_claro'])) {
-   $themesInstall[] = "acquia_claro";
+    $themesInstall[] = "acquia_claro";
   }
   \Drupal::service('theme_installer')->install($themesInstall);
-  \Drupal::configFactory() ->getEditable('system.theme') ->set('default', 'olivero') ->save();
+  \Drupal::configFactory()->getEditable('system.theme')->set('default', 'olivero')->save();
   if (in_array("acquia_claro", $themesInstall)) {
-   \Drupal::configFactory() ->getEditable('system.theme') ->set('admin', "acquia_claro") ->save();
+    \Drupal::configFactory()->getEditable('system.theme')->set('admin', "acquia_claro")->save();
   }
 
   $module_handler = \Drupal::moduleHandler();
@@ -52,7 +52,7 @@ function acquia_cms_common_install() {
     'crop.type.focal_point:uuid',
     'cohesion.settings',
     'purge.plugins',
-    'purge.logger_channels'
+    'purge.logger_channels',
   ];
   $updated_ignore_config = array_unique(array_merge($existing_ignore_config, $new_ignore_config));
   $config->set('ignored_config_entities', $updated_ignore_config);
@@ -138,38 +138,6 @@ function acquia_cms_common_update_8001() {
  * Update permissions for Content Administrator and Content Author.
  */
 function acquia_cms_common_update_8002() {
-  $moduleHandler = \Drupal::service('module_handler');
-  if ($moduleHandler->moduleExists('acquia_cms_site_studio')) {
-    // Update each role's permission to have access to visual page builder.
-    $role_ids = [
-      'content_administrator',
-      'content_author',
-    ];
-    $user_role = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple($role_ids);
-    foreach ($user_role as $role) {
-      $role->grantPermission('access visual page builder');
-      $role->grantPermission('access cpt_cat_accordion_components cohesion_component_category group');
-      $role->grantPermission('access accordion_sections cohesion_helper_category group');
-      $role->grantPermission('access cpt_cat_basic_components cohesion_component_category group');
-      $role->grantPermission('access cpt_cat_card_components cohesion_component_category group');
-      $role->grantPermission('access card_sections cohesion_helper_category group');
-      $role->grantPermission('access cpt_cat_dynamic_components cohesion_component_category group');
-      $role->grantPermission('access hlp_cat_dynamic_helpers cohesion_helper_category group');
-      $role->grantPermission('access cpt_cat_feature_sections cohesion_component_category group');
-      $role->grantPermission('access hlp_cat_hero_sections cohesion_helper_category group');
-      $role->grantPermission('access cpt_cat_layout_components cohesion_component_category group');
-      $role->grantPermission('access hlp_cat_layout_helpers cohesion_helper_category group');
-      $role->grantPermission('access cpt_cat_map_components cohesion_component_category group');
-      $role->grantPermission('access hlp_cat_media_helpers cohesion_helper_category group');
-      $role->grantPermission('access hlp_cat_miscellaneous cohesion_helper_category group');
-      $role->grantPermission('access hlp_cat_page_layouts cohesion_helper_category group');
-      $role->grantPermission('access cpt_cat_read_more_components cohesion_component_category group');
-      $role->grantPermission('access hlp_cat_slider_sections cohesion_helper_category group');
-      $role->grantPermission('access cpt_cat_slider_components cohesion_component_category group');
-      $role->grantPermission('access cpt_cat_tab_components cohesion_component_category group');
-      $role->grantPermission('access tabbed_sections cohesion_helper_category group');
-      $role->grantPermission('access hlp_cat_text_sections cohesion_helper_category group');
-      $role->save();
-    }
-  }
+  // Update role permission code moved to site studio.
+  // Keeping this update hook as existing customers are using it.
 }
