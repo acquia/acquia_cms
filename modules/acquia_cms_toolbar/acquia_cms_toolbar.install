@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Contains hook code for the Acquia CMS Toolbar.
+ */
+
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_toolbar_install() {
+  $get_all_roles = Role::loadMultiple();
+  $roles = [
+    'content_administrator',
+    'content_author',
+    'content_editor',
+    'developer',
+    'site_builder',
+    'user_administrator',
+  ];
+  foreach ($roles as $role) {
+    if (isset($get_all_roles[$role])) {
+      user_role_grant_permissions($role, ['access toolbar']);
+    }
+  }
+}
+
+/**
+ * Update role permissions.
+ */
+function acquia_cms_toolbar_update_8001() {
+  $moduleHandler = \Drupal::service('module_handler');
+  if ($moduleHandler->moduleExists('acquia_cms_toolbar')) {
+    $get_all_roles = Role::loadMultiple();
+    $roles = [
+      'content_administrator',
+      'content_author',
+      'content_editor',
+      'developer',
+      'site_builder',
+      'user_administrator',
+    ];
+    foreach ($roles as $role) {
+      if (isset($get_all_roles[$role])) {
+        user_role_grant_permissions($role, ['access toolbar']);
+      }
+    }
+  }
+}
