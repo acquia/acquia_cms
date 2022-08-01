@@ -307,7 +307,7 @@ function acquia_cms_headless_ui_menu_links_discovered_alter(array &$links) {
     if (in_array($name, $bypass)) {
       continue;
     }
-    if ($link['parent'] == 'system.admin') {
+    if (isset($link['parent']) && $link['parent'] == 'system.admin') {
       $link['parent'] = 'admin.cms';
     }
   }
