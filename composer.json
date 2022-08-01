@@ -1,8 +1,9 @@
 {
     "name": "acquia/acquia_cms",
-    "description": "An implementation of Drupal 9 for running custom, low code websites on the Acquia platform.",
-    "license": "GPL-2.0-or-later",
     "type": "drupal-module",
+    "description": "An implementation of Drupal 9 for running custom, low code websites on the Acquia platform.",
+    "homepage": "https://github.com/acquia/acquia_cms",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Michael Sherron",
@@ -15,7 +16,6 @@
             "role": "Maintainer"
         }
     ],
-    "homepage": "https://github.com/acquia/acquia_cms",
     "require": {
         "acquia/acquia-cms-starterkit": "^1.0",
         "drupal/acquia_claro": "^1.3.2",
@@ -26,35 +26,19 @@
         "drupal/acquia_cms_starter": "^1.3.0",
         "drupal/acquia_cms_toolbar": "^1.3.3",
         "drupal/acquia_cms_tour": "^2.0.0",
-        "drush/drush": "^10 || ^11",
-        "ergebnis/composer-normalize": "^2.9"
+        "drush/drush": "^10 || ^11"
     },
     "require-dev": {
         "acquia/coding-standards": "^0.7.0",
         "axelerant/drupal-quality-checker": "^1.1",
         "drupal/core-composer-scaffold": "^9.0.0",
         "drupal/core-dev": "^9",
+        "ergebnis/composer-normalize": "~2.15.0",
         "friendsoftwig/twigcs": "^4.0",
         "oomphinc/composer-installers-extender": "^1.1 || ^2",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "~9.4.0 || ~9.5.0",
         "weitzman/drupal-test-traits": "^1.5"
-    },
-    "repositories": {
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "autoload": {
-        "psr-4": {
-            "Acquia\\Utility\\": "src/Utility"
-        },
-        "classmap": [
-            "src/Composer/ConfigureProject.php"
-        ]
     },
     "config": {
         "allow-plugins": {
@@ -130,6 +114,22 @@
         },
         "patches": {}
     },
+    "autoload": {
+        "psr-4": {
+            "Acquia\\Utility\\": "src/Utility"
+        },
+        "classmap": [
+            "src/Composer/ConfigureProject.php"
+        ]
+    },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "scripts": {
         "pre-update-cmd": [
             "@putenv COMPOSER_MEMORY_LIMIT=2G"
