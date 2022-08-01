@@ -1,0 +1,83 @@
+diff --git a/acquia_cms_tour.install b/acquia_cms_tour.install
+index df71c0f60fc3623f676a7025f9dfcfee7df413ab..c34436a6c18a8c53d5135c9d4095957be798e8c8 100644
+--- a/acquia_cms_tour.install
++++ b/acquia_cms_tour.install
+@@ -4,27 +4,28 @@
+  * @file
+  * Install, update and uninstall functions for the acquia_cms_tour module.
+  */
++
+ use Drupal\user\Entity\Role;
+ 
+ /**
+  * Implements hook_install().
+  */
+ function acquia_cms_tour_install() {
+-  $roles=Role::loadMultiple();
+-  if(isset($roles['content_administrator'])){
++  $roles = Role::loadMultiple();
++  if (isset($roles['content_administrator'])) {
+     user_role_grant_permissions('content_administrator', [
+       'access acquia cms tour',
+-      'access acquia cms tour dashboard'
++      'access acquia cms tour dashboard',
+     ]);
+   }
+   $roles_author_editor = [
+     'content_author',
+-    'content_editor'
++    'content_editor',
+   ];
+-  foreach($roles_author_editor as $role){
+-    if(isset($roles[$role])){
++  foreach ($roles_author_editor as $role) {
++    if (isset($roles[$role])) {
+       user_role_grant_permissions($role, [
+-        'access acquia cms tour'
++        'access acquia cms tour',
+       ]);
+     }
+   }
+@@ -43,21 +44,21 @@ function acquia_cms_tour_update_8001() {
+ function acquia_cms_tour_update_8002() {
+   $moduleHandler = \Drupal::service('module_handler');
+   if ($moduleHandler->moduleExists('acquia_cms_tour')) {
+-    $roles=Role::loadMultiple();
+-    if(isset($roles['content_administrator'])){
++    $roles = Role::loadMultiple();
++    if (isset($roles['content_administrator'])) {
+       user_role_grant_permissions('content_administrator', [
+         'access acquia cms tour',
+-        'access acquia cms tour dashboard'
++        'access acquia cms tour dashboard',
+       ]);
+     }
+     $roles_author_editor = [
+       'content_author',
+-      'content_editor'
++      'content_editor',
+     ];
+-    foreach($roles_author_editor as $role){
+-      if(isset($roles[$role])){
++    foreach ($roles_author_editor as $role) {
++      if (isset($roles[$role])) {
+         user_role_grant_permissions($role, [
+-          'access acquia cms tour'
++          'access acquia cms tour',
+         ]);
+       }
+     }
+diff --git a/tests/src/Functional/GoogleAnalyticsTest.php b/tests/src/Functional/GoogleAnalyticsTest.php
+index dccffa6e4d626dda228d270aba9014f29714cd27..a539393e9b56a4c62dfe1ea569f66ae91cc64193 100644
+--- a/tests/src/Functional/GoogleAnalyticsTest.php
++++ b/tests/src/Functional/GoogleAnalyticsTest.php
+@@ -68,6 +68,9 @@ class GoogleAnalyticsTest extends BrowserTestBase {
+     $this->assertSame($google_tag_prop_id, $dummy_web_property_id);
+   }
+ 
++  /**
++   *
++   */
+   public function isValidPropertyId($dummy_web_property_id) {
+     if (!preg_match('/^UA-\d+-\d+$/', $dummy_web_property_id)) {
+       return FALSE;
