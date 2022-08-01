@@ -1,0 +1,37 @@
+{
+    "name": "drupal/acquia_cms_image",
+    "type": "drupal-module",
+    "description": "Provides an Image media type and related configuration.",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "cweagans/composer-patches": "^1.7",
+        "drupal/acquia_cms_common": "^1.3.5",
+        "drupal/imce": "2.x-dev"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-composer-scaffold": true,
+            "ergebnis/composer-normalize": true,
+            "oomphinc/composer-installers-extender": true,
+            "phpro/grumphp-shim": true,
+            "webdriver-binary/binary-chromedriver": true
+        }
+    },
+    "extra": {
+        "enable-patching": true,
+        "patches": {}
+    },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    }
+}

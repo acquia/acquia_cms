@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - cohesion
+    - collapsiblock
+    - system
+  theme:
+    - cohesion_theme
+third_party_settings:
+  collapsiblock:
+    collapse_action: '0'
+id: site_branding
+theme: cohesion_theme
+region: dx8_hidden
+weight: 0
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding'
+  provider: system
+  label_display: '0'
+  use_site_logo: true
+  use_site_name: true
+  use_site_slogan: true
+visibility:
+  cohesion_master_template:
+    id: cohesion_master_template
+    using_master_template: 0
+    negate: false

@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Contains installation and update routines for acquia_cms_headless_ui.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_headless_ui_install() {
+  // Call the headless ui install handler service.
+  $headlessUi = \Drupal::service('acquia_cms_headless.pure_headless_mode');
+
+  // Add Aliases.
+  $headlessUi->createHeadlessUiPaths();
+
+  // Update configurations for the Headless UI.
+  $headlessUi->updateHeadlessUiConfig(TRUE);
+
+  // Clear caches to make sure updates are reflected.
+  drupal_flush_all_caches();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function acquia_cms_headless_ui_uninstall() {
+  // Call the headless ui install handler service.
+  $headlessUi = \Drupal::service('acquia_cms_headless.pure_headless_mode');
+
+  // Remove Aliases.
+  $headlessUi->deleteHeadlessUiPaths();
+
+  // Update configurations for the Headless UI.
+  $headlessUi->updateHeadlessUiConfig(FALSE);
+
+  // Clear caches to ensure all headless ui changes are reversed.
+  drupal_flush_all_caches();
+}

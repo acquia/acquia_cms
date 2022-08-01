@@ -1,0 +1,46 @@
+acquia_cms_tour.tour:
+  path: '/admin/tour'
+  defaults:
+    _controller: '\Drupal\acquia_cms_tour\Controller\TourController::build'
+  requirements:
+    _permission: 'access acquia cms tour'
+
+acquia_cms_tour.enabled_modules:
+  path: '/admin/tour/dashboard'
+  defaults:
+    _controller: '\Drupal\acquia_cms_tour\Controller\DashboardController::content'
+    _title: 'CMS Dashboard'
+  requirements:
+    _permission: 'access acquia cms tour dashboard'
+
+acquia_cms_tour.starter_kit_welcome_modal_form:
+  path: '/admin/tour/dashboard/starter-kit-modal-form'
+  defaults:
+    _title: 'Starter kit Introduction Modal Form'
+    _controller: '\Drupal\acquia_cms_tour\Controller\WelcomeModalController::openStarterModalForm'
+  requirements:
+    _permission: 'access acquia cms tour dashboard'
+
+acquia_cms_tour.welcome_modal_form:
+  path: '/admin/tour/dashboard/welcome-modal-form'
+  defaults:
+    _title: 'Modal Form'
+    _controller: '\Drupal\acquia_cms_tour\Controller\WelcomeModalController::openWelcomeModalForm'
+  requirements:
+    _permission: 'access acquia cms tour dashboard'
+
+acquia_cms_tour.installation_wizard:
+  path: '/acquia-cms-tour/installation-wizard'
+  defaults:
+    _title: 'Acquia CMS Installation wizard'
+    _form: 'Drupal\acquia_cms_tour\Form\InstallationWizardForm'
+  requirements:
+    _permission: 'access content'
+
+acquia_cms_tour.selection_wizard:
+  path: '/acquia-cms-tour/starter-kit-selection-wizard'
+  defaults:
+    _title: 'Acquia CMS Installation wizard'
+    _form: 'Drupal\acquia_cms_tour\Form\StarterKitSelectionWizardForm'
+  requirements:
+    _permission: 'access content'

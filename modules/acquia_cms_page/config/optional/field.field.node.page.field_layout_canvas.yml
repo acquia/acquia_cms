@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_layout_canvas
+    - node.type.page
+  enforced:
+    module:
+      - acquia_cms_page
+      - acquia_cms_site_studio
+  module:
+    - acquia_cms_site_studio
+    - cohesion_elements
+id: node.page.field_layout_canvas
+field_name: field_layout_canvas
+entity_type: node
+bundle: page
+label: 'Layout Canvas'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:cohesion_layout'
+  access_elements: '0'
+  handler_settings: {  }
+field_type: cohesion_entity_reference_revisions

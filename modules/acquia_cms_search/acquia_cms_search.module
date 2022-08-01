@@ -1,0 +1,191 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for Acquia CMS Search.
+ */
+
+use Drupal\acquia_cms_search\Facade\AcquiaSearchFacade;
+use Drupal\acquia_cms_search\Facade\FacetFacade;
+use Drupal\acquia_cms_search\Facade\SearchFacade;
+use Drupal\acquia_cms_search\Plugin\views\query\SearchApiQuery;
+use Drupal\acquia_search\Helper\Runtime;
+use Drupal\Core\DestructableInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\field\FieldConfigInterface;
+use Drupal\node\NodeTypeInterface;
+use Drupal\search_api\Entity\Index;
+use Drupal\search_api\ServerInterface;
+
+/**
+ * Implements hook_views_data().
+ */
+function acquia_cms_search_views_data() {
+  return [
+    'views' => [
+      'view_fallback' => [
+        'title' => t('Fallback view area'),
+        'help' => t('Insert a view inside an area if the search server is unavailable. If the view is not based on a Search API index, this behaves like a standard view area.'),
+        'area' => [
+          'id' => 'view_fallback',
+        ],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_views_plugins_query_alter().
+ */
+function acquia_cms_search_views_plugins_query_alter(array &$definitions) {
+  if (Drupal::moduleHandler()->moduleExists('facets_pretty_paths')) {
+    $definitions['search_api_query']['class'] = SearchApiQuery::class;
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for node types.
+ */
+function acquia_cms_search_node_type_insert(NodeTypeInterface $node_type) {
+  Drupal::classResolver(SearchFacade::class)->addNodeType($node_type);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for configurable field.
+ */
+function acquia_cms_search_field_config_insert(FieldConfigInterface $field_config) {
+
+  $field_storage = $field_config->getFieldStorageDefinition();
+
+  // Adding the third party settings in the node.body storage configuration to
+  // index the body field for searching.
+  if ($field_storage->getType() === 'text_with_summary' && $field_storage->id() === 'node.body') {
+    $field_storage->setThirdPartySetting('acquia_cms_common', 'search_index', 'content')
+      ->setThirdPartySetting('acquia_cms_common', 'search_label', 'Body')
+      ->save();
+  }
+
+  if ($field_storage->getType() === 'entity_reference' && $field_storage->getSetting('target_type') === 'taxonomy_term') {
+    Drupal::classResolver(SearchFacade::class)->addTaxonomyField($field_storage);
+  }
+
+  // List of fields type which needs to be indexed.
+  $allowed_fields_type = [
+    'datetime',
+    'string',
+    'email',
+    'telephone',
+    'address',
+    'text_with_summary',
+  ];
+
+  // Index allowed fields type.
+  if (in_array($field_storage->getType(), $allowed_fields_type)) {
+    Drupal::classResolver(SearchFacade::class)->addFields($field_storage);
+  }
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function acquia_cms_search_entity_insert() {
+  // Normally, content is indexed immediately after it is created or modified,
+  // at the end of the current request. But that means content created
+  // programmatically (i.e., in the PHPUnit tests) are not being indexed. So,
+  // explicitly invoke the indexer whenever an entity is created.
+  $indexer = Drupal::service('search_api.post_request_indexing');
+  if ($indexer instanceof DestructableInterface) {
+    $indexer->destruct();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for Search API servers.
+ */
+function acquia_cms_search_search_api_server_insert(ServerInterface $server) {
+  // We don't want to do any secondary config writes during a config sync,
+  // since that can have major, unintentional side effects.
+  if (Drupal::isConfigSyncing()) {
+    return;
+  }
+
+  // Look for an index which is disabled, but wants to passively opt into using
+  // this server.
+  $indexes = Index::loadMultiple();
+  /** @var \Drupal\search_api\IndexInterface $index */
+  foreach ($indexes as $index) {
+    if ($index->status() || $index->isServerEnabled()) {
+      continue;
+    }
+
+    // If the index wants to opt into using this server, grant its wish.
+    $server_name = $index->getThirdPartySetting('acquia_cms_common', 'search_server');
+    if ($server_name && $server->id() === $server_name) {
+      $index->setServer($server)
+        ->enable()
+        // The third-party setting is only needed once.
+        ->unsetThirdPartySetting('acquia_cms_common', 'search_server')
+        ->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_config_schema_info_alter().
+ */
+function acquia_cms_search_config_schema_info_alter(array &$definitions) {
+  $key = 'node.type.*.third_party.acquia_cms_common';
+  // Allow node types to carry a 'search_index' setting. This is used by our
+  // facade to passively opt the node type into a particular index.
+  // @see acquia_cms_search_node_type_insert()
+  // @see \Drupal\acquia_cms_search\Facade\SearchFacade::addNodeType()
+  if (array_key_exists($key, $definitions)) {
+    $definitions[$key]['mapping']['search_index'] = [
+      'type' => 'string',
+      'label' => 'The machine name of the search index to which this content type should be added',
+    ];
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function acquia_cms_search_search_api_server_update(EntityInterface $entity) {
+  if (Drupal::moduleHandler()->moduleExists('acquia_search') && Runtime::isAcquiaServer($entity)) {
+    \Drupal::classResolver(AcquiaSearchFacade::class)->submitSettingsForm();
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function acquia_cms_search_form_acquia_cms_solr_search_form_alter(array &$form) {
+  $form['#submit'][] = AcquiaSearchFacade::class . '::submitSettingsForm';
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function acquia_cms_search_modules_installed(array $modules) {
+  acquia_cms_search_add_category_facet($modules);
+}
+
+/**
+ * Adds search_category facet, if any acms search dependent module is installed.
+ *
+ * @param array $modules
+ *   An array of installed modules.
+ */
+function acquia_cms_search_add_category_facet(array $modules) {
+  $acquiaCmsSearchModules = ["acquia_cms_person", "acquia_cms_place",
+    "acquia_cms_article", "acquia_cms_event", "acquia_cms_page",
+  ];
+  if (array_intersect($acquiaCmsSearchModules, $modules)) {
+    \Drupal::classResolver(FacetFacade::class)->addFacet([
+      'id' => 'search_category',
+      'name' => 'Category',
+      'url_alias' => 'category',
+      'field_identifier' => 'field_categories',
+    ]);
+  }
+}

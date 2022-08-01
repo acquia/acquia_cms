@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the acquia_cms_tour module.
+ */
+
+/**
+ * Add state key for existing sites with Acquia CMS profile.
+ */
+function acquia_cms_tour_update_8001() {
+  \Drupal::state()->set('existing_site_acquia_cms', TRUE);
+}

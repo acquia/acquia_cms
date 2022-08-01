@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the acquia_cms_article module.
+ */
+
+use Drupal\field\Entity\FieldConfig;
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_article_install() {
+  user_role_grant_permissions('content_author', [
+    'create article content',
+    'edit own article content',
+    'delete own article content',
+  ]);
+  user_role_grant_permissions('content_editor', [
+    'edit any article content',
+    'delete any article content',
+  ]);
+}
+
+/**
+ * Implements hook_module_preinstall().
+ */
+function acquia_cms_article_module_preinstall($module) {
+  \Drupal::service('acquia_cms_common.utility')->setModulePreinstallTriggered($module);
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function acquia_cms_article_update_8001() {
+  if (\Drupal::moduleHandler()->moduleExists('acquia_cms_common') && \Drupal::moduleHandler()->moduleExists('acquia_cms_site_studio')) {
+    _acquia_cms_common_update_view_display_options_style('article_cards', 'default', 'view_tpl_article_cards_slider');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Make Display Author field optional.
+ */
+function acquia_cms_article_update_8002() {
+  $field = FieldConfig::loadByName('node', 'article', 'field_display_author');
+  if ($field instanceof FieldConfig && $field->isRequired()) {
+    $field->setRequired(FALSE);
+    $field->save();
+  }
+}

@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - acquia_cms_place
+  module:
+    - address
+    - node
+third_party_settings:
+  acquia_cms_common:
+    search_index: content
+    search_label: Place Address
+id: node.field_place_address
+field_name: field_place_address
+entity_type: node
+type: address
+settings: {  }
+module: address
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

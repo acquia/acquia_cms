@@ -1,0 +1,85 @@
+{
+    "name": "drupal/acquia_cms_headless",
+    "type": "drupal-module",
+    "description": "Provides a Headless/Decoupled functionality for Acquia CMS.",
+    "require": {
+        "drupal/acquia_cms_tour": "^2",
+        "drupal/jsonapi_menu_items": "^1.2",
+        "drupal/next": "^1",
+        "drupal/openapi_jsonapi": "^3.0",
+        "drupal/openapi_ui_redoc": "^1.0@RC",
+        "drupal/openapi_ui_swagger": "^1.0@RC",
+        "drupal/restui": "^1.20",
+        "swagger-api/swagger-ui": "^3.0.17"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-composer-scaffold": true,
+            "ergebnis/composer-normalize": true,
+            "oomphinc/composer-installers-extender": true,
+            "phpro/grumphp-shim": true,
+            "webdriver-binary/binary-chromedriver": true
+        }
+    },
+    "extra": {
+        "enable-patching": true,
+        "installer-paths": {
+            "docroot/core": [
+                "type:drupal-core"
+            ],
+            "docroot/libraries/{$name}": [
+                "type:drupal-library",
+                "type:bower-asset",
+                "type:npm-asset"
+            ],
+            "docroot/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "docroot/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "docroot/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ]
+        },
+        "installer-types": [
+            "bower-asset",
+            "npm-asset"
+        ],
+        "patchLevel": {
+            "drupal/core": "-p2"
+        },
+        "patches": {
+            "drupal/decoupled_router": {
+                "Unable to resolve path on node in other language than default": "https://www.drupal.org/files/issues/2021-05-05/3111456-34.patch"
+            },
+            "drupal/subrequests": {
+                "Get same results on different request": "https://www.drupal.org/files/issues/2019-07-18/change_request_type-63049395-09.patch"
+            }
+        }
+    },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "swagger-api": {
+            "type": "package",
+            "package": {
+                "name": "swagger-api/swagger-ui",
+                "version": "3.0.17",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v3.0.17.zip",
+                    "type": "zip"
+                },
+                "require": {
+                    "composer/installers": "^2.1.1"
+                }
+            }
+        }
+    }
+}

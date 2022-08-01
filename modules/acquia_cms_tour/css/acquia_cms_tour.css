@@ -1,0 +1,128 @@
+.tour-page {
+  color: #222330;
+}
+.tour-page .section-hero .row {
+  display: flex;
+}
+.tour-page .section-hero {
+  color: white;
+  background-image: url('../assets/images/hero-background.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  padding: 30px 18px 50px 50px;
+}
+a:-webkit-any-link {
+  cursor: pointer;
+}
+.tour-page .section-hero .button--primary {
+  background-color: #26a3dd;
+}
+.tour-page .section-hero .text-section {
+  width: 75%;
+  margin-right: 5%;
+}
+.tour-page .section-content {
+  display: flex;
+  margin-top: 60px;
+  opacity: 0.7;
+}
+.tour-page .section-content .sidenav {
+  width: 44%;
+  margin-right: 6%;
+}
+.tour-page .sidenav ul {
+  margin-left: 0;
+}
+.tour-page .sidenav p {
+  font-weight: 500;
+  font-size: 16px;
+}
+.tour-page .sidenav ul li {
+  padding-bottom: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #aba8a8;
+}
+.tour-page .sidenav ul li a {
+  text-decoration: none;
+  color: #222330;
+  font-weight: 500;
+  font-size: 16px;
+}
+.tour-page .section-content .content-start h2 {
+  margin-top: 0;
+}
+.tour-page .section-content .content-leaf {
+  margin-top: 60px;
+  position: relative;
+}
+.tour-page .section-content .content-start {
+  position: relative;
+}
+.tour-page .anchor-link {
+  top: -100px;
+  position: absolute;
+  visibility: hidden;
+}
+.tour-page .content-main h2 > a {
+  color: #222330;
+}
+.tour-page .section-hero .button-section {
+  text-align: center;
+}
+.tour-content-header {
+  overflow: hidden;
+  padding: 1.5rem 0 0;
+  background: #f5f3f3;
+}
+.tour-content-header .block-page-title-block,
+.tour-content-header .page-title,
+.tour-content-header .breadcrumb__link,
+.tour-content-header .breadcrumb__item + .breadcrumb__item::before {
+  color: #222330;
+  opacity: 0.9;
+}
+
+/* Small Devices, Tablets */
+@media only screen and (max-width : 768px) {
+  .tour-page .section-hero .row,
+  .tour-page .section-content {
+    display: block;
+  }
+  .tour-page .section-hero {
+    padding: 20px;
+  }
+  .tour-page .section-content .sidenav {
+    width: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+  }
+  .tour-page .section-hero .text-section {
+    width: auto;
+    margin-right: auto;
+  }
+}
+
+@media screen and (max-width: 1024px) and (min-width: 769px) {
+  .tour-page .section-content .sidenav {
+    width: 100%;
+  }
+}
+
+.tour-checklist,
+form > .fieldset {
+  margin-bottom: 28px;
+  box-shadow: none;
+}
+.tour-checklist .progress__track {
+  border: 1px #bbbec5 solid;
+  height: .5em;
+  margin-bottom: 20px;
+}
+.tour-checklist .progress__bar {
+  background: #28a9e0;
+  border: 1px #28a9e0 solid;
+  height: .5em;
+  min-width: 8px;
+}

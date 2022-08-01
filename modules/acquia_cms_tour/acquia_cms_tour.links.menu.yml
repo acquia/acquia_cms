@@ -1,0 +1,15 @@
+acquia_cms_tour.tour:
+  title: 'Tour'
+  description: 'Access the Acquia CMS tour page'
+  parent: system.admin
+  route_name: acquia_cms_tour.tour
+  weight: 10
+  options:
+    attributes:
+      class: ['toolbar-icon', 'toolbar-icon-help-main']
+
+acquia_cms_tour.dashboard:
+  title: 'Get started'
+  description: 'Access the Acquia CMS getting started dashboard'
+  parent: acquia_cms_tour.tour
+  route_name: acquia_cms_tour.enabled_modules

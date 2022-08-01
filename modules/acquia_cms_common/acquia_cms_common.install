@@ -1,0 +1,175 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the acquia_cms_common module.
+ */
+
+use Drupal\Core\Config\FileStorage;
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_common_install() {
+  user_role_grant_permissions('anonymous', [
+    'access content',
+    'view media',
+  ]);
+  user_role_grant_permissions('authenticated', [
+    'access content',
+    'view media',
+  ]);
+
+  // Enable acquia_claro theme.
+  $themesList = \Drupal::service('extension.list.theme')->getList();
+  $themesInstall = ["olivero"];
+  if (isset($themesList['acquia_claro'])) {
+   $themesInstall[] = "acquia_claro";
+  }
+  \Drupal::service('theme_installer')->install($themesInstall);
+  \Drupal::configFactory() ->getEditable('system.theme') ->set('default', 'olivero') ->save();
+  if (in_array("acquia_claro", $themesInstall)) {
+   \Drupal::configFactory() ->getEditable('system.theme') ->set('admin', "acquia_claro") ->save();
+  }
+
+  $module_handler = \Drupal::moduleHandler();
+  // Re-write the content and media view on module install,
+  // since we have moved this config in optional directory.
+  $module_path = $module_handler->getModule('acquia_cms_common')->getPath();
+  $config_optional = $module_path . '/config/optional';
+  $source_optional_dir = new FileStorage($config_optional);
+
+  $config_storage = \Drupal::service('config.storage');
+  $config_storage->write('views.view.content', $source_optional_dir->read('views.view.content'));
+  $config_storage->write('views.view.media', $source_optional_dir->read('views.view.media'));
+
+  // Get existing config ignore settings and append the new one.
+  $config = \Drupal::configFactory()->getEditable('config_ignore.settings');
+  $existing_ignore_config = $config->get('ignored_config_entities');
+  $new_ignore_config = [
+    'language.entity.*',
+    'media.type.image:uuid',
+    'crop.type.focal_point:uuid',
+    'cohesion.settings',
+    'purge.plugins',
+    'purge.logger_channels'
+  ];
+  $updated_ignore_config = array_unique(array_merge($existing_ignore_config, $new_ignore_config));
+  $config->set('ignored_config_entities', $updated_ignore_config);
+  $config->set('enable_export_filtering', TRUE);
+  $config->save(TRUE);
+
+  // Uninstall page_cache module in favour of memcache.
+  if ($module_handler->moduleExists('page_cache')) {
+    \Drupal::service('module_installer')->uninstall(['page_cache']);
+  }
+
+  /*
+   * We've to explicitly set purge plugin as acquia_purge, If Acquia Purge
+   * module is enabled, else this would give below error:
+   *
+   * ERROR: Purgers:There is no purger loaded which means that you need a module
+   * enabled to provide a purger plugin to clear your external cache or CDN.
+   */
+  if ($module_handler->moduleExists('acquia_purge')) {
+    $config = \Drupal::service('purge.purgers');
+    $config->setPluginsEnabled(['cee22bc3fe' => 'acquia_purge']);
+  }
+}
+
+/**
+ * Implements hook_config_schema_info_alter().
+ */
+function acquia_cms_common_config_schema_info_alter(&$definitions) {
+  $schemaMapping = [
+    'type' => 'mapping',
+    'mapping' => [
+      'default_value' => ['type' => 'boolean'],
+      'disable' => ['type' => 'boolean'],
+      'hidden' => ['type' => 'boolean'],
+    ],
+  ];
+  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['cohesion_layout'] = $schemaMapping;
+  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['component_content'] = $schemaMapping;
+  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['content_moderation_state'] = $schemaMapping;
+  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['content_moderation_state'] = $schemaMapping;
+  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['crop'] = $schemaMapping;
+  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['media'] = $schemaMapping;
+  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['path_alias'] = $schemaMapping;
+  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['redirect'] = $schemaMapping;
+  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['search_api_task'] = $schemaMapping;
+}
+
+/**
+ * Add new text format 'Full HTML'.
+ */
+function acquia_cms_common_update_8001() {
+  // Do not override existing full_html, if already provide.
+  $config_full_html = \Drupal::config('filter.format.full_html')->get('name');
+  if (!$config_full_html) {
+    $module_path = \Drupal::moduleHandler()->getModule('acquia_cms_common')->getPath();
+    $config_optional = $module_path . '/config/optional';
+    $source_optional_dir = new FileStorage($config_optional);
+
+    $config_storage = \Drupal::service('config.storage');
+    $config_storage->write('filter.format.full_html', $source_optional_dir->read('filter.format.full_html'));
+    $config_storage->write('editor.editor.full_html', $source_optional_dir->read('editor.editor.full_html'));
+
+    // Now update each role's permission to use newly added text format.
+    $role_ids = [
+      'administrator',
+      'content_administrator',
+      'content_author',
+      'content_editor',
+      'developer',
+      'site_builder',
+    ];
+    $user_role = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple($role_ids);
+    foreach ($user_role as $role) {
+      $role->grantPermission('use text format full_html');
+      $role->save();
+    }
+  }
+}
+
+/**
+ * Update role permissions for site studio.
+ *
+ * Update permissions for Content Administrator and Content Author.
+ */
+function acquia_cms_common_update_8002() {
+  $moduleHandler = \Drupal::service('module_handler');
+  if ($moduleHandler->moduleExists('acquia_cms_site_studio')) {
+    // Update each role's permission to have access to visual page builder.
+    $role_ids = [
+      'content_administrator',
+      'content_author',
+    ];
+    $user_role = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple($role_ids);
+    foreach ($user_role as $role) {
+      $role->grantPermission('access visual page builder');
+      $role->grantPermission('access cpt_cat_accordion_components cohesion_component_category group');
+      $role->grantPermission('access accordion_sections cohesion_helper_category group');
+      $role->grantPermission('access cpt_cat_basic_components cohesion_component_category group');
+      $role->grantPermission('access cpt_cat_card_components cohesion_component_category group');
+      $role->grantPermission('access card_sections cohesion_helper_category group');
+      $role->grantPermission('access cpt_cat_dynamic_components cohesion_component_category group');
+      $role->grantPermission('access hlp_cat_dynamic_helpers cohesion_helper_category group');
+      $role->grantPermission('access cpt_cat_feature_sections cohesion_component_category group');
+      $role->grantPermission('access hlp_cat_hero_sections cohesion_helper_category group');
+      $role->grantPermission('access cpt_cat_layout_components cohesion_component_category group');
+      $role->grantPermission('access hlp_cat_layout_helpers cohesion_helper_category group');
+      $role->grantPermission('access cpt_cat_map_components cohesion_component_category group');
+      $role->grantPermission('access hlp_cat_media_helpers cohesion_helper_category group');
+      $role->grantPermission('access hlp_cat_miscellaneous cohesion_helper_category group');
+      $role->grantPermission('access hlp_cat_page_layouts cohesion_helper_category group');
+      $role->grantPermission('access cpt_cat_read_more_components cohesion_component_category group');
+      $role->grantPermission('access hlp_cat_slider_sections cohesion_helper_category group');
+      $role->grantPermission('access cpt_cat_slider_components cohesion_component_category group');
+      $role->grantPermission('access cpt_cat_tab_components cohesion_component_category group');
+      $role->grantPermission('access tabbed_sections cohesion_helper_category group');
+      $role->grantPermission('access hlp_cat_text_sections cohesion_helper_category group');
+      $role->save();
+    }
+  }
+}
