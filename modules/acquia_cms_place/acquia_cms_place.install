@@ -26,3 +26,26 @@ function acquia_cms_place_install() {
 function acquia_cms_place_module_preinstall($module) {
   \Drupal::service('acquia_cms_common.utility')->setModulePreinstallTriggered($module);
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update node type conditions from node_type to entity_bundle.
+ */
+function acquia_cms_place_update_8001() {
+  // Load all pattern configuration entities.
+  $pattern_config = \Drupal::configFactory()->getEditable('pathauto.pattern.place');
+
+  // Loop patterns and swap the node_type plugin by the entity_bundle:node
+  // plugin.
+  if ($pattern_config->get('type') === 'canonical_entities:node') {
+    $selection_criteria = $pattern_config->get('selection_criteria');
+    foreach ($selection_criteria as $uuid => $condition) {
+      if ($condition['id'] === 'node_type') {
+        $pattern_config->set("selection_criteria.$uuid.id", 'entity_bundle:node');
+        $pattern_config->save();
+        break;
+      }
+    }
+  }
+}
