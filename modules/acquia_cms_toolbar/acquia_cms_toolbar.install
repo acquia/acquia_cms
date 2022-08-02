@@ -11,6 +11,13 @@ use Drupal\user\Entity\Role;
  * Implements hook_install().
  */
 function acquia_cms_toolbar_install() {
+  update_toolabr_role_permission();
+}
+
+/**
+ * Update role permission handler.
+ */
+function update_toolabr_role_permission() {
   $get_all_roles = Role::loadMultiple();
   $roles = [
     'content_administrator',
@@ -31,21 +38,5 @@ function acquia_cms_toolbar_install() {
  * Update role permissions.
  */
 function acquia_cms_toolbar_update_8001() {
-  $moduleHandler = \Drupal::service('module_handler');
-  if ($moduleHandler->moduleExists('acquia_cms_toolbar')) {
-    $get_all_roles = Role::loadMultiple();
-    $roles = [
-      'content_administrator',
-      'content_author',
-      'content_editor',
-      'developer',
-      'site_builder',
-      'user_administrator',
-    ];
-    foreach ($roles as $role) {
-      if (isset($get_all_roles[$role])) {
-        user_role_grant_permissions($role, ['access toolbar']);
-      }
-    }
-  }
+  update_toolabr_role_permission();
 }
