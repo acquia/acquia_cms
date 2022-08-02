@@ -3,12 +3,12 @@
 namespace Drupal\acquia_cms_site_studio\Facade;
 
 use Drupal\cohesion_sync\PackagerManager;
-use Drupal\Component\Serialization\Yaml;
+use Drupal\cohesion_sync\Services\PackageImportHandler;
 use Drupal\Component\Uuid\UuidInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
-use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Provides a facade for configuring and interacting with Cohesion.
@@ -42,6 +42,13 @@ final class CohesionFacade implements ContainerInjectionInterface {
   protected $uuidGenerator;
 
   /**
+   * The uuid service.
+   *
+   * @var \Drupal\cohesion_sync\Services\PackageImportHandler
+   */
+  protected $packageImportHandler;
+
+  /**
    * CohesionFacade constructor.
    *
    * @param \Drupal\cohesion_sync\PackagerManager $packager
@@ -50,11 +57,17 @@ final class CohesionFacade implements ContainerInjectionInterface {
    *   The module handler service.
    * @param \Drupal\Component\Uuid\UuidInterface $uuid
    *   The uuid service.
+   * @param \Drupal\cohesion_sync\Services\PackageImportHandler $package_import_handler
+   *   The uuid service.
    */
-  public function __construct(PackagerManager $packager, ModuleHandlerInterface $module_handler, UuidInterface $uuid) {
+  public function __construct(PackagerManager $packager,
+   ModuleHandlerInterface $module_handler,
+   UuidInterface $uuid,
+   PackageImportHandler $package_import_handler) {
     $this->packager = $packager;
     $this->moduleHandler = $module_handler;
     $this->uuidGenerator = $uuid;
+    $this->packageImportHandler = $package_import_handler;
   }
 
   /**
@@ -64,7 +77,8 @@ final class CohesionFacade implements ContainerInjectionInterface {
     return new static(
       $container->get('cohesion_sync.packager'),
       $container->get('module_handler'),
-      $container->get('uuid')
+      $container->get('uuid'),
+      $container->get('cohesion_sync.package_import_handler')
     );
   }
 
@@ -98,44 +112,6 @@ final class CohesionFacade implements ContainerInjectionInterface {
       [$package, $store_key, TRUE, FALSE, TRUE, $no_rebuild, FALSE],
     ];
     return array_merge($validate_package_operations, $batch_operations);
-  }
-
-  /**
-   * Returns a list of all available sync packages.
-   *
-   * @return string[]
-   *   An array of sync package paths, relative to the Drupal root.
-   */
-  public function getAllPackages() : array {
-    $packages = [];
-    foreach ($this->getSortedModules() as $module) {
-      $packages = array_merge($packages, $this->getPackagesFromExtension($module));
-    }
-    return $packages;
-  }
-
-  /**
-   * Returns a list of all sync packages shipped with an extension.
-   *
-   * @param \Drupal\Core\Extension\Extension $extension
-   *   The extension to scan.
-   *
-   * @return string[]
-   *   An array of sync package paths, relative to the Drupal root.
-   */
-  public function getPackagesFromExtension(Extension $extension) : array {
-    $dir = $extension->getPath();
-
-    $list = "$dir/config/dx8/packages.yml";
-    if (file_exists($list)) {
-      $list = file_get_contents($list);
-
-      $map = function (string $package) use ($dir) {
-        return "$dir/$package";
-      };
-      return array_map($map, Yaml::decode($list));
-    }
-    return [];
   }
 
   /**
@@ -188,21 +164,42 @@ final class CohesionFacade implements ContainerInjectionInterface {
 
   /**
    * Get all required operations to import site studio packages of Acquia CMS.
+   */
+  public function getAllOperations() : void {
+    $package_list = [];
+    $modules = $this->getSortedModules();
+    foreach ($modules as $module) {
+      $module_path = $module->getPath();
+      $package_list_path = $module_path . COHESION_SYNC_DEFAULT_MODULE_PACKAGES;
+      if (file_exists($package_list_path)) {
+        $package = $this->readPackageList($package_list_path);
+        $package_list = array_merge($package_list, $package);
+      }
+    }
+    if ($package_list) {
+      $this->packageImportHandler->importPackagesFromArray($package_list);
+    }
+  }
+
+  /**
+   * Reads Package List file from provided path.
    *
-   * @param bool $no_rebuild
-   *   Whether rebuild operation should execute or not.
+   * @param string $package_list_path
+   *   Path to package list file.
    *
    * @return array
-   *   All the operations.
-   *
-   * @throws \Exception
+   *   Package list.
    */
-  public function getAllOperations(bool $no_rebuild = FALSE) : array {
-    $operations = [];
-    foreach ($this->getAllPackages() as $package) {
-      $operations = array_merge($operations, $this->importPackage($package, $no_rebuild));
+  public function readPackageList(string $package_list_path): array {
+
+    if (file_exists($package_list_path)) {
+      $package_list = Yaml::parse(file_get_contents($package_list_path));
+      if ($package_list === NULL) {
+        throw new PackageListEmptyOrMissing($package_list_path);
+      }
     }
-    return $operations;
+
+    return $package_list;
   }
 
 }
