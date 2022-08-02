@@ -1,0 +1,134 @@
+uuid: ab16d4f9-e437-48e9-ad69-799bef1a358d
+langcode: en
+status: true
+dependencies: {  }
+label: 'Hide default listing view'
+id: e01b8004
+json_values: |
+  {
+      "preview": {
+          "text": "<div class=\"coh-preview\">Default content for 'Generic'.<\/div>\n",
+          "textFormat": "cohesion"
+      },
+      "sBackgroundColour": "#FFFFFF",
+      "styles": {
+          "settings": {
+              "element": "div",
+              "class": "",
+              "combinator": "",
+              "pseudo": ""
+          },
+          "eb2ed6ad-b4ac-44bd-9a0b-34f7dd1771f9": {
+              "settings": {
+                  "element": "+ .coh-row",
+                  "class": "",
+                  "combinator": "",
+                  "pseudo": ""
+              },
+              "styles": {}
+          },
+          "d405a486-f5e7-449a-9fd4-6dc83f19379b": {
+              "settings": {
+                  "element": ".default-listing-view",
+                  "class": "",
+                  "combinator": "",
+                  "pseudo": ""
+              },
+              "styles": {
+                  "xl": {
+                      "display": {
+                          "value": "none"
+                      }
+                  }
+              }
+          }
+      },
+      "variableFields": []
+  }
+json_mapper: |
+  {
+      "styles": {
+          "title": "Layout",
+          "selectorType": "topLevel",
+          "formDefinition": [],
+          "items": [
+              {
+                  "title": "+ .coh-row",
+                  "type": "container",
+                  "items": [
+                      {
+                          "title": ".default-listing-view",
+                          "type": "container",
+                          "items": [],
+                          "form": null,
+                          "selectorType": "child",
+                          "model": ".default-listing-view",
+                          "uuid": "d405a486-f5e7-449a-9fd4-6dc83f19379b",
+                          "allowedTypes": [
+                              "child",
+                              "pseudo",
+                              "modifier"
+                          ],
+                          "formDefinition": [
+                              {
+                                  "formKey": "layout",
+                                  "children": [
+                                      {
+                                          "formKey": "display",
+                                          "breakpoints": [
+                                              {
+                                                  "name": "xl"
+                                              }
+                                          ],
+                                          "activeFields": [
+                                              {
+                                                  "name": "display",
+                                                  "active": true
+                                              },
+                                              {
+                                                  "name": "visibility",
+                                                  "active": false
+                                              },
+                                              {
+                                                  "name": "overflow",
+                                                  "active": false
+                                              },
+                                              {
+                                                  "name": "overflow-x",
+                                                  "active": false
+                                              },
+                                              {
+                                                  "name": "overflow-y",
+                                                  "active": false
+                                              }
+                                          ]
+                                      }
+                                  ]
+                              }
+                          ]
+                      }
+                  ],
+                  "form": null,
+                  "selectorType": "child",
+                  "model": "+ .coh-row",
+                  "uuid": "eb2ed6ad-b4ac-44bd-9a0b-34f7dd1771f9",
+                  "allowedTypes": [
+                      "child",
+                      "pseudo",
+                      "modifier"
+                  ],
+                  "formDefinition": []
+              }
+          ],
+          "form": null
+      }
+  }
+last_entity_update: entityupdate_0035
+locked: false
+modified: true
+selectable: true
+class_name: .coh-style-hide-default-listing-view
+custom_style_type: generic
+available_in_wysiwyg: false
+parent: null
+weight: 8
