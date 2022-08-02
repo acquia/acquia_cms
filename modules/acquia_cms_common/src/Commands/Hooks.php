@@ -3,7 +3,6 @@
 namespace Drupal\acquia_cms_common\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
-use Consolidation\AnnotatedCommand\CommandResult;
 use Drupal\acquia_cms_common\Services\AcmsUtilityService;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -110,21 +109,6 @@ final class Hooks extends DrushCommands {
       foreach ($requirements as $id => $requirement) {
         Drush::logger()->warning(dt($requirement['description']));
       }
-    }
-  }
-
-  /**
-   * Run site studio rebuild after package import.
-   *
-   * @hook post-command acms:import-site-studio-packages
-   */
-  public function importSiteStudioPackagesPostCommand($result, CommandData $commandData) {
-    $config = $this->configFactory->get('cohesion.settings');
-    if ($config->get('api_key') && $config->get('organization_key')) {
-      $this->say(dt('Rebuilding all entities.'));
-      $result = $this->acmsUtilityService->rebuildSiteStudio();
-      $this->yell('Finished rebuilding.');
-      return is_array($result) && isset(array_shift($result)['error']) ? CommandResult::exitCode(self::EXIT_FAILURE) : CommandResult::exitCode(self::EXIT_SUCCESS);
     }
   }
 
