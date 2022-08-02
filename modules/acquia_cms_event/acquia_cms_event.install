@@ -46,7 +46,7 @@ function acquia_cms_event_update_8001() {
  */
 function acquia_cms_event_update_8002() {
   // Load all pattern configuration entities.
-  $pattern_config = \Drupal::configFactory()->getEditable('pathauto.pattern.event');
+  $pattern_config = \Drupal::configFactory()->getEditable('pathauto.pattern.event_path');
 
   // Loop patterns and swap the node_type plugin by the entity_bundle:node
   // plugin.

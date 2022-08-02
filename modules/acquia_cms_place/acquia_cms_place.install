@@ -34,7 +34,7 @@ function acquia_cms_place_module_preinstall($module) {
  */
 function acquia_cms_place_update_8001() {
   // Load all pattern configuration entities.
-  $pattern_config = \Drupal::configFactory()->getEditable('pathauto.pattern.place');
+  $pattern_config = \Drupal::configFactory()->getEditable('pathauto.pattern.place_path');
 
   // Loop patterns and swap the node_type plugin by the entity_bundle:node
   // plugin.
