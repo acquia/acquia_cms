@@ -162,6 +162,7 @@
         ],
         "post-update-cmd": [
             "Composer\\Config::disableProcessTimeout",
+            "@putenv MODULES_DIR=./docroot/modules/contrib",
             "if [ \"$PIPELINE_ENV\" != \"true\" ]; then composer build:local; fi;"
         ],
         "acms:install": [
@@ -172,6 +173,7 @@
             "cd docroot/themes/contrib/acquia_claro && npm run build"
         ],
         "build:local": [
+            "find $PWD/modules -name 'acquia_cms*' -type d -maxdepth 1 -exec ln -s -f '{}' $MODULES_DIR ';'",
             "cp -f phpunit.xml ./docroot/core"
         ],
         "cohesion:fixture": [
