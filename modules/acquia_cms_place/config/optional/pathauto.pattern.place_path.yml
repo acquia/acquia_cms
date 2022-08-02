@@ -9,13 +9,13 @@ type: 'canonical_entities:node'
 pattern: 'place/[node:field_place_type]/[node:title]'
 selection_criteria:
   fd66c02c-c164-41be-b4a1-68a7ebc56056:
-    id: node_type
-    bundles:
-      place: place
+    id: 'entity_bundle:node'
     negate: false
+    uuid: fd66c02c-c164-41be-b4a1-68a7ebc56056
     context_mapping:
       node: node
-    uuid: fd66c02c-c164-41be-b4a1-68a7ebc56056
+    bundles:
+      place: place
 selection_logic: and
 weight: -5
 relationships: {  }

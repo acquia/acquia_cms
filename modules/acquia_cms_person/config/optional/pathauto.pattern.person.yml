@@ -9,13 +9,13 @@ type: 'canonical_entities:node'
 pattern: 'person/[node:field_person_type]/[node:title]'
 selection_criteria:
   c97ba0fc-5cd3-46f1-be0e-c8e165db8962:
-    id: node_type
-    bundles:
-      person: person
+    id: 'entity_bundle:node'
     negate: false
+    uuid: c97ba0fc-5cd3-46f1-be0e-c8e165db8962
     context_mapping:
       node: node
-    uuid: c97ba0fc-5cd3-46f1-be0e-c8e165db8962
+    bundles:
+      person: person
 selection_logic: and
 weight: -5
 relationships: {  }

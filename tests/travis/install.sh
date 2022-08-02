@@ -71,15 +71,6 @@ if [[ "$ACMS_JOB" == "base" ]] && [[ -n "$ACMS_DB_ARTIFACT" ]] && [[ -n "$ACMS_F
   drush sqlq 'UPDATE `config` SET `data` = replace(data, "s:10:\"acquia_cms\"", "s:7:\"minimal\"") where name="core.extension";'
   drush cr
 
-  # Workaround added to fix error: `The  context is not a valid context`.
-  # @todo Remove below code after ACMS-1332 is completed.
-  drush "php:eval" "module_load_include('install', 'pathauto', 'pathauto'); pathauto_update_8108();"
-  drush cget pathauto.pattern.article | sed '/^uuid: /d' | sed '/_core:/,+1d' | sed '$ d' > docroot/modules/contrib/acquia_cms/modules/acquia_cms_article/config/optional/pathauto.pattern.article.yml
-  drush cget pathauto.pattern.event_path | sed '/^uuid: /d' | sed '/_core:/,+1d' | sed '$ d' > docroot/modules/contrib/acquia_cms/modules/acquia_cms_event/config/optional/pathauto.pattern.event_path.yml
-  drush cget pathauto.pattern.place_path | sed '/^uuid: /d' | sed '/_core:/,+1d' | sed '$ d' > docroot/modules/contrib/acquia_cms/modules/acquia_cms_place/config/optional/pathauto.pattern.place_path.yml
-  drush cget pathauto.pattern.person | sed '/^uuid: /d' | sed '/_core:/,+1d' | sed '$ d' > docroot/modules/contrib/acquia_cms/modules/acquia_cms_person/config/optional/pathauto.pattern.person.yml
-  drush cget pathauto.pattern.page | sed '/^uuid: /d' | sed '/_core:/,+1d' | sed '$ d' > docroot/modules/contrib/acquia_cms/modules/acquia_cms_page/config/optional/pathauto.pattern.page.yml
-
   drush updatedb --cache-clear --yes -vvv
   drush cr
 fi
@@ -95,16 +86,7 @@ if [[ "$ACMS_JOB" == "starter" ]] && [[ -n "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ 
   # @todo Remove this after we update tests artifacts, which is created based on release 2.0.x.
   drush sqlq 'UPDATE `config` SET `data` = replace(data, "s:10:\"acquia_cms\"", "s:7:\"minimal\"") where name="core.extension";'
   drush cr
-
-  # Workaround added to fix error: `The  context is not a valid context`.
-  # @todo Remove below code after ACMS-1332 is completed.
-  drush "php:eval" "module_load_include('install', 'pathauto', 'pathauto'); pathauto_update_8108();"
-  drush cget pathauto.pattern.article | sed '/^uuid: /d' | sed '/_core:/,+1d' | sed '$ d' > docroot/modules/contrib/acquia_cms/modules/acquia_cms_article/config/optional/pathauto.pattern.article.yml
-  drush cget pathauto.pattern.event_path | sed '/^uuid: /d' | sed '/_core:/,+1d' | sed '$ d' > docroot/modules/contrib/acquia_cms/modules/acquia_cms_event/config/optional/pathauto.pattern.event_path.yml
-  drush cget pathauto.pattern.place_path | sed '/^uuid: /d' | sed '/_core:/,+1d' | sed '$ d' > docroot/modules/contrib/acquia_cms/modules/acquia_cms_place/config/optional/pathauto.pattern.place_path.yml
-  drush cget pathauto.pattern.person | sed '/^uuid: /d' | sed '/_core:/,+1d' | sed '$ d' > docroot/modules/contrib/acquia_cms/modules/acquia_cms_person/config/optional/pathauto.pattern.person.yml
-  drush cget pathauto.pattern.page | sed '/^uuid: /d' | sed '/_core:/,+1d' | sed '$ d' > docroot/modules/contrib/acquia_cms/modules/acquia_cms_page/config/optional/pathauto.pattern.page.yml
-
+  
   drush updatedb --cache-clear --yes -vvv
 fi
 
