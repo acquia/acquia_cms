@@ -1,0 +1,709 @@
+uuid: 33b5bd26-5da2-4620-95d6-aaf958398c1e
+langcode: en
+status: true
+dependencies:
+  config:
+    - cohesion_elements.cohesion_component_category.cpt_cat_layout_components
+label: 'Modal button'
+id: cpt_modal_button
+json_values: |
+  {
+      "canvas": [
+          {
+              "type": "container",
+              "uid": "button",
+              "title": "Button",
+              "status": {
+                  "collapsed": true
+              },
+              "uuid": "35a2d07c-4631-4f02-9ed4-a2760fb7ee73",
+              "parentUid": "root",
+              "children": []
+          }
+      ],
+      "componentForm": [
+          {
+              "type": "form-container",
+              "uid": "form-tab-container",
+              "title": "Tab container",
+              "status": {
+                  "collapsed": false
+              },
+              "options": {
+                  "formBuilder": true
+              },
+              "uuid": "0b30b71a-e747-4eff-8de4-0c9d7579f4a0",
+              "parentUid": "root",
+              "children": [
+                  {
+                      "type": "form-container",
+                      "uid": "form-tab-item",
+                      "title": "Tab item",
+                      "status": {
+                          "collapsed": true,
+                          "collapsedParents": []
+                      },
+                      "options": {
+                          "formBuilder": true
+                      },
+                      "uuid": "6c92dd9f-a1de-4c11-b944-75cce3a2dee9",
+                      "parentUid": "form-tab-container",
+                      "children": [
+                          {
+                              "type": "form-container",
+                              "uid": "form-section",
+                              "title": "Field group",
+                              "status": {
+                                  "collapsed": true,
+                                  "collapsedParents": [
+                                      "6c92dd9f-a1de-4c11-b944-75cce3a2dee9"
+                                  ]
+                              },
+                              "options": {
+                                  "formBuilder": true
+                              },
+                              "uuid": "9fb0870d-3a4a-420f-9841-9520de459bfd",
+                              "parentUid": "form-tab-item",
+                              "children": [
+                                  {
+                                      "type": "form-field",
+                                      "uid": "form-input",
+                                      "title": "Input",
+                                      "status": {
+                                          "collapsed": false,
+                                          "collapsedParents": [
+                                              "6c92dd9f-a1de-4c11-b944-75cce3a2dee9"
+                                          ]
+                                      },
+                                      "uuid": "80033672-dc8d-4f04-bed3-b21e655bd92e",
+                                      "parentUid": "form-section",
+                                      "children": []
+                                  },
+                                  {
+                                      "type": "form-field",
+                                      "uid": "form-input",
+                                      "title": "Input",
+                                      "status": {
+                                          "collapsed": false,
+                                          "collapsedParents": [
+                                              "6c92dd9f-a1de-4c11-b944-75cce3a2dee9"
+                                          ]
+                                      },
+                                      "uuid": "4e83a80e-8c91-4cda-b92b-68110776c990",
+                                      "parentUid": "form-section",
+                                      "children": []
+                                  },
+                                  {
+                                      "type": "form-field",
+                                      "uid": "form-select",
+                                      "title": "Select",
+                                      "status": {
+                                          "collapsed": false,
+                                          "collapsedParents": [
+                                              "6c92dd9f-a1de-4c11-b944-75cce3a2dee9"
+                                          ]
+                                      },
+                                      "uuid": "8891f358-4288-4185-9e9e-409bbafbe9fe",
+                                      "parentUid": "form-section",
+                                      "children": []
+                                  }
+                              ]
+                          },
+                          {
+                              "type": "form-container",
+                              "uid": "form-section",
+                              "title": "Field group",
+                              "status": {
+                                  "collapsed": true,
+                                  "collapsedParents": [
+                                      "6c92dd9f-a1de-4c11-b944-75cce3a2dee9"
+                                  ]
+                              },
+                              "options": {
+                                  "formBuilder": true
+                              },
+                              "uuid": "75527e2e-288d-4dfa-96f0-4b4c46cca9e2",
+                              "parentUid": "form-tab-item",
+                              "children": [
+                                  {
+                                      "type": "form-field",
+                                      "uid": "form-input",
+                                      "title": "Input",
+                                      "status": {
+                                          "collapsed": false,
+                                          "collapsedParents": [
+                                              "6c92dd9f-a1de-4c11-b944-75cce3a2dee9"
+                                          ]
+                                      },
+                                      "uuid": "e81bdc72-f405-4935-a10f-b3ca856245a1",
+                                      "parentUid": "form-section",
+                                      "children": []
+                                  }
+                              ]
+                          }
+                      ]
+                  },
+                  {
+                      "type": "form-container",
+                      "uid": "form-tab-item",
+                      "title": "Tab item",
+                      "status": {
+                          "collapsed": true,
+                          "collapsedParents": []
+                      },
+                      "options": {
+                          "formBuilder": true
+                      },
+                      "uuid": "c111119d-d421-4823-adc6-a4b5c79c576a",
+                      "parentUid": "form-tab-container",
+                      "children": [
+                          {
+                              "type": "form-help",
+                              "uid": "form-helptext",
+                              "title": "Help text",
+                              "status": {
+                                  "collapsed": false,
+                                  "collapsedParents": [
+                                      "c111119d-d421-4823-adc6-a4b5c79c576a"
+                                  ]
+                              },
+                              "uuid": "4ff00239-88f1-46d0-ba96-da49b287370d",
+                              "parentUid": "form-tab-item",
+                              "children": []
+                          }
+                      ]
+                  }
+              ]
+          }
+      ],
+      "mapper": {
+          "35a2d07c-4631-4f02-9ed4-a2760fb7ee73": {
+              "settings": {
+                  "formDefinition": [
+                      {
+                          "formKey": "button-settings",
+                          "children": [
+                              {
+                                  "formKey": "button-interaction",
+                                  "breakpoints": [],
+                                  "activeFields": [
+                                      {
+                                          "name": "buttonText",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "titleAttribute",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "type",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "scrollToSelector",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "scrollToDuration",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "scrollToOffsetType",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "scrollToOffsetPx",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "scrollToOffsetElement",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "helpText",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "triggerId",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "modalId",
+                                          "active": true
+                                      }
+                                  ]
+                              },
+                              {
+                                  "formKey": "button-modifier",
+                                  "breakpoints": [],
+                                  "activeFields": [
+                                      {
+                                          "name": "modifier",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "modifierType",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "interactionScope",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "interactionParent",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "interactionTarget",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "modifierName",
+                                          "active": true
+                                      }
+                                  ]
+                              },
+                              {
+                                  "formKey": "button-animation",
+                                  "breakpoints": [
+                                      {
+                                          "name": "xl"
+                                      }
+                                  ],
+                                  "activeFields": [
+                                      {
+                                          "name": "buttonAnimation",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "animationType",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "animationScope",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "animationParent",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "animationTarget",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "animationScale",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "animationDirection",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "animationDirection",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "animationDirection",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "animationDistance",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "animationPieces",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "animationOrigin",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "animationFoldHeight",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "animationHorizontalFirst",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "animationIterations",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "animationEasing",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "animationDuration",
+                                          "active": true
+                                      }
+                                  ]
+                              },
+                              {
+                                  "formKey": "button-style",
+                                  "breakpoints": [],
+                                  "activeFields": [
+                                      {
+                                          "name": "customStyle",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "customStyle",
+                                          "active": true
+                                      }
+                                  ]
+                              }
+                          ]
+                      }
+                  ],
+                  "selectorType": "topLevel",
+                  "form": null,
+                  "items": []
+              },
+              "hideNoData": {
+                  "formDefinition": [
+                      {
+                          "formKey": "tab-hide-data-settings",
+                          "children": [
+                              {
+                                  "formKey": "tab-hide-data-hide",
+                                  "breakpoints": [],
+                                  "activeFields": [
+                                      {
+                                          "name": "hideEnable",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "hideData",
+                                          "active": true
+                                      }
+                                  ]
+                              }
+                          ]
+                      }
+                  ],
+                  "title": "Hide if no data",
+                  "selectorType": "topLevel",
+                  "form": null,
+                  "items": []
+              }
+          }
+      },
+      "model": {
+          "35a2d07c-4631-4f02-9ed4-a2760fb7ee73": {
+              "settings": {
+                  "title": "Modal open button",
+                  "customStyle": [
+                      {
+                          "customStyle": "[field.8891f358-4288-4185-9e9e-409bbafbe9fe]"
+                      }
+                  ],
+                  "settings": {
+                      "type": "interaction",
+                      "styles": {
+                          "xl": {
+                              "buttonAnimation": [
+                                  {
+                                      "animationType": "none"
+                                  }
+                              ]
+                          }
+                      },
+                      "customStyle": [
+                          {
+                              "customStyle": ""
+                          }
+                      ]
+                  },
+                  "type": "modal",
+                  "buttonText": "[field.4e83a80e-8c91-4cda-b92b-68110776c990]",
+                  "triggerId": "[field.80033672-dc8d-4f04-bed3-b21e655bd92e]",
+                  "modalId": "[field.e81bdc72-f405-4935-a10f-b3ca856245a1]"
+              },
+              "context-visibility": {
+                  "contextVisibility": {
+                      "condition": "ALL"
+                  }
+              },
+              "styles": {
+                  "settings": {
+                      "element": "button"
+                  }
+              },
+              "hideNoData": {
+                  "hideEnable": true,
+                  "hideData": "[field.4e83a80e-8c91-4cda-b92b-68110776c990]"
+              }
+          },
+          "0b30b71a-e747-4eff-8de4-0c9d7579f4a0": {
+              "settings": {
+                  "type": "cohTabContainer",
+                  "title": "Tab container",
+                  "responsiveMode": true
+              }
+          },
+          "6c92dd9f-a1de-4c11-b944-75cce3a2dee9": {
+              "settings": {
+                  "title": "Settings",
+                  "type": "cohTabItem",
+                  "breakpointIcon": ""
+              },
+              "contextVisibility": {
+                  "condition": "ALL"
+              }
+          },
+          "9fb0870d-3a4a-420f-9841-9520de459bfd": {
+              "settings": {
+                  "title": "Modal button",
+                  "type": "cohSection",
+                  "hideRowHeading": 0,
+                  "removePadding": 0,
+                  "columnCount": "coh-component-field-group-3-col",
+                  "breakpointIcon": "",
+                  "breakpoints": false,
+                  "propertiesMenu": false,
+                  "disableScrollbar": true,
+                  "disableEllipsisMenu": true,
+                  "isOpen": true,
+                  "showCondition": ""
+              },
+              "contextVisibility": {
+                  "condition": "ALL"
+              }
+          },
+          "80033672-dc8d-4f04-bed3-b21e655bd92e": {
+              "settings": {
+                  "title": "Button ID",
+                  "schema": {
+                      "type": "string",
+                      "escape": true,
+                      "required": true
+                  },
+                  "machineName": "modal-open-button-id",
+                  "tooltipPlacement": "auto top-left",
+                  "tooltipText": "The ID must be unique to the page.",
+                  "validationMessage": {
+                      "302": "Please provide an ID."
+                  }
+              },
+              "contextVisibility": {
+                  "condition": "ALL"
+              },
+              "model": {
+                  "value": ""
+              }
+          },
+          "4e83a80e-8c91-4cda-b92b-68110776c990": {
+              "settings": {
+                  "title": "Button text",
+                  "schema": {
+                      "type": "string",
+                      "escape": true,
+                      "required": true
+                  },
+                  "machineName": "modal-open-button-text",
+                  "tooltipPlacement": "auto right",
+                  "validationMessage": {
+                      "302": "Please enter button text."
+                  }
+              },
+              "contextVisibility": {
+                  "condition": "ALL"
+              }
+          },
+          "8891f358-4288-4185-9e9e-409bbafbe9fe": {
+              "settings": {
+                  "title": "Button style",
+                  "type": "cohSelect",
+                  "selectType": "custom",
+                  "schema": {
+                      "type": "string"
+                  },
+                  "options": [
+                      {
+                          "label": "Color button",
+                          "value": "coh-style-modal-open-button-color"
+                      },
+                      {
+                          "label": "Dark button",
+                          "value": "coh-style-modal-open-button-dark"
+                      },
+                      {
+                          "label": "Light button",
+                          "value": "coh-style-modal-open-button-light"
+                      }
+                  ],
+                  "machineName": "modal-open-button-style",
+                  "tooltipPlacement": "auto right"
+              },
+              "contextVisibility": {
+                  "condition": "ALL"
+              },
+              "model": {
+                  "value": "coh-style-modal-open-button-color"
+              }
+          },
+          "75527e2e-288d-4dfa-96f0-4b4c46cca9e2": {
+              "settings": {
+                  "title": "Modal",
+                  "type": "cohSection",
+                  "hideRowHeading": 0,
+                  "removePadding": 0,
+                  "columnCount": "coh-component-field-group-col",
+                  "breakpointIcon": "",
+                  "breakpoints": false,
+                  "propertiesMenu": false,
+                  "disableScrollbar": true,
+                  "disableEllipsisMenu": true,
+                  "isOpen": true,
+                  "showCondition": ""
+              },
+              "contextVisibility": {
+                  "condition": "ALL"
+              }
+          },
+          "e81bdc72-f405-4935-a10f-b3ca856245a1": {
+              "settings": {
+                  "title": "Modal window ID",
+                  "schema": {
+                      "type": "string",
+                      "escape": true,
+                      "required": true
+                  },
+                  "machineName": "modal-window-id",
+                  "tooltipPlacement": "auto top-left",
+                  "tooltipText": "The ID must be unique to the page.",
+                  "validationMessage": {
+                      "302": "Please provide an ID."
+                  }
+              },
+              "contextVisibility": {
+                  "condition": "ALL"
+              }
+          },
+          "c111119d-d421-4823-adc6-a4b5c79c576a": {
+              "settings": {
+                  "title": "Help",
+                  "type": "cohTabItem",
+                  "breakpointIcon": ""
+              },
+              "contextVisibility": {
+                  "condition": "ALL"
+              }
+          },
+          "4ff00239-88f1-46d0-ba96-da49b287370d": {
+              "settings": {
+                  "title": "Help text",
+                  "type": "cohHelpText",
+                  "options": {
+                      "showClose": false,
+                      "helpType": "coh-help-text--help",
+                      "helpText": "# Using the modal button component\n- Use this component to add a button to your page that can launch a modal window.\n- Add this button component to your layout, where you would like it to appear to the user. \n\n# Modal button\n- **Open button ID -** The button used to open the modal must be given an ID that is unique to the page. The ID is required to provide focus to the button when the modal is closed. This is an accessibility requirement. The ID should be formed from letters, numbers and hyphens and not include spaces. For example **modal-one-button**.\n- **Open button text -** Set the text to display on the button that will open the modal.\n- **Open button style -** Set the style of the button.\n\n# Modal\n- **Modal window ID -** The modal must be given an ID that is unique to the page. The ID is required for the button to target the modal when clicked. The ID should be formed from letters, numbers and hyphens and not include spaces. For example **modal-one**."
+                  }
+              },
+              "contextVisibility": {
+                  "condition": "ALL"
+              }
+          }
+      },
+      "previewModel": {
+          "35a2d07c-4631-4f02-9ed4-a2760fb7ee73": {
+              "settings": {
+                  "customStyle": [
+                      {
+                          "customStyle": ""
+                      }
+                  ]
+              }
+          },
+          "6c92dd9f-a1de-4c11-b944-75cce3a2dee9": {},
+          "c111119d-d421-4823-adc6-a4b5c79c576a": {},
+          "75527e2e-288d-4dfa-96f0-4b4c46cca9e2": {},
+          "80033672-dc8d-4f04-bed3-b21e655bd92e": {},
+          "e81bdc72-f405-4935-a10f-b3ca856245a1": {},
+          "9fb0870d-3a4a-420f-9841-9520de459bfd": {},
+          "4e83a80e-8c91-4cda-b92b-68110776c990": {},
+          "8891f358-4288-4185-9e9e-409bbafbe9fe": {},
+          "4ff00239-88f1-46d0-ba96-da49b287370d": {}
+      },
+      "variableFields": {
+          "35a2d07c-4631-4f02-9ed4-a2760fb7ee73": [
+              "settings.customStyle.0.customStyle",
+              "settings.buttonText",
+              "settings.triggerId",
+              "settings.modalId"
+          ],
+          "6c92dd9f-a1de-4c11-b944-75cce3a2dee9": [],
+          "c111119d-d421-4823-adc6-a4b5c79c576a": [],
+          "75527e2e-288d-4dfa-96f0-4b4c46cca9e2": [],
+          "80033672-dc8d-4f04-bed3-b21e655bd92e": [],
+          "e81bdc72-f405-4935-a10f-b3ca856245a1": [],
+          "9fb0870d-3a4a-420f-9841-9520de459bfd": [],
+          "4e83a80e-8c91-4cda-b92b-68110776c990": [],
+          "8891f358-4288-4185-9e9e-409bbafbe9fe": [],
+          "4ff00239-88f1-46d0-ba96-da49b287370d": []
+      },
+      "meta": {
+          "fieldHistory": [
+              {
+                  "uuid": "e81bdc72-f405-4935-a10f-b3ca856245a1",
+                  "type": "form-input",
+                  "machineName": "modal-window-id"
+              },
+              {
+                  "uuid": "8891f358-4288-4185-9e9e-409bbafbe9fe",
+                  "type": "form-select",
+                  "machineName": "modal-open-button-style"
+              },
+              {
+                  "uuid": "4e83a80e-8c91-4cda-b92b-68110776c990",
+                  "type": "form-input",
+                  "machineName": "modal-open-button-text"
+              },
+              {
+                  "uuid": "80033672-dc8d-4f04-bed3-b21e655bd92e",
+                  "type": "form-input",
+                  "machineName": "modal-open-button-id"
+              },
+              {
+                  "uuid": "3e02fed8-a3de-4ace-9381-16e491294331",
+                  "type": "form-select",
+                  "machineName": "modal-close-button-style"
+              },
+              {
+                  "uuid": "77519c2f-22ef-4539-8bdf-36a7038f4c34",
+                  "type": "form-colorpicker",
+                  "machineName": "modal-background-color"
+              },
+              {
+                  "uuid": "29bedf18-b4db-403a-84bb-d1e8497beb10",
+                  "type": "form-select",
+                  "machineName": "modal-size"
+              },
+              {
+                  "uuid": "1cbb1e60-f5e5-4fe7-9d89-afdabe8ff29b",
+                  "type": "form-checkbox-toggle",
+                  "machineName": "auto-open-modal"
+              },
+              {
+                  "uuid": "84a60807-2330-49cb-8dbd-b02396e723eb",
+                  "type": "form-input-hidden",
+                  "machineName": "modal-auto-open"
+              }
+          ]
+      }
+  }
+json_mapper: '{}'
+last_entity_update: entityupdate_0035
+locked: false
+modified: true
+selectable: true
+category: cpt_cat_layout_components
+preview_image: 'public://element-preview-images/Modal button.png'
+has_quick_edit: true
+entity_type_access: {  }
+bundle_access: {  }
+twig_template: component--cohesion-cpt-modal-button
+weight: 11

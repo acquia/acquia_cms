@@ -57,12 +57,14 @@ function site_studio_import_ui_kit(): array {
   }
   /** @var \Drupal\acquia_cms_site_studio\Facade\CohesionFacade $facade */
   $facade = Drupal::classResolver(CohesionFacade::class);
-
-  $operations = $facade->getAllOperations(TRUE);
-  return [
-    'operations' => $operations,
-    'finished' => 'update_site_studio_settings',
-  ];
+  if (PHP_SAPI !== 'cli') {
+    batch_set($facade->getAllOperations());
+    update_site_studio_settings();
+  }
+  else {
+    $facade->getAllOperations();
+  }
+  return [];
 }
 
 /**
@@ -131,13 +133,9 @@ function acquia_cms_rebuild_site_studio_finished() {
  * @throws Exception
  */
 function acquia_cms_site_studio_init() {
-  /** @var \Drupal\acquia_cms_site_studio\Facade\CohesionFacade $facade */
-  $facade = Drupal::classResolver(CohesionFacade::class);
-  $operations = $facade->getAllOperations(TRUE);
   // Instead of returning the batch array, we are just executing the batch here.
   $batch = install_acms_site_studio_initialize();
-  $operations = array_merge($batch['operations'], $operations);
-  $batch['operations'] = $operations;
+  site_studio_import_ui_kit();
   batch_set($batch);
 }
 
