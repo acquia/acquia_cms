@@ -104,7 +104,8 @@ class AcmsUtilityService {
       $config = $this->configFactory->get('cohesion.settings');
       if ($config->get('api_key') && $config->get('organization_key')) {
         batch_set(install_acms_site_studio_initialize());
-        batch_set(site_studio_import_ui_kit());
+        site_studio_import_ui_kit();
+        update_site_studio_settings();
         return drush_backend_batch_process();
       }
     }

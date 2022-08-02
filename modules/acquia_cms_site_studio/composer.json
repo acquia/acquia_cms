@@ -4,7 +4,7 @@
     "description": "Handles code for Site Studio Installation & Related Configurations.",
     "license": "GPL-2.0-or-later",
     "require": {
-        "acquia/cohesion": "~6.9.0",
+        "acquia/cohesion": "6.9.0",
         "acquia/cohesion-theme": "^6.8",
         "drupal/acquia_cms_common": "^1.3.5",
         "drupal/collapsiblock": "^3",
@@ -31,9 +31,10 @@
         "enable-patching": true,
         "patches": {
             "acquia/cohesion": {
-                "Deprecation: layoutCanvas and RecursiveComponentFilterIterator return type issue fix": "https://gist.githubusercontent.com/alpha1892/e4becafe31597ac58563fb3219e48da6/raw/82496b7faef29c25dd8575dbe84b21f2b1bccd50/cohesion-deprecation-return-type.patch",
+                "Deprecation: layoutCanvas return type issue fix": "https://gist.githubusercontent.com/alpha1892/e4becafe31597ac58563fb3219e48da6/raw/0bfaf86f754b2cbffc1bc176f525b4bfd0e670f6/cohesion-jsonserialize-deprecation.patch",
                 "Error: Attempt to modify property 'styles' on array": "https://gist.githubusercontent.com/panshulK/86e53ac29386142b4204ab885018b36c/raw/c05e9c959cd8102534ccc1923809f90bc735785c/site-studio-updated-style.patch",
-                "Error: Must be type of array 'null' given in array_walk_recursive()": "https://gist.githubusercontent.com/alpha1892/bad7c337f0806ddaeb01be594fbc7405/raw/ef18ec4da7125f051099a8e8a84fa5bb015cc75e/cohesion-GoogleMapApiKeyForm.patch"
+                "Error: Must be type of array 'null' given in array_walk_recursive()": "https://gist.githubusercontent.com/alpha1892/bad7c337f0806ddaeb01be594fbc7405/raw/ef18ec4da7125f051099a8e8a84fa5bb015cc75e/cohesion-GoogleMapApiKeyForm.patch",
+                "Error: Package import with new package manager throws error": "https://gist.githubusercontent.com/rajeshreeputra/2543d73a12137f2c4d93ec5813fa3c3c/raw/add27e82a034ea64ea62a88ada15e84304e40aa9/site-studio-new-package-manger-requirement-issue.patch"
             }
         }
     },
