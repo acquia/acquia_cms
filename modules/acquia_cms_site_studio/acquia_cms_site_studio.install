@@ -5,10 +5,10 @@
  * Contains install-time code for the Acquia CMS profile.
  */
 
+use Drupal\acquia_cms_common\Facade\RolePermissionsFacade;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\node\Entity\NodeType;
-use Drupal\user\Entity\Role;
 
 /**
  * Implements hook_install().
@@ -148,148 +148,12 @@ function acquia_cms_site_studio_uninstall() {
  * Update role permission handler.
  */
 function update_site_studio_role_permission() {
-  $roles = Role::loadMultiple();
+  $roles_permissions = \Drupal::classResolver(RolePermissionsFacade::class)->defaultRolePermissions('acquia_cms_site_studio');
 
-  // Define roles having access to site studio components.
-  $roles_admin_author_editor_develop = [
-    'content_administrator',
-    'content_author',
-    'content_editor',
-    'developer',
-  ];
-
-  // Define site studio basic permission.
-  $permissions = [
-    'access animate on view',
-    'access component builder elements group',
-    'access component content',
-    'access components',
-    'access content elements group',
-    'access custom elements group',
-    'access drupal core elements group',
-    'access elements',
-    'access fields',
-    'access form fields fields group',
-    'access form help fields group',
-    'access form layout fields group',
-    'access helpers',
-    'access interactive elements group',
-    'access layout elements group',
-    'access media elements group',
-    'access menu elements group',
-    'access view elements group',
-    'use text format cohesion',
-  ];
-
-  // Define site studio content administration permission.
-  $permissions_content_admin_author = [
-    'access accordion_sections cohesion_helper_category group',
-    'access card_sections cohesion_helper_category group',
-    'access cpt_cat_accordion_components cohesion_component_category group',
-    'access cpt_cat_basic_components cohesion_component_category group',
-    'access cpt_cat_card_components cohesion_component_category group',
-    'access cpt_cat_dynamic_components cohesion_component_category group',
-    'access cpt_cat_feature_sections cohesion_component_category group',
-    'access cpt_cat_general_components cohesion_component_category group',
-    'access cpt_cat_hero_components cohesion_component_category group',
-    'access cpt_cat_interactive_components cohesion_component_category group',
-    'access cpt_cat_layout_components cohesion_component_category group',
-    'access cpt_cat_map_components cohesion_component_category group',
-    'access cpt_cat_media_components cohesion_component_category group',
-    'access cpt_cat_read_more_components cohesion_component_category group',
-    'access cpt_cat_slider_components cohesion_component_category group',
-    'access cpt_cat_tab_components cohesion_component_category group',
-    'access cpt_cat_template_components cohesion_component_category group',
-    'access hlp_cat_dynamic_helpers cohesion_helper_category group',
-    'access hlp_cat_general_helpers cohesion_helper_category group',
-    'access hlp_cat_hero_sections cohesion_helper_category group',
-    'access hlp_cat_interactive_helpers cohesion_helper_category group',
-    'access hlp_cat_layout_helpers cohesion_helper_category group',
-    'access hlp_cat_media_helpers cohesion_helper_category group',
-    'access hlp_cat_miscellaneous cohesion_helper_category group',
-    'access hlp_cat_page_layouts cohesion_helper_category group',
-    'access hlp_cat_slider_sections cohesion_helper_category group',
-    'access hlp_cat_text_sections cohesion_helper_category group',
-    'access tabbed_sections cohesion_helper_category group',
-    'access visual page builder',
-  ];
-  foreach ($roles_admin_author_editor_develop as $role) {
-    if (isset($roles[$role])) {
-      user_role_grant_permissions($role, $permissions);
-    }
-  }
-  if (isset($roles['content_administrator'])) {
-    user_role_grant_permissions('content_administrator', $permissions_content_admin_author);
-  }
-  if (isset($roles['content_author'])) {
-    user_role_grant_permissions('content_author', $permissions_content_admin_author);
-  }
-
-  // Define content editor permissions.
-  if (isset($roles['content_editor'])) {
-    user_role_grant_permissions('content_editor', [
-      'access cpt_cat_dynamic_components cohesion_component_category group',
-      'access cpt_cat_general_components cohesion_component_category group',
-      'access cpt_cat_hero_components cohesion_component_category group',
-      'access cpt_cat_interactive_components cohesion_component_category group',
-      'access cpt_cat_layout_components cohesion_component_category group',
-      'access cpt_cat_map_components cohesion_component_category group',
-      'access cpt_cat_media_components cohesion_component_category group',
-      'access cpt_cat_template_components cohesion_component_category group',
-      'access hlp_cat_dynamic_helpers cohesion_helper_category group',
-      'access hlp_cat_general_helpers cohesion_helper_category group',
-      'access hlp_cat_interactive_helpers cohesion_helper_category group',
-      'access hlp_cat_layout_helpers cohesion_helper_category group',
-      'access hlp_cat_media_helpers cohesion_helper_category group',
-    ]);
-  }
-
-  // Define site studio etra permissions for developer role.
-  if (isset($roles['developer'])) {
-    user_role_grant_permissions('developer', [
-      'access analytics',
-      'access cohesion sync',
-      'access color_picker',
-      'access context visibility',
-      'access hide no data',
-      'access markup',
-      'access seo',
-      'access styles',
-      'access tokens',
-      'administer base styles',
-      'administer cohesion',
-      'administer cohesion settings',
-      'administer component categories',
-      'administer component content',
-      'administer components',
-      'administer content templates',
-      'administer custom styles',
-      'administer helper categories',
-      'administer helpers',
-      'administer master templates',
-      'administer menu templates',
-      'administer style helpers',
-      'administer style_guide',
-      'administer view templates',
-      'administer website settings',
-    ]);
-  }
-
-  // Define site studion permission for site builder role.
-  if (isset($roles['site_builder'])) {
-    user_role_grant_permissions('site_builder', [
-      'access cohesion sync',
-      'administer cohesion',
-      'administer component categories',
-      'administer component content',
-      'administer components',
-      'administer custom styles',
-      'administer helper categories',
-      'administer helpers',
-      'administer style helpers',
-      'administer style_guide',
-      'use text format cohesion',
-    ]);
+  // Iterate roles to assign permissions as per usage.
+  foreach ($roles_permissions as $role => $permissions) {
+    // Assign permissions based on roles.
+    user_role_grant_permissions($role, $permissions);
   }
 }
 
