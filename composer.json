@@ -172,6 +172,8 @@
             "cd docroot/themes/contrib/acquia_claro && npm run build"
         ],
         "build:local": [
+            "@putenv MODULES_DIR=./docroot/modules/contrib",
+            "find $PWD/modules -name 'acquia_cms*' -type d -maxdepth 1 -exec ln -s -f '{}' $MODULES_DIR ';'",
             "cp -f phpunit.xml ./docroot/core"
         ],
         "cohesion:fixture": [
