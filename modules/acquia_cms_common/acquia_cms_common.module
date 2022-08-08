@@ -43,10 +43,9 @@ function acquia_cms_common_module_preinstall($module) {
     'acquia_cms_place',
   ];
   if (in_array($module, $content_model_modules)) {
-    $entityTypeManager = \Drupal::entityTypeManager();
     $roles = get_content_model_roles();
     foreach ($roles as $role => $role_config) {
-      if (empty($entityTypeManager->getStorage('user_role')->load($role))) {
+      if (empty(Role::load($role))) {
         Role::create($role_config)->save();
       }
     }
