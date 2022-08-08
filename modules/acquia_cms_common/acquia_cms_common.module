@@ -39,6 +39,8 @@ function acquia_cms_common_module_preinstall($module) {
     'acquia_cms_article',
     'acquia_cms_event',
     'acquia_cms_page',
+    'acquia_cms_person',
+    'acquia_cms_place',
   ];
   if (in_array($module, $content_model_modules)) {
     $entityTypeManager = \Drupal::entityTypeManager();
