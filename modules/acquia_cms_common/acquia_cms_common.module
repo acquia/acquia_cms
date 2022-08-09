@@ -7,6 +7,7 @@
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
 use Drupal\acquia_cms_common\Facade\MetatagFacade;
+use Drupal\acquia_cms_common\Facade\PermissionFacade;
 use Drupal\acquia_cms_common\Facade\SitemapFacade;
 use Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade;
 use Drupal\acquia_cms_common\Facade\WorkflowFacade;
@@ -335,6 +336,28 @@ function acquia_cms_common_modules_installed($modules) {
     $config_factory->getEditable('system.image')
       ->set('toolkit', 'imagemagick')
       ->save();
+  }
+
+  if (array_intersect(
+    $modules, [
+      'acquia_cms_article',
+      'acquia_cms_event',
+      'acquia_cms_page',
+      'acquia_cms_person',
+      'acquia_cms_place',
+    ])) {
+    Drupal::classResolver(PermissionFacade::class)->addRole('content_administrator', [
+      'weight' => -7,
+    ]);
+    Drupal::classResolver(PermissionFacade::class)->addRole('content_author', [
+      'weight' => -6,
+    ]);
+    Drupal::classResolver(PermissionFacade::class)->addRole('content_editor', [
+      'weight' => -5,
+    ]);
+  }
+  if (in_array('shield', $modules)) {
+    Drupal::classResolver(PermissionFacade::class)->updateRole('user_administrator');
   }
 }
 
