@@ -5,35 +5,35 @@
  * Install, update and uninstall functions for the acquia_cms_tour module.
  */
 
-use Drupal\user\Entity\Role;
+use Drupal\acquia_cms_common\Facade\PermissionFacade;
 
 /**
  * Implements hook_install().
  */
 function acquia_cms_tour_install() {
-  update_tour_role_permission();
-}
-
-/**
- * Update role permission handler.
- */
-function update_tour_role_permission() {
-  $roles = Role::loadMultiple();
-  if (isset($roles['content_administrator'])) {
-    user_role_grant_permissions('content_administrator', [
-      'access acquia cms tour',
-      'access acquia cms tour dashboard',
-    ]);
-  }
-  $roles_author_editor = [
-    'content_author',
-    'content_editor',
+  $moduleHandler = \Drupal::service('module_handler');
+  $moduleList = [
+    'acquia_cms_article',
+    'acquia_cms_event',
+    'acquia_cms_page',
+    'acquia_cms_person',
+    'acquia_cms_place',
   ];
-  foreach ($roles_author_editor as $role) {
-    if (isset($roles[$role])) {
-      user_role_grant_permissions($role, [
-        'access acquia cms tour',
-      ]);
+  $updatePermissions = FALSE;
+  foreach ($moduleList as $module) {
+    if ($moduleHandler->moduleExists($module)) {
+      $updatePermissions = TRUE;
+      break;
+    }
+  }
+  if ($updatePermissions) {
+    $roles_author_editor = [
+      'content_author',
+      'content_editor',
+      'content_administrator',
+    ];
+    foreach ($roles_author_editor as $role) {
+      Drupal::classResolver(PermissionFacade::class)->updateRole($role);
     }
   }
 }
@@ -43,11 +43,4 @@ function update_tour_role_permission() {
  */
 function acquia_cms_tour_update_8001() {
   \Drupal::state()->set('existing_site_acquia_cms', TRUE);
-}
-
-/**
- * Update role permissions.
- */
-function acquia_cms_tour_update_8002() {
-  update_tour_role_permission();
 }
