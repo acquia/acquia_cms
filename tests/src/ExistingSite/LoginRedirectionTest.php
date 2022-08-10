@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_common\ExistingSite;
+namespace Drupal\Tests\acquia_cms\ExistingSite;
 
 use Drupal\Component\Serialization\Yaml;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
