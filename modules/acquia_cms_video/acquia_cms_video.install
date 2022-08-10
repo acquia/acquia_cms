@@ -5,17 +5,25 @@
  * Install, update and uninstall functions for the acquia_cms_video module.
  */
 
+use Drupal\acquia_cms_common\Facade\PermissionFacade;
+
 /**
  * Implements hook_install().
  */
 function acquia_cms_video_install() {
-  user_role_grant_permissions('content_author', [
-    'create video media',
-    'edit own video media',
-    'delete own video media',
+  $permissionFacade = Drupal::classResolver(PermissionFacade::class);
+  $permissionFacade->createOrUpdateRole('content_author', [
+    'permissions' => [
+      'create video media',
+      'edit own video media',
+      'delete own video media',
+    ],
   ]);
-  user_role_grant_permissions('content_editor', [
-    'edit any video media',
-    'delete any video media',
+  $permissionFacade->createOrUpdateRole('content_editor', [
+    'permissions' => [
+      'edit any video media',
+      'delete any video media',
+    ],
   ]);
+
 }

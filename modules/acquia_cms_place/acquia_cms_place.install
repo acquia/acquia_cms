@@ -5,18 +5,25 @@
  * Install, update and uninstall functions for the acquia_cms_place module.
  */
 
+use Drupal\acquia_cms_common\Facade\PermissionFacade;
+
 /**
  * Implements hook_install().
  */
 function acquia_cms_place_install() {
-  user_role_grant_permissions('content_author', [
-    'create place content',
-    'edit own place content',
-    'delete own place content',
+  $permissionFacade = Drupal::classResolver(PermissionFacade::class);
+  $permissionFacade->createOrUpdateRole('content_author', [
+    'permissions' => [
+      'create place content',
+      'edit own place content',
+      'delete own place content',
+    ],
   ]);
-  user_role_grant_permissions('content_editor', [
-    'edit any place content',
-    'delete any place content',
+  $permissionFacade->createOrUpdateRole('content_editor', [
+    'permissions' => [
+      'edit any place content',
+      'delete any place content',
+    ],
   ]);
 }
 

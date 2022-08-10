@@ -68,13 +68,14 @@ class PermissionFacade implements ContainerInjectionInterface {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function addRole(string $role, array $configurations = []) {
+  public function addRole(string $role, array $configurations = []) :int {
     $permissions = $configurations['permissions'] ?? $this->getPermissionsByRole($role);
     if (!($this->roleEntity->load($role) instanceof RoleInterface)) {
       $defaults = $this->defaultPermissionConfig($role, $configurations);
       $defaults["permissions"] = $permissions;
-      $this->roleEntity->create($defaults)->save();
+      return $this->roleEntity->create($defaults)->save();
     }
+    return 0;
   }
 
   /**
@@ -88,6 +89,22 @@ class PermissionFacade implements ContainerInjectionInterface {
   public function updateRole(string $role, array $configurations = []) {
     $permissions = $configurations['permissions'] ?? $this->getPermissionsByRole($role);
     user_role_grant_permissions($role, $permissions);
+  }
+
+  /**
+   * Create a new role (or update, if exists) & add permissions (if given).
+   *
+   * @param string $role
+   *   A role to add or update.
+   * @param array $configurations
+   *   An array of configurations.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function createOrUpdateRole(string $role, array $configurations = []) : void {
+    if (!$this->addRole($role, $configurations)) {
+      $this->updateRole($role, $configurations);
+    }
   }
 
   /**
@@ -154,6 +171,7 @@ class PermissionFacade implements ContainerInjectionInterface {
           'view any moderation dashboard',
           'view any unpublished content',
           'view scheduled content',
+          'use editorial transition archive',
         ]),
       "content_author" => array_merge(
         $this->getBasicAdministerPermissions(), [
@@ -166,20 +184,8 @@ class PermissionFacade implements ContainerInjectionInterface {
           'use editorial transition publish',
           'view any unpublished content',
           'view scheduled content',
+          'use editorial transition archive',
         ]),
-      'site_builder' => [
-        'access cohesion sync',
-        'administer cohesion',
-        'administer component categories',
-        'administer component content',
-        'administer components',
-        'administer custom styles',
-        'administer helper categories',
-        'administer helpers',
-        'administer style helpers',
-        'administer style_guide',
-        'use text format cohesion',
-      ],
     ];
 
     // Check and prepare roles-permissions for acquia cms tour.
@@ -194,22 +200,19 @@ class PermissionFacade implements ContainerInjectionInterface {
 
     // Check and prepare roles-permissions for acquia cms site studio.
     if ($this->moduleHandler->moduleExists('acquia_cms_site_studio')) {
-      $ssAdminPermissions = array_merge(
-        self::basicComponentPermissions(),
-        self::basicComponentCategoryHelperPermissions(),
-        self::additionalComponentHelperPermissions(),
-        self::additionalComponentCategoryPermissions(),
-        ['access visual page builder'],
+      $allPermissions["content_author"] = array_merge(
+        $allPermissions["content_author"],
+        self::getSiteStudioPermissionsByRole('content_author'),
       );
       $allPermissions["content_administrator"] = array_merge(
         $allPermissions["content_administrator"],
-        $ssAdminPermissions
+        self::getSiteStudioPermissionsByRole('content_administrator'),
       );
       $allPermissions["content_editor"] = array_merge(
         $allPermissions["content_editor"],
-        self::basicComponentCategoryHelperPermissions(),
-        $ssAdminPermissions
+        self::getSiteStudioPermissionsByRole('content_editor'),
       );
+      $allPermissions['site_builder'] = self::getSiteStudioPermissionsByRole('site_builder');
     }
 
     if ($this->moduleHandler->moduleExists('shield')) {
