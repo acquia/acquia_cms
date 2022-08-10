@@ -346,18 +346,18 @@ function acquia_cms_common_modules_installed($modules) {
       'acquia_cms_person',
       'acquia_cms_place',
     ])) {
-    Drupal::classResolver(PermissionFacade::class)->addRole('content_administrator', [
+    Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_administrator', [
       'weight' => -7,
     ]);
-    Drupal::classResolver(PermissionFacade::class)->addRole('content_author', [
+    Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_author', [
       'weight' => -6,
     ]);
-    Drupal::classResolver(PermissionFacade::class)->addRole('content_editor', [
+    Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_editor', [
       'weight' => -5,
     ]);
   }
   if (in_array('shield', $modules)) {
-    Drupal::classResolver(PermissionFacade::class)->updateRole('user_administrator');
+    Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('user_administrator');
   }
 }
 
