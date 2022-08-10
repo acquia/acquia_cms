@@ -10,7 +10,7 @@ use Drupal\user\RoleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a facade for integrating with Metatag.
+ * Provides a facade to provide usage for roles and permissions.
  *
  * @internal
  *   This is a totally internal part of Acquia CMS and may be changed in any
@@ -181,17 +181,19 @@ class PermissionFacade implements ContainerInjectionInterface {
         'use text format cohesion',
       ],
     ];
+
+    // Check and prepare roles-permissions for acquia cms tour.
     if ($this->moduleHandler->moduleExists('acquia_cms_tour')) {
       $allPermissions["content_administrator"] = array_merge($allPermissions["content_administrator"], [
         'access acquia cms tour',
         'access acquia cms tour dashboard',
       ]);
-      array_push($allPermissions["content_author"], 'access acquia cms tour');
-      array_push($allPermissions["content_editor"], 'access acquia cms tour');
+      $allPermissions["content_author"][] = 'access acquia cms tour';
+      $allPermissions["content_editor"][] = 'access acquia cms tour';
     }
 
+    // Check and prepare roles-permissions for acquia cms site studio.
     if ($this->moduleHandler->moduleExists('acquia_cms_site_studio')) {
-      $allPermissions["content_editor"] = array_merge($allPermissions["content_editor"], self::basicComponentCategoryHelperPermissions());
       $ssAdminPermissions = array_merge(
         self::basicComponentPermissions(),
         self::basicComponentCategoryHelperPermissions(),
@@ -199,12 +201,21 @@ class PermissionFacade implements ContainerInjectionInterface {
         self::additionalComponentCategoryPermissions(),
         ['access visual page builder'],
       );
-      $allPermissions["content_administrator"] = array_merge($allPermissions["content_administrator"], $ssAdminPermissions);
-      $allPermissions["content_editor"] = array_merge($allPermissions["content_editor"], $ssAdminPermissions);
+      $allPermissions["content_administrator"] = array_merge(
+        $allPermissions["content_administrator"],
+        $ssAdminPermissions
+      );
+      $allPermissions["content_editor"] = array_merge(
+        $allPermissions["content_editor"],
+        self::basicComponentCategoryHelperPermissions(),
+        $ssAdminPermissions
+      );
     }
+
     if ($this->moduleHandler->moduleExists('shield')) {
       $allPermissions["user_administrator"] = ['administer shield'];
     }
+
     return $allPermissions[$role_name] ?? [];
   }
 
