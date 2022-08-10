@@ -5,6 +5,7 @@
  * Install, update and uninstall functions for the acquia_cms_image module.
  */
 
+use Drupal\acquia_cms_common\Facade\PermissionFacade;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\image\Entity\ImageStyle;
 
@@ -12,14 +13,19 @@ use Drupal\image\Entity\ImageStyle;
  * Implements hook_install().
  */
 function acquia_cms_image_install() {
-  user_role_grant_permissions('content_author', [
-    'create image media',
-    'edit own image media',
-    'delete own image media',
+  $permissionFacade = Drupal::classResolver(PermissionFacade::class);
+  $permissionFacade->createOrUpdateRole('content_author', [
+    'permissions' => [
+      'create image media',
+      'edit own image media',
+      'delete own image media',
+    ],
   ]);
-  user_role_grant_permissions('content_editor', [
-    'edit any image media',
-    'delete any image media',
+  $permissionFacade->createOrUpdateRole('content_editor', [
+    'permissions' => [
+      'edit any image media',
+      'delete any image media',
+    ],
   ]);
 }
 
