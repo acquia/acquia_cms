@@ -12,9 +12,11 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\user\UserInterface;
 use Drupal\views\ViewEntityInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Implements hook_help().
@@ -26,6 +28,20 @@ function acquia_cms_headless_ui_help($route_name) {
 
     default:
       return NULL;
+  }
+}
+
+/**
+ * Implements hook_node_update().
+ */
+function acquia_cms_headless_ui_node_update(NodeInterface $node) {
+  $url = Url::fromRoute('entity.node.headless_preview', ['node' => $node->id()]);
+  // Check for destination query param.
+  $current_request = \Drupal::service('request_stack')->getCurrentRequest();
+  // If not set, then redirect to site-preview.
+  if (!$current_request->query->get('destination')) {
+    $response = new RedirectResponse($url->toString());
+    $response->send();
   }
 }
 
@@ -302,7 +318,7 @@ function acquia_cms_headless_ui_menu_links_discovered_alter(array &$links) {
       'admin.content_models',
       'acquia_cms_tour.tour',
       'system.admin_content',
-      'admin_toolbar_tools.help'
+      'admin_toolbar_tools.help',
     ];
     if (in_array($name, $bypass)) {
       continue;
