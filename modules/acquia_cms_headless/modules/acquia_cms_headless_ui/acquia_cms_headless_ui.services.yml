@@ -15,3 +15,7 @@ services:
       - '@messenger'
       - '@module_handler'
       - '@theme_handler'
+  acquia_cms_headless.site_preview_route_subscriber:
+    class: 'Drupal\acquia_cms_headless_ui\Routing\SitePreviewRouteSubscriber'
+    tags:
+      - { name: event_subscriber }
