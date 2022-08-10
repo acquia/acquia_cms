@@ -33,7 +33,7 @@ function acquia_cms_tour_install() {
       'content_administrator',
     ];
     foreach ($roles_author_editor as $role) {
-      Drupal::classResolver(PermissionFacade::class)->updateRole($role);
+      Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole($role);
     }
   }
 }
