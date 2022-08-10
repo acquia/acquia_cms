@@ -86,4 +86,51 @@ trait SiteStudioPermissionTrait {
     ];
   }
 
+  /**
+   * Finds the Site Studio permissions of given role.
+   *
+   * @param string $role_name
+   *   A string role name.
+   *
+   * @return array|string[]
+   *   Returns an array of permissions for given role.
+   */
+  public static function getSiteStudioPermissionsByRole(string $role_name): array {
+    switch ($role_name) {
+      case 'content_administrator':
+      case 'content_author':
+        return array_merge(
+          self::basicComponentPermissions(),
+          self::basicComponentCategoryHelperPermissions(),
+          self::additionalComponentHelperPermissions(),
+          self::additionalComponentCategoryPermissions(),
+          ['access visual page builder'],
+        );
+
+      case 'content_editor':
+        return array_merge(
+          self::basicComponentPermissions(),
+          self::basicComponentCategoryHelperPermissions(),
+        );
+
+      case 'site_builder':
+        return [
+          'access cohesion sync',
+          'administer cohesion',
+          'administer component categories',
+          'administer component content',
+          'administer components',
+          'administer custom styles',
+          'administer helper categories',
+          'administer helpers',
+          'administer style helpers',
+          'administer style_guide',
+          'use text format cohesion',
+        ];
+
+      default:
+        return [];
+    }
+  }
+
 }

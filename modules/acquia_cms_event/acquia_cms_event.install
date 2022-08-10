@@ -5,18 +5,25 @@
  * Install, update and uninstall functions for the acquia_cms_event module.
  */
 
+use Drupal\acquia_cms_common\Facade\PermissionFacade;
+
 /**
  * Implements hook_install().
  */
 function acquia_cms_event_install() {
-  user_role_grant_permissions('content_author', [
-    'create event content',
-    'edit own event content',
-    'delete own event content',
+  $permissionFacade = Drupal::classResolver(PermissionFacade::class);
+  $permissionFacade->createOrUpdateRole('content_author', [
+    'permissions' => [
+      'create event content',
+      'edit own event content',
+      'delete own event content',
+    ],
   ]);
-  user_role_grant_permissions('content_editor', [
-    'edit any event content',
-    'delete any event content',
+  $permissionFacade->createOrUpdateRole('content_editor', [
+    'permissions' => [
+      'edit any event content',
+      'delete any event content',
+    ],
   ]);
 }
 

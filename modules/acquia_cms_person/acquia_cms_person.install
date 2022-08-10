@@ -5,18 +5,25 @@
  * Install, update and uninstall functions for the acquia_cms_person module.
  */
 
+use Drupal\acquia_cms_common\Facade\PermissionFacade;
+
 /**
  * Implements hook_install().
  */
 function acquia_cms_person_install() {
-  user_role_grant_permissions('content_author', [
-    'create person content',
-    'edit own person content',
-    'delete own person content',
+  $permissionFacade = Drupal::classResolver(PermissionFacade::class);
+  $permissionFacade->createOrUpdateRole('content_author', [
+    'permissions' => [
+      'create person content',
+      'edit own person content',
+      'delete own person content',
+    ],
   ]);
-  user_role_grant_permissions('content_editor', [
-    'edit any person content',
-    'delete any person content',
+  $permissionFacade->createOrUpdateRole('content_editor', [
+    'permissions' => [
+      'edit any person content',
+      'delete any person content',
+    ],
   ]);
 }
 
