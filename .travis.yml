@@ -38,7 +38,7 @@ env:
     # release, dev-develop to track Dev/HEAD, or any other Composer version
     # string.
     # @see https://getcomposer.org/doc/articles/versions.md
-    - ORCA_VERSION=^3
+    - ORCA_VERSION=dev-wip
     # If your package isn't in in ORCA's packages.yml or conflicts with details
     # that are, you can modify the active packages configuration at runtime by
     # uncommenting the following line and specifying your own alter file.
@@ -162,6 +162,7 @@ before_install:
   - composer config --global repositories.acquia_coding_standards path /home/travis/build/acquia/acquia/coding-standards
   # Remove internal module dependencies, so that ORCA CI doesn't report error.
   - if [ "${ORCA_JOB}" != "STATIC_CODE_ANALYSIS" ]; then for path in $(find modules -type f -maxdepth 2 -name "composer.json" -exec ls '{}' ';'); do sed -i '/\"drupal\/acquia_cms.*\":.*\".*\"/d' $path; done; fi
+  # - if [ "${ORCA_JOB}" = "STATIC_CODE_ANALYSIS" ]; then find ./modules/*/config/pack_* -type f -name "*.yml" | xargs rm; fi
   - composer self-update
   # Download AWS cli, only for starter jobs as we store tests artifacts on s3 buckets.
   - if [ "${ACMS_JOB}" = "starter" ] || [ "${ACMS_JOB}" = "starter_full" ] || [ "${ACMS_JOB}" = "base" ]; then curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo ./aws/install && rm -fr aws && aws s3 cp --recursive ${AWS_S3_BUCKET_PATH}/artifacts/ ${TRAVIS_BUILD_DIR}/tests/; fi
