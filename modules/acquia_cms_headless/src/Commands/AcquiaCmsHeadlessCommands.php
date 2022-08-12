@@ -6,6 +6,7 @@ use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\CommandError;
 use Drupal\acquia_cms_headless\Service\StarterkitNextjsService;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -28,16 +29,26 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
   protected $entityTypeManager;
 
   /**
+   * The file system interface.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
    * Constructs an AcquiaCmsHeadlessCommands object.
    *
    * @param \Drupal\acquia_cms_headless\Service\StarterkitNextjsService $starter_kit
    *   The next.js starter kit service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   *   Lets us create a directory.
    */
-  public function __construct(StarterkitNextjsService $starter_kit, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(StarterkitNextjsService $starter_kit, EntityTypeManagerInterface $entity_type_manager, FileSystemInterface $file_system) {
     $this->starterKit = $starter_kit;
     $this->entityTypeManager = $entity_type_manager;
+    $this->fileSystem = $file_system;
   }
 
   /**
@@ -79,9 +90,7 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
       $this->starterKit->createHeadlessSiteEntities();
     }
     $env = $this->starterKit->getEnvironmentVariablesAsString($site);
-    if ($options['env-file']) {
-      $file = realpath($options['env-file']);
-
+    if ($file = $options['env-file']) {
       file_put_contents($file, $env);
       $this->logger()->success("Environment variables were written to $file.");
     }
@@ -106,6 +115,14 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
       $site_machine_name = $this->getSiteMachineName($options['site-name']);
       if ($this->starterKit->getHeadlessSite($site_machine_name)) {
         $messages[] = dt("Site with name [@site] already exists!", ['@site' => $options['site-name']]);
+      }
+    }
+    if (isset($options['env-file'])) {
+      if (!file_exists($options['env-file'])) {
+        if (!is_dir($options['env-file'])) {
+          $dir = $this->fileSystem->dirname($options['env-file']);
+          $this->fileSystem->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY);
+        }
       }
     }
     if ($messages) {

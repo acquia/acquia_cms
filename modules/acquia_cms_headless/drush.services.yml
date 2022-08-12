@@ -4,5 +4,6 @@ services:
     arguments:
       - '@acquia_cms_headless.starterkit_nextjs'
       - '@entity_type.manager'
+      - '@file_system'
     tags:
       - { name: drush.command }
