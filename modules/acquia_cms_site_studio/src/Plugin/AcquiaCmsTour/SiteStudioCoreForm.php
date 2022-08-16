@@ -2,7 +2,7 @@
 
 namespace Drupal\acquia_cms_site_studio\Plugin\AcquiaCmsTour;
 
-use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
+use Drupal\acquia_cms_tour\Form\AcquiaCmsDashboardBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
@@ -15,7 +15,7 @@ use Drupal\Core\Url;
  *   weight = 8
  * )
  */
-class SiteStudioCoreForm extends AcquiaCMSDashboardBase {
+class SiteStudioCoreForm extends AcquiaCmsDashboardBase {
 
   /**
    * Provides module name.
