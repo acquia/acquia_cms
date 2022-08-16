@@ -2,7 +2,7 @@
 
 namespace Drupal\acquia_cms_headless\Plugin\AcquiaCmsHeadless;
 
-use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
+use Drupal\acquia_cms_tour\Form\AcquiaCmsDashboardBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   weight = 1
  * )
  */
-class AcquiaHeadlessApiUrl extends AcquiaCMSDashboardBase {
+class AcquiaHeadlessApiUrl extends AcquiaCmsDashboardBase {
 
   /**
    * Provides module name.

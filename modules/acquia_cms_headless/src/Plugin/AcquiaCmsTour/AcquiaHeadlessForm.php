@@ -2,7 +2,7 @@
 
 namespace Drupal\acquia_cms_headless\Plugin\AcquiaCmsTour;
 
-use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
+use Drupal\acquia_cms_tour\Form\AcquiaCmsDashboardBase;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Entity\EntityStorageException;
@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   weight = 8
  * )
  */
-class AcquiaHeadlessForm extends AcquiaCMSDashboardBase {
+class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
 
   /**
    * The module installer.

@@ -3,7 +3,7 @@
 namespace Drupal\acquia_cms_headless\Plugin\AcquiaCmsHeadless;
 
 use Drupal\acquia_cms_headless\Service\StarterkitNextjsService;
-use Drupal\acquia_cms_tour\Form\AcquiaCMSDashboardBase;
+use Drupal\acquia_cms_tour\Form\AcquiaCmsDashboardBase;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\InfoParserInterface;
@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   weight = 4
  * )
  */
-class HeadlessApiKeys extends AcquiaCMSDashboardBase {
+class HeadlessApiKeys extends AcquiaCmsDashboardBase {
   /**
    * The state interface.
    *
