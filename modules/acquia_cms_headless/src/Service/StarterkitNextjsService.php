@@ -402,7 +402,7 @@ class StarterkitNextjsService {
    * A function that obtains our init headless consumer data.
    *
    * @return \Drupal\Core\Entity\EntityInterface|null
-   *   Returns a user object or a NULL response.
+   *   Returns a consumer object or a NULL response.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -412,6 +412,30 @@ class StarterkitNextjsService {
     $query = $consumerStorage->getQuery();
     $cids = $query
       ->condition('label', $site_name)
+      ->range(0, 1)
+      ->execute();
+    $cid = array_keys($cids);
+
+    return !empty($cid) ? $consumerStorage->load($cid[0]) : NULL;
+  }
+
+  /**
+   * Get consumer based on redirect uri.
+   *
+   * @param string $redirect_uri
+   *   The redirect url.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface|null
+   *   Returns a consumer object or a NULL response.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function getHeadlessConsumerDataByUri(string $redirect_uri) {
+    $consumerStorage = $this->entityTypeManager->getStorage('consumer');
+    $query = $consumerStorage->getQuery();
+    $cids = $query
+      ->condition('redirect', $redirect_uri)
       ->range(0, 1)
       ->execute();
     $cid = array_keys($cids);
@@ -454,6 +478,23 @@ class StarterkitNextjsService {
    */
   public function getHeadlessSite(string $site_id) {
     return $this->entityTypeManager->getStorage('next_site')->load($site_id);
+  }
+
+  /**
+   * Get next.js site based on url.
+   *
+   * @param string $base_url
+   *   The next.js base url.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface[]
+   *   The next.js site object.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function getHeadlessSiteByBaseUrl(string $base_url) {
+    $site = $this->entityTypeManager->getStorage('next_site')->loadByProperties(['base_url' => $base_url]);
+    return reset($site) ?? NULL;
   }
 
   /**
@@ -529,7 +570,10 @@ class StarterkitNextjsService {
     if (!empty($this->getHeadlessUserData())) {
       $config->set('user_uuid', $this->getHeadlessUserData()->uuid());
     }
-    $this->displayEnvironmentVariables($site);
+    // Call this function in case of UI.
+    if (PHP_SAPI !== 'cli') {
+      $this->displayEnvironmentVariables($site);
+    }
     return $site;
   }
 
@@ -579,10 +623,11 @@ class StarterkitNextjsService {
     ];
 
     if ($secret = $next_site->getPreviewSecret()) {
+      $consumer = $this->getHeadlessConsumerData($next_site->label());
       $variables += [
         'DRUPAL_PREVIEW_SECRET' => $secret,
-        'DRUPAL_CLIENT_ID' => $this->getHeadlessConsumerData($next_site->label())->uuid(),
-        'DRUPAL_CLIENT_SECRET' => $this->consumerSecret ?? 'insert secret here',
+        'DRUPAL_CLIENT_ID' => $consumer->uuid(),
+        'DRUPAL_CLIENT_SECRET' => $consumer->get('secret')->value ?? 'insert secret here',
       ];
     }
     $code = '';

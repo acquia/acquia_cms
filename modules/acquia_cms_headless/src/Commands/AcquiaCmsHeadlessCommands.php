@@ -86,15 +86,15 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
       $this->starterKit->createHeadlessConsumer($data);
       // Create a new Next.js Site.
       $site = $this->starterKit->createHeadlessSite($site_id, $data);
-      // Create a set of Next.js Entity types based on available Node Types.
-      $this->starterKit->createHeadlessSiteEntities();
     }
     $env = $this->starterKit->getEnvironmentVariablesAsString($site);
     if ($file = $options['env-file']) {
       file_put_contents($file, $env);
       $this->logger()->success("Environment variables were written to $file.");
     }
-    $this->logger()->info($env);
+    else {
+      $this->logger()->notice("Use these environment variables for your Next.js application. Place them in your .env file:\n" . print_r($env, TRUE));
+    }
   }
 
   /**
@@ -143,6 +143,89 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
     $site_name_lower = strtolower($site_name);
     $site_machine_name = preg_replace('/[^a-z0-9_]+/', '_', $site_name_lower);
     return preg_replace('/_+/', '_', $site_machine_name);
+  }
+
+  /**
+   * Regenerate consumer secret.
+   *
+   * @option site-url
+   *   The site url for which consumer key has to re-regenerate.
+   * @option env-file
+   *   The file where generated consumer secret should be written.
+   * @usage acms:headless:regenerate-env  --site-url='http://localhost:3000' --env-file='../frontend/.env.local'
+   *   Regenerate consumer secret.
+   *
+   * @command acms:headless:regenerate-env
+   */
+  public function acmsHeadlessRegenerateEnv(array $options = [
+    'site-url' => NULL,
+    'env-file' => NULL,
+  ]) {
+    if ($options['site-url']) {
+      $cid = $this->starterKit->getHeadlessConsumerDataByUri($options['site-url'])->id();
+      $consumer = $this->entityTypeManager->getStorage('consumer')->load($cid);
+      if ($consumer) {
+        // Generate a new secret key.
+        $secret = $this->starterKit->createHeadlessSecret();
+        // Apply the new secret to the consumer.
+        $consumer->secret = $secret;
+        // Update the consumer.
+        $consumer->save();
+
+        $site = $this->starterKit->getHeadlessSiteByBaseUrl($options['site-url']);
+        $env = $this->starterKit->getEnvironmentVariablesAsString($site);
+        if ($file = $options['env-file']) {
+          file_put_contents($file, $env);
+          $this->logger()->success("Environment variables were written to $file.");
+        }
+        else {
+          $this->logger()->notice("Use these environment variables for your Next.js application. Place them in your .env file:\n" . print_r($env, TRUE));
+        }
+      }
+    }
+  }
+
+  /**
+   * Hook validates for acms:headless:regenerate-env command.
+   *
+   * @hook validate acms:headless:regenerate-env
+   */
+  public function validateAcmsHeadlessRegenerateEnv(CommandData $commandData) {
+    $options = $commandData->input()->getOptions();
+    $messages = [];
+    $existing_sites = $this->entityTypeManager->getStorage('next_site')->loadMultiple();
+    if (empty($existing_sites)) {
+      $messages[] = dt("There's no Next.js site found, at least one Next.js site should exists in order to generate the secret.");
+    }
+    if (!isset($options['site-url'])) {
+      $messages[] = dt("Missing required parameter site URL.");
+    }
+    if (isset($options['site-url'])) {
+      $site = $this->starterKit->getHeadlessSiteByBaseUrl($options['site-url']);
+      if (!$site) {
+        $messages[] = dt("No site with base url [@url] found.", ['@url' => $options['site-url']]);
+      }
+      if ($site) {
+        $cid = $this->starterKit->getHeadlessConsumerDataByUri($options['site-url'])->id();
+        $consumer = $this->entityTypeManager->getStorage('consumer')->load($cid);
+        if (!$consumer) {
+          $messages[] = dt("No consumer with redirect url [@url] found.", ['@url' => $options['site-url']]);
+        }
+      }
+
+    }
+    if (isset($options['site-url']) && isset($options['env-file'])) {
+      if (!file_exists($options['env-file'])) {
+        if (!is_dir($options['env-file'])) {
+          $dir = $this->fileSystem->dirname($options['env-file']);
+          $this->fileSystem->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY);
+        }
+      }
+    }
+
+    if ($messages) {
+      return new CommandError(implode('\n', $messages));
+    }
   }
 
 }
