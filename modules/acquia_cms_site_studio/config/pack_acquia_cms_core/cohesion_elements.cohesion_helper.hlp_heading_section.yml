@@ -1,0 +1,170 @@
+uuid: 599e8aa1-300f-4be2-8113-9d6a7cd5b150
+langcode: en
+status: true
+dependencies:
+  config:
+    - cohesion_custom_styles.cohesion_custom_style.5d3e1401
+    - cohesion_custom_styles.cohesion_custom_style.a59e0629
+    - cohesion_custom_styles.cohesion_custom_style.ee93d997
+    - cohesion_elements.cohesion_component.cpt_1_column_layout
+    - cohesion_elements.cohesion_component.cpt_heading
+    - cohesion_elements.cohesion_helper_category.hlp_cat_text_sections
+label: 'Heading section'
+id: hlp_heading_section
+json_values: |
+  {
+      "canvas": [
+          {
+              "uid": "cpt_1_column_layout",
+              "type": "component",
+              "title": "1 column layout",
+              "enabled": true,
+              "category": "category-1",
+              "componentId": "cpt_1_column_layout",
+              "componentType": "container",
+              "uuid": "a0f2764a-34a9-4377-8b46-210cdc488162",
+              "parentUid": "root",
+              "status": {
+                  "collapsed": true
+              },
+              "children": [
+                  {
+                      "type": "container",
+                      "uid": "component-drop-zone",
+                      "mimicParent": true,
+                      "parentUid": "cpt_1_column_layout",
+                      "title": "Component drop zone",
+                      "selected": false,
+                      "status": {
+                          "collapsed": false,
+                          "disabled": false,
+                          "collapsedParents": [
+                              "a0f2764a-34a9-4377-8b46-210cdc488162"
+                          ]
+                      },
+                      "uuid": "90b33ea3-9b1b-4ea6-a5e6-56fca8982cc0",
+                      "dropzoneId": "c0116a84-e80c-428d-b6ff-ae43dda904f7",
+                      "children": [
+                          {
+                              "uid": "cpt_heading",
+                              "type": "component",
+                              "title": "Heading",
+                              "enabled": true,
+                              "category": "category-4",
+                              "componentId": "cpt_heading",
+                              "componentType": "heading",
+                              "uuid": "6ecf1cc0-3651-4617-b21f-1fcc41330da3",
+                              "parentUid": "component-drop-zone",
+                              "status": {
+                                  "collapsedParents": [
+                                      "a0f2764a-34a9-4377-8b46-210cdc488162"
+                                  ]
+                              },
+                              "children": []
+                          },
+                          {
+                              "uid": "cpt_heading",
+                              "type": "component",
+                              "title": "Heading",
+                              "enabled": true,
+                              "category": "category-4",
+                              "componentId": "cpt_heading",
+                              "componentType": "heading",
+                              "uuid": "5e63f5e8-edc2-4a58-94a7-8e4cfe4ba15e",
+                              "parentUid": "component-drop-zone",
+                              "status": {
+                                  "collapsedParents": [
+                                      "a0f2764a-34a9-4377-8b46-210cdc488162"
+                                  ]
+                              },
+                              "children": []
+                          }
+                      ]
+                  }
+              ]
+          }
+      ],
+      "mapper": {},
+      "model": {
+          "a0f2764a-34a9-4377-8b46-210cdc488162": {
+              "settings": {
+                  "title": "Heading  - 1 column layout"
+              },
+              "c469e24d-d155-46d5-a9ca-dc61028163c6": "boxed",
+              "2647a498-53ac-4cf2-84d7-9a621dd838a0": "center",
+              "74a865c3-d896-45d6-ba96-5ac344ad9942": "coh-style-padding-top-large",
+              "2a2a10d2-02a6-4263-a8a7-6c84701354f9": "auto",
+              "f8f8754f-4921-41ee-bb30-47fc98451736": "flex-start",
+              "6b754e7a-6c7c-4ed2-9399-b64496075e6b": 6,
+              "ad62c677-81e9-4361-b36d-905eceb8fce9": "-1",
+              "4939e8b3-bae0-47ca-9527-5d7be5138e51": "-1",
+              "d5dbd40f-6af7-413c-a38e-323fc3154a58": "auto",
+              "0214b304-c34f-4155-8795-52cd1c5621cb": "flex-start",
+              "5dcf43ba-fc68-44d2-a27c-03a042c3158e": 10,
+              "d7af9c66-4d99-4107-8709-fd9f399d14cb": "-1",
+              "6f05f900-24d3-4a0c-85ab-1e783ac9d8e7": "-1",
+              "6e2005ad-103a-4e90-a28f-b12587182f5e": "auto",
+              "00ba9989-9e6f-40ba-b0a5-741c79bd5659": "flex-start",
+              "09032d58-36ec-4b7d-93f0-ce4110e125c0": 12,
+              "8cf47e32-7b34-4185-a2ba-731420fd6d98": false
+          },
+          "90b33ea3-9b1b-4ea6-a5e6-56fca8982cc0": {
+              "settings": {
+                  "title": "Column 1 drop zone",
+                  "dropzoneHideSelector": "",
+                  "styles": {
+                      "sm": {
+                          "col": 12
+                      }
+                  }
+              }
+          },
+          "6ecf1cc0-3651-4617-b21f-1fcc41330da3": {
+              "settings": {
+                  "title": "Pre heading"
+              },
+              "ad025039-96c5-4cce-a27b-48778043471c": false,
+              "50bae73f-99e4-446b-a738-9939a3dade60": "Pre heading",
+              "e8f77e4e-3de9-47cc-b229-7040a4f78719": "span",
+              "77d003da-6145-481e-95c8-2f6017361e26": "coh-style-pre-heading",
+              "42c2324a-e7ee-45b6-ab1e-f5dfba48bfb2": "align-text-center",
+              "fa5d575b-1d6e-44f0-a99e-1a2f7688bc27": "color-heading",
+              "fb51822d-28f0-4f47-8776-f7d715c910f5": ""
+          },
+          "5e63f5e8-edc2-4a58-94a7-8e4cfe4ba15e": {
+              "settings": {
+                  "title": "Heading"
+              },
+              "ad025039-96c5-4cce-a27b-48778043471c": false,
+              "50bae73f-99e4-446b-a738-9939a3dade60": "Medium length placeholder heading.",
+              "e8f77e4e-3de9-47cc-b229-7040a4f78719": "h2",
+              "77d003da-6145-481e-95c8-2f6017361e26": "",
+              "42c2324a-e7ee-45b6-ab1e-f5dfba48bfb2": "align-text-center",
+              "fa5d575b-1d6e-44f0-a99e-1a2f7688bc27": "dark-heading",
+              "fb51822d-28f0-4f47-8776-f7d715c910f5": "coh-style-padding-bottom-small"
+          }
+      },
+      "previewModel": {
+          "a0f2764a-34a9-4377-8b46-210cdc488162": {},
+          "6ecf1cc0-3651-4617-b21f-1fcc41330da3": {},
+          "5e63f5e8-edc2-4a58-94a7-8e4cfe4ba15e": {}
+      },
+      "variableFields": {
+          "a0f2764a-34a9-4377-8b46-210cdc488162": [],
+          "6ecf1cc0-3651-4617-b21f-1fcc41330da3": [],
+          "5e63f5e8-edc2-4a58-94a7-8e4cfe4ba15e": []
+      },
+      "meta": {
+          "fieldHistory": []
+      }
+  }
+json_mapper: '{}'
+last_entity_update: entityupdate_0035
+locked: false
+modified: true
+selectable: true
+category: hlp_cat_text_sections
+preview_image: 'public://element-preview-images/Heading section.png'
+entity_type_access: {  }
+bundle_access: {  }
+weight: 0

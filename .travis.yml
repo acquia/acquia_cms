@@ -33,12 +33,12 @@ env:
     # Specify the name of the nearest Git version branch, e.g., 1.x or 8.x-1.x.
     # This may be the destination branch of a pull request or the nearest
     # ancestor of a topic branch.
-    - ORCA_SUT_BRANCH=develop_new
+    - ORCA_SUT_BRANCH=develop
     # Specify the version of ORCA to use. Use dev-master to track the latest
     # release, dev-develop to track Dev/HEAD, or any other Composer version
     # string.
     # @see https://getcomposer.org/doc/articles/versions.md
-    - ORCA_VERSION=^3
+    - ORCA_VERSION=dev-wip
     # If your package isn't in in ORCA's packages.yml or conflicts with details
     # that are, you can modify the active packages configuration at runtime by
     # uncommenting the following line and specifying your own alter file.
@@ -157,9 +157,10 @@ before_install:
   - nvm install 12.13.1; nvm use 12.13.1
   - composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION"
   # Add patch in ORCA to include merge-plugin to composer.
-  - curl https://gist.githubusercontent.com/vishalkhode1/56497e23daa300d0634139828e98cb04/raw/bb6ecb370acb2c73d70bff4d77ae39ba17f51b23/merge_plugin.patch | git -C ../orca apply
+  - curl https://gist.githubusercontent.com/rajeshreeputra/3a3cbda6f94608b2f6d6636dac1fd22c/raw/3f6a89feaec6ef0c93b537a727dd85e664ae833a/merge_plugin.patch | git -C ../orca apply
   # Remove internal module dependencies, so that ORCA CI doesn't report error.
   - if [ "${ORCA_JOB}" != "STATIC_CODE_ANALYSIS" ]; then for path in $(find modules -type f -maxdepth 2 -name "composer.json" -exec ls '{}' ';'); do sed -i '/\"drupal\/acquia_cms.*\":.*\".*\"/d' $path; done; fi
+  # - if [ "${ORCA_JOB}" = "STATIC_CODE_ANALYSIS" ]; then find ./modules/*/config/pack_* -type f -name "*.yml" | xargs rm; fi
   - composer self-update
   # Download AWS cli, only for starter jobs as we store tests artifacts on s3 buckets.
   - if [ "${ACMS_JOB}" = "starter" ] || [ "${ACMS_JOB}" = "starter_full" ] || [ "${ACMS_JOB}" = "base" ]; then curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo ./aws/install && rm -fr aws && aws s3 cp --recursive ${AWS_S3_BUCKET_PATH}/artifacts/ ${TRAVIS_BUILD_DIR}/tests/; fi
