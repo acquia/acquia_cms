@@ -19,7 +19,7 @@ class ToggleModulesService {
     $to_install = [];
     $to_uninstall = [];
     if ($is_dev) {
-      array_push($to_install, 'dblog', 'jsonapi_extras');
+      array_push($to_install, 'dblog', 'jsonapi_extras', 'field_ui', 'views_ui');
       array_push($to_uninstall, 'syslog', 'autologout');
     }
     else {
