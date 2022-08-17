@@ -144,20 +144,23 @@ class StarterkitNextjsService {
 
   /**
    * Create a new consumer for Headless.
+   *
+   * @param array $consumer_data
+   *   The consumer data.
    */
-  public function createHeadlessConsumer() {
+  public function createHeadlessConsumer(array $consumer_data) {
     try {
-      $consumers = $this->getHeadlessConsumerData();
+      $consumers = $this->getHeadlessConsumerData($consumer_data['site-name']);
       $user = $this->getHeadlessUserData();
 
       if (!empty($user) && empty($consumers)) {
         $this->consumerSecret = $this->createHeadlessSecret();
         $consumer = Consumer::create();
-        $consumer->set('label', 'Headless Site 1');
+        $consumer->set('label', $consumer_data['site-name']);
         $consumer->set('secret', $this->consumerSecret);
         $consumer->set('description', 'This client is provided by the acquia_cms_headless module.');
         $consumer->set('is_default', TRUE);
-        $consumer->set('redirect', 'http://localhost:3000');
+        $consumer->set('redirect', $consumer_data['site-url']);
         $consumer->set('roles', 'headless');
         $consumer->set('user_id', $user->id());
         $consumer->save();
@@ -181,24 +184,32 @@ class StarterkitNextjsService {
   /**
    * Creates a new headless Next.js site entity.
    *
+   * @param string $site_id
+   *   The site id.
+   * @param array $site_data
+   *   The site data.
+   *
+   * @return \Drupal\next\Entity\NextSite
+   *   The Next.js site object.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function createHeadlessSite() {
-    $next_site = $this->getHeadlessSite();
+  public function createHeadlessSite(string $site_id, array $site_data) {
+    $next_site = $this->getHeadlessSite($site_id);
     $next_object = $this->entityTypeManager->getStorage('next_site');
     $preview_secret = $this->createHeadlessSecret();
     if (!$next_site) {
       $next_object->create([
-        'id' => 'headless',
-        'label' => 'Headless Site 1',
-        'base_url' => 'http://localhost:3000/',
-        'preview_url' => 'http://localhost:3000/api/preview/',
+        'id' => $site_id,
+        'label' => $site_data['site-name'],
+        'base_url' => $site_data['site-url'],
+        'preview_url' => $site_data['site-url'] . '/api/preview/',
         'preview_secret' => $preview_secret,
       ])->save();
     }
-    return $this->getHeadlessSite();
+    return $this->getHeadlessSite($site_id);
   }
 
   /**
@@ -391,16 +402,40 @@ class StarterkitNextjsService {
    * A function that obtains our init headless consumer data.
    *
    * @return \Drupal\Core\Entity\EntityInterface|null
-   *   Returns a user object or a NULL response.
+   *   Returns a consumer object or a NULL response.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getHeadlessConsumerData() {
+  public function getHeadlessConsumerData($site_name) {
     $consumerStorage = $this->entityTypeManager->getStorage('consumer');
     $query = $consumerStorage->getQuery();
     $cids = $query
-      ->condition('label', 'Headless Site 1')
+      ->condition('label', $site_name)
+      ->range(0, 1)
+      ->execute();
+    $cid = array_keys($cids);
+
+    return !empty($cid) ? $consumerStorage->load($cid[0]) : NULL;
+  }
+
+  /**
+   * Get consumer based on redirect uri.
+   *
+   * @param string $redirect_uri
+   *   The redirect url.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface|null
+   *   Returns a consumer object or a NULL response.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function getHeadlessConsumerDataByUri(string $redirect_uri) {
+    $consumerStorage = $this->entityTypeManager->getStorage('consumer');
+    $query = $consumerStorage->getQuery();
+    $cids = $query
+      ->condition('redirect', $redirect_uri)
       ->range(0, 1)
       ->execute();
     $cid = array_keys($cids);
@@ -432,11 +467,34 @@ class StarterkitNextjsService {
   /**
    * Check to see if our default next.js site exists.
    *
+   * @param string $site_id
+   *   The site id.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface|null
+   *   The next site object or null.
+   *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getHeadlessSite() {
-    return $this->entityTypeManager->getStorage('next_site')->load('headless');
+  public function getHeadlessSite(string $site_id) {
+    return $this->entityTypeManager->getStorage('next_site')->load($site_id);
+  }
+
+  /**
+   * Get next.js site based on url.
+   *
+   * @param string $base_url
+   *   The next.js base url.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface[]
+   *   The next.js site object.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function getHeadlessSiteByBaseUrl(string $base_url) {
+    $site = $this->entityTypeManager->getStorage('next_site')->loadByProperties(['base_url' => $base_url]);
+    return reset($site) ?? NULL;
   }
 
   /**
@@ -471,13 +529,21 @@ class StarterkitNextjsService {
   /**
    * A method that initializes the Next.js starter kit.
    *
+   * @param string $site_id
+   *   The site id.
+   * @param array $site_data
+   *   The site data.
+   *
+   * @return \Drupal\next\Entity\NextSite
+   *   The next site object.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   * @throws \Drupal\Core\Entity\EntityStorageException
    * @throws \Drupal\simple_oauth\Service\Exception\ExtensionNotLoadedException
    * @throws \Drupal\simple_oauth\Service\Exception\FilesystemValidationException
    */
-  public function initStarterkitNextjs() {
+  public function initStarterkitNextjs(string $site_id, array $site_data) {
     // Check to see if Headless user still exists, and if not, recreate it.
     $this->createHeadlessUser();
 
@@ -488,32 +554,67 @@ class StarterkitNextjsService {
     $this->updateDefaultConsumer(FALSE);
 
     // Create a new Next.js Consumer.
-    $this->createHeadlessConsumer();
+    $this->createHeadlessConsumer($site_data);
 
     // Create a Next.js Site.
-    $site = $this->createHeadlessSite();
+    $site = $this->createHeadlessSite($site_id, $site_data);
 
     // Create a set of Next.js Entity types based on available Node Types.
     $this->createHeadlessSiteEntities();
 
     // Add User and Consumer UUIDs to headless config.
     $config = $this->configFactory->getEditable('acquia_cms_headless.settings');
-    if (!empty($this->getHeadlessConsumerData())) {
-      $config->set('consumer_uuid', $this->getHeadlessConsumerData()->uuid());
+    if (!empty($this->getHeadlessConsumerData($site_data['site-name']))) {
+      $config->set('consumer_uuid', $this->getHeadlessConsumerData($site_data['site-name'])->uuid());
     }
     if (!empty($this->getHeadlessUserData())) {
       $config->set('user_uuid', $this->getHeadlessUserData()->uuid());
     }
-    $this->buildEnvironmentVariables($site);
+    // Call this function in case of UI.
+    if (PHP_SAPI !== 'cli') {
+      $this->displayEnvironmentVariables($site);
+    }
+    return $site;
+  }
+
+  /**
+   * Displays the Next.js environment variables for the generated NextSite.
+   *
+   * @param \Drupal\next\Entity\NextSite $next_site
+   *   The NextSite to build environment variables for.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  protected function displayEnvironmentVariables(NextSite $next_site) {
+    $this->messenger->addStatus($this->t("Use these environment variables for your Next.js application. Place them in your .env file: <pre class='codesnippet'>@code</pre>", [
+      '@code' => $this->getEnvironmentVariablesAsString($next_site),
+    ]));
+
+    if (!isset($this->consumerSecret)) {
+      $this->messenger->addWarning($this->t("The consumer secret cannot be retrieved. If you do not know this value, you can <a href=':link'>set a new secret</a>.", [
+        ':link' => Url::fromRoute('entity.consumer.edit_form',
+          [
+            'consumer' => $this->getHeadlessConsumerData($next_site->label())->id(),
+            ['destination' => Url::createFromRequest($this->request)->toString()],
+          ])->toString(),
+      ]));
+    }
   }
 
   /**
    * Build the Next.js environment variables for the generated NextSite.
    *
-   * @param Drupal\next\Entity\NextSite $next_site
+   * @param \Drupal\next\Entity\NextSite $next_site
    *   The NextSite to build environment variables for.
+   *
+   * @return string
+   *   The generated environment variables.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function buildEnvironmentVariables(NextSite $next_site) {
+  public function getEnvironmentVariablesAsString(NextSite $next_site): string {
     $variables = [
       'NEXT_PUBLIC_DRUPAL_BASE_URL' => $this->request->getSchemeAndHttpHost(),
       'NEXT_IMAGE_DOMAIN' => $this->request->getHost(),
@@ -522,10 +623,11 @@ class StarterkitNextjsService {
     ];
 
     if ($secret = $next_site->getPreviewSecret()) {
+      $consumer = $this->getHeadlessConsumerData($next_site->label());
       $variables += [
         'DRUPAL_PREVIEW_SECRET' => $secret,
-        'DRUPAL_CLIENT_ID' => $this->getHeadlessConsumerData()->uuid(),
-        'DRUPAL_CLIENT_SECRET' => $this->consumerSecret ?? 'insert secret here',
+        'DRUPAL_CLIENT_ID' => $consumer->uuid(),
+        'DRUPAL_CLIENT_SECRET' => $consumer->get('secret')->value ?? 'insert secret here',
       ];
     }
     $code = '';
@@ -535,19 +637,7 @@ class StarterkitNextjsService {
         '@value' => $value,
       ]);
     }
-    $this->messenger->addStatus($this->t("Use these environment variables for your Next.js application. Place them in your .env file: <pre class='codesnippet'>@code</pre>", [
-      '@code' => $code,
-    ]));
-
-    if (!isset($this->consumerSecret)) {
-      $this->messenger->addWarning($this->t("The consumer secret cannot be retrieved. If you do not know this value, you can <a href=':link'>set a new secret</a>.", [
-        ':link' => Url::fromRoute('entity.consumer.edit_form',
-          [
-            'consumer' => $this->getHeadlessConsumerData()->id(),
-          ['destination' => Url::createFromRequest($this->request)->toString()],
-          ])->toString(),
-      ]));
-    }
+    return $code;
   }
 
   /**

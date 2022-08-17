@@ -189,8 +189,12 @@ class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
     if ($config_starterkit_nextjs != $acms_starterkit_nextjs) {
       if ($acms_starterkit_nextjs) {
         try {
+          $site_data = [
+            'site-name' => 'Headless Site 1',
+            'site-url' => 'http://localhost:3000',
+          ];
           // Run the Next.js starter kit Initialization service.
-          $this->starterkitNextjsService->initStarterkitNextjs();
+          $this->starterkitNextjsService->initStarterkitNextjs('headless', $site_data);
 
           // Return a message to the user that the set has completed.
           $this->messenger()->addStatus($this->t('Acquia CMS Next.js starter kit has been enabled.'));

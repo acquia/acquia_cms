@@ -1,0 +1,9 @@
+services:
+  acquia_cms_headless.commands:
+    class: \Drupal\acquia_cms_headless\Commands\AcquiaCmsHeadlessCommands
+    arguments:
+      - '@acquia_cms_headless.starterkit_nextjs'
+      - '@entity_type.manager'
+      - '@file_system'
+    tags:
+      - { name: drush.command }
