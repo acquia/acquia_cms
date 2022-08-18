@@ -50,3 +50,6 @@ if (file_exists($memcacheSettingsFile) && getenv('ENABLE_MEMCACHED')) {
 }
 
 $settings['config_sync_directory'] = '../config';
+
+// Enable Image in Acquia DAM
+$settings['enable_acquia_dam_images'] = TRUE;
