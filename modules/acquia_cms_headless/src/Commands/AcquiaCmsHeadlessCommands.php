@@ -169,6 +169,8 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
         $secret = $this->starterKit->createHeadlessSecret();
         // Apply the new secret to the consumer.
         $consumer->secret = $secret;
+        // Set consumer secret.
+        $this->starterKit->setConsumerSecret($secret);
         // Update the consumer.
         $consumer->save();
 
