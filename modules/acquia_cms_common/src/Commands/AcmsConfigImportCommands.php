@@ -9,7 +9,6 @@ use Drupal\acquia_cms_common\Services\AcmsUtilityService;
 use Drupal\acquia_cms_site_studio\Facade\CohesionFacade;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\config\StorageReplaceDataWrapper;
-use Drupal\Core\Config\ConfigManagerInterface;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\StorageComparer;
 use Drupal\Core\Config\StorageInterface;
@@ -89,16 +88,6 @@ final class AcmsConfigImportCommands extends DrushCommands {
   protected $acmsUtilityService;
 
   /**
-   * Get configuration manager.
-   *
-   * @return \Drupal\Core\Config\ConfigManagerInterface
-   *   The ConfigManagerInterface.
-   */
-  public function getConfigManager() {
-    return $this->configManager;
-  }
-
-  /**
    * Get config storage object.
    *
    * @return \Drupal\Core\Config\StorageInterface
@@ -131,8 +120,6 @@ final class AcmsConfigImportCommands extends DrushCommands {
   /**
    * The class constructor.
    *
-   * @param \Drupal\Core\Config\ConfigManagerInterface $configManager
-   *   The ConfigManagerInterface.
    * @param \Drupal\Core\Config\StorageInterface $configStorage
    *   The StorageInterface.
    * @param \Drush\Drupal\Commands\config\ConfigImportCommands $configImportCommands
@@ -147,7 +134,6 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *   The acquia cms service.
    */
   public function __construct(
-    ConfigManagerInterface $configManager,
     StorageInterface $configStorage,
     ConfigImportCommands $configImportCommands,
     TranslationInterface $stringTranslation,
@@ -156,7 +142,6 @@ final class AcmsConfigImportCommands extends DrushCommands {
     AcmsUtilityService $acmsUtilityService
     ) {
     parent::__construct();
-    $this->configManager = $configManager;
     $this->configStorage = $configStorage;
     $this->configImportCommands = $configImportCommands;
     $this->stringTranslation = $stringTranslation;
@@ -260,9 +245,8 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *   Array of acms modules.
    */
   private function getAcmsModules(): array {
-    // Start with the profile itself.
-    $acms_modules = ['acquia_cms'];
-    $acms_extensions = $this->acmsUtilityService->getAcquiaCmsProfileModuleList();
+    $acms_modules = [];
+    $acms_extensions = $this->acmsUtilityService->getAcquiaCmsModuleList();
     foreach ($acms_extensions as $key => $module) {
       if ($module->getType() === 'module') {
         $acms_modules[] = $key;
@@ -377,7 +361,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
 
     // Get optional configuration list for specified module.
     if (file_exists($source_optional)) {
-      $source_storage_dir = ConfigCommands::getDirectory(NULL, $source_optional);
+      $source_storage_dir = ConfigCommands::getDirectory($source_optional);
       $source_storage = new FileStorage($source_storage_dir);
       foreach ($source_storage->listAll() as $name) {
         $config_files[$name] = $source_storage->read($name);
@@ -389,7 +373,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
 
     // Now get default configurations.
     if (file_exists($source_install)) {
-      $source_storage_dir = ConfigCommands::getDirectory(NULL, $source_install);
+      $source_storage_dir = ConfigCommands::getDirectory($source_install);
       $source_storage = new FileStorage($source_storage_dir);
       foreach ($source_storage->listAll() as $name) {
         $config_files[$name] = $source_storage->read($name);
@@ -407,7 +391,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
    */
   private function removeDependentFiles(array &$config_files) {
     $enabled_extensions = $this->acmsUtilityService->getEnabledExtensions();
-    $all_config = $active_storage = $this->getConfigStorage()->listAll();
+    $all_config = $this->getConfigStorage()->listAll();
     $all_config = array_combine($all_config, $all_config);
     foreach ($config_files as $config_name => $data) {
       // Remove configuration where its dependencies cannot be met.
@@ -500,8 +484,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
         }
       }
     }
-    $config_manager = $this->getConfigManager();
-    $storage_comparer = new StorageComparer($source_storage, $active_storage, $config_manager);
+    $storage_comparer = new StorageComparer($source_storage, $active_storage);
     if (!$storage_comparer->createChangelist()->hasChanges()) {
       $this->logger()->notice(('There are no changes to import.'));
       exit();
