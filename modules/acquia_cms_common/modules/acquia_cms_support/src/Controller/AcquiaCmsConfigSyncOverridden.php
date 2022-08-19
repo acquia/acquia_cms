@@ -63,7 +63,7 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
       $this->t('Default Parity'),
       $this->t('Operations'),
     ];
-    $acquiaCmsModules = $this->acmsUtilityService->getAcquiaCmsProfileModuleList();
+    $acquiaCmsModules = $this->acmsUtilityService->getAcquiaCmsModuleList();
     $overriddenConfig = [];
     foreach ($acquiaCmsModules as $module) {
       $path = $module->getPath();

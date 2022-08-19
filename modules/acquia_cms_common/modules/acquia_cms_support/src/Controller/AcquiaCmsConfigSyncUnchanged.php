@@ -66,7 +66,7 @@ class AcquiaCmsConfigSyncUnchanged extends ControllerBase implements ContainerIn
       $this->t('Module'),
     ];
 
-    $acquiaCmsModules = $this->acmsUtilityService->getAcquiaCmsProfileModuleList();
+    $acquiaCmsModules = $this->acmsUtilityService->getAcquiaCmsModuleList();
     $unChangedConfigList = [];
 
     foreach ($acquiaCmsModules as $module) {
