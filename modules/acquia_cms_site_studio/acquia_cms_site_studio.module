@@ -5,12 +5,10 @@
  * File for the Site Studio Installation Code.
  */
 
-use Acquia\Utility\AcquiaTelemetry;
 use Drupal\acquia_cms_site_studio\Facade\CohesionFacade;
 use Drupal\acquia_cms_site_studio\Form\AcquiaCmsSiteStudioSiteConfigureForm;
 use Drupal\acquia_cms_site_studio\Traits\SiteStudioPermissionTrait;
 use Drupal\cohesion\Controller\AdministrationController;
-use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
 use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\media_library\MediaLibraryState;
@@ -59,13 +57,7 @@ function site_studio_import_ui_kit(): array {
   }
   /** @var \Drupal\acquia_cms_site_studio\Facade\CohesionFacade $facade */
   $facade = Drupal::classResolver(CohesionFacade::class);
-  if (PHP_SAPI !== 'cli') {
-    batch_set($facade->getAllOperations());
-    update_site_studio_settings();
-  }
-  else {
-    $facade->getAllOperations();
-  }
+  $facade->importSiteStudioPackages();
   return [];
 }
 
@@ -93,43 +85,6 @@ function update_site_studio_settings() {
 }
 
 /**
- * Rebuilds the site studio from installation.
- *
- * @return array
- *   Batch for rebuild operation.
- *
- * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
- * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
- */
-function install_acms_site_studio_rebuild(): array {
-  // Get the batch array filled with operations that should be performed during
-  // rebuild. Also, we explicitly do not clear the cache during site install.
-  $batch = WebsiteSettingsController::batch(TRUE);
-
-  if (isset($batch['error'])) {
-    Drupal::messenger()->addError($batch['error']);
-  }
-
-  // Set rebuild start and end time only if class AcquiaTelemetry exists.
-  if (class_exists(AcquiaTelemetry::class)) {
-    $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
-    $telemetry->setTime('rebuild_start_time');
-    $batch['finished'] = 'acquia_cms_rebuild_site_studio_finished';
-  }
-  return $batch;
-}
-
-/**
- * Method for performing functions once the rebuild is finished.
- */
-function acquia_cms_rebuild_site_studio_finished() {
-  // The 'success' parameter means no fatal PHP errors were detected. All
-  // other error management should be handled using 'results'.
-  $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
-  $telemetry->setTime('rebuild_end_time');
-}
-
-/**
  * Imports all Cohesion elements immediately in a batch process.
  *
  * @throws Exception
@@ -138,6 +93,7 @@ function acquia_cms_site_studio_init() {
   // Instead of returning the batch array, we are just executing the batch here.
   $batch = install_acms_site_studio_initialize();
   site_studio_import_ui_kit();
+  update_site_studio_settings();
   batch_set($batch);
 }
 
@@ -178,7 +134,7 @@ function acquia_cms_site_studio_form_alter(array &$form, FormStateInterface $for
       // cohesion configuration import and cohesion style rebuild functionality
       // into separate submit handlers.
       // @see \Drupal\cohesion_website_settings\Controller\WebsiteSettingsController::batch
-      $form['#submit'][] = 'acquia_cms_site_studio_rebuild_styles';
+      // $form['#submit'][] = 'acquia_cms_site_studio_rebuild_styles';
     }
   }
 }

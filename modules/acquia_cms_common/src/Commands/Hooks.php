@@ -3,7 +3,6 @@
 namespace Drupal\acquia_cms_common\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
-use Consolidation\AnnotatedCommand\CommandResult;
 use Drupal\acquia_cms_common\Services\AcmsUtilityService;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;

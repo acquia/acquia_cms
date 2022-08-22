@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_site_studio\Facade;
 
+use Drupal\cohesion_sync\Exception\PackageListEmptyOrMissing;
 use Drupal\cohesion_sync\PackagerManager;
 use Drupal\cohesion_sync\Services\PackageImportHandler;
 use Drupal\Component\Uuid\UuidInterface;
@@ -83,65 +84,6 @@ final class CohesionFacade implements ContainerInjectionInterface {
   }
 
   /**
-   * Imports a single sync package.
-   *
-   * @param string $package
-   *   The path to the sync package, relative to the Drupal root.
-   * @param bool $no_rebuild
-   *   Whether rebuild operation should execute or not.
-   *
-   * @return array
-   *   The batch operations.
-   *
-   * @throws \Exception
-   */
-  public function importPackage(string $package, bool $no_rebuild = FALSE): array {
-    // Prepare to import the package. This code is delicate because it was
-    // basically written by rooting around in Cohesion's internals. So be
-    // extremely careful when changing it.
-    // @see \Drupal\cohesion_sync\Form\ImportFileForm::submitForm()
-    // @see \Drupal\cohesion_sync\Drush\CommandHelpers::import()
-    // Use validatePackageBatch method as per site studio 6.5.0
-    $store_key = 'drush_sync_validation' . $this->uuidGenerator->generate();
-    $validate_package_operations = $this->packager->validatePackageBatch($package, $store_key);
-    // Basically, overwrite everything without validating. This is equivalent
-    // to passing the --overwrite-all and --force options to the 'sync:import'
-    // Drush command.
-    $batch_operations[] = [
-      '\Drupal\cohesion_sync\Controller\BatchImportController::setImportBatch',
-      [$package, $store_key, TRUE, FALSE, TRUE, $no_rebuild, FALSE],
-    ];
-    return array_merge($validate_package_operations, $batch_operations);
-  }
-
-  /**
-   * Returns a list of all installed modules.
-   *
-   * @return \Drupal\Core\Extension\Extension[]
-   *   A list of all installed modules. The acquia_cms profile and its modules
-   *   will be the last items in the list.
-   */
-  private function getSortedModules() : array {
-    $module_list = $this->moduleHandler->getModuleList();
-    $acms_module_list = [];
-
-    foreach ($module_list as $name => $extension) {
-      if ('acquia_cms' === $name) {
-        // Ensure the Acquia CMS Profile is the first ACMS extension.
-        $acms_module_list = [$name => $extension] + $acms_module_list;
-        unset($module_list[$name]);
-      }
-      elseif (stripos($name, 'acquia_cms') === 0) {
-        // Add any other ACMS modules to the array.
-        $acms_module_list[$name] = $extension;
-        unset($module_list[$name]);
-      }
-    }
-
-    return $module_list + $acms_module_list;
-  }
-
-  /**
    * Batch finished callback.
    *
    * @param bool $success
@@ -163,26 +105,41 @@ final class CohesionFacade implements ContainerInjectionInterface {
   }
 
   /**
-   * Get all required operations to import site studio packages of Acquia CMS.
+   * Import site studio packages of Acquia CMS modules.
+   *
+   * @throws \Exception
    */
-  public function getAllOperations() : void {
-    $package_list = [];
-    $modules = $this->getSortedModules();
-    foreach ($modules as $module) {
-      $module_path = $module->getPath();
-      $package_list_path = $module_path . COHESION_SYNC_DEFAULT_MODULE_PACKAGES;
-      if (file_exists($package_list_path)) {
-        $package = $this->readPackageList($package_list_path);
-        $package_list = array_merge($package_list, $package);
-      }
-    }
-    if ($package_list) {
+  public function importSiteStudioPackages() : void {
+    $modules = $this->moduleHandler->getModuleList();
+    $package_list = $this->buildPackageList($modules);
+    if (!empty($package_list)) {
       $this->packageImportHandler->importPackagesFromArray($package_list);
     }
   }
 
   /**
-   * Reads Package List file from provided path.
+   * Build site studio package for modules.
+   *
+   * @param array $modules
+   *   The modules array.
+   *
+   * @return array
+   *   This site studio packages.
+   */
+  public function buildPackageList(array $modules): array {
+    $package_list = [];
+    foreach ($modules as $module) {
+      $module_path = $module->getPath();
+      $package_list_path = $module_path . COHESION_SYNC_DEFAULT_MODULE_PACKAGES;
+      if ($package = $this->readPackageList($package_list_path)) {
+        $package_list = array_merge($package_list, $package);
+      }
+    }
+    return $package_list;
+  }
+
+  /**
+   * Reads Package List files from provided path.
    *
    * @param string $package_list_path
    *   Path to package list file.
@@ -191,7 +148,7 @@ final class CohesionFacade implements ContainerInjectionInterface {
    *   Package list.
    */
   public function readPackageList(string $package_list_path): array {
-
+    $package_list = [];
     if (file_exists($package_list_path)) {
       $package_list = Yaml::parse(file_get_contents($package_list_path));
       if ($package_list === NULL) {
