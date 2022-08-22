@@ -172,6 +172,16 @@ class StarterkitNextjsService {
   }
 
   /**
+   * Set consumer secret.
+   *
+   * @param string $secret
+   *   The consumer secret.
+   */
+  public function setConsumerSecret(string $secret) {
+    $this->consumerSecret = $secret;
+  }
+
+  /**
    * Creates a Headless secret key.
    *
    * @return string
@@ -627,7 +637,7 @@ class StarterkitNextjsService {
       $variables += [
         'DRUPAL_PREVIEW_SECRET' => $secret,
         'DRUPAL_CLIENT_ID' => $consumer->uuid(),
-        'DRUPAL_CLIENT_SECRET' => $consumer->get('secret')->value ?? 'insert secret here',
+        'DRUPAL_CLIENT_SECRET' => $this->consumerSecret ?? 'insert secret here',
       ];
     }
     $code = '';
