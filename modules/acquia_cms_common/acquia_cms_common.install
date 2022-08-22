@@ -24,12 +24,12 @@ function acquia_cms_common_install() {
   $themesList = \Drupal::service('extension.list.theme')->getList();
   $themesInstall = ["olivero"];
   if (isset($themesList['acquia_claro'])) {
-   $themesInstall[] = "acquia_claro";
+    $themesInstall[] = "acquia_claro";
   }
   \Drupal::service('theme_installer')->install($themesInstall);
-  \Drupal::configFactory() ->getEditable('system.theme') ->set('default', 'olivero') ->save();
+  \Drupal::configFactory()->getEditable('system.theme')->set('default', 'olivero')->save();
   if (in_array("acquia_claro", $themesInstall)) {
-   \Drupal::configFactory() ->getEditable('system.theme') ->set('admin', "acquia_claro") ->save();
+    \Drupal::configFactory()->getEditable('system.theme')->set('admin', "acquia_claro")->save();
   }
 
   $module_handler = \Drupal::moduleHandler();
@@ -52,7 +52,7 @@ function acquia_cms_common_install() {
     'crop.type.focal_point:uuid',
     'cohesion.settings',
     'purge.plugins',
-    'purge.logger_channels'
+    'purge.logger_channels',
   ];
   $updated_ignore_config = array_unique(array_merge($existing_ignore_config, $new_ignore_config));
   $config->set('ignored_config_entities', $updated_ignore_config);
