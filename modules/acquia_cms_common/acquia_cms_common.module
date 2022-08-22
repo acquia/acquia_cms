@@ -250,6 +250,7 @@ function _acquia_cms_common_update_view_display_options_style($view_name, $displ
  *   The configuration name which needs to be updated.
  * @param array $configurations
  *   The configuration provided.
+ *   An array of drupal configurations.
  */
 function _acquia_cms_common_update_page_configurations(string $config_name, array $configurations) {
   $configFactory = \Drupal::service('config.factory');
