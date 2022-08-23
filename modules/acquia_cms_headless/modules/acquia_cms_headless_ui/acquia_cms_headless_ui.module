@@ -253,7 +253,6 @@ function acquia_cms_headless_ui_local_tasks_alter(array &$local_tasks) {
       $local_tasks[$id]['entity_type_id'] = $matches[2];
     }
   }
-
   $local_tasks['oauth2_token.settings_tab']['title'] = t('API settings');
   $local_tasks['oauth2_token.settings_tab']['base_route'] = 'admin.access_control';
   $local_tasks['oauth2_token.settings_tab']['weight'] = 1;
@@ -302,7 +301,7 @@ function acquia_cms_headless_ui_menu_links_discovered_alter(array &$links) {
       'admin.content_models',
       'acquia_cms_tour.tour',
       'system.admin_content',
-      'admin_toolbar_tools.help'
+      'admin_toolbar_tools.help',
     ];
     if (in_array($name, $bypass)) {
       continue;

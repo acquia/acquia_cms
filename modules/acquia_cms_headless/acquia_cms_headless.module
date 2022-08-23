@@ -4,22 +4,3 @@
  * @file
  * Contains hook implementations for the acquia_cms_headless module.
  */
-
-use Drupal\Core\Url;
-use Drupal\node\NodeInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-
-/**
- * Implements hook_node_presave().
- */
-function acquia_cms_headless_node_update(NodeInterface $node) {
-  $url = Url::fromRoute('entity.node.headless_preview', ['node' => $node->id()]);
-  $headlessConfigurations = \Drupal::config('acquia_cms_headless.settings');
-  // Redirect only when headless mode & next.js starterkit are enabled.
-  if ($headlessConfigurations->get('headless_mode') && $headlessConfigurations->get('starterkit_nextjs')) {
-    if (!$node->isPublished()) {
-      $response = new RedirectResponse($url->toString());
-      $response->send();
-    }
-  }
-}

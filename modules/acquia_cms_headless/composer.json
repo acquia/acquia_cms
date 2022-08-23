@@ -25,6 +25,11 @@
         }
     },
     "extra": {
+        "drush": {
+            "services": {
+                "drush.services.yml": "^10.6 || ^11"
+            }
+        },
         "enable-patching": true,
         "installer-paths": {
             "docroot/core": [
@@ -56,16 +61,11 @@
             "drupal/decoupled_router": {
                 "Unable to resolve path on node in other language than default": "https://www.drupal.org/files/issues/2021-05-05/3111456-34.patch"
             },
-            "drupal/subrequests": {
-                "Get same results on different request": "https://www.drupal.org/files/issues/2019-07-18/change_request_type-63049395-09.patch"
-            },
             "drupal/next": {
                 "Next Module Patchn for Preview Button display on unplubshied node": "https://gist.githubusercontent.com/panshulK/0b86ed1be39b30a8b5bb87f1d3e5e2ff/raw/1ccda257455900363a543b3b00975b5e1c9c491c/next-module-unpublished-preview-button-url-fix.patch"
-            }
-        },
-        "drush": {
-            "services": {
-                "drush.services.yml": "^10.6 || ^11"
+            },
+            "drupal/subrequests": {
+                "Get same results on different request": "https://www.drupal.org/files/issues/2019-07-18/change_request_type-63049395-09.patch"
             }
         }
     },
