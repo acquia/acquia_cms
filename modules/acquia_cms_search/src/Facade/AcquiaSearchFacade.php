@@ -134,12 +134,16 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
     // complain mildly about it. Also, it's possible that things might not work
     // as well as they should. To get past that, load the index that ships
     // with Acquia Search Solr and unlink it from the Solr server.
+    // Database server is now idle so disbale the database server.
     $index = $this->indexStorage->load('acquia_search_index');
+    /** @var \Drupal\search_api\ServerInterface $server */
+    $databaseServer = $this->serverStorage->load('database');
     if ($index && $index->getServerId() === $server->id()) {
       $index->setServer(NULL);
 
       try {
         $this->indexStorage->save($index);
+        $databaseServer->disable()->save();
       }
       catch (SolariumException $e) {
         // Look...we're just trying to unlink the index from the server, man.
