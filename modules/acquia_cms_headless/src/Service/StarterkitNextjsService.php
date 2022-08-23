@@ -12,6 +12,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Http\RequestStack;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Password\DefaultPasswordGenerator;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\next\Entity\NextSite;
@@ -391,6 +392,8 @@ class StarterkitNextjsService {
 
     // Set the base path of the keys directory.
     $dir = "../oauth_keys/$site_path[0]/$site_path[1]";
+    // @todo remove the above mentioned directory fetching code line. //
+    $dir = $this->generateOauthKeysDirectoryUrl();
 
     // Create the directory if it doesn't already exist.
     if (!is_dir($dir)) {
@@ -406,6 +409,25 @@ class StarterkitNextjsService {
       ->set('public_key', "$dir/public.key")
       ->set('private_key', "$dir/private.key")
       ->save();
+  }
+
+  /**
+   * Generates & returns the OAuth keys directory path.
+   *
+   * @throws \Drupal\simple_oauth\Service\Exception\FilesystemValidationException
+   * @throws \Drupal\simple_oauth\Service\Exception\ExtensionNotLoadedException
+   */
+  public function generateOauthKeysDirectoryUrl() {
+    $dirUrl = '';
+    // Pick up the directory path from settings.php.
+    $dirUrl = Settings::get('oauth_keys_directory', '');
+    if (!empty($dirUrl)) {
+      $file_system->prepareDirectory($dirUrl, FileSystemInterface::CREATE_DIRECTORY);
+    }
+    else {
+      // TBD.
+    }
+    return $dirUrl;
   }
 
   /**
