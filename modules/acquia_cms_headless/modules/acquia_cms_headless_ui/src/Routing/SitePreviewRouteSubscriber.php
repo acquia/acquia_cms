@@ -16,7 +16,9 @@ class SitePreviewRouteSubscriber extends RouteSubscriberBase {
   protected function alterRoutes(RouteCollection $collection) {
     // Change the controller for the latest version tab to site-preview.
     if ($route = $collection->get("entity.node.latest_version")) {
-      $route->setDefault('_controller', '\Drupal\next\Controller\SitePreviewController::nodePreview');
+      $defaults = $route->getDefaults();
+      unset($defaults['_title_callback']);
+      $route->setPath('/node/{node}/site-preview');
     }
   }
 
