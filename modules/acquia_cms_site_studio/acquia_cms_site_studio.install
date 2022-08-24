@@ -48,7 +48,7 @@ function acquia_cms_site_studio_install() {
   // If module getting install stand alone.
   if (!InstallerKernel::installationAttempted()) {
     // Trigger save on page body field to update it.
-    if ($module_handler->moduleExists('acquia_cms_page') ) {
+    if ($module_handler->moduleExists('acquia_cms_page')) {
       $config = \Drupal::service('config.factory')->getEditable('field.field.node.page.body');
       if (!empty($config)) {
         $config->save();
@@ -193,5 +193,16 @@ function acquia_cms_site_studio_uninstall() {
     $config->set('label', 'Body');
     $config->set('description', '');
     $config->save();
+  }
+}
+
+/**
+ * Install and update new site studio roles.
+ */
+function acquia_cms_site_studio_update_8004() {
+  $role = Role::load('developer');
+  if ($role instanceof Role) {
+    $role->set('label', 'Low Code Site Builder');
+    $role->save();
   }
 }

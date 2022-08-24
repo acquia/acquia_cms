@@ -5,6 +5,8 @@
  * Install, update and uninstall functions for the acquia_cms_headless module.
  */
 
+use Drupal\user\Entity\Role;
+
 /**
  * Implements hook_install().
  */
@@ -32,4 +34,31 @@ function acquia_cms_headless_requirements($phase) {
   }
 
   return $requirements;
+}
+
+/**
+ * Install and update new headless roles.
+ */
+function acquia_cms_headless_update_8001() {
+  $role = Role::load('headless');
+  if ($role instanceof Role) {
+    $role->set('label', 'Headless Administrator');
+    $role->save();
+    user_role_grant_permissions('headless', [
+      'view any unpublished content',
+      'view latest version',
+      'view all revisions',
+    ]);
+  }
+  // Create Frontend site with preview role.
+  $role = Role::create([
+    'id' => 'frontend_site_with_preview',
+    'label' => 'Frontend site with preview',
+  ]);
+  $role->save();
+  user_role_grant_permissions('frontend_site_with_preview', [
+    'view any unpublished content',
+    'view latest version',
+    'view all revisions',
+  ]);
 }
