@@ -202,3 +202,28 @@ function acquia_cms_site_studio_update_8003() {
     }
   }
 }
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Reset page field body's label and descritption to default.
+ */
+function acquia_cms_site_studio_uninstall() {
+  $config = \Drupal::service('config.factory')->getEditable('field.field.node.page.body');
+  if (!empty($config)) {
+    $config->set('label', 'Body');
+    $config->set('description', '');
+    $config->save();
+  }
+}
+
+/**
+ * Install and update new site studio roles.
+ */
+function acquia_cms_site_studio_update_8004() {
+  $role = Role::load('developer');
+  if ($role instanceof Role) {
+    $role->set('label', 'Low Code Site Builder');
+    $role->save();
+  }
+}
