@@ -107,14 +107,23 @@ final class CohesionFacade implements ContainerInjectionInterface {
   /**
    * Import site studio packages of Acquia CMS modules.
    *
+   * @param array $package_list
+   *   Array of packages.
+   *
+   * @return bool
+   *   TRUE if batch was set successfully.
+   *
    * @throws \Exception
    */
-  public function importSiteStudioPackages() : void {
-    $modules = $this->moduleHandler->getModuleList();
-    $package_list = $this->buildPackageList($modules);
-    if (!empty($package_list)) {
-      $this->packageImportHandler->importPackagesFromArray($package_list);
+  public function importSiteStudioPackages(array $package_list = []) : bool {
+    if (empty($package_list)) {
+      $modules = $this->moduleHandler->getModuleList();
+      $package_list = $this->buildPackageList($modules);
     }
+    if (!empty($package_list)) {
+      return $this->packageImportHandler->importPackagesFromArray($package_list);
+    }
+    return FALSE;
   }
 
   /**
