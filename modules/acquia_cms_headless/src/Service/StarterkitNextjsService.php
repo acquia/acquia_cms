@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_headless\Service;
 
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\consumers\Entity\Consumer;
@@ -16,6 +17,7 @@ use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\next\Entity\NextSite;
+use Drupal\simple_oauth\Service\Exception\FilesystemValidationException;
 use Drupal\simple_oauth\Service\KeyGeneratorService;
 use Drupal\user\Entity\User;
 
@@ -383,22 +385,10 @@ class StarterkitNextjsService {
    * @throws \Drupal\simple_oauth\Service\Exception\ExtensionNotLoadedException
    */
   public function generateOauthKeys() {
-    // Create the directory.
-    $file_system = $this->fileSystem;
-    // Call the site path service.
-    $site_path = $this->sitePath;
-    // Separate the site path array.
-    $site_path = explode('/', $site_path);
 
-    // Set the base path of the keys directory.
-    $dir = "../oauth_keys/$site_path[0]/$site_path[1]";
-    // @todo remove the above mentioned directory fetching code line. //
-    $dir = $this->generateOauthKeysDirectoryUrl();
-
-    // Create the directory if it doesn't already exist.
-    if (!is_dir($dir)) {
-      $file_system->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY);
-    }
+    // Get oauth_keys_directory path from settings.php if available.
+    $dir = Settings::get('oauth_keys_directory', $this->getDefaultOauthKeysDirectory());
+    $this->generateOauthKeysDirectory($dir);
 
     // Generate a public and private oauth key.
     $this->keyGeneratorService->generateKeys($dir);
@@ -412,22 +402,52 @@ class StarterkitNextjsService {
   }
 
   /**
+   * Get default directory path based on environment.
+   *
+   * @return string
+   *   The default directory path.
+   */
+  private function getDefaultOauthKeysDirectory(): string {
+    // Call the site path service.
+    $site_path = $this->sitePath;
+    // Separate the site path array.
+    $site_path = explode('/', $site_path);
+
+    // Set the base path of the oauth_keys directory.
+    $default_dir = "../oauth_keys/$site_path[0]/$site_path[1]";
+
+    // Build default oauth_keys dir path for acquia cloud environment.
+    if (AcquiaDrupalEnvironmentDetector::isAhEnv()) {
+      $site_group = AcquiaDrupalEnvironmentDetector::getAhGroup();
+      $env = AcquiaDrupalEnvironmentDetector::getAhEnv();
+      $default_dir = "/mnt/gfs/$site_group.$env/nobackup/oauth_keys/$site_path[0]/$site_path[1]";
+    }
+    return $default_dir;
+  }
+
+  /**
    * Generates & returns the OAuth keys directory path.
    *
+   * @param string $dir
+   *   The oauth directory.
+   *
    * @throws \Drupal\simple_oauth\Service\Exception\FilesystemValidationException
-   * @throws \Drupal\simple_oauth\Service\Exception\ExtensionNotLoadedException
    */
-  public function generateOauthKeysDirectoryUrl() {
-    $dirUrl = '';
-    // Pick up the directory path from settings.php.
-    $dirUrl = Settings::get('oauth_keys_directory', '');
-    if (!empty($dirUrl)) {
-      $file_system->prepareDirectory($dirUrl, FileSystemInterface::CREATE_DIRECTORY);
+  public function generateOauthKeysDirectory(string $dir) {
+    // Create the directory if it doesn't already exist.
+    if (!is_dir($dir)) {
+      $created = $this->fileSystem->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY);
+      if (!$created) {
+        throw new FilesystemValidationException(
+          strtr('Directory "@path" is not a valid directory.', ['@path' => $dir])
+        );
+      }
     }
-    else {
-      // TBD.
+    if (is_dir($dir) && !is_writable($dir)) {
+      throw new FilesystemValidationException(
+        strtr('Path "@path" is not writable.', ['@path' => $dir])
+      );
     }
-    return $dirUrl;
   }
 
   /**
