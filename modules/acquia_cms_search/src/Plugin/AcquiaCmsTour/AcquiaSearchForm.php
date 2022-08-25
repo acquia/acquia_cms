@@ -133,7 +133,9 @@ class AcquiaSearchForm extends AcquiaCmsDashboardBase {
     $solr_api_uuid = $form_state->getValue(['uuid']);
     $this->config('acquia_search.settings')->set('api_host', $solr_api_host)->save(TRUE);
     $this->state->set('acquia_search.identifier', $solr_identifier);
-    $this->state->set('acquia_search.api_key', $solr_api_key);
+    if ($solr_api_key) {
+      $this->state->set('acquia_search.api_key', $solr_api_key);
+    }
     $this->state->set('acquia_search.uuid', $solr_api_uuid);
     $this->setConfigurationState();
     $this->messenger()->addStatus('The configuration options have been saved.');
