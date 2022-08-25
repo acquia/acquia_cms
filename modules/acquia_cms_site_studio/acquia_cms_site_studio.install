@@ -9,6 +9,7 @@ use Drupal\acquia_cms_common\Facade\PermissionFacade;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\node\Entity\NodeType;
+use Drupal\user\Entity\Role;
 
 /**
  * Implements hook_install().
@@ -200,5 +201,16 @@ function acquia_cms_site_studio_update_8003() {
       $type->setThirdPartySetting('node_revision_delete', 'when_to_delete', '0');
       $type->save();
     }
+  }
+}
+
+/**
+ * Install and update new site studio roles.
+ */
+function acquia_cms_site_studio_update_8004() {
+  $role = Role::load('developer');
+  if ($role instanceof Role) {
+    $role->set('label', 'Low Code Site Builder');
+    $role->save();
   }
 }
