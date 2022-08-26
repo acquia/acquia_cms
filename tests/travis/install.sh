@@ -23,7 +23,8 @@ if [[ "$ACMS_JOB" == "base" ]] || [[ "$ACMS_JOB" == "starter" ]]; then
 
 elif [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]]; then
   orca debug:packages CURRENT_DEV
-  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=minimal --no-sqlite
+  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=minimal --no-sqlite --no-site-install
+  ./vendor/bin/acms site:install --yes
 else
 # Run ORCA's standard installation script.
   ../../../orca/bin/travis/install.sh
@@ -86,7 +87,7 @@ if [[ "$ACMS_JOB" == "starter" ]] && [[ -n "$ACMS_STARTER_DB_ARTIFACT" ]] && [[ 
   # @todo Remove this after we update tests artifacts, which is created based on release 2.0.x.
   drush sqlq 'UPDATE `config` SET `data` = replace(data, "s:10:\"acquia_cms\"", "s:7:\"minimal\"") where name="core.extension";'
   drush cr
-  
+
   drush updatedb --cache-clear --yes -vvv
 fi
 
