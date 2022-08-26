@@ -30,7 +30,7 @@ if [[ "$ACMS_JOB" == "base" ]] || [[ "$ACMS_JOB" == "starter" ]]; then
   cat ../../patches/ci-settings.txt >> $ORCA_FIXTURE_DIR/docroot/sites/default/settings.php
 
 # @todo we can remove ACMS_JOB variable from all places.
-elif [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]] || [[ "${ORCA_JOB}" = ISOLATED* ]] || [[ "${ORCA_JOB}" = INTEGRATED* ]]; then
+elif [[ "$ACMS_JOB" == "starter_full" ]] || [[ "${ORCA_JOB}" = ISOLATED* ]] || [[ "${ORCA_JOB}" = INTEGRATED* ]]; then
   create_fixture
   cd $ORCA_FIXTURE_DIR
   ./vendor/bin/acms site:install --yes
