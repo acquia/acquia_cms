@@ -24,6 +24,7 @@ if [[ "$ACMS_JOB" == "base" ]] || [[ "$ACMS_JOB" == "starter" ]]; then
 elif [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]]; then
   orca debug:packages CURRENT_DEV
   orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=minimal --no-sqlite --no-site-install
+  cd $ORCA_FIXTURE_DIR
   ./vendor/bin/acms site:install --yes
 else
 # Run ORCA's standard installation script.
