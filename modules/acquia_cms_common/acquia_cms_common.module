@@ -316,16 +316,10 @@ function acquia_cms_common_module_implements_alter(&$implementations, $hook) {
  * Implements hook_preprocess_template().
  */
 function acquia_cms_common_preprocess_status_report_general_info(&$variables) {
-  // List of available starter kits.
-  $starter_kits = [
-    'acquia_cms_enterprise_low_code' => 'Acquia CMS Enterprise Low Code',
-    'acquia_cms_headless' => 'Acquia CMS Headless' ,
-    'acquia_cms_community' => 'Acquia CMS Community',
-  ];
   // Check for the starter kit selection.
-  if ($starter_kit = \Drupal::state()->get('acquia_cms.starter_kit')) {
+  if ($starter_kit = \Drupal::service('acquia_cms_common.utility')->getStarterKit()) {
     // Store selected starter kit into the variable.
-    $variables['acquia_cms']['starter_kit'] = $starter_kits[$starter_kit];
+    $variables['acquia_cms']['starter_kit'] = $starter_kit;
   }
 }
 
