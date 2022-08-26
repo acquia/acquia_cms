@@ -14,16 +14,24 @@ cd "$(dirname "$0")"
 # Reuse ORCA's own includes.
 source ../../../orca/bin/travis/_includes.sh
 
+# creates the ORCA fixture, as we do not want to use ORCA's standard fixture.
+create_fixture() {
+  # Find drupal core version from ORCA_JOB variable.
+  CORE_VERSION=$(echo ${ORCA_JOB} | sed -E -e 's/(INTEGRATED_TEST_ON_|INTEGRATED_UPGRADE_TEST_FROM_|ISOLATED_TEST_ON_|INTEGRATED_UPGRADE_TEST_TO_|ISOLATED_UPGRADE_TEST_TO_)//')
+  orca debug:packages ${CORE_VERSION}
+  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=${CORE_VERSION} --dev --profile=minimal --no-sqlite --no-site-install
+}
+
 # If running our custom jobs or isolated test jobs, initialize the fixture.
 # Otherwise, use Orca's installation script.
+
 if [[ "$ACMS_JOB" == "base" ]] || [[ "$ACMS_JOB" == "starter" ]]; then
-  orca debug:packages CURRENT_DEV
-  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=minimal --no-sqlite --no-site-install
+  create_fixture
   cat ../../patches/ci-settings.txt >> $ORCA_FIXTURE_DIR/docroot/sites/default/settings.php
 
-elif [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]]; then
-  orca debug:packages CURRENT_DEV
-  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=CURRENT_DEV --dev --profile=minimal --no-sqlite --no-site-install
+# @todo we can remove ACMS_JOB variable from all places.
+elif [[ "$ACMS_JOB" == "base_full" ]] || [[ "$ACMS_JOB" == "starter_full" ]] || [[ "${ORCA_JOB}" = ISOLATED* ]] || [[ "${ORCA_JOB}" = INTEGRATED* ]]; then
+  create_fixture
   cd $ORCA_FIXTURE_DIR
   ./vendor/bin/acms site:install --yes
 else
@@ -39,9 +47,9 @@ printenv | grep ACMS_ | sort
 cd $ORCA_FIXTURE_DIR
 
 # Rebuild cohesion after install.
-if [[ "$ACMS_JOB" != "base" ]] && [[ "$ACMS_JOB" != "starter" ]] && [[ "$ORCA_JOB" != "LOOSE_DEPRECATED_CODE_SCAN" ]] && [[ "$ORCA_JOB" != "DEPRECATED_CODE_SCAN_W_CONTRIB" ]] && [[ "$ORCA_JOB" != "STRICT_DEPRECATED_CODE_SCAN" ]]; then
-  drush cohesion:rebuild -y
-fi
+#if [[ "$ACMS_JOB" != "base" ]] && [[ "$ACMS_JOB" != "starter" ]] && [[ "$ORCA_JOB" != "LOOSE_DEPRECATED_CODE_SCAN" ]] && [[ "$ORCA_JOB" != "DEPRECATED_CODE_SCAN_W_CONTRIB" ]] && [[ "$ORCA_JOB" != "STRICT_DEPRECATED_CODE_SCAN" ]]; then
+#  drush cohesion:rebuild -y
+#fi
 
 # Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.
 composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms"]' --merge
