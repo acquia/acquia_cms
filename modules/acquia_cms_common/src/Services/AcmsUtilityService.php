@@ -5,7 +5,6 @@ namespace Drupal\acquia_cms_common\Services;
 use Drupal\cohesion\Drush\DX8CommandHelpers;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\State\StateInterface;
 
 /**
  * Defines a service for ACMS.
@@ -69,7 +68,7 @@ class AcmsUtilityService {
   /**
    * Fetch acquia cms profile with list of enabled modules of ACMS.
    */
-  public function getAcquiaCmsProfileModuleList(): array {
+  public function getAcquiaCmsModuleList(): array {
     $profile_modules = $this->moduleHandler->getModuleList();
     return array_filter($profile_modules, function ($key) {
       return str_starts_with($key, 'acquia_cms');
