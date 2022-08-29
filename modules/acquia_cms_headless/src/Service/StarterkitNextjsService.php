@@ -20,6 +20,7 @@ use Drupal\next\Entity\NextSite;
 use Drupal\simple_oauth\Service\Exception\FilesystemValidationException;
 use Drupal\simple_oauth\Service\KeyGeneratorService;
 use Drupal\user\Entity\User;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * A service for the initialization of the Headless Next.js starter kit.
@@ -388,8 +389,8 @@ class StarterkitNextjsService {
 
     // Get oauth_keys_directory path from settings.php if available.
     $dir = Settings::get('oauth_keys_directory', $this->getDefaultOauthKeysDirectory());
-    $this->generateOauthKeysDirectory($dir);
 
+    $this->generateOauthKeysDirectory($dir);
     // Generate a public and private oauth key.
     $this->keyGeneratorService->generateKeys($dir);
 
@@ -439,13 +440,13 @@ class StarterkitNextjsService {
       $created = $this->fileSystem->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY);
       if (!$created) {
         throw new FilesystemValidationException(
-          strtr('Directory "@path" is not a valid directory.', ['@path' => $dir])
+          strtr("The specified directory '@path' is not properly configured. This may be caused by a problem with directory permissions.", ['@path' => $dir])
         );
       }
     }
     if (is_dir($dir) && !is_writable($dir)) {
       throw new FilesystemValidationException(
-        strtr('Path "@path" is not writable.', ['@path' => $dir])
+        strtr('The specified directory "@path" is not writable.', ['@path' => $dir])
       );
     }
   }
@@ -592,10 +593,10 @@ class StarterkitNextjsService {
    * @throws \Drupal\Core\Entity\EntityStorageException
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   * @throws \Drupal\simple_oauth\Service\Exception\ExtensionNotLoadedException
-   * @throws \Drupal\simple_oauth\Service\Exception\FilesystemValidationException
+   * @throws \Drupal\simple_oauth\Service\Exception\ExtensionNotLoadedException|FilesystemValidationException
    */
   public function initStarterkitNextjs(string $site_id, array $site_data) {
+
     // Check to see if Headless user still exists, and if not, recreate it.
     $this->createHeadlessUser();
 
