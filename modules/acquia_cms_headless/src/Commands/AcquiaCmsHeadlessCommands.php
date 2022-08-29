@@ -7,6 +7,8 @@ use Consolidation\AnnotatedCommand\CommandError;
 use Drupal\acquia_cms_headless\Service\StarterkitNextjsService;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\simple_oauth\Service\Exception\ExtensionNotLoadedException;
+use Drupal\simple_oauth\Service\Exception\FilesystemValidationException;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -64,6 +66,10 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
    *   Initializes a next.js app backend.
    *
    * @command acms:headless:new-nextjs
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function acmsHeadlessNewNextjs(array $options = [
     'site-url' => NULL,
@@ -78,7 +84,13 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
     ];
     // Check if there's no Next.js site available.
     if (empty($existing_sites)) {
-      $site = $this->starterKit->initStarterkitNextjs($site_id, $data);
+      try {
+        $site = $this->starterKit->initStarterkitNextjs($site_id, $data);
+        $this->logMessage($site, $options['env-file']);
+      }
+      catch (ExtensionNotLoadedException | FilesystemValidationException $e) {
+        $this->logger()->error($e->getMessage());
+      }
     }
     // Let's create the one requested.
     else {
@@ -86,11 +98,26 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
       $this->starterKit->createHeadlessConsumer($data);
       // Create a new Next.js Site.
       $site = $this->starterKit->createHeadlessSite($site_id, $data);
+      $this->logMessage($site, $options['env-file']);
     }
+  }
+
+  /**
+   * Log messages.
+   *
+   * @param \Drupal\next\Entity\NextSite $site
+   *   The Next.js site object.
+   * @param string|null $file_path
+   *   The env file path.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  protected function logMessage(NextSite $site, string $file_path = NULL) {
     $env = $this->starterKit->getEnvironmentVariablesAsString($site);
-    if ($file = $options['env-file']) {
-      file_put_contents($file, $env);
-      $this->logger()->success("Environment variables were written to $file.");
+    if ($file_path) {
+      file_put_contents($file_path, $env);
+      $this->logger()->success("Environment variables were written to $file_path.");
     }
     else {
       $this->logger()->notice("Use these environment variables for your Next.js application. Place them in your .env file:\n" . print_r($env, TRUE));
@@ -101,15 +128,18 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
    * Hook validates for acms:headless:new-nextjs command.
    *
    * @hook validate acms:headless:new-nextjs
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function validateAcmsHeadlessNewNextJs(CommandData $commandData) {
     $options = $commandData->input()->getOptions();
     $messages = [];
     if (!isset($options['site-url'])) {
-      $messages[] = dt("Missing required parameter site URL.");
+      $messages[] = dt("Missing required parameter site URL.", []);
     }
     if (!isset($options['site-name'])) {
-      $messages[] = dt("Missing required parameter site name.");
+      $messages[] = dt("Missing required parameter site name.", []);
     }
     if (isset($options['site-url']) && isset($options['site-name'])) {
       $site_machine_name = $this->getSiteMachineName($options['site-name']);
@@ -156,6 +186,10 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
    *   Regenerate consumer secret.
    *
    * @command acms:headless:regenerate-env
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function acmsHeadlessRegenerateEnv(array $options = [
     'site-url' => NULL,
@@ -191,16 +225,19 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
    * Hook validates for acms:headless:regenerate-env command.
    *
    * @hook validate acms:headless:regenerate-env
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function validateAcmsHeadlessRegenerateEnv(CommandData $commandData) {
     $options = $commandData->input()->getOptions();
     $messages = [];
     $existing_sites = $this->entityTypeManager->getStorage('next_site')->loadMultiple();
     if (empty($existing_sites)) {
-      $messages[] = dt("There's no Next.js site found, at least one Next.js site should exists in order to generate the secret.");
+      $messages[] = dt("There's no Next.js site found, at least one Next.js site should exists in order to generate the secret.", []);
     }
     if (!isset($options['site-url'])) {
-      $messages[] = dt("Missing required parameter site URL.");
+      $messages[] = dt("Missing required parameter site URL.", []);
     }
     if (isset($options['site-url'])) {
       $site = $this->starterKit->getHeadlessSiteByBaseUrl($options['site-url']);
@@ -226,7 +263,7 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
     }
 
     if ($messages) {
-      return new CommandError(implode('\n', $messages));
+      return new CommandError(implode("\n", $messages));
     }
   }
 
