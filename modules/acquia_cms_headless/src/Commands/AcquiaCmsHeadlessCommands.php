@@ -7,6 +7,7 @@ use Consolidation\AnnotatedCommand\CommandError;
 use Drupal\acquia_cms_headless\Service\StarterkitNextjsService;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\next\Entity\NextSite;
 use Drupal\simple_oauth\Service\Exception\ExtensionNotLoadedException;
 use Drupal\simple_oauth\Service\Exception\FilesystemValidationException;
 use Drush\Commands\DrushCommands;
@@ -156,7 +157,7 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
       }
     }
     if ($messages) {
-      return new CommandError(implode('\n', $messages));
+      return new CommandError(implode("\n", $messages));
     }
   }
 
