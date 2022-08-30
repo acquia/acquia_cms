@@ -157,7 +157,7 @@ before_install:
   - nvm install 12.13.1; nvm use 12.13.1
   - composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION"
   # Add patch in ORCA to include merge-plugin to composer.
-  - curl https://gist.githubusercontent.com/rajeshreeputra/3a3cbda6f94608b2f6d6636dac1fd22c/raw/3f6a89feaec6ef0c93b537a727dd85e664ae833a/merge_plugin.patch | git -C ../orca apply
+  - curl https://gist.githubusercontent.com/rajeshreeputra/3a3cbda6f94608b2f6d6636dac1fd22c/raw/989dc9282710ca650724dbe6a0b52e144383a32d/merge_plugin.patch | git -C ../orca apply
   - git clone -b v1.0.1 https://github.com/apathak18/coding-standards-php.git ../acquia/coding-standards
   - composer config --global repositories.acquia_coding_standards path /home/travis/build/acquia/acquia/coding-standards
   # Remove internal module dependencies, so that ORCA CI doesn't report error.
