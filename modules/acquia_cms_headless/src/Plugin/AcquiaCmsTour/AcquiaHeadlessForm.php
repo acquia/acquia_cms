@@ -91,6 +91,13 @@ class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
           '#suffix' => "</span>",
         ];
       }
+
+      // Get label for nextjs.
+      $next_js_label = $this->starterkitNextjsService->getHeadlessConsumerData()->label();
+      // Label of nextjs site should not be default consumer and
+      // store the value in bool.
+      $is_next_js = ($next_js_label != 'Default Consumer') ? TRUE : FALSE;
+
       $form[$module] = [
         '#type' => 'details',
         '#title' => $this->t('Headless'),
@@ -106,7 +113,8 @@ class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
           dependencies related to the Next.js module will be enabled and a default
           configuration will be initialized to ready Drupal to be connected with
           a next.js application.'),
-        '#default_value' => (bool) $config->get('starterkit_nextjs'),
+        '#disabled' => $is_next_js,
+        '#default_value' => $is_next_js,
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
       ];
       $form[$module]['headless_mode'] = [
@@ -203,9 +211,6 @@ class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
         catch (InvalidPluginDefinitionException | PluginNotFoundException | EntityStorageException | ExtensionNotLoadedException | FilesystemValidationException $e) {
           $this->messenger()->addError($e->getMessage());
         }
-      }
-      else {
-        $this->messenger()->addStatus($this->t('Acquia CMS Next.js starter kit has been disabled.'));
       }
     }
 
