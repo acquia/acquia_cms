@@ -95,10 +95,7 @@ function acquia_cms_site_studio_install() {
   $config_storage->write('editor.editor.cohesion', $source_optional_dir->read('editor.editor.cohesion'));
   $config_storage->write('filter.format.cohesion', $source_optional_dir->read('filter.format.cohesion'));
 
-  Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_administrator');
-  Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_author');
-  Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_editor');
-  Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('site_builder');
+  Drupal::classResolver(PermissionFacade::class)->updateRole('site_builder');
 
 }
 
