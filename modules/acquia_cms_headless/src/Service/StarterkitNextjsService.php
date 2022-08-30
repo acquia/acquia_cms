@@ -411,19 +411,22 @@ class StarterkitNextjsService {
   /**
    * A function that obtains our init headless consumer data.
    *
+   * @param string $site_name
+   *   Site label.
+   *
    * @return \Drupal\Core\Entity\EntityInterface|null
    *   Returns a consumer object or a NULL response.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getHeadlessConsumerData($site_name) {
+  public function getHeadlessConsumerData(string $site_name = NULL): ?object {
     $consumerStorage = $this->entityTypeManager->getStorage('consumer');
     $query = $consumerStorage->getQuery();
-    $cids = $query
-      ->condition('label', $site_name)
-      ->range(0, 1)
-      ->execute();
+    if ($site_name) {
+      $query->condition('label', $site_name);
+    }
+    $cids = $query->range(0, 1)->execute();
     $cid = array_keys($cids);
 
     return !empty($cid) ? $consumerStorage->load($cid[0]) : NULL;
