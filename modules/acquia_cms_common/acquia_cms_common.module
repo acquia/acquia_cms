@@ -355,6 +355,22 @@ function acquia_cms_common_modules_installed($modules) {
     Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_editor', [
       'weight' => -5,
     ]);
+
+    // As we are programmatically creating the below roles,
+    // after any of the content model module is installed:
+    // - content_administrator
+    // - content_author
+    // - content_editor
+    // So we need to make sure that we also import the other optional
+    // configurations which is dependent on any of these roles.
+    /** @var \Drupal\Core\Config\ConfigInstallerInterface $config_installer */
+    $config_installer = \Drupal::service('config.installer');
+    $restrict_by_dependency = [
+      'config' => 'user.role.content_administrator',
+      'config' => 'user.role.content_author',
+      'config' => 'user.role.content_editor',
+    ];
+    $config_installer->installOptionalConfig(NULL, $restrict_by_dependency);
   }
   if (in_array('shield', $modules)) {
     Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('user_administrator');

@@ -58,6 +58,8 @@ class SiteStudioPermissionsTest extends BrowserTestBase {
       [
         [
           "developer",
+        ],
+        [
           "content_administrator",
           "content_author",
           "content_editor",
@@ -76,18 +78,6 @@ class SiteStudioPermissionsTest extends BrowserTestBase {
       [
         'developer',
         $this->getPermissionsByRole('developer'),
-      ],
-      [
-        'content_administrator',
-        $this->getPermissionsByRole('content_administrator'),
-      ],
-      [
-        'content_author',
-        $this->getPermissionsByRole('content_author'),
-      ],
-      [
-        'content_editor',
-        $this->getPermissionsByRole('content_editor'),
       ],
     ];
   }

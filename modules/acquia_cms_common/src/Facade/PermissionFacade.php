@@ -69,8 +69,11 @@ class PermissionFacade implements ContainerInjectionInterface {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function addRole(string $role, array $configurations = []) :int {
-    $permissions = $configurations['permissions'] ?? $this->getPermissionsByRole($role);
     if (!($this->roleEntity->load($role) instanceof RoleInterface)) {
+      // When creating a new role, we need to add default permissions as well
+      // that is needed for that particular role.
+      $permissions = $this->getPermissionsByRole($role);
+      $permissions = isset($configurations['permissions']) ? array_merge($permissions, $configurations['permissions']) : $permissions;
       $defaults = $this->defaultPermissionConfig($role, $configurations);
       $defaults["permissions"] = $permissions;
       return $this->roleEntity->create($defaults)->save();
@@ -85,10 +88,21 @@ class PermissionFacade implements ContainerInjectionInterface {
    *   A new role to add.
    * @param array $configurations
    *   An array of configurations.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function updateRole(string $role, array $configurations = []) {
-    $permissions = $configurations['permissions'] ?? $this->getPermissionsByRole($role);
-    user_role_grant_permissions($role, $permissions);
+    if (($roleObject = $this->roleEntity->load($role)) instanceof RoleInterface) {
+      $permissions = $this->getPermissionsByRole($role);
+      // When update the role, we need sure that default permissions exists
+      // If not, then we should add the default permissions.
+      $permissions = isset($configurations['permissions']) ? array_merge($permissions, $configurations['permissions']) : $permissions;
+      $permissions = array_diff($permissions, $roleObject->getPermissions());
+      foreach ($permissions as $permission) {
+        $roleObject->grantPermission($permission);
+      }
+      return $roleObject->save();
+    }
   }
 
   /**
