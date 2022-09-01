@@ -157,7 +157,7 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
       }
     }
     if ($messages) {
-      return new CommandError(implode("\n", $messages));
+      return new CommandError(implode(PHP_EOL, $messages));
     }
   }
 
@@ -264,7 +264,7 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
     }
 
     if ($messages) {
-      return new CommandError(implode("\n", $messages));
+      return new CommandError(implode(PHP_EOL, $messages));
     }
   }
 
