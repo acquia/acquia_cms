@@ -340,11 +340,17 @@ function acquia_cms_common_modules_installed($modules) {
 
   if (array_intersect(
     $modules, [
+      // Ensure role exists when any of content model module is installed.
       'acquia_cms_article',
       'acquia_cms_event',
       'acquia_cms_page',
       'acquia_cms_person',
       'acquia_cms_place',
+      // Ensure role exists when any of media module is installed.
+      'acquia_cms_document',
+      'acquia_cms_audio',
+      'acquia_cms_video',
+      'acquia_cms_image',
     ])) {
     Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_administrator', [
       'weight' => -7,

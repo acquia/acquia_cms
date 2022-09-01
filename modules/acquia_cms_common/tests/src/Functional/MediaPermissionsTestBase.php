@@ -16,8 +16,6 @@ abstract class MediaPermissionsTestBase extends EntityPermissionsTestBase {
         [
           "content_author",
           "content_editor",
-        ],
-        [
           "content_administrator",
         ],
       ],
@@ -44,6 +42,12 @@ abstract class MediaPermissionsTestBase extends EntityPermissionsTestBase {
         [
           "delete any $bundle $entityType",
           "edit any $bundle $entityType",
+        ],
+      ],
+      [
+        'content_administrator',
+        [
+          "administer media",
         ],
       ],
     ];
