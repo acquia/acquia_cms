@@ -388,7 +388,10 @@ class StarterkitNextjsService {
   public function generateOauthKeys() {
 
     // Get oauth_keys_directory path from settings.php if available.
-    $dir = Settings::get('oauth_keys_directory', $this->getDefaultOauthKeysDirectory());
+    $dir = Settings::get('oauth_keys_directory');
+    if (!$dir) {
+      $dir = $this->getDefaultOauthKeysDirectory();
+    }
 
     $this->generateOauthKeysDirectory($dir);
     // Generate a public and private oauth key.
