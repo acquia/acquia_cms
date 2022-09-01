@@ -17,6 +17,12 @@ npx create-next-app -e https://github.com/acquia/next-acms/tree/main/starters/ba
 
 Once Acquia CMS and ACMS.NEXT library are installed, in your drupal site go to the Extend menu and enable Acquia CMS Headless module. In the top bar menu link select "Tour", which takes you to the "Get Started" page. Click the "Get Started" button. You will see your dashboard. Locate the "Headless" section to reveal two checkbox options: 
 
+* **Add the 'oauth_keys' directory path in approot/sites/default/settings.php** To fetch the public.key & private.key from the mentioned oauth_keys directory. You need to specify the location of the directory in approot settings.php as follows -
+```
+$settings['oauth_keys_directory'] = '../oauth_keys';
+
+```
+Please note that the key name `oauth_keys_directory` should be the same as shown in the example snippet above.
 * **Enable Next.js starter kit** When the Next.js starter kit option is enabled, dependencies related to the Next.js module will be enabled providing users with the ability to use Drupal as a backend for a decoupled NodeJS app while also retaining Drupal’s default front-end. E.g., with a custom theme.
  
 * **Enable Headless mode** When Headless Mode is enabled, it turns on all the capabilities that allows Drupal to be used as a backend for a decoupled Node JS app AND turns off all of Drupal’s front-end features so that the application is purely headless.

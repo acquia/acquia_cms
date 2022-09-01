@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_headless\Service;
 
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\consumers\Entity\Consumer;
@@ -12,11 +13,14 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Http\RequestStack;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Password\DefaultPasswordGenerator;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\next\Entity\NextSite;
+use Drupal\simple_oauth\Service\Exception\FilesystemValidationException;
 use Drupal\simple_oauth\Service\KeyGeneratorService;
 use Drupal\user\Entity\User;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * A service for the initialization of the Headless Next.js starter kit.
@@ -382,21 +386,14 @@ class StarterkitNextjsService {
    * @throws \Drupal\simple_oauth\Service\Exception\ExtensionNotLoadedException
    */
   public function generateOauthKeys() {
-    // Create the directory.
-    $file_system = $this->fileSystem;
-    // Call the site path service.
-    $site_path = $this->sitePath;
-    // Separate the site path array.
-    $site_path = explode('/', $site_path);
 
-    // Set the base path of the keys directory.
-    $dir = "../oauth_keys/$site_path[0]/$site_path[1]";
-
-    // Create the directory if it doesn't already exist.
-    if (!is_dir($dir)) {
-      $file_system->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY);
+    // Get oauth_keys_directory path from settings.php if available.
+    $dir = Settings::get('oauth_keys_directory');
+    if (!$dir) {
+      $dir = $this->getDefaultOauthKeysDirectory();
     }
 
+    $this->generateOauthKeysDirectory($dir);
     // Generate a public and private oauth key.
     $this->keyGeneratorService->generateKeys($dir);
 
@@ -406,6 +403,55 @@ class StarterkitNextjsService {
       ->set('public_key', "$dir/public.key")
       ->set('private_key', "$dir/private.key")
       ->save();
+  }
+
+  /**
+   * Get default directory path based on environment.
+   *
+   * @return string
+   *   The default directory path.
+   */
+  private function getDefaultOauthKeysDirectory(): string {
+    // Call the site path service.
+    $site_path = $this->sitePath;
+    // Separate the site path array.
+    $site_path = explode('/', $site_path);
+
+    // Set the base path of the oauth_keys directory.
+    $default_dir = "../oauth_keys/$site_path[0]/$site_path[1]";
+
+    // Build default oauth_keys dir path for acquia cloud environment.
+    if (AcquiaDrupalEnvironmentDetector::isAhEnv()) {
+      $site_group = AcquiaDrupalEnvironmentDetector::getAhGroup();
+      $env = AcquiaDrupalEnvironmentDetector::getAhEnv();
+      $default_dir = "/mnt/gfs/$site_group.$env/nobackup/oauth_keys/$site_path[0]/$site_path[1]";
+    }
+    return $default_dir;
+  }
+
+  /**
+   * Generates & returns the OAuth keys directory path.
+   *
+   * @param string $dir
+   *   The oauth directory.
+   *
+   * @throws \Drupal\simple_oauth\Service\Exception\FilesystemValidationException
+   */
+  public function generateOauthKeysDirectory(string $dir) {
+    // Create the directory if it doesn't already exist.
+    if (!is_dir($dir)) {
+      $created = $this->fileSystem->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY);
+      if (!$created) {
+        throw new FilesystemValidationException(
+          strtr("The specified directory '@path' is not properly configured. This may be caused by a problem with directory permissions.", ['@path' => $dir])
+        );
+      }
+    }
+    if (is_dir($dir) && !is_writable($dir)) {
+      throw new FilesystemValidationException(
+        strtr('The specified directory "@path" is not writable.', ['@path' => $dir])
+      );
+    }
   }
 
   /**
@@ -550,10 +596,10 @@ class StarterkitNextjsService {
    * @throws \Drupal\Core\Entity\EntityStorageException
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   * @throws \Drupal\simple_oauth\Service\Exception\ExtensionNotLoadedException
-   * @throws \Drupal\simple_oauth\Service\Exception\FilesystemValidationException
+   * @throws \Drupal\simple_oauth\Service\Exception\ExtensionNotLoadedException|FilesystemValidationException
    */
   public function initStarterkitNextjs(string $site_id, array $site_data) {
+
     // Check to see if Headless user still exists, and if not, recreate it.
     $this->createHeadlessUser();
 
