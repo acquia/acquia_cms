@@ -260,10 +260,7 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
    */
   private function prepareEnvironmentFileDirectory(CommandData $commandData, string $env_file) {
     // Create file outside document root if path not given.
-    if ($this->fileSystem->dirname($env_file) === '.') {
-      $env_file = "../$env_file";
-      $commandData->input()->setOption('env-file', $env_file);
-    }
+    $env_file = $this->getDefaultFileName($env_file);
     // Prepare directory if not already exists.
     if (!file_exists($env_file)) {
       if (!is_dir($env_file)) {
@@ -271,6 +268,41 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
         $this->fileSystem->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY);
       }
     }
+  }
+
+  /**
+   * Generate default file name with path.
+   *
+   * @param string $env_file
+   *   The environment file name.
+   *
+   * @return string
+   *   The environment file name with path.
+   */
+  private function getDefaultFileName(string $env_file): string {
+    $path_info = pathinfo($env_file);
+    // Generate default file name if not given.
+    if (!isset($path_info['extension']) || $path_info['extension'] == '') {
+      $path_info['filename'] = '.env';
+      $path_info['extension'] = 'local';
+      $file_name = $path_info['filename'] . '.' . $path_info['extension'];
+      $env_file = $file_name;
+      // Update path one level up if its current directory.
+      if ($path_info['dirname'] === '.') {
+        $env_file = "../" . $file_name;
+      }
+      else {
+        $path_info['dirname'] .= '/' . $path_info['basename'] . '/';
+        $env_file = $path_info['dirname'] . $env_file;
+      }
+    }
+    else {
+      if ($this->fileSystem->dirname($env_file) === '.') {
+        $file_name = $path_info['filename'] . '.' . $path_info['extension'];
+        $env_file = "../" . $file_name;
+      }
+    }
+    return $env_file;
   }
 
 }
