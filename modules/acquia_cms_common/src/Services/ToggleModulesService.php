@@ -13,7 +13,7 @@ class ToggleModulesService {
    * Toggle module based on environment.
    */
   public function toggleModules() {
-    $is_dev = Environment::isAhIdeEnv() || Environment::isLocalEnv();
+    $is_dev = Environment::isLocalEnv();
     $is_prod = Environment::isAhProdEnv();
     $module_installer = \Drupal::service('module_installer');
     $to_install = [];
