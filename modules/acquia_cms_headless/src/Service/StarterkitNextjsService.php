@@ -466,12 +466,10 @@ class StarterkitNextjsService {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getHeadlessConsumerData(string $site_name = NULL): ?object {
+  public function getHeadlessConsumerData(string $site_name): ?object {
     $consumerStorage = $this->entityTypeManager->getStorage('consumer');
     $query = $consumerStorage->getQuery();
-    if ($site_name) {
-      $query->condition('label', $site_name);
-    }
+    $query->condition('label', $site_name);
     $cids = $query->range(0, 1)->execute();
     $cid = array_keys($cids);
 
@@ -742,6 +740,22 @@ class StarterkitNextjsService {
         'destination' => Url::fromRoute('acquia_cms_headless.dashboard')->toString(),
       ],
     ];
+  }
+
+  /**
+   * A function that tells whether site is having nextjs headless.
+   *
+   * @return bool
+   *   TRUE or FALSE.
+   */
+  public function hasConsumerData(): bool {
+    $consumerStorage = $this->entityTypeManager->getStorage('consumer');
+    $query = $consumerStorage->getQuery();
+    $query->condition('label', 'Default Consumer', '!=');
+    $count = $query->count()->execute();
+
+    return ($count >= 1) ? TRUE : FALSE;
+
   }
 
 }
