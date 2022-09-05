@@ -92,11 +92,8 @@ class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
         ];
       }
 
-      // Get label for nextjs.
-      $next_js_label = $this->starterkitNextjsService->getHeadlessConsumerData()->label();
-      // Label of nextjs site should not be default consumer and
-      // store the value in bool.
-      $is_next_js = ($next_js_label != 'Default Consumer') ? TRUE : FALSE;
+      // Get nextjs consumer data.
+      $is_next_js = $this->starterkitNextjsService->hasConsumerData();
 
       $form[$module] = [
         '#type' => 'details',
