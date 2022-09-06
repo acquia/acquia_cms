@@ -10,7 +10,7 @@
         "drupal/collapsiblock": "^3",
         "drupal/facets": "2.0.5",
         "drupal/facets_pretty_paths": "^1.2",
-        "drupal/search_api": "1.23",
+        "drupal/search_api": "1.24",
         "drupal/search_api_autocomplete": "^1.6"
     },
     "config": {
@@ -30,6 +30,9 @@
         "patches": {
             "drupal/facets": {
                 "3259123 - ViewsDisplayBase::isRenderedInCurrentRequest() doesn't let the facet link to reset to original URL": "https://www.drupal.org/files/issues/2022-01-18/3259123-search-facet-reset-link.patch"
+            },
+            "drupal/search_api": {
+                "3236696 - Call to a member function preExecute() on null in SearchApiTagCache->alterCacheMetadata()": "https://www.drupal.org/files/issues/2021-09-20/search_api_condition_cacheable_metadata.patch"
             }
         }
     },
