@@ -66,3 +66,15 @@ function acquia_cms_headless_update_8001() {
   ]);
   $role->trustData()->save();
 }
+
+/**
+ * Add the issue subrequest permission.
+ */
+function acquia_cms_headless_update_8002() {
+  $role = Role::load('frontend_preview_headless');
+  // Assign required permission to the role.
+  if ($role instanceof Role) {
+    $role->grantPermission('issue subrequests');
+    $role->trustData()->save();
+  }
+}
