@@ -7,7 +7,7 @@ _core:
 id: pack_acquia_cms_article
 label: 'Acquia CMS Article'
 description: ''
-excluded_entity_types: '[]'
+excluded_entity_types: '{"cohesion_base_styles":true,"cohesion_color":true,"cohesion_custom_style":true,"cohesion_font_library":true,"cohesion_font_stack":true,"cohesion_helper":true,"cohesion_helper_category":true,"cohesion_icon_library":true,"cohesion_master_templates":true,"cohesion_menu_templates":true,"cohesion_scss_variable":true,"cohesion_style_guide":true,"cohesion_style_guide_manager":true,"cohesion_style_helper":true,"cohesion_website_settings":true,"image_style":true,"view":true,"cohesion_component_category":true}'
 settings: |
   {
       "4b7791f0-7723-44a1-9bdc-3ae83a33f3d2": {
@@ -976,9 +976,6 @@ settings: |
               "f9066a12-6927-4356-ad7c-4a80fb1fba54": {
                   "type": "cohesion_color"
               },
-              "5ef09822-37b8-47f9-b84d-f49116c084df": {
-                  "type": "cohesion_component"
-              },
               "e5796afe-7ac5-40fc-9757-799c37368d9c": {
                   "type": "cohesion_component_category"
               },
@@ -1008,6 +1005,9 @@ settings: |
               },
               "d6d286cb-a4dd-4f26-8959-e9542cfc9fde": {
                   "type": "view"
+              },
+              "5ef09822-37b8-47f9-b84d-f49116c084df": {
+                  "type": "cohesion_component"
               }
           },
           "checked": true
@@ -1426,72 +1426,6 @@ settings: |
           },
           "checked": true
       },
-      "984ce71e-b600-4602-acce-aeea32fa2366": {
-          "type": "cohesion_menu_templates",
-          "items": {
-              "984ce71e-b600-4602-acce-aeea32fa2366": {
-                  "type": "cohesion_menu_templates"
-              }
-          },
-          "checked": true
-      },
-      "6bc27fd8-cc37-4d63-ba83-0cb3e50990e1": {
-          "type": "cohesion_menu_templates",
-          "items": {
-              "5ea60c7b-56bf-47f3-960e-a618f6785b80": {
-                  "type": "cohesion_icon_library"
-              },
-              "6bc27fd8-cc37-4d63-ba83-0cb3e50990e1": {
-                  "type": "cohesion_menu_templates"
-              },
-              "7958f6f3-71e4-4be9-b9d9-3f2f3a9cc65f": {
-                  "type": "file"
-              },
-              "9d23085d-2799-4b73-947c-af21184090ef": {
-                  "type": "file"
-              },
-              "aafa3621-5bed-4895-abd8-9ed5ef155a38": {
-                  "type": "file"
-              },
-              "b5efc7be-89c8-4898-aab5-4c119acef386": {
-                  "type": "file"
-              },
-              "d5f934de-069d-4aaa-b04e-30d6f81c49cf": {
-                  "type": "file"
-              }
-          },
-          "checked": true
-      },
-      "85755a4d-a503-4f87-9041-ed311a458fed": {
-          "type": "cohesion_menu_templates",
-          "items": {
-              "7537520d-a261-4677-9d32-4360363091fa": {
-                  "type": "cohesion_color"
-              },
-              "8556e30f-aa5f-41bc-9611-c7fdfeba13d1": {
-                  "type": "cohesion_color"
-              },
-              "1abef8b2-4144-48f1-a162-f7a4ec0bc993": {
-                  "type": "cohesion_color"
-              },
-              "67b49178-fdca-4ddc-b466-3680a4ec2726": {
-                  "type": "cohesion_custom_style"
-              },
-              "85755a4d-a503-4f87-9041-ed311a458fed": {
-                  "type": "cohesion_menu_templates"
-              }
-          },
-          "checked": true
-      },
-      "3c3630f2-b433-461d-8de4-ef4c89e9731b": {
-          "type": "cohesion_menu_templates",
-          "items": {
-              "3c3630f2-b433-461d-8de4-ef4c89e9731b": {
-                  "type": "cohesion_menu_templates"
-              }
-          },
-          "checked": true
-      },
       "ac284dd8-20a9-4db1-869f-868cf73c4fee": {
           "type": "cohesion_master_templates",
           "items": {
@@ -1618,131 +1552,50 @@ settings: |
           },
           "checked": true
       },
-      "474e6b1b-a967-42e3-bd41-e09d0f622e9f": {
-          "type": "cohesion_master_templates",
+      "496eee40-467e-4a34-9d5f-b5784f4ad8ba": {
+          "type": "cohesion_content_templates",
           "items": {
-              "2387acd0-197c-429d-ad35-e3c9d8817f92": {
-                  "type": "cohesion_color"
-              },
-              "8556e30f-aa5f-41bc-9611-c7fdfeba13d1": {
-                  "type": "cohesion_color"
-              },
-              "37d403a9-eca0-4560-b2a8-38225b5494a4": {
-                  "type": "cohesion_color"
-              },
-              "7537520d-a261-4677-9d32-4360363091fa": {
-                  "type": "cohesion_color"
-              },
-              "1abef8b2-4144-48f1-a162-f7a4ec0bc993": {
-                  "type": "cohesion_color"
-              },
-              "f9066a12-6927-4356-ad7c-4a80fb1fba54": {
-                  "type": "cohesion_color"
-              },
-              "02cb302b-f611-487a-8d04-0ef605c47d77": {
-                  "type": "cohesion_color"
-              },
-              "3827c4fb-440b-4066-b820-b18a406f5cef": {
-                  "type": "cohesion_color"
-              },
-              "4f789331-d73d-4ba3-8cd3-31e310a4f4e1": {
-                  "type": "cohesion_color"
-              },
-              "d1466fed-45ed-425a-9a09-6e859462f15e": {
-                  "type": "cohesion_color"
-              },
-              "52efb155-434d-434a-93e3-41d1907331bc": {
+              "496eee40-467e-4a34-9d5f-b5784f4ad8ba": {
+                  "type": "cohesion_content_templates"
+              }
+          },
+          "checked": true
+      },
+      "523e4072-de57-4820-a1e1-e20e5402562c": {
+          "type": "cohesion_content_templates",
+          "items": {
+              "68604d8c-c15d-4ef6-93f9-8fbac20dd434": {
                   "type": "cohesion_component"
               },
-              "3a53d6ea-200e-4f8d-b0e7-298df99db21c": {
-                  "type": "cohesion_component"
-              },
-              "ebdaa74a-6bab-45eb-a788-b4a264e6ee4a": {
-                  "type": "cohesion_component"
-              },
-              "5a4fc0c1-a220-4fd4-bf4c-002837ef2cd4": {
-                  "type": "cohesion_component"
-              },
-              "2dbb2fdb-f8c2-490a-b982-a3deff816962": {
-                  "type": "cohesion_component"
-              },
-              "9eaf7198-e84c-4587-9fdc-b1f402668be9": {
-                  "type": "cohesion_component_category"
-              },
-              "8c37c971-6215-4d59-b382-ee6cb932942b": {
-                  "type": "cohesion_custom_style"
-              },
-              "c9901d99-1c40-4c9c-99c5-3644cbeea658": {
-                  "type": "cohesion_custom_style"
-              },
-              "c8ca1aec-000f-469a-b1b6-48cd0723ecac": {
-                  "type": "cohesion_custom_style"
-              },
-              "1d6e14cd-1712-455d-90e8-501e92a19d40": {
-                  "type": "cohesion_custom_style"
-              },
-              "8d4a127a-152d-401c-ba7c-637464bbaefc": {
-                  "type": "cohesion_custom_style"
-              },
-              "4b7d6378-2e66-40a6-8d89-4efce8e8b16a": {
-                  "type": "cohesion_custom_style"
-              },
-              "5dc5325e-351b-4049-b477-dc710f612df7": {
-                  "type": "cohesion_custom_style"
-              },
-              "7348f607-1dac-4e04-b7b1-2aaba67d80df": {
-                  "type": "cohesion_custom_style"
-              },
-              "0ae80eef-ebc3-4394-8a2a-4235289ee28b": {
-                  "type": "cohesion_custom_style"
-              },
-              "5ea60c7b-56bf-47f3-960e-a618f6785b80": {
-                  "type": "cohesion_icon_library"
-              },
-              "474e6b1b-a967-42e3-bd41-e09d0f622e9f": {
-                  "type": "cohesion_master_templates"
-              },
-              "3c3630f2-b433-461d-8de4-ef4c89e9731b": {
-                  "type": "cohesion_menu_templates"
-              },
-              "6bc27fd8-cc37-4d63-ba83-0cb3e50990e1": {
-                  "type": "cohesion_menu_templates"
-              },
-              "984ce71e-b600-4602-acce-aeea32fa2366": {
-                  "type": "cohesion_menu_templates"
-              },
-              "7958f6f3-71e4-4be9-b9d9-3f2f3a9cc65f": {
-                  "type": "file"
-              },
-              "9d23085d-2799-4b73-947c-af21184090ef": {
-                  "type": "file"
-              },
-              "aafa3621-5bed-4895-abd8-9ed5ef155a38": {
-                  "type": "file"
-              },
-              "b5efc7be-89c8-4898-aab5-4c119acef386": {
-                  "type": "file"
-              },
-              "d5f934de-069d-4aaa-b04e-30d6f81c49cf": {
-                  "type": "file"
-              },
-              "3ebf4e6f-2872-4d38-ae4b-a39552757654": {
-                  "type": "file"
-              },
-              "19f71676-57af-483a-a814-e44cf4096f18": {
-                  "type": "file"
-              },
-              "970937e6-b5d1-4180-a978-da1a35b2e244": {
-                  "type": "file"
-              },
-              "440444d1-5667-422f-a393-94accc009c88": {
-                  "type": "file"
-              },
-              "b8cce27d-8733-4c3f-92d9-4983d321a490": {
-                  "type": "file"
-              },
-              "7e1f99ed-2425-4746-a75b-946b5aae2d43": {
-                  "type": "file"
+              "523e4072-de57-4820-a1e1-e20e5402562c": {
+                  "type": "cohesion_content_templates"
+              }
+          },
+          "checked": true
+      },
+      "e9093d37-b097-45b4-ad6c-b6677f64dcbb": {
+          "type": "cohesion_content_templates",
+          "items": {
+              "e9093d37-b097-45b4-ad6c-b6677f64dcbb": {
+                  "type": "cohesion_content_templates"
+              }
+          },
+          "checked": true
+      },
+      "c57670e9-563c-46a9-b885-162bc458df35": {
+          "type": "cohesion_content_templates",
+          "items": {
+              "c57670e9-563c-46a9-b885-162bc458df35": {
+                  "type": "cohesion_content_templates"
+              }
+          },
+          "checked": true
+      },
+      "6a4bb8c4-7df2-4c32-aff5-2ab4b8ee01ef": {
+          "type": "cohesion_content_templates",
+          "items": {
+              "6a4bb8c4-7df2-4c32-aff5-2ab4b8ee01ef": {
+                  "type": "cohesion_content_templates"
               }
           },
           "checked": true
