@@ -298,13 +298,32 @@ class StarterkitNextjsService {
         $user->set("init", $email);
         $user->set("preferred_langcode", $language);
         $user->activate();
-        $user->addRole('headless');
+        foreach ($this->getAllSiteRoles() as $role) {
+          $user->addRole($role);
+        }
         $user->save();
       }
     }
     catch (InvalidPluginDefinitionException | PluginNotFoundException | EntityStorageException $e) {
       $this->messenger->addError($e);
     }
+  }
+
+  /**
+   * Gets all current site roles.
+   *
+   * @return array
+   *   Returns an array of role ids.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  protected function getAllSiteRoles(): array {
+    $rolesStorage = $this->entityTypeManager->getStorage('user_role');
+    $query = $rolesStorage->getQuery();
+    return $query
+      ->condition('id', ["authenticated", "anonymous"], 'NOT IN')
+      ->execute();
   }
 
   /**
