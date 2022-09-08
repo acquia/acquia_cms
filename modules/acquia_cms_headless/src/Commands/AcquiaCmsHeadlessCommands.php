@@ -261,6 +261,8 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
   private function prepareEnvironmentFileDirectory(CommandData $commandData, string $env_file) {
     // Create file outside document root if path not given.
     $env_file = $this->getDefaultFileName($env_file);
+    $commandData->input()->setOption('env-file', $env_file);
+
     // Prepare directory if not already exists.
     if (!file_exists($env_file)) {
       if (!is_dir($env_file)) {
