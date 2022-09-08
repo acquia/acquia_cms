@@ -118,7 +118,7 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
     $env = $this->starterKit->getEnvironmentVariablesAsString($site);
     if ($file_path) {
       file_put_contents($file_path, $env);
-      $this->logger()->success("Environment variables were written to $file_path.");
+      $this->logger()->success("Environment variables were written to $file_path");
     }
     else {
       $this->logger()->notice("Use these environment variables for your Next.js application. Place them in your .env file:\n" . print_r($env, TRUE));
@@ -149,12 +149,7 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
       }
     }
     if (isset($options['env-file'])) {
-      if (!file_exists($options['env-file'])) {
-        if (!is_dir($options['env-file'])) {
-          $dir = $this->fileSystem->dirname($options['env-file']);
-          $this->fileSystem->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY);
-        }
-      }
+      $this->prepareEnvironmentFileDirectory($commandData, $options['env-file']);
     }
     if ($messages) {
       return new CommandError(implode(PHP_EOL, $messages));
@@ -210,14 +205,7 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
         $consumer->save();
 
         $site = $this->starterKit->getHeadlessSiteByBaseUrl($options['site-url']);
-        $env = $this->starterKit->getEnvironmentVariablesAsString($site);
-        if ($file = $options['env-file']) {
-          file_put_contents($file, $env);
-          $this->logger()->success("Environment variables were written to $file.");
-        }
-        else {
-          $this->logger()->notice("Use these environment variables for your Next.js application. Place them in your .env file:\n" . print_r($env, TRUE));
-        }
+        $this->logMessage($site, $options['env-file']);
       }
     }
   }
@@ -252,20 +240,69 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
           $messages[] = dt("No consumer with redirect url [@url] found.", ['@url' => $options['site-url']]);
         }
       }
-
     }
     if (isset($options['site-url']) && isset($options['env-file'])) {
-      if (!file_exists($options['env-file'])) {
-        if (!is_dir($options['env-file'])) {
-          $dir = $this->fileSystem->dirname($options['env-file']);
-          $this->fileSystem->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY);
-        }
-      }
+      $this->prepareEnvironmentFileDirectory($commandData, $options['env-file']);
     }
 
     if ($messages) {
       return new CommandError(implode(PHP_EOL, $messages));
     }
+  }
+
+  /**
+   * Set path to create env-file outside document root.
+   *
+   * @param \Consolidation\AnnotatedCommand\CommandData $commandData
+   *   The command data.
+   * @param string $env_file
+   *   The environment file name.
+   */
+  private function prepareEnvironmentFileDirectory(CommandData $commandData, string $env_file) {
+    // Create file outside document root if path not given.
+    $env_file = $this->getDefaultFileName($env_file);
+    // Prepare directory if not already exists.
+    if (!file_exists($env_file)) {
+      if (!is_dir($env_file)) {
+        $dir = $this->fileSystem->dirname($env_file);
+        $this->fileSystem->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY);
+      }
+    }
+  }
+
+  /**
+   * Generate default file name with path.
+   *
+   * @param string $env_file
+   *   The environment file name.
+   *
+   * @return string
+   *   The environment file name with path.
+   */
+  private function getDefaultFileName(string $env_file): string {
+    $path_info = pathinfo($env_file);
+    // Generate default file name if not given.
+    if (!isset($path_info['extension']) || $path_info['extension'] == '') {
+      $path_info['filename'] = '.env';
+      $path_info['extension'] = 'local';
+      $file_name = $path_info['filename'] . '.' . $path_info['extension'];
+      $env_file = $file_name;
+      // Update path one level up if its current directory.
+      if ($path_info['dirname'] === '.') {
+        $env_file = "../" . $file_name;
+      }
+      else {
+        $path_info['dirname'] .= '/' . $path_info['basename'] . '/';
+        $env_file = $path_info['dirname'] . $env_file;
+      }
+    }
+    else {
+      if ($this->fileSystem->dirname($env_file) === '.') {
+        $file_name = $path_info['filename'] . '.' . $path_info['extension'];
+        $env_file = "../" . $file_name;
+      }
+    }
+    return $env_file;
   }
 
 }
