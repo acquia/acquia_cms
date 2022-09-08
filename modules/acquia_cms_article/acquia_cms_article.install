@@ -5,27 +5,30 @@
  * Install, update and uninstall functions for the acquia_cms_article module.
  */
 
-use Drupal\acquia_cms_common\Facade\PermissionFacade;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\user\RoleInterface;
 
 /**
- * Implements hook_install().
+ * Implements hook_content_model_role_presave_alter().
  */
-function acquia_cms_article_install() {
-  $permissionFacade = Drupal::classResolver(PermissionFacade::class);
-  $permissionFacade->createOrUpdateRole('content_author', [
-    'permissions' => [
-      'create article content',
-      'edit own article content',
-      'delete own article content',
-    ],
-  ]);
-  $permissionFacade->createOrUpdateRole('content_editor', [
-    'permissions' => [
-      'edit any article content',
-      'delete any article content',
-    ],
-  ]);
+function acquia_cms_article_content_model_role_presave_alter(RoleInterface &$role) {
+  switch ($role->id()) {
+    case 'content_author':
+      foreach ([
+        'create article content',
+        'edit own article content',
+        'delete own article content',
+      ] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
+
+    case 'content_editor':
+      foreach (['edit any article content', 'delete any article content'] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
+  }
 }
 
 /**

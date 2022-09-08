@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the acquia_cms_audio module.
+ */
+
+use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_content_model_role_presave_alter().
+ */
+function acquia_cms_audio_content_model_role_presave_alter(RoleInterface &$role) {
+  switch ($role->id()) {
+    case 'content_author':
+      foreach ([
+        'create audio content',
+        'edit own audio content',
+        'delete own audio content',
+      ] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
+
+    case 'content_editor':
+      foreach (['edit any audio content', 'delete any audio content'] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
+  }
+}

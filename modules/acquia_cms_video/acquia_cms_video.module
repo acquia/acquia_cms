@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the acquia_cms_video module.
+ */
+
+use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_content_model_role_presave_alter().
+ */
+function acquia_cms_video_content_model_role_presave_alter(RoleInterface &$role) {
+  switch ($role->id()) {
+    case 'content_author':
+      foreach ([
+        'create video media',
+        'edit own video media',
+        'delete own video media',
+      ] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
+
+    case 'content_editor':
+      foreach (['edit any video media', 'delete any video media'] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
+  }
+}

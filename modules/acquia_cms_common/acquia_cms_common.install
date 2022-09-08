@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Config\FileStorage;
+use Drupal\user\RoleInterface;
 
 /**
  * Implements hook_install().
@@ -144,4 +145,17 @@ function acquia_cms_common_update_8001() {
 function acquia_cms_common_update_8002() {
   // Update role permission code moved to site studio.
   // Keeping this update hook as existing customers are using it.
+}
+
+/**
+ * Implements hook_content_model_role_presave_alter().
+ */
+function acquia_cms_common_content_model_role_presave_alter(RoleInterface &$role) {
+  if (\Drupal::moduleHandler()->moduleExists('shield')) {
+    switch ($role->id()) {
+      case 'user_administrator':
+        $role->grantPermission('administer shield');
+        break;
+    }
+  }
 }

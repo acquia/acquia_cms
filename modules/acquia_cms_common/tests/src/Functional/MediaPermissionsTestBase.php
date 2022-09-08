@@ -14,6 +14,10 @@ abstract class MediaPermissionsTestBase extends EntityPermissionsTestBase {
     return [
       [
         [
+          'site_builder',
+          'user_administrator',
+        ],
+        [
           "content_author",
           "content_editor",
           "content_administrator",
@@ -26,28 +30,26 @@ abstract class MediaPermissionsTestBase extends EntityPermissionsTestBase {
    * {@inheritdoc}
    */
   public function providerBasicPermissions(): array {
-    $entityType = $this->getEntityType();
-    $bundle = $this->getBundle();
     return [
       [
-        'content_author',
+        'site_builder',
         [
-          "create $bundle $entityType",
-          "delete own $bundle $entityType",
-          "edit own $bundle $entityType",
+          'use text format filtered_html',
+          'use text format full_html',
+          'view the administration theme',
         ],
       ],
       [
-        'content_editor',
+        'user_administrator',
         [
-          "delete any $bundle $entityType",
-          "edit any $bundle $entityType",
-        ],
-      ],
-      [
-        'content_administrator',
-        [
-          "administer media",
+          'administer CAPTCHA settings',
+          'administer honeypot',
+          'administer recaptcha',
+          'administer seckit',
+          'administer site configuration',
+          'administer users',
+          'manage password reset',
+          'view the administration theme',
         ],
       ],
     ];

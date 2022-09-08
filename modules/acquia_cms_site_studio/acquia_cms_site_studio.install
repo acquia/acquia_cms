@@ -5,7 +5,6 @@
  * Contains install-time code for the Acquia CMS profile.
  */
 
-use Drupal\acquia_cms_common\Facade\PermissionFacade;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\node\Entity\NodeType;
@@ -94,9 +93,6 @@ function acquia_cms_site_studio_install() {
   $config_storage = \Drupal::service('config.storage');
   $config_storage->write('editor.editor.cohesion', $source_optional_dir->read('editor.editor.cohesion'));
   $config_storage->write('filter.format.cohesion', $source_optional_dir->read('filter.format.cohesion'));
-
-  Drupal::classResolver(PermissionFacade::class)->updateRole('site_builder');
-
 }
 
 /**

@@ -33,6 +33,51 @@ function acquia_cms_common_module_preinstall($module) {
   if ($module == 'acquia_cms_common') {
     _acquia_cms_common_rewrite_configuration('workflows.workflow.editorial', 'acquia_cms_common');
   }
+  switch ($module) {
+    case 'acquia_cms_article':
+    case 'acquia_cms_event':
+    case 'acquia_cms_page':
+    case 'acquia_cms_person':
+    case 'acquia_cms_place':
+      Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_administrator');
+      Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_author');
+      Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_editor');
+      break;
+
+    case 'acquia_cms_audio':
+    case 'acquia_cms_video':
+    case 'acquia_cms_image':
+    case 'acquia_cms_document':
+      Drupal::classResolver(PermissionFacade::class)->updateRole('content_author');
+      Drupal::classResolver(PermissionFacade::class)->updateRole('content_editor');
+      break;
+
+    case 'acquia_cms_site_studio':
+      Drupal::classResolver(PermissionFacade::class)->updateRole('content_administrator');
+      Drupal::classResolver(PermissionFacade::class)->updateRole('content_author');
+      Drupal::classResolver(PermissionFacade::class)->updateRole('content_editor');
+      Drupal::classResolver(PermissionFacade::class)->updateRole('site_builder');
+      break;
+
+    case 'acquia_cms_toolbar':
+      Drupal::classResolver(PermissionFacade::class)->updateRole('content_administrator');
+      Drupal::classResolver(PermissionFacade::class)->updateRole('content_author');
+      Drupal::classResolver(PermissionFacade::class)->updateRole('content_editor');
+      Drupal::classResolver(PermissionFacade::class)->updateRole('developer');
+      Drupal::classResolver(PermissionFacade::class)->updateRole('user_administrator');
+      Drupal::classResolver(PermissionFacade::class)->updateRole('site_builder');
+      break;
+
+    case 'acquia_cms_tour':
+      Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_administrator');
+      Drupal::classResolver(PermissionFacade::class)->updateRole('content_author');
+      Drupal::classResolver(PermissionFacade::class)->updateRole('content_editor');
+      break;
+
+    case 'shield':
+      Drupal::classResolver(PermissionFacade::class)->updateRole('user_administrator');
+      break;
+  }
 }
 
 /**
@@ -336,50 +381,6 @@ function acquia_cms_common_modules_installed($modules) {
     $config_factory->getEditable('system.image')
       ->set('toolkit', 'imagemagick')
       ->save();
-  }
-
-  if (array_intersect(
-    $modules, [
-      // Ensure role exists when any of content model module is installed.
-      'acquia_cms_article',
-      'acquia_cms_event',
-      'acquia_cms_page',
-      'acquia_cms_person',
-      'acquia_cms_place',
-      // Ensure role exists when any of media module is installed.
-      'acquia_cms_document',
-      'acquia_cms_audio',
-      'acquia_cms_video',
-      'acquia_cms_image',
-    ])) {
-    Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_administrator', [
-      'weight' => -7,
-    ]);
-    Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_author', [
-      'weight' => -6,
-    ]);
-    Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_editor', [
-      'weight' => -5,
-    ]);
-
-    // As we are programmatically creating the below roles,
-    // after any of the content model module is installed:
-    // - content_administrator
-    // - content_author
-    // - content_editor
-    // So we need to make sure that we also import the other optional
-    // configurations which is dependent on any of these roles.
-    /** @var \Drupal\Core\Config\ConfigInstallerInterface $config_installer */
-    $config_installer = \Drupal::service('config.installer');
-    $restrict_by_dependency = [
-      'config' => 'user.role.content_administrator',
-      'config' => 'user.role.content_author',
-      'config' => 'user.role.content_editor',
-    ];
-    $config_installer->installOptionalConfig(NULL, $restrict_by_dependency);
-  }
-  if (in_array('shield', $modules)) {
-    Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('user_administrator');
   }
 }
 

@@ -5,6 +5,8 @@
  * Contains hook implementations for the acquia_cms_tour module.
  */
 
+use Drupal\user\RoleInterface;
+
 /**
  * Implements hook_menu_links_discovered_alter().
  */
@@ -56,5 +58,25 @@ function acquia_cms_tour_theme() {
 function acquia_cms_tour_modules_uninstalled(array $modules) {
   foreach ($modules as $module) {
     \Drupal::state()->delete('acms_' . $module . '_configured');
+  }
+}
+
+/**
+ * Implements hook_content_model_role_presave_alter().
+ */
+function acquia_cms_tour_content_model_role_presave_alter(RoleInterface &$role) {
+  switch ($role->id()) {
+    case 'content_author':
+    case 'content_editor':
+      foreach (['access acquia cms tour'] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
+
+    case 'content_administrator':
+      foreach (['access acquia cms tour', 'access acquia cms tour dashboard'] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
   }
 }

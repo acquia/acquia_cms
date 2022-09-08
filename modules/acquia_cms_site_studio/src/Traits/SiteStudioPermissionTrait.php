@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acquia_cms_common\Traits;
+namespace Drupal\acquia_cms_site_studio\Traits;
 
 /**
  * Traits defining all Site Studio permissions.
