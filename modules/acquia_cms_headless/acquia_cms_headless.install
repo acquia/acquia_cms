@@ -5,6 +5,9 @@
  * Install, update and uninstall functions for the acquia_cms_headless module.
  */
 
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\user\RoleInterface;
+
 /**
  * Implements hook_install().
  */
@@ -14,6 +17,10 @@ function acquia_cms_headless_install() {
 
   // Programmatically create a new "headless" user.
   $headless_user->createHeadlessUser();
+
+  // Adds the necessary permissions to roles.
+  add_next_site_permissions();
+
 }
 
 /**
@@ -32,4 +39,47 @@ function acquia_cms_headless_requirements($phase) {
   }
 
   return $requirements;
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update all consumers and assign content model roles and add
+ * provide `issue subrequests` permission to authenticated & anonymous role.
+ */
+function acquia_cms_headless_update_8001() {
+  $rolesStorage = \Drupal::entityTypeManager()->getStorage('user_role');
+  $query = $rolesStorage->getQuery();
+  $roleIds = $query
+    ->condition('id', ["authenticated", "anonymous", "headless"], 'NOT IN')
+    ->execute();
+  $config = \Drupal::configFactory()->getEditable('acquia_cms_headless.settings');
+  if ($config->get('consumer_uuid')) {
+    $consumer = \Drupal::service('entity.repository')->loadEntityByUuid("consumer", $config->get('consumer_uuid'));
+    if ($consumer instanceof EntityInterface && $consumer->user_id->entity instanceof EntityInterface) {
+      $user = $consumer->user_id->entity;
+      foreach ($roleIds as $roleId) {
+        $user->addRole($roleId);
+      }
+      $user->save();
+    }
+  }
+  add_next_site_permissions();
+}
+
+/**
+ * Adds the necessary permissions to anonymous & authenticated roles.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function add_next_site_permissions() {
+  $rolesStorage = \Drupal::entityTypeManager()->getStorage('user_role');
+  $roles = $rolesStorage->loadMultiple([
+    RoleInterface::ANONYMOUS_ID,
+    RoleInterface::AUTHENTICATED_ID,
+  ]);
+  foreach ($roles as $role) {
+    $role->grantPermission('issue subrequests');
+    $role->save();
+  }
 }

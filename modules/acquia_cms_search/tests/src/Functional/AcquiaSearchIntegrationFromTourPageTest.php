@@ -16,7 +16,7 @@ use Drupal\views\Entity\View;
  * @group pr
  * @group push
  */
-class AcquiaSearchFormIntegrationTest extends BrowserTestBase {
+class AcquiaSearchIntegrationFromTourPageTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
@@ -49,9 +49,9 @@ class AcquiaSearchFormIntegrationTest extends BrowserTestBase {
   // @codingStandardsIgnoreEnd
 
   /**
-   * Tests administrative integration with Acquia Search Solr.
+   * Tests Acquia Search Solr integration from tour page.
    */
-  public function testAcquiaSearchFormIntegration() {
+  public function testAcquiaSearchIntegrationFromTourPage() {
     $assert_session = $this->assertSession();
     $account = $this->drupalCreateUser([
       'administer site configuration',
@@ -79,10 +79,14 @@ class AcquiaSearchFormIntegrationTest extends BrowserTestBase {
 
     $assert_session->pageTextContains('The configuration options have been saved.');
 
-    // Our index should be using the database server.
-    $this->assertSame('database', Index::load('content')->getServerId());
-    // The search view of acquia search should be enabled.
-    $this->assertTrue(View::load('search')->status());
+    // Our index should be using the Solr server, whereas the one that ships
+    // with Acquia Search Solr should be disabled, along with any views that are
+    // using it.
+    $this->assertSame('acquia_search_server', Index::load('content')->getServerId());
+    $index = Index::load('acquia_search_index');
+    $this->assertFalse($index->status());
+    $this->assertNull($index->getServerId());
+    $this->assertFalse(View::load('acquia_search')->status());
   }
 
 }
