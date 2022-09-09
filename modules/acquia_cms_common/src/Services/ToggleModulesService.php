@@ -13,17 +13,16 @@ class ToggleModulesService {
    * Toggle module based on environment.
    */
   public function toggleModules() {
-    $is_dev = Environment::isLocalEnv();
+    $is_dev = Environment::isAhIdeEnv() || Environment::isLocalEnv();
     $is_prod = Environment::isAhProdEnv();
     $module_installer = \Drupal::service('module_installer');
-    $to_install = [];
     $to_uninstall = [];
     if ($is_dev) {
       array_push($to_install, 'dblog', 'jsonapi_extras', 'field_ui', 'views_ui');
-      array_push($to_uninstall, 'syslog', 'autologout');
+      array_push($to_uninstall, 'autologout');
     }
     else {
-      array_push($to_install, 'syslog', 'autologout');
+      array_push($to_install, 'autologout');
     }
     if (!$is_prod) {
       array_push($to_install, 'reroute_email');
