@@ -340,24 +340,31 @@ class InstallStateTest extends ExistingSiteBase {
     $account->save();
     $this->drupalLogin($account);
 
-    $this->drupalGet('/admin/config/system/seckit');
-    $assert_session->statusCodeEquals(200);
+    if ($this->container->get('module_handler')->moduleExists('seckit')) {
+      $this->drupalGet('/admin/config/system/seckit');
+      $assert_session->statusCodeEquals(200);
+    }
+    if ($this->container->get('module_handler')->moduleExists('honeypot')) {
+      $this->drupalGet('/admin/config/content/honeypot');
+      $assert_session->statusCodeEquals(200);
+    }
+    if ($this->container->get('module_handler')->moduleExists('captcha')) {
+      $this->drupalGet('/admin/config/people/captcha');
+      $assert_session->statusCodeEquals(200);
+    }
+    if ($this->container->get('module_handler')->moduleExists('recaptcha')) {
+      $this->drupalGet('/admin/config/people/captcha/recaptcha');
+      $assert_session->statusCodeEquals(200);
+    }
+    if ($this->container->get('module_handler')->moduleExists('password_policy')) {
+      $this->drupalGet('/admin/config/security/password-policy');
+      $assert_session->statusCodeEquals(200);
+      $this->drupalGet('/admin/config/security/password-policy/add');
+      $assert_session->statusCodeEquals(200);
+      $this->drupalGet('/admin/config/security/password-policy/reset');
+      $assert_session->statusCodeEquals(200);
+    }
 
-    $this->drupalGet('/admin/config/content/honeypot');
-    $assert_session->statusCodeEquals(200);
-
-    $this->drupalGet('/admin/config/people/captcha');
-    $assert_session->statusCodeEquals(200);
-
-    $this->drupalGet('/admin/config/people/captcha/recaptcha');
-    $assert_session->statusCodeEquals(200);
-
-    $this->drupalGet('/admin/config/security/password-policy');
-    $assert_session->statusCodeEquals(200);
-    $this->drupalGet('/admin/config/security/password-policy/add');
-    $assert_session->statusCodeEquals(200);
-    $this->drupalGet('/admin/config/security/password-policy/reset');
-    $assert_session->statusCodeEquals(200);
   }
 
   /**
