@@ -17,6 +17,7 @@ class ToggleModulesService {
     $is_prod = Environment::isAhProdEnv();
     $module_installer = \Drupal::service('module_installer');
     $to_uninstall = [];
+    $to_install = [];
     if ($is_dev) {
       array_push($to_install, 'dblog', 'jsonapi_extras', 'field_ui', 'views_ui');
       array_push($to_uninstall, 'autologout');
