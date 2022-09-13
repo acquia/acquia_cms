@@ -13,7 +13,6 @@ use Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade;
 use Drupal\acquia_cms_common\Facade\WorkflowFacade;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Installer\InstallerKernel;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\imce\Imce;
@@ -301,19 +300,6 @@ function acquia_cms_common_system_breadcrumb_alter(Breadcrumb &$breadcrumb, Rout
 }
 
 /**
- * Implements hook_module_implements_alter().
- */
-function acquia_cms_common_module_implements_alter(&$implementations, $hook) {
-  // Prevent installation of site studio package on module install during
-  // site installation or site set up with starter kit tools,
-  // we have dedicated drush command and install task to perform the same.
-  // This way we can improve the overall installation time.
-  if (($hook == 'modules_installed' && InstallerKernel::installationAttempted()) || getenv('UNSET_COHESION_SYNC')) {
-    unset($implementations['cohesion_sync']);
-  }
-}
-
-/**
  * Implements hook_preprocess_template().
  */
 function acquia_cms_common_preprocess_status_report_general_info(&$variables) {
@@ -427,6 +413,31 @@ function acquia_cms_common_modules_installed($modules) {
       foreach ($rolesToUpdate as $role) {
         $permissionFacade->updateRole($role);
       }
+    }
+  }
+  $configFactory = \Drupal::service('config.factory');
+  $config = $configFactory->get('cohesion.settings');
+  if ($config->get('api_key') && $config->get('organization_key')) {
+    $moduleHandler = \Drupal::service('module_handler');
+    $acms_modules = [
+      'acquia_cms_article',
+      'acquia_cms_event',
+      'acquia_cms_image',
+      'acquia_cms_page',
+      'acquia_cms_person',
+      'acquia_cms_place',
+      'acquia_cms_search',
+      'acquia_cms_video',
+    ];
+    if (array_intersect($acms_modules, $modules) &&
+    $moduleHandler->moduleExists('acquia_cms_site_studio') &&
+    !in_array('acquia_cms_site_studio', $modules)) {
+      $module_path = \Drupal::service('extension.list.module')->getPath('acquia_cms_site_studio');
+      $packages = $module_path . COHESION_SYNC_DEFAULT_MODULE_PACKAGES;
+      \Drupal::service('cohesion_sync.package_import_handler')->importPackagesFromPath($packages);
+    }
+    elseif (in_array('acquia_cms_site_studio', $modules)) {
+      update_site_studio_settings();
     }
   }
 }
