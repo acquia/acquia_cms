@@ -2,7 +2,6 @@
 
 namespace Drupal\acquia_cms_common\Facade;
 
-use Drupal\acquia_cms_common\Traits\SiteStudioPermissionTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -18,8 +17,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   not use this class!
  */
 class PermissionFacade implements ContainerInjectionInterface {
-
-  use SiteStudioPermissionTrait;
 
   /**
    * The config installer service.
@@ -62,18 +59,19 @@ class PermissionFacade implements ContainerInjectionInterface {
    * Create a new role.
    *
    * @param string $role
-   *   A new role to add.
-   * @param array $configurations
-   *   An array of configurations.
+   *   A new role to add and adding permissions.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function addRole(string $role, array $configurations = []) :int {
-    $permissions = $configurations['permissions'] ?? $this->getPermissionsByRole($role);
+  public function addRole(string $role) :int {
     if (!($this->roleEntity->load($role) instanceof RoleInterface)) {
-      $defaults = $this->defaultPermissionConfig($role, $configurations);
-      $defaults["permissions"] = $permissions;
-      return $this->roleEntity->create($defaults)->save();
+      $defaults = $this->defaultPermissionConfig($role);
+      // When creating a new role, we need to add default permissions as well
+      // that is needed for that particular role.
+      $defaults['permissions'] = $this->getPermissionsByRole($role);
+      $roleObj = $this->roleEntity->create($defaults);
+      $this->moduleHandler->alter('content_model_role_presave', $roleObj);
+      return $roleObj->save();
     }
     return 0;
   }
@@ -82,13 +80,24 @@ class PermissionFacade implements ContainerInjectionInterface {
    * Updates an existing role.
    *
    * @param string $role
-   *   A new role to add.
-   * @param array $configurations
-   *   An array of configurations.
+   *   A role string where permissions need to be added/updated.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function updateRole(string $role, array $configurations = []) {
-    $permissions = $configurations['permissions'] ?? $this->getPermissionsByRole($role);
-    user_role_grant_permissions($role, $permissions);
+  public function updateRole(string $role) :int {
+    if (($roleObject = $this->roleEntity->load($role)) instanceof RoleInterface) {
+      $previousPermissions = $roleObject->getPermissions();
+      $this->moduleHandler->alter('content_model_role_presave', $roleObject);
+      $updatedPermissions = $roleObject->getPermissions();
+      if ($previousPermissions !== $updatedPermissions) {
+        $permissions = array_diff($updatedPermissions, $previousPermissions);
+        foreach ($permissions as $permission) {
+          $roleObject->grantPermission($permission);
+        }
+        return $roleObject->save();
+      }
+    }
+    return 0;
   }
 
   /**
@@ -96,14 +105,12 @@ class PermissionFacade implements ContainerInjectionInterface {
    *
    * @param string $role
    *   A role to add or update.
-   * @param array $configurations
-   *   An array of configurations.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function createOrUpdateRole(string $role, array $configurations = []) : void {
-    if (!$this->addRole($role, $configurations)) {
-      $this->updateRole($role, $configurations);
+  public function createOrUpdateRole(string $role) : void {
+    if (!$this->addRole($role)) {
+      $this->updateRole($role);
     }
   }
 
@@ -111,12 +118,10 @@ class PermissionFacade implements ContainerInjectionInterface {
    * The default permission configuration.
    *
    * @param string $role
-   *   A new role to add.
-   * @param array $configurations
-   *   An array of configurations.
+   *   Gets default configuration for the given role.
    */
-  protected function defaultPermissionConfig($role, array $configurations = []): array {
-    $label = $configurations['label'] ?? ucwords(str_replace("_", " ", $role));
+  protected function defaultPermissionConfig(string $role): array {
+    $label = ucwords(str_replace("_", " ", $role));
     return [
       "langcode" => "en",
       "status" => TRUE,
@@ -187,38 +192,6 @@ class PermissionFacade implements ContainerInjectionInterface {
           'use editorial transition archive',
         ]),
     ];
-
-    // Check and prepare roles-permissions for acquia cms tour.
-    if ($this->moduleHandler->moduleExists('acquia_cms_tour')) {
-      $allPermissions["content_administrator"] = array_merge($allPermissions["content_administrator"], [
-        'access acquia cms tour',
-        'access acquia cms tour dashboard',
-      ]);
-      $allPermissions["content_author"][] = 'access acquia cms tour';
-      $allPermissions["content_editor"][] = 'access acquia cms tour';
-    }
-
-    // Check and prepare roles-permissions for acquia cms site studio.
-    if ($this->moduleHandler->moduleExists('acquia_cms_site_studio')) {
-      $allPermissions["content_author"] = array_merge(
-        $allPermissions["content_author"],
-        self::getSiteStudioPermissionsByRole('content_author'),
-      );
-      $allPermissions["content_administrator"] = array_merge(
-        $allPermissions["content_administrator"],
-        self::getSiteStudioPermissionsByRole('content_administrator'),
-      );
-      $allPermissions["content_editor"] = array_merge(
-        $allPermissions["content_editor"],
-        self::getSiteStudioPermissionsByRole('content_editor'),
-      );
-      $allPermissions['site_builder'] = self::getSiteStudioPermissionsByRole('site_builder');
-    }
-
-    if ($this->moduleHandler->moduleExists('shield')) {
-      $allPermissions["user_administrator"] = ['administer shield'];
-    }
-
     return $allPermissions[$role_name] ?? [];
   }
 

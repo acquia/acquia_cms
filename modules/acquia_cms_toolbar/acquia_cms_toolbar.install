@@ -8,13 +8,6 @@
 use Drupal\user\Entity\Role;
 
 /**
- * Implements hook_install().
- */
-function acquia_cms_toolbar_install() {
-  update_toolbar_role_permission();
-}
-
-/**
  * Update role permission handler.
  */
 function update_toolbar_role_permission() {

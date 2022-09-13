@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_document\Functional;
+namespace Drupal\Tests\acquia_cms_image\Functional;
 
 use Drupal\Tests\acquia_cms_common\Functional\MediaPermissionsTestBase;
 

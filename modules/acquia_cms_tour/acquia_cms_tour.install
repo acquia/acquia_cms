@@ -5,39 +5,6 @@
  * Install, update and uninstall functions for the acquia_cms_tour module.
  */
 
-use Drupal\acquia_cms_common\Facade\PermissionFacade;
-
-/**
- * Implements hook_install().
- */
-function acquia_cms_tour_install() {
-  $moduleHandler = \Drupal::service('module_handler');
-  $moduleList = [
-    'acquia_cms_article',
-    'acquia_cms_event',
-    'acquia_cms_page',
-    'acquia_cms_person',
-    'acquia_cms_place',
-  ];
-  $updatePermissions = FALSE;
-  foreach ($moduleList as $module) {
-    if ($moduleHandler->moduleExists($module)) {
-      $updatePermissions = TRUE;
-      break;
-    }
-  }
-  if ($updatePermissions) {
-    $roles_author_editor = [
-      'content_author',
-      'content_editor',
-      'content_administrator',
-    ];
-    foreach ($roles_author_editor as $role) {
-      Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole($role);
-    }
-  }
-}
-
 /**
  * Add state key for existing sites with Acquia CMS profile.
  */

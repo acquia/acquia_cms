@@ -10,9 +10,9 @@ use Drupal\Tests\BrowserTestBase;
  *
  * @group acquia_cms_common
  * @group acquia_cms
- * @group risky
+ * @group integrated
  */
-class SiteStudioPermissionsTest extends BrowserTestBase {
+class IntegratedPermissionsTest extends BrowserTestBase {
 
   use PermissionsTrait;
 
@@ -26,6 +26,15 @@ class SiteStudioPermissionsTest extends BrowserTestBase {
    */
   protected static $modules = [
     'acquia_cms_site_studio',
+    'acquia_cms_event',
+    'acquia_cms_article',
+    'acquia_cms_page',
+    'acquia_cms_tour',
+    'acquia_cms_document',
+    'acquia_cms_image',
+    'acquia_cms_video',
+    'acquia_cms_search',
+    'acquia_cms_toolbar',
   ];
 
   /**
@@ -47,7 +56,7 @@ class SiteStudioPermissionsTest extends BrowserTestBase {
    * {@inheritdoc}
    */
   public function getFixtureBasePath(): string {
-    return dirname(__DIR__) . "/fixtures/permissions/basic";
+    return dirname(__DIR__) . "/fixtures/permissions/integrated";
   }
 
   /**
@@ -58,8 +67,8 @@ class SiteStudioPermissionsTest extends BrowserTestBase {
       [
         [
           "developer",
-        ],
-        [
+          "user_administrator",
+          "site_builder",
           "content_administrator",
           "content_author",
           "content_editor",
@@ -78,6 +87,30 @@ class SiteStudioPermissionsTest extends BrowserTestBase {
       [
         'developer',
         $this->getPermissionsByRole('developer'),
+      ],
+      [
+        'user_administrator',
+        $this->getPermissionsByRole('user_administrator'),
+      ],
+      [
+        'site_builder',
+        $this->getPermissionsByRole('site_builder'),
+      ],
+      [
+        'content_administrator',
+        $this->getPermissionsByRole('content_administrator'),
+      ],
+      [
+        'content_author',
+        $this->getPermissionsByRole('content_author'),
+      ],
+      [
+        'content_editor',
+        $this->getPermissionsByRole('content_editor'),
+      ],
+      [
+        'authenticated',
+        $this->getPermissionsByRole('authenticated'),
       ],
     ];
   }
