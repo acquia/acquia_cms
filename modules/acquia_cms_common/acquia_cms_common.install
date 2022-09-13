@@ -75,6 +75,10 @@ function acquia_cms_common_install() {
     $config = \Drupal::service('purge.purgers');
     $config->setPluginsEnabled(['cee22bc3fe' => 'acquia_purge']);
   }
+
+  // Install the syslog module.
+  $module_installer = \Drupal::service('module_installer');
+  $module_installer->install(['syslog']);
 }
 
 /**
