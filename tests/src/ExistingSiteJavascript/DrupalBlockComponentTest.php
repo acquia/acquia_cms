@@ -47,7 +47,9 @@ class DrupalBlockComponentTest extends CohesionComponentTestBase {
     $assert_session->optionExists('Select block', 'Article Cards', $edit_form);
     $assert_session->optionExists('Select block', 'Language switcher', $edit_form);
     $assert_session->optionExists('Select block', 'Past Events', $edit_form);
-    $assert_session->optionExists('Select block', 'Social Media Links', $edit_form);
+    if ($this->container->get('module_handler')->moduleExists('social_media_links')) {
+      $assert_session->optionExists('Select block', 'Social Media Links', $edit_form);
+    }
     $assert_session->optionExists('Select block', 'Upcoming Events', $edit_form);
     $assert_session->optionExists('Select block', 'User login', $edit_form);
   }
