@@ -350,51 +350,84 @@ function acquia_cms_common_modules_installed($modules) {
     'acquia_cms_image',
     'acquia_cms_document',
   ];
+  $rolesToCreate = $rolesToUpdate = [];
   if (count(array_intersect($content_model_modules, $modules)) > 0) {
-    Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_administrator');
-    Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_author');
-    Drupal::classResolver(PermissionFacade::class)->createOrUpdateRole('content_editor');
-    // As we are programmatically creating the below roles,
-    // after any of the content model module is installed:
-    // - content_administrator
-    // - content_author
-    // - content_editor
-    // So we need to make sure that we also import the other optional
-    // configurations which is dependent on any of these roles.
-    /** @var \Drupal\Core\Config\ConfigInstallerInterface $config_installer */
-    $config_installer = \Drupal::service('config.installer');
-    $restrict_by_dependency = [
-      'config' => 'user.role.content_administrator',
-      'config' => 'user.role.content_author',
-      'config' => 'user.role.content_editor',
+    $rolesToCreate = [
+      'content_administrator',
+      'content_author',
+      'content_editor',
     ];
-    $config_installer->installOptionalConfig(NULL, $restrict_by_dependency);
   }
   if (count(array_intersect($media_modules, $modules)) > 0) {
-    Drupal::classResolver(PermissionFacade::class)->updateRole('content_author');
-    Drupal::classResolver(PermissionFacade::class)->updateRole('content_editor');
+    $roles = [
+      'content_author',
+      'content_editor',
+    ];
+    $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
   }
   if (in_array('acquia_cms_site_studio', $modules)) {
-    Drupal::classResolver(PermissionFacade::class)->updateRole('content_administrator');
-    Drupal::classResolver(PermissionFacade::class)->updateRole('content_author');
-    Drupal::classResolver(PermissionFacade::class)->updateRole('content_editor');
-    Drupal::classResolver(PermissionFacade::class)->updateRole('site_builder');
+    $roles = [
+      'content_administrator',
+      'content_author',
+      'content_editor',
+      'site_builder',
+    ];
+    $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
   }
   if (in_array('acquia_cms_toolbar', $modules)) {
-    Drupal::classResolver(PermissionFacade::class)->updateRole('content_administrator');
-    Drupal::classResolver(PermissionFacade::class)->updateRole('content_author');
-    Drupal::classResolver(PermissionFacade::class)->updateRole('content_editor');
-    Drupal::classResolver(PermissionFacade::class)->updateRole('developer');
-    Drupal::classResolver(PermissionFacade::class)->updateRole('user_administrator');
-    Drupal::classResolver(PermissionFacade::class)->updateRole('site_builder');
+    $roles = [
+      'content_administrator',
+      'content_author',
+      'content_editor',
+      'developer',
+      'user_administrator',
+      'site_builder',
+    ];
+    $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
   }
   if (in_array('acquia_cms_tour', $modules)) {
-    Drupal::classResolver(PermissionFacade::class)->updateRole('content_administrator');
-    Drupal::classResolver(PermissionFacade::class)->updateRole('content_author');
-    Drupal::classResolver(PermissionFacade::class)->updateRole('content_editor');
+    $roles = [
+      'content_administrator',
+      'content_author',
+      'content_editor',
+    ];
+    $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
   }
   if (in_array('shield', $modules)) {
-    Drupal::classResolver(PermissionFacade::class)->updateRole('user_administrator');
+    $roles = [
+      'user_administrator',
+    ];
+    $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
+  }
+  if ($rolesToCreate || $rolesToUpdate) {
+    $permissionFacade = Drupal::classResolver(PermissionFacade::class);
+    foreach ($rolesToCreate as $role) {
+      $permissionFacade->createOrUpdateRole($role);
+    }
+    if ($rolesToCreate) {
+      // As we are programmatically creating the below roles,
+      // after any of the content model module is installed:
+      // - content_administrator
+      // - content_author
+      // - content_editor
+      // So we need to make sure that we also import the other optional
+      // configurations which is dependent on any of these roles.
+      /** @var \Drupal\Core\Config\ConfigInstallerInterface $config_installer */
+      $config_installer = \Drupal::service('config.installer');
+      $restrict_by_dependency = [
+        'config' => 'user.role.content_administrator',
+        'config' => 'user.role.content_author',
+        'config' => 'user.role.content_editor',
+      ];
+      $config_installer->installOptionalConfig(NULL, $restrict_by_dependency);
+    }
+    if ($rolesToUpdate) {
+      // We need to update only those roles, which are not created earlier.
+      $rolesToUpdate = array_diff($rolesToUpdate, $rolesToCreate);
+      foreach ($rolesToUpdate as $role) {
+        $permissionFacade->updateRole($role);
+      }
+    }
   }
 }
 
