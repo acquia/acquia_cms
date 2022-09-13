@@ -105,6 +105,32 @@ final class CohesionFacade implements ContainerInjectionInterface {
   }
 
   /**
+   * Returns a list of all installed modules.
+   *
+   * @return \Drupal\Core\Extension\Extension[]
+   *   A list of all installed modules.
+   *   The acquia_cms modules will be the last items in the list.
+   */
+  private function getSortedModules() : array {
+    $module_list = $this->moduleHandler->getModuleList();
+    $acms_module_list = [];
+
+    foreach ($module_list as $name => $extension) {
+      if ('acquia_cms_site_studio' === $name) {
+        // Ensure the Acquia CMS Site Studio is the first ACMS extension.
+        $acms_module_list = [$name => $extension] + $acms_module_list;
+        unset($module_list[$name]);
+      }
+      elseif (stripos($name, 'acquia_cms') === 0) {
+        // Add any other ACMS modules to the array.
+        $acms_module_list[$name] = $extension;
+        unset($module_list[$name]);
+      }
+    }
+    return $module_list + $acms_module_list;
+  }
+
+  /**
    * Import site studio packages of Acquia CMS modules.
    *
    * @param array $package_list
@@ -117,7 +143,7 @@ final class CohesionFacade implements ContainerInjectionInterface {
    */
   public function importSiteStudioPackages(array $package_list = []) : bool {
     if (empty($package_list)) {
-      $modules = $this->moduleHandler->getModuleList();
+      $modules = $this->getSortedModules();
       $package_list = $this->buildPackageList($modules);
     }
     if (!empty($package_list)) {
