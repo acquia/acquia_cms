@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_site_studio\Functional;
+namespace Drupal\Tests\acquia_cms\Functional;
 
 use Drupal\Tests\acquia_cms_common\Traits\PermissionsTrait;
 use Drupal\Tests\BrowserTestBase;
