@@ -14,16 +14,16 @@ function acquia_cms_audio_content_model_role_presave_alter(RoleInterface &$role)
   switch ($role->id()) {
     case 'content_author':
       foreach ([
-        'create audio content',
-        'edit own audio content',
-        'delete own audio content',
+        'create audio media',
+        'edit own audio media',
+        'delete own audio media',
       ] as $permission) {
         $role->grantPermission($permission);
       }
       break;
 
     case 'content_editor':
-      foreach (['edit any audio content', 'delete any audio content'] as $permission) {
+      foreach (['edit any audio media', 'delete any audio media'] as $permission) {
         $role->grantPermission($permission);
       }
       break;
