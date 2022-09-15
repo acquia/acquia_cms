@@ -5,8 +5,25 @@
  * Install, update and uninstall functions for the acquia_cms_page module.
  */
 
-use Drupal\user\RoleInterface;
 use Drupal\node\Entity\NodeType;
+use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_page_install() {
+  // Set default node revision delete configuration for Page content type.
+  $moduleHandler = \Drupal::service('module_handler');
+  if ($moduleHandler->moduleExists('node_revision_delete')) {
+    $type = NodeType::load('page');
+    if ($type) {
+      $type->setThirdPartySetting('node_revision_delete', 'minimum_revisions_to_keep', '30');
+      $type->setThirdPartySetting('node_revision_delete', 'minimum_age_to_delete', '0');
+      $type->setThirdPartySetting('node_revision_delete', 'when_to_delete', '0');
+      $type->save();
+    }
+  }
+}
 
 /**
  * Implements hook_content_model_role_presave_alter().
