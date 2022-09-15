@@ -6,6 +6,7 @@
  */
 
 use Drupal\user\RoleInterface;
+use Drupal\node\Entity\NodeType;
 
 /**
  * Implements hook_content_model_role_presave_alter().
@@ -55,6 +56,27 @@ function acquia_cms_page_update_8001() {
         $pattern_config->set("selection_criteria.$uuid.id", 'entity_bundle:node');
         $pattern_config->save();
         break;
+      }
+    }
+  }
+}
+
+/**
+ * Remove Page:Node Revision Delete settings if site studio is not installed.
+ */
+function acquia_cms_page_update_8002() {
+  $moduleHandler = \Drupal::service('module_handler');
+  if (!$moduleHandler->moduleExists('node_revision_delete')) {
+    $node = NodeType::load('page');
+    if ($node) {
+      // Getting the config file.
+      $third_party_settings = $node->get('third_party_settings');
+      // Checking if the config exists.
+      if (isset($third_party_settings['node_revision_delete'])) {
+        // Deleting the value from the array.
+        unset($third_party_settings['node_revision_delete']);
+        // Saving the values in the config.
+        $node->set('third_party_settings', $third_party_settings)->save();
       }
     }
   }
