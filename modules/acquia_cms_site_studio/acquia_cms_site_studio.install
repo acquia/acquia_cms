@@ -22,6 +22,9 @@ function acquia_cms_site_studio_install() {
   // Set default theme as cohesion.
   set_theme_site_studio_as_default();
 
+  // Update cohesion.settings config.
+  update_site_studio_settings();
+
   // Set credentials if module being installed independently.
   if (!InstallerKernel::installationAttempted() && $site_studio_api_key && $site_studio_org_key) {
     set_site_studio_credentials($site_studio_api_key, $site_studio_org_key);
