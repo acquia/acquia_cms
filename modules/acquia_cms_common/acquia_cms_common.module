@@ -436,9 +436,6 @@ function acquia_cms_common_modules_installed($modules) {
       $packages = $module_path . COHESION_SYNC_DEFAULT_MODULE_PACKAGES;
       \Drupal::service('cohesion_sync.package_import_handler')->importPackagesFromPath($packages);
     }
-    elseif (in_array('acquia_cms_site_studio', $modules)) {
-      update_site_studio_settings();
-    }
   }
 }
 
