@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - acquia_cms_headless
+  enforced:
+    module:
+      - acquia_cms_headless
+id: frontend_preview_headless
+label: 'Frontend site with preview'
+weight: 4
+is_admin: false
+permissions:
+  - 'view all revisions'
+  - 'view any unpublished content'
+  - 'view latest version'

@@ -5,19 +5,29 @@
  * Install, update and uninstall functions for the acquia_cms_person module.
  */
 
+use Drupal\user\RoleInterface;
+
 /**
- * Implements hook_install().
+ * Implements hook_content_model_role_presave_alter().
  */
-function acquia_cms_person_install() {
-  user_role_grant_permissions('content_author', [
-    'create person content',
-    'edit own person content',
-    'delete own person content',
-  ]);
-  user_role_grant_permissions('content_editor', [
-    'edit any person content',
-    'delete any person content',
-  ]);
+function acquia_cms_person_content_model_role_presave_alter(RoleInterface &$role) {
+  switch ($role->id()) {
+    case 'content_author':
+      foreach ([
+        'create person content',
+        'edit own person content',
+        'delete own person content',
+      ] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
+
+    case 'content_editor':
+      foreach (['edit any person content', 'delete any person content'] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
+  }
 }
 
 /**

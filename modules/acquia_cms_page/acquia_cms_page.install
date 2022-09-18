@@ -5,19 +5,29 @@
  * Install, update and uninstall functions for the acquia_cms_page module.
  */
 
+use Drupal\user\RoleInterface;
+
 /**
- * Implements hook_install().
+ * Implements hook_content_model_role_presave_alter().
  */
-function acquia_cms_page_install() {
-  user_role_grant_permissions('content_author', [
-    'create page content',
-    'edit own page content',
-    'delete own page content',
-  ]);
-  user_role_grant_permissions('content_editor', [
-    'edit any page content',
-    'delete any page content',
-  ]);
+function acquia_cms_page_content_model_role_presave_alter(RoleInterface &$role) {
+  switch ($role->id()) {
+    case 'content_author':
+      foreach ([
+        'create page content',
+        'edit own page content',
+        'delete own page content',
+      ] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
+
+    case 'content_editor':
+      foreach (['edit any page content', 'delete any page content'] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
+  }
 }
 
 /**

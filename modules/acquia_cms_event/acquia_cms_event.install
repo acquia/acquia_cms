@@ -5,19 +5,29 @@
  * Install, update and uninstall functions for the acquia_cms_event module.
  */
 
+use Drupal\user\RoleInterface;
+
 /**
- * Implements hook_install().
+ * Implements hook_content_model_role_presave_alter().
  */
-function acquia_cms_event_install() {
-  user_role_grant_permissions('content_author', [
-    'create event content',
-    'edit own event content',
-    'delete own event content',
-  ]);
-  user_role_grant_permissions('content_editor', [
-    'edit any event content',
-    'delete any event content',
-  ]);
+function acquia_cms_event_content_model_role_presave_alter(RoleInterface &$role) {
+  switch ($role->id()) {
+    case 'content_author':
+      foreach ([
+        'create event content',
+        'edit own event content',
+        'delete own event content',
+      ] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
+
+    case 'content_editor':
+      foreach (['edit any event content', 'delete any event content'] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
+  }
 }
 
 /**

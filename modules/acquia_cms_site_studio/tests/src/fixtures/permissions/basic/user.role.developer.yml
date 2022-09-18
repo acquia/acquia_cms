@@ -1,10 +1,3 @@
-langcode: en
-status: true
-dependencies: {  }
-id: developer
-label: Developer
-weight: -9
-is_admin: null
 permissions:
   - 'access analytics'
   - 'access animate on view'
@@ -32,10 +25,7 @@ permissions:
   - 'access seo'
   - 'access styles'
   - 'access tokens'
-  - 'access toolbar'
   - 'access view elements group'
-  # These permissions are not really administrative. They are needed in order
-  # to allow this role to build components, styles, helpers, and templates for Site Studio at all.
   - 'administer base styles'
   - 'administer cohesion'
   - 'administer cohesion settings'
@@ -52,7 +42,6 @@ permissions:
   - 'administer style_guide'
   - 'administer view templates'
   - 'administer website settings'
-  # The above comment is only applicable till here.
   - 'use text format cohesion'
   - 'use text format filtered_html'
   - 'use text format full_html'
