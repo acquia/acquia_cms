@@ -5,19 +5,29 @@
  * Install, update and uninstall functions for the acquia_cms_place module.
  */
 
+use Drupal\user\RoleInterface;
+
 /**
- * Implements hook_install().
+ * Implements hook_content_model_role_presave_alter().
  */
-function acquia_cms_place_install() {
-  user_role_grant_permissions('content_author', [
-    'create place content',
-    'edit own place content',
-    'delete own place content',
-  ]);
-  user_role_grant_permissions('content_editor', [
-    'edit any place content',
-    'delete any place content',
-  ]);
+function acquia_cms_place_content_model_role_presave_alter(RoleInterface &$role) {
+  switch ($role->id()) {
+    case 'content_author':
+      foreach ([
+        'create place content',
+        'edit own place content',
+        'delete own place content',
+      ] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
+
+    case 'content_editor':
+      foreach (['edit any place content', 'delete any place content'] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
+  }
 }
 
 /**

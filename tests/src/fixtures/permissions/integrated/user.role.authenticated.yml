@@ -1,0 +1,15 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+    - search_api_autocomplete
+    - system
+id: authenticated
+label: 'Authenticated user'
+weight: 1
+is_admin: false
+permissions:
+  - 'access content'
+  - 'use search_api_autocomplete for search'
+  - 'view media'

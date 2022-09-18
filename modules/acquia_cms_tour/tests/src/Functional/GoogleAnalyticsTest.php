@@ -68,6 +68,9 @@ class GoogleAnalyticsTest extends BrowserTestBase {
     $this->assertSame($google_tag_prop_id, $dummy_web_property_id);
   }
 
+  /**
+   * Function to check GA web property id.
+   */
   public function isValidPropertyId($dummy_web_property_id) {
     if (!preg_match('/^UA-\d+-\d+$/', $dummy_web_property_id)) {
       return FALSE;

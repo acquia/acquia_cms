@@ -9,21 +9,6 @@ use Drupal\Core\Installer\InstallerKernel;
 use Drupal\image\Entity\ImageStyle;
 
 /**
- * Implements hook_install().
- */
-function acquia_cms_image_install() {
-  user_role_grant_permissions('content_author', [
-    'create image media',
-    'edit own image media',
-    'delete own image media',
-  ]);
-  user_role_grant_permissions('content_editor', [
-    'edit any image media',
-    'delete any image media',
-  ]);
-}
-
-/**
  * Implements hook_module_implements_alter().
  */
 function acquia_cms_image_module_implements_alter(array &$implementations, string $hook) : void {

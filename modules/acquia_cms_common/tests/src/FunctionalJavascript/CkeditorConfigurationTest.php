@@ -69,37 +69,31 @@ class CkeditorConfigurationTest extends WebDriverTestBase {
     $node_type = $this->drupalCreateContentType()->id();
     $this->createMediaType('image');
 
-    $roles = [
-      'content_author',
-      'content_editor',
-      'content_administrator',
-    ];
-    foreach ($roles as $role_id) {
-      $account = $this->drupalCreateUser([
-        "create $node_type content",
-      ]);
-      $account->addRole($role_id);
-      $account->save();
-      $this->drupalLogin($account);
+    $account = $this->drupalCreateUser([
+      "create $node_type content",
+      "use text format full_html",
+      "use text format filtered_html",
+    ]);
+    $account->save();
+    $this->drupalLogin($account);
 
-      $this->drupalGet("/node/add/$node_type");
+    $this->drupalGet("/node/add/$node_type");
 
-      // Ensure that text format 'filtered_html' & 'full_html' exists.
-      $formats = $session->evaluateScript('Object.keys(drupalSettings.editor.formats)');
-      $this->assertSame(['filtered_html', 'full_html'], $formats);
+    // Ensure that text format 'filtered_html' & 'full_html' exists.
+    $formats = $session->evaluateScript('Object.keys(drupalSettings.editor.formats)');
+    $this->assertSame(['filtered_html', 'full_html'], $formats);
 
-      $this->waitForEditor();
-      $this->getEditorButton('justifyleft');
-      $this->getEditorButton('justifycenter');
-      $this->getEditorButton('justifyright');
-      $this->getEditorButton('justifyblock');
-      $this->getEditorButton('drupalmedialibrary');
+    $this->waitForEditor();
+    $this->getEditorButton('justifyleft');
+    $this->getEditorButton('justifycenter');
+    $this->getEditorButton('justifyright');
+    $this->getEditorButton('justifyblock');
+    $this->getEditorButton('drupalmedialibrary');
 
-      // Assert that the Format dropdown is present.
-      $format = $this->assertSession()
-        ->waitForElementVisible('css', '#cke_edit-body-0-value span.cke_combo__format');
-      $this->assertNotEmpty($format);
-    }
+    // Assert that the Format dropdown is present.
+    $format = $this->assertSession()
+      ->waitForElementVisible('css', '#cke_edit-body-0-value span.cke_combo__format');
+    $this->assertNotEmpty($format);
   }
 
 }
