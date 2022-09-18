@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the acquia_cms_document module.
+ */
+
+use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_content_model_role_presave_alter().
+ */
+function acquia_cms_document_content_model_role_presave_alter(RoleInterface &$role) {
+  switch ($role->id()) {
+    case 'content_author':
+      foreach ([
+        'create document media',
+        'edit own document media',
+        'delete own document media',
+      ] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
+
+    case 'content_editor':
+      foreach (['edit any document media', 'delete any document media'] as $permission) {
+        $role->grantPermission($permission);
+      }
+      break;
+  }
+}

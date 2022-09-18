@@ -8,11 +8,13 @@
 use Acquia\Utility\AcquiaTelemetry;
 use Drupal\acquia_cms_site_studio\Facade\CohesionFacade;
 use Drupal\acquia_cms_site_studio\Form\AcquiaCmsSiteStudioSiteConfigureForm;
+use Drupal\acquia_cms_site_studio\Traits\SiteStudioPermissionTrait;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\cohesion_website_settings\Controller\WebsiteSettingsController;
 use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\media_library\MediaLibraryState;
+use Drupal\user\RoleInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -212,4 +214,21 @@ function acquia_cms_site_studio_rebuild_styles() {
   // Get the batch array filled with operations that should be performed during
   // rebuild.
   batch_set(install_acms_site_studio_rebuild());
+}
+
+/**
+ * Implements hook_content_model_role_presave_alter().
+ */
+function acquia_cms_site_studio_content_model_role_presave_alter(RoleInterface &$role) {
+  if (in_array($role->id(), [
+    'content_administrator',
+    'content_editor',
+    'content_author',
+    'site_builder',
+  ])) {
+    $permissions = SiteStudioPermissionTrait::getSiteStudioPermissionsByRole($role->id());
+    foreach ($permissions as $permission) {
+      $role->grantPermission($permission);
+    }
+  }
 }

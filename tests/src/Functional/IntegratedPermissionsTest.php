@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_common\Functional;
+namespace Drupal\Tests\acquia_cms\Functional;
 
 use Drupal\Tests\acquia_cms_common\Traits\PermissionsTrait;
 use Drupal\Tests\BrowserTestBase;
@@ -10,9 +10,9 @@ use Drupal\Tests\BrowserTestBase;
  *
  * @group acquia_cms_common
  * @group acquia_cms
- * @group risky
+ * @group integrated
  */
-class BasicPermissionsTest extends BrowserTestBase {
+class IntegratedPermissionsTest extends BrowserTestBase {
 
   use PermissionsTrait;
 
@@ -25,10 +25,16 @@ class BasicPermissionsTest extends BrowserTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
-    'acquia_cms_common',
-    'media',
-    'toolbar',
-    'views',
+    'acquia_cms_site_studio',
+    'acquia_cms_event',
+    'acquia_cms_article',
+    'acquia_cms_page',
+    'acquia_cms_tour',
+    'acquia_cms_document',
+    'acquia_cms_image',
+    'acquia_cms_video',
+    'acquia_cms_search',
+    'acquia_cms_toolbar',
   ];
 
   /**
@@ -47,28 +53,10 @@ class BasicPermissionsTest extends BrowserTestBase {
   // @codingStandardsIgnoreEnd
 
   /**
-   * Tests the basic module permissions.
-   *
-   * @param mixed $modules
-   *   A module or an array of modules.
-   * @param array $roles
-   *   An array of roles.
-   *
-   * @dataProvider providerModulePermissions
-   */
-  public function testModulePermissions($modules, array $roles) {
-    $modules = is_string($modules) ? [$modules] : $modules;
-    \Drupal::service('module_installer')->install($modules);
-    foreach ($roles as $role => $permissions) {
-      $this->testBasicPermissions($role, $permissions);
-    }
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function getFixtureBasePath(): string {
-    return dirname(__DIR__) . "/fixtures/permissions/basic";
+    return dirname(__DIR__) . "/fixtures/permissions/integrated";
   }
 
   /**
@@ -78,11 +66,9 @@ class BasicPermissionsTest extends BrowserTestBase {
     return [
       [
         [
-          "administrator",
-          "site_builder",
+          "developer",
           "user_administrator",
-        ],
-        [
+          "site_builder",
           "content_administrator",
           "content_author",
           "content_editor",
@@ -99,29 +85,33 @@ class BasicPermissionsTest extends BrowserTestBase {
   public function providerBasicPermissions(): array {
     return [
       [
-        'site_builder',
-        $this->getPermissionsByRole('site_builder'),
-        ['administer shield'],
+        'developer',
+        $this->getPermissionsByRole('developer'),
       ],
       [
         'user_administrator',
         $this->getPermissionsByRole('user_administrator'),
-        ['administer shield'],
       ],
-    ];
-  }
-
-  /**
-   * Defines an array of modules & permissions to roles.
-   */
-  public function providerModulePermissions(): array {
-    return [
-        [
-          'shield',
-          [
-            'user_administrator' => ['administer shield'],
-          ],
-        ],
+      [
+        'site_builder',
+        $this->getPermissionsByRole('site_builder'),
+      ],
+      [
+        'content_administrator',
+        $this->getPermissionsByRole('content_administrator'),
+      ],
+      [
+        'content_author',
+        $this->getPermissionsByRole('content_author'),
+      ],
+      [
+        'content_editor',
+        $this->getPermissionsByRole('content_editor'),
+      ],
+      [
+        'authenticated',
+        $this->getPermissionsByRole('authenticated'),
+      ],
     ];
   }
 

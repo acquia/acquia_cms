@@ -7,6 +7,7 @@
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
 use Drupal\acquia_cms_common\Facade\MetatagFacade;
+use Drupal\acquia_cms_common\Facade\PermissionFacade;
 use Drupal\acquia_cms_common\Facade\SitemapFacade;
 use Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade;
 use Drupal\acquia_cms_common\Facade\WorkflowFacade;
@@ -335,6 +336,98 @@ function acquia_cms_common_modules_installed($modules) {
     $config_factory->getEditable('system.image')
       ->set('toolkit', 'imagemagick')
       ->save();
+  }
+  $content_model_modules = [
+    'acquia_cms_article',
+    'acquia_cms_event',
+    'acquia_cms_page',
+    'acquia_cms_person',
+    'acquia_cms_place',
+  ];
+  $media_modules = [
+    'acquia_cms_audio',
+    'acquia_cms_video',
+    'acquia_cms_image',
+    'acquia_cms_document',
+  ];
+  $rolesToCreate = $rolesToUpdate = [];
+  if (count(array_intersect($content_model_modules, $modules)) > 0) {
+    $rolesToCreate = [
+      'content_administrator',
+      'content_author',
+      'content_editor',
+    ];
+  }
+  if (count(array_intersect($media_modules, $modules)) > 0) {
+    $roles = [
+      'content_author',
+      'content_editor',
+    ];
+    $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
+  }
+  if (in_array('acquia_cms_site_studio', $modules)) {
+    $roles = [
+      'content_administrator',
+      'content_author',
+      'content_editor',
+      'site_builder',
+    ];
+    $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
+  }
+  if (in_array('acquia_cms_toolbar', $modules)) {
+    $roles = [
+      'content_administrator',
+      'content_author',
+      'content_editor',
+      'developer',
+      'user_administrator',
+      'site_builder',
+    ];
+    $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
+  }
+  if (in_array('acquia_cms_tour', $modules)) {
+    $roles = [
+      'content_administrator',
+      'content_author',
+      'content_editor',
+    ];
+    $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
+  }
+  if (in_array('shield', $modules)) {
+    $roles = [
+      'user_administrator',
+    ];
+    $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
+  }
+  if ($rolesToCreate || $rolesToUpdate) {
+    $permissionFacade = Drupal::classResolver(PermissionFacade::class);
+    foreach ($rolesToCreate as $role) {
+      $permissionFacade->createOrUpdateRole($role);
+    }
+    if ($rolesToCreate) {
+      // As we are programmatically creating the below roles,
+      // after any of the content model module is installed:
+      // - content_administrator
+      // - content_author
+      // - content_editor
+      // So we need to make sure that we also import the other optional
+      // configurations which is dependent on any of these roles.
+      /** @var \Drupal\Core\Config\ConfigInstallerInterface $config_installer */
+      $config_installer = \Drupal::service('config.installer');
+      $restrict_by_dependency = [
+        'config' => 'user.role.content_administrator',
+        'config' => 'user.role.content_author',
+        'config' => 'user.role.content_editor',
+      ];
+      $config_installer->installOptionalConfig(NULL, $restrict_by_dependency);
+    }
+    if ($rolesToUpdate) {
+      // We need to update only those roles, which are not created earlier.
+      $rolesToUpdate = array_diff($rolesToUpdate, $rolesToCreate);
+      foreach ($rolesToUpdate as $role) {
+        $permissionFacade->updateRole($role);
+      }
+    }
   }
 }
 
