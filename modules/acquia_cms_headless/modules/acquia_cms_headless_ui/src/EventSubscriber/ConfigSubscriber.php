@@ -46,6 +46,13 @@ final class ConfigSubscriber implements EventSubscriberInterface {
     if ($name === 'media.settings' && $event->isChanged('standalone_url')) {
       $this->localTaskManager->clearCachedDefinitions();
     }
+    // Prevent system front page to get overridden
+    // if pure headless mode is on.
+    if ($name === 'system.site') {
+      _acquia_cms_common_update_page_configurations('system.site', [
+        'page.front' => '/frontpage',
+      ]);
+    }
   }
 
   /**
