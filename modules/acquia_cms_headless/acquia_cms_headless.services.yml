@@ -13,3 +13,12 @@ services:
   plugin.manager.acquia_cms_headless:
     class: Drupal\acquia_cms_headless\AcquiaCmsHeadlessManager
     parent: default_plugin_manager
+  acquia_cms_headless.preview_link_route_subscriber:
+    class: 'Drupal\acquia_cms_headless\Routing\PreviewLinkRouteSubscriber'
+    tags:
+      - { name: event_subscriber }  
+  acquia_cms_headless.preview_link_access:
+    class: Drupal\acquia_cms_headless\Access\PreviewLinkAccessCheck
+    arguments: ['@current_user']
+    tags:
+      - { name: access_check, applies_to: _preview_link_access_check }
