@@ -21,7 +21,6 @@ function acquia_cms_headless_install() {
 
   // Adds the necessary permissions to roles.
   add_next_site_permissions();
-
 }
 
 /**
@@ -99,15 +98,11 @@ function acquia_cms_headless_update_8002() {
 }
 
 /**
- * Implements hook_update_N().
- *
  * Disable X-Frame-Options for headless.
  */
 function acquia_cms_headless_update_8003() {
   if (\Drupal::moduleHandler()->moduleExists('seckit')) {
     $config = \Drupal::configFactory()->getEditable('seckit.settings');
-    if ($config) {
-      $config->set("seckit_clickjacking.x_frame", '0')->save();
-    }
+    $config->set("seckit_clickjacking.x_frame", '0')->save();
   }
 }
