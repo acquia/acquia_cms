@@ -84,6 +84,19 @@ function acquia_cms_site_studio_install() {
       ->save();
   }
 
+  // Set default node revision delete configuration for Page content type.
+  $moduleHandler = \Drupal::service('module_handler');
+  if ($moduleHandler->moduleExists('acquia_cms_page')) {
+    $type = NodeType::load('page');
+    $third_party_settings = $type->get('third_party_settings');
+    if ($type && !isset($third_party_settings['node_revision_delete'])) {
+      $type->setThirdPartySetting('node_revision_delete', 'minimum_revisions_to_keep', '30');
+      $type->setThirdPartySetting('node_revision_delete', 'minimum_age_to_delete', '0');
+      $type->setThirdPartySetting('node_revision_delete', 'when_to_delete', '0');
+      $type->save();
+    }
+  }
+
   // Re-write the editor and filter format config from
   // optional directory since we have don some update to it.
   $module_path = \Drupal::moduleHandler()->getModule('acquia_cms_site_studio')->getPath();
