@@ -1,0 +1,411 @@
+uuid: 06c56967-88f0-4703-93f5-ff840ee781f1
+langcode: en
+status: true
+dependencies:
+  config:
+    - cohesion_website_settings.cohesion_color.brand-color
+    - cohesion_website_settings.cohesion_color.brand-color-dark
+    - cohesion_website_settings.cohesion_color.gray-10
+    - cohesion_website_settings.cohesion_color.gray-20
+label: 'Modal open button light'
+id: '11692184'
+json_values: |
+  {
+      "preview": {
+          "text": "<p><button class=\"coh-preview\" type=\"button\">Open modal<\/button><\/p>\n",
+          "textFormat": "cohesion"
+      },
+      "styles": {
+          "settings": {
+              "element": "button",
+              "class": "",
+              "combinator": "",
+              "pseudo": ""
+          },
+          "styles": {
+              "xl": {
+                  "background-color": {
+                      "value": {
+                          "link": true,
+                          "name": "Gray 10",
+                          "uid": "gray-10",
+                          "class": ".coh-color-gray-10",
+                          "variable": "$coh-color-gray-10",
+                          "value": {
+                              "hex": "#f2f2f2",
+                              "rgba": "rgba(242, 242, 242, 1)"
+                          },
+                          "inuse": true,
+                          "wysiwyg": true,
+                          "tags": [
+                              "Light"
+                          ]
+                      }
+                  },
+                  "height": {},
+                  "padding": {
+                      "padding-left": {
+                          "value": "16"
+                      },
+                      "padding-right": {
+                          "value": "16"
+                      },
+                      "padding-bottom": {
+                          "value": "16"
+                      },
+                      "padding-top": {
+                          "value": "16"
+                      }
+                  },
+                  "font-size": {
+                      "value": "14"
+                  },
+                  "line-height": {
+                      "value": "1.25"
+                  },
+                  "font-weight": {
+                      "value": "bold"
+                  },
+                  "margin": {
+                      "margin-bottom": {}
+                  },
+                  "color": {
+                      "value": {
+                          "link": true,
+                          "name": "Brand color",
+                          "uid": "brand-color",
+                          "class": ".coh-color-brand-color",
+                          "variable": "$coh-color-brand-color",
+                          "value": {
+                              "hex": "#26a3dd",
+                              "rgba": "rgba(38, 163, 221, 1)"
+                          },
+                          "inuse": true,
+                          "wysiwyg": true,
+                          "tags": [
+                              "Color"
+                          ]
+                      }
+                  },
+                  "transitions": [
+                      {
+                          "transitionProperty": {
+                              "value": "background-color"
+                          },
+                          "transitionDuration": {
+                              "value": 300
+                          },
+                          "transitionTimingFunction": {
+                              "value": "ease"
+                          }
+                      }
+                  ]
+              },
+              "lg": {
+                  "font-size": {},
+                  "line-height": {}
+              }
+          },
+          "45dbcab1-ea9f-488d-b343-8030fedbf08d": {
+              "settings": {
+                  "element": "",
+                  "class": "",
+                  "combinator": "",
+                  "pseudo": ":hover"
+              },
+              "styles": {
+                  "xl": {
+                      "background-color": {
+                          "value": {
+                              "link": true,
+                              "name": "Gray 20",
+                              "uid": "gray-20",
+                              "class": ".coh-color-gray-20",
+                              "variable": "$coh-color-gray-20",
+                              "value": {
+                                  "hex": "#dbdbdc",
+                                  "rgba": "rgba(219, 219, 220, 1)"
+                              },
+                              "inuse": false,
+                              "wysiwyg": true,
+                              "tags": [
+                                  "Light"
+                              ]
+                          }
+                      },
+                      "color": {
+                          "value": {
+                              "link": true,
+                              "name": "Brand color dark",
+                              "uid": "brand-color-dark",
+                              "class": ".coh-color-brand-color-dark",
+                              "variable": "$coh-color-brand-color-dark",
+                              "value": {
+                                  "hex": "#1a89c9",
+                                  "rgba": "rgba(26, 137, 201, 1)"
+                              },
+                              "wysiwyg": true,
+                              "inuse": true,
+                              "tags": [
+                                  "Dark"
+                              ]
+                          }
+                      }
+                  }
+              }
+          }
+      },
+      "sBackgroundColour": "#ffffff",
+      "variableFields": []
+  }
+json_mapper: |
+  {
+      "styles": {
+          "selectorType": "topLevel",
+          "items": [
+              {
+                  "title": ":hover",
+                  "type": "container",
+                  "items": [],
+                  "selectorType": "pseudo",
+                  "formDefinition": [
+                      {
+                          "formKey": "background",
+                          "children": [
+                              {
+                                  "formKey": "background-color",
+                                  "breakpoints": [
+                                      {
+                                          "name": "xl"
+                                      }
+                                  ],
+                                  "activeFields": [
+                                      {
+                                          "name": "background-color",
+                                          "active": true
+                                      }
+                                  ]
+                              }
+                          ]
+                      },
+                      {
+                          "formKey": "font",
+                          "children": [
+                              {
+                                  "formKey": "font-and-color",
+                                  "breakpoints": [
+                                      {
+                                          "name": "xl"
+                                      }
+                                  ],
+                                  "activeFields": [
+                                      {
+                                          "name": "font-family",
+                                          "active": false
+                                      },
+                                      {
+                                          "name": "font-weight",
+                                          "active": false
+                                      },
+                                      {
+                                          "name": "color",
+                                          "active": true
+                                      }
+                                  ]
+                              }
+                          ]
+                      }
+                  ],
+                  "uuid": "45dbcab1-ea9f-488d-b343-8030fedbf08d",
+                  "form": null,
+                  "allowedTypes": [
+                      "child",
+                      "pseudo"
+                  ]
+              }
+          ],
+          "title": "Button",
+          "formDefinition": [
+              {
+                  "formKey": "font",
+                  "children": [
+                      {
+                          "formKey": "font-and-color",
+                          "breakpoints": [
+                              {
+                                  "name": "xl"
+                              }
+                          ],
+                          "activeFields": [
+                              {
+                                  "name": "font-family",
+                                  "active": false
+                              },
+                              {
+                                  "name": "font-weight",
+                                  "active": true
+                              },
+                              {
+                                  "name": "color",
+                                  "active": true
+                              }
+                          ]
+                      },
+                      {
+                          "formKey": "font-sizing-and-alignment",
+                          "breakpoints": [
+                              {
+                                  "name": "xl"
+                              }
+                          ],
+                          "activeFields": [
+                              {
+                                  "name": "font-size",
+                                  "active": true
+                              },
+                              {
+                                  "name": "line-height",
+                                  "active": true
+                              },
+                              {
+                                  "name": "text-align",
+                                  "active": false
+                              },
+                              {
+                                  "name": "letter-spacing",
+                                  "active": false
+                              },
+                              {
+                                  "name": "word-spacing",
+                                  "active": false
+                              },
+                              {
+                                  "name": "text-indent",
+                                  "active": false
+                              }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "formKey": "layout",
+                  "children": [
+                      {
+                          "formKey": "padding",
+                          "breakpoints": [
+                              {
+                                  "name": "xl"
+                              }
+                          ],
+                          "activeFields": [
+                              {
+                                  "name": "padding-equal",
+                                  "active": false
+                              },
+                              {
+                                  "name": "padding-top",
+                                  "active": true
+                              },
+                              {
+                                  "name": "padding-bottom",
+                                  "active": true
+                              },
+                              {
+                                  "name": "padding-left",
+                                  "active": true
+                              },
+                              {
+                                  "name": "padding-right",
+                                  "active": true
+                              },
+                              {
+                                  "name": "padding-block-start",
+                                  "active": false
+                              },
+                              {
+                                  "name": "padding-block-end",
+                                  "active": false
+                              },
+                              {
+                                  "name": "padding-inline-start",
+                                  "active": false
+                              },
+                              {
+                                  "name": "padding-inline-end",
+                                  "active": false
+                              }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "formKey": "background",
+                  "children": [
+                      {
+                          "formKey": "background-color",
+                          "breakpoints": [
+                              {
+                                  "name": "xl"
+                              }
+                          ],
+                          "activeFields": [
+                              {
+                                  "name": "background-color",
+                                  "active": true
+                              }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "formKey": "transform-and-transition",
+                  "children": [
+                      {
+                          "formKey": "transition",
+                          "breakpoints": [
+                              {
+                                  "name": "xl"
+                              }
+                          ],
+                          "activeFields": [
+                              {
+                                  "name": "transitions",
+                                  "active": true
+                              },
+                              {
+                                  "name": "transitionProperty",
+                                  "active": true
+                              },
+                              {
+                                  "name": "transitionCustomProperty",
+                                  "active": true
+                              },
+                              {
+                                  "name": "transitionDuration",
+                                  "active": true
+                              },
+                              {
+                                  "name": "transitionTimingFunction",
+                                  "active": true
+                              },
+                              {
+                                  "name": "transitionDelay",
+                                  "active": false
+                              }
+                          ]
+                      }
+                  ]
+              }
+          ],
+          "form": null
+      }
+  }
+last_entity_update: entityupdate_0036
+locked: false
+modified: true
+selectable: true
+class_name: .coh-style-modal-open-button-light
+custom_style_type: button
+available_in_wysiwyg: false
+parent: null
+weight: 36

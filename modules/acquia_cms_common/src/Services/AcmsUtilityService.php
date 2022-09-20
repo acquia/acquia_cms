@@ -2,7 +2,6 @@
 
 namespace Drupal\acquia_cms_common\Services;
 
-use Drupal\cohesion\Drush\DX8CommandHelpers;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\State\StateInterface;
@@ -77,26 +76,6 @@ class AcmsUtilityService {
   }
 
   /**
-   * Trigger site studio rebuild on demand.
-   */
-  public function rebuildSiteStudio() {
-    // Forcefully clear the cache after site is installed otherwise site
-    // studio fails to rebuild.
-    drupal_flush_all_caches();
-    // Below code ensures that drush batch process doesn't hang. Unset all the
-    // earlier created batches so that drush_backend_batch_process() can run
-    // without being stuck.
-    // @see https://github.com/drush-ops/drush/issues/3773 for the issue.
-    $batch = &batch_get();
-    $batch = NULL;
-    unset($batch);
-    return DX8CommandHelpers::rebuild([
-      'verbose' => '',
-      'no-cache-clear' => FALSE,
-    ]);
-  }
-
-  /**
    * Build and import site studio packages.
    */
   public function siteStudioPackageImport() {
@@ -104,7 +83,8 @@ class AcmsUtilityService {
       $config = $this->configFactory->get('cohesion.settings');
       if ($config->get('api_key') && $config->get('organization_key')) {
         batch_set(install_acms_site_studio_initialize());
-        batch_set(site_studio_import_ui_kit());
+        site_studio_import_ui_kit();
+        update_site_studio_settings();
         return drush_backend_batch_process();
       }
     }

@@ -1,0 +1,130 @@
+uuid: 2658c38e-289b-4f56-99ff-81fabab879fc
+langcode: en
+status: true
+dependencies: {  }
+label: 'Multi column two column'
+id: bc331715
+json_values: |
+  {
+      "preview": {
+          "text": "<div class=\"coh-preview\">Default content for 'Layout'.<\/div>\n",
+          "textFormat": "cohesion"
+      },
+      "sBackgroundColour": "#FFFFFF",
+      "styles": {
+          "settings": {
+              "element": "div",
+              "class": "",
+              "combinator": "",
+              "pseudo": ""
+          },
+          "styles": {
+              "xl": {
+                  "column-count": {
+                      "value": "2"
+                  },
+                  "column-gap": {
+                      "value": "32"
+                  }
+              },
+              "lg": {
+                  "column-gap": {},
+                  "column-count": {}
+              },
+              "md": {
+                  "column-gap": {
+                      "value": "24"
+                  },
+                  "column-count": {
+                      "value": "2"
+                  }
+              },
+              "ps": {
+                  "column-gap": {},
+                  "column-count": {}
+              },
+              "sm": {
+                  "column-count": {
+                      "value": "1"
+                  },
+                  "column-gap": {
+                      "value": "0"
+                  }
+              }
+          }
+      },
+      "variableFields": []
+  }
+json_mapper: |
+  {
+      "styles": {
+          "selectorType": "topLevel",
+          "items": [],
+          "title": "Layout",
+          "formDefinition": [
+              {
+                  "formKey": "layout",
+                  "children": [
+                      {
+                          "formKey": "multi-column-layout",
+                          "breakpoints": [
+                              {
+                                  "name": "xl"
+                              },
+                              {
+                                  "name": "md"
+                              },
+                              {
+                                  "name": "sm"
+                              }
+                          ],
+                          "activeFields": [
+                              {
+                                  "name": "column-count",
+                                  "active": true
+                              },
+                              {
+                                  "name": "column-gap",
+                                  "active": true
+                              },
+                              {
+                                  "name": "column-fill",
+                                  "active": false
+                              },
+                              {
+                                  "name": "column-span",
+                                  "active": false
+                              },
+                              {
+                                  "name": "column-width",
+                                  "active": false
+                              },
+                              {
+                                  "name": "column-rule-style",
+                                  "active": false
+                              },
+                              {
+                                  "name": "column-rule-width",
+                                  "active": false
+                              },
+                              {
+                                  "name": "column-rule-color",
+                                  "active": false
+                              }
+                          ]
+                      }
+                  ]
+              }
+          ],
+          "form": null
+      }
+  }
+last_entity_update: entityupdate_0036
+locked: false
+modified: true
+selectable: true
+class_name: .coh-style-multi-column-two-column
+custom_style_type: layout
+available_in_wysiwyg: false
+parent: null
+weight: 54

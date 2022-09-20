@@ -1,0 +1,243 @@
+uuid: 1657c90a-2bee-4025-9a7e-400c0ee2812a
+langcode: en
+status: true
+dependencies:
+  config:
+    - cohesion_custom_styles.cohesion_custom_style.11692184
+    - cohesion_website_settings.cohesion_color.brand-color
+    - cohesion_website_settings.cohesion_color.brand-color-light
+    - cohesion_website_settings.cohesion_color.white
+label: 'Modal open button color'
+id: 6d37c715
+json_values: |
+  {
+      "preview": {
+          "text": "<p><button class=\"coh-preview\" type=\"button\">Default content for 'Button'<\/button><\/p>\n",
+          "textFormat": "cohesion"
+      },
+      "sBackgroundColour": "#FFFFFF",
+      "styles": {
+          "settings": {
+              "element": "button",
+              "class": "",
+              "combinator": "",
+              "pseudo": ""
+          },
+          "7af7a78d-f83c-4629-b828-31f266be6bea": {
+              "settings": {
+                  "element": "",
+                  "class": "",
+                  "combinator": "",
+                  "pseudo": ":hover"
+              },
+              "styles": {
+                  "xl": {
+                      "background-color": {
+                          "value": {
+                              "link": true,
+                              "name": "Brand color light",
+                              "uid": "brand-color-light",
+                              "class": ".coh-color-brand-color-light",
+                              "variable": "$coh-color-brand-color-light",
+                              "value": {
+                                  "hex": "#70c3e9",
+                                  "rgba": "rgba(112, 195, 233, 1)"
+                              },
+                              "wysiwyg": true,
+                              "inuse": true,
+                              "tags": [
+                                  "Dark"
+                              ]
+                          }
+                      },
+                      "color": {
+                          "value": {
+                              "name": "White",
+                              "uid": "white",
+                              "value": {
+                                  "hex": "#ffffff",
+                                  "rgba": "rgba(255, 255, 255, 1)"
+                              },
+                              "wysiwyg": true,
+                              "class": ".coh-color-white",
+                              "variable": "$coh-color-white",
+                              "inuse": true,
+                              "link": true,
+                              "tags": [
+                                  "Light"
+                              ]
+                          }
+                      }
+                  }
+              }
+          },
+          "styles": {
+              "xl": {
+                  "background-color": {
+                      "value": {
+                          "link": true,
+                          "name": "Brand color",
+                          "uid": "brand-color",
+                          "class": ".coh-color-brand-color",
+                          "variable": "$coh-color-brand-color",
+                          "value": {
+                              "hex": "#26a3dd",
+                              "rgba": "rgba(38, 163, 221, 1)"
+                          },
+                          "inuse": true,
+                          "wysiwyg": true,
+                          "tags": [
+                              "Dark"
+                          ]
+                      }
+                  },
+                  "color": {
+                      "value": {
+                          "name": "White",
+                          "uid": "white",
+                          "value": {
+                              "hex": "#ffffff",
+                              "rgba": "rgba(255, 255, 255, 1)"
+                          },
+                          "wysiwyg": true,
+                          "class": ".coh-color-white",
+                          "variable": "$coh-color-white",
+                          "inuse": true,
+                          "link": true,
+                          "tags": [
+                              "Light"
+                          ]
+                      }
+                  }
+              }
+          }
+      },
+      "variableFields": []
+  }
+json_mapper: |
+  {
+      "styles": {
+          "title": "Button",
+          "selectorType": "topLevel",
+          "formDefinition": [
+              {
+                  "formKey": "background",
+                  "children": [
+                      {
+                          "formKey": "background-color",
+                          "breakpoints": [
+                              {
+                                  "name": "xl"
+                              }
+                          ],
+                          "activeFields": [
+                              {
+                                  "name": "background-color",
+                                  "active": true
+                              }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "formKey": "font",
+                  "children": [
+                      {
+                          "formKey": "font-and-color",
+                          "breakpoints": [
+                              {
+                                  "name": "xl"
+                              }
+                          ],
+                          "activeFields": [
+                              {
+                                  "name": "font-family",
+                                  "active": false
+                              },
+                              {
+                                  "name": "font-weight",
+                                  "active": false
+                              },
+                              {
+                                  "name": "color",
+                                  "active": true
+                              }
+                          ]
+                      }
+                  ]
+              }
+          ],
+          "items": [
+              {
+                  "title": ":hover",
+                  "type": "container",
+                  "items": [],
+                  "selectorType": "pseudo",
+                  "formDefinition": [
+                      {
+                          "formKey": "background",
+                          "children": [
+                              {
+                                  "formKey": "background-color",
+                                  "breakpoints": [
+                                      {
+                                          "name": "xl"
+                                      }
+                                  ],
+                                  "activeFields": [
+                                      {
+                                          "name": "background-color",
+                                          "active": true
+                                      }
+                                  ]
+                              }
+                          ]
+                      },
+                      {
+                          "formKey": "font",
+                          "children": [
+                              {
+                                  "formKey": "font-and-color",
+                                  "breakpoints": [
+                                      {
+                                          "name": "xl"
+                                      }
+                                  ],
+                                  "activeFields": [
+                                      {
+                                          "name": "font-family",
+                                          "active": false
+                                      },
+                                      {
+                                          "name": "font-weight",
+                                          "active": false
+                                      },
+                                      {
+                                          "name": "color",
+                                          "active": true
+                                      }
+                                  ]
+                              }
+                          ]
+                      }
+                  ],
+                  "form": null,
+                  "allowedTypes": [
+                      "child",
+                      "pseudo"
+                  ],
+                  "uuid": "7af7a78d-f83c-4629-b828-31f266be6bea"
+              }
+          ],
+          "form": null
+      }
+  }
+last_entity_update: entityupdate_0036
+locked: false
+modified: true
+selectable: true
+class_name: .coh-style-modal-open-button-color
+custom_style_type: button
+available_in_wysiwyg: false
+parent: .coh-style-modal-open-button-light
+weight: 37

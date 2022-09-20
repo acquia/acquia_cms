@@ -1,0 +1,93 @@
+uuid: 87a00bf8-99ff-4998-8108-73fb6706f6a9
+langcode: en
+status: true
+dependencies:
+  config:
+    - cohesion_custom_styles.cohesion_custom_style.3aaa3bdc
+    - cohesion_website_settings.cohesion_icon_library.icomoon
+label: 'Slider navigation right'
+id: button_7c614ba0
+json_values: |
+  {
+      "preview": {
+          "text": "<p><button class=\"coh-preview coh-style-slider-navigation-left\" type=\"button\">&nbsp;<\/button><\/p>\n",
+          "textFormat": "cohesion"
+      },
+      "styles": {
+          "settings": {
+              "element": "button",
+              "class": "",
+              "combinator": "",
+              "pseudo": ""
+          },
+          "bb012738-7cf9-4b3f-bd86-e880aeae0e39": {
+              "settings": {
+                  "element": "",
+                  "class": "",
+                  "combinator": "",
+                  "pseudo": ":before"
+              },
+              "styles": {
+                  "xl": {
+                      "content-icon": {
+                          "contentIcon": {
+                              "value": {
+                                  "fontFamily": "icomoon",
+                                  "iconName": "61524"
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      },
+      "sBackgroundColour": "#FFFFFF"
+  }
+json_mapper: |
+  {
+      "styles": {
+          "selectorType": "topLevel",
+          "items": [
+              {
+                  "title": ":before",
+                  "type": "container",
+                  "items": [],
+                  "selectorType": "pseudo",
+                  "formDefinition": [
+                      {
+                          "formKey": "content",
+                          "children": [
+                              {
+                                  "formKey": "icon",
+                                  "breakpoints": [
+                                      {
+                                          "name": "xl"
+                                      }
+                                  ],
+                                  "activeFields": [
+                                      {
+                                          "name": "contentIcon",
+                                          "active": true
+                                      }
+                                  ]
+                              }
+                          ]
+                      }
+                  ],
+                  "uuid": "bb012738-7cf9-4b3f-bd86-e880aeae0e39"
+              }
+          ],
+          "title": "Button",
+          "formDefinition": [],
+          "form": null
+      }
+  }
+last_entity_update: entityupdate_0036
+locked: false
+modified: true
+selectable: true
+class_name: .coh-style-slider-navigation-right
+custom_style_type: button
+available_in_wysiwyg: false
+parent: .coh-style-slider-navigation-left
+weight: 43
