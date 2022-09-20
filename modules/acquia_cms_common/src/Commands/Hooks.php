@@ -64,19 +64,4 @@ final class Hooks extends DrushCommands {
     return $result;
   }
 
-  /**
-   * Run site studio rebuild after package import.
-   *
-   * @hook post-command acms:import-site-studio-packages
-   */
-  public function importSiteStudioPackagesPostCommand($result, CommandData $commandData) {
-    $config = $this->configFactory->get('cohesion.settings');
-    if ($config->get('api_key') && $config->get('organization_key')) {
-      $this->say(dt('Rebuilding all entities.'));
-      $result = $this->acmsUtilityService->rebuildSiteStudio();
-      $this->yell('Finished rebuilding.');
-      return is_array($result) && isset(array_shift($result)['error']) ? CommandResult::exitCode(self::EXIT_FAILURE) : CommandResult::exitCode(self::EXIT_SUCCESS);
-    }
-  }
-
 }
