@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\acquia_cms_site_studio\Traits;
+namespace Drupal\acquia_cms_site_studio\Helper;
 
 /**
- * Traits defining all Site Studio permissions.
+ * Helper class defining all Site Studio permissions.
  */
-trait SiteStudioPermissionTrait {
+class SiteStudioPermissionHelper {
 
   /**
    * Defines Basic Site Studio permissions.
