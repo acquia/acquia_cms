@@ -95,7 +95,8 @@ function acquia_cms_site_studio_install() {
   $moduleHandler = \Drupal::service('module_handler');
   if ($moduleHandler->moduleExists('acquia_cms_page')) {
     $type = NodeType::load('page');
-    $third_party_settings = $type->get('third_party_settings');
+    // @todo It's failing on acquia_cms profile, need to revisit.
+    $third_party_settings = $type ? $type->get('third_party_settings') : NULL;
     if ($type && !isset($third_party_settings['node_revision_delete'])) {
       $type->setThirdPartySetting('node_revision_delete', 'minimum_revisions_to_keep', '30');
       $type->setThirdPartySetting('node_revision_delete', 'minimum_age_to_delete', '0');
