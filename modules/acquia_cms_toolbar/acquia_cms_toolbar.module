@@ -13,7 +13,7 @@ use Drupal\user\RoleInterface;
  * Implements hook_preprocess_HOOK().
  */
 function acquia_cms_toolbar_preprocess_html(array &$variables) {
-  $environment_indicator_settings = get_environment_indicator_color_config();
+  $environment_indicator_settings = _acquia_cms_toolbar_get_environment_indicator_color_config();
   $variables['attributes']['class'][] = 'acquia-cms-toolbar';
   $variables['attributes']['class'][] = 'acquia-cms-' . $environment_indicator_settings['environment'];
 }
@@ -47,7 +47,7 @@ function acquia_cms_toolbar_toolbar_alter(array &$items) {
  * Implements hook_toolbar().
  */
 function acquia_cms_toolbar_toolbar() {
-  $environment_indicator_settings = get_environment_indicator_color_config();
+  $environment_indicator_settings = _acquia_cms_toolbar_get_environment_indicator_color_config();
   $items['environment_indicator'] = [
     '#type' => 'toolbar_item',
     '#weight' => 125,
@@ -76,7 +76,7 @@ function acquia_cms_toolbar_toolbar() {
  *   name => 'Local' // Environment name
  *   environment => 'environment-ide' // CSS class name
  */
-function get_environment_indicator_color_config() : array {
+function _acquia_cms_toolbar_get_environment_indicator_color_config(): array {
   $environment_indicator['name'] = 'Local';
   $environment_indicator['environment'] = 'environment-local';
 
