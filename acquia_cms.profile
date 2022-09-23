@@ -9,7 +9,6 @@ use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environm
 use Acquia\Utility\AcquiaTelemetry;
 use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
-use Drupal\acquia_cms_site_studio\Facade\CohesionFacade;
 use Drupal\Core\Installer\InstallerKernel;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -102,12 +101,6 @@ function acquia_cms_install_tasks(): array {
 
   // Allow acquia_cms_site_studio module to be install using profile.
   if (Drupal::service('module_handler')->moduleExists('acquia_cms_site_studio')) {
-    $tasks['install_acms_site_studio_initialize'] = [
-      'display_name' => t('Import Site Studio elements'),
-      'display' => $cohesion_configured,
-      'type' => 'batch',
-      'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
-    ];
     $tasks['install_acms_site_studio_ui_kit'] = [
       'display_name' => t('Import Site Studio components'),
       'display' => $cohesion_configured,
@@ -166,35 +159,7 @@ function install_acms_send_heartbeat_event() {
  * @throws Exception
  */
 function install_acms_site_studio_ui_kit() {
-  // During testing, we don't import the UI kit, because it takes forever.
-  // Instead, we swap in a pre-built directory of Cohesion templates and assets.
-  if (getenv('COHESION_ARTIFACT')) {
-    return [];
-  }
-
-  /** @var \Drupal\acquia_cms\Facade\CohesionFacade $facade */
-  $facade = Drupal::classResolver(CohesionFacade::class);
-
-  // Site studio will rebuild packages (fetch HTML/CSS via the API) by default
-  // on import. Passing this bool as TRUE will skip the rebuild, since we force
-  // a total rebuild at the end. This cuts install times approximately in half,
-  // especially via Drush.
-  $operations = $facade->getAllOperations(TRUE);
-  $batch = [
-    'operations' => $operations,
-    'finished' => 'update_site_studio_settings',
-  ];
-
-  // Set batch along with drush backend process if site is being
-  // installed via Drush, so that we can show log on the screen during
-  // site studio package import/validate.
-  if (PHP_SAPI == 'cli') {
-    batch_set($batch);
-    drush_backend_batch_process();
-  }
-  else {
-    return $batch;
-  }
+  \Drupal::service('acquia_cms_common.utility')->siteStudioPackageImport();
 }
 
 /**
