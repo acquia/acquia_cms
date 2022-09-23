@@ -5,6 +5,24 @@
  * Contains hook implementations for the acquia_cms_headless module.
  */
 
+use Drupal\user\RoleInterface;
+
+/**
+* Implements hook_content_model_role_presave_alter().
+*/
+function acquia_cms_headless_content_model_role_presave_alter(RoleInterface &$role) {
+  $role_id = $role->id();
+  switch ($role->id()) {
+    case 'content_administrator':
+    case 'content_author':
+    case 'content_editor':
+      $user = user_load_by_name('headless');
+      $user->addRole($role_id);
+      $user->save();
+      break;
+  }
+}
+
 /**
  * Implements hook_field_formatter_info_alter().
  */
