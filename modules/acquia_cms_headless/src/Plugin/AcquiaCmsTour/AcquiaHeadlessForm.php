@@ -169,7 +169,6 @@ class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
         ],
         'code-css',
       ];
-
       return $form;
     }
   }
@@ -217,6 +216,7 @@ class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
       if ($acms_headless_mode) {
         try {
           // Install the Acquia CMS Pure headless module.
+          $config->set('headless_mode', TRUE);
           $this->moduleInstaller->install(['acquia_cms_headless_ui']);
           $this->messenger()->addStatus($this->t('Acquia CMS Pure Headless has been enabled.'));
         }
@@ -225,6 +225,7 @@ class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
         }
       }
       else {
+        $config->set('headless_mode', FALSE);
         $this->moduleInstaller->uninstall(['acquia_cms_headless_ui']);
         $this->messenger()->addStatus($this->t('Acquia CMS Pure Headless has been disabled.'));
       }
