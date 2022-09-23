@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
 /**
@@ -42,12 +43,43 @@ function acquia_cms_headless_requirements($phase) {
 }
 
 /**
+ * Install and update new headless roles.
+ */
+function acquia_cms_headless_update_8001() {
+  $role = Role::load('headless');
+  $permissions = [
+    'view any unpublished content',
+    'view latest version',
+    'view all revisions',
+  ];
+  if ($role instanceof Role) {
+    $role->set('label', 'Headless Administrator');
+    foreach ($permissions as $permission) {
+      $role->grantPermission($permission);
+    }
+    $role->trustData()->save();
+  }
+  // Create Frontend site with preview role.
+  $role = Role::create([
+    'id' => 'frontend_site_with_preview',
+    'label' => 'Frontend site with preview',
+    'permissions' => $permissions,
+    'dependencies' => [
+      'enforced' => [
+        'module' => ['acquia_cms_headless'],
+      ],
+    ],
+  ]);
+  $role->trustData()->save();
+}
+
+/**
  * Implements hook_update_N().
  *
  * Update all consumers and assign content model roles and add
  * provide `issue subrequests` permission to authenticated & anonymous role.
  */
-function acquia_cms_headless_update_8001() {
+function acquia_cms_headless_update_8002() {
   $rolesStorage = \Drupal::entityTypeManager()->getStorage('user_role');
   $query = $rolesStorage->getQuery();
   $roleIds = $query
