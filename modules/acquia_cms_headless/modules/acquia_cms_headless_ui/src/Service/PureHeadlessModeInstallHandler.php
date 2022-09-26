@@ -215,6 +215,12 @@ class PureHeadlessModeInstallHandler {
         ->getEditable('views.view.content')
         ->set('display.default.display_options.fields.title.settings.link_to_entity', FALSE)
         ->save();
+
+      $this->configFactory
+        ->getEditable('acquia_cms_headless.settings')
+        ->set('headless_mode', TRUE)
+        ->save();
+
     }
     else {
       // Update 403 and Frontpage values in Site Settings.
@@ -237,6 +243,11 @@ class PureHeadlessModeInstallHandler {
       $this->configFactory
         ->getEditable('views.view.content')
         ->set('display.default.display_options.fields.title.settings.link_to_entity', TRUE)
+        ->save();
+
+      $this->configFactory
+        ->getEditable('acquia_cms_headless.settings')
+        ->set('headless_mode', FALSE)
         ->save();
     }
   }
