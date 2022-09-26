@@ -194,7 +194,9 @@ class StarterkitNextjsService {
    *   Returns a 21 character secret key string.
    */
   public function createHeadlessSecret(): string {
-    return PasswordGeneratorTrait::generateRandomPassword(12);
+    // Calling a trait static method is deprecated in php 8.1
+    // but we can call it within a class i.e (self::staticMethod).
+    return self::generateRandomPassword(12);
   }
 
   /**

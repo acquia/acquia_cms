@@ -7,7 +7,7 @@
 
 use Drupal\acquia_cms_site_studio\Facade\CohesionFacade;
 use Drupal\acquia_cms_site_studio\Form\AcquiaCmsSiteStudioSiteConfigureForm;
-use Drupal\acquia_cms_site_studio\Traits\SiteStudioPermissionTrait;
+use Drupal\acquia_cms_site_studio\Helper\SiteStudioPermissionHelper;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Form\FormStateInterface;
@@ -180,7 +180,7 @@ function acquia_cms_site_studio_content_model_role_presave_alter(RoleInterface &
     'content_author',
     'site_builder',
   ])) {
-    $permissions = SiteStudioPermissionTrait::getSiteStudioPermissionsByRole($role->id());
+    $permissions = SiteStudioPermissionHelper::getSiteStudioPermissionsByRole($role->id());
     foreach ($permissions as $permission) {
       $role->grantPermission($permission);
     }
