@@ -4,3 +4,12 @@
  * @file
  * Contains hook implementations for the acquia_cms_headless module.
  */
+
+/**
+ * Implements hook_field_formatter_info_alter().
+ */
+function acquia_cms_headless_field_formatter_info_alter(&$info) {
+  if (isset($info['oembed'])) {
+    $info['oembed']['class'] = 'Drupal\acquia_cms_headless\Plugin\Field\FieldFormatter\OEmbedAdvanceFormatter';
+  }
+}

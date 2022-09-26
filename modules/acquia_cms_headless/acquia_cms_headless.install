@@ -21,25 +21,23 @@ function acquia_cms_headless_install() {
 
   // Adds the necessary permissions to roles.
   add_next_site_permissions();
-
 }
 
 /**
- * Implements hook_requirements().
+ * Adds the necessary permissions to anonymous & authenticated roles.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
  */
-function acquia_cms_headless_requirements($phase) {
-  $requirements = [];
-
-  if ($phase == 'runtime') {
-    $value = mt_rand(0, 100);
-    $requirements['acquia_cms_headless_status'] = [
-      'title' => t('acquia_cms_headless status'),
-      'value' => t('acquia_cms_headless value: @value', ['@value' => $value]),
-      'severity' => $value > 50 ? REQUIREMENT_INFO : REQUIREMENT_WARNING,
-    ];
+function add_next_site_permissions() {
+  $rolesStorage = \Drupal::entityTypeManager()->getStorage('user_role');
+  $roles = $rolesStorage->loadMultiple([
+    RoleInterface::ANONYMOUS_ID,
+    RoleInterface::AUTHENTICATED_ID,
+  ]);
+  foreach ($roles as $role) {
+    $role->grantPermission('issue subrequests');
+    $role->save();
   }
-
-  return $requirements;
 }
 
 /**
@@ -100,18 +98,11 @@ function acquia_cms_headless_update_8002() {
 }
 
 /**
- * Adds the necessary permissions to anonymous & authenticated roles.
- *
- * @throws \Drupal\Core\Entity\EntityStorageException
+ * Disable X-Frame-Options for headless.
  */
-function add_next_site_permissions() {
-  $rolesStorage = \Drupal::entityTypeManager()->getStorage('user_role');
-  $roles = $rolesStorage->loadMultiple([
-    RoleInterface::ANONYMOUS_ID,
-    RoleInterface::AUTHENTICATED_ID,
-  ]);
-  foreach ($roles as $role) {
-    $role->grantPermission('issue subrequests');
-    $role->save();
+function acquia_cms_headless_update_8003() {
+  if (\Drupal::moduleHandler()->moduleExists('seckit')) {
+    $config = \Drupal::configFactory()->getEditable('seckit.settings');
+    $config->set("seckit_clickjacking.x_frame", '0')->save();
   }
 }
