@@ -158,8 +158,6 @@ before_install:
   - composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION"
   # Add patch in ORCA to include merge-plugin to composer.
   - curl https://gist.githubusercontent.com/vishalkhode1/56497e23daa300d0634139828e98cb04/raw/bb6ecb370acb2c73d70bff4d77ae39ba17f51b23/merge_plugin.patch | git -C ../orca apply
-  - git clone -b v1.0.1 https://github.com/apathak18/coding-standards-php.git ../acquia/coding-standards
-  - composer config --global repositories.acquia_coding_standards path /home/travis/build/acquia/acquia/coding-standards
   # Remove internal module dependencies, so that ORCA CI doesn't report error.
   - if [ "${ORCA_JOB}" != "STATIC_CODE_ANALYSIS" ]; then for path in $(find modules -type f -maxdepth 2 -name "composer.json" -exec ls '{}' ';'); do sed -i '/\"drupal\/acquia_cms.*\":.*\".*\"/d' $path; done; fi
   - composer self-update
