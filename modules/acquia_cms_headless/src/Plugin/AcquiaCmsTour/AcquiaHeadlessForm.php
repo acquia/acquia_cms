@@ -53,6 +53,7 @@ class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
     $instance = parent::create($container);
     $instance->moduleInstaller = $container->get('module_installer');
     $instance->starterkitNextjsService = $container->get('acquia_cms_headless.starterkit_nextjs');
+    $instance->isNextJs = $instance->starterkitNextjsService->hasConsumerData();
 
     return $instance;
   }
@@ -78,7 +79,6 @@ class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
     $form['#tree'] = FALSE;
     $module = $this->module;
     $headless = 'acquia_cms_headless_ui';
-
     if ($this->isModuleEnabled()) {
       $config = $this->config('acquia_cms_headless.settings');
       $configured = $this->getConfigurationState();
@@ -91,9 +91,6 @@ class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
           '#suffix' => "</span>",
         ];
       }
-
-      // Get nextjs consumer data.
-      $is_next_js = $this->starterkitNextjsService->hasConsumerData();
 
       $form[$module] = [
         '#type' => 'details',
@@ -110,8 +107,8 @@ class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
           dependencies related to the Next.js module will be enabled and a default
           configuration will be initialized to ready Drupal to be connected with
           a next.js application.'),
-        '#disabled' => $is_next_js,
-        '#default_value' => $is_next_js,
+        '#disabled' => $this->isNextJs,
+        '#default_value' => $this->isNextJs,
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
       ];
       $form[$module]['headless_mode'] = [
@@ -182,7 +179,6 @@ class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
     $config = $this->config('acquia_cms_headless.settings');
 
     // Get current form values so that we have something to compare against.
-    $config_starterkit_nextjs = $config->get('starterkit_nextjs');
     $config_headless = $config->get('headless_mode');
 
     // Get form state values.
@@ -191,23 +187,21 @@ class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
 
     // Check to see on submit, if this is actually changing.  If yes, then we
     // either need to enable or disable modules related to starterkit nextjs.
-    if ($config_starterkit_nextjs != $acms_starterkit_nextjs) {
-      if ($acms_starterkit_nextjs) {
-        try {
-          $site_data = [
-            'site-name' => 'Headless Site 1',
-            'site-url' => 'http://localhost:3000',
-          ];
-          // Run the Next.js starter kit Initialization service.
-          $this->starterkitNextjsService->initStarterkitNextjs('headless', $site_data);
+    if (!$this->isNextJs && $acms_starterkit_nextjs) {
+      try {
+        $site_data = [
+          'site-name' => 'Headless Site 1',
+          'site-url' => 'http://localhost:3000',
+        ];
+        // Run the Next.js starter kit Initialization service.
+        $this->starterkitNextjsService->initStarterkitNextjs('headless', $site_data);
 
-          // Return a message to the user that the set has completed.
-          $this->messenger()->addStatus($this->t('Acquia CMS Next.js starter kit has been enabled.'));
-          $this->config('acquia_cms_headless.settings')->set('starterkit_nextjs', $acms_starterkit_nextjs)->save();
-        }
-        catch (InvalidPluginDefinitionException | PluginNotFoundException | EntityStorageException | ExtensionNotLoadedException | FilesystemValidationException $e) {
-          $this->messenger()->addError($e->getMessage());
-        }
+        // Return a message to the user that the set has completed.
+        $this->messenger()->addStatus($this->t('Acquia CMS Next.js starter kit has been enabled.'));
+        $this->config('acquia_cms_headless.settings')->set('starterkit_nextjs', $acms_starterkit_nextjs)->save();
+      }
+      catch (InvalidPluginDefinitionException | PluginNotFoundException | EntityStorageException | ExtensionNotLoadedException | FilesystemValidationException $e) {
+        $this->messenger()->addError($e->getMessage());
       }
     }
 
