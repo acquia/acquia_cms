@@ -27,16 +27,6 @@ function acquia_cms_install() {
 }
 
 /**
- * Implements hook_modules_installed().
- */
-function acquia_cms_modules_installed(array $modules) {
-  if (in_array('acquia_cms_site_studio', $modules)) {
-    \Drupal::service('acquia_cms_common.utility')->siteStudioPackageImport();
-    \Drupal::service('acquia_cms_common.utility')->rebuildSiteStudio();
-  }
-}
-
-/**
  * Update config ignore settings.
  */
 function acquia_cms_update_8001() {
