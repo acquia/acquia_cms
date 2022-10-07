@@ -1,0 +1,32 @@
+{
+    "name": "drupal/acquia_cms_dam",
+    "type": "drupal-module",
+    "description": "Provides an Acquia DAM related configuration.",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "drupal/acquia_cms_common": "^1.5",
+        "drupal/acquia_dam": "^1"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-composer-scaffold": true,
+            "ergebnis/composer-normalize": true,
+            "oomphinc/composer-installers-extender": true,
+            "phpro/grumphp-shim": true,
+            "webdriver-binary/binary-chromedriver": true
+        }
+    },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    }
+}
