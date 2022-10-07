@@ -1,0 +1,120 @@
+uuid: 40213149-d0c8-4518-b727-2513420a6e10
+langcode: en
+status: true
+dependencies:
+  config:
+    - cohesion_custom_styles.cohesion_custom_style.63181883
+label: 'Embedded (Media, Video)'
+id: media_acquia_dam_video_asset_emb
+json_values: |
+  {
+      "canvas": [
+          {
+              "type": "container",
+              "uid": "container",
+              "title": "Container",
+              "status": {
+                  "collapsed": false
+              },
+              "iconColor": "layout",
+              "uuid": "f4f0987d-d0b6-453c-8de0-9d2af5f0de33",
+              "parentUid": "root",
+              "children": [
+                  {
+                      "type": "container",
+                      "uid": "drupal-field",
+                      "title": "Field",
+                      "status": {
+                          "collapsed": false
+                      },
+                      "iconColor": "drupal",
+                      "uuid": "64e741a5-f922-4465-9457-36587d1bdbad",
+                      "parentUid": "container",
+                      "children": []
+                  }
+              ]
+          }
+      ],
+      "mapper": {
+          "64e741a5-f922-4465-9457-36587d1bdbad": {
+              "settings": {
+                  "formDefinition": [],
+                  "selectorType": "topLevel",
+                  "form": null,
+                  "items": []
+              }
+          },
+          "f4f0987d-d0b6-453c-8de0-9d2af5f0de33": {}
+      },
+      "model": {
+          "f4f0987d-d0b6-453c-8de0-9d2af5f0de33": {
+              "settings": {
+                  "title": "Container - iframe responsive styles",
+                  "width": "fluid",
+                  "customStyle": [
+                      {
+                          "customStyle": "coh-style-margin-bottom-small"
+                      }
+                  ],
+                  "settings": {
+                      "width": "fluid",
+                      "customStyle": [
+                          {
+                              "customStyle": ""
+                          }
+                      ]
+                  }
+              },
+              "context-visibility": {
+                  "contextVisibility": {
+                      "condition": "ALL"
+                  }
+              },
+              "styles": {
+                  "settings": {
+                      "element": "container"
+                  }
+              }
+          },
+          "64e741a5-f922-4465-9457-36587d1bdbad": {
+              "settings": {
+                  "title": "Field - Remote video URL",
+                  "settings": {
+                      "drupalField": ""
+                  }
+              },
+              "context-visibility": {
+                  "contextVisibility": {
+                      "condition": "ALL"
+                  }
+              },
+              "styles": {
+                  "settings": {
+                      "element": "drupal-field"
+                  }
+              }
+          }
+      },
+      "previewModel": {
+          "f4f0987d-d0b6-453c-8de0-9d2af5f0de33": {},
+          "64e741a5-f922-4465-9457-36587d1bdbad": {}
+      },
+      "variableFields": {
+          "f4f0987d-d0b6-453c-8de0-9d2af5f0de33": [],
+          "64e741a5-f922-4465-9457-36587d1bdbad": []
+      },
+      "meta": {
+          "fieldHistory": []
+      }
+  }
+json_mapper: '{}'
+last_entity_update: entityupdate_0036
+modified: true
+selectable: false
+custom: false
+twig_template: media--cohesion--media-acquia-dam-video-asset-emb
+default: true
+entity_type: media
+bundle: acquia_dam_video_asset
+view_mode: embedded
+master_template: ''

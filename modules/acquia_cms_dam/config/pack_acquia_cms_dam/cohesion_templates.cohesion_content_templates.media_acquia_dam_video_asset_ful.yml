@@ -1,0 +1,47 @@
+uuid: a6b07900-9edf-409b-86dc-dd07910013d4
+langcode: en
+status: true
+dependencies:
+  config:
+    - cohesion_templates.cohesion_master_templates.mstr_tpl_master_template_boxed
+label: 'Full content (Media, Video)'
+id: media_acquia_dam_video_asset_ful
+json_values: |
+  {
+      "canvas": [
+          {
+              "type": "item",
+              "uid": "video",
+              "title": "Video",
+              "selected": false,
+              "status": {
+                  "collapsed": true,
+                  "isopen": false
+              },
+              "iconColor": "media",
+              "uuid": "02601d9a-4198-45e6-906a-9e092b95706c",
+              "parentUid": "root",
+              "children": []
+          }
+      ],
+      "mapper": {
+          "02601d9a-4198-45e6-906a-9e092b95706c": {}
+      },
+      "model": [],
+      "previewModel": {},
+      "variableFields": {},
+      "meta": {
+          "fieldHistory": []
+      }
+  }
+json_mapper: '{}'
+last_entity_update: entityupdate_0036
+modified: true
+selectable: true
+custom: false
+twig_template: media--cohesion--media-acquia-dam-video-asset-ful
+default: true
+entity_type: media
+bundle: acquia_dam_video_asset
+view_mode: full
+master_template: __none__

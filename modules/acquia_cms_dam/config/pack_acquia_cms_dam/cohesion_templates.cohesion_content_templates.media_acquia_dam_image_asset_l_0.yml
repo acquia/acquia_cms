@@ -1,0 +1,221 @@
+uuid: 05ac4213-f2a8-4286-9048-1c9a5fcaf9a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.coh_medium_landscape
+    - image.style.coh_small_landscape
+    - image.style.coh_x_large_landscape
+label: 'Large landscape (Media, Image)'
+id: media_acquia_dam_image_asset_l_0
+json_values: |
+  {
+      "canvas": [
+          {
+              "type": "item",
+              "uid": "picture",
+              "title": "Picture",
+              "selected": false,
+              "status": {
+                  "collapsed": true,
+                  "isopen": false
+              },
+              "uuid": "1610462f-2894-44f2-8606-a1c611a520cb",
+              "parentUid": "root",
+              "children": []
+          }
+      ],
+      "mapper": {
+          "1610462f-2894-44f2-8606-a1c611a520cb": {
+              "settings": {
+                  "formDefinition": [
+                      {
+                          "formKey": "picture-settings",
+                          "children": [
+                              {
+                                  "formKey": "picture-info",
+                                  "breakpoints": [],
+                                  "activeFields": [
+                                      {
+                                          "name": "title",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "alt",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "lazyload",
+                                          "active": true
+                                      }
+                                  ]
+                              },
+                              {
+                                  "formKey": "picture-images",
+                                  "breakpoints": [
+                                      {
+                                          "name": "xl"
+                                      },
+                                      {
+                                          "name": "sm"
+                                      },
+                                      {
+                                          "name": "ps"
+                                      }
+                                  ],
+                                  "activeFields": [
+                                      {
+                                          "name": "displaySize",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "imageAlignment",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "pictureImagesArray",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "image",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "imageStyle",
+                                          "active": true
+                                      }
+                                  ]
+                              },
+                              {
+                                  "formKey": "picture-style",
+                                  "breakpoints": [],
+                                  "activeFields": [
+                                      {
+                                          "name": "customStyle",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "customStyle",
+                                          "active": true
+                                      }
+                                  ]
+                              }
+                          ]
+                      }
+                  ],
+                  "selectorType": "topLevel",
+                  "form": null,
+                  "items": []
+              }
+          }
+      },
+      "model": {
+          "1610462f-2894-44f2-8606-a1c611a520cb": {
+              "settings": {
+                  "title": "Picture",
+                  "customStyle": [
+                      {
+                          "customStyle": ""
+                      }
+                  ],
+                  "styles": {
+                      "xl": {
+                          "pictureImagesArray": [
+                              {
+                                  "imageStyle": "coh_x_large_landscape",
+                                  "image": "[media:asset-path]"
+                              }
+                          ],
+                          "displaySize": "coh-image-responsive"
+                      },
+                      "sm": {
+                          "pictureImagesArray": [
+                              {
+                                  "imageStyle": "coh_medium_landscape"
+                              }
+                          ],
+                          "displaySize": "coh-image-responsive"
+                      },
+                      "xs": [],
+                      "ps": {
+                          "pictureImagesArray": [
+                              {
+                                  "imageStyle": "coh_small_landscape"
+                              }
+                          ],
+                          "displaySize": "coh-image-responsive"
+                      }
+                  },
+                  "lazyload": false,
+                  "settings": {
+                      "lazyload": false,
+                      "styles": {
+                          "xl": {
+                              "displaySize": "coh-image-responsive",
+                              "pictureImagesArray": [
+                                  {
+                                      "imageStyle": ""
+                                  }
+                              ]
+                          }
+                      },
+                      "customStyle": [
+                          {
+                              "customStyle": ""
+                          }
+                      ]
+                  },
+                  "attributes": {
+                      "alt": "[media:image:alt]",
+                      "title": "[media:image:title]"
+                  }
+              },
+              "context-visibility": {
+                  "contextVisibility": {
+                      "condition": "ALL"
+                  }
+              },
+              "styles": {
+                  "settings": {
+                      "element": "picture"
+                  }
+              }
+          }
+      },
+      "previewModel": {
+          "1610462f-2894-44f2-8606-a1c611a520cb": {
+              "settings": {
+                  "styles": {
+                      "xl": {
+                          "pictureImagesArray": [
+                              {
+                                  "image": ""
+                              }
+                          ]
+                      }
+                  }
+              }
+          }
+      },
+      "variableFields": {
+          "1610462f-2894-44f2-8606-a1c611a520cb": [
+              "settings.styles.xl.pictureImagesArray.0.image",
+              "settings.attributes.alt",
+              "settings.attributes.title"
+          ]
+      },
+      "meta": {
+          "fieldHistory": []
+      }
+  }
+json_mapper: '{}'
+last_entity_update: entityupdate_0036
+modified: true
+selectable: false
+custom: false
+twig_template: media--cohesion--media-acquia-dam-image-asset-l-0
+default: true
+entity_type: media
+bundle: acquia_dam_image_asset
+view_mode: large_landscape
+master_template: ''
