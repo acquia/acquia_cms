@@ -192,18 +192,18 @@ jobs:
         #php-version: [ "7.4" ]
         module:
           - acquia_cms_article
-          - acquia_cms_audio
-          - acquia_cms_common
-          - acquia_cms_document
-          - acquia_cms_event
-          - acquia_cms_image
-          - acquia_cms_page
-          - acquia_cms_person
-          - acquia_cms_place
-          - acquia_cms_search
-          - acquia_cms_site_studio
-          - acquia_cms_tour
-          - acquia_cms_video
+#          - acquia_cms_audio
+#          - acquia_cms_common
+#          - acquia_cms_document
+#          - acquia_cms_event
+#          - acquia_cms_image
+#          - acquia_cms_page
+#          - acquia_cms_person
+#          - acquia_cms_place
+#          - acquia_cms_search
+#          - acquia_cms_site_studio
+#          - acquia_cms_tour
+#          - acquia_cms_video
           #- acquia_cms_audio
           #- acquia_cms_headless
           #- acquia_cms_starter
@@ -228,7 +228,7 @@ jobs:
           # Remove internal module dependencies, so that ORCA CI doesn't report error.
           for path in $(find modules -type f -maxdepth 2 -name "composer.json" -exec ls '{}' ';'); do sed -i '/\"drupal\/acquia_cms.*\":.*\".*\"/d' $path; done;
           # Remove all PHPUnit test files, exlcuding the current module's PHPUnit tests.
-          find modules -type f -name "*Test.php" ! -path "*/${MODULE}/*" -exec rm -fr '{}' ';'
+          # find modules -type f -name "*Test.php" ! -path "*/${MODULE}/*" -exec rm -fr '{}' ';'
           # Do not run any existing site tests. We run them seperately.
           find modules -type d -name ExistingSite | xargs rm -rf && rm -rf tests/src/
           ../orca/bin/ci/before_install.sh
