@@ -94,6 +94,7 @@ jobs:
       SITESTUDIO_ORG_KEY: ${{ secrets.SITESTUDIO_ORG_KEY }}
       ACMS_JOB: ${{ matrix.acms_job }}
       JOB_TYPE: "integrated-tests"
+      CI: true
     strategy:
       matrix:
         orca-job:
@@ -145,6 +146,9 @@ jobs:
             find tests/src -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
           fi
           ../orca/bin/ci/before_install.sh
+          chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
+          CHROMEDRIVER_PID=$!
+          echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
       - name: Install
         run: ./tests/ci/install.sh
       - name: Before script
@@ -155,6 +159,7 @@ jobs:
         run : ../orca/bin/ci/before_cache.sh
       - name: After script
         run: |
+          kill -0 ${{ env.CHROMEDRIVER_PID }}
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
