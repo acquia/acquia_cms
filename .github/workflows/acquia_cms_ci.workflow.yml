@@ -165,7 +165,7 @@ jobs:
           ../orca/bin/ci/after_script.sh
 
   isolated_tests:
-    name: ${{ matrix.module }} (${{ matrix.orca-job }})
+    name: acquia_cms (${{ matrix.orca-job }})
     runs-on: ubuntu-latest
     env:
       # Set ORCA related environment variables.
@@ -195,8 +195,8 @@ jobs:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT_DEV
         #php-version: [ "7.4" ]
-        module:
-          - acquia_cms_article
+#        module:
+#          - acquia_cms_article
 #          - acquia_cms_audio
 #          - acquia_cms_common
 #          - acquia_cms_document
