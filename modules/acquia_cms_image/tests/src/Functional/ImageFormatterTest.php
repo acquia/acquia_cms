@@ -51,9 +51,9 @@ class ImageFormatterTest extends BrowserTestBase {
       'medium_landscape' => 'coh_medium_landscape',
       'small' => 'coh_small',
       'small_landscape' => 'coh_small_landscape',
-      'large_super_landscape' => '',
-      'teaser' => 'x_small_landscape_480x298',
-      'x_small_square' => 'x_small_square_480x480',
+      'large_super_landscape' => 'coh_x_large_super_landscape',
+      'teaser' => 'x_small_landscape',
+      'x_small_square' => 'x_small_square',
     ];
   }
 
