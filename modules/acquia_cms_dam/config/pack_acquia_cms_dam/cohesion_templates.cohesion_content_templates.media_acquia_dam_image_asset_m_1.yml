@@ -19,13 +19,13 @@ json_values: |
                   "collapsed": true,
                   "isopen": false
               },
-              "uuid": "8e467c9a-4d92-43bf-b636-23bca0e6820e",
+              "uuid": "8b958df4-5bb9-4f0d-bcab-885434a97c2c",
               "parentUid": "root",
               "children": []
           }
       ],
       "mapper": {
-          "8e467c9a-4d92-43bf-b636-23bca0e6820e": {
+          "8b958df4-5bb9-4f0d-bcab-885434a97c2c": {
               "settings": {
                   "formDefinition": [
                       {
@@ -106,7 +106,7 @@ json_values: |
           }
       },
       "model": {
-          "8e467c9a-4d92-43bf-b636-23bca0e6820e": {
+          "8b958df4-5bb9-4f0d-bcab-885434a97c2c": {
               "settings": {
                   "title": "Picture",
                   "customStyle": [
@@ -115,22 +115,28 @@ json_values: |
                       }
                   ],
                   "styles": {
-                      "xs": [],
+                      "xl": {
+                          "pictureImagesArray": [
+                              {
+                                  "imageStyle": "coh_medium_landscape",
+                                  "image": "[media:asset-path]"
+                              }
+                          ],
+                          "displaySize": "coh-image",
+                          "imageAlignment": "coh-image-align-centre"
+                      },
+                      "xs": {},
                       "ps": {
                           "pictureImagesArray": [
                               {
                                   "imageStyle": "coh_small_landscape"
                               }
                           ],
-                          "displaySize": "coh-image-responsive"
+                          "displaySize": "coh-image",
+                          "imageAlignment": "coh-image-align-centre"
                       },
-                      "xl": {
-                          "pictureImagesArray": [
-                              {
-                                  "imageStyle": "coh_medium_landscape"
-                              }
-                          ],
-                          "displaySize": "coh-image-responsive"
+                      "sm": {
+                          "imageAlignment": null
                       }
                   },
                   "lazyload": false,
@@ -170,12 +176,14 @@ json_values: |
           }
       },
       "previewModel": {
-          "8e467c9a-4d92-43bf-b636-23bca0e6820e": {
+          "8b958df4-5bb9-4f0d-bcab-885434a97c2c": {
               "settings": {
                   "styles": {
                       "xl": {
                           "pictureImagesArray": [
-                              {}
+                              {
+                                  "image": ""
+                              }
                           ]
                       }
                   }
@@ -183,7 +191,8 @@ json_values: |
           }
       },
       "variableFields": {
-          "8e467c9a-4d92-43bf-b636-23bca0e6820e": [
+          "8b958df4-5bb9-4f0d-bcab-885434a97c2c": [
+              "settings.styles.xl.pictureImagesArray.0.image",
               "settings.attributes.alt",
               "settings.attributes.title"
           ]
