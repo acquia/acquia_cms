@@ -19,13 +19,13 @@ json_values: |
                   "collapsed": true,
                   "isopen": false
               },
-              "uuid": "f0eff50e-4108-47f5-85d0-76cf87ce54d8",
+              "uuid": "93732dd3-3e3d-4931-990d-20d8864134d7",
               "parentUid": "root",
               "children": []
           }
       ],
       "mapper": {
-          "f0eff50e-4108-47f5-85d0-76cf87ce54d8": {
+          "93732dd3-3e3d-4931-990d-20d8864134d7": {
               "settings": {
                   "formDefinition": [
                       {
@@ -106,7 +106,7 @@ json_values: |
           }
       },
       "model": {
-          "f0eff50e-4108-47f5-85d0-76cf87ce54d8": {
+          "93732dd3-3e3d-4931-990d-20d8864134d7": {
               "settings": {
                   "title": "Picture",
                   "customStyle": [
@@ -115,6 +115,15 @@ json_values: |
                       }
                   ],
                   "styles": {
+                      "xl": {
+                          "pictureImagesArray": [
+                              {
+                                  "imageStyle": "x_small_landscape",
+                                  "image": "[media:image:entity:path]"
+                              }
+                          ],
+                          "displaySize": "coh-image-responsive"
+                      },
                       "xs": [],
                       "ps": {
                           "pictureImagesArray": [
@@ -123,16 +132,7 @@ json_values: |
                               }
                           ],
                           "displaySize": "coh-image-responsive"
-                      },
-                      "xl": {
-                          "pictureImagesArray": [
-                              {
-                                  "imageStyle": "x_small_landscape"
-                              }
-                          ],
-                          "displaySize": "coh-image-responsive"
-                      },
-                      "sm": {}
+                      }
                   },
                   "lazyload": false,
                   "settings": {
@@ -171,12 +171,14 @@ json_values: |
           }
       },
       "previewModel": {
-          "f0eff50e-4108-47f5-85d0-76cf87ce54d8": {
+          "93732dd3-3e3d-4931-990d-20d8864134d7": {
               "settings": {
                   "styles": {
                       "xl": {
                           "pictureImagesArray": [
-                              {}
+                              {
+                                  "image": ""
+                              }
                           ]
                       }
                   }
@@ -184,7 +186,8 @@ json_values: |
           }
       },
       "variableFields": {
-          "f0eff50e-4108-47f5-85d0-76cf87ce54d8": [
+          "93732dd3-3e3d-4931-990d-20d8864134d7": [
+              "settings.styles.xl.pictureImagesArray.0.image",
               "settings.attributes.alt",
               "settings.attributes.title"
           ]
