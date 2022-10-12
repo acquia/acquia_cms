@@ -1,0 +1,228 @@
+uuid: cc532926-b4d8-4c86-9fcd-6175696a3c10
+langcode: en
+status: true
+dependencies:
+  config:
+    - cohesion_templates.cohesion_master_templates.mstr_tpl_master_template_boxed
+    - image.style.coh_medium
+    - image.style.coh_small
+    - image.style.coh_x_large
+label: 'Full content (Media, Image)'
+id: media_acquia_dam_image_asset_ful
+json_values: |
+  {
+      "canvas": [
+          {
+              "type": "item",
+              "uid": "picture",
+              "title": "Picture",
+              "selected": false,
+              "status": {
+                  "collapsed": true,
+                  "isopen": false
+              },
+              "uuid": "2eb3c052-6394-4811-8549-d561f9a03b83",
+              "parentUid": "root",
+              "children": []
+          }
+      ],
+      "mapper": {
+          "2eb3c052-6394-4811-8549-d561f9a03b83": {
+              "settings": {
+                  "formDefinition": [
+                      {
+                          "formKey": "picture-settings",
+                          "children": [
+                              {
+                                  "formKey": "picture-info",
+                                  "breakpoints": [],
+                                  "activeFields": [
+                                      {
+                                          "name": "title",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "alt",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "lazyload",
+                                          "active": true
+                                      }
+                                  ]
+                              },
+                              {
+                                  "formKey": "picture-images",
+                                  "breakpoints": [
+                                      {
+                                          "name": "xl"
+                                      },
+                                      {
+                                          "name": "sm"
+                                      },
+                                      {
+                                          "name": "ps"
+                                      }
+                                  ],
+                                  "activeFields": [
+                                      {
+                                          "name": "displaySize",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "imageAlignment",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "pictureImagesArray",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "image",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "imageStyle",
+                                          "active": true
+                                      }
+                                  ]
+                              },
+                              {
+                                  "formKey": "picture-style",
+                                  "breakpoints": [],
+                                  "activeFields": [
+                                      {
+                                          "name": "customStyle",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "customStyle",
+                                          "active": true
+                                      }
+                                  ]
+                              }
+                          ]
+                      }
+                  ],
+                  "selectorType": "topLevel",
+                  "form": null,
+                  "items": []
+              },
+              "styles": {
+                  "formDefinition": [],
+                  "selectorType": "topLevel",
+                  "items": [],
+                  "form": null
+              }
+          }
+      },
+      "model": {
+          "2eb3c052-6394-4811-8549-d561f9a03b83": {
+              "settings": {
+                  "title": "Picture",
+                  "customStyle": [
+                      {
+                          "customStyle": ""
+                      }
+                  ],
+                  "styles": {
+                      "xl": {
+                          "pictureImagesArray": [
+                              {
+                                  "imageStyle": "coh_x_large",
+                                  "image": "[media:asset-path]"
+                              }
+                          ],
+                          "displaySize": "coh-image-responsive"
+                      },
+                      "sm": {
+                          "pictureImagesArray": [
+                              {
+                                  "imageStyle": "coh_medium"
+                              }
+                          ],
+                          "displaySize": "coh-image-responsive"
+                      },
+                      "xs": [],
+                      "ps": {
+                          "pictureImagesArray": [
+                              {
+                                  "imageStyle": "coh_small"
+                              }
+                          ],
+                          "displaySize": "coh-image-responsive"
+                      }
+                  },
+                  "lazyload": false,
+                  "settings": {
+                      "lazyload": false,
+                      "styles": {
+                          "xl": {
+                              "displaySize": "coh-image-responsive",
+                              "pictureImagesArray": [
+                                  {
+                                      "imageStyle": ""
+                                  }
+                              ]
+                          }
+                      },
+                      "customStyle": [
+                          {
+                              "customStyle": ""
+                          }
+                      ]
+                  },
+                  "attributes": {
+                      "alt": "[media:image:alt]",
+                      "title": "[media:image:title]"
+                  }
+              },
+              "context-visibility": {
+                  "contextVisibility": {
+                      "condition": "ALL"
+                  }
+              },
+              "styles": {
+                  "settings": {
+                      "element": "picture"
+                  }
+              }
+          }
+      },
+      "previewModel": {
+          "2eb3c052-6394-4811-8549-d561f9a03b83": {
+              "settings": {
+                  "styles": {
+                      "xl": {
+                          "pictureImagesArray": [
+                              {
+                                  "image": ""
+                              }
+                          ]
+                      }
+                  }
+              }
+          }
+      },
+      "variableFields": {
+          "2eb3c052-6394-4811-8549-d561f9a03b83": [
+              "settings.styles.xl.pictureImagesArray.0.image",
+              "settings.attributes.alt",
+              "settings.attributes.title"
+          ]
+      },
+      "meta": {
+          "fieldHistory": []
+      }
+  }
+json_mapper: '{}'
+last_entity_update: entityupdate_0036
+modified: true
+selectable: true
+custom: false
+twig_template: media--cohesion--media-acquia-dam-image-asset-ful
+default: true
+entity_type: media
+bundle: acquia_dam_image_asset
+view_mode: full
+master_template: __none__
