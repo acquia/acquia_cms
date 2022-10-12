@@ -1,0 +1,221 @@
+uuid: d4552ed0-ebaa-4893-a3b0-db86a5f2813e
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.coh_medium
+    - image.style.coh_small
+    - image.style.coh_x_large
+label: 'Large (Media, Image)'
+id: media_acquia_dam_image_asset_lar
+json_values: |
+  {
+      "canvas": [
+          {
+              "type": "item",
+              "uid": "picture",
+              "title": "Picture",
+              "selected": false,
+              "status": {
+                  "collapsed": true,
+                  "isopen": false
+              },
+              "uuid": "698321b7-07e9-4db1-ad37-56810c799159",
+              "parentUid": "root",
+              "children": []
+          }
+      ],
+      "mapper": {
+          "698321b7-07e9-4db1-ad37-56810c799159": {
+              "settings": {
+                  "formDefinition": [
+                      {
+                          "formKey": "picture-settings",
+                          "children": [
+                              {
+                                  "formKey": "picture-info",
+                                  "breakpoints": [],
+                                  "activeFields": [
+                                      {
+                                          "name": "title",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "alt",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "lazyload",
+                                          "active": true
+                                      }
+                                  ]
+                              },
+                              {
+                                  "formKey": "picture-images",
+                                  "breakpoints": [
+                                      {
+                                          "name": "xl"
+                                      },
+                                      {
+                                          "name": "sm"
+                                      },
+                                      {
+                                          "name": "ps"
+                                      }
+                                  ],
+                                  "activeFields": [
+                                      {
+                                          "name": "displaySize",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "imageAlignment",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "pictureImagesArray",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "image",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "imageStyle",
+                                          "active": true
+                                      }
+                                  ]
+                              },
+                              {
+                                  "formKey": "picture-style",
+                                  "breakpoints": [],
+                                  "activeFields": [
+                                      {
+                                          "name": "customStyle",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "customStyle",
+                                          "active": true
+                                      }
+                                  ]
+                              }
+                          ]
+                      }
+                  ],
+                  "selectorType": "topLevel",
+                  "form": null,
+                  "items": []
+              }
+          }
+      },
+      "model": {
+          "698321b7-07e9-4db1-ad37-56810c799159": {
+              "settings": {
+                  "title": "Picture",
+                  "customStyle": [
+                      {
+                          "customStyle": ""
+                      }
+                  ],
+                  "styles": {
+                      "xl": {
+                          "pictureImagesArray": [
+                              {
+                                  "imageStyle": "coh_x_large",
+                                  "image": "[media:asset-path]"
+                              }
+                          ],
+                          "displaySize": "coh-image-responsive"
+                      },
+                      "sm": {
+                          "pictureImagesArray": [
+                              {
+                                  "imageStyle": "coh_medium"
+                              }
+                          ],
+                          "displaySize": "coh-image-responsive"
+                      },
+                      "xs": [],
+                      "ps": {
+                          "pictureImagesArray": [
+                              {
+                                  "imageStyle": "coh_small"
+                              }
+                          ],
+                          "displaySize": "coh-image-responsive"
+                      }
+                  },
+                  "lazyload": false,
+                  "settings": {
+                      "lazyload": false,
+                      "styles": {
+                          "xl": {
+                              "displaySize": "coh-image-responsive",
+                              "pictureImagesArray": [
+                                  {
+                                      "imageStyle": ""
+                                  }
+                              ]
+                          }
+                      },
+                      "customStyle": [
+                          {
+                              "customStyle": ""
+                          }
+                      ]
+                  },
+                  "attributes": {
+                      "alt": "[media:image:alt]",
+                      "title": "[media:image:title]"
+                  }
+              },
+              "context-visibility": {
+                  "contextVisibility": {
+                      "condition": "ALL"
+                  }
+              },
+              "styles": {
+                  "settings": {
+                      "element": "picture"
+                  }
+              }
+          }
+      },
+      "previewModel": {
+          "698321b7-07e9-4db1-ad37-56810c799159": {
+              "settings": {
+                  "styles": {
+                      "xl": {
+                          "pictureImagesArray": [
+                              {
+                                  "image": ""
+                              }
+                          ]
+                      }
+                  }
+              }
+          }
+      },
+      "variableFields": {
+          "698321b7-07e9-4db1-ad37-56810c799159": [
+              "settings.styles.xl.pictureImagesArray.0.image",
+              "settings.attributes.alt",
+              "settings.attributes.title"
+          ]
+      },
+      "meta": {
+          "fieldHistory": []
+      }
+  }
+json_mapper: '{}'
+last_entity_update: entityupdate_0036
+modified: true
+selectable: false
+custom: false
+twig_template: media--cohesion--media-acquia-dam-image-asset-lar
+default: true
+entity_type: media
+bundle: acquia_dam_image_asset
+view_mode: large
+master_template: ''
