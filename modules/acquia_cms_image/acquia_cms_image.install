@@ -98,3 +98,23 @@ function acquia_cms_image_update_8002() {
     }
   }
 }
+
+/**
+ * Install new view modes, display modes & image styles.
+ */
+function acquia_cms_image_update_8003() {
+  $configurations = [
+    'core.entity_view_mode.media.teaser',
+    'core.entity_view_display.media.image.full',
+    'core.entity_view_mode.media.x_small_square',
+    'core.entity_view_display.media.image.teaser',
+    'core.entity_view_mode.media.large_super_landscape',
+    'core.entity_view_display.media.image.x_small_square',
+    'core.entity_view_display.media.image.large_super_landscape',
+    'image.style.x_small_landscape',
+    'image.style.x_small_square',
+  ];
+  foreach ($configurations as $config) {
+    _acquia_cms_common_rewrite_configuration($config, 'acquia_cms_image');
+  }
+}
