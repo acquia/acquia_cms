@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.full
+    - media.type.acquia_dam_video_asset
+  module:
+    - acquia_dam
+id: media.acquia_dam_video_asset.full
+targetEntityType: media
+bundle: acquia_dam_video_asset
+mode: full
+content:
+  acquia_dam_asset_id:
+    type: acquia_dam_embed_code
+    label: hidden
+    settings:
+      embed_style: inline_view
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true
