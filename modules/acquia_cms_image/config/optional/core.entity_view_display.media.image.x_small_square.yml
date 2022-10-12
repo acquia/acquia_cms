@@ -1,0 +1,40 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.x_small_square
+    - field.field.media.image.field_categories
+    - field.field.media.image.field_tags
+    - field.field.media.image.image
+    - image.style.x_small_square
+    - media.type.image
+  module:
+    - image
+  enforced:
+    module:
+      - acquia_cms_image
+id: media.image.x_small_square
+targetEntityType: media
+bundle: image
+mode: x_small_square
+content:
+  image:
+    type: image
+    label: visually_hidden
+    settings:
+      image_link: ''
+      image_style: x_small_square
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  field_categories: true
+  field_tags: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true
