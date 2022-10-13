@@ -3,7 +3,10 @@ langcode: en
 status: true
 dependencies:
   config:
-    - image.style.coh_small_landscape
+    - cohesion_custom_styles.cohesion_custom_style.65dc3072
+    - cohesion_custom_styles.cohesion_custom_style.bfd0fecd
+    - cohesion_custom_styles.cohesion_custom_style.ed4b7a3d
+    - cohesion_custom_styles.cohesion_custom_style.f3dc1bea
 label: 'Search Results (Node, Article)'
 id: node_article_search_results
 json_values: |
@@ -181,24 +184,20 @@ json_values: |
                       "uid": "column",
                       "title": "Column",
                       "status": {
-                          "collapsed": true
+                          "collapsed": false
                       },
                       "uuid": "7937185e-6555-4f94-9885-30774bdf5ce9",
                       "parentUid": "row-for-columns",
                       "children": [
                           {
-                              "type": "item",
-                              "uid": "picture",
-                              "title": "Picture",
-                              "selected": false,
+                              "type": "container",
+                              "uid": "drupal-field",
+                              "title": "Field",
                               "status": {
-                                  "collapsed": true,
-                                  "isopen": false,
-                                  "collapsedParents": [
-                                      "7937185e-6555-4f94-9885-30774bdf5ce9"
-                                  ]
+                                  "collapsed": true
                               },
-                              "uuid": "6de41826-4ad6-4b26-b215-16524c7bd5ea",
+                              "iconColor": "drupal",
+                              "uuid": "601cedd8-9aa4-4772-8c22-6526deaf0d47",
                               "parentUid": "column",
                               "children": []
                           }
@@ -560,85 +559,6 @@ json_values: |
                       }
                   ],
                   "title": "Hide if no data",
-                  "selectorType": "topLevel",
-                  "form": null,
-                  "items": []
-              }
-          },
-          "6de41826-4ad6-4b26-b215-16524c7bd5ea": {
-              "settings": {
-                  "formDefinition": [
-                      {
-                          "formKey": "picture-settings",
-                          "children": [
-                              {
-                                  "formKey": "picture-info",
-                                  "breakpoints": [],
-                                  "activeFields": [
-                                      {
-                                          "name": "title",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "alt",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "lazyload",
-                                          "active": true
-                                      }
-                                  ]
-                              },
-                              {
-                                  "formKey": "picture-images",
-                                  "breakpoints": [
-                                      {
-                                          "name": "xl"
-                                      },
-                                      {
-                                          "name": "ps"
-                                      }
-                                  ],
-                                  "activeFields": [
-                                      {
-                                          "name": "displaySize",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "imageAlignment",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "pictureImagesArray",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "image",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "imageStyle",
-                                          "active": true
-                                      }
-                                  ]
-                              },
-                              {
-                                  "formKey": "picture-style",
-                                  "breakpoints": [],
-                                  "activeFields": [
-                                      {
-                                          "name": "customStyle",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "customStyle",
-                                          "active": true
-                                      }
-                                  ]
-                              }
-                          ]
-                      }
-                  ],
                   "selectorType": "topLevel",
                   "form": null,
                   "items": []
@@ -2374,7 +2294,8 @@ json_values: |
                   "form": null,
                   "items": []
               }
-          }
+          },
+          "601cedd8-9aa4-4772-8c22-6526deaf0d47": {}
       },
       "model": {
           "77586c33-8dae-499d-8beb-39b6db45e48d": {
@@ -2958,56 +2879,13 @@ json_values: |
                   "hideData": "[node:field_article_image]"
               }
           },
-          "6de41826-4ad6-4b26-b215-16524c7bd5ea": {
+          "601cedd8-9aa4-4772-8c22-6526deaf0d47": {
               "settings": {
-                  "title": "Picture",
-                  "customStyle": [
-                      {
-                          "customStyle": ""
-                      }
-                  ],
-                  "styles": {
-                      "xl": {
-                          "pictureImagesArray": [
-                              {
-                                  "imageStyle": "x_small_square_320x320_",
-                                  "image": "[node:field_article_image:entity:image:entity:path]"
-                              }
-                          ],
-                          "displaySize": "coh-image-responsive"
-                      },
-                      "ps": {
-                          "pictureImagesArray": [
-                              {
-                                  "imageStyle": "coh_small_landscape"
-                              }
-                          ],
-                          "displaySize": "coh-image-responsive"
-                      }
-                  },
-                  "lazyload": false,
+                  "title": "Field",
                   "settings": {
-                      "lazyload": false,
-                      "styles": {
-                          "xl": {
-                              "displaySize": "coh-image-responsive",
-                              "pictureImagesArray": [
-                                  {
-                                      "imageStyle": ""
-                                  }
-                              ]
-                          }
-                      },
-                      "customStyle": [
-                          {
-                              "customStyle": ""
-                          }
-                      ]
+                      "drupalField": ""
                   },
-                  "attributes": {
-                      "title": "[node:field_article_image:entity:image:entity:name]",
-                      "alt": "[node:field_article_image:entity:image:entity:alt]"
-                  }
+                  "drupalField": "content.field_article_image"
               },
               "context-visibility": {
                   "contextVisibility": {
@@ -3016,7 +2894,7 @@ json_values: |
               },
               "styles": {
                   "settings": {
-                      "element": "picture"
+                      "element": "drupal-field"
                   }
               }
           }
@@ -3060,20 +2938,8 @@ json_values: |
                   "linkToPage": "#"
               }
           },
-          "6de41826-4ad6-4b26-b215-16524c7bd5ea": {
-              "settings": {
-                  "styles": {
-                      "xl": {
-                          "pictureImagesArray": [
-                              {
-                                  "image": ""
-                              }
-                          ]
-                      }
-                  }
-              }
-          },
-          "30b6853e-c586-460f-bae0-711a2355750e": []
+          "30b6853e-c586-460f-bae0-711a2355750e": [],
+          "601cedd8-9aa4-4772-8c22-6526deaf0d47": {}
       },
       "variableFields": {
           "77586c33-8dae-499d-8beb-39b6db45e48d": [],
@@ -3100,12 +2966,8 @@ json_values: |
               "settings.linkText",
               "settings.linkToPage"
           ],
-          "6de41826-4ad6-4b26-b215-16524c7bd5ea": [
-              "settings.styles.xl.pictureImagesArray.0.image",
-              "settings.attributes.title",
-              "settings.attributes.alt"
-          ],
-          "30b6853e-c586-460f-bae0-711a2355750e": []
+          "30b6853e-c586-460f-bae0-711a2355750e": [],
+          "601cedd8-9aa4-4772-8c22-6526deaf0d47": []
       },
       "meta": {
           "fieldHistory": []
