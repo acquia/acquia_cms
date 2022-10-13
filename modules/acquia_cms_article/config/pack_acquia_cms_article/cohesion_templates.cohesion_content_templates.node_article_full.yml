@@ -3,11 +3,18 @@ langcode: en
 status: true
 dependencies:
   config:
+    - cohesion_custom_styles.cohesion_custom_style.097f31b2
+    - cohesion_custom_styles.cohesion_custom_style.58a35e7a
+    - cohesion_custom_styles.cohesion_custom_style.65dc3072
+    - cohesion_custom_styles.cohesion_custom_style.7ef725fd
+    - cohesion_custom_styles.cohesion_custom_style.a13b8c94
+    - cohesion_custom_styles.cohesion_custom_style.bfd0fecd
+    - cohesion_custom_styles.cohesion_custom_style.ed4b7a3d
+    - cohesion_custom_styles.cohesion_custom_style.ee93d997
+    - cohesion_custom_styles.cohesion_custom_style.f3dc1bea
+    - cohesion_elements.cohesion_component.cpt_breadcrumbs
     - cohesion_templates.cohesion_master_templates.master_template
-    - image.style.coh_large_super_landscape
-    - image.style.coh_medium_super_landscape
-    - image.style.coh_small_landscape
-    - image.style.coh_x_large_super_landscape
+    - cohesion_website_settings.cohesion_color.gray-10
 label: 'Full content (Node, Article)'
 id: node_article_full
 json_values: |
@@ -180,25 +187,20 @@ json_values: |
                               "uid": "column",
                               "title": "Column",
                               "status": {
-                                  "collapsed": true,
-                                  "collapsedParents": []
+                                  "collapsed": false
                               },
                               "uuid": "873b1426-c49a-4008-9bc8-cea6db2123bf",
                               "parentUid": "row-for-columns",
                               "children": [
                                   {
-                                      "type": "item",
-                                      "uid": "picture",
-                                      "title": "Picture",
-                                      "selected": false,
+                                      "type": "container",
+                                      "uid": "drupal-field",
+                                      "title": "Field",
                                       "status": {
-                                          "collapsed": true,
-                                          "isopen": false,
-                                          "collapsedParents": [
-                                              "873b1426-c49a-4008-9bc8-cea6db2123bf"
-                                          ]
+                                          "collapsed": false
                                       },
-                                      "uuid": "65a56bc6-9090-4f4a-b44a-c339e3c182aa",
+                                      "iconColor": "drupal",
+                                      "uuid": "e28ff52e-2a66-4639-b309-3b86bedecbac",
                                       "parentUid": "column",
                                       "children": []
                                   }
@@ -209,8 +211,7 @@ json_values: |
                               "uid": "column",
                               "title": "Column",
                               "status": {
-                                  "collapsed": true,
-                                  "collapsedParents": []
+                                  "collapsed": false
                               },
                               "uuid": "a608c60e-5765-49e9-88cf-0271e8bebf2b",
                               "parentUid": "row-for-columns",
@@ -220,10 +221,7 @@ json_values: |
                                       "uid": "drupal-field",
                                       "title": "Field",
                                       "status": {
-                                          "collapsed": true,
-                                          "collapsedParents": [
-                                              "a608c60e-5765-49e9-88cf-0271e8bebf2b"
-                                          ]
+                                          "collapsed": false
                                       },
                                       "uuid": "32d3d0f7-2fa9-4c29-8d5f-3ef634f3aa0c",
                                       "parentUid": "column",
@@ -2374,91 +2372,6 @@ json_values: |
                   "items": []
               }
           },
-          "65a56bc6-9090-4f4a-b44a-c339e3c182aa": {
-              "settings": {
-                  "formDefinition": [
-                      {
-                          "formKey": "picture-settings",
-                          "children": [
-                              {
-                                  "formKey": "picture-info",
-                                  "breakpoints": [],
-                                  "activeFields": [
-                                      {
-                                          "name": "title",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "alt",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "lazyload",
-                                          "active": true
-                                      }
-                                  ]
-                              },
-                              {
-                                  "formKey": "picture-images",
-                                  "breakpoints": [
-                                      {
-                                          "name": "xl"
-                                      },
-                                      {
-                                          "name": "md"
-                                      },
-                                      {
-                                          "name": "sm"
-                                      },
-                                      {
-                                          "name": "ps"
-                                      }
-                                  ],
-                                  "activeFields": [
-                                      {
-                                          "name": "displaySize",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "imageAlignment",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "pictureImagesArray",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "image",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "imageStyle",
-                                          "active": true
-                                      }
-                                  ]
-                              },
-                              {
-                                  "formKey": "picture-style",
-                                  "breakpoints": [],
-                                  "activeFields": [
-                                      {
-                                          "name": "customStyle",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "customStyle",
-                                          "active": true
-                                      }
-                                  ]
-                              }
-                          ]
-                      }
-                  ],
-                  "selectorType": "topLevel",
-                  "form": null,
-                  "items": []
-              }
-          },
           "77e7b1ff-d376-449a-a55f-b06501e9dbd8": {
               "settings": {
                   "formDefinition": [
@@ -3484,7 +3397,8 @@ json_values: |
                   "items": [],
                   "form": null
               }
-          }
+          },
+          "e28ff52e-2a66-4639-b309-3b86bedecbac": {}
       },
       "model": {
           "a08fc160-cbd2-409a-a20c-1886a9076721": {
@@ -3941,72 +3855,13 @@ json_values: |
                   "hideData": "[node:field_article_image]"
               }
           },
-          "65a56bc6-9090-4f4a-b44a-c339e3c182aa": {
+          "e28ff52e-2a66-4639-b309-3b86bedecbac": {
               "settings": {
-                  "title": "Picture",
-                  "customStyle": [
-                      {
-                          "customStyle": ""
-                      }
-                  ],
-                  "styles": {
-                      "xl": {
-                          "pictureImagesArray": [
-                              {
-                                  "imageStyle": "coh_x_large_super_landscape",
-                                  "image": "[node:field_article_image:entity:image:entity:path]"
-                              }
-                          ],
-                          "displaySize": "coh-image-responsive"
-                      },
-                      "sm": {
-                          "pictureImagesArray": [
-                              {
-                                  "imageStyle": "coh_medium_super_landscape"
-                              }
-                          ],
-                          "displaySize": "coh-image-responsive"
-                      },
-                      "ps": {
-                          "pictureImagesArray": [
-                              {
-                                  "imageStyle": "coh_small_landscape"
-                              }
-                          ],
-                          "displaySize": "coh-image-responsive"
-                      },
-                      "md": {
-                          "pictureImagesArray": [
-                              {
-                                  "imageStyle": "coh_large_super_landscape"
-                              }
-                          ],
-                          "displaySize": "coh-image-responsive"
-                      }
-                  },
-                  "lazyload": false,
+                  "title": "Field",
                   "settings": {
-                      "lazyload": false,
-                      "styles": {
-                          "xl": {
-                              "displaySize": "coh-image-responsive",
-                              "pictureImagesArray": [
-                                  {
-                                      "imageStyle": ""
-                                  }
-                              ]
-                          }
-                      },
-                      "customStyle": [
-                          {
-                              "customStyle": ""
-                          }
-                      ]
+                      "drupalField": ""
                   },
-                  "attributes": {
-                      "title": "[node:field_article_image:entity:name]",
-                      "alt": "[node:field_article_image:entity:image:alt]"
-                  }
+                  "drupalField": "content.field_article_image"
               },
               "context-visibility": {
                   "contextVisibility": {
@@ -4015,7 +3870,7 @@ json_values: |
               },
               "styles": {
                   "settings": {
-                      "element": "picture"
+                      "element": "drupal-field"
                   }
               }
           },
@@ -4494,19 +4349,6 @@ json_values: |
           "782e6181-4ecf-4ea0-a09a-ba6775d3f048": {},
           "131ebc05-bc00-44d4-bbd9-7a6dcefcce83": {},
           "873b1426-c49a-4008-9bc8-cea6db2123bf": {},
-          "65a56bc6-9090-4f4a-b44a-c339e3c182aa": {
-              "settings": {
-                  "styles": {
-                      "xl": {
-                          "pictureImagesArray": [
-                              {
-                                  "image": ""
-                              }
-                          ]
-                      }
-                  }
-              }
-          },
           "a608c60e-5765-49e9-88cf-0271e8bebf2b": {},
           "b4c72932-3b83-463e-9531-6b8d4e76b17c": {},
           "5f755c02-6b9c-4048-83c2-757ead614280": {},
@@ -4535,7 +4377,8 @@ json_values: |
               }
           },
           "a08fc160-cbd2-409a-a20c-1886a9076721": {},
-          "32d3d0f7-2fa9-4c29-8d5f-3ef634f3aa0c": {}
+          "32d3d0f7-2fa9-4c29-8d5f-3ef634f3aa0c": {},
+          "e28ff52e-2a66-4639-b309-3b86bedecbac": {}
       },
       "variableFields": {
           "87756a05-748a-44ab-87fc-3e71b94fe814": [],
@@ -4562,11 +4405,6 @@ json_values: |
           "873b1426-c49a-4008-9bc8-cea6db2123bf": [
               "hideNoData.hideData"
           ],
-          "65a56bc6-9090-4f4a-b44a-c339e3c182aa": [
-              "settings.styles.xl.pictureImagesArray.0.image",
-              "settings.attributes.title",
-              "settings.attributes.alt"
-          ],
           "a608c60e-5765-49e9-88cf-0271e8bebf2b": [],
           "b4c72932-3b83-463e-9531-6b8d4e76b17c": [],
           "5f755c02-6b9c-4048-83c2-757ead614280": [],
@@ -4590,7 +4428,8 @@ json_values: |
               "settings.linkToPage"
           ],
           "a08fc160-cbd2-409a-a20c-1886a9076721": [],
-          "32d3d0f7-2fa9-4c29-8d5f-3ef634f3aa0c": []
+          "32d3d0f7-2fa9-4c29-8d5f-3ef634f3aa0c": [],
+          "e28ff52e-2a66-4639-b309-3b86bedecbac": []
       },
       "meta": {
           "fieldHistory": []

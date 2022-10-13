@@ -3,11 +3,21 @@ langcode: en
 status: true
 dependencies:
   config:
+    - cohesion_custom_styles.cohesion_custom_style.097f31b2
+    - cohesion_custom_styles.cohesion_custom_style.0f2c7187
+    - cohesion_custom_styles.cohesion_custom_style.45861218
+    - cohesion_custom_styles.cohesion_custom_style.58a35e7a
+    - cohesion_custom_styles.cohesion_custom_style.65dc3072
+    - cohesion_custom_styles.cohesion_custom_style.7ef725fd
+    - cohesion_custom_styles.cohesion_custom_style.96e94044
+    - cohesion_custom_styles.cohesion_custom_style.a13b8c94
+    - cohesion_custom_styles.cohesion_custom_style.bfd0fecd
+    - cohesion_custom_styles.cohesion_custom_style.ed4b7a3d
+    - cohesion_custom_styles.cohesion_custom_style.ee93d997
+    - cohesion_elements.cohesion_component.cpt_breadcrumbs
     - cohesion_templates.cohesion_master_templates.master_template
-    - image.style.coh_large_super_landscape
-    - image.style.coh_medium_super_landscape
+    - cohesion_website_settings.cohesion_color.gray-10
     - image.style.coh_small_landscape
-    - image.style.coh_x_large_super_landscape
 label: 'Full content (Node, Event)'
 id: node_event_full
 json_values: |
@@ -40,7 +50,7 @@ json_values: |
                       "uid": "row-for-columns",
                       "title": "Row for columns",
                       "status": {
-                          "collapsed": true
+                          "collapsed": false
                       },
                       "uuid": "47d8afbc-9ed9-48e6-9e41-cf9548134510",
                       "parentUid": "container",
@@ -195,27 +205,20 @@ json_values: |
                               "uid": "column",
                               "title": "Column",
                               "status": {
-                                  "collapsed": true,
-                                  "collapsedParents": [
-                                      "47d8afbc-9ed9-48e6-9e41-cf9548134510"
-                                  ]
+                                  "collapsed": false
                               },
                               "uuid": "90f589d7-a755-44b9-a08a-1afe7bbed81d",
                               "parentUid": "row-for-columns",
                               "children": [
                                   {
-                                      "type": "item",
-                                      "uid": "picture",
-                                      "title": "Picture",
-                                      "selected": false,
+                                      "type": "container",
+                                      "uid": "drupal-field",
+                                      "title": "Field",
                                       "status": {
-                                          "collapsed": true,
-                                          "isopen": false,
-                                          "collapsedParents": [
-                                              "47d8afbc-9ed9-48e6-9e41-cf9548134510"
-                                          ]
+                                          "collapsed": true
                                       },
-                                      "uuid": "79e7a391-3a26-4297-9a2c-30d0d2df74f1",
+                                      "iconColor": "drupal",
+                                      "uuid": "bd301e82-60b6-4bce-8fdd-dc097152536c",
                                       "parentUid": "column",
                                       "children": []
                                   }
@@ -228,7 +231,7 @@ json_values: |
                       "uid": "row-for-columns",
                       "title": "Row for columns",
                       "status": {
-                          "collapsed": true
+                          "collapsed": false
                       },
                       "uuid": "8bfc5a1e-ae51-4a48-b5d6-6a3ebe174503",
                       "parentUid": "container",
@@ -3825,91 +3828,6 @@ json_values: |
                   "items": []
               }
           },
-          "79e7a391-3a26-4297-9a2c-30d0d2df74f1": {
-              "settings": {
-                  "formDefinition": [
-                      {
-                          "formKey": "picture-settings",
-                          "children": [
-                              {
-                                  "formKey": "picture-info",
-                                  "breakpoints": [],
-                                  "activeFields": [
-                                      {
-                                          "name": "title",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "alt",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "lazyload",
-                                          "active": true
-                                      }
-                                  ]
-                              },
-                              {
-                                  "formKey": "picture-images",
-                                  "breakpoints": [
-                                      {
-                                          "name": "xl"
-                                      },
-                                      {
-                                          "name": "md"
-                                      },
-                                      {
-                                          "name": "sm"
-                                      },
-                                      {
-                                          "name": "ps"
-                                      }
-                                  ],
-                                  "activeFields": [
-                                      {
-                                          "name": "displaySize",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "imageAlignment",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "pictureImagesArray",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "image",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "imageStyle",
-                                          "active": true
-                                      }
-                                  ]
-                              },
-                              {
-                                  "formKey": "picture-style",
-                                  "breakpoints": [],
-                                  "activeFields": [
-                                      {
-                                          "name": "customStyle",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "customStyle",
-                                          "active": true
-                                      }
-                                  ]
-                              }
-                          ]
-                      }
-                  ],
-                  "selectorType": "topLevel",
-                  "form": null,
-                  "items": []
-              }
-          },
           "4693beae-0836-4a8e-8010-60dfd656c71b": {
               "settings": {
                   "formDefinition": [
@@ -5103,7 +5021,8 @@ json_values: |
                   "items": [],
                   "form": null
               }
-          }
+          },
+          "bd301e82-60b6-4bce-8fdd-dc097152536c": {}
       },
       "model": {
           "168d7c8d-0ee9-45c1-a2f3-414a62b02f48": {
@@ -5616,72 +5535,13 @@ json_values: |
                   "hideData": "[node:field_event_image]"
               }
           },
-          "79e7a391-3a26-4297-9a2c-30d0d2df74f1": {
+          "bd301e82-60b6-4bce-8fdd-dc097152536c": {
               "settings": {
-                  "title": "Picture",
-                  "customStyle": [
-                      {
-                          "customStyle": ""
-                      }
-                  ],
-                  "styles": {
-                      "xl": {
-                          "pictureImagesArray": [
-                              {
-                                  "imageStyle": "coh_x_large_super_landscape",
-                                  "image": "[node:field_event_image:entity:image:entity:path]"
-                              }
-                          ],
-                          "displaySize": "coh-image-responsive"
-                      },
-                      "md": {
-                          "pictureImagesArray": [
-                              {
-                                  "imageStyle": "coh_large_super_landscape"
-                              }
-                          ],
-                          "displaySize": "coh-image-responsive"
-                      },
-                      "sm": {
-                          "pictureImagesArray": [
-                              {
-                                  "imageStyle": "coh_medium_super_landscape"
-                              }
-                          ],
-                          "displaySize": "coh-image-responsive"
-                      },
-                      "ps": {
-                          "pictureImagesArray": [
-                              {
-                                  "imageStyle": "coh_small_landscape"
-                              }
-                          ],
-                          "displaySize": "coh-image-responsive"
-                      }
-                  },
-                  "lazyload": false,
+                  "title": "Field",
                   "settings": {
-                      "lazyload": false,
-                      "styles": {
-                          "xl": {
-                              "displaySize": "coh-image-responsive",
-                              "pictureImagesArray": [
-                                  {
-                                      "imageStyle": ""
-                                  }
-                              ]
-                          }
-                      },
-                      "customStyle": [
-                          {
-                              "customStyle": ""
-                          }
-                      ]
+                      "drupalField": ""
                   },
-                  "attributes": {
-                      "title": "[node:field_event_image:entity:name]",
-                      "alt": "[node:field_event_image:entity:image:alt]"
-                  }
+                  "drupalField": "content.field_event_image"
               },
               "context-visibility": {
                   "contextVisibility": {
@@ -5690,7 +5550,7 @@ json_values: |
               },
               "styles": {
                   "settings": {
-                      "element": "picture"
+                      "element": "drupal-field"
                   }
               }
           },
@@ -6731,19 +6591,6 @@ json_values: |
               }
           },
           "90f589d7-a755-44b9-a08a-1afe7bbed81d": {},
-          "79e7a391-3a26-4297-9a2c-30d0d2df74f1": {
-              "settings": {
-                  "styles": {
-                      "xl": {
-                          "pictureImagesArray": [
-                              {
-                                  "image": ""
-                              }
-                          ]
-                      }
-                  }
-              }
-          },
           "1bcba3f7-dd3a-4498-96b1-1bf1fd6d62ec": {},
           "13999c6f-7276-49ae-8dbf-85a40b09a8b3": {},
           "19812813-c342-44b5-9f68-b123c2bbd2a9": {
@@ -6833,7 +6680,8 @@ json_values: |
               }
           },
           "6c8bd15c-3f05-4e3f-8278-32c689624eee": {},
-          "b94fb4e1-7080-4f13-baab-8f3e8808a74c": {}
+          "b94fb4e1-7080-4f13-baab-8f3e8808a74c": {},
+          "bd301e82-60b6-4bce-8fdd-dc097152536c": {}
       },
       "variableFields": {
           "a4e18250-0fff-41a9-9c42-19c5615b07bc": [],
@@ -6843,11 +6691,6 @@ json_values: |
               "settings.content"
           ],
           "90f589d7-a755-44b9-a08a-1afe7bbed81d": [],
-          "79e7a391-3a26-4297-9a2c-30d0d2df74f1": [
-              "settings.attributes.title",
-              "settings.attributes.alt",
-              "settings.styles.xl.pictureImagesArray.0.image"
-          ],
           "1bcba3f7-dd3a-4498-96b1-1bf1fd6d62ec": [],
           "13999c6f-7276-49ae-8dbf-85a40b09a8b3": [],
           "19812813-c342-44b5-9f68-b123c2bbd2a9": [
@@ -6935,7 +6778,8 @@ json_values: |
           ],
           "b94fb4e1-7080-4f13-baab-8f3e8808a74c": [
               "settings.content"
-          ]
+          ],
+          "bd301e82-60b6-4bce-8fdd-dc097152536c": []
       },
       "meta": {
           "fieldHistory": []
