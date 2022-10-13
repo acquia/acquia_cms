@@ -11,12 +11,12 @@ dependencies:
     - field.field.node.place.field_place_type
     - field.field.node.place.field_tags
     - node.type.place
-  enforced:
-    module:
-      - acquia_cms_place
   module:
     - address
     - user
+  enforced:
+    module:
+      - acquia_cms_place
 id: node.place.card
 targetEntityType: node
 bundle: place
@@ -24,24 +24,32 @@ mode: card
 content:
   field_place_address:
     type: address_default
-    weight: 0
-    region: content
     label: above
     settings: {  }
     third_party_settings: {  }
-  field_place_telephone:
-    type: string
     weight: 1
     region: content
+  field_place_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: card
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_place_telephone:
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 2
+    region: content
 hidden:
   body: true
   content_moderation_control: true
   field_categories: true
-  field_place_image: true
   field_place_type: true
   field_tags: true
   langcode: true
