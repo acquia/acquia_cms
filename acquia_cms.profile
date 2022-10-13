@@ -203,6 +203,18 @@ function acquia_cms_modules_uninstalled(array $modules) {
 }
 
 /**
+ * Implements hook_module_implements_alter().
+ */
+function acquia_cms_module_implements_alter(array &$implementations) : void {
+
+  // Prevent installation of site studio package on module install
+  // during site installation from other modules, this causes issue.
+  if (InstallerKernel::installationAttempted()) {
+    unset($implementations['cohesion_sync']);
+  }
+}
+
+/**
  * Method that calls another method to capture the installation end time.
  */
 function install_acms_finished() {
