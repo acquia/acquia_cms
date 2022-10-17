@@ -4,7 +4,9 @@ language: php
 # The lowest version of PHP supported by all of Drupal, Acquia, and ORCA itself.
 # @see https://www.drupal.org/docs/8/system-requirements/php-requirements
 # @see https://docs.acquia.com/acquia-cloud/arch/tech-platform/
-php: "7.4"
+php:
+  - 7.4
+  - 8.1
 
 services:
   - mysql
@@ -72,7 +74,9 @@ matrix:
     # The standard ORCA jobs provide broad out-of-the-box coverage.
     # @see https://github.com/acquia/orca/blob/master/docs/understanding-orca.md#continuous-integration
     - { env: ORCA_JOB=STATIC_CODE_ANALYSIS, name: "Static code analysis" }
+    - { env: ORCA_JOB=STATIC_CODE_ANALYSIS PHP_VER=8.1, php: "8.1", dist: focal, name: "Static code analysis" }
     - { env: ORCA_JOB=STRICT_DEPRECATED_CODE_SCAN, name: "Strict deprecated code scan" }
+    - { env: ORCA_JOB=STRICT_DEPRECATED_CODE_SCAN PHP_VER=8.1, php: "8.1", dist: focal, name: "Strict deprecated code scan" }
     # The following two jobs are not applicable because Acquia CMS does not support versions prior to Drupal 9.1.x.
     # - { env: ORCA_JOB=INTEGRATED_TEST_ON_OLDEST_SUPPORTED, name: "Integrated test on oldest supported Drupal core version" }
     # - { env: ORCA_JOB=INTEGRATED_TEST_ON_LATEST_LTS, name: "Integrated test on latest LTS Drupal core version" }
@@ -80,7 +84,7 @@ matrix:
     - { env: ORCA_JOB=INTEGRATED_UPGRADE_TEST_FROM_PREVIOUS_MINOR, if: type = cron, name: "Integrated upgrade test from previous minor" }
     - { env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT, if: type = cron, name: "Isolated test on current Drupal core version" }
     - { env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT, if: type = cron, php: "8.0", dist: focal, name: "Isolated test on current Drupal core version and PHP 8" }
-    - { env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT PHP_VER=8.1, if: type = cron, php: "8.1", dist: focal, name: "Isolated test on current Drupal core version and PHP 8.1" }
+    - { env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT PHP_VER=8.1, php: "8.1", dist: focal, name: "Isolated test on current Drupal core version and PHP 8.1" }
     # To send PHPUnit test coverage data to Coveralls (coveralls.io), configure
     # your GitHub repository according to the FAQ below and uncomment the
     # following line. By default this job is allowed to fail (see below) so that
