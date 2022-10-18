@@ -10,7 +10,6 @@ use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\media\IFrameUrlHelper;
 use Drupal\media\OEmbed\ResourceFetcherInterface;
 use Drupal\media\OEmbed\UrlResolverInterface;
-use Drupal\media\Plugin\Field\FieldFormatter\OEmbedFormatter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
