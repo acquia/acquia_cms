@@ -111,6 +111,7 @@ class AcmsModulesUninstallValidator implements ModuleUninstallValidatorInterface
   protected function hasContent(string $node_type): bool {
     if ($node_type) {
       $nodes = $this->entityTypeManager->getStorage('node')->getQuery()
+        ->accessCheck(FALSE)
         ->condition('type', $node_type)
         ->execute();
       return (bool) $nodes;
@@ -133,6 +134,7 @@ class AcmsModulesUninstallValidator implements ModuleUninstallValidatorInterface
   protected function hasMedia(string $media_type): bool {
     if ($media_type) {
       $media = $this->entityTypeManager->getStorage('media')->getQuery()
+        ->accessCheck(FALSE)
         ->condition('bundle', $media_type)
         ->execute();
       return (bool) $media;
