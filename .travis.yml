@@ -121,8 +121,8 @@ matrix:
     # Uncomment the following four lines to enable the corresponding tests once
     # the next major version of Drupal core has an alpha release or earlier.
     # Until then it's wasteful to use CI jobs on them, even if they exit early.
-    # - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_BETA_OR_LATER, name: "Isolated test on next major, latest minor beta-or-later Drupal core version" }
-    # - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_BETA_OR_LATER, name: "Integrated test on next major, latest minor beta-or-later Drupal core version" }
+    - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_BETA_OR_LATER, php: "8.1", dist: focal, name: "Isolated test on next major, latest minor beta-or-later Drupal core version" }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_BETA_OR_LATER, php: "8.1", dist: focal, name: "Integrated test on next major, latest minor beta-or-later Drupal core version" }
     - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV, php: "8.1", dist: focal, name: "Isolated test on next major, latest minor dev Drupal core version" }
     - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV, php: "8.1", dist: focal, name: "Integrated test on next major, latest minor dev Drupal core version" }
     - { env: ORCA_JOB=ISOLATED_UPGRADE_TEST_TO_NEXT_MAJOR_DEV, if: type = cron, name: "Isolated upgrade test to next major dev Drupal core version" }
@@ -143,6 +143,8 @@ matrix:
     - env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR_DEV
     - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV, php: "8.1", dist: focal }
     - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV, php: "8.1", dist: focal }
+    - { env: ORCA_JOB=ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_BETA_OR_LATER, php: "8.1", dist: focal }
+    - { env: ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_BETA_OR_LATER, php: "8.1",  dist: focal }
     - env: ORCA_JOB=ISOLATED_UPGRADE_TEST_TO_NEXT_MAJOR_DEV
     - env: ORCA_JOB=ISOLATED_TEST_ON_CURRENT PHP_VER=8.1
 
