@@ -48,23 +48,6 @@ content:
     third_party_settings: {  }
     weight: 5
     region: content
-  field_event_image:
-    type: entity_reference_entity_view
-    label: hidden
-    settings:
-      view_mode: card
-      link: false
-    third_party_settings: {  }
-    weight: 2
-    region: content
-  field_event_place:
-    type: entity_reference_label
-    label: hidden
-    settings:
-      link: false
-    third_party_settings: {  }
-    weight: 6
-    region: content
   field_event_start:
     type: datetime_default
     label: hidden
@@ -79,10 +62,20 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
+  field_event_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: card
+      link: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
 hidden:
   field_categories: true
   field_door_time: true
   field_event_duration: true
+  field_event_place: true
   field_event_type: true
   field_tags: true
   langcode: true
