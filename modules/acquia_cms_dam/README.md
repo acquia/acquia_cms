@@ -40,14 +40,14 @@ Require Acquia CMS DAM.
 
 `composer require drupal/acquia_cms_dam`
 
-#Configuration
+# Configuration
 This module need manual Configuration
-Visit `/admin/config/acquia-dam`
-Provide your Acquia DAM Domain & click on Save DAM Configuration
-Login to DAM server and authenticate
-Visit `/user`
-Click on Acquia DAM tab on user profile page.
-Click on Connect to Acquia Dam.
+* Visit `/admin/config/acquia-dam`
+* Provide your Acquia DAM Domain & click on Save DAM Configuration
+* Login to DAM server and authenticate
+* Visit `/user`
+* Click on `Acquia DAM` tab on user profile page.
+* Click on `Connect` under Connect to Acquia Dam.
 
 # Maintainers
 Current maintainers:
