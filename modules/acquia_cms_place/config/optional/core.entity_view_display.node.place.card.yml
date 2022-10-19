@@ -5,6 +5,7 @@ dependencies:
     - core.entity_view_mode.node.card
     - field.field.node.place.body
     - field.field.node.place.field_categories
+    - field.field.node.place.field_geofield
     - field.field.node.place.field_place_address
     - field.field.node.place.field_place_image
     - field.field.node.place.field_place_telephone
@@ -27,15 +28,6 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 1
-    region: content
-  field_place_image:
-    type: entity_reference_entity_view
-    label: hidden
-    settings:
-      view_mode: card
-      link: false
-    third_party_settings: {  }
     weight: 0
     region: content
   field_place_telephone:
@@ -46,10 +38,22 @@ content:
     third_party_settings: {  }
     weight: 2
     region: content
+  field_place_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: card
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  body:
+    weight: 1
 hidden:
   body: true
   content_moderation_control: true
   field_categories: true
+  field_geofield: true
   field_place_type: true
   field_tags: true
   langcode: true

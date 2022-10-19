@@ -50,6 +50,14 @@ content:
     third_party_settings: {  }
     weight: 2
     region: content
+  field_place_telephone:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
   field_place_image:
     type: entity_reference_entity_view
     label: hidden
@@ -58,14 +66,6 @@ content:
       link: false
     third_party_settings: {  }
     weight: 0
-    region: content
-  field_place_telephone:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 3
     region: content
 hidden:
   content_moderation_control: true

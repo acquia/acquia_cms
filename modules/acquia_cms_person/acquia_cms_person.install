@@ -59,3 +59,35 @@ function acquia_cms_person_update_8001() {
     }
   }
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update Person display modes.
+ */
+function acquia_cms_person_update_8002() {
+  // Load and update default view mode.
+  $display_modes = [
+    'default',
+    'card',
+    'horizontal_card',
+    'search_results',
+    'teaser',
+  ];
+  $view_modes = [
+    'full',
+    'card',
+    'large_super_landscape',
+    'small',
+    'teaser',
+  ];
+  foreach ($display_modes as $key => $display_mode) {
+    $person_default = \Drupal::configFactory()->getEditable('core.entity_view_display.node.person.' . $display_mode);
+    if ($person_default->get('content.field_person_image.type') == 'entity_reference_label') {
+      $person_default->set('content.field_person_image.type', 'entity_reference_entity_view');
+      $person_default->set('content.field_person_image.settings.view_mode', $view_modes[$key]);
+      $person_default->save();
+    }
+  }
+
+}

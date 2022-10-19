@@ -59,3 +59,58 @@ function acquia_cms_place_update_8001() {
     }
   }
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update Place display modes.
+ */
+function acquia_cms_place_update_8002() {
+  // Load and update default view mode.
+  $place_image_field = [
+    'field_place_image' => [
+      'type' => 'entity_reference_entity_view',
+      'label' => 'hidden',
+      'settings' => [
+        'view_mode' => 'full',
+        'link' => 'false',
+      ],
+      'third_party_settings' => [],
+      'weight' => 0,
+      'region' => 'content',
+    ],
+  ];
+  $display_modes = [
+    'default',
+    'card',
+    'horizontal_card',
+    'search_results',
+    'teaser',
+  ];
+  $view_modes = [
+    'full',
+    'card',
+    'large_super_landscape',
+    'small',
+    'teaser',
+  ];
+  foreach ($display_modes as $key => $display_mode) {
+    $place_default = \Drupal::configFactory()->getEditable('core.entity_view_display.node.place.' . $display_mode);
+    if ($place_default->get('hidden.field_place_image')) {
+      $place_image_field['field_place_image']['settings']['view_mode'] = $view_modes[$key];
+      $place_default->set('content', array_merge($place_default->get('content'), $place_image_field));
+      if ($place_default->get('content.body')) {
+        $place_default->set('content.body.weight', $place_default->get('content.body.weight') + 1);
+      }
+      if ($place_default->get('content.field_place_address')) {
+        $place_default->set('content.field_place_address.weight', $place_default->get('content.field_place_address.weight') + 1);
+      }
+      if ($place_default->get('content.field_place_telephone')) {
+        $place_default->set('content.field_place_telephone.weight', $place_default->get('content.field_place_telephone.weight') + 1);
+      }
+      $place_default->clear('hidden.field_place_image');
+      $place_default->save();
+    }
+  }
+
+}

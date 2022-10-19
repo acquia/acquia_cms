@@ -82,3 +82,48 @@ function acquia_cms_article_update_8003() {
     }
   }
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update Article display modes.
+ */
+function acquia_cms_article_update_8004() {
+  // Load and update default view mode.
+  $article_image_field = [
+    'field_article_image' => [
+      'type' => 'entity_reference_entity_view',
+      'label' => 'hidden',
+      'settings' => [
+        'view_mode' => 'full',
+        'link' => 'false',
+      ],
+      'third_party_settings' => [],
+      'weight' => 3,
+      'region' => 'content',
+    ],
+  ];
+  $display_modes = [
+    'default',
+    'card',
+    'horizontal_card',
+    'search_results',
+    'teaser',
+  ];
+  $view_modes = [
+    'full',
+    'card',
+    'large_super_landscape',
+    'small',
+    'teaser',
+  ];
+  foreach ($display_modes as $key => $display_mode) {
+    $article_default = \Drupal::configFactory()->getEditable('core.entity_view_display.node.article.' . $display_mode);
+    if ($article_default->get('hidden.field_article_image')) {
+      $article_image_field['field_article_image']['settings']['view_mode'] = $view_modes[$key];
+      $article_default->set('content', array_merge($article_default->get('content'), $article_image_field));
+      $article_default->clear('hidden.field_article_image');
+      $article_default->save();
+    }
+  }
+}
