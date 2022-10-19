@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for ACMS DAM.
+ */
+
+/**
+ * Implements hook_modules_installed().
+ */
+function acquia_cms_dam_modules_installed($modules) {
+  $content_model = [
+    'acquia_cms_article',
+    'acquia_cms_event',
+    'acquia_cms_page',
+    'acquia_cms_person',
+    'acquia_cms_place',
+  ];
+  $moduleHandler = \Drupal::service('module_handler');
+  if (in_array('acquia_cms_dam', $modules) || $content_model = array_intersect($modules, $content_model)) {
+    foreach ($content_model as $module) {
+      if ($moduleHandler->moduleExists($module)) {
+        $node_type = explode('_', $module);
+        // Update content type image field to support Acquia DAM.
+        _acquia_cms_dam_update_content_type_image_field(end($node_type));
+      }
+    }
+    // Flush cache to reflect Acquia CMS DAM configs.
+    drupal_flush_all_caches();
+  }
+}
+
+/**
+ * Helper function to update content type image field config.
+ *
+ * @param string $node_type
+ *   The node type.
+ */
+function _acquia_cms_dam_update_content_type_image_field(string $node_type) {
+  // Update content type image field configuration for DAM integration.
+  if ($node_type) {
+    $field = 'field.field.node.' . $node_type . '.field_' . $node_type . '_image';
+    if ($field_config = \Drupal::configFactory()->getEditable($field)) {
+      if (!array_intersect($field_config->get('dependencies.config'), ['media.type.acquia_dam_image_asset'])) {
+        $field_config->set('dependencies.config', array_merge($field_config->get('dependencies.config'), ['media.type.acquia_dam_image_asset']));
+      }
+      if (!$field_config->get('settings.handler_settings.target_bundles.acquia_dam_image_asset')) {
+        $field_config->set('settings.handler_settings.target_bundles.acquia_dam_image_asset', 'acquia_dam_image_asset');
+      }
+      if (!$field_config->get('settings.handler_settings.sort.direction')) {
+        $field_config->set('settings.handler_settings.sort.direction', 'ASC');
+      }
+      $field_config->save();
+    }
+  }
+}
