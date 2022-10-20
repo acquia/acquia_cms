@@ -88,29 +88,33 @@ function acquia_cms_place_update_8002() {
     'teaser',
   ];
   $view_modes = [
-    'full',
-    'card',
     'large_super_landscape',
-    'small',
+    'small_landscape',
+    'small_landscape',
+    'teaser',
     'teaser',
   ];
+  // Update Image field.
   foreach ($display_modes as $key => $display_mode) {
-    $place_default = \Drupal::configFactory()->getEditable('core.entity_view_display.node.place.' . $display_mode);
-    if ($place_default->get('hidden.field_place_image')) {
+    $place_view_mode = \Drupal::configFactory()->getEditable('core.entity_view_display.node.place.' . $display_mode);
+    if ($place_view_mode->get('hidden.field_place_image')) {
       $place_image_field['field_place_image']['settings']['view_mode'] = $view_modes[$key];
-      $place_default->set('content', array_merge($place_default->get('content'), $place_image_field));
-      if ($place_default->get('content.body')) {
-        $place_default->set('content.body.weight', $place_default->get('content.body.weight') + 1);
+      $place_view_mode->set('content', array_merge($place_view_mode->get('content'), $place_image_field));
+      if ($place_view_mode->get('content.body')) {
+        $place_view_mode->set('content.body.weight', $place_view_mode->get('content.body.weight') + 1);
       }
-      if ($place_default->get('content.field_place_address')) {
-        $place_default->set('content.field_place_address.weight', $place_default->get('content.field_place_address.weight') + 1);
+      if ($place_view_mode->get('content.field_place_address')) {
+        $place_view_mode->set('content.field_place_address.weight', $place_view_mode->get('content.field_place_address.weight') + 1);
       }
-      if ($place_default->get('content.field_place_telephone')) {
-        $place_default->set('content.field_place_telephone.weight', $place_default->get('content.field_place_telephone.weight') + 1);
+      if ($place_view_mode->get('content.field_place_telephone')) {
+        $place_view_mode->set('content.field_place_telephone.weight', $place_view_mode->get('content.field_place_telephone.weight') + 1);
       }
-      $place_default->clear('hidden.field_place_image');
-      $place_default->save();
+      $place_view_mode->clear('hidden.field_place_image');
+      $place_view_mode->save();
     }
   }
+
+  // Add referenced image view mode.
+  _acquia_cms_common_rewrite_configuration('core.entity_view_display.node.place.referenced_image', 'acquia_cms_place');
 
 }

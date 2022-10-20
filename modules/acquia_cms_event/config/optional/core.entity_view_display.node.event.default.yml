@@ -30,7 +30,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 2
     region: content
   content_moderation_control:
     settings: {  }
@@ -44,15 +44,25 @@ content:
       timezone_override: ''
       format_type: short
     third_party_settings: {  }
-    weight: 6
+    weight: 5
     region: content
-  field_event_place:
-    type: entity_reference_label
+  field_event_image:
+    type: entity_reference_entity_view
     label: hidden
     settings:
+      view_mode: large_super_landscape
       link: false
     third_party_settings: {  }
-    weight: 4
+    weight: 2
+    region: content
+  field_event_place:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: referenced_image
+      link: false
+    third_party_settings: {  }
+    weight: 3
     region: content
   field_event_start:
     type: datetime_default
@@ -61,21 +71,12 @@ content:
       timezone_override: ''
       format_type: short
     third_party_settings: {  }
-    weight: 5
+    weight: 4
     region: content
   links:
     settings: {  }
     third_party_settings: {  }
-    weight: 1
-    region: content
-  field_event_image:
-    type: entity_reference_entity_view
-    label: hidden
-    settings:
-      view_mode: full
-      link: false
-    third_party_settings: {  }
-    weight: 2
+    weight: 5
     region: content
 hidden:
   field_categories: true

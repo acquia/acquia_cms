@@ -74,20 +74,17 @@ function acquia_cms_person_update_8002() {
     'search_results',
     'teaser',
   ];
-  $view_modes = [
-    'full',
-    'card',
-    'large_super_landscape',
-    'small',
-    'teaser',
-  ];
-  foreach ($display_modes as $key => $display_mode) {
-    $person_default = \Drupal::configFactory()->getEditable('core.entity_view_display.node.person.' . $display_mode);
-    if ($person_default->get('content.field_person_image.type') == 'entity_reference_label') {
-      $person_default->set('content.field_person_image.type', 'entity_reference_entity_view');
-      $person_default->set('content.field_person_image.settings.view_mode', $view_modes[$key]);
-      $person_default->save();
+  // Update Image field.
+  foreach ($display_modes as $display_mode) {
+    $person_view_mode = \Drupal::configFactory()->getEditable('core.entity_view_display.node.person.' . $display_mode);
+    if ($person_view_mode->get('content.field_person_image.type') == 'entity_reference_label') {
+      $person_view_mode->set('content.field_person_image.type', 'entity_reference_entity_view');
+      $person_view_mode->set('content.field_person_image.settings.view_mode', 'x_small_square');
+      $person_view_mode->save();
     }
   }
+
+  // Add referenced image view mode.
+  _acquia_cms_common_rewrite_configuration('core.entity_view_display.node.person.referenced_image', 'acquia_cms_person');
 
 }

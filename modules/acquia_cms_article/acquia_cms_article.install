@@ -111,19 +111,41 @@ function acquia_cms_article_update_8004() {
     'teaser',
   ];
   $view_modes = [
-    'full',
-    'card',
     'large_super_landscape',
-    'small',
+    'small_landscape',
+    'small_landscape',
+    'teaser',
     'teaser',
   ];
+  // Update Image field.
   foreach ($display_modes as $key => $display_mode) {
-    $article_default = \Drupal::configFactory()->getEditable('core.entity_view_display.node.article.' . $display_mode);
-    if ($article_default->get('hidden.field_article_image')) {
+    $article_view_mode = \Drupal::configFactory()->getEditable('core.entity_view_display.node.article.' . $display_mode);
+    if ($article_view_mode->get('hidden.field_article_image')) {
       $article_image_field['field_article_image']['settings']['view_mode'] = $view_modes[$key];
-      $article_default->set('content', array_merge($article_default->get('content'), $article_image_field));
-      $article_default->clear('hidden.field_article_image');
-      $article_default->save();
+      $article_view_mode->set('content', array_merge($article_view_mode->get('content'), $article_image_field));
+      $article_view_mode->clear('hidden.field_article_image');
+      $article_view_mode->save();
     }
+  }
+
+  // Update Display Author field.
+  $field_display_author = [
+    'field_display_author' => [
+      'type' => 'entity_reference_entity_view',
+      'label' => 'hidden',
+      'settings' => [
+        'view_mode' => 'referenced_image',
+        'link' => 'false',
+      ],
+      'third_party_settings' => [],
+      'weight' => 4,
+      'region' => 'content',
+    ],
+  ];
+  $article_view_mode = \Drupal::configFactory()->getEditable('core.entity_view_display.node.article.default');
+  if ($article_view_mode->get('hidden.field_display_author')) {
+    $article_view_mode->set('content', array_merge($article_view_mode->get('content'), $field_display_author));
+    $article_view_mode->clear('hidden.field_display_author');
+    $article_view_mode->save();
   }
 }
