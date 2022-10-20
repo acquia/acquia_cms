@@ -2,44 +2,45 @@ name: "Acquia CMS Common"
 package: "Acquia CMS"
 description: "Handles shared functionality for Acquia CMS."
 type: module
-core_version_requirement: ^9
+core_version_requirement: ^9.3 || ^10
 dependencies:
-  - drupal:acquia_purge
+  - acquia_purge:acquia_purge
+  - acquia_telemetry:acquia_telemetry
   - drupal:block
   - drupal:ckeditor
   - drupal:config
-  - drupal:config_ignore
-  - drupal:config_rewrite
+  - config_ignore:config_ignore
+  - config_rewrite:config_rewrite
   - drupal:config_translation
   - drupal:content_moderation
   - drupal:content_translation
-  - drupal:diff
-  - drupal:entity_clone
-  - drupal:focal_point
+  - diff:diff
+  - entity_clone:entity_clone
+  - focal_point:focal_point
   - drupal:language
   - drupal:media
   - drupal:media_library
   - drupal:menu_ui
-  - drupal:metatag_open_graph
-  - drupal:metatag_twitter_cards
-  - drupal:moderation_dashboard
-  - drupal:moderation_sidebar
-  - drupal:password_policy_character_types
-  - drupal:password_policy_length
-  - drupal:password_policy_username
-  - drupal:pathauto
-  - drupal:purge_processor_cron
-  - drupal:purge_processor_lateruntime
-  - drupal:purge_ui
-  - drupal:redirect
-  - drupal:responsive_preview
-  - drupal:scheduler_content_moderation_integration
-  - drupal:schema_article
-  - drupal:schema_person
-  - drupal:schema_place
-  - drupal:seckit
-  - drupal:simple_sitemap
-  - drupal:smart_trim
+  - metatag_open_graph:metatag_open_graph
+  - metatag_twitter_cards:metatag_twitter_cards
+  - moderation_dashboard:moderation_dashboard
+  - moderation_sidebar:moderation_sidebar
+  - password_policy:password_policy_character_types
+  - password_policy:password_policy_length
+  - password_policy:password_policy_username
+  - pathauto:pathauto
+  - purge:purge_processor_cron
+  - purge:purge_processor_lateruntime
+  - purge:purge_ui
+  - redirect:redirect
+  - responsive_preview:responsive_preview
+  - scheduler_content_moderation_integration:scheduler_content_moderation_integration
+  - schema_metatag:schema_article
+  - schema_metatag:schema_person
+  - schema_metatag:schema_place
+  - seckit:seckit
+  - schema_metatag:simple_sitemap
+  - smart_trim:smart_trim
   - drupal:taxonomy
-  - drupal:username_enumeration_prevention
-  - drupal:workbench_email
+  - username_enumeration_prevention:username_enumeration_prevention
+  - workbench_email:workbench_email
