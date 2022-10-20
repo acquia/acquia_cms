@@ -31,7 +31,7 @@ class ImageFormatterTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->entityDisplay = $this->container->get('entity_display.repository');
   }
