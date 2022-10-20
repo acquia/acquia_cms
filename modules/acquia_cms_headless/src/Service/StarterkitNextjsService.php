@@ -326,6 +326,7 @@ class StarterkitNextjsService {
     $rolesStorage = $this->entityTypeManager->getStorage('user_role');
     $query = $rolesStorage->getQuery();
     return $query
+      ->accessCheck(FALSE)
       ->condition('id', ["authenticated", "anonymous"], 'NOT IN')
       ->execute();
   }
@@ -536,6 +537,7 @@ class StarterkitNextjsService {
     $userStorage = $this->entityTypeManager->getStorage('user');
     $query = $userStorage->getQuery();
     $uids = $query
+      ->accessCheck(FALSE)
       ->condition('name', 'Headless')
       ->range(0, 1)
       ->execute();
@@ -775,7 +777,7 @@ class StarterkitNextjsService {
     $consumerStorage = $this->entityTypeManager->getStorage('consumer');
     $query = $consumerStorage->getQuery();
     $query->condition('label', 'Default Consumer', '!=');
-    $count = $query->count()->execute();
+    $count = $query->accessCheck(FALSE)->count()->execute();
 
     return ($count >= 1) ? TRUE : FALSE;
 
