@@ -2,20 +2,20 @@ name: "Acquia CMS Headless"
 package: 'Acquia CMS'
 type: module
 description: 'Provides functionality for Progressively Decoupled and Purely Headless sites using Node and Next JS.'
-core_version_requirement: ^9
+core_version_requirement: ^9 || ^10
 dependencies:
-  - drupal:acquia_cms_tour
-  - drupal:consumers
-  - drupal:entity_clone
-  - drupal:jsonapi_extras
-  - drupal:jsonapi_menu_items
-  - drupal:jsonapi_resources
-  - drupal:next
-  - drupal:next_jsonapi
-  - drupal:openapi_jsonapi
-  - drupal:openapi_ui
-  - drupal:openapi_ui_redoc
-  - drupal:openapi_ui_swagger
+  - acquia_cms_tour:acquia_cms_tour
+  - consumers:consumers
+  - entity_clone:entity_clone
+  - jsonapi_extras:jsonapi_extras
+  - jsonapi_menu_items:jsonapi_menu_items
+  - jsonapi_resources:jsonapi_resources
+  - next:next
+  - next:next_jsonapi
+  - openapi_jsonapi:openapi_jsonapi
+  - openapi_ui:openapi_ui
+  - openapi_ui_redoc:openapi_ui_redoc
+  - openapi_ui_swagger:openapi_ui_swagger
   - drupal:rest
-  - drupal:restui
-  - drupal:simple_oauth
+  - restui:restui
+  - simple_oauth:simple_oauth

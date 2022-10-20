@@ -81,6 +81,7 @@ function acquia_cms_headless_update_8002() {
   $rolesStorage = \Drupal::entityTypeManager()->getStorage('user_role');
   $query = $rolesStorage->getQuery();
   $roleIds = $query
+    ->accessCheck(FALSE)
     ->condition('id', ["authenticated", "anonymous", "headless"], 'NOT IN')
     ->execute();
   $config = \Drupal::configFactory()->getEditable('acquia_cms_headless.settings');
