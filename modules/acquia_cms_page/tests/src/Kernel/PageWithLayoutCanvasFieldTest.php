@@ -17,7 +17,7 @@ class PageWithLayoutCanvasFieldTest extends FieldKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'node',
     'media',
     'acquia_cms_page',
@@ -43,7 +43,7 @@ class PageWithLayoutCanvasFieldTest extends FieldKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $this->installEntitySchema('field_config');
     $this->fieldDefinition = $this->container->get('entity_type.manager')->getStorage('field_config');
