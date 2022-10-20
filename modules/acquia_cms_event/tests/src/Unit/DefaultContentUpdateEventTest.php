@@ -72,7 +72,7 @@ class DefaultContentUpdateEventTest extends UnitTestCase {
   /**
    * Once test method has finished running, tearDown() will be invoked.
    */
-  public function tearDown() {
+  public function tearDown(): void {
     parent::tearDown();
     unset($this->updateEvent);
   }
