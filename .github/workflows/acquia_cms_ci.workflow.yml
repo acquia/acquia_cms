@@ -190,6 +190,7 @@ jobs:
       COMPOSER_PROCESS_TIMEOUT: 1800
       MODULES: ${{ matrix.modules }}
       JOB_TYPE: "isolated-tests"
+      CI: true
     strategy:
       matrix:
         orca-job:
@@ -250,6 +251,9 @@ jobs:
           # Do not run any existing site tests. We run them seperately.
           find modules -type d -name ExistingSite | xargs rm -rf && rm -rf tests/src/
           ../orca/bin/ci/before_install.sh
+          chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
+          CHROMEDRIVER_PID=$!
+          echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
       - name: Install
         run: ./tests/ci/install.sh
       - name: Before script
@@ -260,6 +264,7 @@ jobs:
         run: ../orca/bin/ci/before_cache.sh
       - name: After script
         run: |
+          kill -0 ${{ env.CHROMEDRIVER_PID }}
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
