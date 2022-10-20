@@ -31,7 +31,7 @@ jobs:
         orca-job:
           - STATIC_CODE_ANALYSIS
           - STRICT_DEPRECATED_CODE_SCAN
-        #php-version: [ "7.4" ]
+        #php-version: [ "8.1" ]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -40,7 +40,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
+          php-version: 8.1
           #coverage: xdebug
       - name: Download ORCA
         run: |
@@ -99,7 +99,7 @@ jobs:
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT_DEV
-        #php-version: [ "7.4" ]
+        #php-version: [ "8.1" ]
         acms_job:
           - integrated_php_unit_tests
           - integrated_existing_site_tests
@@ -112,7 +112,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
+          php-version: 8.1
           #coverage: xdebug
       - name: Setup MySQL
         run: |
@@ -195,7 +195,7 @@ jobs:
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT_DEV
-        #php-version: [ "7.4" ]
+        #php-version: [ "8.1" ]
         modules:
           - acquia_cms_article, acquia_cms_person, acquia_cms_place, acquia_cms_event
           - acquia_cms_page, acquia_cms_site_studio
@@ -226,7 +226,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
+          php-version: 8.1
           #coverage: xdebug
       - name: Download ORCA
         run: |
