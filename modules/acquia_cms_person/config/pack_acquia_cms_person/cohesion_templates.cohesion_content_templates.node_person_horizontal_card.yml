@@ -1,7 +1,10 @@
 uuid: 3a8d98d7-1e2f-40ce-8393-e45f81530e0e
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - cohesion_custom_styles.cohesion_custom_style.097f31b2
+    - cohesion_custom_styles.cohesion_custom_style.5f5e8fba
 label: 'Horizontal card (Node, Person)'
 id: node_person_horizontal_card
 json_values: |
@@ -77,22 +80,19 @@ json_values: |
                       "uid": "container",
                       "title": "Container",
                       "status": {
-                          "collapsed": true
+                          "collapsed": false
                       },
                       "uuid": "28a44604-339e-42b1-8f2d-ca3acb516675",
                       "parentUid": "container",
                       "children": [
                           {
-                              "type": "item",
-                              "uid": "image",
-                              "title": "Image",
+                              "type": "container",
+                              "uid": "drupal-field",
+                              "title": "Field",
                               "status": {
-                                  "collapsed": true,
-                                  "collapsedParents": [
-                                      "28a44604-339e-42b1-8f2d-ca3acb516675"
-                                  ]
+                                  "collapsed": true
                               },
-                              "uuid": "c81ef16a-cf06-4d86-9fdc-bc50098d702d",
+                              "uuid": "60fd2514-a44d-4a4e-b45b-417c982a5f58",
                               "parentUid": "container",
                               "children": []
                           }
@@ -552,6 +552,55 @@ json_values: |
                                           "active": false
                                       }
                                   ]
+                              },
+                              {
+                                  "formKey": "height",
+                                  "breakpoints": [
+                                      {
+                                          "name": "xl"
+                                      }
+                                  ],
+                                  "activeFields": [
+                                      {
+                                          "name": "min-height",
+                                          "active": false
+                                      },
+                                      {
+                                          "name": "max-height",
+                                          "active": false
+                                      },
+                                      {
+                                          "name": "height",
+                                          "active": true
+                                      }
+                                  ]
+                              }
+                          ]
+                      },
+                      {
+                          "formKey": "custom-css",
+                          "children": [
+                              {
+                                  "formKey": "css-property-and-css-value",
+                                  "breakpoints": [
+                                      {
+                                          "name": "xl"
+                                      }
+                                  ],
+                                  "activeFields": [
+                                      {
+                                          "name": "custom-css",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "customCssProperty",
+                                          "active": true
+                                      },
+                                      {
+                                          "name": "customCss",
+                                          "active": true
+                                      }
+                                  ]
                               }
                           ]
                       }
@@ -583,78 +632,6 @@ json_values: |
                       }
                   ],
                   "title": "Hide if no data",
-                  "selectorType": "topLevel",
-                  "form": null,
-                  "items": []
-              }
-          },
-          "c81ef16a-cf06-4d86-9fdc-bc50098d702d": {
-              "settings": {
-                  "formDefinition": [
-                      {
-                          "formKey": "image-settings",
-                          "children": [
-                              {
-                                  "formKey": "image-image",
-                                  "breakpoints": [],
-                                  "activeFields": [
-                                      {
-                                          "name": "image",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "title",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "alt",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "lazyload",
-                                          "active": true
-                                      }
-                                  ]
-                              },
-                              {
-                                  "formKey": "image-size",
-                                  "breakpoints": [
-                                      {
-                                          "name": "xl"
-                                      }
-                                  ],
-                                  "activeFields": [
-                                      {
-                                          "name": "displaySize",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "imageAlignment",
-                                          "active": true
-                                      }
-                                  ]
-                              },
-                              {
-                                  "formKey": "image-style",
-                                  "breakpoints": [],
-                                  "activeFields": [
-                                      {
-                                          "name": "imageStyle",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "customStyle",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "customStyle",
-                                          "active": true
-                                      }
-                                  ]
-                              }
-                          ]
-                      }
-                  ],
                   "selectorType": "topLevel",
                   "form": null,
                   "items": []
@@ -1379,7 +1356,8 @@ json_values: |
                   ],
                   "form": null
               }
-          }
+          },
+          "60fd2514-a44d-4a4e-b45b-417c982a5f58": {}
       },
       "model": {
           "741731aa-337e-422b-a4c0-4e3959a2ef7e": {
@@ -1650,6 +1628,19 @@ json_values: |
                           },
                           "max-width": {
                               "value": "144"
+                          },
+                          "custom-css": [
+                              {
+                                  "customCssProperty": {
+                                      "value": "object-fit"
+                                  },
+                                  "customCss": {
+                                      "value": "cover"
+                                  }
+                              }
+                          ],
+                          "height": {
+                              "value": "100%"
                           }
                       }
                   }
@@ -1659,41 +1650,13 @@ json_values: |
                   "hideData": "[node:field_person_image]"
               }
           },
-          "c81ef16a-cf06-4d86-9fdc-bc50098d702d": {
+          "60fd2514-a44d-4a4e-b45b-417c982a5f58": {
               "settings": {
-                  "title": "Image",
-                  "styles": {
-                      "xl": {
-                          "displaySize": "coh-image-responsive",
-                          "imageAlignment": "coh-image-align-left"
-                      }
-                  },
-                  "customStyle": [
-                      {
-                          "customStyle": ""
-                      }
-                  ],
-                  "lazyload": false,
+                  "title": "Field",
                   "settings": {
-                      "lazyload": false,
-                      "styles": {
-                          "xl": {
-                              "displaySize": "coh-image-responsive"
-                          }
-                      },
-                      "imageStyle": "",
-                      "customStyle": [
-                          {
-                              "customStyle": ""
-                          }
-                      ]
+                      "drupalField": ""
                   },
-                  "imageStyle": "x_small_square_320x320_",
-                  "image": "[node:field_person_image:entity:image:entity:path]",
-                  "attributes": {
-                      "title": "[node:field_person_image:entity:name]",
-                      "alt": "[node:field_person_image:entity:image:alt]"
-                  }
+                  "drupalField": "content.field_person_image"
               },
               "context-visibility": {
                   "contextVisibility": {
@@ -1702,7 +1665,7 @@ json_values: |
               },
               "styles": {
                   "settings": {
-                      "element": "img"
+                      "element": "drupal-field"
                   }
               }
           }
@@ -1711,11 +1674,6 @@ json_values: |
           "ab91ab40-fbb2-4a34-8cf3-ab70bd11573f": {},
           "28a44604-339e-42b1-8f2d-ca3acb516675": {},
           "741731aa-337e-422b-a4c0-4e3959a2ef7e": {},
-          "c81ef16a-cf06-4d86-9fdc-bc50098d702d": {
-              "settings": {
-                  "image": ""
-              }
-          },
           "09b805a2-c49e-46bf-adc8-ae2f2172c05e": {},
           "2400cbd9-d14d-4ec2-b6a3-eed8cb0e2429": {
               "settings": {
@@ -1726,17 +1684,13 @@ json_values: |
               "settings": {
                   "content": "Job title"
               }
-          }
+          },
+          "60fd2514-a44d-4a4e-b45b-417c982a5f58": {}
       },
       "variableFields": {
           "ab91ab40-fbb2-4a34-8cf3-ab70bd11573f": [],
           "28a44604-339e-42b1-8f2d-ca3acb516675": [],
           "741731aa-337e-422b-a4c0-4e3959a2ef7e": [],
-          "c81ef16a-cf06-4d86-9fdc-bc50098d702d": [
-              "settings.attributes.title",
-              "settings.attributes.alt",
-              "settings.image"
-          ],
           "09b805a2-c49e-46bf-adc8-ae2f2172c05e": [],
           "2400cbd9-d14d-4ec2-b6a3-eed8cb0e2429": [
               "settings.linkText",
@@ -1744,7 +1698,8 @@ json_values: |
           ],
           "8d02eee6-c6b8-46e8-aada-878817f57b3c": [
               "settings.content"
-          ]
+          ],
+          "60fd2514-a44d-4a4e-b45b-417c982a5f58": []
       },
       "meta": {
           "fieldHistory": []

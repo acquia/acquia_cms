@@ -159,3 +159,13 @@ function acquia_cms_common_content_model_role_presave_alter(RoleInterface &$role
     }
   }
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add referenced image view mode.
+ */
+function acquia_cms_common_update_8003() {
+  // Add referenced image view mode.
+  _acquia_cms_common_rewrite_configuration('core.entity_view_mode.node.referenced_image', 'acquia_cms_common');
+}
