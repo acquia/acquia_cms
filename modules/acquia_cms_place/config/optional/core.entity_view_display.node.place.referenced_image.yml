@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.places
+    - core.entity_view_mode.node.referenced_image
     - field.field.node.place.body
     - field.field.node.place.field_categories
     - field.field.node.place.field_geofield
@@ -13,37 +13,31 @@ dependencies:
     - field.field.node.place.field_tags
     - node.type.place
   module:
-    - address
     - user
   enforced:
     module:
       - acquia_cms_place
-id: node.place.places
+id: node.place.referenced_image
 targetEntityType: node
 bundle: place
-mode: places
+mode: referenced_image
 content:
-  field_place_address:
-    type: address_default
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 0
-    region: content
-  field_place_telephone:
-    type: string
+  field_place_image:
+    type: entity_reference_entity_view
     label: hidden
     settings:
-      link_to_entity: false
+      view_mode: small_landscape
+      link: false
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
 hidden:
   body: true
   content_moderation_control: true
   field_categories: true
   field_geofield: true
-  field_place_image: true
+  field_place_address: true
+  field_place_telephone: true
   field_place_type: true
   field_tags: true
   langcode: true
