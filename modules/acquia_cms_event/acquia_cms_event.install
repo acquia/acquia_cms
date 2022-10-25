@@ -71,3 +71,70 @@ function acquia_cms_event_update_8002() {
     }
   }
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update Event display modes.
+ */
+function acquia_cms_event_update_8003() {
+  // Load and update default view mode.
+  $event_image_field = [
+    'field_event_image' => [
+      'type' => 'entity_reference_entity_view',
+      'label' => 'hidden',
+      'settings' => [
+        'view_mode' => 'full',
+        'link' => 'false',
+      ],
+      'third_party_settings' => [],
+      'weight' => 2,
+      'region' => 'content',
+    ],
+  ];
+  $display_modes = [
+    'default',
+    'card',
+    'horizontal_card',
+    'search_results',
+    'teaser',
+  ];
+  $view_modes = [
+    'large_super_landscape',
+    'small_landscape',
+    'small_landscape',
+    'teaser',
+    'teaser',
+  ];
+  // Update Image field.
+  foreach ($display_modes as $key => $display_mode) {
+    $event_view_mode = \Drupal::configFactory()->getEditable('core.entity_view_display.node.event.' . $display_mode);
+    if ($event_view_mode->get('hidden.field_event_image')) {
+      $event_image_field['field_event_image']['settings']['view_mode'] = $view_modes[$key];
+      $event_view_mode->set('content', array_merge($event_view_mode->get('content'), $event_image_field));
+      if ($event_view_mode->get('content.body')) {
+        $event_view_mode->set('content.body.weight', $event_view_mode->get('content.body.weight') + 1);
+      }
+      if ($event_view_mode->get('content.field_event_end')) {
+        $event_view_mode->set('content.field_event_end.weight', $event_view_mode->get('content.field_event_end.weight') + 1);
+      }
+      if ($event_view_mode->get('content.field_event_place')) {
+        $event_view_mode->set('content.field_event_place.weight', $event_view_mode->get('content.field_event_place.weight') + 1);
+      }
+      if ($event_view_mode->get('content.field_event_start')) {
+        $event_view_mode->set('content.field_event_start.weight', $event_view_mode->get('content.field_event_start.weight') + 1);
+      }
+      $event_view_mode->clear('hidden.field_event_image');
+      $event_view_mode->save();
+    }
+  }
+
+  // Update Place field.
+  $event_view_mode = \Drupal::configFactory()->getEditable('core.entity_view_display.node.event.default');
+  if ($event_view_mode->get('content.field_event_place.type') == 'entity_reference_label') {
+    $event_view_mode->set('content.field_event_place.type', 'entity_reference_entity_view');
+    $event_view_mode->set('content.field_event_place.settings.view_mode', 'referenced_image');
+    $event_view_mode->save();
+  }
+
+}
