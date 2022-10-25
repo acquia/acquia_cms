@@ -13,12 +13,12 @@ dependencies:
     - field.field.node.person.field_place
     - field.field.node.person.field_tags
     - node.type.person
-  enforced:
-    module:
-      - acquia_cms_person
   module:
     - smart_trim
     - user
+  enforced:
+    module:
+      - acquia_cms_person
 id: node.person.search_results
 targetEntityType: node
 bundle: person
@@ -26,57 +26,58 @@ mode: search_results
 content:
   body:
     type: smart_trim
-    weight: 3
-    region: content
     label: hidden
     settings:
       trim_length: 128
       trim_type: chars
       trim_suffix: ...
-      wrap_class: trimmed
-      more_text: More
-      more_class: more-link
-      summary_handler: trim
       wrap_output: false
+      wrap_class: trimmed
       more_link: false
+      more_class: more-link
+      more_text: More
+      summary_handler: trim
       trim_options:
         text: false
         trim_zero: false
     third_party_settings: {  }
-  content_moderation_control:
-    weight: 4
+    weight: 3
     region: content
+  content_moderation_control:
     settings: {  }
     third_party_settings: {  }
+    weight: 4
+    region: content
   field_job_title:
     type: string
-    weight: 0
-    region: content
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-  field_person_image:
-    type: entity_reference_label
-    weight: 2
+    weight: 0
     region: content
+  field_person_image:
+    type: entity_reference_entity_view
     label: hidden
     settings:
-      link: true
+      view_mode: x_small_square
+      link: false
     third_party_settings: {  }
+    weight: 2
+    region: content
   field_person_type:
     type: entity_reference_label
-    weight: 1
-    region: content
     label: hidden
     settings:
       link: false
     third_party_settings: {  }
-  links:
-    weight: 5
+    weight: 1
     region: content
+  links:
     settings: {  }
     third_party_settings: {  }
+    weight: 5
+    region: content
 hidden:
   field_categories: true
   field_email: true

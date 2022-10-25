@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.card
+    - core.entity_view_mode.node.referenced_image
     - field.field.node.person.body
     - field.field.node.person.field_categories
     - field.field.node.person.field_email
@@ -14,47 +14,32 @@ dependencies:
     - field.field.node.person.field_tags
     - node.type.person
   module:
-    - text
     - user
   enforced:
     module:
       - acquia_cms_person
-id: node.person.card
+id: node.person.referenced_image
 targetEntityType: node
 bundle: person
-mode: card
+mode: referenced_image
 content:
-  body:
-    type: text_summary_or_trimmed
-    label: hidden
-    settings:
-      trim_length: 128
-    third_party_settings: {  }
-    weight: 1
-    region: content
   field_person_image:
     type: entity_reference_entity_view
     label: hidden
     settings:
-      view_mode: x_small_square
+      view_mode: large
       link: false
     third_party_settings: {  }
     weight: 0
     region: content
-  field_person_type:
-    type: entity_reference_label
-    label: hidden
-    settings:
-      link: false
-    third_party_settings: {  }
-    weight: 2
-    region: content
 hidden:
+  body: true
   content_moderation_control: true
   field_categories: true
   field_email: true
   field_job_title: true
   field_person_telephone: true
+  field_person_type: true
   field_place: true
   field_tags: true
   langcode: true
