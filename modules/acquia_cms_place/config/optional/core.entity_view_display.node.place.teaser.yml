@@ -12,13 +12,13 @@ dependencies:
     - field.field.node.place.field_place_type
     - field.field.node.place.field_tags
     - node.type.place
-  enforced:
-    module:
-      - acquia_cms_place
   module:
     - address
     - smart_trim
     - user
+  enforced:
+    module:
+      - acquia_cms_place
 id: node.place.teaser
 targetEntityType: node
 bundle: place
@@ -26,42 +26,51 @@ mode: teaser
 content:
   body:
     type: smart_trim
-    weight: 0
-    region: content
     label: hidden
     settings:
       trim_length: 128
       trim_type: chars
       trim_suffix: ..
-      wrap_class: trimmed
-      more_text: More
-      more_class: more-link
-      summary_handler: trim
       wrap_output: false
+      wrap_class: trimmed
       more_link: false
+      more_class: more-link
+      more_text: More
+      summary_handler: trim
       trim_options:
         text: false
         trim_zero: false
     third_party_settings: {  }
-  field_place_address:
-    type: address_default
     weight: 1
     region: content
+  field_place_address:
+    type: address_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-  field_place_telephone:
-    type: string
     weight: 2
     region: content
+  field_place_telephone:
+    type: string
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 3
+    region: content
+  field_place_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: teaser
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   content_moderation_control: true
   field_categories: true
-  field_place_image: true
+  field_geofield: true
   field_place_type: true
   field_tags: true
   langcode: true

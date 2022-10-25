@@ -24,24 +24,32 @@ mode: card
 content:
   body:
     type: text_summary_or_trimmed
-    weight: 2
-    region: content
     label: hidden
     settings:
       trim_length: 128
     third_party_settings: {  }
+    weight: 2
+    region: content
   content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
     weight: 0
     region: content
+  field_article_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: small_landscape
+      link: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  links:
     settings: {  }
     third_party_settings: {  }
-  links:
     weight: 1
     region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
-  field_article_image: true
   field_article_media: true
   field_article_type: true
   field_categories: true
