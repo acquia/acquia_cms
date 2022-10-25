@@ -7,30 +7,38 @@ dependencies:
     - field.field.node.page.field_page_image
     - field.field.node.page.field_tags
     - node.type.page
+  module:
+    - user
   enforced:
     module:
       - acquia_cms_page
-  module:
-    - user
 id: node.page.default
 targetEntityType: node
 bundle: page
 mode: default
 content:
   content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
     weight: 0
     region: content
+  field_page_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: large_super_landscape
+      link: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  links:
     settings: {  }
     third_party_settings: {  }
-  links:
     weight: 1
     region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   body: true
   field_categories: true
-  field_page_image: true
   field_tags: true
   langcode: true
   search_api_excerpt: true
