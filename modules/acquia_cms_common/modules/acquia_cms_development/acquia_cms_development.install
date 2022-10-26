@@ -91,7 +91,6 @@ function _acquia_connector_config(string $key, string $identifier) {
   // Don't use dependency injection here because we just created the sub.
   $subscription = \Drupal::service('acquia_connector.subscription');
   $subscription->populateSettings();
-
   // Setting specific config for Acquia Connector.
   $config->set('subscription_name', "Acquia Engineering");
   $config->set('hide_signup_messages', 1);
