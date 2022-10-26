@@ -1,4 +1,3 @@
-uuid: 7aae5706-2b63-487e-b74f-a00e04e1ad26
 langcode: en
 status: true
 dependencies:
@@ -6,33 +5,35 @@ dependencies:
     - field.field.media.image.field_categories
     - field.field.media.image.field_tags
     - field.field.media.image.image
+    - image.style.coh_x_large
     - media.type.image
+  module:
+    - image
   enforced:
     module:
       - acquia_cms_image
-  module:
-    - image
-    - user
 id: media.image.default
 targetEntityType: media
 bundle: image
 mode: default
 content:
-  thumbnail:
+  image:
     type: image
-    weight: 2
-    region: content
     label: visually_hidden
     settings:
-      image_style: coh_small_square
       image_link: ''
+      image_style: coh_x_large
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   created: true
   field_categories: true
   field_tags: true
-  image: true
   langcode: true
   name: true
   search_api_excerpt: true
+  thumbnail: true
   uid: true
