@@ -6,7 +6,7 @@ dependencies:
     - field.field.media.image.field_categories
     - field.field.media.image.field_tags
     - field.field.media.image.image
-    - image.style.coh_large
+    - image.style.coh_x_large
     - media.type.image
   module:
     - image
@@ -23,7 +23,9 @@ content:
     label: hidden
     settings:
       image_link: ''
-      image_style: coh_large
+      image_style: coh_x_large
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
     weight: 0
     region: content
