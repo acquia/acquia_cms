@@ -7,6 +7,8 @@ on:
   pull_request:
     paths-ignore:
       - README.md
+  schedule:
+      -   cron: "* * * * *"      
 jobs:
   static_code_analysis:
     runs-on: ubuntu-latest
