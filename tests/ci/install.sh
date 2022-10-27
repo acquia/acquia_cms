@@ -48,9 +48,6 @@ composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_c
 
 # Enable Starter on full installs if Appropriate.
 if [[ "${ACMS_JOB}" == "backstop_tests" ]]; then
-    # Adding this workaround now as backstop tests are failing due to acquia_connector 4.x release.
-    # @todo remove below after ACMS-1505 is fixed.
-    composer require "drupal/acquia_connector:~3"
 
     echo "Installing Starter Kit"
     drush en acquia_cms_development -y

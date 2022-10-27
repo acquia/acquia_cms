@@ -6,8 +6,6 @@
  */
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
-use Drupal\acquia_connector\Helper\Storage as ConnectorStorage;
-use Drupal\acquia_connector\Subscription;
 use Drupal\acquia_search\Helper\Storage as SolrStorage;
 use Drupal\cohesion\Form\GoogleMapApiKeyForm;
 use Drupal\Core\Form\FormState;
@@ -77,20 +75,22 @@ function acquia_cms_development_install() {
 function _acquia_connector_config(string $key, string $identifier) {
   $config = \Drupal::configFactory()->getEditable('acquia_connector.settings');
 
-  // Replicating Storage from acquia_connector/src/Form/CredentialForm.php.
-  $storage = new ConnectorStorage();
-  $storage->setKey($key);
-  $storage->setIdentifier($identifier);
+  // Save Credentials to state, only if a new value was added.
+  \Drupal::state()->set('acquia_connector.identifier', $identifier);
+  \Drupal::state()->set('acquia_connector.key', $key);
 
+  // @todo set application_uuid if needed
+  // \Drupal::state()->set('acquia_connector.application_uuid', '');
   // @todo This code was copied verbatim from the Acquia Connector module, but
   // it's not at all clear why it uses this face-melter of a cache clear. (My
   // guess is that the original authors were flailing.) Replace this with a more
   // precise and lightweight cache invalidation or similar ASAP.
   drupal_flush_all_caches();
 
-  $subscription = new Subscription();
-  $subscription->update();
-
+  // Our status gets updated locally via the return data.
+  // Don't use dependency injection here because we just created the sub.
+  $subscription = \Drupal::service('acquia_connector.subscription');
+  $subscription->populateSettings();
   // Setting specific config for Acquia Connector.
   $config->set('subscription_name', "Acquia Engineering");
   $config->set('hide_signup_messages', 1);
