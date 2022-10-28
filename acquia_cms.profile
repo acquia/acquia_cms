@@ -124,7 +124,7 @@ function acquia_cms_install_tasks(): array {
   // For cli we are sending it from file mentioned above.
   if (PHP_SAPI !== 'cli') {
     $tasks['install_acms_send_heartbeat_event'] = [
-      'run' => Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+      'run' => Drupal::service('module_handler')->moduleExists('acquia_connector') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
     ];
   }
 
@@ -138,13 +138,14 @@ function acquia_cms_install_tasks(): array {
  */
 function install_acms_send_heartbeat_event() {
   $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
+  $telemetry_service = \Drupal::service('acquia_connector.telemetry');
   $config = Drupal::config('cohesion.settings');
   $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
   Drupal::configFactory()
     ->getEditable('acquia_telemetry.settings')
     ->set('api_key', 'e896d8a97a24013cee91e37a35bf7b0b')
     ->save();
-  \Drupal::service('acquia.telemetry')->sendTelemetry('acquia_cms_installed', [
+  $telemetry_service->sendTelemetry('acquia_cms_installed', [
     'Application UUID' => Environment::getAhApplicationUuid(),
     'Site Environment' => Environment::getAhEnv(),
     'Install Time' => $telemetry->calculateTime('install_start_time', 'install_end_time'),
