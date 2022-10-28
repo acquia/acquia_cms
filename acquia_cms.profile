@@ -139,11 +139,11 @@ function acquia_cms_install_tasks(): array {
 function install_acms_send_heartbeat_event() {
   $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
   $telemetry_service = \Drupal::service('acquia_connector.telemetry');
-  $config = Drupal::config('cohesion.settings');
+  $config = \Drupal::config('cohesion.settings');
   $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
-  Drupal::configFactory()
-    ->getEditable('acquia_telemetry.settings')
-    ->set('api_key', 'e896d8a97a24013cee91e37a35bf7b0b')
+  \Drupal::configFactory()
+    ->getEditable('acquia_connector.settings')
+    ->set('spi.amplitude_api_key', 'e896d8a97a24013cee91e37a35bf7b0b')
     ->save();
   $telemetry_service->sendTelemetry('acquia_cms_installed', [
     'Application UUID' => Environment::getAhApplicationUuid(),

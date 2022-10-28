@@ -2,7 +2,7 @@
 
 namespace Drupal\acquia_cms\Facade;
 
-use Drupal\acquia_connector\EventSubscriber\KernelTerminate\AcquiaTelemetry;
+use Drupal\acquia_connector\EventSubscriber\KernelTerminate\AcquiaConnectorTelemetryOverride;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -20,7 +20,7 @@ final class TelemetryFacade implements ContainerInjectionInterface {
   /**
    * The telemetry service.
    *
-   * @var \Drupal\acquia_connector\EventSubscriber\KernelTerminate\AcquiaTelemetry
+   * @var \Drupal\acquia_common\EventSubscriber\KernelTerminate\AcquiaConnectorTelemetryOverride
    */
   private $telemetry;
 
@@ -34,12 +34,12 @@ final class TelemetryFacade implements ContainerInjectionInterface {
   /**
    * TelemetryFacade constructor.
    *
-   * @param \Drupal\acquia_connector\EventSubscriber\KernelTerminate\AcquiaTelemetry $telemetry_service
+   * @param \Drupal\acquia_common\EventSubscriber\KernelTerminate\AcquiaConnectorTelemetryOverride $telemetry_service
    *   The telemetry service.
    * @param \Drupal\Core\Extension\ModuleExtensionList $module_list
    *   The module extension list service.
    */
-  public function __construct(AcquiaTelemetry $telemetry_service, ModuleExtensionList $module_list) {
+  public function __construct(AcquiaConnectorTelemetryOverride $telemetry_service, ModuleExtensionList $module_list) {
     $this->telemetry = $telemetry_service;
     $this->moduleList = $module_list;
   }
