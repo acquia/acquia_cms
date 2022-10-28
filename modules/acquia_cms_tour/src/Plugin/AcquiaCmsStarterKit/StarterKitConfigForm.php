@@ -189,25 +189,34 @@ class StarterKitConfigForm extends AcquiaCmsStarterKitBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $starter_kits = [
+      'acquia_cms_enterprise_low_code' => 'Acquia CMS Enterprise low-code',
+      'acquia_cms_community' => 'Acquia CMS Community',
+      'acquia_cms_headless' => 'Acquia CMS Headless',
+    ];
     $starter_kit_demo = $form_state->getValue(['demo']) ?? 'No';
     $starter_kit_content_model = $form_state->getValue(['content_model']) ?? 'No';
     if ($starter_kit_demo && $starter_kit_content_model) {
       $this->state->set('acquia_cms.starter_kit_demo', $starter_kit_demo);
       $this->state->set('acquia_cms.starter_kit_content_model', $starter_kit_content_model);
       $this->state->set('acquia_cms_tour_staretr_kit_demo_progress', TRUE);
-      $this->messenger()->addStatus('The configuration options have been saved.');
+      $this->messenger()->addStatus($this->t('The configuration options have been saved.'));
     }
     $starter_kit = $this->state->get('acquia_cms.starter_kit');
     $service = \Drupal::service('acquia_cms_tour.starter_kit');
-    $missingModules = $service->getMissingModules($starter_kit, $starter_kit_demo, $starter_kit_content_model);
-    if (!$missingModules) {
+    $missing_modules = $service->getMissingModules($starter_kit, $starter_kit_demo, $starter_kit_content_model);
+    if (!$missing_modules) {
       $this->state->set('show_starter_kit_modal', FALSE);
       $this->state->set('starter_kit_wizard_completed', TRUE);
       $service->enableModules($starter_kit, $starter_kit_demo, $starter_kit_content_model);
-      $this->messenger()->addStatus('The required starter kit has been installed. Also, the related modules & themes have been enabled.');
+      $this->messenger()->addStatus($this->t('The %starter_kit starter kit has been installed. Also, the related modules & themes have been enabled.', [
+        '%starter_kit' => $starter_kits[$starter_kit],
+      ]));
     }
     else {
-      $this->messenger()->addStatus("It seems that the following modules are missing from the codebase. We suggest running the below command to add the missing modules and visiting this page again. Use 'composer require -W {$missingModules}'");
+      $this->messenger()->addStatus($this->t("It seems that the following modules are missing from the codebase. We suggest running the below command to add the missing modules and visiting this page again. Use 'composer require -W %missing_modules'", [
+        '%missing_modules' => $missing_modules,
+      ]));
     }
     // Update state.
     $this->setConfigurationState();

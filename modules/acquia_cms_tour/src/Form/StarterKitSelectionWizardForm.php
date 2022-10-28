@@ -332,7 +332,6 @@ class StarterKitSelectionWizardForm extends FormBase {
     $formController = $this->getCurrentFormController()['class'];
     $this->classResolver->getInstanceFromDefinition($formController)->submitForm($form, $form_state);
     $this->state->set('starter_kit_wizard_step', 'completed');
-    $this->messenger()->addStatus($this->t('The configuration options have been saved.'));
     $form_state->setRedirect('acquia_cms_tour.enabled_modules');
   }
 
