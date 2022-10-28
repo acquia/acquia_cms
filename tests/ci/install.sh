@@ -38,7 +38,7 @@ cd ${ORCA_FIXTURE_DIR}
 
 # Install acquia_cms only for the Integrated & ExistingSite PHPUnit tests.
 if [ -n "${ACMS_JOB}" ]; then
-  ./vendor/bin/acms site:install acquia_cms --yes
+  ./vendor/bin/drush site:install acquia_cms --yes
 fi
 
 # Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.
@@ -46,12 +46,12 @@ fi
 # @todo look for alternative way setting maintenance theme template.
 composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms"]' --merge && composer update --lock
 
+# Adding this workaround now as backstop tests are failing due to acquia_connector 4.x release.
+# @todo remove below after ACMS-1505 is fixed.
+composer require "drupal/acquia_connector:~3"
+
 # Enable Starter on full installs if Appropriate.
 if [[ "${ACMS_JOB}" == "backstop_tests" ]]; then
-    # Adding this workaround now as backstop tests are failing due to acquia_connector 4.x release.
-    # @todo remove below after ACMS-1505 is fixed.
-    composer require "drupal/acquia_connector:~3"
-
     echo "Installing Starter Kit"
     drush en acquia_cms_development -y
     drush pmu shield -y
