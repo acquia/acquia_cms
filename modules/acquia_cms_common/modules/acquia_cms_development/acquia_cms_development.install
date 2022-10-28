@@ -14,15 +14,12 @@ use Drupal\Core\Form\FormState;
  * Implements hook_install().
  */
 function acquia_cms_development_install() {
-
   $key = getenv('CONNECTOR_KEY');
   $identifier = getenv('CONNECTOR_ID');
   if (isset($key, $identifier)) {
-
     _acquia_connector_config($key, $identifier);
     _acquia_search_config($key, $identifier);
   }
-
   // Configure shield if it is an Acquia cloud environment (but not an IDE).
   if (Environment::isAhEnv() && !Environment::isAhIdeEnv()) {
 
@@ -73,14 +70,14 @@ function acquia_cms_development_install() {
  *   The Acquia hosting identifier.
  */
 function _acquia_connector_config(string $key, string $identifier) {
+  $app_uuid = Environment::getAhApplicationUuid();
   $config = \Drupal::configFactory()->getEditable('acquia_connector.settings');
 
   // Save Credentials to state, only if a new value was added.
   \Drupal::state()->set('acquia_connector.identifier', $identifier);
   \Drupal::state()->set('acquia_connector.key', $key);
 
-  // @todo set application_uuid if needed
-  // \Drupal::state()->set('acquia_connector.application_uuid', '');
+  \Drupal::state()->set('acquia_connector.application_uuid', $app_uuid);
   // @todo This code was copied verbatim from the Acquia Connector module, but
   // it's not at all clear why it uses this face-melter of a cache clear. (My
   // guess is that the original authors were flailing.) Replace this with a more

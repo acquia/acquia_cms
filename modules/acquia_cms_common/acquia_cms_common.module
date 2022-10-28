@@ -439,8 +439,13 @@ function acquia_cms_common_modules_installed($modules, $is_syncing) {
         \Drupal::service('cohesion_sync.package_import_handler')->importPackagesFromPath($packages);
       }
     }
-  }
 
+    // Acquia connector check and set telemetry opt-in feature.
+    if (in_array('acquia_connector', $modules)) {
+      // Set telemetry to be TRUE on install of acquia_connector.
+      \Drupal::state()->set('acquia_connector.telemetry.opted', TRUE);
+    }
+  }
 }
 
 /**
@@ -459,4 +464,19 @@ function acquia_cms_common_preprocess_maintenance_page(array &$variables) {
   $variables['#attached']['library'][] = 'acquia_claro/install-page';
   $acquia_cms_path = \Drupal::service('extension.list.module')->getPath('acquia_cms_common');
   $variables['install_page_logo_path'] = '/' . $acquia_cms_path . '/acquia_cms.png';
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function acquia_cms_common_module_implements_alter(array &$implementations, string $hook): void {
+  if (\Drupal::moduleHandler()->moduleExists('acquia_connector') &&
+  ($hook === 'modules_installed' || $hook === 'modules_uninstalled')) {
+    // Check if telemetry not opted.
+    if (!\Drupal::state()->get('acquia_connector.telemetry.opted', TRUE)) {
+      // Revoke the invoking of hook_modules_installed and
+      // hook_modules_uninstalled of Acquia connector.
+      unset($implementations['acquia_connector']);
+    }
+  }
 }

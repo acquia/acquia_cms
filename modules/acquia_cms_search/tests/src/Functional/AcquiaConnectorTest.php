@@ -55,6 +55,7 @@ class AcquiaConnectorTest extends BrowserTestBase {
     $this->drupalGet('/admin/tour/dashboard');
     $assert_session->statusCodeEquals(200);
     // Assert that the expected fields show up.
+    $assert_session->fieldExists('Send anonymous data about Acquia product usage');
     $assert_session->fieldExists('Name');
     // Assert that save and advanced buttons are present on form.
     $assert_session->buttonExists('Save');

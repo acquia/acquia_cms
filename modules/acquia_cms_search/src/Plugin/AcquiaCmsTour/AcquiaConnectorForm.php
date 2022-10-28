@@ -3,8 +3,11 @@
 namespace Drupal\acquia_cms_search\Plugin\AcquiaCmsTour;
 
 use Drupal\acquia_cms_tour\Form\AcquiaCmsDashboardBase;
+use Drupal\acquia_connector\SiteProfile\SiteProfile;
+use Drupal\acquia_connector\Subscription;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the acquia_cms_tour.
@@ -39,6 +42,33 @@ class AcquiaConnectorForm extends AcquiaCmsDashboardBase {
   }
 
   /**
+   * Acquia Connector Subscription service.
+   *
+   * @var \Drupal\acquia_connector\Subscription
+   */
+  protected Subscription $subscription;
+
+  /**
+   * The site profile.
+   *
+   * @var \Drupal\acquia_connector\SiteProfile\SiteProfile
+   */
+  protected SiteProfile $siteProfile;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    $instance = parent::create($container);
+    if ($container->get('module_handler')->moduleExists('acquia_connector')) {
+      $instance->siteProfile = $container->get('acquia_connector.site_profile');
+      $instance->subscription = $container->get('acquia_connector.subscription');
+    }
+
+    return $instance;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
@@ -51,6 +81,7 @@ class AcquiaConnectorForm extends AcquiaCmsDashboardBase {
         '#suffix' => "</span>",
       ];
     }
+    // Check acquia_connector module is enabled.
     if ($this->isModuleEnabled()) {
       $module_path = $this->moduleHandler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
@@ -60,15 +91,24 @@ class AcquiaConnectorForm extends AcquiaCmsDashboardBase {
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
       ];
+      // Start with an empty subscription.
+      $subscription = $this->subscription->getSubscription(TRUE);
+      $site_name = isset($subscription['uuid']) ? $this->siteProfile->getSiteName($subscription['uuid']) : "";
+      $form[$module]['opt_in'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Send anonymous data about Acquia product usage'),
+        '#default_value' => $this->state->get('acquia_connector.telemetry.opted'),
+        '#description' => $this->t('This module intends to collect anonymous data about Acquia product usage. No private information will be gathered. Data will not be used for marketing or sold to any third party. This is an opt-in module and can be disabled at any time by uninstalling the acquia connector module by your site administrator.'),
+        '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
+      ];
       $form[$module]['site_name'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Name'),
         '#maxlength' => 255,
         '#disabled' => TRUE,
         '#required' => TRUE,
-        '#default_value' => $this->state->get('spi.site_name'),
-        '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
-        '#suffix' => "</div>",
+        '#default_value' => $this->state->get('spi.site_name') ?? $site_name,
+        '#suffix' => '</div class= "dashboard-fields-wrapper">',
       ];
 
       $form[$module]['actions']['submit'] = [
@@ -112,9 +152,17 @@ class AcquiaConnectorForm extends AcquiaCmsDashboardBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $acquia_connector_site_name = $form_state->getValue(['site_name']);
     $this->state->set('spi.site_name', $acquia_connector_site_name);
-    // Set configuration state for dashboard.
-    $this->setConfigurationState();
-    $this->messenger()->addStatus('The configuration options have been saved.');
+    $acquia_telemetry_opt_in = $form_state->getValue('opt_in');
+    if ($acquia_telemetry_opt_in) {
+      $this->state->set('acquia_connector.telemetry.opted', TRUE);
+      $this->setConfigurationState();
+      $this->messenger()->addStatus('You have opted into collect anonymous data about Acquia product usage. Thank you for helping improve Acquia products.');
+    }
+    else {
+      $this->state->set('acquia_connector.telemetry.opted', FALSE);
+      $this->setConfigurationState(FALSE);
+      $this->messenger()->addStatus('You have successfully opted out to collect anonymous data about Acquia product usage. Anonymous usage information will no longer be collected.');
+    }
   }
 
   /**
