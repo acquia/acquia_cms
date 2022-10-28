@@ -20,7 +20,7 @@ create_fixture() {
   CORE_VERSION=$(echo ${ORCA_JOB} | sed -E -e 's/(INTEGRATED_TEST_ON_|INTEGRATED_UPGRADE_TEST_FROM_|ISOLATED_TEST_ON_|INTEGRATED_UPGRADE_TEST_TO_|ISOLATED_UPGRADE_TEST_TO_)//')
   echo "The CORE_VERSION is: ${CORE_VERSION}"
   orca debug:packages ${CORE_VERSION}
-  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=${CORE_VERSION} --dev --profile=minimal --no-sqlite --no-site-install
+  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=${CORE_VERSION} --dev --profile=acquia_cms --no-sqlite --no-site-install
 }
 
 if [ "${JOB_TYPE}" == "static-code-analysis" ]; then
@@ -38,7 +38,7 @@ cd ${ORCA_FIXTURE_DIR}
 
 # Install acquia_cms only for the Integrated & ExistingSite PHPUnit tests.
 if [ -n "${ACMS_JOB}" ]; then
-  ./vendor/bin/acms site:install --yes
+  ./vendor/bin/acms site:install acquia_cms --yes
 fi
 
 # Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.
