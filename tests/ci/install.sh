@@ -47,11 +47,7 @@ composer require "drupal/acquia_connector:~3"
 
 # Install acquia_cms only for the Integrated & ExistingSite PHPUnit tests.
 if [ -n "${ACMS_JOB}" ]; then
-  ./vendor/bin/drush site:install acquia_cms --yes
-
-  # We are doing cache:clear here because without it, CI tests are failing.
-  # @todo We should probably do cache clear from acquia_cms profile/module.
-  ./vendor/bin/drush cr
+  ./vendor/bin/drush site:install acquia_cms --yes && ./vendor/bin/drush cr
 fi
 
 # Enable Starter on full installs if Appropriate.
