@@ -125,8 +125,8 @@ class AcquiaTelemetry implements ContainerInjectionInterface {
    *   Throws exception for negative time.
    */
   public function calculateTime(string $start_time_key, string $end_time_key) {
-    $start_time = $this->getTime($start_time_key);
-    $end_time = $this->getTime($end_time_key);
+    $start_time = $this->getTime($start_time_key) ?: 'now';
+    $end_time = $this->getTime($end_time_key) ?: 'now';
     $startTime = new DrupalDateTime($start_time);
     $endTime = new DrupalDateTime($end_time);
     if (($timeDiff = $endTime->getTimestamp() - $startTime->getTimestamp()) >= 0) {
