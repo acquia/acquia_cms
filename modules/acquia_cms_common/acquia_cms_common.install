@@ -158,4 +158,25 @@ function acquia_cms_common_content_model_role_presave_alter(RoleInterface &$role
         break;
     }
   }
+  if (\Drupal::moduleHandler()->moduleExists('captcha')) {
+    switch ($role->id()) {
+      case 'user_administrator':
+        $role->grantPermission('administer CAPTCHA settings');
+        break;
+    }
+  }
+  if (\Drupal::moduleHandler()->moduleExists('honeypot')) {
+    switch ($role->id()) {
+      case 'user_administrator':
+        $role->grantPermission('administer honeypot');
+        break;
+    }
+  }
+  if (\Drupal::moduleHandler()->moduleExists('recaptcha')) {
+    switch ($role->id()) {
+      case 'user_administrator':
+        $role->grantPermission('administer recaptcha');
+        break;
+    }
+  }
 }
