@@ -30,6 +30,25 @@ abstract class MediaPermissionsTestBase extends EntityPermissionsTestBase {
    * {@inheritdoc}
    */
   public function providerBasicPermissions(): array {
+    // Update permissions to specified role on the basis of the module.
+    $user_admin_permission = [
+      'administer seckit',
+      'administer site configuration',
+      'administer users',
+      'manage password reset',
+      'view the administration theme',
+    ];
+    $modules_permission = [
+      'shield' => 'administer shield',
+      'honeypot' => 'administer honeypot',
+      'captcha' => 'administer CAPTCHA settings',
+      'recaptcha' => 'administer recaptcha',
+    ];
+    foreach ($modules_permission as $module => $permission) {
+      if ($this->container->get('module_handler')->moduleExists($module)) {
+        $user_admin_permission += [$permission];
+      }
+    }
     return [
       [
         'site_builder',
@@ -41,16 +60,7 @@ abstract class MediaPermissionsTestBase extends EntityPermissionsTestBase {
       ],
       [
         'user_administrator',
-        [
-          'administer CAPTCHA settings',
-          'administer honeypot',
-          'administer recaptcha',
-          'administer seckit',
-          'administer site configuration',
-          'administer users',
-          'manage password reset',
-          'view the administration theme',
-        ],
+        $user_admin_permission,
       ],
     ];
   }
