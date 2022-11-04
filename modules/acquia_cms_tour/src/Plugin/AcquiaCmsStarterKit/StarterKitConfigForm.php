@@ -3,6 +3,7 @@
 namespace Drupal\acquia_cms_tour\Plugin\AcquiaCmsStarterKit;
 
 use Drupal\acquia_cms_tour\Form\AcquiaCmsStarterKitBase;
+use Drupal\acquia_cms_tour\Services\StarterKitService;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -26,11 +27,20 @@ class StarterKitConfigForm extends AcquiaCmsStarterKitBase {
   protected $formName = 'acquia_cms_starter_kit_config';
 
   /**
+   * Starterkit service.
+   *
+   * @var Drupal\acquia_cms_tour\Services\StarterKitService
+   */
+  protected StarterKitService $starterKitService;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     /** @var static $instance */
     $instance = parent::create($container);
+    $instance->starterKitService = $container->get('acquia_cms_tour.starter_kit');
+
     return $instance;
   }
 
@@ -49,12 +59,11 @@ class StarterKitConfigForm extends AcquiaCmsStarterKitBase {
     // different features (Site Studio and Place nodes). Site Studio is always
     // enabled in ACMS, but Place may not.
     // Initialize an empty array.
-    $service = \Drupal::service('acquia_cms_tour.starter_kit');
     $starter_kit = $this->state->get('acquia_cms.starter_kit');
     $starterKit = [
-      'acquia_cms_demo_content' => $service->getMissingModules($starter_kit, 'Yes', 'No'),
-      'acquia_cms_content_model' => $service->getMissingModules($starter_kit, 'No', 'Yes'),
-      'acquia_cms_starter_kit_only' => $service->getMissingModules($starter_kit, 'No', 'No'),
+      'acquia_cms_demo_content' => $this->starterKitService->getMissingModules($starter_kit, 'Yes', 'No'),
+      'acquia_cms_content_model' => $this->starterKitService->getMissingModules($starter_kit, 'No', 'Yes'),
+      'acquia_cms_starter_kit_only' => $this->starterKitService->getMissingModules($starter_kit, 'No', 'No'),
     ];
     $formName = $this->formName;
     $form[$formName] = [
@@ -109,7 +118,7 @@ class StarterKitConfigForm extends AcquiaCmsStarterKitBase {
         '@message @missingModules </i></b></p></div>',
         [
           '@message' => $formattedMessage,
-          '@missingModules' => $service->getMissingModulesCommand($starterKit['acquia_cms_demo_content']),
+          '@missingModules' => $this->starterKitService->getMissingModulesCommand($starterKit['acquia_cms_demo_content']),
         ]
       );
       $form[$formName]['requirement_message_demo_content'] = [
@@ -128,7 +137,7 @@ class StarterKitConfigForm extends AcquiaCmsStarterKitBase {
         '@message @missingModules </i></b></p></div>',
         [
           '@message' => $formattedMessage,
-          '@missingModules' => $service->getMissingModulesCommand($starterKit['acquia_cms_demo_content']),
+          '@missingModules' => $this->starterKitService->getMissingModulesCommand($starterKit['acquia_cms_demo_content']),
         ]
       );
       $form[$formName]['requirement_message_demo_no_content_model'] = [
@@ -147,7 +156,7 @@ class StarterKitConfigForm extends AcquiaCmsStarterKitBase {
         '@message @missingModules </i></b></p></div>',
         [
           '@message' => $formattedMessage,
-          '@missingModules' => $service->getMissingModulesCommand($starterKit['acquia_cms_content_model']),
+          '@missingModules' => $this->starterKitService->getMissingModulesCommand($starterKit['acquia_cms_content_model']),
         ]
       );
       $form[$formName]['requirement_message_content_model'] = [
@@ -166,7 +175,7 @@ class StarterKitConfigForm extends AcquiaCmsStarterKitBase {
         '@message @missingModules </i></b></p></div>',
         [
           '@message' => $formattedMessage,
-          '@missingModules' => $service->getMissingModulesCommand($starterKit['acquia_cms_starter_kit_only']),
+          '@missingModules' => $this->starterKitService->getMissingModulesCommand($starterKit['acquia_cms_starter_kit_only']),
         ]
       );
       $form[$formName]['requirement_message_starter_kit_only'] = [
@@ -203,12 +212,11 @@ class StarterKitConfigForm extends AcquiaCmsStarterKitBase {
       $this->messenger()->addStatus($this->t('The configuration options have been saved.'));
     }
     $starter_kit = $this->state->get('acquia_cms.starter_kit');
-    $service = \Drupal::service('acquia_cms_tour.starter_kit');
-    $missing_modules = $service->getMissingModules($starter_kit, $starter_kit_demo, $starter_kit_content_model);
+    $missing_modules = $this->starterKitService->getMissingModules($starter_kit, $starter_kit_demo, $starter_kit_content_model);
     if (!$missing_modules) {
       $this->state->set('show_starter_kit_modal', FALSE);
       $this->state->set('starter_kit_wizard_completed', TRUE);
-      $service->enableModules($starter_kit, $starter_kit_demo, $starter_kit_content_model);
+      $this->starterKitService->enableModules($starter_kit, $starter_kit_demo, $starter_kit_content_model);
       $this->messenger()->addStatus($this->t('The %starter_kit starter kit has been installed. Also, the related modules & themes have been enabled.', [
         '%starter_kit' => $starter_kits[$starter_kit],
       ]));
