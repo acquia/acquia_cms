@@ -313,130 +313,134 @@ function acquia_cms_common_preprocess_status_report_general_info(&$variables) {
 /**
  * Implements hook_modules_installed().
  */
-function acquia_cms_common_modules_installed($modules) {
-  if (in_array('imagemagick', $modules) && Environment::isAhEnv()) {
-    $config_factory = \Drupal::configFactory();
-    $config_factory->getEditable('imagemagick.settings')
-      ->set('path_to_binaries', '/usr/bin/')
-      ->save();
-    $config_factory->getEditable('system.image')
-      ->set('toolkit', 'imagemagick')
-      ->save();
-  }
-  $content_model_modules = [
-    'acquia_cms_article',
-    'acquia_cms_event',
-    'acquia_cms_page',
-    'acquia_cms_person',
-    'acquia_cms_place',
-  ];
-  $media_modules = [
-    'acquia_cms_audio',
-    'acquia_cms_video',
-    'acquia_cms_image',
-    'acquia_cms_document',
-  ];
-  $rolesToCreate = $rolesToUpdate = [];
-  if (count(array_intersect($content_model_modules, $modules)) > 0) {
-    $rolesToCreate = [
-      'content_administrator',
-      'content_author',
-      'content_editor',
-    ];
-  }
-  if (count(array_intersect($media_modules, $modules)) > 0) {
-    $roles = [
-      'content_author',
-      'content_editor',
-    ];
-    $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
-  }
-  if (in_array('acquia_cms_site_studio', $modules)) {
-    $roles = [
-      'content_administrator',
-      'content_author',
-      'content_editor',
-      'site_builder',
-    ];
-    $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
-  }
-  if (in_array('acquia_cms_toolbar', $modules)) {
-    $roles = [
-      'content_administrator',
-      'content_author',
-      'content_editor',
-      'developer',
-      'user_administrator',
-      'site_builder',
-    ];
-    $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
-  }
-  if (in_array('acquia_cms_tour', $modules)) {
-    $roles = [
-      'content_administrator',
-      'content_author',
-      'content_editor',
-    ];
-    $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
-  }
-  if (in_array('shield', $modules)) {
-    $roles = [
-      'user_administrator',
-    ];
-    $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
-  }
-  if ($rolesToCreate || $rolesToUpdate) {
-    $permissionFacade = Drupal::classResolver(PermissionFacade::class);
-    foreach ($rolesToCreate as $role) {
-      $permissionFacade->createOrUpdateRole($role);
+function acquia_cms_common_modules_installed($modules, $is_syncing) {
+  if (!$is_syncing) {
+    if (in_array('imagemagick', $modules) && Environment::isAhEnv()) {
+      $config_factory = \Drupal::configFactory();
+      $config_factory->getEditable('imagemagick.settings')
+        ->set('path_to_binaries', '/usr/bin/')
+        ->save();
+      $config_factory->getEditable('system.image')
+        ->set('toolkit', 'imagemagick')
+        ->save();
     }
-    if ($rolesToCreate) {
-      // As we are programmatically creating the below roles,
-      // after any of the content model module is installed:
-      // - content_administrator
-      // - content_author
-      // - content_editor
-      // So we need to make sure that we also import the other optional
-      // configurations which is dependent on any of these roles.
-      /** @var \Drupal\Core\Config\ConfigInstallerInterface $config_installer */
-      $config_installer = \Drupal::service('config.installer');
-      $restrict_by_dependency = [
-        'config' => 'user.role.content_administrator',
-        'config' => 'user.role.content_author',
-        'config' => 'user.role.content_editor',
-      ];
-      $config_installer->installOptionalConfig(NULL, $restrict_by_dependency);
-    }
-    if ($rolesToUpdate) {
-      // We need to update only those roles, which are not created earlier.
-      $rolesToUpdate = array_diff($rolesToUpdate, $rolesToCreate);
-      foreach ($rolesToUpdate as $role) {
-        $permissionFacade->updateRole($role);
-      }
-    }
-  }
-  $configFactory = \Drupal::service('config.factory');
-  $config = $configFactory->get('cohesion.settings');
-  if ($config->get('api_key') && $config->get('organization_key')) {
-    $moduleHandler = \Drupal::service('module_handler');
-    $acms_modules = [
+    $content_model_modules = [
       'acquia_cms_article',
       'acquia_cms_event',
-      'acquia_cms_image',
       'acquia_cms_page',
       'acquia_cms_person',
       'acquia_cms_place',
-      'acquia_cms_search',
-      'acquia_cms_video',
     ];
-    if (array_intersect($acms_modules, $modules) &&
-    $moduleHandler->moduleExists('acquia_cms_site_studio') &&
-    !in_array('acquia_cms_site_studio', $modules)) {
-      $module_path = \Drupal::service('extension.list.module')->getPath('acquia_cms_site_studio');
-      $packages = $module_path . COHESION_SYNC_DEFAULT_MODULE_PACKAGES;
-      \Drupal::service('cohesion_sync.package_import_handler')->importPackagesFromPath($packages);
+    $media_modules = [
+      'acquia_cms_audio',
+      'acquia_cms_video',
+      'acquia_cms_image',
+      'acquia_cms_document',
+    ];
+    $rolesToCreate = $rolesToUpdate = [];
+    if (count(array_intersect($content_model_modules, $modules)) > 0) {
+      $rolesToCreate = [
+        'content_administrator',
+        'content_author',
+        'content_editor',
+      ];
+    }
+    if (count(array_intersect($media_modules, $modules)) > 0) {
+      $roles = [
+        'content_author',
+        'content_editor',
+      ];
+      $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
+    }
+    if (in_array('acquia_cms_site_studio', $modules)) {
+      $roles = [
+        'content_administrator',
+        'content_author',
+        'content_editor',
+        'site_builder',
+      ];
+      $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
+    }
+    if (in_array('acquia_cms_toolbar', $modules)) {
+      $roles = [
+        'content_administrator',
+        'content_author',
+        'content_editor',
+        'developer',
+        'user_administrator',
+        'site_builder',
+      ];
+      $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
+    }
+    if (in_array('acquia_cms_tour', $modules)) {
+      $roles = [
+        'content_administrator',
+        'content_author',
+        'content_editor',
+      ];
+      $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
+    }
+    if (in_array('shield', $modules)) {
+      $roles = [
+        'user_administrator',
+      ];
+      $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
+    }
+    if ($rolesToCreate || $rolesToUpdate) {
+      $permissionFacade = Drupal::classResolver(PermissionFacade::class);
+      foreach ($rolesToCreate as $role) {
+        $permissionFacade->createOrUpdateRole($role);
+      }
+      if ($rolesToCreate) {
+        // As we are programmatically creating the below roles,
+        // after any of the content model module is installed:
+        // - content_administrator
+        // - content_author
+        // - content_editor
+        // So we need to make sure that we also import the other optional
+        // configurations which is dependent on any of these roles.
+        /** @var \Drupal\Core\Config\ConfigInstallerInterface $config_installer */
+        $config_installer = \Drupal::service('config.installer');
+        $restrict_by_dependency = [
+          'config' => 'user.role.content_administrator',
+          'config' => 'user.role.content_author',
+          'config' => 'user.role.content_editor',
+        ];
+        $config_installer->installOptionalConfig(NULL, $restrict_by_dependency);
+      }
+      if ($rolesToUpdate) {
+        // We need to update only those roles, which are not created earlier.
+        $rolesToUpdate = array_diff($rolesToUpdate, $rolesToCreate);
+        foreach ($rolesToUpdate as $role) {
+          $permissionFacade->updateRole($role);
+        }
+      }
+    }
+    $configFactory = \Drupal::service('config.factory');
+    $config = $configFactory->get('cohesion.settings');
+    if ($config->get('api_key') && $config->get('organization_key')) {
+      $moduleHandler = \Drupal::service('module_handler');
+      $acms_modules = [
+        'acquia_cms_article',
+        'acquia_cms_event',
+        'acquia_cms_image',
+        'acquia_cms_page',
+        'acquia_cms_person',
+        'acquia_cms_place',
+        'acquia_cms_search',
+        'acquia_cms_video',
+      ];
+
+      if (array_intersect($acms_modules, $modules) &&
+      $moduleHandler->moduleExists('acquia_cms_site_studio') &&
+      !in_array('acquia_cms_site_studio', $modules)) {
+        $module_path = \Drupal::service('extension.list.module')->getPath('acquia_cms_site_studio');
+        $packages = $module_path . COHESION_SYNC_DEFAULT_MODULE_PACKAGES;
+        \Drupal::service('cohesion_sync.package_import_handler')->importPackagesFromPath($packages);
+      }
     }
   }
+
 }
 
 /**
