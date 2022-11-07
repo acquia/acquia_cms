@@ -103,25 +103,25 @@ trait PermissionsTrait {
   }
 
   /**
-   * Check permissions of contributed enabled module.
+   * Assign permissions only if the below modules are enabled.
    *
    * @param string $role
    *   User role.
    *
    * @return array
-   *   Returns list of contributed permissions.
+   *   Returns list of permissions.
    */
   public function contribModulePermissions($role): ?array {
     $module_permissions = [];
-    if ($role == 'user_administrator') {
+    if ($role === 'user_administrator') {
       $module_handler = $this->container->get('module_handler');
-      $modules_permission = [
+      $permissions = [
         'shield' => 'administer shield',
         'honeypot' => 'administer honeypot',
         'captcha' => 'administer CAPTCHA settings',
         'recaptcha' => 'administer recaptcha',
       ];
-      foreach ($modules_permission as $module => $permission) {
+      foreach ($permissions as $module => $permission) {
         if ($module_handler->moduleExists($module)) {
           $module_permissions += [$permission];
         }
