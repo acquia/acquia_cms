@@ -8,33 +8,37 @@
 /**
  * Implements hook_install().
  */
-function acquia_cms_headless_ui_install() {
-  // Call the headless ui install handler service.
-  $headlessUi = \Drupal::service('acquia_cms_headless.pure_headless_mode');
+function acquia_cms_headless_ui_install($is_syncing) {
+  if (!$is_syncing) {
+    // Call the headless ui install handler service.
+    $headlessUi = \Drupal::service('acquia_cms_headless.pure_headless_mode');
 
-  // Add Aliases.
-  $headlessUi->createHeadlessUiPaths();
+    // Add Aliases.
+    $headlessUi->createHeadlessUiPaths();
 
-  // Update configurations for the Headless UI.
-  $headlessUi->updateHeadlessUiConfig(TRUE);
+    // Update configurations for the Headless UI.
+    $headlessUi->updateHeadlessUiConfig(TRUE);
 
-  // Clear caches to make sure updates are reflected.
-  drupal_flush_all_caches();
+    // Clear caches to make sure updates are reflected.
+    drupal_flush_all_caches();
+  }
 }
 
 /**
  * Implements hook_uninstall().
  */
-function acquia_cms_headless_ui_uninstall() {
-  // Call the headless ui install handler service.
-  $headlessUi = \Drupal::service('acquia_cms_headless.pure_headless_mode');
+function acquia_cms_headless_ui_uninstall($is_syncing) {
+  if (!$is_syncing) {
+    // Call the headless ui install handler service.
+    $headlessUi = \Drupal::service('acquia_cms_headless.pure_headless_mode');
 
-  // Remove Aliases.
-  $headlessUi->deleteHeadlessUiPaths();
+    // Remove Aliases.
+    $headlessUi->deleteHeadlessUiPaths();
 
-  // Update configurations for the Headless UI.
-  $headlessUi->updateHeadlessUiConfig(FALSE);
+    // Update configurations for the Headless UI.
+    $headlessUi->updateHeadlessUiConfig(FALSE);
 
-  // Clear caches to ensure all headless ui changes are reversed.
-  drupal_flush_all_caches();
+    // Clear caches to ensure all headless ui changes are reversed.
+    drupal_flush_all_caches();
+  }
 }
