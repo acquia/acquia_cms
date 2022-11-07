@@ -6,7 +6,9 @@ services:
 
   acquia_cms_common.event_subscriber:
     class: '\Drupal\acquia_cms_common\EventSubscriber\ConfigEventsSubscriber'
-    arguments: ['@module_handler', '@acquia_cms_common.utility']
+    arguments:
+      - '@module_handler'
+      - '@acquia_cms_common.utility'
     tags:
       - { name: 'event_subscriber' }
 
@@ -15,17 +17,27 @@ services:
 
   acquia_cms_common.utility:
     class:  Drupal\acquia_cms_common\Services\AcmsUtilityService
-    arguments: ['@module_handler', '@config.factory', '@state']
+    arguments:
+      - '@module_handler'
+      - '@config.factory'
+      - '@state'
 
   acquia_cms_common.uninstall_validator:
     class: Drupal\acquia_cms_common\AcmsModulesUninstallValidator
     tags:
       - { name: module_install.uninstall_validator }
-    arguments: ['@entity_type.manager', '@string_translation']
+    arguments:
+      - '@entity_type.manager'
+      - '@string_translation'
+      - '@module_handler'
+      - '@config.factory'
     lazy: true
 
   acquia_cms_common.https_redirect_subscriber:
     class: '\Drupal\acquia_cms_common\EventSubscriber\HttpsRedirectSubscriber'
-    arguments: ['@config.factory', '@cache.config', '@request_stack']
+    arguments:
+      - '@config.factory'
+      - '@cache.config'
+      - '@request_stack'
     tags:
       - { name: 'event_subscriber' }
