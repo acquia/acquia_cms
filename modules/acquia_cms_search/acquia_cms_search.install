@@ -10,24 +10,26 @@ use Drupal\node\Entity\NodeType;
 /**
  * Implements hook_install().
  */
-function acquia_cms_search_install() {
-  // Add permission to the following roles,
-  // so that search autocomplete functionality is accessible.
-  // This will also fix search box design issue if site studio being use.
-  user_role_grant_permissions('anonymous', [
-    'use search_api_autocomplete for search',
-  ]);
-  user_role_grant_permissions('authenticated', [
-    'use search_api_autocomplete for search',
-  ]);
+function acquia_cms_search_install($is_syncing) {
+  if (!$is_syncing) {
+    // Add permission to the following roles,
+    // so that search autocomplete functionality is accessible.
+    // This will also fix search box design issue if site studio being use.
+    user_role_grant_permissions('anonymous', [
+      'use search_api_autocomplete for search',
+    ]);
+    user_role_grant_permissions('authenticated', [
+      'use search_api_autocomplete for search',
+    ]);
 
-  // Retroactively enable indexing for any content types that existed before
-  // this module was installed.
-  $node_types = NodeType::loadMultiple();
-  array_walk($node_types, 'acquia_cms_search_node_type_insert');
-  $enabled_modules = \Drupal::service('module_handler')->getModuleList();
-  $enabled_modules = array_keys($enabled_modules);
-  acquia_cms_search_add_category_facet($enabled_modules);
+    // Retroactively enable indexing for any content types that existed before
+    // this module was installed.
+    $node_types = NodeType::loadMultiple();
+    array_walk($node_types, 'acquia_cms_search_node_type_insert');
+    $enabled_modules = \Drupal::service('module_handler')->getModuleList();
+    $enabled_modules = array_keys($enabled_modules);
+    acquia_cms_search_add_category_facet($enabled_modules);
+  }
 }
 
 /**

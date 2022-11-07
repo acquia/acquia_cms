@@ -50,9 +50,11 @@ function acquia_cms_tour_theme() {
  *
  * Implements hook_modules_uninstalled().
  */
-function acquia_cms_tour_modules_uninstalled(array $modules) {
-  foreach ($modules as $module) {
-    \Drupal::state()->delete('acms_' . $module . '_configured');
+function acquia_cms_tour_modules_uninstalled(array $modules, $is_syncing) {
+  if (!$is_syncing) {
+    foreach ($modules as $module) {
+      \Drupal::state()->delete('acms_' . $module . '_configured');
+    }
   }
 }
 
