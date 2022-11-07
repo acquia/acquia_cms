@@ -13,51 +13,53 @@ use Drupal\Core\Form\FormState;
 /**
  * Implements hook_install().
  */
-function acquia_cms_development_install() {
-  $key = getenv('CONNECTOR_KEY');
-  $identifier = getenv('CONNECTOR_ID');
-  if (isset($key, $identifier)) {
-    _acquia_connector_config($key, $identifier);
-    _acquia_search_config($key, $identifier);
-  }
-  // Configure shield if it is an Acquia cloud environment (but not an IDE).
-  if (Environment::isAhEnv() && !Environment::isAhIdeEnv()) {
-
-    $shield_user = getenv('SHIELD_USER');
-    $shield_pass = getenv('SHIELD_PASS');
-    if (isset($shield_user, $shield_pass)) {
-      \Drupal::service('module_installer')->install(['shield']);
-      Drupal::configFactory()
-        ->getEditable('shield.settings')
-        ->set('credentials.shield.user', $shield_user)
-        ->set('credentials.shield.pass', $shield_pass)
-        ->save();
+function acquia_cms_development_install($is_syncing) {
+  if (!$is_syncing) {
+    $key = getenv('CONNECTOR_KEY');
+    $identifier = getenv('CONNECTOR_ID');
+    if (isset($key, $identifier)) {
+      _acquia_connector_config($key, $identifier);
+      _acquia_search_config($key, $identifier);
     }
-  }
+    // Configure shield if it is an Acquia cloud environment (but not an IDE).
+    if (Environment::isAhEnv() && !Environment::isAhIdeEnv()) {
 
-  // Starter "really" needs Google Maps API Keys to "work."
-  // This code is a work around for the dev team to ensure that we can install
-  // these modules w/o issue until a more permanent API key is supplied by
-  // Acquia AND/OR we provide a free maps option.
-  // @todo remove this once the above conditions are met.
-  $gmaps_key = getenv('GMAPS_KEY');
-  if (!empty($gmaps_key)) {
-    \Drupal::configFactory()
-      ->getEditable('geocoder.geocoder_provider.googlemaps')
-      ->set('configuration.apiKey', $gmaps_key)
-      ->save();
+      $shield_user = getenv('SHIELD_USER');
+      $shield_pass = getenv('SHIELD_PASS');
+      if (isset($shield_user, $shield_pass)) {
+        \Drupal::service('module_installer')->install(['shield']);
+        Drupal::configFactory()
+          ->getEditable('shield.settings')
+          ->set('credentials.shield.user', $shield_user)
+          ->set('credentials.shield.pass', $shield_pass)
+          ->save();
+      }
+    }
 
-    // Programmatically submit Site Studio (cohesion) Google Map configuration
-    // form passing the Google Maps key because this will update the cohesion
-    // google-map element templates, updating the asset url with this Google Map
-    // key.So when user visit the content page of place content type, this won't
-    // show the modal popup error i.e The Google Map cannot be loaded.
-    // @see \Drupal\cohesion\Form\GoogleMapApiKeyForm
-    $form = \Drupal::formBuilder()->getForm('\Drupal\cohesion\Form\GoogleMapApiKeyForm');
-    $form_state = new FormState();
-    $values['google_map_api_key'] = $gmaps_key;
-    $form_state->setValues($values);
-    \Drupal::classResolver(GoogleMapApiKeyForm::class)->submitForm($form, $form_state);
+    // Starter "really" needs Google Maps API Keys to "work."
+    // This code is a work around for the dev team to ensure that we can install
+    // these modules w/o issue until a more permanent API key is supplied by
+    // Acquia AND/OR we provide a free maps option.
+    // @todo remove this once the above conditions are met.
+    $gmaps_key = getenv('GMAPS_KEY');
+    if (!empty($gmaps_key)) {
+      \Drupal::configFactory()
+        ->getEditable('geocoder.geocoder_provider.googlemaps')
+        ->set('configuration.apiKey', $gmaps_key)
+        ->save();
+
+      // Programmatically submit Site Studio (cohesion) Google Map configuration
+      // form passing the Google Maps key because this will update the cohesion
+      // google-map element templates, updating asset url with this Google Map
+      // key.So when user visit the content page of place content type, this
+      // won't show the modal popup error i.e The Google Map cannot be loaded.
+      // @see \Drupal\cohesion\Form\GoogleMapApiKeyForm
+      $form = \Drupal::formBuilder()->getForm('\Drupal\cohesion\Form\GoogleMapApiKeyForm');
+      $form_state = new FormState();
+      $values['google_map_api_key'] = $gmaps_key;
+      $form_state->setValues($values);
+      \Drupal::classResolver(GoogleMapApiKeyForm::class)->submitForm($form, $form_state);
+    }
   }
 }
 

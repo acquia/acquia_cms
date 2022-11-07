@@ -157,12 +157,14 @@ function set_theme_site_studio_as_default() {
  *
  * Reset page field body's label and descritption to default.
  */
-function acquia_cms_site_studio_uninstall() {
-  $config = \Drupal::service('config.factory')->getEditable('field.field.node.page.body');
-  if (!empty($config)) {
-    $config->set('label', 'Body');
-    $config->set('description', '');
-    $config->save();
+function acquia_cms_site_studio_uninstall($is_syncing) {
+  if (!$is_syncing) {
+    $config = \Drupal::service('config.factory')->getEditable('field.field.node.page.body');
+    if (!empty($config)) {
+      $config->set('label', 'Body');
+      $config->set('description', '');
+      $config->save();
+    }
   }
 }
 

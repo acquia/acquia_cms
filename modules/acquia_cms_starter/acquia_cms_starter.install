@@ -53,35 +53,37 @@ function acquia_cms_starter_install() {
 /**
  * Implements hook_modules_installed().
  */
-function acquia_cms_starter_modules_installed(array $modules) {
+function acquia_cms_starter_modules_installed(array $modules, $is_syncing) {
   // Moved the warning display for MAPS key from hook_requirements() above.
   // The intention behind doing this was to display the warning message,
   // on successful module installation.
   // The warning message is ignored on UI installation in hook_requirements
   // upon setting the severity level to REQUIRMENT_WARNING.
   // Check issue here -  https://www.drupal.org/project/drupal/issues/2295051
-  $entity_type_manager = Drupal::entityTypeManager();
-  if ($entity_type_manager->hasDefinition('geocoder_provider')) {
-    /** @var \Drupal\geocoder\GeocoderProviderInterface $provider */
-    $provider = $entity_type_manager->getStorage('geocoder_provider')
-      ->load('googlemaps');
+  if (!$is_syncing) {
+    $entity_type_manager = Drupal::entityTypeManager();
+    if ($entity_type_manager->hasDefinition('geocoder_provider')) {
+      /** @var \Drupal\geocoder\GeocoderProviderInterface $provider */
+      $provider = $entity_type_manager->getStorage('geocoder_provider')
+        ->load('googlemaps');
 
-    if ($provider) {
-      $configuration = $provider->get('configuration');
-      if (empty($configuration['apiKey'])) {
-        // Tweaked the message to be displayed on UI installation.
-        // The module will be installed with warning messages.
-        if (PHP_SAPI !== 'cli') {
-          \Drupal::messenger()->addWarning(t('The Google API key is not set, and you will see warnings below. They are technically harmless, but the maps will not work. You can set the key later <a href="@url">here</a> and resave your starter content to generate them.', [
-            '@url' => '/admin/tour/dashboard',
-          ]));
+      if ($provider) {
+        $configuration = $provider->get('configuration');
+        if (empty($configuration['apiKey'])) {
+          // Tweaked the message to be displayed on UI installation.
+          // The module will be installed with warning messages.
+          if (PHP_SAPI !== 'cli') {
+            \Drupal::messenger()->addWarning(t('The Google API key is not set, and you will see warnings below. They are technically harmless, but the maps will not work. You can set the key later <a href="@url">here</a> and resave your starter content to generate them.', [
+              '@url' => '/admin/tour/dashboard',
+            ]));
+          }
         }
       }
     }
-  }
-  // Enable demo content if page and site studio modules are enabled.
-  $module_handler = \Drupal::moduleHandler();
-  if ($module_handler->moduleExists('acquia_cms_page') && $module_handler->moduleExists('acquia_cms_site_studio')) {
-    \Drupal::service('module_installer')->install(['acquia_cms_site_studio_content']);
+    // Enable demo content if page and site studio modules are enabled.
+    $module_handler = \Drupal::moduleHandler();
+    if ($module_handler->moduleExists('acquia_cms_page') && $module_handler->moduleExists('acquia_cms_site_studio')) {
+      \Drupal::service('module_installer')->install(['acquia_cms_site_studio_content']);
+    }
   }
 }
