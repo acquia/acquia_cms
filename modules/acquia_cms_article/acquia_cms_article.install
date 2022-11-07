@@ -82,3 +82,19 @@ function acquia_cms_article_update_8003() {
     }
   }
 }
+
+/**
+ * Updating the target bundles for field article media to empty array.
+ *
+ * Implements hook_update_N().
+ */
+function acquia_cms_article_update_8004() {
+  if ($field_config = \Drupal::configFactory()->getEditable('field.field.node.article.field_article_media')) {
+    $value = $field_config->get('settings.handler_settings.target_bundles');
+    if (is_null($value)) {
+      $value = [];
+      $field_config->set('settings.handler_settings.target_bundles', $value);
+      $field_config->save(TRUE);
+    }
+  }
+}
