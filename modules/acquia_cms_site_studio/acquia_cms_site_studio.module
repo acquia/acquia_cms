@@ -174,12 +174,14 @@ function acquia_cms_site_studio_rebuild_styles() {
  * Implements hook_content_model_role_presave_alter().
  */
 function acquia_cms_site_studio_content_model_role_presave_alter(RoleInterface &$role) {
-  if (in_array($role->id(), [
-    'content_administrator',
-    'content_editor',
-    'content_author',
-    'site_builder',
-  ])) {
+  if (\Drupal::getContainer()->has('cohesion.utils') &&
+    \Drupal::service('cohesion.utils')->usedx8Status() &&
+    in_array($role->id(), [
+      'content_administrator',
+      'content_editor',
+      'content_author',
+      'site_builder',
+    ])) {
     $permissions = SiteStudioPermissionHelper::getSiteStudioPermissionsByRole($role->id());
     foreach ($permissions as $permission) {
       $role->grantPermission($permission);

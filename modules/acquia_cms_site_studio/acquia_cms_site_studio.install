@@ -228,3 +228,27 @@ function acquia_cms_site_studio_update_8004() {
     $role->save();
   }
 }
+
+/**
+ * Update and refactor permissions in new site studio.
+ */
+function acquia_cms_site_studio_update_8005() {
+  $roles = [
+    'content_administrator',
+    'content_editor',
+    'content_author',
+  ];
+  $permissions = [
+    'access cpt_cat_general_components cohesion_component_category group',
+    'access cpt_cat_hero_components cohesion_component_category group',
+    'access cpt_cat_interactive_components cohesion_component_category group',
+    'access cpt_cat_media_components cohesion_component_category group',
+    'access cpt_cat_template_components cohesion_component_category group',
+    'access hlp_cat_general_helpers cohesion_helper_category group',
+    'access hlp_cat_interactive_helpers cohesion_helper_category group',
+  ];
+  $user_role = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple($roles);
+  foreach ($user_role as $role) {
+    user_role_revoke_permissions($role->id(), $permissions);
+  }
+}

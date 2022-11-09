@@ -42,9 +42,6 @@ abstract class MediaPermissionsTestBase extends EntityPermissionsTestBase {
       [
         'user_administrator',
         [
-          'administer CAPTCHA settings',
-          'administer honeypot',
-          'administer recaptcha',
           'administer seckit',
           'administer site configuration',
           'administer users',

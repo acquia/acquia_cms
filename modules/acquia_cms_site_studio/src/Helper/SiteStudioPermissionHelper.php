@@ -71,16 +71,9 @@ class SiteStudioPermissionHelper {
   public static function basicComponentCategoryHelperPermissions(): array {
     return [
       'access cpt_cat_dynamic_components cohesion_component_category group',
-      'access cpt_cat_general_components cohesion_component_category group',
-      'access cpt_cat_hero_components cohesion_component_category group',
-      'access cpt_cat_interactive_components cohesion_component_category group',
       'access cpt_cat_layout_components cohesion_component_category group',
       'access cpt_cat_map_components cohesion_component_category group',
-      'access cpt_cat_media_components cohesion_component_category group',
-      'access cpt_cat_template_components cohesion_component_category group',
       'access hlp_cat_dynamic_helpers cohesion_helper_category group',
-      'access hlp_cat_general_helpers cohesion_helper_category group',
-      'access hlp_cat_interactive_helpers cohesion_helper_category group',
       'access hlp_cat_layout_helpers cohesion_helper_category group',
       'access hlp_cat_media_helpers cohesion_helper_category group',
     ];
