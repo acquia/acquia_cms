@@ -4,6 +4,10 @@ status: true
 dependencies:
   config:
     - views.view.articles
+  enforced:
+    module:
+      - acquia_cms_article
+      - acquia_cms_site_studio
 label: 'Articles grid'
 id: view_tpl_articles_grid
 json_values: |

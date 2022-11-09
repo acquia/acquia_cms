@@ -4,6 +4,10 @@ status: true
 dependencies:
   config:
     - views.view.articles_fallback
+  enforced:
+    module:
+      - acquia_cms_article
+      - acquia_cms_site_studio
 label: 'Articles fallback'
 id: view_tpl_articles_fallback
 json_values: |
