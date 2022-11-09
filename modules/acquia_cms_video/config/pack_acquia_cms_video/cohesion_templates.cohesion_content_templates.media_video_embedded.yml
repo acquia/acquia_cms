@@ -1,7 +1,13 @@
 uuid: 211116a7-7c3b-4a67-a4ad-e7a100c95d40
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - cohesion_custom_styles.cohesion_custom_style.63181883
+  enforced:
+    module:
+      - acquia_cms_video
+      - acquia_cms_site_studio
 label: 'Embedded (Media, Video)'
 id: media_video_embedded
 json_values: |
