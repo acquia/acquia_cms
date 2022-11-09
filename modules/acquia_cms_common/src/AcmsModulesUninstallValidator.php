@@ -93,24 +93,6 @@ class AcmsModulesUninstallValidator implements ModuleUninstallValidatorInterface
         '@type' => $type,
       ]);
     }
-    $sitestudio_modules = [
-      'acquia_cms_article',
-      'acquia_cms_event',
-      'acquia_cms_image',
-      'acquia_cms_page',
-      'acquia_cms_person',
-      'acquia_cms_place',
-      'acquia_cms_search',
-      'acquia_cms_site_studio',
-      'acquia_cms_video',
-    ];
-    if ($this->moduleHandler->moduleExists('acquia_cms_site_studio') &&
-    in_array($module, $sitestudio_modules) &&
-    $this->hasSiteStudioPackage($module)) {
-      $reasons[] = $this->t('There are site studio package available for module [@module], please manually delete package before uninstallation.', [
-        '@module' => $module,
-      ]);
-    }
     return $reasons;
   }
 
@@ -180,64 +162,6 @@ class AcmsModulesUninstallValidator implements ModuleUninstallValidatorInterface
         ->condition('bundle', $media_type)
         ->execute();
       return (bool) $media;
-    }
-    return FALSE;
-  }
-
-  /**
-   * Check if media with certain type is available.
-   *
-   * @param string $module
-   *   The media type.
-   *
-   * @return bool
-   *   The status of data available for certain node type.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   */
-  protected function hasSiteStudioPackage(string $module): bool {
-    if ($module) {
-      $package = $config = [];
-      switch ($module) {
-        case 'acquia_cms_article':
-          $package = 'pack_acquia_cms_article';
-          break;
-
-        case 'acquia_cms_event':
-          $package = 'pack_acquia_cms_event';
-          break;
-
-        case 'acquia_cms_image':
-          $package = 'pack_acquia_cms_image';
-          break;
-
-        case 'acquia_cms_page':
-          $package = 'pack_acquia_cms_page';
-          break;
-
-        case 'acquia_cms_person':
-          $package = 'pack_acquia_cms_person';
-          break;
-
-        case 'acquia_cms_place':
-          $package = 'pack_acquia_cms_place';
-          break;
-
-        case 'acquia_cms_search':
-          $package = 'pack_acquia_cms_search';
-          break;
-
-        case 'acquia_cms_site_studio':
-          $package = 'pack_acquia_cms_core';
-          break;
-
-        case 'acquia_cms_video':
-          $package = 'pack_acquia_cms_video';
-          break;
-      }
-      $config = $this->configFactory->getEditable('cohesion_sync.cohesion_sync_package.' . $package)->get('id');
-      return (bool) $config;
     }
     return FALSE;
   }
