@@ -1,7 +1,11 @@
 uuid: f28e2642-488c-4531-ad2d-73691018d460
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - acquia_cms_person
+      - acquia_cms_site_studio
 label: 'Search Results (Node, Person)'
 id: node_person_search_results
 json_values: |
