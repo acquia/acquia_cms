@@ -81,103 +81,6 @@
             "time": "2022-09-19T04:37:11+00:00"
         },
         {
-            "name": "acquia/acsf-contenthub-console",
-            "version": "1.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/acquia/acsf-contenthub-console.git",
-                "reference": "156d24187d9f441a98e0240b1713f812bb43a875"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/acquia/acsf-contenthub-console/zipball/156d24187d9f441a98e0240b1713f812bb43a875",
-                "reference": "156d24187d9f441a98e0240b1713f812bb43a875",
-                "shasum": ""
-            },
-            "require": {
-                "acquia/cloud-contenthub-console": "^1.4"
-            },
-            "require-dev": {
-                "drupal/coder": "dev-8.x-3.x",
-                "php-coveralls/php-coveralls": "^2.4",
-                "phpunit/phpunit": "^8",
-                "squizlabs/php_codesniffer": "^3.5"
-            },
-            "type": "project",
-            "autoload": {
-                "psr-4": {
-                    "Acquia\\Console\\Acsf\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Acquia Engineering",
-                    "homepage": "https://www.acquia.com",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "A package providing Acquia Cloud Site Factory commands for the CommonConsole command line interface.",
-            "support": {
-                "issues": "https://github.com/acquia/acsf-contenthub-console/issues",
-                "source": "https://github.com/acquia/acsf-contenthub-console/tree/1.4"
-            },
-            "time": "2022-06-14T12:09:47+00:00"
-        },
-        {
-            "name": "acquia/cloud-contenthub-console",
-            "version": "1.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/acquia/cloud-contenthub-console.git",
-                "reference": "9825e6a3eca63927f99a8a1f32e0e4f71b5f102f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/acquia/cloud-contenthub-console/zipball/9825e6a3eca63927f99a8a1f32e0e4f71b5f102f",
-                "reference": "9825e6a3eca63927f99a8a1f32e0e4f71b5f102f",
-                "shasum": ""
-            },
-            "require": {
-                "acquia/contenthub-console-helpers": "^1.4",
-                "ext-json": "*",
-                "typhonius/acquia-php-sdk-v2": ">=2.0.15"
-            },
-            "require-dev": {
-                "drupal/coder": "dev-8.x-3.x",
-                "php-coveralls/php-coveralls": "^2.4",
-                "phpspec/prophecy-phpunit": "^2.0",
-                "phpunit/phpunit": "^9",
-                "squizlabs/php_codesniffer": "^3.5"
-            },
-            "type": "project",
-            "autoload": {
-                "psr-4": {
-                    "Acquia\\Console\\Cloud\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Acquia Engineering",
-                    "homepage": "https://www.acquia.com",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "A package providing Acquia Cloud commands for the CommonConsole command line interface.",
-            "support": {
-                "issues": "https://github.com/acquia/cloud-contenthub-console/issues",
-                "source": "https://github.com/acquia/cloud-contenthub-console/tree/1.4.1"
-            },
-            "time": "2022-09-01T13:01:43+00:00"
-        },
-        {
             "name": "acquia/cohesion",
             "version": "6.9.3",
             "source": {
@@ -343,106 +246,6 @@
                 "source": "https://github.com/acquia/content-hub-php/tree/3.0"
             },
             "time": "2022-09-27T16:09:53+00:00"
-        },
-        {
-            "name": "acquia/contenthub-console",
-            "version": "1.6.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/acquia/contenthub-console.git",
-                "reference": "7ac1b103892bd6bba8c6dc77eac19cb19d7848c9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/acquia/contenthub-console/zipball/7ac1b103892bd6bba8c6dc77eac19cb19d7848c9",
-                "reference": "7ac1b103892bd6bba8c6dc77eac19cb19d7848c9",
-                "shasum": ""
-            },
-            "require": {
-                "acquia/acsf-contenthub-console": "^1.4",
-                "ext-json": "*",
-                "ext-simplexml": "*",
-                "spatie/ssl-certificate": "1.21|1.22.1|^2",
-                "zumba/amplitude-php": "^1"
-            },
-            "require-dev": {
-                "drupal/coder": "dev-8.x-3.x",
-                "php-coveralls/php-coveralls": "^2.4",
-                "phpspec/prophecy-phpunit": "^2.0",
-                "phpunit/phpunit": "^9",
-                "squizlabs/php_codesniffer": "^3.5"
-            },
-            "type": "project",
-            "autoload": {
-                "psr-4": {
-                    "Acquia\\Console\\ContentHub\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Acquia Engineering",
-                    "homepage": "https://www.acquia.com",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "A package providing Acquia ContentHub commands for the CommonConsole command line interface.",
-            "support": {
-                "issues": "https://github.com/acquia/contenthub-console/issues",
-                "source": "https://github.com/acquia/contenthub-console/tree/1.6.2"
-            },
-            "time": "2022-09-01T12:37:13+00:00"
-        },
-        {
-            "name": "acquia/contenthub-console-helpers",
-            "version": "1.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/acquia/contenthub-console-helpers.git",
-                "reference": "f98ed7c91c6a73b08561865f88ac9871ae514751"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/acquia/contenthub-console-helpers/zipball/f98ed7c91c6a73b08561865f88ac9871ae514751",
-                "reference": "f98ed7c91c6a73b08561865f88ac9871ae514751",
-                "shasum": ""
-            },
-            "require": {
-                "eclipsegc/common-console": "^0.1",
-                "ext-json": "*"
-            },
-            "require-dev": {
-                "drupal/coder": "dev-8.x-3.x",
-                "php-coveralls/php-coveralls": "^2.4",
-                "phpunit/phpunit": "^8",
-                "squizlabs/php_codesniffer": "^3.5"
-            },
-            "type": "project",
-            "autoload": {
-                "psr-4": {
-                    "Acquia\\Console\\Helpers\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Acquia Engineering",
-                    "homepage": "https://www.acquia.com",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "A package providing Helper Libraries for the CommonConsole command line interface.",
-            "support": {
-                "issues": "https://github.com/acquia/contenthub-console-helpers/issues",
-                "source": "https://github.com/acquia/contenthub-console-helpers/tree/1.4"
-            },
-            "time": "2022-06-14T12:00:21+00:00"
         },
         {
             "name": "acquia/drupal-environment-detector",
@@ -1451,16 +1254,16 @@
         },
         {
             "name": "consolidation/annotated-command",
-            "version": "4.5.6",
+            "version": "4.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/consolidation/annotated-command.git",
-                "reference": "3968070538761628546270935f0733a0cc408e1f"
+                "reference": "76835d35fcb0b879170129e82adfa1536b72921f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/consolidation/annotated-command/zipball/3968070538761628546270935f0733a0cc408e1f",
-                "reference": "3968070538761628546270935f0733a0cc408e1f",
+                "url": "https://api.github.com/repos/consolidation/annotated-command/zipball/76835d35fcb0b879170129e82adfa1536b72921f",
+                "reference": "76835d35fcb0b879170129e82adfa1536b72921f",
                 "shasum": ""
             },
             "require": {
@@ -1501,9 +1304,9 @@
             "description": "Initialize Symfony Console commands from annotated command class methods.",
             "support": {
                 "issues": "https://github.com/consolidation/annotated-command/issues",
-                "source": "https://github.com/consolidation/annotated-command/tree/4.5.6"
+                "source": "https://github.com/consolidation/annotated-command/tree/4.6.1"
             },
-            "time": "2022-06-22T20:17:12+00:00"
+            "time": "2022-11-09T18:31:17+00:00"
         },
         {
             "name": "consolidation/config",
@@ -2721,21 +2524,20 @@
         },
         {
             "name": "drupal/acquia_contenthub",
-            "version": "3.0.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/acquia_contenthub.git",
-                "reference": "3.0.0"
+                "reference": "3.0.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_contenthub-3.0.0.zip",
-                "reference": "3.0.0",
-                "shasum": "c1e44ee2a13e95cea73d6031c58e9355c9e70266"
+                "url": "https://ftp.drupal.org/files/projects/acquia_contenthub-3.0.1.zip",
+                "reference": "3.0.1",
+                "shasum": "0fbb80c19b3f586a2880f8156fd59a7082e31b78"
             },
             "require": {
                 "acquia/content-hub-php": "^3.0",
-                "acquia/contenthub-console": "^1.6.2",
                 "drupal/core": ">=9.2",
                 "drupal/depcalc": "^1.16",
                 "laminas/laminas-diactoros": "^1.8 || ^2.2",
@@ -2759,15 +2561,15 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.0",
-                    "datestamp": "1664475922",
+                    "version": "3.0.1",
+                    "datestamp": "1667982760",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "branch-alias": {
-                    "dev-3.x": "3.x-dev"
+                    "dev-3.0.x": "3.0.x-dev"
                 },
                 "drush": {
                     "services": {
@@ -2837,20 +2639,20 @@
         },
         {
             "name": "drupal/acquia_lift",
-            "version": "4.4.0",
+            "version": "4.5.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/acquia_lift.git",
-                "reference": "8.x-4.4"
+                "reference": "8.x-4.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_lift-8.x-4.4.zip",
-                "reference": "8.x-4.4",
-                "shasum": "0c9338b47337cf0ce2ab350cfd8efcf79c0ecf0b"
+                "url": "https://ftp.drupal.org/files/projects/acquia_lift-8.x-4.5.zip",
+                "reference": "8.x-4.5",
+                "shasum": "3ee67573128b8e12da98f29adf54b4a429a49f87"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9"
+                "drupal/core": "^9.2 || ^10"
             },
             "require-dev": {
                 "drupal/acquia_contenthub_publisher": "*"
@@ -2858,8 +2660,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-4.4",
-                    "datestamp": "1626368035",
+                    "version": "8.x-4.5",
+                    "datestamp": "1668023390",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2960,24 +2762,23 @@
         },
         {
             "name": "drupal/acquia_search",
-            "version": "3.0.7",
+            "version": "3.0.8",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/acquia_search.git",
-                "reference": "3.0.7"
+                "reference": "3.0.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_search-3.0.7.zip",
-                "reference": "3.0.7",
-                "shasum": "b4695762d4c9e2a55a258d570baad0272fee643a"
+                "url": "https://ftp.drupal.org/files/projects/acquia_search-3.0.8.zip",
+                "reference": "3.0.8",
+                "shasum": "34964cb6738cf44a7a4e7774520f17b2f82ed8b9"
             },
             "require": {
                 "drupal/core": "^9.2 || ^10",
                 "drupal/search_api_solr": "^4.1.12",
-                "guzzlehttp/guzzle": "^6.5 || ^7.2",
-                "http-interop/http-factory-guzzle": "^1.0",
-                "php-http/guzzle6-adapter": "^2.0 || ^3.0"
+                "guzzlehttp/guzzle": "^6 || ^7",
+                "http-interop/http-factory-guzzle": "^1.0"
             },
             "conflict": {
                 "drupal/acquia_connector": "<3",
@@ -2986,14 +2787,11 @@
             "require-dev": {
                 "drush/drush": "^10 || ^11"
             },
-            "suggest": {
-                "php-http/guzzle6-adapter": "Required to use Acquia Connector with Guzzle 6 / Drupal 9.3 and lower"
-            },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.7",
-                    "datestamp": "1664412342",
+                    "version": "3.0.8",
+                    "datestamp": "1668017513",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3655,17 +3453,17 @@
         },
         {
             "name": "drupal/captcha",
-            "version": "1.5.0",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/captcha.git",
-                "reference": "8.x-1.5"
+                "reference": "8.x-1.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/captcha-8.x-1.5.zip",
-                "reference": "8.x-1.5",
-                "shasum": "36284ece721d3534d0c3bd6ae01cdb549920a024"
+                "url": "https://ftp.drupal.org/files/projects/captcha-8.x-1.6.zip",
+                "reference": "8.x-1.6",
+                "shasum": "24b755e77ff4a95f40ef074c91ed9132303fafbb"
             },
             "require": {
                 "drupal/core": ">=8.9 <11"
@@ -3673,8 +3471,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.5",
-                    "datestamp": "1662751122",
+                    "version": "8.x-1.6",
+                    "datestamp": "1667906819",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3690,8 +3488,20 @@
             ],
             "authors": [
                 {
+                    "name": "Anybody",
+                    "homepage": "https://www.drupal.org/user/291091"
+                },
+                {
                     "name": "elachlan",
                     "homepage": "https://www.drupal.org/user/1021502"
+                },
+                {
+                    "name": "gisle",
+                    "homepage": "https://www.drupal.org/user/409554"
+                },
+                {
+                    "name": "Grevil",
+                    "homepage": "https://www.drupal.org/user/3668491"
                 },
                 {
                     "name": "japerry",
@@ -3712,6 +3522,10 @@
                 {
                     "name": "soxofaan",
                     "homepage": "https://www.drupal.org/user/41478"
+                },
+                {
+                    "name": "thomas.frobieter",
+                    "homepage": "https://www.drupal.org/user/409335"
                 },
                 {
                     "name": "wundo",
@@ -5043,29 +4857,26 @@
         },
         {
             "name": "drupal/field_group",
-            "version": "3.3.0",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/field_group.git",
-                "reference": "8.x-3.3"
+                "reference": "8.x-3.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/field_group-8.x-3.3.zip",
-                "reference": "8.x-3.3",
-                "shasum": "c7a423b1d7643ee40dd1543d72fa04e8ac1756e4"
+                "url": "https://ftp.drupal.org/files/projects/field_group-8.x-3.4.zip",
+                "reference": "8.x-3.4",
+                "shasum": "80b937e1a11f8b29c69d853fc4bf798c057c6f94"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9"
-            },
-            "require-dev": {
-                "drupal/jquery_ui_accordion": "^1.0"
+                "drupal/core": "^9.2 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.3",
-                    "datestamp": "1663516404",
+                    "version": "8.x-3.4",
+                    "datestamp": "1667241979",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5335,17 +5146,17 @@
         },
         {
             "name": "drupal/geofield",
-            "version": "1.45.0",
+            "version": "1.46.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/geofield.git",
-                "reference": "8.x-1.45"
+                "reference": "8.x-1.46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/geofield-8.x-1.45.zip",
-                "reference": "8.x-1.45",
-                "shasum": "64451e5e8e7d152283e0e588f27ab4f2d6f3af24"
+                "url": "https://ftp.drupal.org/files/projects/geofield-8.x-1.46.zip",
+                "reference": "8.x-1.46",
+                "shasum": "2e3d1e933b42623b9c44660937cee9124c6abfed"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9 || ^10",
@@ -5354,8 +5165,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.45",
-                    "datestamp": "1665693991",
+                    "version": "8.x-1.46",
+                    "datestamp": "1666260947",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6419,26 +6230,26 @@
         },
         {
             "name": "drupal/moderation_sidebar",
-            "version": "1.5.0",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/moderation_sidebar.git",
-                "reference": "8.x-1.5"
+                "reference": "8.x-1.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/moderation_sidebar-8.x-1.5.zip",
-                "reference": "8.x-1.5",
-                "shasum": "d3391f5ca10a9d145d217ef2ce0b463d90a14510"
+                "url": "https://ftp.drupal.org/files/projects/moderation_sidebar-8.x-1.6.zip",
+                "reference": "8.x-1.6",
+                "shasum": "a854296ff5d59df0fba16df781cf6c9f071c4bfe"
             },
             "require": {
-                "drupal/core": "^8 || ^9"
+                "drupal/core": "^9.3 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.5",
-                    "datestamp": "1648129967",
+                    "version": "8.x-1.6",
+                    "datestamp": "1667433303",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8299,20 +8110,20 @@
         },
         {
             "name": "drupal/simple_oauth",
-            "version": "5.2.0",
+            "version": "5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/simple_oauth.git",
-                "reference": "5.2.0"
+                "reference": "5.2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/simple_oauth-5.2.0.zip",
-                "reference": "5.2.0",
-                "shasum": "3d2b0f38284190a59e4ac99d6f5d4af424c4d19f"
+                "url": "https://ftp.drupal.org/files/projects/simple_oauth-5.2.1.zip",
+                "reference": "5.2.1",
+                "shasum": "831aadf6d4ecc723429a0582bb2abc01ac24db1d"
             },
             "require": {
-                "drupal/consumers": "^1.2",
+                "drupal/consumers": "^1.14",
                 "drupal/core": "^8 || ^9",
                 "lcobucci/jwt": "^4",
                 "league/oauth2-server": "^8.3",
@@ -8325,8 +8136,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "5.2.0",
-                    "datestamp": "1641403293",
+                    "version": "5.2.1",
+                    "datestamp": "1667802031",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8340,7 +8151,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -8862,17 +8673,17 @@
         },
         {
             "name": "drupal/workbench_email",
-            "version": "2.3.2",
+            "version": "2.3.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/workbench_email.git",
-                "reference": "2.3.2"
+                "reference": "2.3.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/workbench_email-2.3.2.zip",
-                "reference": "2.3.2",
-                "shasum": "b8efdb143805cce0ac1426cd66b93a18534fe058"
+                "url": "https://ftp.drupal.org/files/projects/workbench_email-2.3.3.zip",
+                "reference": "2.3.3",
+                "shasum": "d10e15a1a3c72cc29a823de6aaa5b2b18be63d97"
             },
             "require": {
                 "drupal/core": "^9.1 || ^10"
@@ -8883,8 +8694,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.3.2",
-                    "datestamp": "1662087612",
+                    "version": "2.3.3",
+                    "datestamp": "1667986449",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8930,16 +8741,16 @@
         },
         {
             "name": "drush/drush",
-            "version": "11.2.1",
+            "version": "11.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drush-ops/drush.git",
-                "reference": "95123e003c96f4c57299fa277ef60457041cae1a"
+                "reference": "57cd12235f0a8b3aaabc841fd6c82b64f3dffc02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drush-ops/drush/zipball/95123e003c96f4c57299fa277ef60457041cae1a",
-                "reference": "95123e003c96f4c57299fa277ef60457041cae1a",
+                "url": "https://api.github.com/repos/drush-ops/drush/zipball/57cd12235f0a8b3aaabc841fd6c82b64f3dffc02",
+                "reference": "57cd12235f0a8b3aaabc841fd6c82b64f3dffc02",
                 "shasum": ""
             },
             "require": {
@@ -8949,7 +8760,7 @@
                 "consolidation/config": "^2",
                 "consolidation/filter-via-dot-access-data": "^2",
                 "consolidation/robo": "^3.0.9 || ^4.0.1",
-                "consolidation/site-alias": "^3.1.3",
+                "consolidation/site-alias": "^3.1.6 || ^4",
                 "consolidation/site-process": "^4.1.3 || ^5",
                 "enlightn/security-checker": "^1",
                 "ext-dom": "*",
@@ -8958,12 +8769,12 @@
                 "php": ">=7.4",
                 "psy/psysh": "~0.11",
                 "symfony/event-dispatcher": "^4.0 || ^5.0 || ^6.0",
+                "symfony/filesystem": "^4.4 || ^5.4 || ^6.1",
                 "symfony/finder": "^4.0 || ^5 || ^6",
                 "symfony/polyfill-php80": "^1.23",
                 "symfony/var-dumper": "^4.0 || ^5.0 || ^6.0",
                 "symfony/yaml": "^4.0 || ^5.0 || ^6.0",
-                "webflo/drupal-finder": "^1.2",
-                "webmozart/path-util": "^2.1.0"
+                "webflo/drupal-finder": "^1.2"
             },
             "conflict": {
                 "drupal/core": "< 9.2",
@@ -9061,10 +8872,9 @@
             "homepage": "http://www.drush.org",
             "support": {
                 "forum": "http://drupal.stackexchange.com/questions/tagged/drush",
-                "irc": "irc://irc.freenode.org/drush",
                 "issues": "https://github.com/drush-ops/drush/issues",
                 "slack": "https://drupal.slack.com/messages/C62H9CWQM",
-                "source": "https://github.com/drush-ops/drush/tree/11.2.1"
+                "source": "https://github.com/drush-ops/drush/tree/11.3.2"
             },
             "funding": [
                 {
@@ -9072,7 +8882,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-09-23T17:35:58+00:00"
+            "time": "2022-10-24T14:01:14+00:00"
         },
         {
             "name": "e0ipso/shaper",
@@ -9119,56 +8929,6 @@
                 "source": "https://github.com/e0ipso/shaper/tree/1.2.4"
             },
             "time": "2021-05-19T09:42:57+00:00"
-        },
-        {
-            "name": "eclipsegc/common-console",
-            "version": "0.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/EclipseGc/CommonConsole.git",
-                "reference": "a2d2ff65085fd56f7d1581a6226c5a0452f72248"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/EclipseGc/CommonConsole/zipball/a2d2ff65085fd56f7d1581a6226c5a0452f72248",
-                "reference": "a2d2ff65085fd56f7d1581a6226c5a0452f72248",
-                "shasum": ""
-            },
-            "require": {
-                "consolidation/config": "^1.0@dev || ^2",
-                "ext-json": "*",
-                "php": ">=7.3",
-                "symfony/config": ">=4.4",
-                "symfony/console": ">=4.4",
-                "symfony/dependency-injection": ">=4.4",
-                "symfony/event-dispatcher": ">=4.4",
-                "symfony/filesystem": ">=4.4",
-                "symfony/process": ">=4.4",
-                "symfony/yaml": ">=4.4"
-            },
-            "require-dev": {
-                "phpspec/prophecy-phpunit": "^2.0@dev",
-                "phpunit/phpunit": "^9.3@dev"
-            },
-            "bin": [
-                "bin/commoncli"
-            ],
-            "type": "project",
-            "autoload": {
-                "psr-4": {
-                    "EclipseGc\\CommonConsole\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "description": "A Common Console base application.",
-            "support": {
-                "issues": "https://github.com/EclipseGc/CommonConsole/issues",
-                "source": "https://github.com/EclipseGc/CommonConsole/tree/0.1.0"
-            },
-            "time": "2022-06-08T10:19:57+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -10851,76 +10611,6 @@
             "time": "2018-11-26T11:52:41+00:00"
         },
         {
-            "name": "league/oauth2-client",
-            "version": "2.6.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/oauth2-client.git",
-                "reference": "2334c249907190c132364f5dae0287ab8666aa19"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/oauth2-client/zipball/2334c249907190c132364f5dae0287ab8666aa19",
-                "reference": "2334c249907190c132364f5dae0287ab8666aa19",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^6.0 || ^7.0",
-                "paragonie/random_compat": "^1 || ^2 || ^9.99",
-                "php": "^5.6 || ^7.0 || ^8.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "^1.3.5",
-                "php-parallel-lint/php-parallel-lint": "^1.3.1",
-                "phpunit/phpunit": "^5.7 || ^6.0 || ^9.5",
-                "squizlabs/php_codesniffer": "^2.3 || ^3.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "League\\OAuth2\\Client\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alex Bilbie",
-                    "email": "hello@alexbilbie.com",
-                    "homepage": "http://www.alexbilbie.com",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Woody Gilk",
-                    "homepage": "https://github.com/shadowhand",
-                    "role": "Contributor"
-                }
-            ],
-            "description": "OAuth 2.0 Client Library",
-            "keywords": [
-                "Authentication",
-                "SSO",
-                "authorization",
-                "identity",
-                "idp",
-                "oauth",
-                "oauth2",
-                "single sign on"
-            ],
-            "support": {
-                "issues": "https://github.com/thephpleague/oauth2-client/issues",
-                "source": "https://github.com/thephpleague/oauth2-client/tree/2.6.1"
-            },
-            "time": "2021-12-22T16:42:49+00:00"
-        },
-        {
             "name": "league/oauth2-server",
             "version": "8.3.5",
             "source": {
@@ -11486,16 +11176,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.62.1",
+            "version": "2.63.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "01bc4cdefe98ef58d1f9cb31bdbbddddf2a88f7a"
+                "reference": "ad35dd71a6a212b98e4b87e97389b6fa85f0e347"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/01bc4cdefe98ef58d1f9cb31bdbbddddf2a88f7a",
-                "reference": "01bc4cdefe98ef58d1f9cb31bdbbddddf2a88f7a",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/ad35dd71a6a212b98e4b87e97389b6fa85f0e347",
+                "reference": "ad35dd71a6a212b98e4b87e97389b6fa85f0e347",
                 "shasum": ""
             },
             "require": {
@@ -11584,7 +11274,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-02T07:48:13+00:00"
+            "time": "2022-10-30T18:34:28+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -12714,16 +12404,16 @@
         },
         {
             "name": "psy/psysh",
-            "version": "v0.11.8",
+            "version": "v0.11.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "f455acf3645262ae389b10e9beba0c358aa6994e"
+                "reference": "1acec99d6684a54ff92f8b548a4e41b566963778"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/f455acf3645262ae389b10e9beba0c358aa6994e",
-                "reference": "f455acf3645262ae389b10e9beba0c358aa6994e",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/1acec99d6684a54ff92f8b548a4e41b566963778",
+                "reference": "1acec99d6684a54ff92f8b548a4e41b566963778",
                 "shasum": ""
             },
             "require": {
@@ -12784,9 +12474,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bobthecow/psysh/issues",
-                "source": "https://github.com/bobthecow/psysh/tree/v0.11.8"
+                "source": "https://github.com/bobthecow/psysh/tree/v0.11.9"
             },
-            "time": "2022-07-28T14:25:11+00:00"
+            "time": "2022-11-06T15:29:46+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -13421,182 +13111,6 @@
                 "source": "https://github.com/symfony-cmf/Routing/tree/2.3.4"
             },
             "time": "2021-11-08T16:33:10+00:00"
-        },
-        {
-            "name": "symfony/cache",
-            "version": "v5.4.15",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/cache.git",
-                "reference": "60e87188abbacd29ccde44d69c5392a33e888e98"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/60e87188abbacd29ccde44d69c5392a33e888e98",
-                "reference": "60e87188abbacd29ccde44d69c5392a33e888e98",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2.5",
-                "psr/cache": "^1.0|^2.0",
-                "psr/log": "^1.1|^2|^3",
-                "symfony/cache-contracts": "^1.1.7|^2",
-                "symfony/deprecation-contracts": "^2.1|^3",
-                "symfony/polyfill-php73": "^1.9",
-                "symfony/polyfill-php80": "^1.16",
-                "symfony/service-contracts": "^1.1|^2|^3",
-                "symfony/var-exporter": "^4.4|^5.0|^6.0"
-            },
-            "conflict": {
-                "doctrine/dbal": "<2.13.1",
-                "symfony/dependency-injection": "<4.4",
-                "symfony/http-kernel": "<4.4",
-                "symfony/var-dumper": "<4.4"
-            },
-            "provide": {
-                "psr/cache-implementation": "1.0|2.0",
-                "psr/simple-cache-implementation": "1.0|2.0",
-                "symfony/cache-implementation": "1.0|2.0"
-            },
-            "require-dev": {
-                "cache/integration-tests": "dev-master",
-                "doctrine/cache": "^1.6|^2.0",
-                "doctrine/dbal": "^2.13.1|^3.0",
-                "predis/predis": "^1.1",
-                "psr/simple-cache": "^1.0|^2.0",
-                "symfony/config": "^4.4|^5.0|^6.0",
-                "symfony/dependency-injection": "^4.4|^5.0|^6.0",
-                "symfony/filesystem": "^4.4|^5.0|^6.0",
-                "symfony/http-kernel": "^4.4|^5.0|^6.0",
-                "symfony/messenger": "^4.4|^5.0|^6.0",
-                "symfony/var-dumper": "^4.4|^5.0|^6.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Cache\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Provides extended PSR-6, PSR-16 (and tags) implementations",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "caching",
-                "psr6"
-            ],
-            "support": {
-                "source": "https://github.com/symfony/cache/tree/v5.4.15"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2022-10-27T07:55:40+00:00"
-        },
-        {
-            "name": "symfony/cache-contracts",
-            "version": "v2.5.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/cache-contracts.git",
-                "reference": "64be4a7acb83b6f2bf6de9a02cee6dad41277ebc"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache-contracts/zipball/64be4a7acb83b6f2bf6de9a02cee6dad41277ebc",
-                "reference": "64be4a7acb83b6f2bf6de9a02cee6dad41277ebc",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2.5",
-                "psr/cache": "^1.0|^2.0|^3.0"
-            },
-            "suggest": {
-                "symfony/cache-implementation": ""
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "2.5-dev"
-                },
-                "thanks": {
-                    "name": "symfony/contracts",
-                    "url": "https://github.com/symfony/contracts"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Contracts\\Cache\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Generic abstractions related to caching",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "abstractions",
-                "contracts",
-                "decoupling",
-                "interfaces",
-                "interoperability",
-                "standards"
-            ],
-            "support": {
-                "source": "https://github.com/symfony/cache-contracts/tree/v2.5.2"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2022-01-02T09:53:40+00:00"
         },
         {
             "name": "symfony/config",
@@ -16440,79 +15954,6 @@
             "time": "2022-10-07T08:01:20+00:00"
         },
         {
-            "name": "symfony/var-exporter",
-            "version": "v5.4.10",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/var-exporter.git",
-                "reference": "8fc03ee75eeece3d9be1ef47d26d79bea1afb340"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/8fc03ee75eeece3d9be1ef47d26d79bea1afb340",
-                "reference": "8fc03ee75eeece3d9be1ef47d26d79bea1afb340",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2.5",
-                "symfony/polyfill-php80": "^1.16"
-            },
-            "require-dev": {
-                "symfony/var-dumper": "^4.4.9|^5.0.9|^6.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\VarExporter\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Allows exporting any serializable PHP data structure to plain PHP code",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "clone",
-                "construct",
-                "export",
-                "hydrate",
-                "instantiate",
-                "serialize"
-            ],
-            "support": {
-                "source": "https://github.com/symfony/var-exporter/tree/v5.4.10"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2022-05-27T12:56:18+00:00"
-        },
-        {
             "name": "symfony/yaml",
             "version": "v4.4.45",
             "source": {
@@ -16662,67 +16103,6 @@
                 }
             ],
             "time": "2022-09-28T08:40:08+00:00"
-        },
-        {
-            "name": "typhonius/acquia-php-sdk-v2",
-            "version": "2.0.15",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/typhonius/acquia-php-sdk-v2.git",
-                "reference": "ce6534ab7d79697a0f0204d81b7475c1037d4471"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/typhonius/acquia-php-sdk-v2/zipball/ce6534ab7d79697a0f0204d81b7475c1037d4471",
-                "reference": "ce6534ab7d79697a0f0204d81b7475c1037d4471",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^6.3",
-                "league/oauth2-client": "^2.4",
-                "php": ">=7.3",
-                "symfony/cache": "^4|^5",
-                "webmozart/path-util": "^2.3"
-            },
-            "require-dev": {
-                "eloquent/phony-phpunit": "^4",
-                "php-coveralls/php-coveralls": "^2.0.0",
-                "phpstan/phpstan": "^0.11.19",
-                "phpstan/phpstan-phpunit": "^0.11.2",
-                "phpunit/phpunit": "^7.0",
-                "squizlabs/php_codesniffer": "3.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "AcquiaCloudApi\\Response\\": "src/Response",
-                    "AcquiaCloudApi\\Connector\\": "src/Connector",
-                    "AcquiaCloudApi\\Endpoints\\": "src/Endpoints",
-                    "AcquiaCloudApi\\Exception\\": "src/Exception"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Adam Malone",
-                    "email": "adam@adammalone.net"
-                }
-            ],
-            "description": "A PHP SDK for Acquia CloudAPI v2",
-            "support": {
-                "issues": "https://github.com/typhonius/acquia-php-sdk-v2/issues",
-                "source": "https://github.com/typhonius/acquia-php-sdk-v2/tree/2.0.15"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/typhonius",
-                    "type": "github"
-                }
-            ],
-            "time": "2020-10-20T22:54:07+00:00"
         },
         {
             "name": "typo3/phar-stream-wrapper",
@@ -17046,67 +16426,6 @@
                 "source": "https://github.com/geocoder-php/php-common/tree/4.6.0"
             },
             "time": "2022-07-30T11:09:43+00:00"
-        },
-        {
-            "name": "zumba/amplitude-php",
-            "version": "1.0.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zumba/amplitude-php.git",
-                "reference": "99d776d1b60d2a4d8bb26e4039e368edd3d89aac"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zumba/amplitude-php/zipball/99d776d1b60d2a4d8bb26e4039e368edd3d89aac",
-                "reference": "99d776d1b60d2a4d8bb26e4039e368edd3d89aac",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-json": "*",
-                "php": ">=7.2",
-                "psr/log": "^1.0 | ^2.0 | ^3.0"
-            },
-            "require-dev": {
-                "php-coveralls/php-coveralls": "^2.4",
-                "phpunit/phpunit": "8.3.* | ^9",
-                "squizlabs/php_codesniffer": "3.4.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Zumba\\Amplitude\\": "./src/",
-                    "Zumba\\Amplitude\\Test\\": "./test/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Zumba Fitness, LLC",
-                    "homepage": "https://tech.zumba.com"
-                },
-                {
-                    "name": "Jonathan Foote",
-                    "email": "jonathan.foote@zumba.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP SDK for Amplitude",
-            "homepage": "https://github.com/zumba/amplitude-php",
-            "keywords": [
-                "amplitude",
-                "analytics",
-                "sdk",
-                "tracking"
-            ],
-            "support": {
-                "issues": "https://github.com/zumba/amplitude-php/issues",
-                "source": "https://github.com/zumba/amplitude-php/tree/1.0.6"
-            },
-            "time": "2022-09-09T13:49:49+00:00"
         }
     ],
     "packages-dev": [
@@ -18316,16 +17635,16 @@
         },
         {
             "name": "instaclick/php-webdriver",
-            "version": "1.4.15",
+            "version": "1.4.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/instaclick/php-webdriver.git",
-                "reference": "ed8f7741a0952db42686aae0780a0935138a7cf8"
+                "reference": "a39a1f6dc0f4ddd8b2438fa5eb1f67755730d606"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/instaclick/php-webdriver/zipball/ed8f7741a0952db42686aae0780a0935138a7cf8",
-                "reference": "ed8f7741a0952db42686aae0780a0935138a7cf8",
+                "url": "https://api.github.com/repos/instaclick/php-webdriver/zipball/a39a1f6dc0f4ddd8b2438fa5eb1f67755730d606",
+                "reference": "a39a1f6dc0f4ddd8b2438fa5eb1f67755730d606",
                 "shasum": ""
             },
             "require": {
@@ -18373,9 +17692,9 @@
             ],
             "support": {
                 "issues": "https://github.com/instaclick/php-webdriver/issues",
-                "source": "https://github.com/instaclick/php-webdriver/tree/1.4.15"
+                "source": "https://github.com/instaclick/php-webdriver/tree/1.4.16"
             },
-            "time": "2022-08-09T14:26:29+00:00"
+            "time": "2022-10-28T13:30:35+00:00"
         },
         {
             "name": "localheinz/diff",
@@ -19364,16 +18683,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "9.2.17",
+            "version": "9.2.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "aa94dc41e8661fe90c7316849907cba3007b10d8"
+                "reference": "12fddc491826940cf9b7e88ad9664cf51f0f6d0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/aa94dc41e8661fe90c7316849907cba3007b10d8",
-                "reference": "aa94dc41e8661fe90c7316849907cba3007b10d8",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/12fddc491826940cf9b7e88ad9664cf51f0f6d0a",
+                "reference": "12fddc491826940cf9b7e88ad9664cf51f0f6d0a",
                 "shasum": ""
             },
             "require": {
@@ -19429,7 +18748,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.17"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.18"
             },
             "funding": [
                 {
@@ -19437,7 +18756,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-08-30T12:24:04+00:00"
+            "time": "2022-10-27T13:35:33+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -19682,16 +19001,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.25",
+            "version": "9.5.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3e6f90ca7e3d02025b1d147bd8d4a89fd4ca8a1d"
+                "reference": "851867efcbb6a1b992ec515c71cdcf20d895e9d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3e6f90ca7e3d02025b1d147bd8d4a89fd4ca8a1d",
-                "reference": "3e6f90ca7e3d02025b1d147bd8d4a89fd4ca8a1d",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/851867efcbb6a1b992ec515c71cdcf20d895e9d2",
+                "reference": "851867efcbb6a1b992ec515c71cdcf20d895e9d2",
                 "shasum": ""
             },
             "require": {
@@ -19764,7 +19083,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.25"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.26"
             },
             "funding": [
                 {
@@ -19780,7 +19099,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-25T03:44:45+00:00"
+            "time": "2022-10-28T06:00:21+00:00"
         },
         {
             "name": "sebastian/cli-parser",
