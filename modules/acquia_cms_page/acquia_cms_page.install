@@ -98,3 +98,29 @@ function acquia_cms_page_update_8002() {
     }
   }
 }
+
+/**
+ * Added enforced dependency in site studio templates for Acquia CMS Page.
+ *
+ * Implements hook_update_N().
+ */
+function acquia_cms_page_update_8003() {
+  $moduleHandler = \Drupal::service('module_handler');
+  if ($moduleHandler->moduleExists('acquia_cms_site_studio')) {
+    $module_path = \Drupal::service('extension.list.module')->getPath('acquia_cms_page');
+    $directory = $module_path . '/config/pack_acquia_cms_page';
+    if (is_dir($directory)) {
+      $files = \Drupal::service('file_system')->scanDirectory($directory, '/.*\.yml$/');
+      foreach ($files as $file) {
+        $sitestudio_template = \Drupal::configFactory()->getEditable($file->name);
+        if (is_null($sitestudio_template->get('dependencies.enforced.module'))) {
+          $sitestudio_template->set('dependencies.enforced.module', [
+            'acquia_cms_page',
+            'acquia_cms_site_studio',
+          ]);
+          $sitestudio_template->save(TRUE);
+        }
+      }
+    }
+  }
+}
