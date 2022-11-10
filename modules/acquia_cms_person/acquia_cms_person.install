@@ -131,3 +131,29 @@ function acquia_cms_person_update_8003() {
       ->save();
   }
 }
+
+/**
+ * Added enforced dependency in site studio templates for Acquia CMS Person.
+ *
+ * Implements hook_update_N().
+ */
+function acquia_cms_person_update_8004() {
+  $moduleHandler = \Drupal::service('module_handler');
+  if ($moduleHandler->moduleExists('acquia_cms_site_studio')) {
+    $module_path = \Drupal::service('extension.list.module')->getPath('acquia_cms_person');
+    $directory = $module_path . '/config/pack_acquia_cms_person';
+    if (is_dir($directory)) {
+      $files = \Drupal::service('file_system')->scanDirectory($directory, '/.*\.yml$/');
+      foreach ($files as $file) {
+        $sitestudio_template = \Drupal::configFactory()->getEditable($file->name);
+        if (is_null($sitestudio_template->get('dependencies.enforced.module'))) {
+          $sitestudio_template->set('dependencies.enforced.module', [
+            'acquia_cms_person',
+            'acquia_cms_site_studio',
+          ]);
+          $sitestudio_template->save(TRUE);
+        }
+      }
+    }
+  }
+}

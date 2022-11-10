@@ -136,7 +136,6 @@ function acquia_cms_event_update_8003() {
     $event_view_mode->set('content.field_event_place.settings.view_mode', 'referenced_image');
     $event_view_mode->save();
   }
-
 }
 
 /**
@@ -179,5 +178,31 @@ function acquia_cms_event_update_8004() {
         'settings' => [],
       ])
       ->save();
+  }
+}
+
+/**
+ * Added enforced dependency in site studio templates for Acquia CMS Event.
+ *
+ * Implements hook_update_N().
+ */
+function acquia_cms_event_update_8005() {
+  $moduleHandler = \Drupal::service('module_handler');
+  if ($moduleHandler->moduleExists('acquia_cms_site_studio')) {
+    $module_path = \Drupal::service('extension.list.module')->getPath('acquia_cms_event');
+    $directory = $module_path . '/config/pack_acquia_cms_event';
+    if (is_dir($directory)) {
+      $files = \Drupal::service('file_system')->scanDirectory($directory, '/.*\.yml$/');
+      foreach ($files as $file) {
+        $sitestudio_template = \Drupal::configFactory()->getEditable($file->name);
+        if (is_null($sitestudio_template->get('dependencies.enforced.module'))) {
+          $sitestudio_template->set('dependencies.enforced.module', [
+            'acquia_cms_event',
+            'acquia_cms_site_studio',
+          ]);
+          $sitestudio_template->save(TRUE);
+        }
+      }
+    }
   }
 }
