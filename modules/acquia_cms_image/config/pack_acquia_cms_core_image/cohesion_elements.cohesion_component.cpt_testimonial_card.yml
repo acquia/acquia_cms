@@ -3870,7 +3870,7 @@ json_values: |
                   "title": "Quote",
                   "type": "cohSection",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -4003,7 +4003,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-2-col",
+                  "columnCount": "2",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -4078,7 +4078,7 @@ json_values: |
                   "title": "Color",
                   "type": "cohSection",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-col",
+                  "columnCount": "auto",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -4146,7 +4146,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 1,
                   "removePadding": 1,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -4164,7 +4164,7 @@ json_values: |
                   "type": "cohHelpText",
                   "options": {
                       "showClose": false,
-                      "helpType": "coh-help-text--help",
+                      "helpType": "help",
                       "helpText": "Text color is automatic based on your background color selection."
                   },
                   "showCondition": "[field.f1f6b9a6-1859-44b5-9e97-60c8d8283bba] tags include 'Dark' OR [field.f1f6b9a6-1859-44b5-9e97-60c8d8283bba] tags include 'Light' OR [field.f1f6b9a6-1859-44b5-9e97-60c8d8283bba] tags include 'Color'"
@@ -4233,7 +4233,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-col",
+                  "columnCount": "auto",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -4317,7 +4317,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -4364,7 +4364,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 1,
                   "removePadding": 1,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -4382,7 +4382,7 @@ json_values: |
                   "type": "cohHelpText",
                   "options": {
                       "showClose": false,
-                      "helpType": "coh-help-text--help",
+                      "helpType": "help",
                       "helpText": "Padding has been applied because you have set a background color or border."
                   },
                   "showCondition": "(!([field.f1f6b9a6-1859-44b5-9e97-60c8d8283bba] rgba is undefined OR [field.f1f6b9a6-1859-44b5-9e97-60c8d8283bba] is transparent)) OR [field.f2ad9e1f-f912-455b-a112-dc95ce2b2943] == 'border'"
@@ -4414,7 +4414,7 @@ json_values: |
                   "title": "Height",
                   "type": "cohSection",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -4461,7 +4461,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -4518,7 +4518,7 @@ json_values: |
                   "options": {
                       "helpText": "# Using the Testimonial card\n- Use this card to add a testimonial with optional profile image to a layout.\n\n# Quote\n- **Quote -** Add a quote. This field is required.\n- **Card heading element -** Select the required HTML heading element. Set as **Heading 3** by default. This is for accessibility so is visually hidden and outputs **Quote from [name]**.\n- **Name -**  Add the name of the person who said the quote. This field is optional.\n- **Occupation -** Add the occupation of the person who said the quote. This field is optional.\n- **Organization -** Add the organization of the person who said the quote. This field is optional.\n\n# Profile image\n- **Image -** Upload a profile image to display below the quote. The image will display as a 56px disc. Large images will be resized. The image is optional.\n- **Alt tag -** Enter an alt tag unless image is decorative.\n\n# Color\n- **Background color -** Choose a background color from the color palette. When a background color is selected, the text color will be selected automatically. \n- **Text color -** Select an appropriate Light or Dark text color to contrast with the color of where the card is placed. **Note:** The text field only shows if no background color is selected.\n\n# Border\n- **Border -** Add border will add a 1px border around the card.\n- **Border color -** Select a border color. **Note:** The border color field only shows if you have selected Add border.\n\n# Padding\n- **Padding -** Apply padding around the content of the card. **Note:** If a border or background color is applied to the card, padding around the content will be applied automatically.\n\n# Height\n- **Height -** Set the card height to either **Fit to content** or **Fill space available**. Fill space available will make the card expand to fill the height available within the parent component. This option allows you to create layouts where the height of multiple cards are the same, achieving horizontal alignment.\n\n# Space below\n- **Add space below -** Add a space (margin) below the card. This is required if a space is desirable when adding this component above another component within the same parent layout component.",
                       "showClose": false,
-                      "helpType": "coh-help-text--help"
+                      "helpType": "help"
                   }
               },
               "contextVisibility": {
@@ -4912,7 +4912,7 @@ json_values: |
       }
   }
 json_mapper: '{}'
-last_entity_update: entityupdate_0036
+last_entity_update: entityupdate_0040
 locked: false
 modified: true
 selectable: true
