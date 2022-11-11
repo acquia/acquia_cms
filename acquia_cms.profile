@@ -101,8 +101,14 @@ function acquia_cms_install_tasks(): array {
 
   // Allow acquia_cms_site_studio module to be install using profile.
   if (Drupal::service('module_handler')->moduleExists('acquia_cms_site_studio')) {
-    $tasks['install_acms_site_studio_ui_kit'] = [
-      'display_name' => t('Import Site Studio components'),
+    $tasks['install_acms_site_studio_base'] = [
+      'display_name' => t('Import Site Studio base elements'),
+      'display' => $cohesion_configured,
+      'type' => 'batch',
+      'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+    ];
+    $tasks['install_acms_site_studio_packages'] = [
+      'display_name' => t('Import Site Studio packages'),
       'display' => $cohesion_configured,
       'type' => 'batch',
       'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
@@ -117,12 +123,6 @@ function acquia_cms_install_tasks(): array {
   // Also send hearbeat event only for UI here.
   // For cli we are sending it from file mentioned above.
   if (PHP_SAPI !== 'cli') {
-    $tasks['install_acms_site_studio_rebuild'] = [
-      'display_name' => t('Rebuild Site Studio'),
-      'display' => $cohesion_configured,
-      'type' => 'batch',
-      'run' => $cohesion_configured ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
-    ];
     $tasks['install_acms_send_heartbeat_event'] = [
       'run' => Drupal::service('module_handler')->moduleExists('acquia_telemetry') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
     ];
@@ -154,12 +154,43 @@ function install_acms_send_heartbeat_event() {
 }
 
 /**
- * Import site studio uikit.
+ * Import Site studio base elements.
+ *
+ * @return array|null
+ *   Returns an array of operations (If site is installed through UI).
+ */
+function install_acms_site_studio_base() {
+  $batch = install_acms_site_studio_initialize();
+  if (PHP_SAPI != "cli") {
+    return $batch;
+  }
+  batch_set($batch);
+  drush_backend_batch_process();
+}
+
+/**
+ * Import Site Studio packages from all acquia_cms modules.
+ *
+ * @return array|mixed|null
+ *   Returns an array batch operations (If site is installed through UI).
  *
  * @throws Exception
  */
-function install_acms_site_studio_ui_kit() {
-  \Drupal::service('acquia_cms_common.utility')->siteStudioPackageImport();
+function install_acms_site_studio_packages() {
+  site_studio_import_ui_kit();
+  if (PHP_SAPI != "cli") {
+    // When site is installed through UI, the profile installation tasks
+    // expects the function to return an array of operations and then it calls
+    // batch_set() to execute the batch. In our case, Site Studio already called
+    // batch_set() function, so we are fetching the batch which we would execute
+    // and returning an array of operations.
+    $batch = & batch_get();
+    if (isset($batch)) {
+      $batchArray = $batch['sets'][0] ?? [];
+    }
+    return $batchArray ?? [];
+  }
+  drush_backend_batch_process();
 }
 
 /**
