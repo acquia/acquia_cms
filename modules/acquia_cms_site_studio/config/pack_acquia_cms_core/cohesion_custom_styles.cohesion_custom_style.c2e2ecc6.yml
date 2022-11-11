@@ -1144,10 +1144,14 @@ json_values: |
               }
           }
       },
-      "sBackgroundColour": "#FFFFFF",
       "preview": {
           "text": "<div class=\"coh-preview coh-video coh-style-video-play-button\"><span class=\"mejs__offscreen\">Video Player<\/span>\n<div aria-label=\"Video Player\" class=\"mejs__container coh-video-inner mejs__video\" role=\"application\" style=\"width: 711px;height: 400px;\" tabindex=\"0\">\n<div class=\"mejs__inner\">\n<div class=\"mejs__layers\">\n<div class=\"mejs__poster mejs__layer\" style=\"background:#EEE; width: 100%; height: 100%;\">&nbsp;<\/div>\n\n<div class=\"mejs__overlay mejs__layer\" style=\"width: 100%; height: 100%; display: none;\">\n<div class=\"mejs__overlay-loading\">&nbsp;<\/div>\n<\/div>\n\n<div class=\"mejs__overlay mejs__layer\" style=\"display: none; width: 100%; height: 100%;\">\n<div class=\"mejs__overlay-error\">&nbsp;<\/div>\n<\/div>\n\n<div class=\"mejs__overlay mejs__layer mejs__overlay-play\" style=\"width: 100%; height: 100%;\">\n<div aria-label=\"Play\" aria-pressed=\"false\" class=\"mejs__overlay-button\" role=\"button\" tabindex=\"0\">&nbsp;<\/div>\n<\/div>\n<\/div>\n\n<div class=\"mejs__controls mejs__offscreen\" style=\"opacity: 1;clip: unset;clip-path: unset;overflow: visible;\">\n<div class=\"mejs__button mejs__playpause-button mejs__play\"><button aria-controls=\"mep_0\" aria-label=\"Play\" tabindex=\"0\" title=\"Play\" type=\"button\"><\/button><\/div>\n\n<div aria-live=\"off\" class=\"mejs__time mejs__currenttime-container\" role=\"timer\"><span class=\"mejs__currenttime\">00:00<\/span><\/div>\n\n<div class=\"mejs__time-rail\" style=\"\n\"><span aria-label=\"Time Slider\" aria-valuemax=\"39.16\" aria-valuemin=\"0\" aria-valuenow=\"0\" aria-valuetext=\"00:00\" class=\"mejs__time-total mejs__time-slider\" role=\"slider\" tabindex=\"0\"><span class=\"mejs__time-float\" style=\"display: none; left: 70.7031px;\"><span class=\"mejs__time-float-current\">00:05<\/span><\/span><\/span><\/div>\n\n<div class=\"mejs__time mejs__duration-container\"><span class=\"mejs__duration\">00:39<\/span><\/div>\n\n<div class=\"mejs__button mejs__volume-button mejs__mute\"><button aria-controls=\"mep_1\" aria-label=\"Mute\" tabindex=\"0\" title=\"Mute\" type=\"button\"><\/button>\n\n<div aria-label=\"Volume Slider\" aria-orientation=\"vertical\" aria-valuemax=\"100\" aria-valuemin=\"0\" aria-valuenow=\"39\" aria-valuetext=\"39%\" class=\"mejs__volume-slider\" href=\"javascript:void(0);\" role=\"slider\" style=\"display: block;\"><span class=\"mejs__offscreen\">Use Up\/Down Arrow keys to increase or decrease volume.<\/span>\n\n<div class=\"mejs__volume-total\">\n<div class=\"mejs__volume-current\" style=\"bottom: 0px; height: 39.7656%;\">&nbsp;<\/div>\n\n<div class=\"mejs__volume-handle\" style=\"bottom: 39.7656%; margin-bottom: -3px;\">&nbsp;<\/div>\n<\/div>\n<\/div>\n<\/div>\n\n<div class=\"mejs__button mejs__fullscreen-button\"><button aria-controls=\"mep_0\" aria-label=\"Fullscreen\" tabindex=\"0\" title=\"Fullscreen\" type=\"button\"><\/button><\/div>\n<\/div>\n<\/div>\n<\/div>\n<\/div>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
       "variableFields": []
   }
@@ -4150,12 +4154,13 @@ json_mapper: |
           "form": null
       }
   }
-last_entity_update: entityupdate_0036
+last_entity_update: entityupdate_0040
 locked: false
 modified: true
 selectable: true
 class_name: .coh-style-video
 custom_style_type: media
 available_in_wysiwyg: false
+available_in_wysiwyg_inline: false
 parent: null
 weight: 78

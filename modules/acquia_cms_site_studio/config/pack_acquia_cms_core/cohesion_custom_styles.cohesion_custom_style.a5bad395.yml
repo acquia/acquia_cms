@@ -13,7 +13,12 @@ json_values: |
   {
       "preview": {
           "text": "<p style=\"color:white;text-decoration:underline;font-weight:bold;margin:30px 0\">ACCORDION MODE<\/p>\n\n<div class=\"coh-preview\">\n<div class=\"coh-accordion-title\"><a href=\"#\">Item 1 (default)<\/a><\/div>\n\n<div class=\"coh-accordion-title is-active\"><a href=\"#\">Item 2 (active)<\/a><\/div>\n<\/div>\n\n<p style=\"color:white;text-decoration:underline;font-weight:bold;margin:30px 0\">TAB MODE<\/p>\n\n<div class=\"coh-preview\">\n<ul class=\"coh-accordion-tabs-nav\" style=\"display:block\">\n\t<li><a href=\"#\">Item 1 (default)<\/a><\/li>\n\t<li class=\"is-active\"><a href=\"#\">Item 2 (active)<\/a><\/li>\n<\/ul>\n<\/div>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(0,0,0,1)"
+              }
+          }
       },
       "styles": {
           "settings": {
@@ -985,7 +990,6 @@ json_values: |
               }
           }
       },
-      "sBackgroundColour": "#000000",
       "variableFields": []
   }
 json_mapper: |
@@ -2347,12 +2351,13 @@ json_mapper: |
           "form": null
       }
   }
-last_entity_update: entityupdate_0036
+last_entity_update: entityupdate_0040
 locked: false
 modified: true
 selectable: true
 class_name: .coh-style-accordion-tabs-keyline-light-text
 custom_style_type: generic
 available_in_wysiwyg: false
+available_in_wysiwyg_inline: false
 parent: null
 weight: 28

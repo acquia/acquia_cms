@@ -13,7 +13,12 @@ json_values: |
   {
       "preview": {
           "text": "<ul>\n\t<li class=\"coh-preview\"><a>&nbsp;<\/a><\/li>\n\t<li class=\"coh-preview\"><a>&nbsp;<\/a><\/li>\n\t<li class=\"coh-preview\"><a>&nbsp;<\/a><\/li>\n<\/ul>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
       "styles": {
           "settings": {
@@ -209,7 +214,6 @@ json_values: |
               }
           }
       },
-      "sBackgroundColour": "#FFFFFF",
       "variableFields": []
   }
 json_mapper: |
@@ -764,12 +768,13 @@ json_mapper: |
           "form": null
       }
   }
-last_entity_update: entityupdate_0036
+last_entity_update: entityupdate_0040
 locked: false
 modified: true
 selectable: true
 class_name: .coh-style-social-icon
 custom_style_type: list_item
 available_in_wysiwyg: false
+available_in_wysiwyg_inline: false
 parent: null
 weight: 77

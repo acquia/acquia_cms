@@ -12,7 +12,12 @@ json_values: |
   {
       "preview": {
           "text": "<ul class=\"coh-preview\">\n\t<li><button>&nbsp;<\/button><\/li>\n\t<li><button>&nbsp;<\/button><\/li>\n\t<li class=\"slick-active\"><button>&nbsp;<\/button><\/li>\n\t<li><button>&nbsp;<\/button><\/li>\n\t<li><button>&nbsp;<\/button><\/li>\n\t<li><button>&nbsp;<\/button><\/li>\n<\/ul>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
       "styles": {
           "settings": {
@@ -221,7 +226,6 @@ json_values: |
               }
           }
       },
-      "sBackgroundColour": "#FFFFFF",
       "variableFields": []
   }
 json_mapper: |
@@ -829,12 +833,13 @@ json_mapper: |
           "form": null
       }
   }
-last_entity_update: entityupdate_0036
+last_entity_update: entityupdate_0040
 locked: false
 modified: true
 selectable: true
 class_name: .coh-style-slider-pagination
 custom_style_type: slider-pagination
 available_in_wysiwyg: false
+available_in_wysiwyg_inline: false
 parent: null
 weight: 81

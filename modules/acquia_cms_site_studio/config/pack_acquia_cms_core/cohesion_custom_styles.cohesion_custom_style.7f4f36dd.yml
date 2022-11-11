@@ -10,9 +10,13 @@ json_values: |
   {
       "preview": {
           "text": "<div class=\"coh-preview\">Default content for light text theme. This is a <a>link.<\/a><\/div>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(0,0,0,1)"
+              }
+          }
       },
-      "sBackgroundColour": "#000000",
       "styles": {
           "settings": {
               "element": "div",
@@ -83,12 +87,13 @@ json_mapper: |
           "form": null
       }
   }
-last_entity_update: entityupdate_0036
+last_entity_update: entityupdate_0040
 locked: false
 modified: true
 selectable: true
 class_name: .coh-style-text-color-dark-background
 custom_style_type: generic
 available_in_wysiwyg: false
+available_in_wysiwyg_inline: false
 parent: null
 weight: 22
