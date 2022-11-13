@@ -176,7 +176,7 @@ function acquia_cms_place_update_8004() {
       $files = \Drupal::service('file_system')->scanDirectory($directory, '/.*\.yml$/');
       foreach ($files as $file) {
         $sitestudio_template = \Drupal::configFactory()->getEditable($file->name);
-        if (is_null($sitestudio_template->get('dependencies.enforced.module'))) {
+        if ($sitestudio_template && is_null($sitestudio_template->get('dependencies.enforced.module'))) {
           $sitestudio_template->set('dependencies.enforced.module', [
             'acquia_cms_place',
             'acquia_cms_site_studio',
