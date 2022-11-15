@@ -17,8 +17,11 @@ use Drupal\user\Entity\Role;
  * @throws Exception
  */
 function acquia_cms_site_studio_install() {
-  $site_studio_api_key = getenv('SITESTUDIO_API_KEY');
-  $site_studio_org_key = getenv('SITESTUDIO_ORG_KEY');
+  // If site studio key available in the environment variables
+  // then pick it from there else check for settings overrides.
+  $config = \Drupal::config('cohesion.settings');
+  $site_studio_api_key = getenv('SITESTUDIO_API_KEY') ?? $config->get('api_key');
+  $site_studio_org_key = getenv('SITESTUDIO_ORG_KEY') ?? $config->get('organization_key');
 
   // Set default theme as cohesion.
   set_theme_site_studio_as_default();
