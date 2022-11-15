@@ -13,6 +13,7 @@ use Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade;
 use Drupal\acquia_cms_common\Facade\WorkflowFacade;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Installer\InstallerKernel;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\imce\Imce;
@@ -416,9 +417,13 @@ function acquia_cms_common_modules_installed($modules, $is_syncing) {
         }
       }
     }
+
+    // Prevent installation of site studio package on module install
+    // during site installation from other modules, this causes issue.
     $configFactory = \Drupal::service('config.factory');
     $config = $configFactory->get('cohesion.settings');
-    if ($config->get('api_key') && $config->get('organization_key')) {
+    $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
+    if (!InstallerKernel::installationAttempted() && $cohesion_configured) {
       $moduleHandler = \Drupal::service('module_handler');
       $acms_modules = [
         'acquia_cms_article',
@@ -478,5 +483,10 @@ function acquia_cms_common_module_implements_alter(array &$implementations, stri
       // hook_modules_uninstalled of Acquia connector.
       unset($implementations['acquia_connector']);
     }
+  }
+  // Prevent installation of site studio package on module install
+  // during site installation from other modules, this causes issue.
+  if ($hook == 'modules_installed' && InstallerKernel::installationAttempted()) {
+    unset($implementations['cohesion_sync']);
   }
 }
