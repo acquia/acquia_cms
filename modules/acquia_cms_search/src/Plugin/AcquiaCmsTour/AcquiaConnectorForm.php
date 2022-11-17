@@ -98,7 +98,7 @@ class AcquiaConnectorForm extends AcquiaCmsDashboardBase {
         '#type' => 'checkbox',
         '#title' => $this->t('Send anonymous data about Acquia product usage'),
         '#default_value' => $this->state->get('acquia_connector.telemetry.opted'),
-        '#description' => $this->t('This module intends to collect anonymous data about Acquia product usage. No private information will be gathered. Data will not be used for marketing or sold to any third party. This is an opt-in module and can be disabled at any time by uninstalling the acquia connector module by your site administrator.'),
+        '#description' => $this->t('In order to improve our services Acquia collects anonymous information about product usage and performance. The data will never be used for marketing or sold to third parties. Please uncheck this box if you do not wish for this data to be collected.'),
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
       ];
       $form[$module]['site_name'] = [
