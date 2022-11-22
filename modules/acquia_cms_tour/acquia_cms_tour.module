@@ -28,11 +28,6 @@ function acquia_cms_tour_menu_links_discovered_alter(array &$links) {
  */
 function acquia_cms_tour_theme() {
   return [
-    'acquia_cms_tour' => [
-      'variables' => [
-        'data' => [],
-      ],
-    ],
     'acquia_cms_tour_checklist_form' => [
       'render element' => 'form',
     ],
@@ -66,17 +61,8 @@ function acquia_cms_tour_modules_uninstalled(array $modules) {
  */
 function acquia_cms_tour_content_model_role_presave_alter(RoleInterface &$role) {
   switch ($role->id()) {
-    case 'content_author':
-    case 'content_editor':
-      foreach (['access acquia cms tour'] as $permission) {
-        $role->grantPermission($permission);
-      }
-      break;
-
     case 'content_administrator':
-      foreach (['access acquia cms tour', 'access acquia cms tour dashboard'] as $permission) {
-        $role->grantPermission($permission);
-      }
+      $role->grantPermission('access acquia cms tour dashboard');
       break;
   }
 }

@@ -33,7 +33,7 @@ class HelpIntegrationTest extends BrowserTestBase {
     $assert_session = $this->assertSession();
 
     $account = $this->drupalCreateUser([
-      'access acquia cms tour',
+      'access acquia cms tour dashboard',
       'access toolbar',
     ]);
     $this->drupalLogin($account);
@@ -41,9 +41,9 @@ class HelpIntegrationTest extends BrowserTestBase {
     $toolbar = $assert_session->elementExists('css', '#toolbar-administration');
 
     $assert_tour_link = function () use ($assert_session, $toolbar) {
-      $assert_session->elementsCount('named', ['link', 'Tour'], 1, $toolbar);
-      $tour_link = $assert_session->elementExists('named', ['link', 'Tour'], $toolbar);
-      $this->assertSame('Tour', $tour_link->getText());
+      $assert_session->elementsCount('named', ['link', 'Acquia CMS Wizard'], 1, $toolbar);
+      $tour_link = $assert_session->elementExists('named', ['link', 'Acquia CMS Wizard'], $toolbar);
+      $this->assertSame('Acquia CMS Wizard', $tour_link->getText());
       $this->assertTrue($tour_link->hasClass('toolbar-icon'));
       $this->assertTrue($tour_link->hasClass('toolbar-icon-help-main'));
       // The Help link should never show up.
