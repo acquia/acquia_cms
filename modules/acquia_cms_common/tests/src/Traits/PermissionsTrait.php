@@ -92,10 +92,43 @@ trait PermissionsTrait {
    * @dataProvider providerBasicPermissions
    */
   public function testBasicPermissions(string $role, array $permissions, array $no_permissions = []) {
+    $contrib_module_permissions = $this->contribModulePermissions($role);
+    if (!empty($contrib_module_permissions)) {
+      $permissions = array_merge($permissions, $contrib_module_permissions);
+    }
     $this->assertPermissions($role, $permissions);
     if ($no_permissions) {
       $this->assertNoPermissions($role, $no_permissions);
     }
+  }
+
+  /**
+   * Assign permissions only if the below modules are enabled.
+   *
+   * @param string $role
+   *   User role.
+   *
+   * @return array
+   *   Returns list of permissions.
+   */
+  public function contribModulePermissions($role): ?array {
+    $module_permissions = [];
+    if ($role === 'user_administrator') {
+      $module_handler = $this->container->get('module_handler');
+      $permissions = [
+        'shield' => 'administer shield',
+        'honeypot' => 'administer honeypot',
+        'captcha' => 'administer CAPTCHA settings',
+        'recaptcha' => 'administer recaptcha',
+      ];
+      foreach ($permissions as $module => $permission) {
+        if ($module_handler->moduleExists($module)) {
+          $module_permissions += [$permission];
+        }
+      }
+    }
+
+    return $module_permissions;
   }
 
   abstract public function providerRoleExistNotExist(): array;

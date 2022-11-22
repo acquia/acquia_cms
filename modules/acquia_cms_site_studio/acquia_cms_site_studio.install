@@ -17,8 +17,11 @@ use Drupal\user\Entity\Role;
  * @throws Exception
  */
 function acquia_cms_site_studio_install() {
-  $site_studio_api_key = getenv('SITESTUDIO_API_KEY');
-  $site_studio_org_key = getenv('SITESTUDIO_ORG_KEY');
+  // If site studio key available in the environment variables
+  // then pick it from there else check for settings overrides.
+  $config = \Drupal::config('cohesion.settings');
+  $site_studio_api_key = getenv('SITESTUDIO_API_KEY') ?? $config->get('api_key');
+  $site_studio_org_key = getenv('SITESTUDIO_ORG_KEY') ?? $config->get('organization_key');
 
   // Set default theme as cohesion.
   set_theme_site_studio_as_default();
@@ -226,5 +229,29 @@ function acquia_cms_site_studio_update_8004() {
   if ($role instanceof Role) {
     $role->set('label', 'Low Code Site Builder');
     $role->save();
+  }
+}
+
+/**
+ * Update and refactor permissions in new site studio.
+ */
+function acquia_cms_site_studio_update_8005() {
+  $roles = [
+    'content_administrator',
+    'content_editor',
+    'content_author',
+  ];
+  $permissions = [
+    'access cpt_cat_general_components cohesion_component_category group',
+    'access cpt_cat_hero_components cohesion_component_category group',
+    'access cpt_cat_interactive_components cohesion_component_category group',
+    'access cpt_cat_media_components cohesion_component_category group',
+    'access cpt_cat_template_components cohesion_component_category group',
+    'access hlp_cat_general_helpers cohesion_helper_category group',
+    'access hlp_cat_interactive_helpers cohesion_helper_category group',
+  ];
+  $user_role = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple($roles);
+  foreach ($user_role as $role) {
+    user_role_revoke_permissions($role->id(), $permissions);
   }
 }
