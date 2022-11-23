@@ -277,7 +277,7 @@ class InstallStateTest extends ExistingSiteBase {
    * Tests tour permission for user roles.
    *
    * - User roles with permission 'access acquia cms tour dashboard'
-   *   should be able to access `Acquia CMS Wizard`.
+   *   should be able to access Acquia CMS Wizard.
    * - User roles without permission 'access acquia cms tour dashboard'
    *   should not be able to access Acquia CMS Wizard.
    */
