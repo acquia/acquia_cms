@@ -28,6 +28,30 @@ function acquia_cms_dam_modules_installed($modules) {
     // Flush cache to reflect Acquia CMS DAM configs.
     drupal_flush_all_caches();
   }
+
+  // Update site studio settings to use DAM media.
+  if ($moduleHandler->moduleExists('acquia_cms_site_studio')) {
+    $config = \Drupal::service('config.factory')->getEditable('cohesion.settings');
+    $config->set('image_browser', [
+      'config' => [
+        'type' => 'medialib_imagebrowser',
+        'dx8_entity_browser' => 'media_browser',
+        'cohesion_media_lib_types' => [
+          'image',
+          'acquia_dam_image_asset',
+        ],
+      ],
+      'content' => [
+        'type' => 'medialib_imagebrowser',
+        'dx8_entity_browser' => 'media_browser',
+        'cohesion_media_lib_types' => [
+          'image',
+          'acquia_dam_image_asset',
+        ],
+      ],
+    ]);
+    $config->save();
+  }
 }
 
 /**
