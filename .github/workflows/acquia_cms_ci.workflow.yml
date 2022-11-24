@@ -17,6 +17,7 @@ jobs:
       ORCA_SUT_BRANCH: develop
       ORCA_VERSION: ^3.0
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
+      ORCA_REPOSITORIES_ALTER: ../acquia_cms/tests/repositories_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
       ORCA_PHPCS_STANDARD: AcquiaPHP
@@ -47,6 +48,7 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/56497e23daa300d0634139828e98cb04/raw/b2bbe36dd58806aaca5e7da4f415a8b623fdbc88/merge_plugin.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/vishalkhode1/ef6c7ebace871612266ad61f3aab2593/raw/611dbc591e9625f292404bb73832e7ac23a2368d/alter-repository.patch | git -C ../orca apply
           # Remove internal module dependencies, so that ORCA CI doesn't report error.
           if [ "${ORCA_JOB}" != "STATIC_CODE_ANALYSIS" ]; then for path in $(find modules -type f -maxdepth 2 -name "composer.json" -exec ls '{}' ';'); do sed -i '/\"drupal\/acquia_cms.*\":.*\".*\"/d' $path; done; fi
       - name: Before Install
@@ -79,6 +81,7 @@ jobs:
       ORCA_SUT_BRANCH: develop
       ORCA_VERSION: ^3.0
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
+      ORCA_REPOSITORIES_ALTER: ../acquia_cms/tests/repositories_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
       ORCA_PHPCS_STANDARD: AcquiaPHP
@@ -123,6 +126,7 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/56497e23daa300d0634139828e98cb04/raw/b2bbe36dd58806aaca5e7da4f415a8b623fdbc88/merge_plugin.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/vishalkhode1/ef6c7ebace871612266ad61f3aab2593/raw/611dbc591e9625f292404bb73832e7ac23a2368d/alter-repository.patch | git -C ../orca apply
 #      - name: Configure AWS Credentials
 #        uses: aws-actions/configure-aws-credentials@v1
 #        with:
@@ -173,6 +177,7 @@ jobs:
       ORCA_SUT_BRANCH: develop
       ORCA_VERSION: ^3.0
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
+      ORCA_REPOSITORIES_ALTER: ../acquia_cms/tests/repositories_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
       ORCA_PHPCS_STANDARD: AcquiaPHP
@@ -233,6 +238,7 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/56497e23daa300d0634139828e98cb04/raw/b2bbe36dd58806aaca5e7da4f415a8b623fdbc88/merge_plugin.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/vishalkhode1/ef6c7ebace871612266ad61f3aab2593/raw/611dbc591e9625f292404bb73832e7ac23a2368d/alter-repository.patch | git -C ../orca apply
       - name: Before Install
         run: |
           # Remove internal module dependencies, so that ORCA CI doesn't report error.
