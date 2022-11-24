@@ -2,27 +2,27 @@ name: "Acquia CMS Common"
 package: "Acquia CMS"
 description: "Handles shared functionality for Acquia CMS."
 type: module
-core_version_requirement: ^9.3 || ^10
+core_version_requirement: ^9.5 || ^10
 dependencies:
   - acquia_purge:acquia_purge
-  - acquia_telemetry:acquia_telemetry
-  - drupal:block
-  - drupal:ckeditor
-  - drupal:config
   - config_ignore:config_ignore
   - config_rewrite:config_rewrite
+  - diff:diff
+  - drupal:block
+  - drupal:ckeditor5
+  - drupal:config
   - drupal:config_translation
   - drupal:content_moderation
   - drupal:content_translation
-  - diff:diff
-  - entity_clone:entity_clone
-  - focal_point:focal_point
   - drupal:language
   - drupal:media
   - drupal:media_library
   - drupal:menu_ui
-  - metatag_open_graph:metatag_open_graph
-  - metatag_twitter_cards:metatag_twitter_cards
+  - drupal:taxonomy
+  - entity_clone:entity_clone
+  - focal_point:focal_point
+  - metatag:metatag_open_graph
+  - metatag:metatag_twitter_cards
   - moderation_dashboard:moderation_dashboard
   - moderation_sidebar:moderation_sidebar
   - password_policy:password_policy_character_types
@@ -38,9 +38,8 @@ dependencies:
   - schema_metatag:schema_article
   - schema_metatag:schema_person
   - schema_metatag:schema_place
-  - seckit:seckit
   - schema_metatag:simple_sitemap
+  - seckit:seckit
   - smart_trim:smart_trim
-  - drupal:taxonomy
   - username_enumeration_prevention:username_enumeration_prevention
   - workbench_email:workbench_email
