@@ -5,13 +5,13 @@
     "license": "GPL-2.0-or-later",
     "require": {
         "cweagans/composer-patches": "^1.7",
-        "drupal/acquia_cms_common": "^1.5.2",
+        "drupal/acquia_cms_common": "2.0.x-dev",
         "drupal/acquia_search": "^3.1",
         "drupal/collapsiblock": "^4.0",
         "drupal/facets": "2.0.5",
-        "drupal/facets_pretty_paths": "^1.2",
-        "drupal/search_api": "1.27",
-        "drupal/search_api_autocomplete": "^1.6"
+        "drupal/facets_pretty_paths": "dev-3287445-automated-drupal-10",
+        "drupal/search_api": "1.28",
+        "drupal/search_api_autocomplete": "^1.7"
     },
     "config": {
         "allow-plugins": {
@@ -40,7 +40,14 @@
     "repositories": {
         "drupal": {
             "type": "composer",
-            "url": "https://packages.drupal.org/8"
+            "url": "https://packages.drupal.org/8",
+            "exclude": [
+                "drupal/facets_pretty_paths"
+            ]
+        },
+        "drupal/facets_pretty_paths": {
+            "type": "vcs",
+            "url": "https://git.drupalcode.org/issue/facets_pretty_paths-3287445.git"
         },
         "assets": {
             "type": "composer",
