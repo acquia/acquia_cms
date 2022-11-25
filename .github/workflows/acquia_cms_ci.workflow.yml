@@ -51,6 +51,11 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/ef6c7ebace871612266ad61f3aab2593/raw/611dbc591e9625f292404bb73832e7ac23a2368d/alter-repository.patch | git -C ../orca apply
           # Remove internal module dependencies, so that ORCA CI doesn't report error.
           if [ "${ORCA_JOB}" != "STATIC_CODE_ANALYSIS" ]; then for path in $(find modules -type f -maxdepth 2 -name "composer.json" -exec ls '{}' ';'); do sed -i '/\"drupal\/acquia_cms.*\":.*\".*\"/d' $path; done; fi
+
+          # The strict deprecated code scan runs on current drupal core version.
+          # So, we've added workabound to run the CI on current drupal core version
+          # @todo: Remove below once we are done with making all acquia_cms modules as Drupal 10 compatible.
+          if [ "${ORCA_JOB}" = "STRICT_DEPRECATED_CODE_SCAN" ]; then sed -i 's/\(\"drupal\/core\"\: \"\^\)\(9.5\)/\19.4/' modules/acquia_cms_common/composer.json; fi
       - name: Before Install
         run: ../orca/bin/ci/before_install.sh
       - name: Install
