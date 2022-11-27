@@ -1,0 +1,74 @@
+name: "Acquia CMS CI (CRON)"
+on:
+  push:
+    #branches: [ develop, main]
+    branches: [ ACMS-CRON ]
+    paths-ignore:
+      - README.md
+  pull_request:
+    #    branches: [ develop ]
+    paths-ignore:
+      - README.md
+jobs:
+  static_code_analysis:
+    name: ${{ matrix.orca-job }}
+    runs-on: ubuntu-latest
+    env:
+      # Provide your package's name.
+      ORCA_SUT_NAME: acquia/acquia_cms
+      ORCA_SUT_BRANCH: develop
+      ORCA_VERSION: ^3.0
+      ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
+      ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
+      ORCA_ENABLE_NIGHTWATCH: "FALSE"
+      ORCA_PHPCS_STANDARD: AcquiaPHP
+      ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
+      COMPOSER_PROCESS_TIMEOUT: 1800
+      ORCA_JOB: ${{ matrix.orca-job }}
+      GITHUB_EVENT: $ {{ github.event_name }}
+      JOB_TYPE: "static-code-analysis"
+      #ACMS_JOB: ${{ matrix.acms-job}}
+    strategy:
+      matrix:
+        orca-job:
+          - STATIC_CODE_ANALYSIS
+          - STRICT_DEPRECATED_CODE_SCAN
+          - LOOSE_DEPRECATED_CODE_SCAN
+          - DEPRECATED_CODE_SCAN_W_CONTRIB
+#          - INTEGRATED_TEST_ON_PREVIOUS_MINOR
+#          - INTEGRATED_UPGRADE_TEST_TO_NEXT_MINOR
+#          - INTEGRATED_UPGRADE_TEST_FROM_PREVIOUS_MINOR
+#          - INTEGRATED_TEST_ON_CURRENT
+        #php-version: [ "8.1" ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 12.13.1
+        uses: actions/setup-node@v3
+        with:
+          node-version: 12.13.1
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          #coverage: xdebug
+      - name: Download ORCA
+        run: |
+          composer self-update
+          composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
+          curl https://gist.githubusercontent.com/vishalkhode1/56497e23daa300d0634139828e98cb04/raw/b2bbe36dd58806aaca5e7da4f415a8b623fdbc88/merge_plugin.patch | git -C ../orca apply
+          # Remove internal module dependencies, so that ORCA CI doesn't report error.
+          if [ "${ORCA_JOB}" != "STATIC_CODE_ANALYSIS" ]; then for path in $(find modules -type f -maxdepth 2 -name "composer.json" -exec ls '{}' ';'); do sed -i '/\"drupal\/acquia_cms.*\":.*\".*\"/d' $path; done; fi
+      - name: Before Install
+        run: ../orca/bin/ci/before_install.sh
+      - name: Install
+        run: ./tests/ci/install.sh
+      - name: Before script
+        run: ../orca/bin/ci/before_script.sh
+      - name: Script
+        run: ./tests/ci/script.sh
+      - name: Before Cache
+        run: ../orca/bin/ci/before_cache.sh
+      - name: After script
+        run: |
+          ../orca/bin/ci/after_success.sh
+          ../orca/bin/ci/after_failure.sh
+          ../orca/bin/ci/after_script.sh
