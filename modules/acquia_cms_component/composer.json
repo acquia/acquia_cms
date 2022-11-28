@@ -5,7 +5,7 @@
     "license": "GPL-2.0-or-later",
     "require": {
         "drupal/acquia_cms_common": "^1.5",
-        "drupal/component": "1.0-rc3",
+        "drupal/component": "1.0-rc4",
         "drupal/jsonapi_extras": "^3"
     },
     "config": {
@@ -18,15 +18,6 @@
             "oomphinc/composer-installers-extender": true,
             "phpro/grumphp-shim": true,
             "webdriver-binary/binary-chromedriver": true
-        }
-    },
-    "extra": {
-        "enable-patching": true,
-        "patches": {
-            "drupal/component": {
-                "3236462 - Missing Use statement creates fatal errors": "https://git.drupalcode.org/project/component/-/merge_requests/2.patch",
-                "3296262: Fix deprecation warnings in RecursiveComponentFilterIterator": "https://git.drupalcode.org/project/component/-/merge_requests/5.patch"
-            }
         }
     },
     "repositories": {
