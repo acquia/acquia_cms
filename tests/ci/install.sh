@@ -14,10 +14,29 @@ cd "$(dirname "$0")"
 # Reuse ORCA's own includes.
 source ../../../orca/bin/ci/_includes.sh
 
+# Gets the core version to download.
+get_core_version() {
+  ORCA_SUPPORTED_DRUPAL_VERSIONS=$(orca debug:core-versions | sed -e '1,3d' | sed '$d' | awk '{ print $2 }')
+  CORE_VERSION=$(echo ${ORCA_JOB} | sed -E -e 's/(INTEGRATED_TEST_ON_|INTEGRATED_UPGRADE_TEST_FROM_|ISOLATED_TEST_ON_)//')
+  FOUND=FALSE
+  while read SUPPORTED_VERSION
+  do
+    if [ "${SUPPORTED_VERSION}" == "${CORE_VERSION}" ]; then
+      FOUND=TRUE
+      break
+    fi
+  done <<< "${ORCA_SUPPORTED_DRUPAL_VERSIONS}"
+  if [ "${FOUND}" == "FALSE" ]; then
+    CORE_VERSION=CURRENT
+  fi
+  echo ${CORE_VERSION}
+}
+
 # creates the ORCA fixture, as we do not want to use ORCA's standard fixture.
 create_fixture() {
   # Find drupal core version from ORCA_JOB variable.
-  CORE_VERSION=$(echo ${ORCA_JOB} | sed -E -e 's/(INTEGRATED_TEST_ON_|INTEGRATED_UPGRADE_TEST_FROM_|ISOLATED_TEST_ON_|INTEGRATED_UPGRADE_TEST_TO_|ISOLATED_UPGRADE_TEST_TO_)//')
+  CORE_VERSION=$(get_core_version)
+
   echo "The CORE_VERSION is: ${CORE_VERSION}"
   orca debug:packages ${CORE_VERSION}
   orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=${CORE_VERSION} --dev --profile=minimal --no-sqlite --no-site-install
