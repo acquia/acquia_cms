@@ -41,10 +41,6 @@ cd ${ORCA_FIXTURE_DIR}
 # @todo look for alternative way setting maintenance theme template.
 composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms"]' --merge && composer update --lock
 
-# Adding this workaround now as backstop tests are failing due to acquia_connector 4.x release.
-# @todo remove below after ACMS-1505 is fixed.
-composer require "drupal/acquia_connector:~3"
-
 # Install acquia_cms only for the Integrated & ExistingSite PHPUnit tests.
 if [ -n "${ACMS_JOB}" ]; then
   ./vendor/bin/drush site:install acquia_cms --yes && ./vendor/bin/drush cr
