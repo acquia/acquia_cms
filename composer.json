@@ -111,7 +111,60 @@
         "patchLevel": {
             "drupal/core": "-p2"
         },
-        "patches": {}
+        "patches": {
+            "drupal/core": {
+                "Drupal Core add is-syncing paramemeter": "https://www.drupal.org/files/issues/2020-03-13/3118155_4.patch"
+            },
+            "acquia/cohesion": {
+                "DO NOT import packages, if configuration sync is in progress": "https://gist.githubusercontent.com/vishalkhode1/fa9343ab9912dac31f6aee6022b69c0f/raw/a7387cd04b6d6f4ba76d197881d0aa90589a2dca/do-not-import-package-when-syncing.patch"
+            },
+            "drupal/config_rewrite": {
+                "DO NOT rewrite configurations, if configuration sync is in progress": "https://gist.githubusercontent.com/vishalkhode1/a3169616a299f8794acadd8b5f874d4a/raw/84efffc63196dd83aa689021c3a6201f0e28da37/donot-config-rewrite-if-config-syncing.patch"
+            },
+            "drupal/acquia_cms_common": {
+                "DO NOT import configurations, if configuration sync is in progress": "https://gist.githubusercontent.com/vishalkhode1/c0afca2ec539fe9cc7eab754728ea297/raw/69a395ba8328bce15e262a8de438a637d8bef937/donot-import-config-if-config-syncing.patch",
+                "The acquia_cms_commont configurations updated": "https://gist.githubusercontent.com/vishalkhode1/c68dd31432f4eadd9b9641f270231dca/raw/6c2e80a40c1d4335ed49ba03618d72ae51b7faa9/acquia-cms-common-config-updated.patch"
+            },
+            "drupal/acquia_cms_page": {
+                "DO NOT import configurations, if configuration sync is in progress": "https://gist.githubusercontent.com/vishalkhode1/fec3f5d1d5c3d6d5c6769891867776da/raw/2ca783707c3cbe6cfa4c92a06d004c17587ab301/donot-import-config-if-config-syncing.patch",
+                "The acquia_cms_page configurations updated": "https://gist.githubusercontent.com/vishalkhode1/bdc10c92a4a5963cd889cb487464cd3b/raw/79956cc833a20df127642854c9fe161b25d80c5e/acquia-cms-page-config-updated.patch"
+            },
+            "drupal/acquia_cms_search": {
+                "DO NOT import configurations, if configuration sync is in progress": "https://gist.githubusercontent.com/vishalkhode1/4c13e0d8672a906d2a47d6c40bdc32c9/raw/3abd46f9ee6e008b0f4cd3c46211e7f42a51c14b/donot-import-config-if-config-syncing.patch",
+                "The acquia_cms_search configurations updated": "https://gist.githubusercontent.com/vishalkhode1/2bde4e76f9d0afa9ed3237405f9d3c63/raw/0d1591a3efc146e4fc39fd38b32a43041c5129f2/acquia-cms-search-config-updated.patch"
+            },
+            "drupal/acquia_cms_site_studio": {
+                "DO NOT import configurations, if configuration sync is in progress": "https://gist.githubusercontent.com/vishalkhode1/c25aee513956b7dbc1cb3980cc995144/raw/06cb615af6d397408b6eec3c1fd913b7a2573b30/donot-import-config-if-config-syncing.patch",
+                "The acquia_cms_site_studio configurations updated": "https://gist.githubusercontent.com/vishalkhode1/82455be840c385ef89c78dcdc665f96b/raw/4c7843793da4c6878d27e01e5e1b2f48aad22f91/acquia-cms-site-studio-config-updated.patch"
+            },
+            "drupal/acquia_cms_starter": {
+                "DO NOT import configurations, if configuration sync is in progress": "https://gist.githubusercontent.com/vishalkhode1/1742a3b98791efe23b9567ab10fbaf31/raw/8ad927dd3ed260991b5ba06dc9da036bf29fc3cd/donot-import-config-if-config-syncing.patch"
+            },
+            "drupal/acquia_cms_tour": {
+                "DO NOT import configurations, if configuration sync is in progress": "https://gist.githubusercontent.com/vishalkhode1/2c657ac7700c0902ebbed36110769ea6/raw/d5a8fe9023d1fe7b3f52cb369286a3f0653c1f5e/donot-import-config-if-config-syncing.patch"
+            },
+            "drupal/acquia_cms_image": {
+                "The acquia_cms_image configurations updated": "https://gist.githubusercontent.com/vishalkhode1/df5c23b1bdcddcd37f5d2e5fc15f7710/raw/3d8d6587a9fc29cc0c1248a8aaaee49438d9f717/acquia-cms-image-config-updated.patch"
+            },
+            "drupal/acquia_cms_video": {
+                "The acquia_cms_video configurations updated": "https://gist.githubusercontent.com/vishalkhode1/394e7c71e3dccd74fcbf63f37f02f176/raw/82c0a5eea2a04f25920003456394aad573774a58/acquia-cms-video-config-updated.patch"
+            },
+            "drupal/acquia_cms_person": {
+                "The acquia_cms_person configurations updated": "https://gist.githubusercontent.com/vishalkhode1/c70a2113ef17286d88db2a04c6affced/raw/c5c22d89d309b8f1469270b59578a3bffd78be29/acquia-cms-person-config-updated.patch"
+            },
+            "drupal/acquia_cms_document": {
+                "The acquia_cms_document configurations updated": "https://gist.githubusercontent.com/vishalkhode1/4d129a3001b2384e6d020cd5576b300c/raw/7968b51d69160f52e28799702329e0882b0849a4/acquia-cms-document-config-updated.patch"
+            },
+            "drupal/acquia_cms_event": {
+                "The acquia_cms_event configurations updated": "https://gist.githubusercontent.com/vishalkhode1/fe58c645667cb1c12172b19a5a83c5c5/raw/5cb92063aebc8aa9352e7021e96b78d0cb9690f5/acquia-cms-event-config-updated.patch"
+            },
+            "drupal/acquia_cms_place": {
+                "The acquia_cms_place configurations updated": "https://gist.githubusercontent.com/vishalkhode1/611415b1e024f2d4ab4a16182e166040/raw/d7b7e0998feb44ff7ff75b46d26c7ef61b24a968/acquia-cms-place-config-updated.patch"
+            },
+            "drupal/acquia_cms_article": {
+                "The acquia_cms_article configurations updated": "https://gist.githubusercontent.com/vishalkhode1/b8ff0439ad85946de52cb25a232802fc/raw/032427ec665fc0c2996985fcd0f303cdf8d9399a/acquia-cms-article-config-updated.patch "
+            }
+        }
     },
     "autoload": {
         "psr-4": {
