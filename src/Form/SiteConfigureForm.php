@@ -135,7 +135,7 @@ class SiteConfigureForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Send anonymous usage information to Acquia'),
       '#default_value' => 1,
-      '#description' => $this->t('Acquia telemetry is obselete and moved to Acquia Connector which intends to collect anonymous data about Acquia product usage. No private information will be gathered. Data will not be used for marketing or sold to any third party. This is an opt-in module and can be disabled at any time by uninstalling the acquia_connector module by your site administrator.'),
+      '#description' => $this->t('This module intends to collect anonymous data about Acquia product usage. No private information will be gathered. Data will not be used for marketing or sold to any third party. This is an opt-in module and can be disabled at any time by uninstalling the acquia connector module by your site administrator.'),
     ];
     $form['decoupled'] = [
       '#type' => 'checkbox',
