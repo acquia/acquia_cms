@@ -98,7 +98,7 @@ jobs:
     strategy:
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_CURRENT_DEV
+          - ISOLATED_TEST_ON_NEXT_MINOR
         #php-version: [ "8.1" ]
         acms_job:
           - integrated_php_unit_tests
@@ -194,7 +194,7 @@ jobs:
     strategy:
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_CURRENT_DEV
+          - ISOLATED_TEST_ON_NEXT_MINOR
         #php-version: [ "8.1" ]
         modules:
           - acquia_cms_article, acquia_cms_person, acquia_cms_place, acquia_cms_event
