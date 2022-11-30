@@ -2,11 +2,12 @@
 
 namespace Drupal\acquia_cms_search\Facade;
 
-use Drupal\acquia_search\Helper\Storage as AcquiaSearch;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Messenger\MessengerTrait;
+use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Solarium\Exception\ExceptionInterface as SolariumException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -53,22 +54,48 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
   private $logger;
 
   /**
+   * The config factory service object.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  private $configFactory;
+
+  /**
+   * The state service.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  private $state;
+
+  /**
    * AcquiaSearchFacade constructor.
    *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
+   * @param \Drupal\Core\State\StateInterface $state
+   *   The state service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The logger channel.
    * @param \Drupal\Core\Entity\EntityStorageInterface $index_storage
    *   The search index entity storage handler.
    * @param \Drupal\Core\Entity\EntityStorageInterface $server_storage
    *   The search server entity storage handler.
    * @param \Drupal\Core\Entity\EntityStorageInterface $view_storage
    *   The view entity storage handler.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The logger channel.
    */
-  public function __construct(EntityStorageInterface $index_storage, EntityStorageInterface $server_storage, EntityStorageInterface $view_storage, LoggerChannelInterface $logger) {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    StateInterface $state,
+    LoggerChannelInterface $logger,
+    EntityStorageInterface $index_storage,
+    EntityStorageInterface $server_storage,
+    EntityStorageInterface $view_storage) {
+    $this->configFactory = $config_factory;
+    $this->state = $state;
+    $this->logger = $logger;
     $this->indexStorage = $index_storage;
     $this->serverStorage = $server_storage;
     $this->viewStorage = $view_storage;
-    $this->logger = $logger;
   }
 
   /**
@@ -78,10 +105,12 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
     $entity_type_manager = $container->get('entity_type.manager');
 
     return new static(
+      $container->get('config.factory'),
+      $container->get('state'),
+      $container->get('logger.factory')->get('acquia_cms_search'),
       $entity_type_manager->getStorage('search_api_index'),
       $entity_type_manager->getStorage('search_api_server'),
-      $entity_type_manager->getStorage('view'),
-      $container->get('logger.factory')->get('acquia_cms_search')
+      $entity_type_manager->getStorage('view')
     );
   }
 
@@ -89,8 +118,9 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
    * Submit handler for the Acquia Search settings form.
    */
   public static function submitSettingsForm() : void {
-    if (static::isConfigured()) {
-      \Drupal::classResolver(static::class)->switchIndexToSolrServer();
+    $class_resolver = \Drupal::classResolver(static::class);
+    if ($class_resolver->isConfigured()) {
+      $class_resolver->switchIndexToSolrServer();
     }
   }
 
@@ -101,13 +131,15 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
    *   TRUE if Acquia Search has been configured satisfactorily, otherwise
    *   FALSE.
    */
-  private static function isConfigured() : bool {
-    return (
-      (bool) AcquiaSearch::getIdentifier() &&
-      (bool) AcquiaSearch::getApiKey() &&
-      (bool) AcquiaSearch::getApiHost() &&
-      (bool) AcquiaSearch::getUuid()
-    );
+  protected function isConfigured() : bool {
+    $api_host = $this->configFactory->getEditable('acquia_search.settings')->get('api_host');
+    $api_key = $this->state->get('acquia_search.api_key');
+    $identifier = $this->state->get('acquia_search.identifier');
+    $uuid = $this->state->get('acquia_search.uuid');
+    if ($api_host && $api_key && $identifier && $uuid) {
+      return TRUE;
+    }
+    return FALSE;
   }
 
   /**
