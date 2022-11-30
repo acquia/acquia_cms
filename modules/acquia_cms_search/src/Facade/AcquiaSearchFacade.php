@@ -2,7 +2,6 @@
 
 namespace Drupal\acquia_cms_search\Facade;
 
-use Drupal\acquia_search\Helper\Storage as AcquiaSearch;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -102,12 +101,14 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
    *   FALSE.
    */
   private static function isConfigured() : bool {
-    return (
-      (bool) AcquiaSearch::getIdentifier() &&
-      (bool) AcquiaSearch::getApiKey() &&
-      (bool) AcquiaSearch::getApiHost() &&
-      (bool) AcquiaSearch::getUuid()
-    );
+    $api_host = \Drupal::configFactory()->getEditable('acquia_search.settings')->get('api_host');
+    $api_key = \Drupal::state()->get('acquia_search.api_key');
+    $identifier = \Drupal::state()->get('acquia_search.identifier');
+    $uuid = \Drupal::state()->get('acquia_search.uuid');
+    if ($api_host && $api_key && $identifier && $uuid) {
+      return TRUE;
+    }
+    return FALSE;
   }
 
   /**
