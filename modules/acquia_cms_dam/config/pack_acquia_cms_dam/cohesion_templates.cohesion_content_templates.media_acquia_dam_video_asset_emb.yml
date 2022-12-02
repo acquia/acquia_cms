@@ -1,415 +1,83 @@
 uuid: 40213149-d0c8-4518-b727-2513420a6e10
 langcode: en
 status: true
-dependencies:
-  config:
-    - cohesion_custom_styles.cohesion_custom_style.63181883
+dependencies: {  }
 label: 'Embedded (Media, Video)'
 id: media_acquia_dam_video_asset_emb
 json_values: |
   {
       "canvas": [
           {
-              "type": "container",
-              "uid": "container",
-              "title": "Container",
+              "type": "item",
+              "uid": "video",
+              "title": "Video",
+              "selected": false,
               "status": {
-                  "collapsed": false
+                  "collapsed": true,
+                  "isopen": false
               },
-              "uuid": "fe5b93d9-608a-4ff0-9689-142c7b84ecaa",
+              "iconColor": "media",
+              "uuid": "6adacac6-06d5-4c85-a0ae-9c20baa97e9b",
               "parentUid": "root",
-              "children": [
-                  {
-                      "type": "container",
-                      "uid": "drupal-field",
-                      "title": "Field",
-                      "status": {
-                          "collapsed": false
-                      },
-                      "uuid": "6b2a85ac-98df-452d-ae4f-526192840574",
-                      "parentUid": "container",
-                      "children": []
-                  }
-              ]
+              "children": []
           }
       ],
       "mapper": {
-          "fe5b93d9-608a-4ff0-9689-142c7b84ecaa": {
-              "settings": {
-                  "formDefinition": [
-                      {
-                          "formKey": "container-settings",
-                          "children": [
-                              {
-                                  "formKey": "container-width",
-                                  "breakpoints": [],
-                                  "activeFields": [
-                                      {
-                                          "name": "width",
-                                          "active": true
-                                      }
-                                  ]
-                              },
-                              {
-                                  "formKey": "common-link-animation",
-                                  "breakpoints": [
-                                      {
-                                          "name": "xl"
-                                      }
-                                  ],
-                                  "activeFields": [
-                                      {
-                                          "name": "linkAnimation",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "animationType",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "animationScope",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "animationParent",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "animationTarget",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "animationScale",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "animationDirection",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "animationDirection",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "animationDirection",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "animationDistance",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "animationPieces",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "animationOrigin",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "animationFoldHeight",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "animationHorizontalFirst",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "animationIterations",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "animationEasing",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "animationDuration",
-                                          "active": true
-                                      }
-                                  ]
-                              },
-                              {
-                                  "formKey": "common-link-modifier",
-                                  "breakpoints": [],
-                                  "activeFields": [
-                                      {
-                                          "name": "modifier",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "modifierType",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "interactionScope",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "interactionParent",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "interactionTarget",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "modifierName",
-                                          "active": true
-                                      }
-                                  ]
-                              },
-                              {
-                                  "formKey": "container-style",
-                                  "breakpoints": [],
-                                  "activeFields": [
-                                      {
-                                          "name": "customStyle",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "customStyle",
-                                          "active": true
-                                      }
-                                  ]
-                              }
-                          ]
-                      },
-                      {
-                          "formKey": "common-admin",
-                          "children": [
-                              {
-                                  "formKey": "common-comments",
-                                  "breakpoints": [],
-                                  "activeFields": [
-                                      {
-                                          "name": "comments",
-                                          "active": true
-                                      }
-                                  ]
-                              }
-                          ]
-                      }
-                  ],
-                  "selectorType": "topLevel",
-                  "form": null,
-                  "items": []
-              },
-              "styles": {
-                  "formDefinition": [
-                      {
-                          "formKey": "layout",
-                          "children": [
-                              {
-                                  "formKey": "position",
-                                  "breakpoints": [
-                                      {
-                                          "name": "xl"
-                                      }
-                                  ],
-                                  "activeFields": [
-                                      {
-                                          "name": "position",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "top",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "bottom",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "left",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "right",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "z-index",
-                                          "active": true
-                                      }
-                                  ]
-                              },
-                              {
-                                  "formKey": "padding",
-                                  "breakpoints": [
-                                      {
-                                          "name": "xl"
-                                      }
-                                  ],
-                                  "activeFields": [
-                                      {
-                                          "name": "padding-equal",
-                                          "active": false
-                                      },
-                                      {
-                                          "name": "padding-top",
-                                          "active": false
-                                      },
-                                      {
-                                          "name": "padding-bottom",
-                                          "active": false
-                                      },
-                                      {
-                                          "name": "padding-left",
-                                          "active": false
-                                      },
-                                      {
-                                          "name": "padding-right",
-                                          "active": false
-                                      },
-                                      {
-                                          "name": "padding-block-start",
-                                          "active": false
-                                      },
-                                      {
-                                          "name": "padding-block-end",
-                                          "active": false
-                                      },
-                                      {
-                                          "name": "padding-inline-start",
-                                          "active": false
-                                      },
-                                      {
-                                          "name": "padding-inline-end",
-                                          "active": false
-                                      }
-                                  ]
-                              }
-                          ]
-                      }
-                  ],
-                  "selectorType": "topLevel",
-                  "items": [
-                      {
-                          "title": "iframe",
-                          "type": "container",
-                          "items": [],
-                          "form": null,
-                          "selectorType": "child",
-                          "model": "iframe",
-                          "uuid": "6679c1f7-72ff-4bbf-929c-2297b57c91ea",
-                          "allowedTypes": [
-                              "child",
-                              "pseudo",
-                              "modifier"
-                          ],
-                          "formDefinition": [
-                              {
-                                  "formKey": "layout",
-                                  "children": [
-                                      {
-                                          "formKey": "height",
-                                          "breakpoints": [
-                                              {
-                                                  "name": "xl"
-                                              }
-                                          ],
-                                          "activeFields": [
-                                              {
-                                                  "name": "min-height",
-                                                  "active": false
-                                              },
-                                              {
-                                                  "name": "max-height",
-                                                  "active": false
-                                              },
-                                              {
-                                                  "name": "height",
-                                                  "active": true
-                                              }
-                                          ]
-                                      },
-                                      {
-                                          "formKey": "width",
-                                          "breakpoints": [
-                                              {
-                                                  "name": "xl"
-                                              }
-                                          ],
-                                          "activeFields": [
-                                              {
-                                                  "name": "min-width",
-                                                  "active": false
-                                              },
-                                              {
-                                                  "name": "max-width",
-                                                  "active": false
-                                              },
-                                              {
-                                                  "name": "width",
-                                                  "active": true
-                                              }
-                                          ]
-                                      },
-                                      {
-                                          "formKey": "position",
-                                          "breakpoints": [
-                                              {
-                                                  "name": "xl"
-                                              }
-                                          ],
-                                          "activeFields": [
-                                              {
-                                                  "name": "position",
-                                                  "active": true
-                                              },
-                                              {
-                                                  "name": "top",
-                                                  "active": true
-                                              },
-                                              {
-                                                  "name": "bottom",
-                                                  "active": true
-                                              },
-                                              {
-                                                  "name": "left",
-                                                  "active": true
-                                              },
-                                              {
-                                                  "name": "right",
-                                                  "active": true
-                                              },
-                                              {
-                                                  "name": "z-index",
-                                                  "active": true
-                                              }
-                                          ]
-                                      }
-                                  ]
-                              }
-                          ]
-                      }
-                  ],
-                  "form": null
-              }
-          },
-          "6b2a85ac-98df-452d-ae4f-526192840574": []
+          "6adacac6-06d5-4c85-a0ae-9c20baa97e9b": {}
       },
       "model": {
-          "fe5b93d9-608a-4ff0-9689-142c7b84ecaa": {
+          "6adacac6-06d5-4c85-a0ae-9c20baa97e9b": {
               "settings": {
-                  "title": "Container - iframe responsive styles",
-                  "width": "fluid",
+                  "title": "Video",
                   "customStyle": [
                       {
-                          "customStyle": "coh-style-margin-bottom-small"
+                          "customStyle": ""
                       }
                   ],
+                  "videoAutoplay": false,
+                  "videoLoop": false,
+                  "videoMute": false,
+                  "videoRewind": true,
+                  "videoClickPlaypause": true,
+                  "videoPauseOthers": true,
+                  "videoPlayOnHover": false,
+                  "videoShowControls": false,
+                  "videoShowControlsLoad": true,
+                  "videoShowControlsPause": true,
+                  "videoShowPlayCenter": true,
+                  "videoShowPlayPause": true,
+                  "videoShowCurrent": true,
+                  "videoShowProgress": true,
+                  "videoShowDuration": true,
+                  "videoShowVolume": true,
+                  "videoShowFullscreen": true,
                   "settings": {
-                      "width": "fluid",
+                      "videoPreload": "none",
+                      "videoAutoplay": false,
+                      "videoLoop": false,
+                      "videoMute": false,
+                      "videoRewind": true,
+                      "videoClickPlaypause": true,
+                      "videoPauseOthers": true,
+                      "videoPlayOnHover": false,
+                      "videoShowControls": false,
+                      "videoShowControlsLoad": true,
+                      "videoShowControlsPause": true,
+                      "videoShowPlayCenter": true,
+                      "videoShowPlayPause": true,
+                      "videoShowCurrent": true,
+                      "videoShowProgress": true,
+                      "videoShowDuration": true,
+                      "videoShowVolume": true,
+                      "videoShowFullscreen": true,
                       "customStyle": [
                           {
                               "customStyle": ""
                           }
                       ]
                   },
-                  "admin": {
-                      "comments": "This container makes the video iframe responsive in a 16:9 format."
-                  }
+                  "videoPreload": "none",
+                  "videoUrl": "[media:embed-code:url]"
               },
               "context-visibility": {
                   "contextVisibility": {
@@ -418,75 +86,18 @@ json_values: |
               },
               "styles": {
                   "settings": {
-                      "element": "container"
-                  },
-                  "styles": {
-                      "xl": {
-                          "position": {
-                              "value": "relative"
-                          }
-                      }
-                  },
-                  "6679c1f7-72ff-4bbf-929c-2297b57c91ea": {
-                      "settings": {
-                          "element": "iframe",
-                          "class": "",
-                          "combinator": "",
-                          "pseudo": ""
-                      },
-                      "styles": {
-                          "xl": {
-                              "height": {
-                                  "value": "250px"
-                              },
-                              "width": {
-                                  "value": "250px"
-                              },
-                              "position": {},
-                              "top": {
-                                  "value": ""
-                              },
-                              "bottom": {
-                                  "value": ""
-                              },
-                              "left": {
-                                  "value": ""
-                              },
-                              "right": {
-                                  "value": ""
-                              }
-                          }
-                      }
-                  }
-              }
-          },
-          "6b2a85ac-98df-452d-ae4f-526192840574": {
-              "settings": {
-                  "title": "Field - Remote video URL",
-                  "settings": {
-                      "drupalField": ""
-                  },
-                  "drupalField": "content.field_media_oembed_video"
-              },
-              "context-visibility": {
-                  "contextVisibility": {
-                      "condition": "ALL"
-                  }
-              },
-              "styles": {
-                  "settings": {
-                      "element": "drupal-field"
+                      "element": "media"
                   }
               }
           }
       },
       "previewModel": {
-          "fe5b93d9-608a-4ff0-9689-142c7b84ecaa": [],
-          "6b2a85ac-98df-452d-ae4f-526192840574": []
+          "6adacac6-06d5-4c85-a0ae-9c20baa97e9b": {}
       },
       "variableFields": {
-          "fe5b93d9-608a-4ff0-9689-142c7b84ecaa": [],
-          "6b2a85ac-98df-452d-ae4f-526192840574": []
+          "6adacac6-06d5-4c85-a0ae-9c20baa97e9b": [
+              "settings.videoUrl"
+          ]
       },
       "meta": {
           "fieldHistory": []
