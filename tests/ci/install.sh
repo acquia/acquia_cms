@@ -38,7 +38,7 @@ cd ${ORCA_FIXTURE_DIR}
 
 # Install acquia_cms only for the Integrated & ExistingSite PHPUnit tests.
 if [ -n "${ACMS_JOB}" ]; then
-  ./vendor/bin/acms site:install --yes
+  ./vendor/bin/acms site:install --yes --uri=http://127.0.0.1:8080
 fi
 
 # Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.
