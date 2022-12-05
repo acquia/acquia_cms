@@ -36,10 +36,10 @@
         "drupal/pathauto": "^1",
         "drupal/recaptcha": "^3",
         "drupal/redirect": "^1",
-        "drupal/reroute_email": "dev-3315054-php-coding-standards",
+        "drupal/reroute_email": "2.1.x-dev@dev",
         "drupal/responsive_preview": "^2.0",
         "drupal/schema_metatag": "^2.4",
-        "drupal/scheduler_content_moderation_integration": "dev-3322425-d10-readiness",
+        "drupal/scheduler_content_moderation_integration": "2.x-dev@dev",
         "drupal/seckit": "dev-3289537-automated-drupal-10",
         "drupal/shield": "^1",
         "drupal/simple_sitemap": "^4.0",
@@ -112,12 +112,9 @@
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8",
-            "exclude" : [
+            "exclude": [
                 "drupal/config_ignore",
                 "drupal/google_tag",
-                "drupal/reroute_email",
-                "drupal/schema_metatag",
-                "drupal/scheduler_content_moderation_integration",
                 "drupal/seckit",
                 "drupal/username_enumeration_prevention"
             ]
@@ -130,21 +127,9 @@
             "type": "vcs",
             "url": "https://git.drupalcode.org/issue/google_tag-3287784.git"
         },
-        "drupal/reroute_email": {
-            "type": "vcs",
-            "url": "https://git.drupalcode.org/issue/reroute_email-3315054.git"
-        },
-        "drupal/schema_metatag": {
-            "type": "vcs",
-            "url": "https://git.drupalcode.org/project/schema_metatag.git"
-        },
         "drupal/seckit": {
             "type": "vcs",
             "url": "https://git.drupalcode.org/issue/seckit-3289537.git"
-        },
-        "drupal/scheduler_content_moderation_integration": {
-            "type": "vcs",
-            "url": "https://git.drupalcode.org/issue/scheduler_content_moderation_integration-3322425.git"
         },
         "drupal/username_enumeration_prevention": {
             "type": "vcs",
