@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "69ed86ed21f765222dee99e4ee144f7d",
+    "content-hash": "ae6180a10104c6133f6a62af72118a28",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -3661,26 +3661,26 @@
         },
         {
             "name": "drupal/collapsiblock",
-            "version": "3.0.1",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/collapsiblock.git",
-                "reference": "3.0.1"
+                "reference": "4.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/collapsiblock-3.0.1.zip",
-                "reference": "3.0.1",
-                "shasum": "a702570810aa952f654112da3eda5f0cd325c58e"
+                "url": "https://ftp.drupal.org/files/projects/collapsiblock-4.0.0.zip",
+                "reference": "4.0.0",
+                "shasum": "182b1aa4a61d8a985e48730ed15ca6869785b45e"
             },
             "require": {
-                "drupal/core": "^8 || ^9"
+                "drupal/core": "^9.2 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.1",
-                    "datestamp": "1630277785",
+                    "version": "4.0.0",
+                    "datestamp": "1670190899",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3693,26 +3693,36 @@
             ],
             "authors": [
                 {
-                    "name": "darvanen",
-                    "homepage": "https://www.drupal.org/user/1068770"
+                    "name": "Nedjo Rogers (nedjo)",
+                    "homepage": "https://www.drupal.org/u/nedjo",
+                    "role": "Maintainer"
                 },
                 {
-                    "name": "gagarine",
-                    "homepage": "https://www.drupal.org/user/162439"
+                    "name": "Jordan L (j0rd)",
+                    "homepage": "https://www.drupal.org/u/j0rd",
+                    "role": "Maintainer"
                 },
                 {
-                    "name": "j0rd",
-                    "homepage": "https://www.drupal.org/user/61506"
+                    "name": "Simon Perdrisat (gagarine)",
+                    "homepage": "https://www.drupal.org/u/gagarine",
+                    "role": "Maintainer"
                 },
                 {
-                    "name": "sonvir249",
-                    "homepage": "https://www.drupal.org/user/3225171"
+                    "name": "Max Pogonowski (darvanen)",
+                    "homepage": "https://www.drupal.org/u/darvanen",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Sonvir Choudhary (sonvir249)",
+                    "homepage": "https://www.drupal.org/u/sonvir249",
+                    "role": "Maintainer"
                 }
             ],
-            "description": "Makes individual blocks collapsible.",
+            "description": "Provides a way to make individual Drupal blocks collapsible.",
             "homepage": "https://www.drupal.org/project/collapsiblock",
             "support": {
-                "source": "https://git.drupalcode.org/project/collapsiblock"
+                "source": "https://git.drupalcode.org/project/collapsiblock",
+                "issues": "https://www.drupal.org/project/issues/collapsiblock"
             }
         },
         {
@@ -4809,62 +4819,20 @@
         },
         {
             "name": "drupal/facets_pretty_paths",
-            "version": "1.2.0",
+            "version": "dev-3287445-automated-drupal-10",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/facets_pretty_paths.git",
-                "reference": "8.x-1.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/facets_pretty_paths-8.x-1.2.zip",
-                "reference": "8.x-1.2",
-                "shasum": "8f45e3ab9798293cae8d6f65580f1cb088eaefd3"
+                "url": "https://git.drupalcode.org/issue/facets_pretty_paths-3287445.git",
+                "reference": "97bd23572da409f61f0ddc82a559870d11afd008"
             },
             "require": {
-                "drupal/core": "^8 || ^9",
                 "drupal/facets": "^1 || ^2",
                 "drupal/pathauto": "^1"
             },
             "require-dev": {
-                "composer/installers": "^1.2",
-                "cweagans/composer-patches": "^1.4",
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
-                "drupal-composer/drupal-scaffold": "^2.2",
-                "drupal/admin_toolbar": "^2",
-                "drupal/coder": "^8.3",
-                "drupal/search_api": "^1.5",
-                "drush/drush": ">=9.7",
-                "openeuropa/drupal-core-require-dev": "^8.6 || ^9",
-                "openeuropa/task-runner": "~1.0-beta2"
+                "drupal/search_api": "^1.5"
             },
             "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.2",
-                    "datestamp": "1639410183",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                },
-                "composer-exit-on-patch-failure": true,
-                "enable-patching": true,
-                "installer-paths": {
-                    "build/core": [
-                        "type:drupal-core"
-                    ],
-                    "build/modules/contrib/{$name}": [
-                        "type:drupal-module"
-                    ],
-                    "build/profiles/contrib/{$name}": [
-                        "type:drupal-profile"
-                    ],
-                    "build/themes/contrib/{$name}": [
-                        "type:drupal-theme"
-                    ]
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Drupal\\facets_pretty_paths\\": "./src"
@@ -4875,18 +4843,6 @@
                     "Drupal\\Tests\\facets_pretty_paths\\": "./tests/src"
                 }
             },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "scripts": {
-                "drupal-scaffold": [
-                    "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
-                ],
-                "post-install-cmd": [
-                    "./vendor/bin/run drupal:site-setup"
-                ],
-                "post-update-cmd": [
-                    "./vendor/bin/run drupal:site-setup"
-                ]
-            },
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -4894,24 +4850,13 @@
                 {
                     "name": "All contributors",
                     "homepage": "https://www.drupal.org/node/2625160/committers"
-                },
-                {
-                    "name": "Upchuk",
-                    "homepage": "https://www.drupal.org/user/1885838"
-                },
-                {
-                    "name": "phenaproxima",
-                    "homepage": "https://www.drupal.org/user/205645"
                 }
             ],
             "description": "Pretty paths for Facets.",
-            "homepage": "https://www.drupal.org/project/facets_pretty_paths",
             "keywords": [
                 "drupal"
             ],
-            "support": {
-                "source": "https://git.drupalcode.org/project/facets_pretty_paths"
-            }
+            "time": "2022-11-29T11:25:50+00:00"
         },
         {
             "name": "drupal/field_group",
@@ -5793,12 +5738,15 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-1.2.x": "1.2.x-dev"
+                },
                 "drupal": {
                     "version": "1.2.4",
                     "datestamp": "1670645270",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -6431,8 +6379,7 @@
             "require": {
                 "drupal/core": "^9.1 || ^10",
                 "drupal/openapi": "^2",
-                "drupal/schemata": "^1",
-                "drupal/schemata_json_schema": "*"
+                "drupal/schemata": "^1"
             },
             "type": "drupal-module",
             "extra": {
@@ -6452,7 +6399,6 @@
             "authors": [
                 {
                     "name": "Mateu Aguiló Bosch",
-                    "homepage": "https://www.drupal.org/user/3616626",
                     "email": "mateu.aguilo.bosch@gmail.com"
                 },
                 {
@@ -6469,10 +6415,7 @@
                 }
             ],
             "description": "OpenAPI support for the JSON:API module.",
-            "homepage": "https://www.drupal.org/project/openapi_jsonapi",
-            "support": {
-                "source": "https://git.drupalcode.org/project/openapi_jsonapi"
-            }
+            "time": "2022-12-06T18:22:18+00:00"
         },
         {
             "name": "drupal/openapi_ui",
@@ -6538,12 +6481,15 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
                 "drupal": {
                     "version": "8.x-1.0-rc4",
                     "datestamp": "1670344278",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "RC releases are not covered by Drupal security advisories."
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -6991,18 +6937,68 @@
         },
         {
             "name": "drupal/reroute_email",
-            "version": "dev-3315054-php-coding-standards",
+            "version": "dev-2.1.x",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/issue/reroute_email-3315054.git",
-                "reference": "0fc952c561c8b69d6fde1bca83bd3c16d2e61731"
+                "url": "https://git.drupalcode.org/project/reroute_email.git",
+                "reference": "12c7242f3e3c0d9682bc2b8615c09692b0598a4c"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10"
             },
             "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-2.1.x": "2.1.x-dev"
+                },
+                "drupal": {
+                    "version": "2.1.1+6-dev",
+                    "datestamp": "1665651560",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0-or-later"
             ],
+            "authors": [
+                {
+                    "name": "B-Prod",
+                    "homepage": "https://www.drupal.org/user/407852"
+                },
+                {
+                    "name": "bohart",
+                    "homepage": "https://www.drupal.org/user/289861"
+                },
+                {
+                    "name": "Devaraj johnson",
+                    "homepage": "https://www.drupal.org/user/2698767"
+                },
+                {
+                    "name": "DYdave",
+                    "homepage": "https://www.drupal.org/user/467284"
+                },
+                {
+                    "name": "kbahey",
+                    "homepage": "https://www.drupal.org/user/4063"
+                },
+                {
+                    "name": "rfay",
+                    "homepage": "https://www.drupal.org/user/30906"
+                },
+                {
+                    "name": "wafaa",
+                    "homepage": "https://www.drupal.org/user/50133"
+                }
+            ],
             "description": "Reroutes emails send from the site to a predefined email. Useful for test sites.",
-            "time": "2022-10-14T04:55:02+00:00"
+            "homepage": "https://www.drupal.org/project/reroute_email",
+            "support": {
+                "source": "https://git.drupalcode.org/project/reroute_email"
+            }
         },
         {
             "name": "drupal/responsive_preview",
@@ -7194,21 +7190,62 @@
         },
         {
             "name": "drupal/scheduler_content_moderation_integration",
-            "version": "dev-3322425-d10-readiness",
+            "version": "dev-2.x",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/issue/scheduler_content_moderation_integration-3322425.git",
-                "reference": "31b85da729ee38b40a83700001bb85d3b202db4e"
+                "url": "https://git.drupalcode.org/project/scheduler_content_moderation_integration.git",
+                "reference": "1194e8bd38ea9421853268e5e1f3520d70ac7280"
             },
             "require": {
+                "drupal/core": "^8.7.7 || ^9 || ^10",
                 "drupal/scheduler": "^2"
             },
             "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
+                "drupal": {
+                    "version": "2.0.0-alpha1+8-dev",
+                    "datestamp": "1670257763",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0-or-later"
             ],
+            "authors": [
+                {
+                    "name": "chr.fritsch",
+                    "homepage": "https://www.drupal.org/user/2103716"
+                },
+                {
+                    "name": "daniel.bosen",
+                    "homepage": "https://www.drupal.org/user/404865"
+                },
+                {
+                    "name": "jonathan1055",
+                    "homepage": "https://www.drupal.org/user/92645"
+                },
+                {
+                    "name": "smustgrave",
+                    "homepage": "https://www.drupal.org/user/3252890"
+                },
+                {
+                    "name": "volkerk",
+                    "homepage": "https://www.drupal.org/user/57527"
+                }
+            ],
             "description": "Scheduler sub-module providing content moderation functionality for publishing/unpublishing",
-            "time": "2022-11-21T05:24:12+00:00"
+            "homepage": "https://www.drupal.org/project/scheduler_content_moderation_integration",
+            "support": {
+                "source": "https://git.drupalcode.org/project/scheduler_content_moderation_integration",
+                "error": "Invalid dependency: \"scheduler\", Could not parse version constraint ~: Invalid version string \"~\""
+            }
         },
         {
             "name": "drupal/schema_metatag",
@@ -7230,9 +7267,11 @@
             },
             "require-dev": {
                 "drupal/coder": "^8.3",
+                "drupal/metatag_views": "*",
+                "drupal/schema_article": "*",
+                "drupal/schema_organization": "*",
                 "phpcompatibility/php-compatibility": "^9.3"
             },
-            "default-branch": true,
             "type": "drupal-module",
             "extra": {
                 "drupal": {
@@ -7261,7 +7300,6 @@
                     "name": "wells",
                     "homepage": "https://www.drupal.org/user/2452278"
                 }
-
             ],
             "description": "Metatag implementation of Schema.org structured data (JSON-LD)",
             "homepage": "https://www.drupal.org/project/schema_metatag",
@@ -7269,39 +7307,38 @@
                 "Drupal"
             ],
             "support": {
-                "issues": "https://www.drupal.org/project/issues/schema_metatag",
-                "source": "https://git.drupalcode.org/project/schema_metatag"
-            },
-            "time": "2022-10-05T17:31:23+00:00"
+                "source": "https://git.drupalcode.org/project/schema_metatag",
+                "issues": "https://www.drupal.org/project/issues/schema_metatag"
+            }
         },
         {
             "name": "drupal/schemata",
-            "version": "1.0.0-beta2",
+            "version": "1.0.0-beta3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/schemata.git",
-                "reference": "8.x-1.0-beta2"
+                "reference": "8.x-1.0-beta3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/schemata-8.x-1.0-beta2.zip",
-                "reference": "8.x-1.0-beta2",
-                "shasum": "c50bc45c370073224877a8c72e6d8d5b2ec732d3"
+                "url": "https://ftp.drupal.org/files/projects/schemata-8.x-1.0-beta3.zip",
+                "reference": "8.x-1.0-beta3",
+                "shasum": "be2cbbf357c3f4d126c8ffbf926432b5fe44e4ff"
             },
             "require": {
-                "drupal/core": "^8 || ^9"
+                "drupal/core": "^8 || ^9 || ^10"
             },
             "require-dev": {
                 "drupal/coder": "^8.2",
+                "drupal/hal": "^1 || ^2",
                 "jakub-onderka/php-parallel-lint": "^0.9.2",
-                "league/json-guard": "^1.0",
-                "league/json-reference": "^1.0"
+                "justinrainbow/json-schema": "^5.2"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-beta2",
-                    "datestamp": "1585777919",
+                    "version": "8.x-1.0-beta3",
+                    "datestamp": "1670337727",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -7325,7 +7362,7 @@
                 ]
             },
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -7375,80 +7412,18 @@
             }
         },
         {
-            "name": "drupal/schemata_json_schema",
-            "version": "1.0.0-beta2",
-            "require": {
-                "drupal/core": "^8 || ^9",
-                "drupal/schemata": "*"
-            },
-            "type": "metapackage",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.0-beta2",
-                    "datestamp": "1585777919",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "e0ipso",
-                    "homepage": "https://www.drupal.org/user/550110"
-                },
-                {
-                    "name": "febbraro",
-                    "homepage": "https://www.drupal.org/user/43670"
-                },
-                {
-                    "name": "Grayside",
-                    "homepage": "https://www.drupal.org/user/346868"
-                },
-                {
-                    "name": "HalfChem",
-                    "homepage": "https://www.drupal.org/user/1608382"
-                },
-                {
-                    "name": "jhedstrom",
-                    "homepage": "https://www.drupal.org/user/208732"
-                },
-                {
-                    "name": "mpotter",
-                    "homepage": "https://www.drupal.org/user/616192"
-                },
-                {
-                    "name": "richgerdes",
-                    "homepage": "https://www.drupal.org/user/3437973"
-                },
-                {
-                    "name": "tekante",
-                    "homepage": "https://www.drupal.org/user/640024"
-                }
-            ],
-            "description": "Provides a data models for entity types and bundles in JSON schema format.",
-            "homepage": "https://www.drupal.org/project/schemata",
-            "support": {
-                "source": "https://git.drupalcode.org/project/schemata"
-            }
-        },
-        {
             "name": "drupal/search_api",
-            "version": "1.27.0",
+            "version": "1.28.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api.git",
-                "reference": "8.x-1.27"
+                "reference": "8.x-1.28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.27.zip",
-                "reference": "8.x-1.27",
-                "shasum": "b8c9a055fe43435c09231fd93d3e07c5d2863a46"
+                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.28.zip",
+                "reference": "8.x-1.28",
+                "shasum": "d3ae0bb3cf17c986d5e0c6edb87aee6580b6fc1e"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10.0"
@@ -7469,8 +7444,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.27",
-                    "datestamp": "1666211720",
+                    "version": "8.x-1.28",
+                    "datestamp": "1667814116",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8286,117 +8261,6 @@
             "homepage": "https://www.drupal.org/project/views_remote_data",
             "support": {
                 "source": "https://git.drupalcode.org/project/views_remote_data"
-            }
-        },
-        {
-            "name": "drupal/webform",
-            "version": "6.1.3",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/webform.git",
-                "reference": "6.1.3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/webform-6.1.3.zip",
-                "reference": "6.1.3",
-                "shasum": "efd032eadc10a4752b9b0203152a5d20eefac175"
-            },
-            "require": {
-                "drupal/core": "^8.8 || ^9"
-            },
-            "require-dev": {
-                "drupal/address": "~1.0",
-                "drupal/bootstrap": "~3.0",
-                "drupal/captcha": "~1.0",
-                "drupal/chosen": "~3.0",
-                "drupal/clientside_validation": "~3.0",
-                "drupal/clientside_validation_jquery": "*",
-                "drupal/devel": "~3.0",
-                "drupal/entity": "~1.0",
-                "drupal/entity_print": "~2.0",
-                "drupal/gnode": "*",
-                "drupal/group": "1.0",
-                "drupal/jquery_ui": "~1.0",
-                "drupal/jquery_ui_checkboxradio": "~1.0",
-                "drupal/jquery_ui_datepicker": "~1.0",
-                "drupal/lingotek": "~3.0",
-                "drupal/mailsystem": "~4.0",
-                "drupal/paragraphs": "~1.0",
-                "drupal/select2": "~1.0",
-                "drupal/smtp": "~1.0",
-                "drupal/styleguide": "~1.0",
-                "drupal/telephone_validation": "~2.0",
-                "drupal/token": "~1.0",
-                "drupal/variationcache": "~1.0",
-                "drupal/webform_access": "*",
-                "drupal/webform_attachment": "*",
-                "drupal/webform_clientside_validation": "*",
-                "drupal/webform_devel": "*",
-                "drupal/webform_entity_print": "*",
-                "drupal/webform_group": "*",
-                "drupal/webform_node": "*",
-                "drupal/webform_options_limit": "*",
-                "drupal/webform_scheduled_email": "*",
-                "drupal/webform_share": "*",
-                "drupal/webform_ui": "*"
-            },
-            "suggest": {
-                "drupal/jquery_ui_checkboxradio": "Provides jQuery UI Checkboxradio library. Required by the Webform jQueryUI Buttons module. The Webform jQueryUI Buttons module is deprecated because jQueryUI is no longer maintained.",
-                "drupal/jquery_ui_datepicker": "Provides jQuery UI Datepicker library. Required to support datepickers. The Webform jQueryUI Datepicker module is deprecated because jQueryUI is no longer maintained."
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "6.1.3",
-                    "datestamp": "1644940723",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                },
-                "drush": {
-                    "services": {
-                        "drush.services.yml": "^9 || ^10"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Jacob Rockowitz (jrockowitz)",
-                    "homepage": "https://www.drupal.org/u/jrockowitz",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Alexander Trotsenko (bucefal91)",
-                    "homepage": "https://www.drupal.org/u/bucefal91",
-                    "role": "Co-maintainer"
-                },
-                {
-                    "name": "Contributors",
-                    "homepage": "https://www.drupal.org/node/7404/committers",
-                    "role": "Contributor"
-                },
-                {
-                    "name": "quicksketch",
-                    "homepage": "https://www.drupal.org/user/35821"
-                },
-                {
-                    "name": "torotil",
-                    "homepage": "https://www.drupal.org/user/865256"
-                }
-            ],
-            "description": "Enables the creation of webforms and questionnaires.",
-            "homepage": "https://drupal.org/project/webform",
-            "support": {
-                "source": "https://git.drupalcode.org/project/webform",
-                "issues": "https://www.drupal.org/project/issues/webform?version=8.x",
-                "docs": "https://www.drupal.org/docs/8/modules/webform",
-                "forum": "https://drupal.stackexchange.com/questions/tagged/webform"
             }
         },
         {
@@ -12509,16 +12373,16 @@
         },
         {
             "name": "solarium/solarium",
-            "version": "6.2.7",
+            "version": "6.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/solariumphp/solarium.git",
-                "reference": "6d6d13b4eda222e7bdb9616545aa67efbe8c6cec"
+                "reference": "0bca4fdcd53e86dea19754b0081f91fe17248a9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solariumphp/solarium/zipball/6d6d13b4eda222e7bdb9616545aa67efbe8c6cec",
-                "reference": "6d6d13b4eda222e7bdb9616545aa67efbe8c6cec",
+                "url": "https://api.github.com/repos/solariumphp/solarium/zipball/0bca4fdcd53e86dea19754b0081f91fe17248a9d",
+                "reference": "0bca4fdcd53e86dea19754b0081f91fe17248a9d",
                 "shasum": ""
             },
             "require": {
@@ -12532,11 +12396,13 @@
             },
             "require-dev": {
                 "escapestudios/symfony2-coding-standard": "^3.11",
+                "ext-iconv": "*",
                 "guzzlehttp/guzzle": "^7.2",
                 "nyholm/psr7": "^1.2",
                 "php-http/guzzle7-adapter": "^0.1",
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan": "^1.0",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^9.5",
                 "roave/security-advisories": "dev-master",
@@ -12567,9 +12433,9 @@
             ],
             "support": {
                 "issues": "https://github.com/solariumphp/solarium/issues",
-                "source": "https://github.com/solariumphp/solarium/tree/6.2.7"
+                "source": "https://github.com/solariumphp/solarium/tree/6.2.8"
             },
-            "time": "2022-09-12T09:20:39+00:00"
+            "time": "2022-12-06T10:22:19+00:00"
         },
         {
             "name": "spatie/macroable",
@@ -20508,22 +20374,24 @@
         "drupal/config_ignore": 20,
         "drupal/google_tag": 20,
         "drupal/reroute_email": 20,
-        "drupal/schema_metatag": 20,
         "drupal/scheduler_content_moderation_integration": 20,
         "drupal/seckit": 20,
         "drupal/username_enumeration_prevention": 20,
-        "drupal/acquia_cms_place": 20,
-        "drupal/openapi_ui_redoc": 5,
-        "drupal/openapi_ui_swagger": 5,
-        "drupal/imce": 20,
         "drupal/acquia_cms_image": 20,
-        "drupal/node_revision_delete": 5,
+        "drupal/acquia_cms_video": 20,
+        "drupal/acquia_cms_place": 20,
+        "drupal/acquia_cms_tour": 20,
+        "drupal/jsonapi_menu_items": 20,
+        "drupal/openapi_jsonapi": 20,
+        "drupal/openapi_ui_redoc": 20,
+        "drupal/openapi_ui_swagger": 20,
+        "drupal/facets_pretty_paths": 20,
+        "acquia/cohesion": 20,
         "drupal/acquia_cms_article": 20,
         "drupal/acquia_cms_document": 20,
         "drupal/acquia_cms_event": 20,
         "drupal/acquia_cms_page": 20,
-        "drupal/acquia_cms_search": 20,
-        "drupal/acquia_cms_video": 20
+        "drupal/acquia_cms_search": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
