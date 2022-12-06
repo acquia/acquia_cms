@@ -98,3 +98,52 @@ function acquia_cms_page_update_8002() {
     }
   }
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update Page display modes.
+ */
+function acquia_cms_page_update_8003() {
+  // Load and update default view mode.
+  $page_image_field = [
+    'field_page_image' => [
+      'type' => 'entity_reference_entity_view',
+      'label' => 'hidden',
+      'settings' => [
+        'view_mode' => 'full',
+        'link' => 'false',
+      ],
+      'third_party_settings' => [],
+      'weight' => 2,
+      'region' => 'content',
+    ],
+  ];
+  $display_modes = [
+    'default',
+    'card',
+    'horizontal_card',
+    'search_results',
+    'teaser',
+  ];
+  $view_modes = [
+    'full',
+    'card',
+    'large_super_landscape',
+    'small',
+    'teaser',
+  ];
+  foreach ($display_modes as $key => $display_mode) {
+    $page_view_mode = \Drupal::configFactory()->getEditable('core.entity_view_display.node.page.' . $display_mode);
+    if ($page_view_mode->get('hidden.field_page_image')) {
+      $page_image_field['field_page_image']['settings']['view_mode'] = $view_modes[$key];
+      $page_view_mode->set('content', array_merge($page_view_mode->get('content'), $page_image_field));
+      if ($page_view_mode->get('content.body')) {
+        $page_view_mode->set('content.body.weight', $page_view_mode->get('content.body.weight') + 1);
+      }
+      $page_view_mode->clear('hidden.field_page_image');
+      $page_view_mode->save();
+    }
+  }
+
+}

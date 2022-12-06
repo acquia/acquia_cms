@@ -39,6 +39,7 @@ class ContactInformationCardComponentTest extends CohesionComponentTestBase {
     $edit_form->fillField('Email', 'acquiaindia@test.com');
 
     $this->openMediaLibrary($edit_form, 'Select image');
+    $this->selectMediaSource("Media Types");
     $this->selectMedia(0);
     $this->insertSelectedMedia();
   }

@@ -3,7 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
-    - image.style.coh_small_landscape
+    - cohesion_custom_styles.cohesion_custom_style.097f31b2
+    - cohesion_custom_styles.cohesion_custom_style.a13b8c94
 label: 'Card (Node, Page)'
 id: node_page_card
 json_values: |
@@ -80,23 +81,20 @@ json_values: |
                       "uid": "container",
                       "title": "Container",
                       "status": {
-                          "collapsed": true,
-                          "collapsedParents": []
+                          "collapsed": false
                       },
                       "uuid": "32581850-c4fc-40b8-a64a-f99380e3f56c",
                       "parentUid": "container",
                       "children": [
                           {
-                              "type": "item",
-                              "uid": "image",
-                              "title": "Image",
+                              "type": "container",
+                              "uid": "drupal-field",
+                              "title": "Field",
                               "status": {
-                                  "collapsed": true,
-                                  "collapsedParents": [
-                                      "32581850-c4fc-40b8-a64a-f99380e3f56c"
-                                  ]
+                                  "collapsed": true
                               },
-                              "uuid": "cf85bf76-a24e-42f2-8753-eb429f9c0fb1",
+                              "iconColor": "drupal",
+                              "uuid": "f629f877-a25b-4109-a386-266f6692c157",
                               "parentUid": "container",
                               "children": []
                           }
@@ -607,78 +605,6 @@ json_values: |
                       }
                   ],
                   "title": "Hide if no data",
-                  "selectorType": "topLevel",
-                  "form": null,
-                  "items": []
-              }
-          },
-          "cf85bf76-a24e-42f2-8753-eb429f9c0fb1": {
-              "settings": {
-                  "formDefinition": [
-                      {
-                          "formKey": "image-settings",
-                          "children": [
-                              {
-                                  "formKey": "image-image",
-                                  "breakpoints": [],
-                                  "activeFields": [
-                                      {
-                                          "name": "image",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "title",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "alt",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "lazyload",
-                                          "active": true
-                                      }
-                                  ]
-                              },
-                              {
-                                  "formKey": "image-size",
-                                  "breakpoints": [
-                                      {
-                                          "name": "xl"
-                                      }
-                                  ],
-                                  "activeFields": [
-                                      {
-                                          "name": "displaySize",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "imageAlignment",
-                                          "active": true
-                                      }
-                                  ]
-                              },
-                              {
-                                  "formKey": "image-style",
-                                  "breakpoints": [],
-                                  "activeFields": [
-                                      {
-                                          "name": "imageStyle",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "customStyle",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "customStyle",
-                                          "active": true
-                                      }
-                                  ]
-                              }
-                          ]
-                      }
-                  ],
                   "selectorType": "topLevel",
                   "form": null,
                   "items": []
@@ -1307,7 +1233,8 @@ json_values: |
                   "form": null,
                   "items": []
               }
-          }
+          },
+          "f629f877-a25b-4109-a386-266f6692c157": {}
       },
       "model": {
           "032e8885-0753-42c0-a9bf-e533b892febc": {
@@ -1562,41 +1489,13 @@ json_values: |
                   "hideData": "[node:field_page_image]"
               }
           },
-          "cf85bf76-a24e-42f2-8753-eb429f9c0fb1": {
+          "f629f877-a25b-4109-a386-266f6692c157": {
               "settings": {
-                  "title": "Image",
-                  "styles": {
-                      "xl": {
-                          "displaySize": "coh-image-responsive",
-                          "imageAlignment": "coh-image-align-left"
-                      }
-                  },
-                  "customStyle": [
-                      {
-                          "customStyle": ""
-                      }
-                  ],
-                  "lazyload": false,
+                  "title": "Field",
                   "settings": {
-                      "lazyload": false,
-                      "styles": {
-                          "xl": {
-                              "displaySize": "coh-image-responsive"
-                          }
-                      },
-                      "imageStyle": "",
-                      "customStyle": [
-                          {
-                              "customStyle": ""
-                          }
-                      ]
+                      "drupalField": ""
                   },
-                  "imageStyle": "coh_small_landscape",
-                  "image": "[node:field_page_image:entity:image:entity:path]",
-                  "attributes": {
-                      "title": "[node:field_page_image:entity:image:entity:name]",
-                      "alt": "[node:field_page_image:entity:image:alt]"
-                  }
+                  "drupalField": "content.field_page_image"
               },
               "context-visibility": {
                   "contextVisibility": {
@@ -1605,7 +1504,7 @@ json_values: |
               },
               "styles": {
                   "settings": {
-                      "element": "img"
+                      "element": "drupal-field"
                   }
               }
           }
@@ -1620,12 +1519,8 @@ json_values: |
                   "linkText": "Title of the page"
               }
           },
-          "cf85bf76-a24e-42f2-8753-eb429f9c0fb1": {
-              "settings": {
-                  "image": ""
-              }
-          },
-          "e9bb4398-565c-4515-abe3-878171391410": {}
+          "e9bb4398-565c-4515-abe3-878171391410": {},
+          "f629f877-a25b-4109-a386-266f6692c157": {}
       },
       "variableFields": {
           "032e8885-0753-42c0-a9bf-e533b892febc": [],
@@ -1636,12 +1531,8 @@ json_values: |
               "settings.linkText",
               "settings.linkToPage"
           ],
-          "cf85bf76-a24e-42f2-8753-eb429f9c0fb1": [
-              "settings.attributes.title",
-              "settings.attributes.alt",
-              "settings.image"
-          ],
-          "e9bb4398-565c-4515-abe3-878171391410": []
+          "e9bb4398-565c-4515-abe3-878171391410": [],
+          "f629f877-a25b-4109-a386-266f6692c157": []
       },
       "meta": {
           "fieldHistory": []

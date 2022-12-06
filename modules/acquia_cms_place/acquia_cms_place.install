@@ -59,3 +59,62 @@ function acquia_cms_place_update_8001() {
     }
   }
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update Place display modes.
+ */
+function acquia_cms_place_update_8002() {
+  // Load and update default view mode.
+  $place_image_field = [
+    'field_place_image' => [
+      'type' => 'entity_reference_entity_view',
+      'label' => 'hidden',
+      'settings' => [
+        'view_mode' => 'full',
+        'link' => 'false',
+      ],
+      'third_party_settings' => [],
+      'weight' => 0,
+      'region' => 'content',
+    ],
+  ];
+  $display_modes = [
+    'default',
+    'card',
+    'horizontal_card',
+    'search_results',
+    'teaser',
+  ];
+  $view_modes = [
+    'large_super_landscape',
+    'small_landscape',
+    'small_landscape',
+    'teaser',
+    'teaser',
+  ];
+  // Update Image field.
+  foreach ($display_modes as $key => $display_mode) {
+    $place_view_mode = \Drupal::configFactory()->getEditable('core.entity_view_display.node.place.' . $display_mode);
+    if ($place_view_mode->get('hidden.field_place_image')) {
+      $place_image_field['field_place_image']['settings']['view_mode'] = $view_modes[$key];
+      $place_view_mode->set('content', array_merge($place_view_mode->get('content'), $place_image_field));
+      if ($place_view_mode->get('content.body')) {
+        $place_view_mode->set('content.body.weight', $place_view_mode->get('content.body.weight') + 1);
+      }
+      if ($place_view_mode->get('content.field_place_address')) {
+        $place_view_mode->set('content.field_place_address.weight', $place_view_mode->get('content.field_place_address.weight') + 1);
+      }
+      if ($place_view_mode->get('content.field_place_telephone')) {
+        $place_view_mode->set('content.field_place_telephone.weight', $place_view_mode->get('content.field_place_telephone.weight') + 1);
+      }
+      $place_view_mode->clear('hidden.field_place_image');
+      $place_view_mode->save();
+    }
+  }
+
+  // Add referenced image view mode.
+  _acquia_cms_common_rewrite_configuration('core.entity_view_display.node.place.referenced_image', 'acquia_cms_place');
+
+}

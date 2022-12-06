@@ -1,0 +1,47 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.referenced_image
+    - field.field.node.person.body
+    - field.field.node.person.field_categories
+    - field.field.node.person.field_email
+    - field.field.node.person.field_job_title
+    - field.field.node.person.field_person_image
+    - field.field.node.person.field_person_telephone
+    - field.field.node.person.field_person_type
+    - field.field.node.person.field_place
+    - field.field.node.person.field_tags
+    - node.type.person
+  module:
+    - user
+  enforced:
+    module:
+      - acquia_cms_person
+id: node.person.referenced_image
+targetEntityType: node
+bundle: person
+mode: referenced_image
+content:
+  field_person_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: large
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  body: true
+  content_moderation_control: true
+  field_categories: true
+  field_email: true
+  field_job_title: true
+  field_person_telephone: true
+  field_person_type: true
+  field_place: true
+  field_tags: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

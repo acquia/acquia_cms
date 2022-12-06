@@ -1,0 +1,45 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.referenced_image
+    - field.field.node.place.body
+    - field.field.node.place.field_categories
+    - field.field.node.place.field_geofield
+    - field.field.node.place.field_place_address
+    - field.field.node.place.field_place_image
+    - field.field.node.place.field_place_telephone
+    - field.field.node.place.field_place_type
+    - field.field.node.place.field_tags
+    - node.type.place
+  module:
+    - user
+  enforced:
+    module:
+      - acquia_cms_place
+id: node.place.referenced_image
+targetEntityType: node
+bundle: place
+mode: referenced_image
+content:
+  field_place_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: small_landscape
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  body: true
+  content_moderation_control: true
+  field_categories: true
+  field_geofield: true
+  field_place_address: true
+  field_place_telephone: true
+  field_place_type: true
+  field_tags: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

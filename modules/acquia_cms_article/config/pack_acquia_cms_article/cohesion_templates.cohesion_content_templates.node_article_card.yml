@@ -3,7 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
-    - image.style.coh_small_landscape
+    - cohesion_custom_styles.cohesion_custom_style.097f31b2
+    - cohesion_custom_styles.cohesion_custom_style.65dc3072
+    - cohesion_custom_styles.cohesion_custom_style.a13b8c94
+    - cohesion_custom_styles.cohesion_custom_style.bfd0fecd
+    - cohesion_custom_styles.cohesion_custom_style.ed4b7a3d
 label: 'Card (Node, Article)'
 id: node_article_card
 json_values: |
@@ -168,23 +172,20 @@ json_values: |
                       "uid": "container",
                       "title": "Container",
                       "status": {
-                          "collapsed": true,
-                          "collapsedParents": []
+                          "collapsed": false
                       },
                       "uuid": "431a5d30-c620-46b3-8e13-913c553c4391",
                       "parentUid": "container",
                       "children": [
                           {
-                              "type": "item",
-                              "uid": "image",
-                              "title": "Image",
+                              "type": "container",
+                              "uid": "drupal-field",
+                              "title": "Field",
                               "status": {
-                                  "collapsed": true,
-                                  "collapsedParents": [
-                                      "431a5d30-c620-46b3-8e13-913c553c4391"
-                                  ]
+                                  "collapsed": true
                               },
-                              "uuid": "77e230d2-bda7-4869-aea6-3b81ec84542e",
+                              "iconColor": "drupal",
+                              "uuid": "7500c1a8-bc55-47f5-ad50-9969644b5213",
                               "parentUid": "container",
                               "children": []
                           }
@@ -695,78 +696,6 @@ json_values: |
                       }
                   ],
                   "title": "Hide if no data",
-                  "selectorType": "topLevel",
-                  "form": null,
-                  "items": []
-              }
-          },
-          "77e230d2-bda7-4869-aea6-3b81ec84542e": {
-              "settings": {
-                  "formDefinition": [
-                      {
-                          "formKey": "image-settings",
-                          "children": [
-                              {
-                                  "formKey": "image-image",
-                                  "breakpoints": [],
-                                  "activeFields": [
-                                      {
-                                          "name": "image",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "title",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "alt",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "lazyload",
-                                          "active": true
-                                      }
-                                  ]
-                              },
-                              {
-                                  "formKey": "image-size",
-                                  "breakpoints": [
-                                      {
-                                          "name": "xl"
-                                      }
-                                  ],
-                                  "activeFields": [
-                                      {
-                                          "name": "displaySize",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "imageAlignment",
-                                          "active": true
-                                      }
-                                  ]
-                              },
-                              {
-                                  "formKey": "image-style",
-                                  "breakpoints": [],
-                                  "activeFields": [
-                                      {
-                                          "name": "imageStyle",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "customStyle",
-                                          "active": true
-                                      },
-                                      {
-                                          "name": "customStyle",
-                                          "active": true
-                                      }
-                                  ]
-                              }
-                          ]
-                      }
-                  ],
                   "selectorType": "topLevel",
                   "form": null,
                   "items": []
@@ -2306,7 +2235,8 @@ json_values: |
                   "form": null,
                   "items": []
               }
-          }
+          },
+          "7500c1a8-bc55-47f5-ad50-9969644b5213": {}
       },
       "model": {
           "c2cb5754-d772-4d73-917a-402d82f060e9": {
@@ -2819,41 +2749,13 @@ json_values: |
                   "hideData": "[node:field_article_image]"
               }
           },
-          "77e230d2-bda7-4869-aea6-3b81ec84542e": {
+          "7500c1a8-bc55-47f5-ad50-9969644b5213": {
               "settings": {
-                  "title": "Image",
-                  "styles": {
-                      "xl": {
-                          "displaySize": "coh-image-responsive",
-                          "imageAlignment": "coh-image-align-left"
-                      }
-                  },
-                  "customStyle": [
-                      {
-                          "customStyle": ""
-                      }
-                  ],
-                  "lazyload": false,
+                  "title": "Field",
                   "settings": {
-                      "lazyload": false,
-                      "styles": {
-                          "xl": {
-                              "displaySize": "coh-image-responsive"
-                          }
-                      },
-                      "imageStyle": "",
-                      "customStyle": [
-                          {
-                              "customStyle": ""
-                          }
-                      ]
+                      "drupalField": ""
                   },
-                  "imageStyle": "coh_small_landscape",
-                  "image": "[node:field_article_image:entity:image:entity:path]",
-                  "attributes": {
-                      "title": "[node:field_article_image:entity:image:entity:name]",
-                      "alt": "[node:field_article_image:entity:image:entity:alt]"
-                  }
+                  "drupalField": "content.field_article_image"
               },
               "context-visibility": {
                   "contextVisibility": {
@@ -2862,7 +2764,7 @@ json_values: |
               },
               "styles": {
                   "settings": {
-                      "element": "img"
+                      "element": "drupal-field"
                   }
               }
           }
@@ -2903,11 +2805,7 @@ json_values: |
           "0005e2e8-54af-4dbb-9967-be838980ce83": {},
           "431a5d30-c620-46b3-8e13-913c553c4391": {},
           "c2cb5754-d772-4d73-917a-402d82f060e9": {},
-          "77e230d2-bda7-4869-aea6-3b81ec84542e": {
-              "settings": {
-                  "image": ""
-              }
-          }
+          "7500c1a8-bc55-47f5-ad50-9969644b5213": {}
       },
       "variableFields": {
           "aa94750d-4ba1-4926-8de5-bb8b55da1e2d": [],
@@ -2934,11 +2832,7 @@ json_values: |
           "0005e2e8-54af-4dbb-9967-be838980ce83": [],
           "431a5d30-c620-46b3-8e13-913c553c4391": [],
           "c2cb5754-d772-4d73-917a-402d82f060e9": [],
-          "77e230d2-bda7-4869-aea6-3b81ec84542e": [
-              "settings.attributes.title",
-              "settings.attributes.alt",
-              "settings.image"
-          ]
+          "7500c1a8-bc55-47f5-ad50-9969644b5213": []
       },
       "meta": {
           "fieldHistory": []
