@@ -217,7 +217,7 @@ class EventTest extends ContentTypeTestBase {
           'endDate' => $expected_date,
           'location' => [
             '@type' => 'Place',
-            'name' => '<a href="/place/great-place" hreflang="en">A great place</a>',
+            'name' => 'A great place',
           ],
         ],
       ],
