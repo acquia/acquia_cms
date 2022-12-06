@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f0ad506ac6ace817c56dc63f39fbe55",
+    "content-hash": "e4829d17e088c628244e424a6fede88a",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2393,29 +2393,29 @@
         },
         {
             "name": "drupal/acquia_claro",
-            "version": "1.3.3",
+            "version": "1.3.4-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/acquia_claro.git",
-                "reference": "1.3.3"
+                "reference": "1.3.4-alpha1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_claro-1.3.3.zip",
-                "reference": "1.3.3",
-                "shasum": "3fffe2d4f58dadd001c0771cf4246e1cabce3ff0"
+                "url": "https://ftp.drupal.org/files/projects/acquia_claro-1.3.4-alpha1.zip",
+                "reference": "1.3.4-alpha1",
+                "shasum": "ae6762938f6e28ca48c1f72b78f24c340c5d0b5b"
             },
             "require": {
-                "drupal/core": "^9"
+                "drupal/core": "^9.4 || ^10"
             },
             "type": "drupal-theme",
             "extra": {
                 "drupal": {
-                    "version": "1.3.3",
-                    "datestamp": "1656312300",
+                    "version": "1.3.4-alpha1",
+                    "datestamp": "1669889720",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -20761,6 +20761,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "drupal/acquia_claro": 15,
         "drupal/acquia_cms_person": 20,
         "drupal/acquia_cms_common": 20,
         "drupal/config_ignore": 20,
