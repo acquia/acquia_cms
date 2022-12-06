@@ -327,6 +327,7 @@ function acquia_cms_common_modules_installed($modules, $is_syncing) {
     }
     $content_model_modules = [
       'acquia_cms_article',
+      'acquia_cms_dam',
       'acquia_cms_event',
       'acquia_cms_page',
       'acquia_cms_person',
@@ -434,6 +435,7 @@ function acquia_cms_common_modules_installed($modules, $is_syncing) {
         'acquia_cms_place',
         'acquia_cms_search',
         'acquia_cms_video',
+        'acquia_cms_dam',
       ];
 
       if (array_intersect($acms_modules, $modules) &&

@@ -44,13 +44,18 @@ class ImageFormatterTest extends BrowserTestBase {
    */
   protected function viewImageStylefOfViewModes() {
     return [
-      'embedded' => '',
-      'large' => 'coh_large',
-      'large_landscape' => 'coh_large_super_landscape',
+      'embedded' => 'coh_medium',
+      'default' => 'coh_x_large',
+      'full' => 'coh_x_large',
+      'large' => 'coh_x_large',
+      'large_landscape' => 'coh_x_large_landscape',
+      'large_super_landscape' => 'coh_x_large_super_landscape',
       'medium' => 'coh_medium',
       'medium_landscape' => 'coh_medium_landscape',
       'small' => 'coh_small',
       'small_landscape' => 'coh_small_landscape',
+      'teaser' => 'x_small_landscape',
+      'x_small_square' => 'x_small_square',
     ];
   }
 

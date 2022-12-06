@@ -1,0 +1,118 @@
+uuid: 40213149-d0c8-4518-b727-2513420a6e10
+langcode: en
+status: true
+dependencies:
+  config:
+    - cohesion_custom_styles.cohesion_custom_style.c2e2ecc6
+label: 'Embedded (Media, Video)'
+id: media_acquia_dam_video_asset_emb
+json_values: |
+  {
+      "canvas": [
+          {
+              "type": "item",
+              "uid": "video",
+              "title": "Video",
+              "selected": false,
+              "status": {
+                  "collapsed": true,
+                  "isopen": false
+              },
+              "iconColor": "media",
+              "uuid": "6adacac6-06d5-4c85-a0ae-9c20baa97e9b",
+              "parentUid": "root",
+              "children": []
+          }
+      ],
+      "mapper": {
+          "6adacac6-06d5-4c85-a0ae-9c20baa97e9b": {}
+      },
+      "model": {
+          "6adacac6-06d5-4c85-a0ae-9c20baa97e9b": {
+              "settings": {
+                  "title": "Video",
+                  "customStyle": [
+                      {
+                          "customStyle": "coh-style-video"
+                      }
+                  ],
+                  "videoAutoplay": false,
+                  "videoLoop": false,
+                  "videoMute": false,
+                  "videoRewind": true,
+                  "videoClickPlaypause": true,
+                  "videoPauseOthers": true,
+                  "videoPlayOnHover": false,
+                  "videoShowControls": false,
+                  "videoShowControlsLoad": true,
+                  "videoShowControlsPause": true,
+                  "videoShowPlayCenter": true,
+                  "videoShowPlayPause": true,
+                  "videoShowCurrent": true,
+                  "videoShowProgress": true,
+                  "videoShowDuration": true,
+                  "videoShowVolume": true,
+                  "videoShowFullscreen": true,
+                  "settings": {
+                      "videoPreload": "none",
+                      "videoAutoplay": false,
+                      "videoLoop": false,
+                      "videoMute": false,
+                      "videoRewind": true,
+                      "videoClickPlaypause": true,
+                      "videoPauseOthers": true,
+                      "videoPlayOnHover": false,
+                      "videoShowControls": false,
+                      "videoShowControlsLoad": true,
+                      "videoShowControlsPause": true,
+                      "videoShowPlayCenter": true,
+                      "videoShowPlayPause": true,
+                      "videoShowCurrent": true,
+                      "videoShowProgress": true,
+                      "videoShowDuration": true,
+                      "videoShowVolume": true,
+                      "videoShowFullscreen": true,
+                      "customStyle": [
+                          {
+                              "customStyle": ""
+                          }
+                      ]
+                  },
+                  "videoPreload": "metadata",
+                  "videoUrl": "[media:embed-code:url]"
+              },
+              "context-visibility": {
+                  "contextVisibility": {
+                      "condition": "ALL"
+                  }
+              },
+              "styles": {
+                  "settings": {
+                      "element": "media"
+                  }
+              }
+          }
+      },
+      "previewModel": {
+          "6adacac6-06d5-4c85-a0ae-9c20baa97e9b": {}
+      },
+      "variableFields": {
+          "6adacac6-06d5-4c85-a0ae-9c20baa97e9b": [
+              "settings.videoUrl"
+          ]
+      },
+      "meta": {
+          "fieldHistory": []
+      }
+  }
+json_mapper: '{}'
+last_entity_update: entityupdate_0036
+modified: true
+selectable: false
+custom: false
+twig_template: media--cohesion--media-acquia-dam-video-asset-emb
+default: true
+entity_type: media
+bundle: acquia_dam_video_asset
+view_mode: embedded
+master_template: ''

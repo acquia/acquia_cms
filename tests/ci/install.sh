@@ -38,7 +38,10 @@ cd ${ORCA_FIXTURE_DIR}
 
 # Install acquia_cms only for the Integrated & ExistingSite PHPUnit tests.
 if [ -n "${ACMS_JOB}" ]; then
-  ./vendor/bin/acms site:install --yes
+  ./vendor/bin/acms site:install --yes --uri=http://127.0.0.1:8080
+  # Enable Acquia CMS DAM module.
+  # @todo We should probably move this in acms site:install command.
+  drush en acquia_cms_dam --yes --uri=http://127.0.0.1:8080
 fi
 
 # Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.
@@ -53,6 +56,7 @@ if [[ "${ACMS_JOB}" == "backstop_tests" ]]; then
     drush en acquia_cms_development -y
     drush pmu shield -y
     drush en acquia_cms_starter -y
+    drush cr
 fi
 
 # Set the fixture state to reset to between tests.

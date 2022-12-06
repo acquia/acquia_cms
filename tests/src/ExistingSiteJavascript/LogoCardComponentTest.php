@@ -31,6 +31,7 @@ class LogoCardComponentTest extends CohesionComponentTestBase {
     // Add the component to the layout canvas.
     $edit_form = $this->getLayoutCanvas()->add('Logo card')->edit();
     $this->openMediaLibrary($edit_form, 'Select image');
+    $this->selectMediaSource("Media Types");
     $this->selectMedia(0);
     $this->insertSelectedMedia();
   }
