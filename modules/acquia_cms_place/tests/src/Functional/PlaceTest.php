@@ -220,7 +220,7 @@ class PlaceTest extends ContentTypeTestBase {
             'postalCode' => '94050',
             'addressCountry' => 'United States',
           ],
-          'description' => '<p>This is an awesome remix!</p>',
+          'description' => 'This is an awesome remix!',
           'image' => [
             '@type' => 'ImageObject',
             'url' => $image_url,
