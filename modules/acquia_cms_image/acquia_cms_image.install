@@ -98,3 +98,52 @@ function acquia_cms_image_update_8002() {
     }
   }
 }
+
+/**
+ * Install new view modes, display modes & image styles.
+ */
+function acquia_cms_image_update_8003() {
+  $configurations = [
+    'core.entity_view_mode.media.teaser',
+    'core.entity_view_display.media.image.default',
+    'core.entity_view_display.media.image.full',
+    'core.entity_view_mode.media.x_small_square',
+    'core.entity_view_display.media.image.teaser',
+    'core.entity_view_mode.media.large_super_landscape',
+    'core.entity_view_display.media.image.x_small_square',
+    'core.entity_view_display.media.image.large_super_landscape',
+    'image.style.x_small_landscape',
+    'image.style.x_small_square',
+  ];
+  foreach ($configurations as $config) {
+    _acquia_cms_common_rewrite_configuration($config, 'acquia_cms_image');
+  }
+
+  $configs = [
+    'embedded' => 'coh_medium',
+    'large' => 'coh_x_large',
+    'large_landscape' => 'coh_x_large_landscape',
+  ];
+  // Iterate config values to update in the configuration files.
+  foreach ($configs as $config_key => $image_style) {
+    $config_name = "core.entity_view_display.media.image.$config_key";
+    $dependency = "core.entity_view_mode.media.$config_key";
+    $image_dependency = "image.style.$image_style";
+    // Prepare the configurations key-value pair.
+    $configurations = [
+      'dependencies.config' => [
+        $dependency,
+        'field.field.media.image.field_categories',
+        'field.field.media.image.field_tags',
+        'field.field.media.image.image',
+        $image_dependency,
+        'media.type.image',
+      ],
+      'content.image.settings' => [
+        'image_style' => $image_style,
+        'image_loading' => ['attribute' => 'lazy'],
+      ],
+    ];
+    _acquia_cms_common_update_page_configurations($config_name, $configurations);
+  }
+}

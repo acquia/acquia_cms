@@ -171,14 +171,14 @@ class ArticleTest extends ContentTypeTestBase {
         [
           '@type' => 'Article',
           'name' => 'Local news',
-          'description' => '<p>This is an example of body text</p>',
+          'description' => 'This is an example of body text',
           'image' => [
             '@type' => 'ImageObject',
             'url' => $image_url,
           ],
           "author" => [
             "@type" => "Person",
-            "name" => '<a href="/person/example-person" hreflang="en">Example person</a>',
+            "name" => 'Example person',
           ],
         ],
       ],

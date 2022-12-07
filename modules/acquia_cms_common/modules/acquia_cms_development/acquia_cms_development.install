@@ -6,7 +6,6 @@
  */
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
-use Drupal\acquia_search\Helper\Storage as SolrStorage;
 use Drupal\cohesion\Form\GoogleMapApiKeyForm;
 use Drupal\Core\Form\FormState;
 
@@ -107,11 +106,11 @@ function _acquia_search_config(string $key, string $identifier) {
   // Replicating Storage from acquia_search/src/Helper/Storage.php.
   $search_uuid = getenv('SEARCH_UUID');
   if (isset($search_uuid)) {
-    $storage = new SolrStorage();
-    $storage->setApiHost('https://api.sr-prod02.acquia.com');
-    $storage->setUuid($search_uuid);
-    $storage->setApiKey($key);
-    $storage->setIdentifier($identifier);
+    \Drupal::configFactory()->getEditable('acquia_search.settings')
+      ->set('api_host', 'https://api.sr-prod02.acquia.com')->save();
+    \Drupal::state()->set('acquia_search.api_key', $key);
+    \Drupal::state()->set('acquia_search.identifier', $identifier);
+    \Drupal::state()->set('acquia_search.uuid', $search_uuid);
 
     // @todo This code was copied verbatim from the Acquia Search module,
     // but it's not at all clear why it uses this face-melter of a cache clear.
