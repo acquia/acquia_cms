@@ -177,7 +177,7 @@ class PersonTest extends ContentTypeTestBase {
         [
           '@type' => 'Person',
           'name' => 'Hank Aaron',
-          'description' => '<p>This is an example of bio</p>',
+          'description' => 'This is an example of bio',
           'email' => 'example@example.com',
           'telephone' => '1234567890',
           'image' => [
