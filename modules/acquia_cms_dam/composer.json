@@ -4,9 +4,19 @@
     "license": "GPL-2.0-or-later",
     "type": "drupal-module",
     "require": {
-        "drupal/acquia_cms_image": "^1.4",
-        "drupal/acquia_cms_video": "^1.4",
+        "drupal/acquia_cms_image": "^1.5",
+        "drupal/acquia_cms_video": "^1.5",
         "drupal/acquia_dam": "^1"
+    },
+    "conflict": {
+        "drupal/acquia_cms_article": "<1.5",
+        "drupal/acquia_cms_event": "<1.5",
+        "drupal/acquia_cms_image": "<1.5",
+        "drupal/acquia_cms_page": "<1.5",
+        "drupal/acquia_cms_person": "<1.5",
+        "drupal/acquia_cms_place": "<1.5",
+        "drupal/acquia_cms_site_studio": "<1.5",
+        "drupal/acquia_cms_video": "<1.5"
     },
     "repositories": {
         "drupal": {
