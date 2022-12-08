@@ -60,9 +60,10 @@ function acquia_cms_common_install() {
   $config->set('enable_export_filtering', TRUE);
   $config->save(TRUE);
 
-  // Uninstall page_cache module in favour of memcache.
+  $module_installer = \Drupal::service('module_installer');
   if ($module_handler->moduleExists('page_cache')) {
-    \Drupal::service('module_installer')->uninstall(['page_cache']);
+    // Uninstall page_cache module in favour of memcache.
+    $module_installer->uninstall(['page_cache']);
   }
 
   /*
@@ -77,9 +78,13 @@ function acquia_cms_common_install() {
     $config->setPluginsEnabled(['cee22bc3fe' => 'acquia_purge']);
   }
 
-  // Install the syslog module.
-  $module_installer = \Drupal::service('module_installer');
-  $module_installer->install(['syslog']);
+  // Install the syslog module and purge sub-modules.
+  $module_installer->install([
+    'syslog',
+    'purge_processor_lateruntime',
+    'purge_processor_cron',
+    'purge_ui',
+  ]);
 }
 
 /**
