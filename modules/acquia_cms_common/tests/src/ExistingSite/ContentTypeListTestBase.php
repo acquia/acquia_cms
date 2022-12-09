@@ -382,7 +382,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown() {
+  public function tearDown(): void {
     if ($this->container->get('module_handler')->moduleExists('acquia_cms_search')) {
       $this->setBackendAvailability(TRUE);
     }
