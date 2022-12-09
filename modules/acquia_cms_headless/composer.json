@@ -6,8 +6,8 @@
         "drupal/acquia_cms_tour": "dev-drupal10",
         "drupal/jsonapi_menu_items": "1.2.x-dev@dev",
         "drupal/next": "^1.5",
-        "drupal/openapi_jsonapi": "dev-3288872-automated-drupal-10",
-        "drupal/openapi_ui_redoc": "dev-3288875-automated-drupal-10",
+        "drupal/openapi_jsonapi": "^3.0",
+        "drupal/openapi_ui_redoc": "^1.0@RC",
         "drupal/openapi_ui_swagger": "1.x-dev@dev",
         "drupal/restui": "^1.21",
         "swagger-api/swagger-ui": "^3.0.17"
@@ -73,22 +73,6 @@
         }
     },
     "repositories": {
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8",
-            "exclude": [
-                "drupal/openapi_ui_redoc",
-                "drupal/openapi_jsonapi"
-            ]
-        },
-        "drupal/openapi_ui_redoc": {
-            "type": "vcs",
-            "url": "https://git.drupalcode.org/issue/openapi_ui_redoc-3288875.git"
-        },
-        "drupal/openapi_jsonapi": {
-            "type": "vcs",
-            "url": "https://git.drupalcode.org/issue/openapi_jsonapi-3288872.git"
-        },
         "swagger-api": {
             "type": "package",
             "package": {
