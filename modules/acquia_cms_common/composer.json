@@ -17,7 +17,7 @@
         "drupal/autologout": "^1",
         "drupal/checklistapi": "^2.0",
         "drupal/core": "^9.5 || ^10",
-        "drupal/config_ignore": "dev-3286656-automated-drupal-10",
+        "drupal/config_ignore": "3.x-dev@dev",
         "drupal/config_rewrite": "^1.4",
         "drupal/default_content": "2.0.0-alpha2",
         "drupal/diff": "^1",
@@ -90,9 +90,6 @@
                 "3165473 - Add check for core index": "https://www.drupal.org/files/issues/2020-08-18/3165473-27.patch",
                 "3267344 - Use markup to render text on status report page": "https://git.drupalcode.org/project/acquia_telemetry/-/merge_requests/1.diff"
             },
-            "drupal/config_ignore": {
-                "2857247 - Support for export filtering via Drush": "https://www.drupal.org/files/issues/2021-08-18/config_ignore_2857247-75.patch"
-            },
             "drupal/core": {
                 "3059955 - It is possible to overflow the number of items allowed in Media Library": "https://www.drupal.org/files/issues/2019-12-28/3082690-80.patch",
                 "3301692: Passing null to parameter to mb_strtolower() is deprecated with PHP 8.1": "https://git.drupalcode.org/project/drupal/-/merge_requests/2598.patch",
@@ -112,15 +109,10 @@
             "type": "composer",
             "url": "https://packages.drupal.org/8",
             "exclude": [
-                "drupal/config_ignore",
                 "drupal/google_tag",
                 "drupal/seckit",
                 "drupal/username_enumeration_prevention"
             ]
-        },
-        "drupal/config_ignore": {
-            "type": "vcs",
-            "url": "https://git.drupalcode.org/issue/config_ignore-3286656.git"
         },
         "drupal/google_tag": {
             "type": "vcs",
