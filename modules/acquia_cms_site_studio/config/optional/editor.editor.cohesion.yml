@@ -4,59 +4,356 @@ dependencies:
   config:
     - filter.format.cohesion
   module:
-    - ckeditor
+    - ckeditor5
+    - cohesion
+third_party_settings:
+  cohesion:
+    ssa_enabled: true
 format: cohesion
-editor: ckeditor
+editor: ckeditor5
 settings:
   toolbar:
-    rows:
-      -
-        -
-          name: Formatting
-          items:
-            - Bold
-            - Italic
-            - Underline
-            - RemoveFormat
-        -
-          name: Layout
-          items:
-            - JustifyLeft
-            - JustifyCenter
-            - JustifyRight
-            - JustifyBlock
-        -
-          name: Links
-          items:
-            - DrupalLink
-            - DrupalUnlink
-        -
-          name: Lists
-          items:
-            - BulletedList
-            - NumberedList
-        -
-          name: Media
-          items:
-            - DrupalMediaLibrary
-            - Blockquote
-        -
-          name: Tools
-          items:
-            - Source
-            - Maximize
-        -
-          name: Styles
-          items:
-            - Format
-            - Styles
-            - DX8Styles
-            - DX8InlineStyles
+    items:
+      - bold
+      - italic
+      - underline
+      - removeFormat
+      - '|'
+      - alignment
+      - '|'
+      - link
+      - '|'
+      - bulletedList
+      - numberedList
+      - '|'
+      - drupalMedia
+      - blockQuote
+      - '|'
+      - sourceEditing
+      - '|'
+      - heading
+      - codeBlock
+      - style
   plugins:
-    stylescombo:
-      styles: ''
-    language:
-      language_list: un
+    ckeditor5_alignment:
+      enabled_alignments:
+        - left
+        - center
+        - right
+        - justify
+    ckeditor5_heading:
+      enabled_headings:
+        - heading2
+        - heading3
+        - heading4
+        - heading5
+        - heading6
+    ckeditor5_list:
+      reversed: true
+      startIndex: true
+    ckeditor5_sourceEditing:
+      allowed_tags: {  }
+    ckeditor5_style:
+      styles:
+        -
+          label: 'Paragraph extra large'
+          element: '<p class="coh-style-paragraph-extra-large">'
+        -
+          label: 'Paragraph extra large [inline]'
+          element: '<span class="coh-style-paragraph-extra-large">'
+        -
+          label: 'Link button light'
+          element: '<a class="coh-style-link-button-light">'
+        -
+          label: 'Link button light [inline]'
+          element: '<span class="coh-style-link-button-light">'
+        -
+          label: 'Heading 3 size [h1]'
+          element: '<h1 class="coh-style-heading-3-size">'
+        -
+          label: 'Heading 3 size [h2]'
+          element: '<h2 class="coh-style-heading-3-size">'
+        -
+          label: 'Heading 3 size [h3]'
+          element: '<h3 class="coh-style-heading-3-size">'
+        -
+          label: 'Heading 3 size [h4]'
+          element: '<h4 class="coh-style-heading-3-size">'
+        -
+          label: 'Heading 3 size [h5]'
+          element: '<h5 class="coh-style-heading-3-size">'
+        -
+          label: 'Heading 3 size [h6]'
+          element: '<h6 class="coh-style-heading-3-size">'
+        -
+          label: 'Heading 3 size [h6] [inline]'
+          element: '<span class="coh-style-heading-3-size">'
+        -
+          label: 'Link with icon'
+          element: '<a class="coh-style-link-with-icon">'
+        -
+          label: 'Link with icon [inline]'
+          element: '<span class="coh-style-link-with-icon">'
+        -
+          label: 'Heading 2 size [h1]'
+          element: '<h1 class="coh-style-heading-2-size">'
+        -
+          label: 'Heading 2 size [h2]'
+          element: '<h2 class="coh-style-heading-2-size">'
+        -
+          label: 'Heading 2 size [h3]'
+          element: '<h3 class="coh-style-heading-2-size">'
+        -
+          label: 'Heading 2 size [h4]'
+          element: '<h4 class="coh-style-heading-2-size">'
+        -
+          label: 'Heading 2 size [h5]'
+          element: '<h5 class="coh-style-heading-2-size">'
+        -
+          label: 'Heading 2 size [h6]'
+          element: '<h6 class="coh-style-heading-2-size">'
+        -
+          label: 'Heading 2 size [h6] [inline]'
+          element: '<span class="coh-style-heading-2-size">'
+        -
+          label: 'Tick list [ul]'
+          element: '<ul class="coh-style-tick-list">'
+        -
+          label: 'Tick list [ol]'
+          element: '<ol class="coh-style-tick-list">'
+        -
+          label: 'Tick list [dl]'
+          element: '<dl class="coh-style-tick-list">'
+        -
+          label: 'Tick list [dl] [inline]'
+          element: '<span class="coh-style-tick-list">'
+        -
+          label: 'Pre heading [h1]'
+          element: '<h1 class="coh-style-pre-heading">'
+        -
+          label: 'Pre heading [h2]'
+          element: '<h2 class="coh-style-pre-heading">'
+        -
+          label: 'Pre heading [h3]'
+          element: '<h3 class="coh-style-pre-heading">'
+        -
+          label: 'Pre heading [h4]'
+          element: '<h4 class="coh-style-pre-heading">'
+        -
+          label: 'Pre heading [h5]'
+          element: '<h5 class="coh-style-pre-heading">'
+        -
+          label: 'Pre heading [h6]'
+          element: '<h6 class="coh-style-pre-heading">'
+        -
+          label: 'Pre heading [h6] [inline]'
+          element: '<span class="coh-style-pre-heading">'
+        -
+          label: 'Pre heading dark [h1]'
+          element: '<h1 class="coh-style-pre-heading-dark">'
+        -
+          label: 'Pre heading dark [h2]'
+          element: '<h2 class="coh-style-pre-heading-dark">'
+        -
+          label: 'Pre heading dark [h3]'
+          element: '<h3 class="coh-style-pre-heading-dark">'
+        -
+          label: 'Pre heading dark [h4]'
+          element: '<h4 class="coh-style-pre-heading-dark">'
+        -
+          label: 'Pre heading dark [h5]'
+          element: '<h5 class="coh-style-pre-heading-dark">'
+        -
+          label: 'Pre heading dark [h6]'
+          element: '<h6 class="coh-style-pre-heading-dark">'
+        -
+          label: 'Pre heading dark [h6] [inline]'
+          element: '<span class="coh-style-pre-heading-dark">'
+        -
+          label: 'Heading 5 size [h1]'
+          element: '<h1 class="coh-style-heading-5-size">'
+        -
+          label: 'Heading 5 size [h2]'
+          element: '<h2 class="coh-style-heading-5-size">'
+        -
+          label: 'Heading 5 size [h3]'
+          element: '<h3 class="coh-style-heading-5-size">'
+        -
+          label: 'Heading 5 size [h4]'
+          element: '<h4 class="coh-style-heading-5-size">'
+        -
+          label: 'Heading 5 size [h5]'
+          element: '<h5 class="coh-style-heading-5-size">'
+        -
+          label: 'Heading 5 size [h6]'
+          element: '<h6 class="coh-style-heading-5-size">'
+        -
+          label: 'Heading 5 size [h6] [inline]'
+          element: '<span class="coh-style-heading-5-size">'
+        -
+          label: 'Link button dark'
+          element: '<a class="coh-style-link-button-dark">'
+        -
+          label: 'Link button dark [inline]'
+          element: '<span class="coh-style-link-button-dark">'
+        -
+          label: 'Paragraph small'
+          element: '<p class="coh-style-paragraph-small">'
+        -
+          label: 'Paragraph small [inline]'
+          element: '<span class="coh-style-paragraph-small">'
+        -
+          label: 'Pre heading blue [h1]'
+          element: '<h1 class="coh-style-pre-heading-blue">'
+        -
+          label: 'Pre heading blue [h2]'
+          element: '<h2 class="coh-style-pre-heading-blue">'
+        -
+          label: 'Pre heading blue [h3]'
+          element: '<h3 class="coh-style-pre-heading-blue">'
+        -
+          label: 'Pre heading blue [h4]'
+          element: '<h4 class="coh-style-pre-heading-blue">'
+        -
+          label: 'Pre heading blue [h5]'
+          element: '<h5 class="coh-style-pre-heading-blue">'
+        -
+          label: 'Pre heading blue [h6]'
+          element: '<h6 class="coh-style-pre-heading-blue">'
+        -
+          label: 'Pre heading blue [h6] [inline]'
+          element: '<span class="coh-style-pre-heading-blue">'
+        -
+          label: 'Heading 1 size [h1]'
+          element: '<h1 class="coh-style-heading-1-size">'
+        -
+          label: 'Heading 1 size [h2]'
+          element: '<h2 class="coh-style-heading-1-size">'
+        -
+          label: 'Heading 1 size [h3]'
+          element: '<h3 class="coh-style-heading-1-size">'
+        -
+          label: 'Heading 1 size [h4]'
+          element: '<h4 class="coh-style-heading-1-size">'
+        -
+          label: 'Heading 1 size [h5]'
+          element: '<h5 class="coh-style-heading-1-size">'
+        -
+          label: 'Heading 1 size [h6]'
+          element: '<h6 class="coh-style-heading-1-size">'
+        -
+          label: 'Heading 1 size [h6] [inline]'
+          element: '<span class="coh-style-heading-1-size">'
+        -
+          label: 'Heading XL [h1]'
+          element: '<h1 class="coh-style-heading-xl">'
+        -
+          label: 'Heading XL [h2]'
+          element: '<h2 class="coh-style-heading-xl">'
+        -
+          label: 'Heading XL [h3]'
+          element: '<h3 class="coh-style-heading-xl">'
+        -
+          label: 'Heading XL [h4]'
+          element: '<h4 class="coh-style-heading-xl">'
+        -
+          label: 'Heading XL [h5]'
+          element: '<h5 class="coh-style-heading-xl">'
+        -
+          label: 'Heading XL [h6]'
+          element: '<h6 class="coh-style-heading-xl">'
+        -
+          label: 'Heading XL [h6] [inline]'
+          element: '<span class="coh-style-heading-xl">'
+        -
+          label: 'Heading 4 size [h1]'
+          element: '<h1 class="coh-style-heading-4-size">'
+        -
+          label: 'Heading 4 size [h2]'
+          element: '<h2 class="coh-style-heading-4-size">'
+        -
+          label: 'Heading 4 size [h3]'
+          element: '<h3 class="coh-style-heading-4-size">'
+        -
+          label: 'Heading 4 size [h4]'
+          element: '<h4 class="coh-style-heading-4-size">'
+        -
+          label: 'Heading 4 size [h5]'
+          element: '<h5 class="coh-style-heading-4-size">'
+        -
+          label: 'Heading 4 size [h6]'
+          element: '<h6 class="coh-style-heading-4-size">'
+        -
+          label: 'Heading 4 size [h6] [inline]'
+          element: '<span class="coh-style-heading-4-size">'
+        -
+          label: 'Link button color'
+          element: '<a class="coh-style-link-button-color">'
+        -
+          label: 'Link button color [inline]'
+          element: '<span class="coh-style-link-button-color">'
+        -
+          label: 'Pre heading light [h1]'
+          element: '<h1 class="coh-style-pre-heading-light">'
+        -
+          label: 'Pre heading light [h2]'
+          element: '<h2 class="coh-style-pre-heading-light">'
+        -
+          label: 'Pre heading light [h3]'
+          element: '<h3 class="coh-style-pre-heading-light">'
+        -
+          label: 'Pre heading light [h4]'
+          element: '<h4 class="coh-style-pre-heading-light">'
+        -
+          label: 'Pre heading light [h5]'
+          element: '<h5 class="coh-style-pre-heading-light">'
+        -
+          label: 'Pre heading light [h6]'
+          element: '<h6 class="coh-style-pre-heading-light">'
+        -
+          label: 'Pre heading light [h6] [inline]'
+          element: '<span class="coh-style-pre-heading-light">'
+        -
+          label: 'Paragraph large'
+          element: '<p class="coh-style-paragraph-large">'
+        -
+          label: 'Paragraph large [inline]'
+          element: '<span class="coh-style-paragraph-large">'
+        -
+          label: 'Brand color light'
+          element: '<span class="coh-color-brand-color-light">'
+        -
+          label: 'Brand color'
+          element: '<span class="coh-color-brand-color">'
+        -
+          label: 'Brand color dark'
+          element: '<span class="coh-color-brand-color-dark">'
+        -
+          label: 'Gray 10'
+          element: '<span class="coh-color-gray-10">'
+        -
+          label: 'Gray 20'
+          element: '<span class="coh-color-gray-20">'
+        -
+          label: 'Gray 30'
+          element: '<span class="coh-color-gray-30">'
+        -
+          label: 'Gray 70'
+          element: '<span class="coh-color-gray-70">'
+        -
+          label: 'Gray 80'
+          element: '<span class="coh-color-gray-80">'
+        -
+          label: 'Gray 90'
+          element: '<span class="coh-color-gray-90">'
+        -
+          label: Black
+          element: '<span class="coh-color-black">'
+        -
+          label: White
+          element: '<span class="coh-color-white">'
+    media_media:
+      allow_view_mode_override: true
 image_upload:
   status: true
   scheme: public

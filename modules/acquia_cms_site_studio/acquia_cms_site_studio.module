@@ -10,6 +10,7 @@ use Drupal\acquia_cms_site_studio\Form\AcquiaCmsSiteStudioSiteConfigureForm;
 use Drupal\acquia_cms_site_studio\Helper\SiteStudioPermissionHelper;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\Core\Ajax\CloseDialogCommand;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\media_library\MediaLibraryState;
 use Drupal\user\RoleInterface;
@@ -185,6 +186,45 @@ function acquia_cms_site_studio_content_model_role_presave_alter(RoleInterface &
     $permissions = SiteStudioPermissionHelper::getSiteStudioPermissionsByRole($role->id());
     foreach ($permissions as $permission) {
       $role->grantPermission($permission);
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() to add permissions to role.
+ */
+function acquia_cms_site_studio_cohesion_helper_category_insert(EntityInterface $entity) {
+  _acquia_cms_site_studio_add_permissions($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() to add permissions to role.
+ */
+function acquia_cms_site_studio_cohesion_component_category_insert(EntityInterface $entity) {
+  _acquia_cms_site_studio_add_permissions($entity);
+}
+
+/**
+ * Helper function to add Site Studio component permissions to roles.
+ *
+ * @param EntityInterface $entity
+ *   Site Studio component entity.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function _acquia_cms_site_studio_add_permissions(EntityInterface $entity) {
+  $roles = [
+    'content_administrator',
+    'content_author',
+    'content_editor',
+  ];
+  foreach ($roles as $role) {
+    $permissions = SiteStudioPermissionHelper::getDynamicPermissionsByRole($role);
+    $permissionToProvide = "access " . $entity->id() . " " . $entity->bundle() . " group";
+    if (in_array($permissionToProvide, $permissions)) {
+      $roleObject = \Drupal\user\Entity\Role::load($role);
+      $roleObject->grantPermission($permissionToProvide);
+      $roleObject->save();
     }
   }
 }
