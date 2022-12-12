@@ -1,7 +1,9 @@
 uuid: 16d6d0a5-feb9-41c4-b9bf-5da495f8dfec
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - cohesion_custom_styles.cohesion_custom_style.c2e2ecc6
 label: 'Video component (Media, Video)'
 id: media_acquia_dam_video_asset_vid
 json_values: |
@@ -179,7 +181,7 @@ json_values: |
                   "title": "Video",
                   "customStyle": [
                       {
-                          "customStyle": ""
+                          "customStyle": "coh-style-video"
                       }
                   ],
                   "videoAutoplay": false,
@@ -224,7 +226,7 @@ json_values: |
                           }
                       ]
                   },
-                  "videoPreload": "none",
+                  "videoPreload": "metadata",
                   "videoUrl": "[media:embed-code:url]"
               },
               "context-visibility": {
@@ -240,7 +242,7 @@ json_values: |
           }
       },
       "previewModel": {
-          "fb1b161f-3b3d-4f91-bc93-943b80f6d6ee": []
+          "fb1b161f-3b3d-4f91-bc93-943b80f6d6ee": {}
       },
       "variableFields": {
           "fb1b161f-3b3d-4f91-bc93-943b80f6d6ee": [
