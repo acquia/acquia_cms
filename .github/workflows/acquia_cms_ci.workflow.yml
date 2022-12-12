@@ -98,6 +98,7 @@ jobs:
     strategy:
       matrix:
         orca-job:
+          - ISOLATED_TEST_ON_CURRENT_DEV
           - ISOLATED_TEST_ON_NEXT_MINOR
         #php-version: [ "8.1" ]
         acms_job:
@@ -194,6 +195,7 @@ jobs:
     strategy:
       matrix:
         orca-job:
+          - ISOLATED_TEST_ON_CURRENT_DEV
           - ISOLATED_TEST_ON_NEXT_MINOR
         #php-version: [ "8.1" ]
         modules:
