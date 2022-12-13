@@ -11,7 +11,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\Http\RequestStack;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Password\DefaultPasswordGenerator;
 use Drupal\Core\Site\Settings;
@@ -22,6 +21,7 @@ use Drupal\simple_oauth\Service\Exception\FilesystemValidationException;
 use Drupal\simple_oauth\Service\KeyGeneratorService;
 use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * A service for the initialization of the Headless Next.js starter kit.
@@ -113,7 +113,7 @@ class StarterkitNextjsService {
    *   Gets the site path, useful in cases of multi-site arrangements.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   Lets us create a directory.
-   * @param \Drupal\Core\Http\RequestStack $request_stack
+   * @param Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The current request.
    */
   public function __construct(ConfigFactoryInterface $config_factory, DefaultPasswordGenerator $defaultPasswordGenerator, EntityTypeManagerInterface $entity_type_manager, KeyGeneratorService $key_generator_service, MessengerInterface $messenger, string $site_path, FileSystemInterface $file_system, RequestStack $request_stack) {
