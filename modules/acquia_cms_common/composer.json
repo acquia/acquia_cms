@@ -46,7 +46,8 @@
         "drupal/smart_trim": "^2.0",
         "drupal/social_media_links": "^2.7",
         "drupal/username_enumeration_prevention": "dev-3269921-drupal-10-compatibility",
-        "drupal/workbench_email": "^2.3"
+        "drupal/workbench_email": "^2.3",
+        "nnnick/chartjs": "^3.9"
     },
     "conflict": {
         "drupal/acquia_cms_article": "<1.4",
@@ -105,6 +106,18 @@
         }
     },
     "repositories": {
+        "chart.js": {
+            "type": "package",
+            "package": {
+                "name": "nnnick/chartjs",
+                "version": "v3.9.1",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/chartjs/Chart.js/releases/download/v3.9.1/chart.js-3.9.1.tgz",
+                    "type": "tar"
+                }
+            }
+        },
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8",
