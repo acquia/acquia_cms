@@ -9,7 +9,7 @@
         "drupal/acquia_search": "^3.1",
         "drupal/collapsiblock": "^4.0",
         "drupal/facets": "2.0.5",
-        "drupal/facets_pretty_paths": "dev-3287445-automated-drupal-10",
+        "drupal/facets_pretty_paths": "^1.3",
         "drupal/search_api": "1.28",
         "drupal/search_api_autocomplete": "^1.7"
     },
@@ -30,6 +30,9 @@
         "patches": {
             "drupal/facets": {
                 "3259123 - ViewsDisplayBase::isRenderedInCurrentRequest() doesn't let the facet link to reset to original URL": "https://www.drupal.org/files/issues/2022-01-18/3259123-search-facet-reset-link.patch"
+            },
+            "drupal/facets_pretty_paths": {
+                "3327265 - Call to undefined method Symfony\\Component\\HttpFoundation\\RequestStack::getMasterRequest()": "https://www.drupal.org/files/issues/2022-12-15/3327265-fix-undefined-method-error.patch"
             },
             "drupal/search_api": {
                 "3151796 - Problems when executing Search API tasks during install, updates": "https://www.drupal.org/files/issues/2022-11-04/search_api-3151796-division-by-zero-error-7.patch",
