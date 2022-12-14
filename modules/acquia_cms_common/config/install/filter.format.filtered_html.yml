@@ -3,7 +3,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.embedded
-    - core.entity_view_mode.media.media_library
+    - core.entity_view_mode.media.full
   module:
     - editor
     - media
@@ -19,7 +19,7 @@ filters:
     settings: {  }
   filter_url:
     id: filter_url
-    provider: filterclear
+    provider: filter
     status: true
     weight: -46
     settings:
@@ -29,9 +29,8 @@ filters:
     provider: filter
     status: true
     weight: -45
-    # Manually added the <p> tags for alignment buttons per https://www.drupal.org/project/drupal/issues/2649546.
     settings:
-      allowed_html: '<a href hreflang> <em> <strong> <cite> <blockquote cite> <code> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <img src alt data-entity-type data-entity-uuid data-align data-caption> <sup> <sub> <s> <u> <drupal-media data-entity-type data-entity-uuid data-view-mode data-align data-caption alt title> <p class="text-align-left text-align-center text-align-right text-align-justify">'
+      allowed_html: '<br> <p class="text-align-left text-align-center text-align-right text-align-justify"> <h2 id class="text-align-left text-align-center text-align-right text-align-justify"> <h3 id class="text-align-left text-align-center text-align-right text-align-justify"> <h4 id class="text-align-left text-align-center text-align-right text-align-justify"> <h5 id class="text-align-left text-align-center text-align-right text-align-justify"> <h6 id class="text-align-left text-align-center text-align-right text-align-justify"> <cite> <dl> <dt> <dd> <img data-align data-caption src alt height width data-entity-type data-entity-uuid> <a hreflang href> <blockquote cite> <ul type> <ol type start> <drupal-media data-align data-caption title data-entity-type data-entity-uuid alt data-view-mode> <strong> <em> <u> <code> <s> <sub> <sup> <li>'
       filter_html_help: true
       filter_html_nofollow: false
   media_embed:
@@ -41,8 +40,10 @@ filters:
     weight: -43
     settings:
       default_view_mode: embedded
+      allowed_view_modes:
+        default: default
+        full: full
       allowed_media_types: {  }
-      allowed_view_modes: {  }
   editor_file_reference:
     id: editor_file_reference
     provider: editor
