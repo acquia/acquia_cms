@@ -25,7 +25,7 @@ class InstallStateTest extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp() :void {
     parent::setUp();
     // Update configuration so that password policy can be tested by
     // registering an account through UI.
@@ -414,7 +414,7 @@ class InstallStateTest extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown() {
+  public function tearDown() :void {
     // Delete user created during testing password policy.
     $user = user_load_by_mail('example@example.com');
     if ($user) {
