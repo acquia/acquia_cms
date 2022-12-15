@@ -64,6 +64,7 @@ class AcquiaSearchIntegrationTest extends BrowserTestBase {
       'administer search_api',
     ]);
     $this->drupalLogin($account);
+    $this->drupalGet('/admin/config/search/search-api/server/acquia_search_server/edit');
     $assert_session = $this->assertSession();
     $assert_session->statusCodeEquals(200);
   }
