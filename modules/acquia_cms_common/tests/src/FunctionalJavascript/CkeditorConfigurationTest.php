@@ -4,11 +4,11 @@ namespace Drupal\Tests\acquia_cms_common\FunctionalJavascript;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
-use Drupal\Tests\ckeditor\Traits\CKEditorTestTrait;
+use Drupal\Tests\ckeditor5\Traits\CKEditor5TestTrait;
 use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
 
 /**
- * Tests the CKEditor configuration shipped with Acquia CMS.
+ * Tests the CKEditor5 configuration shipped with Acquia CMS.
  *
  * @group acquia_cms
  * @group acquia_cms_video
@@ -17,7 +17,7 @@ use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
  */
 class CkeditorConfigurationTest extends WebDriverTestBase {
 
-  use CKEditorTestTrait;
+  use CKEditor5TestTrait;
   use MediaTypeCreationTrait;
 
   /**
@@ -61,7 +61,7 @@ class CkeditorConfigurationTest extends WebDriverTestBase {
   }
 
   /**
-   * Tests that CKEditor is configured as we expect.
+   * Tests that CKEditor5 is configured as we expect.
    */
   public function test() {
     $session = $this->getSession();
