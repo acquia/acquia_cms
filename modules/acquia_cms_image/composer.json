@@ -22,7 +22,11 @@
     },
     "extra": {
         "enable-patching": true,
-        "patches": {}
+        "patches": {
+            "drupal/imce": {
+                "3327489 - User warning: The following theme is missing from the file system: ckeditor": "https://www.drupal.org/files/issues/2022-12-16/3327489-ckeditor-theme-missing.patch"
+            }
+        }
     },
     "repositories": {
         "drupal": {
