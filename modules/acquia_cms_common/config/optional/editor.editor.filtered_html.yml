@@ -29,7 +29,6 @@ settings:
       - drupalMedia
       - '|'
       - code
-      - imce_image
       - sourceEditing
   plugins:
     ckeditor5_heading:
@@ -66,7 +65,7 @@ settings:
         - right
         - justify
     media_media:
-      allow_view_mode_override: true
+      allow_view_mode_override: false
 image_upload:
   status: false
   scheme: public

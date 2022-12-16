@@ -155,10 +155,7 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
    * Asserts that an embedded media item is visible in CKEditor5.
    */
   protected function assertMediaIsEmbedded() {
-    $this->assignNameToCkeditorIframe();
-    $this->getSession()->switchToIFrame('ckeditor5');
-
-    $result = $this->assertSession()->waitForElementVisible('css', 'drupal-media');
+    $result = $this->assertSession()->waitForElementVisible('css', '.ck-content .ck-widget.drupal-media .media');
     $this->assertNotEmpty($result);
   }
 
@@ -190,10 +187,13 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
   protected function openMediaLibrary() {
     // Exit the CKEditor5 iFrame if we're in it.
     $this->getSession()->switchToIFrame(NULL);
-
     $this->waitForEditor();
-    $this->pressEditorButton('drupalmedialibrary');
 
+    // The `Show more items` button is clicked, because when tests running
+    // on mobile device makes ckeditor5 responsive and requires click to
+    // additional button to navigate to other elements.
+    $this->pressEditorButton('Show more items');
+    $this->pressEditorButton('Insert Media');
     $result = $this->assertSession()->waitForText('Add or select media');
     $this->assertNotEmpty($result);
   }
