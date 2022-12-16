@@ -9,6 +9,7 @@ use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Installer\Form\SiteConfigureForm as CoreSiteConfigureForm;
+use Drupal\Core\State\StateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -22,6 +23,13 @@ class SiteConfigureForm extends ConfigFormBase {
    * @var \Drupal\Core\Extension\ModuleInstallerInterface
    */
   private $moduleInstaller;
+
+  /**
+   * The state interface.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
 
   /**
    * The decorated site configuration form object.
@@ -51,6 +59,8 @@ class SiteConfigureForm extends ConfigFormBase {
    *   The config factory service.
    * @param \Drupal\Core\Extension\ModuleInstallerInterface $module_installer
    *   The module installer.
+   * @param \Drupal\Core\State\StateInterface $state
+   *   The state service.
    * @param \Drupal\Core\Installer\Form\SiteConfigureForm $site_form
    *   The decorated site configuration form object.
    * @param \Drupal\acquia_cms_tour\Form\GoogleMapsApiForm $maps_form
@@ -58,9 +68,10 @@ class SiteConfigureForm extends ConfigFormBase {
    * @param \Drupal\acquia_cms_site_studio\Form\AcquiaCmsSiteStudioSiteConfigureForm $siteStudioForm
    *   The decorated Site Studio configuration form object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ModuleInstallerInterface $module_installer, CoreSiteConfigureForm $site_form, GoogleMapsApiForm $maps_form, AcquiaCmsSiteStudioSiteConfigureForm $siteStudioForm) {
+  public function __construct(ConfigFactoryInterface $config_factory, ModuleInstallerInterface $module_installer, StateInterface $state, CoreSiteConfigureForm $site_form, GoogleMapsApiForm $maps_form, AcquiaCmsSiteStudioSiteConfigureForm $siteStudioForm) {
     parent::__construct($config_factory);
     $this->moduleInstaller = $module_installer;
+    $this->state = $state;
     $this->siteForm = $site_form;
     $this->mapsForm = $maps_form;
     $this->siteStudioForm = $siteStudioForm;
@@ -73,6 +84,7 @@ class SiteConfigureForm extends ConfigFormBase {
     return new static(
       $container->get('config.factory'),
       $container->get('module_installer'),
+      $container->get('state'),
       CoreSiteConfigureForm::create($container),
       GoogleMapsApiForm::create($container),
       AcquiaCmsSiteStudioSiteConfigureForm::create($container)
@@ -123,7 +135,7 @@ class SiteConfigureForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Send anonymous usage information to Acquia'),
       '#default_value' => 1,
-      '#description' => $this->t('This module intends to collect anonymous data about Acquia product usage. No private information will be gathered. Data will not be used for marketing or sold to any third party. This is an opt-in module and can be disabled at any time by uninstalling the acquia_telemetry module by your site administrator.'),
+      '#description' => $this->t('This module intends to collect anonymous data about Acquia product usage. No private information will be gathered. Data will not be used for marketing or sold to any third party. This is an opt-in module and can be disabled at any time by uninstalling the acquia connector module by your site administrator.'),
     ];
     $form['decoupled'] = [
       '#type' => 'checkbox',
@@ -156,10 +168,10 @@ class SiteConfigureForm extends ConfigFormBase {
       $this->mapsForm->submitForm($form, $form_state);
     }
     $this->siteStudioForm->submitForm($form, $form_state);
-    // Enable the Acquia Telemetry module if user opt's in.
+    // Enable the Acquia Connector module if user opt's in.
     $acquia_telemetry_opt_in = $form_state->getValue('acquia_telemetry');
     if ($acquia_telemetry_opt_in) {
-      $this->moduleInstaller->install(['acquia_telemetry']);
+      $this->state->set('acquia_connector.telemetry.opted', TRUE);
     }
     // Enable the JSON API Extras if user opts in for decoupled functionality.
     if ($form_state->getValue('decoupled')) {
