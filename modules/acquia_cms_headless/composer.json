@@ -5,11 +5,11 @@
     "license": "GPL-2.0-or-later",
     "require": {
         "drupal/acquia_cms_tour": "dev-drupal10",
-        "drupal/jsonapi_menu_items": "1.2.x-dev@dev",
-        "drupal/next": "^1.5",
+        "drupal/jsonapi_menu_items": "^1.2",
+        "drupal/next": "^1.6",
         "drupal/openapi_jsonapi": "^3.0",
-        "drupal/openapi_ui_redoc": "^1.0@RC",
-        "drupal/openapi_ui_swagger": "1.x-dev@dev",
+        "drupal/openapi_ui_redoc": "^1.0",
+        "drupal/openapi_ui_swagger": "^1.0",
         "drupal/restui": "^1.21",
         "swagger-api/swagger-ui": "^3.0.17"
     },
@@ -74,6 +74,10 @@
         }
     },
     "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
         "swagger-api": {
             "type": "package",
             "package": {
@@ -83,8 +87,7 @@
                 "dist": {
                     "url": "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v3.0.17.zip",
                     "type": "zip"
-                },
-                "require": {}
+                }
             }
         }
     }
