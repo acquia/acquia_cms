@@ -37,27 +37,12 @@ final class Component extends CohesionElement {
     $this->pressAriaButton('More actions');
     $this->waitForElementVisible('css', '.ssa-dropdown-menu .ssa-dropdown-item')->press();
 
-    $this->getIframeElements();
+    // Wait for the sidebar form to appear.
+    $this->waitForElementVisible('css', 'form.ssa-sidebar-component');
 
-    // Wait for the form wrapper to appear...
-    $form = $this->waitForElementVisible('css', '.coh-layout-canvas-settings');
-    // ...then wait the form wrapper to load the actual settings form.
-    $this->waitForElementVisible('css', 'coh-component-form', $form);
-    return $form;
-  }
-
-  /**
-   * In site studio 6.8 onwards component edit page open in iframe.
-   */
-  public function getIframeElements() {
-    $selector = 'iframe[title="Edit component"]';
-    $frame = $this->waitForElementVisible('css', $selector, $this->session->getPage());
-    $name = $frame->getAttribute('name');
-    if (empty($name)) {
-      $name = 'edit_component_iframe';
-      $this->session->executeScript("document.querySelector('$selector').setAttribute('name', '$name')");
-    }
-    $this->session->switchToIFrame($name);
+    // Wait for the form wrapper to appear.
+    return $this->waitForElementVisible('css', '.ssa-component-form--inner');
+    ;
   }
 
 }
