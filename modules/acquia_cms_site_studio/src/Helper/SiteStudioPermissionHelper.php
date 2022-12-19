@@ -98,9 +98,7 @@ class SiteStudioPermissionHelper {
         );
 
       case 'content_editor':
-        return array_merge(
-          self::basicComponentPermissions(),
-        );
+        return self::basicComponentPermissions();
 
       case 'site_builder':
         return [
@@ -122,6 +120,15 @@ class SiteStudioPermissionHelper {
     }
   }
 
+  /**
+   * Static Dynamic Permission by role function.
+   *
+   * @param string $role_name
+   *   Role name.
+   *
+   * @return array
+   *   List of permissions based on role.
+   */
   public static function getDynamicPermissionsByRole(string $role_name): array {
     switch ($role_name) {
       case 'content_administrator':

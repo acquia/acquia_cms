@@ -191,14 +191,14 @@ function acquia_cms_site_studio_content_model_role_presave_alter(RoleInterface &
 }
 
 /**
- * Implements hook_ENTITY_TYPE_insert() to add permissions to role.
+ * Implements hook_ENTITY_TYPE_insert().
  */
 function acquia_cms_site_studio_cohesion_helper_category_insert(EntityInterface $entity) {
   _acquia_cms_site_studio_add_permissions($entity);
 }
 
 /**
- * Implements hook_ENTITY_TYPE_insert() to add permissions to role.
+ * Implements hook_ENTITY_TYPE_insert().
  */
 function acquia_cms_site_studio_cohesion_component_category_insert(EntityInterface $entity) {
   _acquia_cms_site_studio_add_permissions($entity);
@@ -207,7 +207,7 @@ function acquia_cms_site_studio_cohesion_component_category_insert(EntityInterfa
 /**
  * Helper function to add Site Studio component permissions to roles.
  *
- * @param EntityInterface $entity
+ * @param \Drupal\Core\Entity\EntityInterface $entity
  *   Site Studio component entity.
  *
  * @throws \Drupal\Core\Entity\EntityStorageException
