@@ -17,7 +17,7 @@ class MaintenancePageTest extends ExistingSiteSelenium2DriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp() :void {
     parent::setUp();
     $this->container->get('state')->set('system.maintenance_mode', TRUE);
   }
@@ -37,7 +37,7 @@ class MaintenancePageTest extends ExistingSiteSelenium2DriverTestBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown() {
+  public function tearDown() :void {
     $this->container->get('state')->set('system.maintenance_mode', FALSE);
     parent::tearDown();
   }
