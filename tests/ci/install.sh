@@ -38,6 +38,7 @@ cd ${ORCA_FIXTURE_DIR}
 
 # Install acquia_cms only for the Integrated & ExistingSite PHPUnit tests.
 if [ -n "${ACMS_JOB}" ]; then
+  cat ${ORCA_SUT_DIR}/docroot/sites/default/ss_settings.php >> ${ORCA_FIXTURE_DIR}/docroot/sites/default/settings.php
   ./vendor/bin/acms site:install --yes --uri=http://127.0.0.1:8080
   # Enable Acquia CMS DAM module.
   # @todo We should probably move this in acms site:install command.
