@@ -6,7 +6,7 @@
     "require": {
         "cweagans/composer-patches": "^1.7",
         "drupal/acquia_cms_common": "^1.6",
-        "drupal/imce": "3.0.4"
+        "drupal/imce": "^2.5 || ^3.0.5"
     },
     "config": {
         "allow-plugins": {
@@ -22,11 +22,7 @@
     },
     "extra": {
         "enable-patching": true,
-        "patches": {
-            "drupal/imce": {
-                "3327489 - User warning: The following theme is missing from the file system: ckeditor": "https://www.drupal.org/files/issues/2022-12-16/3327489-ckeditor-theme-missing.patch"
-            }
-        }
+        "patches": {}
     },
     "repositories": {
         "drupal": {
