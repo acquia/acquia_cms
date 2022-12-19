@@ -4,20 +4,19 @@ namespace Drupal\Tests\acquia_cms_common\FunctionalJavascript;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
-use Drupal\Tests\ckeditor\Traits\CKEditorTestTrait;
+use Drupal\Tests\ckeditor5\Traits\CKEditor5TestTrait;
 use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
 
 /**
- * Tests the CKEditor configuration shipped with Acquia CMS.
+ * Provides Base class to test CKEditor5 configuration shipped with Acquia CMS.
  *
  * @group acquia_cms
- * @group acquia_cms_video
  * @group medium_risk
  * @group push
  */
-class CkeditorConfigurationTest extends WebDriverTestBase {
+abstract class Ckeditor5ConfigurationTestBase extends WebDriverTestBase {
 
-  use CKEditorTestTrait;
+  use CKEditor5TestTrait;
   use MediaTypeCreationTrait;
 
   /**
@@ -61,7 +60,7 @@ class CkeditorConfigurationTest extends WebDriverTestBase {
   }
 
   /**
-   * Tests that CKEditor is configured as we expect.
+   * Tests that CKEditor5 is configured as we expect.
    */
   public function test() {
     $session = $this->getSession();
@@ -82,18 +81,20 @@ class CkeditorConfigurationTest extends WebDriverTestBase {
     // Ensure that text format 'filtered_html' & 'full_html' exists.
     $formats = $session->evaluateScript('Object.keys(drupalSettings.editor.formats)');
     $this->assertSame(['filtered_html', 'full_html'], $formats);
-
+    // Resize window, so that all Ckeditor plugins are displayed.
+    $this->getSession()->getDriver()->resizeWindow(2000, 2000);
     $this->waitForEditor();
-    $this->getEditorButton('justifyleft');
-    $this->getEditorButton('justifycenter');
-    $this->getEditorButton('justifyright');
-    $this->getEditorButton('justifyblock');
-    $this->getEditorButton('drupalmedialibrary');
-
-    // Assert that the Format dropdown is present.
-    $format = $this->assertSession()
-      ->waitForElementVisible('css', '#cke_edit-body-0-value span.cke_combo__format');
-    $this->assertNotEmpty($format);
+    foreach ($this->getEditorButtons() as $button) {
+      $this->getEditorButton($button);
+    }
   }
+
+  /**
+   * Provides an array of CkEditor plugin names.
+   *
+   * @return string[]
+   *   Returns an array of ckeditor5 enabled toolbar plugin.
+   */
+  abstract protected function getEditorButtons(): array;
 
 }

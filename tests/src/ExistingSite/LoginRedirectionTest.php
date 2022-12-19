@@ -25,7 +25,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp() :void {
     parent::setUp();
 
     // Store the current config flag so we can restore it in tearDown().
@@ -60,7 +60,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown() {
+  public function tearDown() :void {
     $this->container->get('config.factory')
       ->getEditable('acquia_cms_common.settings')
       ->set('user_login_redirection', $this->enabled)

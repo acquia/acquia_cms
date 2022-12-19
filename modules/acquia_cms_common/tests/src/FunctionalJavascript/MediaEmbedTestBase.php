@@ -8,15 +8,15 @@ use Drupal\acquia_cms_common\Facade\PermissionFacade;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\media\Entity\MediaType;
 use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
-use Drupal\Tests\ckeditor\Traits\CKEditorTestTrait;
+use Drupal\Tests\ckeditor5\Traits\CKEditor5TestTrait;
 use Drupal\Tests\TestFileCreationTrait;
 
 /**
- * Base class for testing CKEditor embeds of a specific media type.
+ * Base class for testing CKEditor5 embeds of a specific media type.
  */
 abstract class MediaEmbedTestBase extends WebDriverTestBase {
 
-  use CKEditorTestTrait;
+  use CKEditor5TestTrait;
   use MediaTestTrait;
   use TestFileCreationTrait;
 
@@ -76,7 +76,7 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
   }
 
   /**
-   * Tests embedding media in CKEditor.
+   * Tests embedding media in CKEditor5.
    */
   public function testEmbedMedia() {
     if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
@@ -152,18 +152,15 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
   }
 
   /**
-   * Asserts that an embedded media item is visible in CKEditor.
+   * Asserts that an embedded media item is visible in CKEditor5.
    */
   protected function assertMediaIsEmbedded() {
-    $this->assignNameToCkeditorIframe();
-    $this->getSession()->switchToIFrame('ckeditor');
-
-    $result = $this->assertSession()->waitForElementVisible('css', 'drupal-media');
+    $result = $this->assertSession()->waitForElementVisible('css', '.ck-content .ck-widget.drupal-media .media');
     $this->assertNotEmpty($result);
   }
 
   /**
-   * Inserts all selected media into CKEditor and closes the media library.
+   * Inserts all selected media into CKEditor5 and closes the media library.
    */
   protected function insertSelectedMedia() {
     $this->assertSession()
@@ -185,15 +182,18 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
   }
 
   /**
-   * Opens the media library in CKEditor.
+   * Opens the media library in CKEditor5.
    */
   protected function openMediaLibrary() {
-    // Exit the CKEditor iFrame if we're in it.
+    // Exit the CKEditor5 iFrame if we're in it.
     $this->getSession()->switchToIFrame(NULL);
-
     $this->waitForEditor();
-    $this->pressEditorButton('drupalmedialibrary');
 
+    // The `Show more items` button is clicked, because when tests running
+    // on mobile device makes ckeditor5 responsive and requires click to
+    // additional button to navigate to other elements.
+    $this->pressEditorButton('Show more items');
+    $this->pressEditorButton('Insert Media');
     $result = $this->assertSession()->waitForText('Add or select media');
     $this->assertNotEmpty($result);
   }
