@@ -31,7 +31,7 @@ final class ElementBrowser extends CohesionElement {
    * Closes the element browser.
    */
   public function close() : void {
-    $this->pressAriaButton('Close');
+    $this->pressAriaButton('Close sidebar browser');
   }
 
   /**

@@ -133,10 +133,10 @@ function acquia_cms_common_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Implements hook_ckeditor_css_alter().
+ * Implements hook_ckeditor5_css_alter().
  */
-function acquia_cms_common_ckeditor_css_alter(&$css, $editor) {
-  // Attach reset, plugin, base, theme, icon and fonts css files to ckeditor.
+function acquia_cms_common_ckeditor5_css_alter(&$css, $editor) {
+  // Attach reset, plugin, base, theme, icon and fonts css files to ckeditor5.
   $base_styles_edit_route = \Drupal::service('router.route_provider')
     ->getRoutesByNames(['entity.cohesion_base_styles.edit_form']);
   if (!(count($base_styles_edit_route) === 1)) {
@@ -154,7 +154,7 @@ function acquia_cms_common_ckeditor_css_alter(&$css, $editor) {
       if ($editor->getFilterFormat() &&  $editor->getFilterFormat()->get('format') == 'filtered_html') {
         $wysiwyg_cache_token = \Drupal::keyValue('cohesion.wysiwyg_cache_token');
         $wysiwyg_cache_buster = $wysiwyg_cache_token->get('cache_token') ? '?_t=' . $wysiwyg_cache_token->get('cache_token') : '';
-        // Reset and ckeditor specific styles.
+        // Reset and ckeditor5 specific styles.
         $cohesionModulePath = \Drupal::service('extension.list.module')->getPath('cohesion');
         $streamWrapperManager = \Drupal::service('stream_wrapper_manager');
         $css[] = $cohesionModulePath . '/css/reset.css' . $wysiwyg_cache_buster;

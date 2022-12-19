@@ -30,7 +30,7 @@ class ContactInformationCardComponentTest extends CohesionComponentTestBase {
 
     // Add the component to the layout canvas.
     $edit_form = $this->getLayoutCanvas()->add('Contact information card')->edit();
-    $edit_form->fillField('Card heading element', 'string:h3');
+    $edit_form->fillField('Card heading element', 'h3');
     $edit_form->fillField('Card heading', 'This is the Heading');
     $edit_form->fillField('Contact name', 'Leia Organa');
     $edit_form->fillField('Company', 'Acquiaville');

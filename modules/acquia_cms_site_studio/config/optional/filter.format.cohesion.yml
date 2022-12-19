@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.embedded
+    - core.entity_view_mode.media.full
   module:
     - editor
     - media
@@ -16,7 +17,7 @@ filters:
     status: false
     weight: -9
     settings:
-      allowed_html: '<em> <strong> <cite> <blockquote cite> <code> <li> <dt> <dd> <img src alt data-entity-type data-entity-uuid> <u> <a href hreflang class=" coh-style-link-location-with-icon coh-style-link-with-icon coh-style-link-button-fluid-width coh-style-link-button"> <ul type class="coh-style-pagination-list coh-style-tick-list"> <ol start type class="coh-style-pagination-list coh-style-tick-list"> <p class="coh-style-image-caption coh-style-video-caption coh-style-paragraph-large"> <h1 class="heading-2 heading-1 coh-style-heading-3-size coh-style-pre-heading coh-style-heading-1-size coh-style-heading-4-size coh-style-sub-heading"> <h2 id class="heading-3 coh-style-heading-3-size coh-style-pre-heading coh-style-heading-1-size coh-style-heading-4-size coh-style-sub-heading"> <h3 id class="heading-4 coh-style-heading-3-size coh-style-pre-heading coh-style-heading-1-size coh-style-heading-4-size coh-style-sub-heading"> <h4 id class="coh-style-heading-3-size coh-style-pre-heading coh-style-heading-1-size coh-style-heading-4-size coh-style-sub-heading"> <h5 id class="coh-style-heading-3-size coh-style-pre-heading coh-style-heading-1-size coh-style-heading-4-size coh-style-sub-heading"> <h6 id class="coh-style-heading-3-size coh-style-pre-heading coh-style-heading-1-size coh-style-heading-4-size coh-style-sub-heading"> <pre> <button class="coh-style-button-cta coh-style-button-solid coh-style-button-unstyled coh-style-button-outline"> <dl class="coh-style-pagination-list coh-style-tick-list"> <span class="red-pill blue-pill coh-style-breadcrumb-block coh-style-button-cta coh-style-pagination-list coh-style-button-solid coh-style-button-unstyled coh-style-button-outline coh-style-link-location-with-icon coh-style-heading-3-size coh-style-pre-heading coh-style-heading-1-size coh-style-heading-4-size coh-style-sub-heading coh-style-link-with-icon coh-style-link-button-fluid-width coh-style-link-button coh-style-tick-list coh-style-image-caption coh-style-video-caption coh-style-paragraph-large coh-color-black coh-color-color-1 coh-color-color-3 coh-color-color-4 coh-color-gray coh-color-light-1 coh-color-light-2 coh-color-white"> <drupal-media data-entity-type data-entity-uuid data-view-mode data-align data-caption alt title>'
+      allowed_html: '<p class="coh-style-paragraph-extra-large coh-style-paragraph-small coh-style-paragraph-large"> <span class="coh-style-paragraph-extra-large coh-style-link-button-light coh-style-heading-3-size coh-style-link-with-icon coh-style-heading-2-size coh-style-tick-list coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-link-button-dark coh-style-paragraph-small coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-link-button-color coh-style-pre-heading-light coh-style-paragraph-large coh-color-brand-color-light coh-color-brand-color coh-color-brand-color-dark coh-color-gray-10 coh-color-gray-20 coh-color-gray-30 coh-color-gray-70 coh-color-gray-80 coh-color-gray-90 coh-color-black coh-color-white"> <a class="coh-style-link-button-light coh-style-link-with-icon coh-style-link-button-dark coh-style-link-button-color"> <h1 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <h2 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <h3 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <h4 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <h5 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <h6 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <ul class="coh-style-tick-list"> <ol class="coh-style-tick-list"> <dl class="coh-style-tick-list">'
       filter_html_help: true
       filter_html_nofollow: false
   editor_file_reference:
@@ -50,8 +51,10 @@ filters:
     weight: 100
     settings:
       default_view_mode: embedded
+      allowed_view_modes:
+        default: default
+        full: full
       allowed_media_types: {  }
-      allowed_view_modes: {  }
   filter_autop:
     id: filter_autop
     provider: filter
