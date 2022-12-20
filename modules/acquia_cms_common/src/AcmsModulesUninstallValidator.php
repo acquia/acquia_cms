@@ -2,7 +2,6 @@
 
 namespace Drupal\acquia_cms_common;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ModuleUninstallValidatorInterface;
@@ -31,13 +30,6 @@ class AcmsModulesUninstallValidator implements ModuleUninstallValidatorInterface
   protected $moduleHandler;
 
   /**
-   * The config factory service object.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
    * Constructs a new AcmsModulesUninstallValidator.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -46,18 +38,14 @@ class AcmsModulesUninstallValidator implements ModuleUninstallValidatorInterface
    *   The string translation service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The config factory.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
     TranslationInterface $string_translation,
-    ModuleHandlerInterface $module_handler,
-    ConfigFactoryInterface $config_factory) {
+    ModuleHandlerInterface $module_handler) {
     $this->entityTypeManager = $entity_type_manager;
     $this->stringTranslation = $string_translation;
     $this->moduleHandler = $module_handler;
-    $this->configFactory = $config_factory;
   }
 
   /**
@@ -198,45 +186,53 @@ class AcmsModulesUninstallValidator implements ModuleUninstallValidatorInterface
    */
   protected function hasSiteStudioPackage(string $module): bool {
     if ($module) {
-      $package = $config = [];
+      $packages = $config = [];
       switch ($module) {
         case 'acquia_cms_article':
-          $package = 'pack_acquia_cms_article';
+          $packages = ['pack_acquia_cms_article'];
           break;
 
         case 'acquia_cms_event':
-          $package = 'pack_acquia_cms_event';
+          $packages = ['pack_acquia_cms_event'];
           break;
 
         case 'acquia_cms_image':
-          $package = 'pack_acquia_cms_image';
+          $packages = [
+            'pack_acquia_cms_image',
+            'pack_acquia_cms_core_image',
+          ];
           break;
 
         case 'acquia_cms_page':
-          $package = 'pack_acquia_cms_page';
+          $packages = ['pack_acquia_cms_page'];
           break;
 
         case 'acquia_cms_person':
-          $package = 'pack_acquia_cms_person';
+          $packages = ['pack_acquia_cms_person'];
           break;
 
         case 'acquia_cms_place':
-          $package = 'pack_acquia_cms_place';
+          $packages = ['pack_acquia_cms_place'];
           break;
 
         case 'acquia_cms_search':
-          $package = 'pack_acquia_cms_search';
+          $packages = [
+            'pack_acquia_cms_search',
+            'pack_acquia_cms_search_content',
+          ];
           break;
 
         case 'acquia_cms_site_studio':
-          $package = 'pack_acquia_cms_core';
+          $packages = ['pack_acquia_cms_core'];
           break;
 
         case 'acquia_cms_video':
-          $package = 'pack_acquia_cms_video';
+          $packages = ['pack_acquia_cms_video'];
           break;
       }
-      $config = $this->configFactory->getEditable('cohesion_sync.cohesion_sync_package.' . $package)->get('id');
+      foreach ($packages as $package) {
+        $config = \Drupal::configFactory()->getEditable($package);
+      }
       return (bool) $config;
     }
     return FALSE;
