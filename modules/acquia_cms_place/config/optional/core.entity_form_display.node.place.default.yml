@@ -12,9 +12,6 @@ dependencies:
     - field.field.node.place.field_tags
     - node.type.place
     - workflows.workflow.editorial
-  enforced:
-    module:
-      - acquia_cms_place
   module:
     - address
     - content_moderation
@@ -22,8 +19,13 @@ dependencies:
     - geofield
     - media_library
     - path
+    - scheduler
+    - scheduler_content_moderation_integration
     - telephone
     - text
+  enforced:
+    module:
+      - acquia_cms_place
 third_party_settings:
   field_group:
     group_taxonomy:
@@ -31,29 +33,29 @@ third_party_settings:
         - field_categories
         - field_tags
         - field_place_type
-      parent_name: ''
-      weight: 6
-      format_type: fieldset
+      label: Taxonomy
       region: content
+      parent_name: ''
+      weight: 7
+      format_type: fieldset
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         description: ''
         required_fields: true
-      label: Taxonomy
     group_media:
       children:
         - field_place_image
-      parent_name: ''
-      weight: 5
-      format_type: fieldset
+      label: Media
       region: content
+      parent_name: ''
+      weight: 6
+      format_type: fieldset
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         description: ''
         required_fields: true
-      label: Media
 id: node.place.default
 targetEntityType: node
 bundle: place
@@ -61,14 +63,14 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 1
+    weight: 2
+    region: content
     settings:
       rows: 9
       summary_rows: 3
       placeholder: ''
       show_summary: false
     third_party_settings: {  }
-    region: content
   created:
     type: datetime_timestamp
     weight: 12
@@ -76,70 +78,92 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_categories:
+    type: options_select
     weight: 6
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
   field_geofield:
-    weight: 3
+    type: geofield_latlon
+    weight: 4
+    region: content
     settings:
       html5_geolocation: false
     third_party_settings: {  }
-    type: geofield_latlon
-    region: content
   field_place_address:
-    weight: 2
+    type: address_default
+    weight: 3
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: address_default
-    region: content
   field_place_image:
     type: media_library_widget
-    weight: 5
+    weight: 8
+    region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
-    region: content
   field_place_telephone:
-    weight: 4
+    type: telephone_default
+    weight: 5
+    region: content
     settings:
       placeholder: ''
     third_party_settings: {  }
-    type: telephone_default
-    region: content
   field_place_type:
+    type: options_select
     weight: 7
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
   field_tags:
+    type: entity_reference_autocomplete_tags
     weight: 6
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete_tags
-    region: content
   langcode:
     type: language_select
-    weight: 8
+    weight: 1
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   moderation_state:
     type: moderation_state_default
-    weight: 9
-    settings: {  }
+    weight: 8
     region: content
+    settings: {  }
     third_party_settings: {  }
   path:
     type: path
+    weight: 14
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  publish_on:
+    type: datetime_timestamp_no_default
     weight: 16
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  publish_state:
+    type: scheduler_moderation
+    weight: 18
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  scheduler_settings:
+    weight: 15
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -158,16 +182,28 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 10
+    weight: 9
+    region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
-      match_limit: 10
+    third_party_settings: {  }
+  unpublish_on:
+    type: datetime_timestamp_no_default
+    weight: 17
     region: content
+    settings: {  }
+    third_party_settings: {  }
+  unpublish_state:
+    type: scheduler_moderation
+    weight: 19
+    region: content
+    settings: {  }
     third_party_settings: {  }
   url_redirects:
-    weight: 14
+    weight: 13
     region: content
     settings: {  }
     third_party_settings: {  }
