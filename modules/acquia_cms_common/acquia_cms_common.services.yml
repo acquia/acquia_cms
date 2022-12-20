@@ -21,7 +21,7 @@ services:
     class: Drupal\acquia_cms_common\AcmsModulesUninstallValidator
     tags:
       - { name: module_install.uninstall_validator }
-    arguments: ['@entity_type.manager', '@string_translation', '@module_handler']
+    arguments: ['@entity_type.manager', '@string_translation']
     lazy: true
 
   acquia_cms_common.https_redirect_subscriber:
