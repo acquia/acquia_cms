@@ -103,6 +103,7 @@ jobs:
       JOB_TYPE: "integrated-tests"
       CI: true
     strategy:
+      fail-fast: false
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
@@ -200,6 +201,7 @@ jobs:
       JOB_TYPE: "isolated-tests"
       CI: true
     strategy:
+      fail-fast: false
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
