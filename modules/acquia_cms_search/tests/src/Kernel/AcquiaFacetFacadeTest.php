@@ -50,7 +50,7 @@ class AcquiaFacetFacadeTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $this->installEntitySchema('facets_facet');
     $this->facetFacade = $this->container->get('class_resolver')->getInstanceFromDefinition(FacetFacade::class);
