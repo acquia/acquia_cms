@@ -351,7 +351,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
    * {@inheritdoc}
    */
   protected function getExpectedLinks() : array {
-    $ids = $this->getQuery()->execute();
+    $ids = $this->getQuery()->accessCheck(FALSE)->execute();
 
     /** @var \Drupal\node\NodeInterface[] $content */
     $content = $this->container->get('entity_type.manager')
@@ -375,6 +375,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
     return $this->container->get('entity_type.manager')
       ->getStorage('node')
       ->getQuery()
+      ->accessCheck(FALSE)
       ->condition('type', $this->nodeType)
       ->condition('status', TRUE);
   }
