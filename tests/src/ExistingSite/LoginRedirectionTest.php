@@ -126,11 +126,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
       'content author with redirect' => [
         TRUE,
         [
-          ['', '/user/{uid}/moderation/dashboard'],
-          ['user', '/user/{uid}/moderation/dashboard'],
-          ['/user', '/user/{uid}/moderation/dashboard'],
-          ['/user/', '/user/{uid}/moderation/dashboard'],
-          ['/user/{uid}', '/user/{uid}/moderation/dashboard'],
+          ['', '/user/{uid}/moderation-dashboard'],
+          ['user', '/user/{uid}/moderation-dashboard'],
+          ['/user', '/user/{uid}/moderation-dashboard'],
+          ['/user/', '/user/{uid}/moderation-dashboard'],
+          ['/user/{uid}', '/user/{uid}/moderation-dashboard'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
           ['/node/add', '/node/add'],
@@ -140,11 +140,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
       'content editor with redirect' => [
         TRUE,
         [
-          ['', '/user/{uid}/moderation/dashboard'],
-          ['user', '/user/{uid}/moderation/dashboard'],
-          ['/user', '/user/{uid}/moderation/dashboard'],
-          ['/user/', '/user/{uid}/moderation/dashboard'],
-          ['/user/{uid}', '/user/{uid}/moderation/dashboard'],
+          ['', '/user/{uid}/moderation-dashboard'],
+          ['user', '/user/{uid}/moderation-dashboard'],
+          ['/user', '/user/{uid}/moderation-dashboard'],
+          ['/user/', '/user/{uid}/moderation-dashboard'],
+          ['/user/{uid}', '/user/{uid}/moderation-dashboard'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
           ['/admin/content', '/admin/content'],
@@ -154,11 +154,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
       'content administrator with redirect' => [
         TRUE,
         [
-          ['', '/user/{uid}/moderation/dashboard'],
-          ['user', '/user/{uid}/moderation/dashboard'],
-          ['/user', '/user/{uid}/moderation/dashboard'],
-          ['/user/', '/user/{uid}/moderation/dashboard'],
-          ['/user/{uid}', '/user/{uid}/moderation/dashboard'],
+          ['', '/user/{uid}/moderation-dashboard'],
+          ['user', '/user/{uid}/moderation-dashboard'],
+          ['/user', '/user/{uid}/moderation-dashboard'],
+          ['/user/', '/user/{uid}/moderation-dashboard'],
+          ['/user/{uid}', '/user/{uid}/moderation-dashboard'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
           ['/node/add', '/node/add'],
@@ -168,11 +168,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
       'administrator with redirect' => [
         TRUE,
         [
-          ['', '/user/{uid}/moderation/dashboard'],
-          ['user', '/user/{uid}/moderation/dashboard'],
-          ['/user', '/user/{uid}/moderation/dashboard'],
-          ['/user/', '/user/{uid}/moderation/dashboard'],
-          ['/user/{uid}', '/user/{uid}/moderation/dashboard'],
+          ['', '/user/{uid}/moderation-dashboard'],
+          ['user', '/user/{uid}/moderation-dashboard'],
+          ['/user', '/user/{uid}/moderation-dashboard'],
+          ['/user/', '/user/{uid}/moderation-dashboard'],
+          ['/user/{uid}', '/user/{uid}/moderation-dashboard'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
           ['/node/add', '/node/add'],
@@ -224,11 +224,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
       'content author+site builder with redirect' => [
         TRUE,
         [
-          ['', '/user/{uid}/moderation/dashboard'],
-          ['user', '/user/{uid}/moderation/dashboard'],
-          ['/user', '/user/{uid}/moderation/dashboard'],
-          ['/user/', '/user/{uid}/moderation/dashboard'],
-          ['/user/{uid}', '/user/{uid}/moderation/dashboard'],
+          ['', '/user/{uid}/moderation-dashboard'],
+          ['user', '/user/{uid}/moderation-dashboard'],
+          ['/user', '/user/{uid}/moderation-dashboard'],
+          ['/user/', '/user/{uid}/moderation-dashboard'],
+          ['/user/{uid}', '/user/{uid}/moderation-dashboard'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
           ['/node/add', '/node/add'],
@@ -238,11 +238,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
       'content author+user administrator with redirect' => [
         TRUE,
         [
-          ['', '/user/{uid}/moderation/dashboard'],
-          ['user', '/user/{uid}/moderation/dashboard'],
-          ['/user', '/user/{uid}/moderation/dashboard'],
-          ['/user/', '/user/{uid}/moderation/dashboard'],
-          ['/user/{uid}', '/user/{uid}/moderation/dashboard'],
+          ['', '/user/{uid}/moderation-dashboard'],
+          ['user', '/user/{uid}/moderation-dashboard'],
+          ['/user', '/user/{uid}/moderation-dashboard'],
+          ['/user/', '/user/{uid}/moderation-dashboard'],
+          ['/user/{uid}', '/user/{uid}/moderation-dashboard'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
           ['/node/add', '/node/add'],
@@ -266,11 +266,11 @@ class LoginRedirectionTest extends ExistingSiteBase {
       'content author+site builder+user administrator with redirect' => [
         TRUE,
         [
-          ['', '/user/{uid}/moderation/dashboard'],
-          ['user', '/user/{uid}/moderation/dashboard'],
-          ['/user', '/user/{uid}/moderation/dashboard'],
-          ['/user/', '/user/{uid}/moderation/dashboard'],
-          ['/user/{uid}', '/user/{uid}/moderation/dashboard'],
+          ['', '/user/{uid}/moderation-dashboard'],
+          ['user', '/user/{uid}/moderation-dashboard'],
+          ['/user', '/user/{uid}/moderation-dashboard'],
+          ['/user/', '/user/{uid}/moderation-dashboard'],
+          ['/user/{uid}', '/user/{uid}/moderation-dashboard'],
           ['/user/{uid}/edit', '/user/{uid}/edit'],
           ['/user-stories', '/user-stories'],
           ['/node/add', '/node/add'],
@@ -322,7 +322,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
       'content administrator without redirect' => [
         FALSE,
         [
-          ['', '/user/{uid}/moderation/dashboard'],
+          ['', '/user/{uid}/moderation-dashboard'],
           ['user', '/user/{uid}'],
           ['/user', '/user/{uid}'],
           ['/user/', '/user/{uid}'],
@@ -336,7 +336,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
       'content author without redirect' => [
         FALSE,
         [
-          ['', '/user/{uid}/moderation/dashboard'],
+          ['', '/user/{uid}/moderation-dashboard'],
           ['user', '/user/{uid}'],
           ['/user', '/user/{uid}'],
           ['/user/', '/user/{uid}'],
@@ -350,7 +350,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
       'content editor without redirect' => [
         FALSE,
         [
-          ['', '/user/{uid}/moderation/dashboard'],
+          ['', '/user/{uid}/moderation-dashboard'],
           ['user', '/user/{uid}'],
           ['/user', '/user/{uid}'],
           ['/user/', '/user/{uid}'],
@@ -364,7 +364,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
       'administrator without redirect' => [
         FALSE,
         [
-          ['', '/user/{uid}/moderation/dashboard'],
+          ['', '/user/{uid}/moderation-dashboard'],
           ['user', '/user/{uid}'],
           ['/user', '/user/{uid}'],
           ['/user/', '/user/{uid}'],
@@ -378,7 +378,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
       'content author+site builder without redirect' => [
         FALSE,
         [
-          ['', '/user/{uid}/moderation/dashboard'],
+          ['', '/user/{uid}/moderation-dashboard'],
           ['user', '/user/{uid}'],
           ['/user', '/user/{uid}'],
           ['/user/', '/user/{uid}'],
@@ -392,7 +392,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
       'content author+user administrator without redirect' => [
         FALSE,
         [
-          ['', '/user/{uid}/moderation/dashboard'],
+          ['', '/user/{uid}/moderation-dashboard'],
           ['user', '/user/{uid}'],
           ['/user', '/user/{uid}'],
           ['/user/', '/user/{uid}'],
@@ -420,7 +420,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
       'content author+site builder+user administrator without redirect' => [
         FALSE,
         [
-          ['', '/user/{uid}/moderation/dashboard'],
+          ['', '/user/{uid}/moderation-dashboard'],
           ['user', '/user/{uid}'],
           ['/user', '/user/{uid}'],
           ['/user/', '/user/{uid}'],
