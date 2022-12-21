@@ -111,7 +111,11 @@
         "patchLevel": {
             "drupal/core": "-p2"
         },
-        "patches": {}
+        "patches": {
+            "drupal/core": {
+                "REMOVE: Allow installation profile to be changed from Acquia CMS to minimal during config sync": "https://gist.githubusercontent.com/rajeshreeputra/ae198ea15a2584f00de3327067056fe0/raw/3d69baaa16bfcc7b2af41deef102eaebd4291906/profile-change-acms-to-minimal.patch"
+            }
+        }
     },
     "autoload": {
         "psr-4": {
