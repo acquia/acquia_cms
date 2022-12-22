@@ -13,16 +13,18 @@ dependencies:
     - field.field.node.person.field_tags
     - node.type.person
     - workflows.workflow.editorial
-  enforced:
-    module:
-      - acquia_cms_person
   module:
     - content_moderation
     - field_group
     - media_library
     - path
+    - scheduler
+    - scheduler_content_moderation_integration
     - telephone
     - text
+  enforced:
+    module:
+      - acquia_cms_person
 third_party_settings:
   field_group:
     group_taxonomy:
@@ -30,29 +32,29 @@ third_party_settings:
         - field_categories
         - field_tags
         - field_person_type
+      label: Taxonomy
+      region: content
       parent_name: ''
       weight: 6
       format_type: fieldset
-      region: content
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         description: ''
         required_fields: true
-      label: Taxonomy
     group_media:
       children:
         - field_person_image
+      label: Media
+      region: content
       parent_name: ''
       weight: 4
       format_type: fieldset
-      region: content
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         description: ''
         required_fields: true
-      label: Media
 id: node.person.default
 targetEntityType: node
 bundle: person
@@ -60,7 +62,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 2
+    weight: 3
     region: content
     settings:
       rows: 9
@@ -70,7 +72,7 @@ content:
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 13
+    weight: 11
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -82,20 +84,20 @@ content:
     third_party_settings: {  }
   field_email:
     type: email_default
-    weight: 10
+    weight: 7
     region: content
     settings:
-      size: 60
       placeholder: ''
+      size: 60
     third_party_settings: {  }
   field_job_title:
+    type: string_textfield
     weight: 1
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_person_image:
     type: media_library_widget
     weight: 4
@@ -104,12 +106,12 @@ content:
       media_types: {  }
     third_party_settings: {  }
   field_person_telephone:
-    weight: 11
+    type: telephone_default
+    weight: 9
+    region: content
     settings:
       placeholder: ''
     third_party_settings: {  }
-    type: telephone_default
-    region: content
   field_person_type:
     type: options_select
     weight: 9
@@ -117,11 +119,11 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_place:
+    type: options_select
     weight: 5
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
   field_tags:
     type: entity_reference_autocomplete_tags
     weight: 8
@@ -134,20 +136,42 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 3
+    weight: 2
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   moderation_state:
     type: moderation_state_default
-    weight: 12
-    settings: {  }
+    weight: 10
     region: content
+    settings: {  }
     third_party_settings: {  }
   path:
     type: path
-    weight: 18
+    weight: 15
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  publish_on:
+    type: datetime_timestamp_no_default
+    weight: 17
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  publish_state:
+    type: scheduler_moderation
+    weight: 19
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  scheduler_settings:
+    weight: 16
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 8
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -160,22 +184,34 @@ content:
       placeholder: ''
     third_party_settings: {  }
   translation:
-    weight: 15
+    weight: 13
     region: content
     settings: {  }
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 14
+    weight: 12
+    region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
-      match_limit: 10
+    third_party_settings: {  }
+  unpublish_on:
+    type: datetime_timestamp_no_default
+    weight: 18
     region: content
+    settings: {  }
+    third_party_settings: {  }
+  unpublish_state:
+    type: scheduler_moderation
+    weight: 20
+    region: content
+    settings: {  }
     third_party_settings: {  }
   url_redirects:
-    weight: 16
+    weight: 14
     region: content
     settings: {  }
     third_party_settings: {  }
