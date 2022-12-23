@@ -271,9 +271,9 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     $this->drupalGet('/node/1/delete');
     $assert_session->statusCodeEquals(200);
 
-    // Test that we can clone content.
+    // Test that we can not clone content.
     $this->drupalGet('/entity_clone/node/1');
-    $assert_session->statusCodeEquals(200);
+    $assert_session->statusCodeEquals(403);
   }
 
   /**
