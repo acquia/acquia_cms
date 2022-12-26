@@ -49,6 +49,12 @@ class DecoupledTest extends ExistingSiteBase {
         ->setData($data)
         ->save();
     }
+
+    // Accept all JSON:API create, read, update, and delete operations.
+    $this->container->get('config.factory')
+      ->getEditable('jsonapi.settings')
+      ->set('read_only', FALSE)
+      ->save();
   }
 
   /**
