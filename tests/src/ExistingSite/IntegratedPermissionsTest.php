@@ -3,54 +3,17 @@
 namespace Drupal\Tests\acquia_cms\Functional;
 
 use Drupal\Tests\acquia_cms_common\Traits\PermissionsTrait;
-use Drupal\Tests\BrowserTestBase;
+use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
  * Tests basic, broad permissions of the user roles included with Acquia CMS.
  *
  * @group acquia_cms_common
  * @group acquia_cms
- * @group integrated
  */
-class IntegratedPermissionsTest extends BrowserTestBase {
+class IntegratedPermissionsTest extends ExistingSiteBase {
 
   use PermissionsTrait;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $defaultTheme = 'stark';
-
-  /**
-   * {@inheritdoc}
-   */
-  protected static $modules = [
-    'acquia_cms_site_studio',
-    'acquia_cms_event',
-    'acquia_cms_article',
-    'acquia_cms_page',
-    'acquia_cms_tour',
-    'acquia_cms_document',
-    'acquia_cms_image',
-    'acquia_cms_video',
-    'acquia_cms_search',
-    'acquia_cms_toolbar',
-  ];
-
-  /**
-   * Disable strict config schema checks in this test.
-   *
-   * Cohesion has a lot of config schema errors, and until they are all fixed,
-   * this test cannot pass unless we disable strict config schema checking
-   * altogether. Since strict config schema isn't critically important in
-   * testing this functionality, it's okay to disable it for now, but it should
-   * be re-enabled (i.e., this property should be removed) as soon as possible.
-   *
-   * @var bool
-   */
-  // @codingStandardsIgnoreStart
-  protected $strictConfigSchema = FALSE;
-  // @codingStandardsIgnoreEnd
 
   /**
    * {@inheritdoc}
