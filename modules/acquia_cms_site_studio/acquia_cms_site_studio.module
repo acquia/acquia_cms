@@ -13,6 +13,7 @@ use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\media_library\MediaLibraryState;
+use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -192,6 +193,8 @@ function acquia_cms_site_studio_content_model_role_presave_alter(RoleInterface &
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
+ *
+ * Adds the permissions to role.
  */
 function acquia_cms_site_studio_cohesion_helper_category_insert(EntityInterface $entity) {
   _acquia_cms_site_studio_add_permissions($entity);
@@ -199,6 +202,8 @@ function acquia_cms_site_studio_cohesion_helper_category_insert(EntityInterface 
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
+ *
+ * Adds the permissions to role.
  */
 function acquia_cms_site_studio_cohesion_component_category_insert(EntityInterface $entity) {
   _acquia_cms_site_studio_add_permissions($entity);
@@ -222,7 +227,7 @@ function _acquia_cms_site_studio_add_permissions(EntityInterface $entity) {
     $permissions = SiteStudioPermissionHelper::getDynamicPermissionsByRole($role);
     $permissionToProvide = "access " . $entity->id() . " " . $entity->bundle() . " group";
     if (in_array($permissionToProvide, $permissions)) {
-      $roleObject = \Drupal\user\Entity\Role::load($role);
+      $roleObject = Role::load($role);
       $roleObject->grantPermission($permissionToProvide);
       $roleObject->save();
     }
