@@ -6,6 +6,7 @@ use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\acquia_cms_common\Traits\PasswordGeneratorTrait;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Drupal\Component\Utility\Crypt;
 use Drupal\consumers\Entity\Consumer;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityStorageException;
@@ -97,6 +98,13 @@ class StarterkitNextjsService {
   protected $consumerSecret;
 
   /**
+   * Generated consumer client Id.
+   *
+   * @var string
+   */
+  protected $clientId;
+
+  /**
    * Injects various services used in the Next.js starter kit Service.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -125,6 +133,7 @@ class StarterkitNextjsService {
     $this->sitePath = $site_path;
     $this->fileSystem = $file_system;
     $this->request = $request_stack->getCurrentRequest();
+    $this->clientId = Crypt::randomBytesBase64();
   }
 
   /**
@@ -160,9 +169,11 @@ class StarterkitNextjsService {
       $user = $this->getHeadlessUserData();
 
       if (!empty($user) && empty($consumers)) {
+
         $this->consumerSecret = $this->createHeadlessSecret();
         $consumer = Consumer::create();
         $consumer->set('label', $consumer_data['site-name']);
+        $consumer->set('client_id', $this->clientId);
         $consumer->set('secret', $this->consumerSecret);
         $consumer->set('description', 'This client is provided by the acquia_cms_headless module.');
         $consumer->set('is_default', TRUE);
@@ -222,6 +233,7 @@ class StarterkitNextjsService {
       $next_object->create([
         'id' => $site_id,
         'label' => $site_data['site-name'],
+        'client_id' => $this->clientId,
         'base_url' => $site_data['site-url'],
         'preview_url' => $site_data['site-url'] . '/api/preview/',
         'preview_secret' => $preview_secret,
@@ -711,7 +723,7 @@ class StarterkitNextjsService {
       $consumer = $this->getHeadlessConsumerData($next_site->label());
       $variables += [
         'DRUPAL_PREVIEW_SECRET' => $secret,
-        'DRUPAL_CLIENT_ID' => $consumer->uuid(),
+        'DRUPAL_CLIENT_ID' => $consumer->getClientId(),
         'DRUPAL_CLIENT_SECRET' => $this->consumerSecret ?? 'insert secret here',
       ];
     }
