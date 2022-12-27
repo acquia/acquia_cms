@@ -30,9 +30,6 @@ function acquia_cms_image_install($is_syncing) {
             array_splice($items, $key + 1, 0, "imce_image");
             $settings["toolbar"]["items"] = $items;
           }
-          if (isset($settings["plugins"]["media_media"])) {
-            $settings["plugins"]["media_media"]["allow_view_mode_override"] = TRUE;
-          }
           $editorObject->setSettings($settings)->save();
         }
       }
