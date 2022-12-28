@@ -10,6 +10,12 @@ use Behat\Mink\Element\ElementInterface;
 abstract class CohesionHelperTestBase extends CohesionTestBase {
 
   /**
+   * @var bool
+   * @todo this need to be removed once ACO fixes ACO-2372.
+   */
+  protected $failOnPhpWatchdogMessages = FALSE;
+
+  /**
    * {@inheritdoc}
    */
   protected function editDefinition(string $group, string $label) : ElementInterface {
