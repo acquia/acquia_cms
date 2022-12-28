@@ -120,3 +120,12 @@ function acquia_cms_headless_update_8004() {
     'access acquia cms headless api dashboard',
   ]);
 }
+
+/**
+ * Execute method to update client_id field.
+ */
+function acquia_cms_headless_update_8005() {
+  if (\Drupal::moduleHandler()->moduleExists('consumers') && function_exists('consumers_update_8109')) {
+    consumers_update_8109();
+  }
+}
