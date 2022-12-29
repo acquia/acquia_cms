@@ -30,6 +30,12 @@ class DecoupledTest extends ExistingSiteBase {
   use MediaTestTrait;
 
   /**
+   * @var bool
+   * @todo this need to be removed once ACO fixes ACO-2372.
+   */
+  protected $failOnPhpWatchdogMessages = FALSE;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp():void {
@@ -49,12 +55,6 @@ class DecoupledTest extends ExistingSiteBase {
         ->setData($data)
         ->save();
     }
-
-    // Accept all JSON:API create, read, update, and delete operations.
-    $this->container->get('config.factory')
-      ->getEditable('jsonapi.settings')
-      ->set('read_only', FALSE)
-      ->save();
   }
 
   /**
