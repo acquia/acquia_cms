@@ -31,7 +31,15 @@ class DecoupledTest extends ExistingSiteBase {
 
   /**
    * @var bool
-   * @todo this need to be removed once ACO fixes ACO-2372.
+   *
+   * In weitzman 2.0 new feature introduced to fail tests if there is any type
+   * of PHP log in watchdog, this will consider as test failure and exit.
+   * With this test we are making JSON:API call with non allowed method(s)
+   * i.e. PATCH, PUT, POST, DELETE, etc... and expecting error entries
+   * in watchdog.
+   *
+   * Hence marking this test allowed by setting
+   * failOnPhpWatchdogMessages to FALSE.
    */
   protected $failOnPhpWatchdogMessages = FALSE;
 
