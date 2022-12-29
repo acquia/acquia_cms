@@ -138,7 +138,7 @@ class HeadlessNextSites extends AcquiaCmsDashboardBase {
     $query->tableSort($header);
     $query->pager(10);
 
-    return $query->execute();
+    return $query->accessCheck(TRUE)->execute();
   }
 
   /**

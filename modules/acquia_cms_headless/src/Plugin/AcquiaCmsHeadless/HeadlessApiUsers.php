@@ -128,7 +128,7 @@ class HeadlessApiUsers extends AcquiaCmsDashboardBase {
     $query->range(0, 1);
     $query->tableSort($header);
     $query->pager(10);
-    return $query->accessCheck(FALSE)->execute();
+    return $query->accessCheck(TRUE)->execute();
   }
 
   /**

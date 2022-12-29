@@ -326,7 +326,7 @@ class StarterkitNextjsService {
     $rolesStorage = $this->entityTypeManager->getStorage('user_role');
     $query = $rolesStorage->getQuery();
     return $query
-      ->accessCheck(FALSE)
+      ->accessCheck(TRUE)
       ->condition('id', ["authenticated", "anonymous"], 'NOT IN')
       ->execute();
   }
@@ -343,6 +343,7 @@ class StarterkitNextjsService {
     $consumerQuery = $consumerStorage->getQuery();
     $cids = $consumerQuery
       ->condition('label', 'Default Consumer', 'NOT IN')
+      ->accessCheck(TRUE)
       ->execute();
 
     if (!empty($cids)) {
@@ -494,7 +495,7 @@ class StarterkitNextjsService {
     $consumerStorage = $this->entityTypeManager->getStorage('consumer');
     $query = $consumerStorage->getQuery();
     $query->condition('label', $site_name);
-    $cids = $query->range(0, 1)->execute();
+    $cids = $query->range(0, 1)->accessCheck(TRUE)->execute();
     $cid = array_keys($cids);
 
     return !empty($cid) ? $consumerStorage->load($cid[0]) : NULL;
@@ -518,6 +519,7 @@ class StarterkitNextjsService {
     $cids = $query
       ->condition('redirect', $redirect_uri)
       ->range(0, 1)
+      ->accessCheck(TRUE)
       ->execute();
     $cid = array_keys($cids);
 
@@ -537,7 +539,7 @@ class StarterkitNextjsService {
     $userStorage = $this->entityTypeManager->getStorage('user');
     $query = $userStorage->getQuery();
     $uids = $query
-      ->accessCheck(FALSE)
+      ->accessCheck(TRUE)
       ->condition('name', 'Headless')
       ->range(0, 1)
       ->execute();
@@ -595,6 +597,7 @@ class StarterkitNextjsService {
     // Find the Default Consumer entity.
     $cids = $consumerQuery
       ->condition('label', "Default Consumer")
+      ->accessCheck(TRUE)
       ->execute();
     $cid = array_keys($cids);
 
@@ -777,7 +780,7 @@ class StarterkitNextjsService {
     $consumerStorage = $this->entityTypeManager->getStorage('consumer');
     $query = $consumerStorage->getQuery();
     $query->condition('label', 'Default Consumer', '!=');
-    $count = $query->accessCheck(FALSE)->count()->execute();
+    $count = $query->accessCheck(TRUE)->count()->execute();
 
     return ($count >= 1) ? TRUE : FALSE;
 
