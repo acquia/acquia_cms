@@ -29,7 +29,6 @@ abstract class Ckeditor5ConfigurationTestBase extends WebDriverTestBase {
    */
   protected static $modules = [
     'acquia_cms_common',
-    'media_library',
   ];
 
   /**
