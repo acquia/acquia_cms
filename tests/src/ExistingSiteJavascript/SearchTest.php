@@ -93,11 +93,12 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
     // Get the container which holds the facets, and assert that, initially,
     // the content type facet is visible but none of the dependent facets are.
-    $this->assertTrue($this->assertLinkExists('Content Type', $facets)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Article Type', $facets)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Event Type', $facets)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Person Type', $facets)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Place Type', $facets)->isVisible());
+    $this->assertTrue($this->assertElementWithTitleExists('Content Type', $facets)->isVisible());
+    $this->assertFalse($this->assertElementWithTitleExists('Article Type', $facets)->isVisible());
+    $this->assertFalse($this->assertElementWithTitleExists('Event Type', $facets)->isVisible());
+    $this->assertFalse($this->assertElementWithTitleExists('Page Type', $facets)->isVisible());
+    $this->assertFalse($this->assertElementWithTitleExists('Person Type', $facets)->isVisible());
+    $this->assertFalse($this->assertElementWithTitleExists('Place Type', $facets)->isVisible());
 
     foreach ($node_types as $node_type_id => $type) {
       // Clear all selected facets.
@@ -112,6 +113,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
       $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
 
       // Activate the facet for this content type.
+      print_r($facets);
       $this->assertLinkExists($node_type_label . ' (1)', $facets)->click();
 
       $this->assertLinkExists('Test published ' . $node_type_label);
@@ -187,6 +189,24 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
   }
 
   /**
+   * Asserts that a text exists.
+   *
+   * @param string $title
+   *   The title, text, or rel of the link.
+   * @param \Behat\Mink\Element\ElementInterface|null $container
+   *   (optional) The element that contains the link.
+   *
+   * @return \Behat\Mink\Element\ElementInterface
+   *   The link element.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   */
+  private function assertElementWithTitleExists(string $title, ElementInterface $container = NULL) : ElementInterface {
+    print_r($this->assertSession()->elementExists('named', ['content', $title], $container));
+    return $this->assertSession()->elementExists('named', ['content', $title], $container);
+  }
+
+  /**
    * Asserts that a link does not exist.
    *
    * @param string $title
@@ -233,11 +253,11 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
   private function assertFacetLinkExists(ElementInterface $facets = NULL) {
     // Get the container which holds the facets, and assert that, initially, the
     // Test that none of the dependent facets are visible for fallback.
-    $this->assertFalse($this->assertLinkExists('Content Type', $facets)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Article Type', $facets)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Event Type', $facets)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Person Type', $facets)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Place Type', $facets)->isVisible());
+    $this->assertFalse($this->assertElementWithTitleExists('Content Type', $facets)->isVisible());
+    $this->assertFalse($this->assertElementWithTitleExists('Article Type', $facets)->isVisible());
+    $this->assertFalse($this->assertElementWithTitleExists('Event Type', $facets)->isVisible());
+    $this->assertFalse($this->assertElementWithTitleExists('Person Type', $facets)->isVisible());
+    $this->assertFalse($this->assertElementWithTitleExists('Place Type', $facets)->isVisible());
     $this->assertLinksExistInOrder();
   }
 
