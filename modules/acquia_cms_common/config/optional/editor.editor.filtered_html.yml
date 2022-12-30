@@ -26,7 +26,6 @@ settings:
       - numberedList
       - '|'
       - blockQuote
-      - drupalMedia
       - '|'
       - code
       - sourceEditing
@@ -54,7 +53,6 @@ settings:
         - '<h4 id>'
         - '<h5 id>'
         - '<h6 id>'
-        - '<drupal-media data-align data-caption title>'
     ckeditor5_list:
       reversed: false
       startIndex: true
@@ -65,7 +63,7 @@ settings:
         - right
         - justify
     media_media:
-      allow_view_mode_override: true
+      allow_view_mode_override: false
 image_upload:
   status: false
   scheme: public
