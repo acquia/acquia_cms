@@ -1,0 +1,85 @@
+name: "Acquia CMS CI"
+on:
+  push:
+    branches: [ develop, qa, stage, main, release/*, feature/* ]
+    paths-ignore:
+      - README.md
+  pull_request:
+    #    branches: [ develop ]
+    paths-ignore:
+      - README.md
+jobs:
+  #  static_code_analysis:
+  #    runs-on: ubuntu-latest
+  #    env:
+  #      JOB_TYPE: "static-code-analysis"
+  #      #ACMS_JOB: ${{ matrix.acms-job}}
+  #    strategy:
+  #      matrix:
+  #        orca-job:
+  #          - STATIC_CODE_ANALYSIS
+  #    steps:
+  #      - uses: actions/checkout@v3
+  #      - name: Use Node.js 12.13.1
+  #        uses: actions/setup-node@v3
+  #        with:
+  #          node-version: 12.13.1
+  #      - uses: shivammathur/setup-php@v2
+  #        with:
+  #          php-version: 8.1
+  #          #coverage: xdebug
+  #      - name: static_code_analysis
+  #        run: |
+  #          echo "static_code_analysis job should pass. :) "
+  #  strict_deprecated_code_scan:
+  #    runs-on: ubuntu-latest
+  #    env:
+  #      JOB_TYPE: "static-code-analysis-2"
+  #      #ACMS_JOB: ${{ matrix.acms-job}}
+  #    strategy:
+  #      matrix:
+  #        orca-job:
+  #          - STATIC_CODE_ANALYSIS
+  #          - ISOLATED_TEST_ON_CURRENT_DEV
+  #    steps:
+  #      - uses: actions/checkout@v3
+  #      - name: Use Node.js 12.13.1
+  #        uses: actions/setup-node@v3
+  #        with:
+  #          node-version: 12.13.1
+  #      - uses: shivammathur/setup-php@v2
+  #        with:
+  #          php-version: 8.1
+  #          #coverage: xdebug
+  #      - name: strict_deprecated_code_scan
+  #        run: |
+  #          echo "strict_deprecated_code_scan also pass. :) "
+  deploy_code:
+    if: ${{ github.ref == 'refs/heads/develop' }}
+    name: "Continuous Deployment (CD)"
+    #needs: [static_code_analysis, strict_deprecated_code_scan]
+    runs-on: ubuntu-latest
+    #environment: code_deployment
+    #concurrency: production
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Configure SSH keys
+        run: |
+          mkdir -p ~/.ssh
+          echo "${DRUPAL_SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval `ssh-agent -s`
+          ssh-add ~/.ssh/id_rsa
+          ssh-keyscan "${DRUPAL_SSH_KNOWN_HOSTS}" >> ~/.ssh/known_hosts
+          echo {{ github.repository_owner }}
+        shell: bash
+        env:
+          DRUPAL_SSH_PRIVATE_KEY: ${{ secrets.DRUPAL_SSH_PRIVATE_KEY }}
+          DRUPAL_SSH_KNOWN_HOSTS: git.drupal.org
+      - name: deploy_code
+        run: |
+          git config user.name --global "Vishal Khode"
+          git config user.email --global "vishal.khode@acquia.com"
+          ${GITHUB_WORKSPACE}/scripts/deploy_code.sh
