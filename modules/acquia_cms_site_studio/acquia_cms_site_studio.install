@@ -40,7 +40,7 @@ function acquia_cms_site_studio_install() {
   // Update search & search_fallback views display_options's style
   // type as cohesion_layout and option's views_template & master_template
   // if acquia_cms_site_studio module is present else use default one.
-  $module_handler = \Drupal::moduleHandler();
+  $module_handler = \Drupal::service('module_handler');
   if ($module_handler->moduleExists('acquia_cms_search')) {
     _acquia_cms_common_update_view_display_options_style('search');
     _acquia_cms_common_update_view_display_options_style('search_fallback');
@@ -95,8 +95,7 @@ function acquia_cms_site_studio_install() {
   }
 
   // Set default node revision delete configuration for Page content type.
-  $moduleHandler = \Drupal::service('module_handler');
-  if ($moduleHandler->moduleExists('acquia_cms_page')) {
+  if ($module_handler->moduleExists('acquia_cms_page')) {
     $type = NodeType::load('page');
     // @todo It's failing on acquia_cms profile, need to revisit.
     $third_party_settings = $type ? $type->get('third_party_settings') : NULL;
@@ -109,8 +108,8 @@ function acquia_cms_site_studio_install() {
   }
 
   // Re-write the editor and filter format config from
-  // optional directory since we have don some update to it.
-  $module_path = \Drupal::moduleHandler()->getModule('acquia_cms_site_studio')->getPath();
+  // optional directory since we have done some update to it.
+  $module_path = $module_handler->getModule('acquia_cms_site_studio')->getPath();
   $config_optional = $module_path . '/config/optional';
   $source_optional_dir = new FileStorage($config_optional);
 
@@ -155,7 +154,7 @@ function set_theme_site_studio_as_default() {
 /**
  * Implements hook_uninstall().
  *
- * Reset page field body's label and descritption to default.
+ * Reset page field body's label and description to default.
  */
 function acquia_cms_site_studio_uninstall() {
   $config = \Drupal::service('config.factory')->getEditable('field.field.node.page.body');
@@ -209,8 +208,8 @@ function acquia_cms_site_studio_update_8003() {
       ->save();
   }
   // Set default node revision delete configuration for Place content type.
-  $moduleHandler = \Drupal::service('module_handler');
-  if ($moduleHandler->moduleExists('acquia_cms_page')) {
+  $module_handler = \Drupal::service('module_handler');
+  if ($module_handler->moduleExists('acquia_cms_page')) {
     $type = NodeType::load('page');
     if ($type) {
       $type->setThirdPartySetting('node_revision_delete', 'minimum_revisions_to_keep', '30');

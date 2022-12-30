@@ -4,9 +4,9 @@
     "description": "Provides component and related configuration for Acquia CMS.",
     "license": "GPL-2.0-or-later",
     "require": {
-        "drupal/acquia_cms_common": "^1.6",
-        "drupal/component": "1.0-rc3",
-        "drupal/jsonapi_extras": "^3"
+        "drupal/acquia_cms_common": "dev-1.x",
+        "drupal/component": "^1.0",
+        "drupal/jsonapi_extras": "^3.23"
     },
     "config": {
         "allow-plugins": {
@@ -20,20 +20,7 @@
             "webdriver-binary/binary-chromedriver": true
         }
     },
-    "extra": {
-        "enable-patching": true,
-        "patches": {
-            "drupal/component": {
-                "3236462 - Missing Use statement creates fatal errors": "https://git.drupalcode.org/project/component/-/merge_requests/2.patch",
-                "3296262: Fix deprecation warnings in RecursiveComponentFilterIterator": "https://git.drupalcode.org/project/component/-/merge_requests/5.patch"
-            }
-        }
-    },
     "repositories": {
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        },
         "assets": {
             "type": "composer",
             "url": "https://asset-packagist.org"

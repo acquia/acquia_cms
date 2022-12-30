@@ -181,36 +181,6 @@ function acquia_cms_headless_ui_form_taxonomy_overview_terms_alter(array &$form)
 }
 
 /**
- * Implements template_preprocess_admin_block_content().
- */
-function acquia_cms_headless_ui_preprocess_admin_block_content(array &$variables) {
-  template_preprocess_admin_block_content($variables);
-
-  foreach ($variables['content'] as &$item) {
-    if (isset($item['options']['attributes'])) {
-      $item['attributes'] = new Attribute($item['options']['attributes']);
-    }
-  }
-}
-
-/**
- * Implements hook_theme_registry_alter().
- */
-function acquia_cms_headless_ui_theme_registry_alter(array &$theme_registry) {
-  $hook = &$theme_registry['admin_block_content'];
-
-  $hook['preprocess functions'] = array_diff(
-        $hook['preprocess functions'],
-        ['template_preprocess_admin_block_content']
-    );
-
-  $seven_path = \Drupal::service('extension.list.theme')->getPath('seven') . '/templates';
-  if ($hook['path'] == $seven_path) {
-    $hook['path'] = \Drupal::service('extension.list.module')->getPath('acquia_cms_headless_ui') . '/templates';
-  }
-}
-
-/**
  * Implements hook_local_tasks_alter().
  */
 function acquia_cms_headless_ui_local_tasks_alter(array &$local_tasks) {

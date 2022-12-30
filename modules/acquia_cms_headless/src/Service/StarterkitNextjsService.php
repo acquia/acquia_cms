@@ -11,7 +11,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\Http\RequestStack;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Password\DefaultPasswordGenerator;
 use Drupal\Core\Site\Settings;
@@ -22,6 +21,7 @@ use Drupal\simple_oauth\Service\Exception\FilesystemValidationException;
 use Drupal\simple_oauth\Service\KeyGeneratorService;
 use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * A service for the initialization of the Headless Next.js starter kit.
@@ -113,7 +113,7 @@ class StarterkitNextjsService {
    *   Gets the site path, useful in cases of multi-site arrangements.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   Lets us create a directory.
-   * @param \Drupal\Core\Http\RequestStack $request_stack
+   * @param Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The current request.
    */
   public function __construct(ConfigFactoryInterface $config_factory, DefaultPasswordGenerator $defaultPasswordGenerator, EntityTypeManagerInterface $entity_type_manager, KeyGeneratorService $key_generator_service, MessengerInterface $messenger, string $site_path, FileSystemInterface $file_system, RequestStack $request_stack) {
@@ -326,6 +326,7 @@ class StarterkitNextjsService {
     $rolesStorage = $this->entityTypeManager->getStorage('user_role');
     $query = $rolesStorage->getQuery();
     return $query
+      ->accessCheck(TRUE)
       ->condition('id', ["authenticated", "anonymous"], 'NOT IN')
       ->execute();
   }
@@ -342,6 +343,7 @@ class StarterkitNextjsService {
     $consumerQuery = $consumerStorage->getQuery();
     $cids = $consumerQuery
       ->condition('label', 'Default Consumer', 'NOT IN')
+      ->accessCheck(TRUE)
       ->execute();
 
     if (!empty($cids)) {
@@ -493,7 +495,7 @@ class StarterkitNextjsService {
     $consumerStorage = $this->entityTypeManager->getStorage('consumer');
     $query = $consumerStorage->getQuery();
     $query->condition('label', $site_name);
-    $cids = $query->range(0, 1)->execute();
+    $cids = $query->range(0, 1)->accessCheck(TRUE)->execute();
     $cid = array_keys($cids);
 
     return !empty($cid) ? $consumerStorage->load($cid[0]) : NULL;
@@ -517,6 +519,7 @@ class StarterkitNextjsService {
     $cids = $query
       ->condition('redirect', $redirect_uri)
       ->range(0, 1)
+      ->accessCheck(TRUE)
       ->execute();
     $cid = array_keys($cids);
 
@@ -536,6 +539,7 @@ class StarterkitNextjsService {
     $userStorage = $this->entityTypeManager->getStorage('user');
     $query = $userStorage->getQuery();
     $uids = $query
+      ->accessCheck(TRUE)
       ->condition('name', 'Headless')
       ->range(0, 1)
       ->execute();
@@ -593,6 +597,7 @@ class StarterkitNextjsService {
     // Find the Default Consumer entity.
     $cids = $consumerQuery
       ->condition('label', "Default Consumer")
+      ->accessCheck(TRUE)
       ->execute();
     $cid = array_keys($cids);
 
@@ -775,7 +780,7 @@ class StarterkitNextjsService {
     $consumerStorage = $this->entityTypeManager->getStorage('consumer');
     $query = $consumerStorage->getQuery();
     $query->condition('label', 'Default Consumer', '!=');
-    $count = $query->count()->execute();
+    $count = $query->accessCheck(TRUE)->count()->execute();
 
     return ($count >= 1) ? TRUE : FALSE;
 

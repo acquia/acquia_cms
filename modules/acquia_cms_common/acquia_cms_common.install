@@ -108,6 +108,10 @@ function acquia_cms_common_config_schema_info_alter(&$definitions) {
   $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['path_alias'] = $schemaMapping;
   $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['redirect'] = $schemaMapping;
   $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['search_api_task'] = $schemaMapping;
+  $definitions['config_ignore.settings']['mapping']['enable_export_filtering'] = [
+    'type' => 'boolean',
+    'label' => 'Enable export filtering',
+  ];
 }
 
 /**
