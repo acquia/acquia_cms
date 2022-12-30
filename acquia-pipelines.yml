@@ -39,5 +39,3 @@ events:
             # in Pipelines doesn't seem to work. This deployment is ephemeral, so using
             # the existing config directory isn't a problem.
             - echo "\$config_directories['sync'] = '../config';" >> docroot/sites/default/settings.php
-            # Add temporary SS fixes in settings.php
-            - cat docroot/sites/default/ss_settings.php >> docroot/sites/default/settings.php
