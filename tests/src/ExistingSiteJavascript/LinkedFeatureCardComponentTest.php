@@ -32,13 +32,13 @@ class LinkedFeatureCardComponentTest extends CohesionComponentTestBase {
     $edit_form = $this->getLayoutCanvas()->add('Linked feature card')->edit();
     $edit_form->fillField('Card heading', 'Example component 123');
     $edit_form->fillField('Description', 'Example');
-    // @todo make below assertion working later.
-    // $edit_form->fillField('Type page name', 'https://www.acquia.com');
+    $edit_form->fillField('Link to page or URL', 'https://www.acquia.com');
     $this->assertSession()->optionExists('Card heading element', 'Heading 3');
-
-    $this->openMediaLibrary($edit_form, 'Select image');
+    // @todo this need to be removed once ACO fixes ACO-2372.
+    /*$this->openMediaLibrary($edit_form, 'Select image');
+    $this->selectMediaSource("Media Types");
     $this->selectMedia(0);
-    $this->insertSelectedMedia();
+    $this->insertSelectedMedia();*/
   }
 
   /**
