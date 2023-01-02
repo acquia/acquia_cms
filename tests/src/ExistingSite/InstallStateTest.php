@@ -276,10 +276,10 @@ class InstallStateTest extends ExistingSiteBase {
   /**
    * Tests tour permission for user roles.
    *
-   * - User roles with permission 'access acquia cms tour' should able to
-   *   access tour page.
-   * - User roles without permission 'access acquia cms tour'
-   *   should not be able to access tour page.
+   * - User roles with permission 'access acquia cms tour dashboard'
+   *   should able to Acquia CMS Wizard.
+   * - User roles without permission 'access acquia cms tour dashboard'
+   *   should not be able to access Acquia CMS Wizard.
    */
   public function testTourPermissions() {
     $assert_session = $this->assertSession();
@@ -294,29 +294,21 @@ class InstallStateTest extends ExistingSiteBase {
       $account->addRole($role);
       $account->save();
       $this->drupalLogin($account);
-      $this->assertTrue($account->hasPermission('access acquia cms tour'));
+      $this->assertTrue($account->hasPermission('access acquia cms tour dashboard'));
 
       // User should be able to access the toolbar and see a Tour link.
       $assert_session->elementExists('css', '#toolbar-administration')
-        ->clickLink('Tour');
+        ->clickLink('Acquia CMS Wizard');
       // Visit the tour page.
-      $this->drupalGet('/admin/tour');
+      $this->drupalGet('/admin/tour/dashboard');
       $assert_session->statusCodeEquals(200);
     }
-
-    // User with dashboard permission shall access the dashboard pages.
-    $account = $this->createUser(['access acquia cms tour dashboard']);
-    $this->drupalLogin($account);
-    $this->drupalGet('/admin/tour/dashboard');
-    $assert_session->statusCodeEquals(200);
 
     // Regular authenticated users should not be able to access the dashboard
     // and tour page.
     $account = $this->createUser();
     $this->drupalLogin($account);
     $this->drupalGet('/admin/tour/dashboard');
-    $assert_session->statusCodeEquals(403);
-    $this->drupalGet('/admin/tour');
     $assert_session->statusCodeEquals(403);
   }
 
