@@ -277,7 +277,7 @@ jobs:
           ../orca/bin/ci/after_script.sh
 
   deploy_code:
-    if: ${{ github.ref == 'refs/heads/develop' }}
+    if: ${{ github.ref == 'refs/heads/main' }}
     name: "Continuous Deployment (CD)"
     needs: [ static_code_analysis, integrated_tests, isolated_tests ]
     runs-on: ubuntu-latest
