@@ -65,34 +65,8 @@ class AcquiaSearchIntegrationTest extends BrowserTestBase {
     ]);
     $this->drupalLogin($account);
     $this->drupalGet('/admin/config/search/search-api/server/acquia_search_server/edit');
-
-    // @todo write new test as per 3.1 acquia search release.
-    /*
-    $page = $this->getSession()->getPage();
-    $page->fillField('Acquia Subscription identifier', 'ABCD-12345');
-    $page->fillField('Acquia Connector key', $this->randomString());
-    $page->fillField('Acquia Application UUID',
-    $this->container->get('uuid')->generate());
-    $page->pressButton('Save');
-    $assert_session = $this->assertSession();
-    $assert_session->pageTextContains('The server was successfully saved.');
-     */
-
     $assert_session = $this->assertSession();
     $assert_session->statusCodeEquals(200);
-
-    // Our index should be using the Solr server, whereas the one that ships
-    // with Acquia Search Solr should be disabled, along with any views that are
-    // using it.
-    // @todo write new test as per 3.1 acquia search release.
-    /*
-    $this->assertSame('acquia_search_server',
-    Index::load('content')->getServerId());
-    $index = Index::load('acquia_search_index');
-    $this->assertFalse($index->status());
-    $this->assertNull($index->getServerId());
-    $this->assertFalse(View::load('acquia_search')->status());
-     */
   }
 
 }

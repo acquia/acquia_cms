@@ -128,7 +128,7 @@ class HeadlessApiKeys extends AcquiaCmsDashboardBase {
     $query->tableSort($header);
     $query->pager(10);
 
-    return $query->execute();
+    return $query->accessCheck(TRUE)->execute();
   }
 
   /**
@@ -265,7 +265,7 @@ class HeadlessApiKeys extends AcquiaCmsDashboardBase {
       $secret = $consumer->getTypedData()->get('secret')->getValue();
       $row = [
         'label' => Link::fromTextAndUrl($consumer->label(), $operations[$consumer->id()]['edit']['url']),
-        'client_id' => $consumer->uuid(),
+        'client_id' => $consumer->getClientId(),
         'secret' => !empty($secret) ? '**********' : 'N/A',
         'operations' => [
           'data' => [
@@ -276,7 +276,7 @@ class HeadlessApiKeys extends AcquiaCmsDashboardBase {
         ],
       ];
 
-      $rows[$consumer->uuid()] = $row;
+      $rows[$consumer->getClientId()] = $row;
     }
 
     return $rows;

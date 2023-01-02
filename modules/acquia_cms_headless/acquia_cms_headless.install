@@ -81,6 +81,7 @@ function acquia_cms_headless_update_8002() {
   $rolesStorage = \Drupal::entityTypeManager()->getStorage('user_role');
   $query = $rolesStorage->getQuery();
   $roleIds = $query
+    ->accessCheck(FALSE)
     ->condition('id', ["authenticated", "anonymous", "headless"], 'NOT IN')
     ->execute();
   $config = \Drupal::configFactory()->getEditable('acquia_cms_headless.settings');
@@ -104,5 +105,27 @@ function acquia_cms_headless_update_8003() {
   if (\Drupal::moduleHandler()->moduleExists('seckit')) {
     $config = \Drupal::configFactory()->getEditable('seckit.settings');
     $config->set("seckit_clickjacking.x_frame", '0')->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ * Update existing permission with new permission
+ */
+function acquia_cms_headless_update_8004() {
+  user_role_grant_permissions('headless', [
+    'access acquia cms headless dashboard',
+  ]);
+  user_role_revoke_permissions('headless', [
+    'access acquia cms headless api dashboard',
+  ]);
+}
+
+/**
+ * Execute method to update client_id field.
+ */
+function acquia_cms_headless_update_8005() {
+  if (\Drupal::moduleHandler()->moduleExists('consumers') && function_exists('consumers_update_8109')) {
+    consumers_update_8109();
   }
 }

@@ -43,14 +43,6 @@ function acquia_cms_starter_requirements(string $phase) : array {
 }
 
 /**
- * Implements hook_install().
- */
-function acquia_cms_starter_install() {
-  \Drupal::service('module_installer')->install(['webform']);
-  \Drupal::service('module_installer')->install(['webform_ui']);
-}
-
-/**
  * Implements hook_modules_installed().
  */
 function acquia_cms_starter_modules_installed(array $modules) {

@@ -8,49 +8,51 @@ dependencies:
     - field.field.node.page.field_tags
     - node.type.page
     - workflows.workflow.editorial
-  enforced:
-    module:
-      - acquia_cms_page
   module:
     - content_moderation
     - field_group
     - media_library
     - path
+    - scheduler
+    - scheduler_content_moderation_integration
     - text
+  enforced:
+    module:
+      - acquia_cms_page
 third_party_settings:
   field_group:
     group_taxonomy:
       children:
         - field_categories
         - field_tags
-      parent_name: ''
-      weight: 4
-      format_type: fieldset
+      label: Taxonomy
       region: content
+      parent_name: ''
+      weight: 5
+      format_type: fieldset
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         description: ''
         required_fields: true
-      label: Taxonomy
 id: node.page.default
 targetEntityType: node
 bundle: page
 mode: default
 content:
   body:
-    weight: 1
+    type: text_textarea_with_summary
+    weight: 2
+    region: content
     settings:
       rows: 9
       summary_rows: 3
       placeholder: ''
       show_summary: false
     third_party_settings: {  }
-    type: text_textarea_with_summary
-    region: content
   created:
     type: datetime_timestamp
-    weight: 7
+    weight: 8
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -62,30 +64,59 @@ content:
     third_party_settings: {  }
   field_page_image:
     type: media_library_widget
-    weight: 3
+    weight: 4
+    region: content
     settings:
       media_types: {  }
-    region: content
     third_party_settings: {  }
   field_tags:
+    type: entity_reference_autocomplete_tags
     weight: 4
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete_tags
+  langcode:
+    type: language_select
+    weight: 1
     region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
   moderation_state:
     type: moderation_state_default
-    weight: 5
-    settings: {  }
+    weight: 6
     region: content
+    settings: {  }
     third_party_settings: {  }
   path:
     type: path
-    weight: 8
+    weight: 9
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  publish_on:
+    type: datetime_timestamp_no_default
+    weight: 14
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  publish_state:
+    type: scheduler_moderation
+    weight: 16
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  scheduler_settings:
+    weight: 13
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 11
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -97,18 +128,35 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  translation:
+    weight: 12
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 6
+    weight: 7
+    region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
-      match_limit: 10
+    third_party_settings: {  }
+  unpublish_on:
+    type: datetime_timestamp_no_default
+    weight: 15
     region: content
+    settings: {  }
+    third_party_settings: {  }
+  unpublish_state:
+    type: scheduler_moderation
+    weight: 17
+    region: content
+    settings: {  }
     third_party_settings: {  }
   url_redirects:
-    weight: 9
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }

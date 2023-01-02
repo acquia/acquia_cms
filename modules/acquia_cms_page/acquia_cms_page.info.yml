@@ -2,9 +2,9 @@ name: "Acquia CMS Page"
 package: "Acquia CMS"
 description: "Provides an unstructured Page content type and related configuration."
 type: module
-core_version_requirement: ^9
+core_version_requirement: ^9 || ^10
 dependencies:
-  - drupal:acquia_cms_image
+  - acquia_cms_image:acquia_cms_image
   - drupal:media_library
   - drupal:path
   - field_group:field_group

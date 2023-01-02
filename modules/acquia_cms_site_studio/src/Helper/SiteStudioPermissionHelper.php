@@ -94,17 +94,11 @@ class SiteStudioPermissionHelper {
       case 'content_author':
         return array_merge(
           self::basicComponentPermissions(),
-          self::basicComponentCategoryHelperPermissions(),
-          self::additionalComponentHelperPermissions(),
-          self::additionalComponentCategoryPermissions(),
           ['access visual page builder'],
         );
 
       case 'content_editor':
-        return array_merge(
-          self::basicComponentPermissions(),
-          self::basicComponentCategoryHelperPermissions(),
-        );
+        return self::basicComponentPermissions();
 
       case 'site_builder':
         return [
@@ -120,6 +114,33 @@ class SiteStudioPermissionHelper {
           'administer style_guide',
           'use text format cohesion',
         ];
+
+      default:
+        return [];
+    }
+  }
+
+  /**
+   * Static Dynamic Permission by role function.
+   *
+   * @param string $role_name
+   *   Role name.
+   *
+   * @return array
+   *   List of permissions based on role.
+   */
+  public static function getDynamicPermissionsByRole(string $role_name): array {
+    switch ($role_name) {
+      case 'content_administrator':
+      case 'content_author':
+        return array_merge(
+          self::basicComponentCategoryHelperPermissions(),
+          self::additionalComponentHelperPermissions(),
+          self::additionalComponentCategoryPermissions(),
+        );
+
+      case 'content_editor':
+        return self::basicComponentCategoryHelperPermissions();
 
       default:
         return [];
