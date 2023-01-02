@@ -54,7 +54,6 @@ if [[ "${ACMS_JOB}" == "backstop_tests" ]]; then
 
     echo "Installing Starter Kit"
     drush en acquia_cms_development -y
-    drush pmu shield -y
     drush en acquia_cms_starter -y
     drush cr
 fi

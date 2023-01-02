@@ -1,20 +1,20 @@
 name: 'Acquia CMS Site Studio'
 package: 'Acquia CMS'
 description: 'Module for Site Studio Installation Code.'
-core_version_requirement: ^9
+core_version_requirement: ^9 || ^10
 type: module
 dependencies:
-  - drupal:acquia_cms_common
-  - drupal:cohesion
-  - drupal:cohesion_base_styles
-  - drupal:cohesion_custom_styles
-  - drupal:cohesion_elements
-  - drupal:cohesion_style_guide
-  - drupal:cohesion_style_helpers
-  - drupal:cohesion_sync
-  - drupal:cohesion_templates
-  - drupal:cohesion_website_settings
-  - drupal:config_ignore
-  - drupal:collapsiblock
-  - drupal:node_revision_delete
-  - drupal:sitestudio_page_builder
+  - acquia_cms_common:acquia_cms_common
+  - cohesion
+  - cohesion_base_styles
+  - cohesion_custom_styles
+  - cohesion_elements
+  - cohesion_style_guide
+  - cohesion_style_helpers
+  - cohesion_sync
+  - cohesion_templates
+  - cohesion_website_settings
+  - config_ignore:config_ignore
+  - collapsiblock:collapsiblock
+  - node_revision_delete:node_revision_delete
+  - sitestudio_page_builder

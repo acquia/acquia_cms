@@ -167,3 +167,46 @@ function acquia_cms_article_update_8005() {
     $article_view_mode->save();
   }
 }
+
+/**
+ * Updates for scheduler option in Article content type.
+ *
+ * Implements hook_update_N().
+ */
+function acquia_cms_article_update_8006() {
+  $formStorage = \Drupal::entityTypeManager()->getStorage('entity_form_display');
+  $formDisplay = $formStorage->load('node.article.default');
+  if ($formDisplay) {
+    $formDisplay
+      ->setComponent('publish_on', [
+        'type' => 'datetime_timestamp_no_default',
+        'region' => 'content',
+        'weight' => 14,
+        'settings' => [],
+      ])
+      ->setComponent('publish_state', [
+        'type' => 'scheduler_moderation',
+        'region' => 'content',
+        'weight' => 16,
+        'settings' => [],
+      ])
+      ->setComponent('scheduler_settings', [
+        'region' => 'content',
+        'weight' => 13,
+        'settings' => [],
+      ])
+      ->setComponent('unpublish_on', [
+        'type' => 'datetime_timestamp_no_default',
+        'region' => 'content',
+        'weight' => 15,
+        'settings' => [],
+      ])
+      ->setComponent('unpublish_state', [
+        'type' => 'scheduler_moderation',
+        'region' => 'content',
+        'weight' => 17,
+        'settings' => [],
+      ])
+      ->save();
+  }
+}

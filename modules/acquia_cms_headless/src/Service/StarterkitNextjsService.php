@@ -6,12 +6,12 @@ use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\acquia_cms_common\Traits\PasswordGeneratorTrait;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Drupal\Component\Utility\Crypt;
 use Drupal\consumers\Entity\Consumer;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\Http\RequestStack;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Password\DefaultPasswordGenerator;
 use Drupal\Core\Site\Settings;
@@ -22,6 +22,7 @@ use Drupal\simple_oauth\Service\Exception\FilesystemValidationException;
 use Drupal\simple_oauth\Service\KeyGeneratorService;
 use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * A service for the initialization of the Headless Next.js starter kit.
@@ -97,6 +98,13 @@ class StarterkitNextjsService {
   protected $consumerSecret;
 
   /**
+   * Generated consumer client Id.
+   *
+   * @var string
+   */
+  protected $clientId;
+
+  /**
    * Injects various services used in the Next.js starter kit Service.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -113,7 +121,7 @@ class StarterkitNextjsService {
    *   Gets the site path, useful in cases of multi-site arrangements.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   Lets us create a directory.
-   * @param \Drupal\Core\Http\RequestStack $request_stack
+   * @param Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The current request.
    */
   public function __construct(ConfigFactoryInterface $config_factory, DefaultPasswordGenerator $defaultPasswordGenerator, EntityTypeManagerInterface $entity_type_manager, KeyGeneratorService $key_generator_service, MessengerInterface $messenger, string $site_path, FileSystemInterface $file_system, RequestStack $request_stack) {
@@ -125,6 +133,7 @@ class StarterkitNextjsService {
     $this->sitePath = $site_path;
     $this->fileSystem = $file_system;
     $this->request = $request_stack->getCurrentRequest();
+    $this->clientId = Crypt::randomBytesBase64();
   }
 
   /**
@@ -160,9 +169,11 @@ class StarterkitNextjsService {
       $user = $this->getHeadlessUserData();
 
       if (!empty($user) && empty($consumers)) {
+
         $this->consumerSecret = $this->createHeadlessSecret();
         $consumer = Consumer::create();
         $consumer->set('label', $consumer_data['site-name']);
+        $consumer->set('client_id', $this->clientId);
         $consumer->set('secret', $this->consumerSecret);
         $consumer->set('description', 'This client is provided by the acquia_cms_headless module.');
         $consumer->set('is_default', TRUE);
@@ -222,6 +233,7 @@ class StarterkitNextjsService {
       $next_object->create([
         'id' => $site_id,
         'label' => $site_data['site-name'],
+        'client_id' => $this->clientId,
         'base_url' => $site_data['site-url'],
         'preview_url' => $site_data['site-url'] . '/api/preview/',
         'preview_secret' => $preview_secret,
@@ -326,6 +338,7 @@ class StarterkitNextjsService {
     $rolesStorage = $this->entityTypeManager->getStorage('user_role');
     $query = $rolesStorage->getQuery();
     return $query
+      ->accessCheck(TRUE)
       ->condition('id', ["authenticated", "anonymous"], 'NOT IN')
       ->execute();
   }
@@ -342,6 +355,7 @@ class StarterkitNextjsService {
     $consumerQuery = $consumerStorage->getQuery();
     $cids = $consumerQuery
       ->condition('label', 'Default Consumer', 'NOT IN')
+      ->accessCheck(TRUE)
       ->execute();
 
     if (!empty($cids)) {
@@ -493,7 +507,7 @@ class StarterkitNextjsService {
     $consumerStorage = $this->entityTypeManager->getStorage('consumer');
     $query = $consumerStorage->getQuery();
     $query->condition('label', $site_name);
-    $cids = $query->range(0, 1)->execute();
+    $cids = $query->range(0, 1)->accessCheck(TRUE)->execute();
     $cid = array_keys($cids);
 
     return !empty($cid) ? $consumerStorage->load($cid[0]) : NULL;
@@ -517,6 +531,7 @@ class StarterkitNextjsService {
     $cids = $query
       ->condition('redirect', $redirect_uri)
       ->range(0, 1)
+      ->accessCheck(TRUE)
       ->execute();
     $cid = array_keys($cids);
 
@@ -536,6 +551,7 @@ class StarterkitNextjsService {
     $userStorage = $this->entityTypeManager->getStorage('user');
     $query = $userStorage->getQuery();
     $uids = $query
+      ->accessCheck(TRUE)
       ->condition('name', 'Headless')
       ->range(0, 1)
       ->execute();
@@ -593,6 +609,7 @@ class StarterkitNextjsService {
     // Find the Default Consumer entity.
     $cids = $consumerQuery
       ->condition('label', "Default Consumer")
+      ->accessCheck(TRUE)
       ->execute();
     $cid = array_keys($cids);
 
@@ -706,7 +723,7 @@ class StarterkitNextjsService {
       $consumer = $this->getHeadlessConsumerData($next_site->label());
       $variables += [
         'DRUPAL_PREVIEW_SECRET' => $secret,
-        'DRUPAL_CLIENT_ID' => $consumer->uuid(),
+        'DRUPAL_CLIENT_ID' => $consumer->getClientId(),
         'DRUPAL_CLIENT_SECRET' => $this->consumerSecret ?? 'insert secret here',
       ];
     }
@@ -775,7 +792,7 @@ class StarterkitNextjsService {
     $consumerStorage = $this->entityTypeManager->getStorage('consumer');
     $query = $consumerStorage->getQuery();
     $query->condition('label', 'Default Consumer', '!=');
-    $count = $query->count()->execute();
+    $count = $query->accessCheck(TRUE)->count()->execute();
 
     return ($count >= 1) ? TRUE : FALSE;
 
