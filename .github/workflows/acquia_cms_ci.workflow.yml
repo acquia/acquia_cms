@@ -275,3 +275,32 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
+
+  deploy_code:
+    if: ${{ github.ref == 'refs/heads/develop' }}
+    name: "Continuous Deployment (CD)"
+    needs: [ static_code_analysis, integrated_tests, isolated_tests ]
+    runs-on: ubuntu-latest
+    environment: code_deployment
+    concurrency: production
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Configure SSH keys
+        run: |
+          mkdir -p ~/.ssh
+          echo "${DRUPAL_SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval `ssh-agent -s`
+          ssh-add ~/.ssh/id_rsa
+          ssh-keyscan "${DRUPAL_SSH_KNOWN_HOSTS}" >> ~/.ssh/known_hosts
+        shell: bash
+        env:
+          DRUPAL_SSH_PRIVATE_KEY: ${{ secrets.DRUPAL_SSH_PRIVATE_KEY }}
+          DRUPAL_SSH_KNOWN_HOSTS: git.drupal.org
+      - name: deploy_code
+        run: |
+          git config user.name --global "Vishal Khode"
+          git config user.email --global "vishal.khode@acquia.com"
+          ${GITHUB_WORKSPACE}/scripts/deploy_code.sh
