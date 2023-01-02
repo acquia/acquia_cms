@@ -1,0 +1,92 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.cohesion
+    - filter.format.filtered_html
+    - filter.format.full_html
+    - media.type.document
+    - media.type.image
+    - media.type.video
+    - node.type.article
+    - node.type.event
+    - node.type.page
+    - node.type.person
+    - node.type.place
+    - workflows.workflow.editorial
+  module:
+    - acquia_cms_tour
+    - cohesion
+    - content_moderation
+    - entity_clone
+    - filter
+    - media
+    - moderation_dashboard
+    - moderation_sidebar
+    - node
+    - scheduler
+    - system
+    - toolbar
+id: content_editor
+label: 'Content Editor'
+weight: -5
+is_admin: null
+permissions:
+  - 'access animate on view'
+  - 'access component builder elements group'
+  - 'access component content'
+  - 'access components'
+  - 'access content elements group'
+  - 'access content overview'
+  - 'access cpt_cat_dynamic_components cohesion_component_category group'
+  - 'access cpt_cat_layout_components cohesion_component_category group'
+  - 'access cpt_cat_map_components cohesion_component_category group'
+  - 'access custom elements group'
+  - 'access drupal core elements group'
+  - 'access elements'
+  - 'access fields'
+  - 'access form fields fields group'
+  - 'access form help fields group'
+  - 'access form layout fields group'
+  - 'access helpers'
+  - 'access hlp_cat_dynamic_helpers cohesion_helper_category group'
+  - 'access hlp_cat_layout_helpers cohesion_helper_category group'
+  - 'access hlp_cat_media_helpers cohesion_helper_category group'
+  - 'access interactive elements group'
+  - 'access layout elements group'
+  - 'access media elements group'
+  - 'access media overview'
+  - 'access menu elements group'
+  - 'access toolbar'
+  - 'access view elements group'
+  - 'clone node entity'
+  - 'delete any article content'
+  - 'delete any document media'
+  - 'delete any event content'
+  - 'delete any image media'
+  - 'delete any page content'
+  - 'delete any person content'
+  - 'delete any place content'
+  - 'delete any video media'
+  - 'edit any article content'
+  - 'edit any document media'
+  - 'edit any event content'
+  - 'edit any image media'
+  - 'edit any page content'
+  - 'edit any person content'
+  - 'edit any place content'
+  - 'edit any video media'
+  - 'schedule publishing of nodes'
+  - 'use editorial transition archive'
+  - 'use editorial transition create_new_draft'
+  - 'use editorial transition publish'
+  - 'use editorial transition review'
+  - 'use moderation dashboard'
+  - 'use moderation sidebar'
+  - 'use text format cohesion'
+  - 'use text format filtered_html'
+  - 'use text format full_html'
+  - 'view any unpublished content'
+  - 'view latest version'
+  - 'view scheduled content'
+  - 'view the administration theme'

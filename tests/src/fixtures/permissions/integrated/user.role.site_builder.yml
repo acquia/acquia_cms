@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.filtered_html
+  module:
+    - filter
+    - system
+    - toolbar
+id: site_builder
+label: 'Site Builder'
+weight: -8
+is_admin: null
+permissions:
+  - 'access cohesion sync'
+  - 'access toolbar'
+  - 'administer cohesion'
+  - 'administer component categories'
+  - 'administer component content'
+  - 'administer components'
+  - 'administer custom styles'
+  - 'administer helper categories'
+  - 'administer helpers'
+  - 'administer style helpers'
+  - 'administer style_guide'
+  - 'use text format cohesion'
+  - 'use text format filtered_html'
+  - 'use text format full_html'
+  - 'view the administration theme'
