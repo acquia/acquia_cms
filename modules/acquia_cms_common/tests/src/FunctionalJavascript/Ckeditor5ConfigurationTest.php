@@ -46,7 +46,6 @@ class Ckeditor5ConfigurationTest extends Ckeditor5ConfigurationTestBase {
       "Subscript",
       "Paragraph",
       "Block quote",
-      "Insert Media",
       "Code",
       "Source",
     ];
