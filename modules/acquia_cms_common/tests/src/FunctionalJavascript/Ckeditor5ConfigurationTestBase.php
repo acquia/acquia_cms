@@ -29,7 +29,6 @@ abstract class Ckeditor5ConfigurationTestBase extends WebDriverTestBase {
    */
   protected static $modules = [
     'acquia_cms_common',
-    'media_library',
   ];
 
   /**
@@ -66,7 +65,6 @@ abstract class Ckeditor5ConfigurationTestBase extends WebDriverTestBase {
     $session = $this->getSession();
 
     $node_type = $this->drupalCreateContentType()->id();
-    $this->createMediaType('image');
 
     $account = $this->drupalCreateUser([
       "create $node_type content",
