@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the acquia_cms_video module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_video_install($is_syncing) {
+  if (!$is_syncing) {
+    _acquia_cms_common_editor_config_rewrite();
+  }
+}
