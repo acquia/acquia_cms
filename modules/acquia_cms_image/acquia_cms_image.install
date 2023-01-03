@@ -6,7 +6,6 @@
  */
 
 use Drupal\Core\Installer\InstallerKernel;
-use Drupal\editor\Entity\Editor;
 use Drupal\image\Entity\ImageStyle;
 
 /**
@@ -14,38 +13,7 @@ use Drupal\image\Entity\ImageStyle;
  */
 function acquia_cms_image_install($is_syncing) {
   if (!$is_syncing) {
-    $editors = [
-      "filtered_html",
-      "full_html",
-    ];
-    foreach ($editors as $editor) {
-      try {
-        $editorObject = \Drupal::entityTypeManager()->getStorage('editor')->load($editor);
-        if ($editorObject instanceof Editor) {
-          $settings = $editorObject->getSettings();
-          if (isset($settings["toolbar"]["items"])) {
-            $items = $settings["toolbar"]["items"];
-            if (!in_array('drupalMedia', $items)) {
-              // Enable drupalMedia and data caption once module is enabled.
-              $settings["toolbar"]["items"][] = 'drupalMedia';
-            }
-            if (!in_array('imce_image', $items)) {
-              // Make sure IMCE plugin is next to Drupal Media plugin.
-              $settings["toolbar"]["items"][] = 'imce_image';
-            }
-            if (!in_array('<drupal-media data-align data-caption title>', $settings['plugins']['ckeditor5_sourceEditing']['allowed_tags'])) {
-              $settings['plugins']['ckeditor5_sourceEditing']['allowed_tags'][] = '<drupal-media data-align data-caption title>';
-            }
-          }
-          if (isset($settings["plugins"]["media_media"]) && $settings["plugins"]["media_media"]["allow_view_mode_override"] === FALSE) {
-            $settings["plugins"]["media_media"]["allow_view_mode_override"] = TRUE;
-          }
-          $editorObject->setSettings($settings)->save();
-        }
-      }
-      catch (\Exception $e) {
-      }
-    }
+    _acquia_cms_common_editor_config_rewrite(TRUE);
   }
 }
 

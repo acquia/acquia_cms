@@ -16,6 +16,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
+use Drupal\editor\Entity\Editor;
 use Drupal\imce\Imce;
 use Drupal\node\NodeTypeInterface;
 use Drupal\workbench_email\TemplateInterface;
@@ -500,5 +501,49 @@ function acquia_cms_common_css_alter(array &$css) {
     // Remove the default css provided by module: `collapsiblock`.
     $path = \Drupal::service('extension.list.module')->getPath('collapsiblock') . '/theme/dist/css/collapsiblock.min.css';
     unset($css[$path]);
+  }
+}
+
+/**
+ * Function to rewrite filtered_html & full_html configurations.
+ *
+ * @param bool $include_imce_plugin
+ *   Decides If imce_image plugin to add in editor toolbar settings.
+ *
+ * @see acquia_cms_audio_install()
+ * @see acquia_cms_document_install()
+ * @see acquia_cms_video_install()
+ * @see acquia_cms_image_install()
+ */
+function _acquia_cms_common_editor_config_rewrite(bool $include_imce_plugin = FALSE): void {
+  $editors = [
+    "filtered_html",
+    "full_html",
+  ];
+  foreach ($editors as $editor) {
+    try {
+      $editorObject = \Drupal::entityTypeManager()->getStorage('editor')->load($editor);
+      if ($editorObject instanceof Editor) {
+        $settings = $editorObject->getSettings();
+        $items = &$settings["toolbar"]["items"];
+        $plugins = &$settings['plugins'];
+        if (!in_array('drupalMedia', $items)) {
+          $items[] = 'drupalMedia';
+        }
+        if ($include_imce_plugin && !in_array('imce_image', $items)) {
+          $items[] = 'imce_image';
+        }
+        if (!in_array('<drupal-media data-align data-caption title>', $plugins['ckeditor5_sourceEditing']['allowed_tags'])) {
+          $plugins['ckeditor5_sourceEditing']['allowed_tags'][] = '<drupal-media data-align data-caption title>';
+        }
+        if ($plugins["media_media"]["allow_view_mode_override"] === FALSE) {
+          $plugins["media_media"]["allow_view_mode_override"] = TRUE;
+        }
+        $editorObject->setSettings($settings)->save();
+      }
+    }
+    catch (\Exception $e) {
+      \Drupal::logger("acquia_cms_config_rewrite")->error($e->getMessage());
+    }
   }
 }
