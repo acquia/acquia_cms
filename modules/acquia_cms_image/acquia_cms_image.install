@@ -25,10 +25,17 @@ function acquia_cms_image_install($is_syncing) {
           $settings = $editorObject->getSettings();
           if (isset($settings["toolbar"]["items"])) {
             $items = $settings["toolbar"]["items"];
-            $key = array_search('drupalMedia', $items);
-            // Make sure IMCE plugin is next to Drupal Media plugin.
-            array_splice($items, $key + 1, 0, "imce_image");
-            $settings["toolbar"]["items"] = $items;
+            if (!in_array('drupalMedia', $items)) {
+              // Enable drupalMedia and data caption once module is enabled.
+              $settings["toolbar"]["items"][] = 'drupalMedia';
+            }
+            if (!in_array('imce_image', $items)) {
+              // Make sure IMCE plugin is next to Drupal Media plugin.
+              $settings["toolbar"]["items"][] = 'imce_image';
+            }
+            if (!in_array('<drupal-media data-align data-caption title>', $settings['plugins']['ckeditor5_sourceEditing']['allowed_tags'])) {
+              $settings['plugins']['ckeditor5_sourceEditing']['allowed_tags'][] = '<drupal-media data-align data-caption title>';
+            }
           }
           if (isset($settings["plugins"]["media_media"]) && $settings["plugins"]["media_media"]["allow_view_mode_override"] === FALSE) {
             $settings["plugins"]["media_media"]["allow_view_mode_override"] = TRUE;

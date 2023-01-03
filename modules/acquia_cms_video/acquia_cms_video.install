@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the acquia_cms_video module.
+ */
+
+use Drupal\editor\Entity\Editor;
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_video_install($is_syncing) {
+  if (!$is_syncing) {
+    $editors = [
+      "filtered_html",
+      "full_html",
+    ];
+    foreach ($editors as $editor) {
+      try {
+        $editorObject = \Drupal::entityTypeManager()->getStorage('editor')->load($editor);
+        if ($editorObject instanceof Editor) {
+          $settings = $editorObject->getSettings();
+          if (isset($settings["toolbar"]["items"]) &&
+            !in_array('drupalMedia', $settings["toolbar"]["items"])) {
+            $settings["toolbar"]["items"][] = 'drupalMedia';
+          }
+          if (isset($settings['plugins']['ckeditor5_sourceEditing']['allowed_tags']) &&
+            !in_array('<drupal-media data-align data-caption title>', $settings['plugins']['ckeditor5_sourceEditing']['allowed_tags'])) {
+            $settings['plugins']['ckeditor5_sourceEditing']['allowed_tags'][] = '<drupal-media data-align data-caption title>';
+          }
+          if (isset($settings["plugins"]["media_media"]) && $settings["plugins"]["media_media"]["allow_view_mode_override"] === FALSE) {
+            $settings["plugins"]["media_media"]["allow_view_mode_override"] = TRUE;
+          }
+          $editorObject->setSettings($settings)->save();
+        }
+      }
+      catch (\Exception $e) {
+      }
+    }
+  }
+}
