@@ -89,7 +89,7 @@ final class RedirectHandler implements ContainerInjectionInterface {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current form state.
    */
-  public static function submitForm(array &$form, FormStateInterface $form_state) : void {
+  public static function submitForm(array &$form, FormStateInterface $form_state): void {
     \Drupal::classResolver(static::class)->handleRedirect($form_state);
   }
 
@@ -99,15 +99,18 @@ final class RedirectHandler implements ContainerInjectionInterface {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    */
-  protected function handleRedirect(FormStateInterface $form_state) {
+  protected function handleRedirect(FormStateInterface $form_state): void {
     // This is set by the user login form.
     // @see \Drupal\user\Form\UserLoginForm::validateAuthentication()
     $user = $this->userStorage->load($form_state->get('uid'));
     assert($user instanceof AccountInterface);
 
+    // Get user login object.
+    $loginObject = get_class($form_state->getFormObject());
     // If the user is about to be redirected to their user page, do our special
     // sauce redirect handling based on the role(s) the user has.
-    if ($this->willRedirectToUserPage()) {
+    if ((stripos($loginObject ?? '', 'userloginform') != FALSE) &&
+      $this->willRedirectToUserPage()) {
       // Remove the 'destination' query sting parameter, since it will cause our
       // redirect to be totally ignored due to a core quirk.
       // @todo Remove when https://www.drupal.org/project/drupal/issues/2950883
@@ -138,12 +141,9 @@ final class RedirectHandler implements ContainerInjectionInterface {
    * @return bool
    *   TRUE if the user will be redirected to their user page, FALSE otherwise.
    */
-  private function willRedirectToUserPage() : bool {
-    $destination = $this->request->query->get('destination');
-
-    if ($destination) {
+  private function willRedirectToUserPage(): bool {
+    if ($destination = $this->request->query->get('destination')) {
       $destination = $this->pathValidator->getUrlIfValid($destination);
-
       return $destination
         ? in_array($destination->getRouteName(), [
           'user.page',
@@ -151,6 +151,7 @@ final class RedirectHandler implements ContainerInjectionInterface {
         ], TRUE)
         : FALSE;
     }
+
     return TRUE;
   }
 
@@ -163,7 +164,7 @@ final class RedirectHandler implements ContainerInjectionInterface {
    * @return bool
    *   TRUE if the user is a contributor, FALSE otherwise.
    */
-  private function isContributor(AccountInterface $account) : bool {
+  private function isContributor(AccountInterface $account): bool {
     return $this->hasAnyRole($account, [
       'content_author',
       'content_editor',
@@ -181,7 +182,7 @@ final class RedirectHandler implements ContainerInjectionInterface {
    * @return bool
    *   TRUE if the user is a developer, FALSE otherwise.
    */
-  private function isDeveloper(AccountInterface $account) : bool {
+  private function isDeveloper(AccountInterface $account): bool {
     return $this->hasAnyRole($account, ['site_builder', 'developer']);
   }
 
@@ -194,7 +195,7 @@ final class RedirectHandler implements ContainerInjectionInterface {
    * @return bool
    *   TRUE if the user is a user administrator, FALSE otherwise.
    */
-  private function isUserAdministrator(AccountInterface $account) : bool {
+  private function isUserAdministrator(AccountInterface $account): bool {
     return in_array('user_administrator', $account->getRoles(), TRUE);
   }
 
@@ -209,7 +210,7 @@ final class RedirectHandler implements ContainerInjectionInterface {
    * @return bool
    *   TRUE if the user has any of the given roles, FALSE otherwise.
    */
-  private function hasAnyRole(AccountInterface $account, array $roles) : bool {
+  private function hasAnyRole(AccountInterface $account, array $roles): bool {
     return (bool) array_intersect($roles, $account->getRoles());
   }
 
