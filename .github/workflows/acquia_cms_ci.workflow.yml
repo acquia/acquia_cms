@@ -279,6 +279,11 @@ jobs:
   deploy_code:
     if: ${{ github.ref == 'refs/heads/main' }}
     name: "Continuous Deployment (CD)"
+    env:
+      GIT_AUTHOR_NAME: "Vishal Khode"
+      GIT_COMMITTER_NAME: "Vishal Khode"
+      GIT_COMMITTER_EMAIL: "vishal.khode@acquia.com"
+      GIT_AUTHOR_EMAIL: "vishal.khode@acquia.com"
     needs: [ static_code_analysis, integrated_tests, isolated_tests ]
     runs-on: ubuntu-latest
     environment: code_deployment
@@ -301,6 +306,4 @@ jobs:
           DRUPAL_SSH_KNOWN_HOSTS: git.drupal.org
       - name: deploy_code
         run: |
-          git config user.name --global "Vishal Khode"
-          git config user.email --global "vishal.khode@acquia.com"
           ${GITHUB_WORKSPACE}/scripts/deploy_code.sh
