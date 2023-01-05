@@ -11,3 +11,16 @@
 function acquia_cms_tour_update_8001() {
   \Drupal::state()->set('existing_site_acquia_cms', TRUE);
 }
+
+/**
+ * Remove permissions from roles.
+ */
+function acquia_cms_tour_update_8002() {
+  if ($roles = Role::loadMultiple()) {
+    foreach ($roles as $role) {
+      if ($role->hasPermission('access acquia cms tour')) {
+        $role->revokePermission('access acquia cms tour')->save();
+      }
+    }
+  }
+}
