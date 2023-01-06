@@ -118,9 +118,7 @@ function acquia_cms_headless_update_8004() {
     if ($role_obj->hasPermission('access acquia cms headless api dashboard')) {
       $role->revokePermission('access acquia cms headless api dashboard');
     }
-    if (!$role_obj->hasPermission('access acquia cms headless dashboard')) {
-      $role->grantPermission('access acquia cms headless dashboard');
-    }
+    $role->grantPermission('access acquia cms headless dashboard');
     $role_obj->save();
   }
 }
