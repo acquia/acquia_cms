@@ -116,9 +116,9 @@ function acquia_cms_headless_update_8004() {
   $role_obj = Role::load('headless');
   if ($role_obj instanceof Role) {
     if ($role_obj->hasPermission('access acquia cms headless api dashboard')) {
-      $role->revokePermission('access acquia cms headless api dashboard');
+      $role_obj->revokePermission('access acquia cms headless api dashboard');
     }
-    $role->grantPermission('access acquia cms headless dashboard');
+    $role_obj->grantPermission('access acquia cms headless dashboard');
     $role_obj->save();
   }
 }
