@@ -113,12 +113,16 @@ function acquia_cms_headless_update_8003() {
  * Update existing permission with new permission
  */
 function acquia_cms_headless_update_8004() {
-  user_role_grant_permissions('headless', [
-    'access acquia cms headless dashboard',
-  ]);
-  user_role_revoke_permissions('headless', [
-    'access acquia cms headless api dashboard',
-  ]);
+  $role_obj = Role::load('headless');
+  if ($role_obj instanceof Role) {
+    if ($role_obj->hasPermission('access acquia cms headless api dashboard')) {
+      $role->revokePermission('access acquia cms headless api dashboard');
+    }
+    if (!$role_obj->hasPermission('access acquia cms headless dashboard')) {
+      $role->grantPermission('access acquia cms headless dashboard');
+    }
+    $role_obj->save();
+  }
 }
 
 /**
