@@ -1,18 +1,21 @@
 langcode: und
 status: true
 dependencies:
-  enforced:
-    module:
-      - acquia_cms_image
   module:
     - file
     - image
     - media
+  enforced:
+    module:
+      - acquia_cms_image
 id: media.image
 field_name: image
 entity_type: media
 type: image
 settings:
+  target_type: file
+  display_field: false
+  display_default: false
   uri_scheme: public
   default_image:
     uuid: null
@@ -20,9 +23,6 @@ settings:
     title: ''
     width: null
     height: null
-  target_type: file
-  display_field: false
-  display_default: false
 module: image
 locked: false
 cardinality: 1

@@ -12,10 +12,6 @@ third_party_settings:
 id: transition_to_review
 label: 'Transition to Review'
 subject: '[node:title] State Changed'
-body:
-  value: '[node:title] needs review.'
-  format: plain_text
-bundles: {  }
 recipient_types:
   role:
     id: role
@@ -25,3 +21,7 @@ recipient_types:
       roles:
         content_administrator: content_administrator
         content_editor: content_editor
+body:
+  value: '[node:title] needs review.'
+  format: plain_text
+bundles: {  }

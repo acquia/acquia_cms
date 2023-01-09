@@ -1,14 +1,14 @@
 langcode: en
 status: false
 dependencies:
+  config:
+    - core.entity_view_mode.node.search_index
   module:
     - node
     - search_api
   enforced:
     module:
       - acquia_cms_search
-  config:
-    - core.entity_view_mode.node.search_index
 third_party_settings:
   acquia_cms_common:
     search_server: database
@@ -100,6 +100,9 @@ processor_settings:
     weights:
       preprocess_query: -10
   html_filter:
+    weights:
+      preprocess_index: -10
+      preprocess_query: -9
     all_fields: false
     fields: {  }
     title: true
@@ -110,22 +113,22 @@ processor_settings:
       h2: 3
       h3: 2
       strong: 2
-    weights:
-      preprocess_index: -10
-      preprocess_query: -9
   ignorecase:
+    weights:
+      preprocess_index: -9
+      preprocess_query: -8
     all_fields: true
     fields:
       - langcode
       - rendered_item
       - title
       - type
-    weights:
-      preprocess_index: -9
-      preprocess_query: -8
   language_with_fallback: {  }
   rendered_item: {  }
   stopwords:
+    weights:
+      preprocess_index: -5
+      preprocess_query: -4
     all_fields: false
     fields:
       - rendered_item
@@ -165,30 +168,27 @@ processor_settings:
       - was
       - will
       - with
-    weights:
-      preprocess_index: -5
-      preprocess_query: -4
   tokenizer:
+    weights:
+      preprocess_index: -6
+      preprocess_query: -5
     all_fields: false
     fields:
       - rendered_item
     spaces: ''
     overlap_cjk: 1
     minimum_word_size: '3'
-    weights:
-      preprocess_index: -6
-      preprocess_query: -5
   transliteration:
-    all_fields: false
-    fields:
-      - rendered_item
     weights:
       preprocess_index: -4
       preprocess_query: -3
+    all_fields: false
+    fields:
+      - rendered_item
 tracker_settings:
   default:
     indexing_order: fifo
 options:
-  index_directly: true
   cron_limit: 50
+  index_directly: true
 server: ''
