@@ -44,7 +44,6 @@ function acquia_cms_common_install($is_syncing) {
     $config_storage = \Drupal::service('config.storage');
     $config_storage->write('views.view.content', $source_optional_dir->read('views.view.content'));
     $config_storage->write('views.view.media', $source_optional_dir->read('views.view.media'));
-
     // Get existing config ignore settings and append the new one.
     $config = \Drupal::configFactory()->getEditable('config_ignore.settings');
     $existing_ignore_config = $config->get('ignored_config_entities');
@@ -67,6 +66,13 @@ function acquia_cms_common_install($is_syncing) {
       $module_installer->uninstall(['page_cache']);
     }
 
+    // Install the syslog module and purge sub-modules.
+    $module_installer->install([
+      'syslog',
+      'purge_processor_lateruntime',
+      'purge_processor_cron',
+      'purge_ui',
+    ]);
     /*
      * We've to explicitly set purge plugin as acquia_purge, If Acquia Purge
      * module is enabled, else this would give below error:
@@ -79,14 +85,6 @@ function acquia_cms_common_install($is_syncing) {
       $config = \Drupal::service('purge.purgers');
       $config->setPluginsEnabled(['cee22bc3fe' => 'acquia_purge']);
     }
-
-    // Install the syslog module and purge sub-modules.
-    $module_installer->install([
-      'syslog',
-      'purge_processor_lateruntime',
-      'purge_processor_cron',
-      'purge_ui',
-    ]);
   }
 }
 
