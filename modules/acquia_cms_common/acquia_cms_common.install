@@ -52,8 +52,6 @@ function acquia_cms_common_install() {
     'media.type.image:uuid',
     'crop.type.focal_point:uuid',
     'cohesion.settings',
-    'purge.plugins',
-    'purge.logger_channels',
   ];
   $updated_ignore_config = array_unique(array_merge($existing_ignore_config, $new_ignore_config));
   $config->set('ignored_config_entities', $updated_ignore_config);
@@ -101,7 +99,6 @@ function acquia_cms_common_config_schema_info_alter(&$definitions) {
   ];
   $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['cohesion_layout'] = $schemaMapping;
   $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['component_content'] = $schemaMapping;
-  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['content_moderation_state'] = $schemaMapping;
   $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['content_moderation_state'] = $schemaMapping;
   $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['crop'] = $schemaMapping;
   $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['media'] = $schemaMapping;
