@@ -274,6 +274,22 @@ function install_acms_additional_modules() {
     $config = \Drupal::service('purge.purgers');
     $config->setPluginsEnabled(['cee22bc3fe' => 'acquia_purge']);
   }
+
+  // Some permissions for few roles is not getting added and
+  // causing issues. Temporary added below fix as a workaround.
+  // @todo We need to identify the root cause and fix it.
+  $roleStorage = \Drupal::entityTypeManager()->getStorage('user_role');
+  $roles = [
+    "site_builder",
+    "content_author",
+    "content_administrator",
+    "content_editor",
+  ];
+  foreach ($roles as $role) {
+    $roleObj = $roleStorage->load($role);
+    \Drupal::service('module_handler')->alter('content_model_role_presave', $roleObj);
+    $roleObj->save();
+  }
 }
 
 /**
