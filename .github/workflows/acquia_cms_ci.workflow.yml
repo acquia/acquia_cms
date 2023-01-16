@@ -15,7 +15,7 @@ jobs:
       # Provide your package's name.
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: 1.5.x
-      ORCA_VERSION: ^3.0
+      ORCA_VERSION: v3.26.0
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -74,7 +74,7 @@ jobs:
       # Provide your package's name.
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: 1.5.x
-      ORCA_VERSION: ^3.0
+      ORCA_VERSION: v3.26.0
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -95,7 +95,7 @@ jobs:
     strategy:
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_CURRENT_DEV
+          - INTEGRATED_TEST_ON_PREVIOUS_MINOR
         #php-version: [ "8.1" ]
         acms_job:
           - integrated_php_unit_tests
