@@ -1,0 +1,21 @@
+version: 1.3.0
+services:
+  - composer:
+      version: 2
+  - php:
+      version: 8.1
+
+events:
+  build:
+    steps:
+      - setup:
+          type: script
+          script:
+            - composer validate --no-check-all --ansi --no-interaction
+            - composer install
+
+  post-deploy:
+    steps:
+      - deploy:
+          script:
+            - pipelines-deploy
