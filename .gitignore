@@ -1,0 +1,121 @@
+# Files and directories suggested to be ignored by Drupal
+# @see https://git.drupalcode.org/project/drupal/-/blob/9.3.x/example.gitignore
+#
+# We allow settings.php to be committed since Acquia's filesystem is read-only
+# @see https://www.drupal.org/project/drupal/issues/3257119
+/docroot/core
+/vendor/
+/docroot/sites/*/settings.*.php
+/docroot/sites/*/services*.yml
+/docroot/sites/*/files
+/docroot/sites/*/private
+/docroot/sites/simpletest
+
+# Directories specific to this template
+/docroot/libraries
+/docroot/modules/contrib
+/docroot/profiles/contrib
+/docroot/themes/contrib
+
+# Files and directories for common development environments, loosely inherited from BLT Project
+# @see https://github.com/acquia/blt-project/blob/11.x/.gitignore
+
+# OS X
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Eclipse
+*.pydevproject
+.project
+.metadata
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+*.launch
+.externalToolBuilders/
+
+# CDT / PDT
+.cproject
+.buildpathk
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# IntelliJ / PhpStorm
+.idea/
+atlassian-ide-plugin.xml
+
+# XHProf
+xhprof_*
+
+# Sass
+.sass-cache
+*.css.map
+
+# Netbeans IDE
+nbproject
+nbproject/*
+
+# DrupalVM
+.vagrant/
+
+# DevDesktop
+*.dd
+
+# NPM
+npm-debug.log
+
+# Drush 9 Checksums
+drush/sites/.checksums
+
+# Deprecation detector rules
+.rules
+
+# PHPCS
+.phpcs-cache
+
+# PHPUnit
+.phpunit.result.cache
+
+# Drupal check report.
+drupal-check-report.xml
+
+# Local files
+local.settings.php
+local.drush.yml
+local.site.yml
+local.services.yml
+*.local
+local.blt.yml
+
+# oauth keys
+oauth_keys/
+
+# env-file
+/.env*
+/.editorconfig
+/.gitattributes
