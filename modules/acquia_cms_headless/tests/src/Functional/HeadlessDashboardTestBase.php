@@ -1,9 +1,9 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_headless\FunctionalJavascript;
+namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
-use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Provides Base class to test headless dashboard.
@@ -12,7 +12,7 @@ use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
  * @group medium_risk
  * @group push
  */
-abstract class HeadlessDashboardTestBase extends WebDriverTestBase {
+abstract class HeadlessDashboardTestBase extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
