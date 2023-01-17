@@ -1,6 +1,10 @@
 langcode: en
 status: true
 dependencies:
+  module:
+    - acquia_cms_common
+    - menu_ui
+    - scheduler
   enforced:
     module:
       - acquia_cms_page
@@ -8,10 +12,10 @@ third_party_settings:
   acquia_cms_common:
     workflow_id: editorial
     workbench_email_templates:
-        back_to_draft: back_to_draft
-        to_archived: to_archived
-        to_published: to_published
-        transition_to_review: transition_to_review
+      back_to_draft: back_to_draft
+      to_archived: to_archived
+      to_published: to_published
+      transition_to_review: transition_to_review
     metatag:
       tag_types:
         basic: basic

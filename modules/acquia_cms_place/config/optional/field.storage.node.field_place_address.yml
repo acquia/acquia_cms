@@ -1,16 +1,16 @@
 langcode: en
 status: true
 dependencies:
-  enforced:
-    module:
-      - acquia_cms_place
   module:
     - address
     - node
+  enforced:
+    module:
+      - acquia_cms_place
 third_party_settings:
   acquia_cms_common:
     search_index: content
-    search_label: Place Address
+    search_label: 'Place Address'
 id: node.field_place_address
 field_name: field_place_address
 entity_type: node

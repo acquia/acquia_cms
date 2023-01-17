@@ -15,37 +15,37 @@ third_party_settings:
       children:
         - field_categories
         - field_tags
+      label: Taxonomy
+      region: content
       parent_name: ''
       weight: 1
       format_type: fieldset
-      region: content
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         description: ''
         required_fields: true
-      label: Taxonomy
 id: media.document.media_library
 targetEntityType: media
 bundle: document
 mode: media_library
 content:
   field_categories:
+    type: options_select
     weight: 3
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
   field_tags:
+    type: entity_reference_autocomplete_tags
     weight: 4
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete_tags
-    region: content
   langcode:
     type: language_select
     weight: 2
