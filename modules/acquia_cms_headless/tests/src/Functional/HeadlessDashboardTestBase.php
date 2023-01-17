@@ -3,7 +3,7 @@
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
-use Drupal\Tests\BrowserTestBase;
+use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 
 /**
  * Provides Base class to test headless dashboard.
@@ -12,7 +12,7 @@ use Drupal\Tests\BrowserTestBase;
  * @group medium_risk
  * @group push
  */
-abstract class HeadlessDashboardTestBase extends BrowserTestBase {
+abstract class HeadlessDashboardTestBase extends WebDriverTestBase {
 
   /**
    * {@inheritdoc}
@@ -63,7 +63,7 @@ abstract class HeadlessDashboardTestBase extends BrowserTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet("/admin/headless/dashboard");
-    $this->assertSession()->statusCodeEquals(200);
+    // $this->assertSession()->statusCodeEquals(200);
   }
 
   /**
