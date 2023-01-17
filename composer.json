@@ -38,6 +38,9 @@
         "phpunit/phpunit": "~9.4.0 || ~9.5.0",
         "weitzman/drupal-test-traits": "^1.5"
     },
+    "conflict": {
+        "drupal/acquia_cms_common": "<1.7.1"
+    },
     "config": {
         "allow-plugins": {
             "composer/installers": true,
@@ -111,7 +114,13 @@
         "patchLevel": {
             "drupal/core": "-p2"
         },
-        "patches": {}
+        "patches": {
+            "drupal/core": {
+                "3313342 - [PHP 8.1] Deprecated function: strpos(): Passing null to parameter #1 LayoutBuilderUiCacheContext.php on line 28": "https://git.drupalcode.org/project/drupal/-/merge_requests/3143.patch",
+                "3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112": "https://www.drupal.org/files/issues/2023-01-12/3328187-3-9.5.x.patch",
+                "REMOVE: Allow installation profile to be changed from Acquia CMS to minimal during config sync": "https://gist.githubusercontent.com/rajeshreeputra/ae198ea15a2584f00de3327067056fe0/raw/3d69baaa16bfcc7b2af41deef102eaebd4291906/profile-change-acms-to-minimal.patch"
+            }
+        }
     },
     "autoload": {
         "psr-4": {

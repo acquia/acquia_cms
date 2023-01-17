@@ -25,7 +25,7 @@ class InstallStateTest extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp() :void {
     parent::setUp();
     // Update configuration so that password policy can be tested by
     // registering an account through UI.
@@ -276,48 +276,45 @@ class InstallStateTest extends ExistingSiteBase {
   /**
    * Tests tour permission for user roles.
    *
-   * - User roles with permission 'access acquia cms tour' should able to
-   *   access tour page.
-   * - User roles without permission 'access acquia cms tour'
-   *   should not be able to access tour page.
+   * - User roles with permission 'access acquia cms tour dashboard'
+   *   should be able to access Acquia CMS Wizard.
+   * - User roles without permission 'access acquia cms tour dashboard'
+   *   should not be able to access Acquia CMS Wizard.
    */
   public function testTourPermissions() {
     $assert_session = $this->assertSession();
 
+    // Regular users should not be able to access the dashboard
+    // and tour page.
     $roles = [
       'content_author',
       'content_editor',
-      'content_administrator',
+      // Left empty for anonymous user.
+      '',
     ];
     foreach ($roles as $role) {
       $account = $this->createUser();
-      $account->addRole($role);
+      if ($role) {
+        $account->addRole($role);
+      }
       $account->save();
       $this->drupalLogin($account);
-      $this->assertTrue($account->hasPermission('access acquia cms tour'));
-
-      // User should be able to access the toolbar and see a Tour link.
-      $assert_session->elementExists('css', '#toolbar-administration')
-        ->clickLink('Tour');
+      $this->assertFalse($account->hasPermission('access acquia cms tour dashboard'));
       // Visit the tour page.
-      $this->drupalGet('/admin/tour');
-      $assert_session->statusCodeEquals(200);
+      $this->drupalGet('/admin/tour/dashboard');
+      $assert_session->statusCodeEquals(403);
     }
 
-    // User with dashboard permission shall access the dashboard pages.
-    $account = $this->createUser(['access acquia cms tour dashboard']);
+    // Only content_administrator user should be able to access the dashboard.
+    $account = $this->createUser();
+    $account->addRole("content_administrator");
+    $account->save();
     $this->drupalLogin($account);
     $this->drupalGet('/admin/tour/dashboard');
     $assert_session->statusCodeEquals(200);
-
-    // Regular authenticated users should not be able to access the dashboard
-    // and tour page.
-    $account = $this->createUser();
-    $this->drupalLogin($account);
-    $this->drupalGet('/admin/tour/dashboard');
-    $assert_session->statusCodeEquals(403);
-    $this->drupalGet('/admin/tour');
-    $assert_session->statusCodeEquals(403);
+    // User should be able to access the toolbar and see a Tour link.
+    $assert_session->elementExists('css', '#toolbar-administration')
+      ->clickLink('Acquia CMS Wizard');
   }
 
   /**
@@ -340,24 +337,31 @@ class InstallStateTest extends ExistingSiteBase {
     $account->save();
     $this->drupalLogin($account);
 
-    $this->drupalGet('/admin/config/system/seckit');
-    $assert_session->statusCodeEquals(200);
+    if ($this->container->get('module_handler')->moduleExists('seckit')) {
+      $this->drupalGet('/admin/config/system/seckit');
+      $assert_session->statusCodeEquals(200);
+    }
+    if ($this->container->get('module_handler')->moduleExists('honeypot')) {
+      $this->drupalGet('/admin/config/content/honeypot');
+      $assert_session->statusCodeEquals(200);
+    }
+    if ($this->container->get('module_handler')->moduleExists('captcha')) {
+      $this->drupalGet('/admin/config/people/captcha');
+      $assert_session->statusCodeEquals(200);
+    }
+    if ($this->container->get('module_handler')->moduleExists('recaptcha')) {
+      $this->drupalGet('/admin/config/people/captcha/recaptcha');
+      $assert_session->statusCodeEquals(200);
+    }
+    if ($this->container->get('module_handler')->moduleExists('password_policy')) {
+      $this->drupalGet('/admin/config/security/password-policy');
+      $assert_session->statusCodeEquals(200);
+      $this->drupalGet('/admin/config/security/password-policy/add');
+      $assert_session->statusCodeEquals(200);
+      $this->drupalGet('/admin/config/security/password-policy/reset');
+      $assert_session->statusCodeEquals(200);
+    }
 
-    $this->drupalGet('/admin/config/content/honeypot');
-    $assert_session->statusCodeEquals(200);
-
-    $this->drupalGet('/admin/config/people/captcha');
-    $assert_session->statusCodeEquals(200);
-
-    $this->drupalGet('/admin/config/people/captcha/recaptcha');
-    $assert_session->statusCodeEquals(200);
-
-    $this->drupalGet('/admin/config/security/password-policy');
-    $assert_session->statusCodeEquals(200);
-    $this->drupalGet('/admin/config/security/password-policy/add');
-    $assert_session->statusCodeEquals(200);
-    $this->drupalGet('/admin/config/security/password-policy/reset');
-    $assert_session->statusCodeEquals(200);
   }
 
   /**
@@ -407,7 +411,7 @@ class InstallStateTest extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown() {
+  public function tearDown() :void {
     // Delete user created during testing password policy.
     $user = user_load_by_mail('example@example.com');
     if ($user) {

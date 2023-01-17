@@ -26,7 +26,7 @@ class GoogleMapComponentTest extends CohesionComponentTestBase {
 
     // Add the component to the layout canvas.
     $edit_form = $this->getLayoutCanvas()->add('Google map')->edit();
-    $this->assertSession()->elementExists('css', '.coh-accordion-title')->click();
+    $this->assertSession()->elementExists('xpath', '//button[span[text()="Map marker"]]')->click();
 
     $edit_form->fillField('Address', 'Test Address');
     $edit_form->fillField('Latitude', '22.52138');

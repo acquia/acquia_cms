@@ -64,17 +64,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
   protected function openMediaLibrary(ElementInterface $edit_form, string $button_text) {
     $edit_form->pressButton($button_text);
     $this->assertNotEmpty($this->assertSession()->waitForText('Media Library'));
-
-    $session = $this->getSession();
-
-    $selector = 'iframe[title="Media Library"]';
-    $frame = $this->waitForElementVisible('css', $selector, $session->getPage());
-    $name = $frame->getAttribute('name');
-    if (empty($name)) {
-      $name = 'media_library_iframe';
-      $session->executeScript("document.querySelector('$selector').setAttribute('name', '$name')");
-    }
-    $session->switchToIFrame($name);
+    $this->assertSession()->waitForElementVisible("css", ".media-library-content");
   }
 
   /**
@@ -92,9 +82,23 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    */
   protected function insertSelectedMedia() : void {
     $session = $this->getSession();
-    $session->getPage()->pressButton('Insert selected');
-    $session->switchToIFrame(NULL);
+    $session->getPage()->find("css", '.ui-dialog-buttonset button')->click();
     $this->assertTrue($session->wait(10000, 'typeof window.media_library_iframe === "undefined"'));
+  }
+
+  /**
+   * Selects the media source from dropdown option. Default is DAM option.
+   *
+   * @param string $source
+   *   Media source option i.e. DAM or Media Types (for core media).
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   */
+  protected function selectMediaSource(string $source = "DAM"): void {
+    $field = $this->getSession()->getPage()->find('css', '.js-acquia-dam-source-field');
+    $field->selectOption($source);
+    // Wait while container is rendered based on selected Media Source.
+    $this->waitForElementVisible('css', '#media-library-view', $this->getSession()->getPage());
   }
 
   /**
