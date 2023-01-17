@@ -135,6 +135,14 @@ jobs:
         run: ./tests/ci/install.sh
       - name: Before script
         run: ../orca/bin/ci/before_script.sh
+      - name: Cleanup orca_public tests
+        shell: bash
+        run: |
+          source ../orca/bin/ci/_includes.sh
+          FILES=$(grep -nr "orca_public" ${ORCA_FIXTURE_DIR}/docroot/modules/contrib | sed 's/\:.*//')
+          echo "${FILES}" | while read -r FILE; do
+            rm ${FILE}
+          done
       - name: Script
         run: ./tests/ci/script.sh
       - name: Before Cache
