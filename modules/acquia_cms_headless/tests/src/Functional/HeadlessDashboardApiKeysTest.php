@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
+use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
+
 /**
  * Tests headless dashboard API key.
  *
@@ -10,7 +13,46 @@ namespace Drupal\Tests\acquia_cms_headless\Functional;
  * @group medium_risk
  * @group push
  */
-class HeadlessDashboardApiKeysTest extends HeadlessDashboardTestBase {
+class HeadlessDashboardApiKeysTest extends WebDriverTestBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected static $modules = [
+    'acquia_cms_headless',
+  ];
+
+  /**
+   * Disable strict config schema checks in this test.
+   *
+   * Cohesion has a lot of config schema errors, and until they are all fixed,
+   * this test cannot pass unless we disable strict config schema checking
+   * altogether. Since strict config schema isn't critically important in
+   * testing this functionality, it's okay to disable it for now, but it should
+   * be re-enabled (i.e., this property should be removed) as soon as possible.
+   *
+   * @var bool
+   */
+  // @codingStandardsIgnoreStart
+  protected $strictConfigSchema = FALSE;
+  // @codingStandardsIgnoreEnd
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    // @todo Remove this check when Acquia Cloud IDEs support running functional
+    // JavaScript tests.
+    if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
+      $this->markTestSkipped('This test cannot run in an Acquia Cloud IDE.');
+    }
+    parent::setUp();
+  }
 
   /**
    * Test  API Keys section exists.
@@ -29,7 +71,7 @@ class HeadlessDashboardApiKeysTest extends HeadlessDashboardTestBase {
 
     // Visit headless dashboard.
     $this->drupalGet("/admin/headless/dashboard");
-    // $this->assertSession()->statusCodeEquals(200);
+
     // Test API Keys section exists, get API Keys section.
     $consumers_fieldset = $assert_session->elementExists('css', '#edit-consumers-api-keys');
 
@@ -85,7 +127,6 @@ class HeadlessDashboardApiKeysTest extends HeadlessDashboardTestBase {
     $this->assertEquals('Generate New API Keys', $keys_modal->find('css', '.ui-dialog-title')->getText());
     $keys_modal_content = $keys_modal->find('css', '.headless-dashboard-modal');
     $this->assertNotEmpty($keys_modal_content);
-    // @todo $keys_modal_content has link to redirect me to OAuth settings page.
     $this->assertSession()->elementExists('named', ['link', 'Oauth Settings'], $keys_modal_content);
     $keys_modal->find('css', '.ui-dialog-titlebar-close')->click();
 
@@ -94,18 +135,18 @@ class HeadlessDashboardApiKeysTest extends HeadlessDashboardTestBase {
     $this->assertSession()->elementExists('named', ['link', 'Delete'], $consumers_fieldset)->click();
     $page = $this->getSession()->getPage();
     $this->assertNotEmpty($page);
-    // @todo getCurrentUrl() returns absolute path we need relative path.
-    // $this->assertSame('/admin/config/services/consumer/1/delete?destination=/admin/headless/dashboard', $this->getSession()->getCurrentUrl());
+    $expected_url = $this->baseUrl . '/admin/config/services/consumer/1/delete?destination=/admin/headless/dashboard';
+    $this->assertSame($expected_url, $this->getSession()->getCurrentUrl());
     $this->assertSession()->elementExists('named', ['link', 'Cancel'], $page)->click();
 
     // Click on Clone button.
     $consumers_fieldset->findButton('List additional actions')->click();
-    $this->assertSession()->elementExists('named', ['link', 'Delete'], $consumers_fieldset)->click();
+    $this->assertSession()->elementExists('named', ['link', 'Clone'], $consumers_fieldset)->click();
     $page = $this->getSession()->getPage();
     $this->assertNotEmpty($page);
-    // @todo getCurrentUrl() returns absolute path we need relative path.
-    // $this->assertSame('/entity_clone/consumer/1?destination=/admin/headless/dashboard', $this->getSession()->getCurrentUrl());
-    $this->assertSession()->elementExists('named', ['link', 'Cancel'], $page)->click();
+    $expected_url = $this->baseUrl . '/entity_clone/consumer/1?destination=/admin/headless/dashboard';
+    $this->assertSame($expected_url, $this->getSession()->getCurrentUrl());
+    $this->assertSession()->elementExists('named', ['button', 'Cancel'], $page)->click();
   }
 
 }
