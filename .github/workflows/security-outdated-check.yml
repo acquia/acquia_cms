@@ -1,0 +1,31 @@
+name: Drush Security & Composer Outdated Check
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  push:
+    branches: [ develop ]
+
+jobs:
+  check:
+    name: Security & Outdated Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Drupal core dependencies and modules
+        run: |
+          composer --no-interaction --no-progress --prefer-dist --optimize-autoloader install
+
+      - name: composer update
+        run: |
+          composer update
+
+      - name: Run security check
+        run: |
+          ./vendor/bin/drush pm:security
+
+      - name: composer outdated
+        run: |
+          composer show -o

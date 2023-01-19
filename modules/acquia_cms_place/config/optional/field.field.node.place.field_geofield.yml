@@ -4,28 +4,28 @@ dependencies:
   config:
     - field.storage.node.field_geofield
     - node.type.place
-  enforced:
-    module:
-      - acquia_cms_place
   module:
     - geocoder_field
     - geofield
+  enforced:
+    module:
+      - acquia_cms_place
 third_party_settings:
   geocoder_field:
     method: geocode
     weight: 0
+    field: field_place_address
     skip_not_empty_value: false
     disabled: false
     hidden: false
     providers:
       - googlemaps
     dumper: wkt
+    delta_handling: s_to_m
     failure:
       handling: preserve
       status_message: true
       log: true
-    field: field_place_address
-    delta_handling: s_to_m
 id: node.place.field_geofield
 field_name: field_geofield
 entity_type: node

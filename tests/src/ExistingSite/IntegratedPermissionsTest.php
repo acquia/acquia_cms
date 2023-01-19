@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms\Functional;
+namespace Drupal\Tests\acquia_cms\ExistingSite;
 
 use Drupal\Tests\acquia_cms_common\Traits\PermissionsTrait;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
