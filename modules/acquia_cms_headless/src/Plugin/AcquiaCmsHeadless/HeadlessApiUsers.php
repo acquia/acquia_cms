@@ -13,6 +13,7 @@ use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGeneratorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\user\Entity\Role;
 
 /**
  * Plugin implementation of the acquia_cms_headless.
@@ -132,6 +133,13 @@ class HeadlessApiUsers extends AcquiaCmsDashboardBase {
   }
 
   /**
+   * Gets Headless role label.
+   */
+  public function getHeadlessRoleLabel() {
+    return Role::load('headless')->label();
+  }
+
+  /**
    * Build the form table header.
    *
    * @return array
@@ -233,6 +241,7 @@ class HeadlessApiUsers extends AcquiaCmsDashboardBase {
     $users = $storage->loadMultiple($user_data);
     $operations = $this->createOperationLinks($entity_type);
 
+
     // Match the data with the columns.
     foreach ($users as $user) {
       if ($user->getTypedData()->get('status')->getValue()[0]['value']) {
@@ -245,7 +254,7 @@ class HeadlessApiUsers extends AcquiaCmsDashboardBase {
       $row = [
         'name' => Link::fromTextAndUrl($user->label(), $operations[$user->id()]['edit']['url']),
         // Currently only displaying users assigned the headless role.
-        'role' => $this->t('Headless Role'),
+        'role' => $this->getHeadlessRoleLabel(),
         'status' => $this->t('<span class="@status"></span>', ['@status' => $status]),
         'operations' => [
           'data' => [
@@ -286,7 +295,7 @@ class HeadlessApiUsers extends AcquiaCmsDashboardBase {
 
     $form[$module]['info_text'] = [
       '#type' => 'markup',
-      '#markup' => $this->t('<p>Only users assigned the <strong>Headless</strong> user role will appear in this list.  If adding new Headless users, make sure to assign the <strong>Headless</strong> role.</p>'),
+      '#markup' => $this->t('<p>Only users assigned the <strong>' . $this->getHeadlessRoleLabel() . '</strong> user role will appear in this list.  If adding new Headless users, make sure to assign the <strong>Headless</strong> role.</p>'),
       '#prefix' => '<div class="headless-dashboard-admin-heading"><div class="headless-dashboard-user-info">',
       '#suffix' => '</div>',
     ];
