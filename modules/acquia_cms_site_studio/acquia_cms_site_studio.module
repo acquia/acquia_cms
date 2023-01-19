@@ -228,8 +228,10 @@ function _acquia_cms_site_studio_add_permissions(EntityInterface $entity) {
     $permissionToProvide = "access " . $entity->id() . " " . $entity->bundle() . " group";
     if (in_array($permissionToProvide, $permissions)) {
       $roleObject = Role::load($role);
-      $roleObject->grantPermission($permissionToProvide);
-      $roleObject->save();
+      if ($roleObject) {
+        $roleObject->grantPermission($permissionToProvide);
+        $roleObject->save();
+      }
     }
   }
 }

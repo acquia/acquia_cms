@@ -6,28 +6,28 @@ dependencies:
     - field.field.media.video.field_media_oembed_video
     - field.field.media.video.field_tags
     - media.type.video
-  enforced:
-    module:
-      - acquia_cms_video
   module:
     - field_group
     - media
+  enforced:
+    module:
+      - acquia_cms_video
 third_party_settings:
   field_group:
     group_taxonomy:
       children:
         - field_categories
         - field_tags
+      label: Taxonomy
+      region: content
       parent_name: ''
       weight: 3
       format_type: fieldset
-      region: content
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         description: ''
         required_fields: true
-      label: Taxonomy
 id: media.video.default
 targetEntityType: media
 bundle: video
@@ -40,29 +40,29 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_categories:
+    type: options_select
     weight: 4
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
   field_media_oembed_video:
     type: oembed_textfield
     weight: 1
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    region: content
   field_tags:
+    type: entity_reference_autocomplete_tags
     weight: 5
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete_tags
-    region: content
   langcode:
     type: language_select
     weight: 2
@@ -86,12 +86,12 @@ content:
   uid:
     type: entity_reference_autocomplete
     weight: 6
+    region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
-      match_limit: 10
-    region: content
     third_party_settings: {  }
 hidden:
   path: true

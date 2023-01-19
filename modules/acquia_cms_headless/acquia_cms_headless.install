@@ -12,15 +12,17 @@ use Drupal\user\RoleInterface;
 /**
  * Implements hook_install().
  */
-function acquia_cms_headless_install() {
-  // Call the headless service.
-  $headless_user = \Drupal::service('acquia_cms_headless.starterkit_nextjs');
+function acquia_cms_headless_install($is_syncing) {
+  if (!$is_syncing) {
+    // Call the headless service.
+    $headless_user = \Drupal::service('acquia_cms_headless.starterkit_nextjs');
 
-  // Programmatically create a new "headless" user.
-  $headless_user->createHeadlessUser();
+    // Programmatically create a new "headless" user.
+    $headless_user->createHeadlessUser();
 
-  // Adds the necessary permissions to roles.
-  add_next_site_permissions();
+    // Adds the necessary permissions to roles.
+    add_next_site_permissions();
+  }
 }
 
 /**
