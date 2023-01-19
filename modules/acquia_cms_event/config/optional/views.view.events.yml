@@ -18,59 +18,12 @@ base_table: search_api_index_content
 base_field: search_api_id
 display:
   default:
-    display_plugin: default
     id: default
     display_title: Master
+    display_plugin: default
     position: 0
     display_options:
-      access:
-        type: perm
-        options:
-          perm: 'access content'
-      cache:
-        type: search_api_tag
-        options: {  }
-      query:
-        type: views_query
-        options:
-          bypass_access: false
-          skip_access: false
-          preserve_facet_query_args: false
-      exposed_form:
-        type: basic
-        options:
-          submit_button: Apply
-          reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
-          expose_sort_order: true
-          sort_asc_label: Asc
-          sort_desc_label: Desc
-      pager:
-        type: full
-        options:
-          items_per_page: 10
-          offset: 0
-          id: 0
-          total_pages: null
-          tags:
-            previous: '‹ Previous'
-            next: 'Next ›'
-            first: '« First'
-            last: 'Last »'
-          expose:
-            items_per_page: false
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
-          quantity: 5
-      style:
-        type: default
-      row:
-        type: search_api
+      title: Events
       fields:
         field_event_type:
           id: field_event_type
@@ -79,6 +32,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_field
           label: ''
           exclude: false
           alter:
@@ -154,7 +108,97 @@ display:
                 display_method: label
               tags:
                 display_method: label
-          plugin_id: search_api_field
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 10
+          total_pages: null
+          id: 0
+          tags:
+            next: 'Next ›'
+            previous: '‹ Previous'
+            first: '« First'
+            last: 'Last »'
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+          quantity: 5
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      access:
+        type: perm
+        options:
+          perm: 'access content'
+      cache:
+        type: search_api_tag
+        options: {  }
+      empty:
+        view_fallback:
+          id: view_fallback
+          table: views
+          field: view_fallback
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: view_fallback
+          empty: true
+          view_to_insert: 'events_fallback:default'
+          inherit_arguments: 0
+        main_listing_pages_view:
+          id: main_listing_pages_view
+          table: views
+          field: main_listing_pages_view
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: main_listing_pages_view
+          empty: true
+          tokenize: 0
+          content:
+            value: 'Sorry, no content found. Please try to search with different keywords.'
+            format: filtered_html
+      sorts:
+        field_event_start:
+          id: field_event_start
+          table: search_api_index_content
+          field: field_event_start
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: field_event_start
+          exposed: false
+        title:
+          id: title
+          table: search_api_index_content
+          field: title
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: title
+          exposed: false
+      arguments: {  }
       filters:
         type:
           id: type
@@ -163,6 +207,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_options
           operator: or
           value:
             event: event
@@ -196,7 +241,6 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
-          plugin_id: search_api_options
         published:
           id: published
           table: search_api_index_content
@@ -204,6 +248,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_boolean
           operator: '='
           value: '1'
           group: 1
@@ -234,7 +279,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: search_api_boolean
         search_api_language:
           id: search_api_language
           table: search_api_index_content
@@ -242,6 +286,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_language
           operator: in
           value:
             '***LANGUAGE_language_interface***': '***LANGUAGE_language_interface***'
@@ -274,62 +319,19 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: search_api_language
-      sorts:
-        field_event_start:
-          id: field_event_start
-          table: search_api_index_content
-          field: field_event_start
-          relationship: none
-          group_type: group
-          admin_label: ''
-          order: ASC
-          exposed: false
-          expose:
-            label: ''
-          plugin_id: search_api
-        title:
-          id: title
-          table: search_api_index_content
-          field: title
-          relationship: none
-          group_type: group
-          admin_label: ''
-          order: ASC
-          exposed: false
-          expose:
-            label: ''
-          plugin_id: search_api
-      title: Events
+      style:
+        type: default
+      row:
+        type: search_api
+      query:
+        type: search_api_query
+        options:
+          bypass_access: false
+          skip_access: false
+          preserve_facet_query_args: false
+      relationships: {  }
       header: {  }
       footer: {  }
-      empty:
-        view_fallback:
-          id: view_fallback
-          table: views
-          field: view_fallback
-          relationship: none
-          group_type: group
-          admin_label: ''
-          empty: true
-          view_to_insert: 'events_fallback:default'
-          inherit_arguments: 0
-          plugin_id: view_fallback
-        main_listing_pages_view:
-          id: main_listing_pages_view
-          table: views
-          field: main_listing_pages_view
-          relationship: none
-          group_type: group
-          admin_label: ''
-          empty: true
-          tokenize: 0
-          content:
-            value: 'Sorry, no content found. Please try to search with different keywords.'
-            format: filtered_html
-          plugin_id: main_listing_pages_view
-      relationships: {  }
-      arguments: {  }
       display_extenders: {  }
     cache_metadata:
       max-age: -1
@@ -344,18 +346,18 @@ display:
         - 'config:field.storage.node.field_event_type'
         - 'config:search_api.index.content'
   page:
-    display_plugin: page
     id: page
     display_title: Page
+    display_plugin: page
     position: 1
     display_options:
-      display_extenders: {  }
-      path: events
       cache:
         type: none
       defaults:
         cache: false
       exposed_block: true
+      display_extenders: {  }
+      path: events
     cache_metadata:
       max-age: -1
       contexts:

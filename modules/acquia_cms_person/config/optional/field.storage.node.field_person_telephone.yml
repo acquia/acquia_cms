@@ -1,16 +1,16 @@
 langcode: en
 status: true
 dependencies:
-  enforced:
-    module:
-      - acquia_cms_person
   module:
     - node
     - telephone
+  enforced:
+    module:
+      - acquia_cms_person
 third_party_settings:
   acquia_cms_common:
     search_index: content
-    search_label: Person Telephone
+    search_label: 'Person Telephone'
 id: node.field_person_telephone
 field_name: field_person_telephone
 entity_type: node

@@ -16,106 +16,109 @@ use Drupal\user\Entity\Role;
  *
  * @throws Exception
  */
-function acquia_cms_site_studio_install() {
-  // If site studio key available in the environment variables
-  // then pick it from there else check for settings overrides.
-  $config = \Drupal::config('cohesion.settings');
-  $site_studio_api_key = getenv('SITESTUDIO_API_KEY') ?? $config->get('api_key');
-  $site_studio_org_key = getenv('SITESTUDIO_ORG_KEY') ?? $config->get('organization_key');
+function acquia_cms_site_studio_install($is_syncing) {
+  if (!$is_syncing) {
+    // If site studio key available in the environment variables
+    // then pick it from there else check for settings overrides.
+    $config = \Drupal::config('cohesion.settings');
+    $site_studio_api_key = getenv('SITESTUDIO_API_KEY') ?? $config->get('api_key');
+    $site_studio_org_key = getenv('SITESTUDIO_ORG_KEY') ?? $config->get('organization_key');
 
-  // Set default theme as cohesion.
-  set_theme_site_studio_as_default();
+    // Set default theme as cohesion.
+    set_theme_site_studio_as_default();
 
-  // Update cohesion.settings config.
-  update_site_studio_settings();
+    // Update cohesion.settings config.
+    update_site_studio_settings();
 
-  // Set credentials if module being installed independently.
-  if (!InstallerKernel::installationAttempted() && $site_studio_api_key && $site_studio_org_key) {
-    set_site_studio_credentials($site_studio_api_key, $site_studio_org_key);
-    if (PHP_SAPI === 'cli') {
-      batch_set(AdministrationController::batchAction(TRUE));
+    // Set credentials if module being installed independently.
+    if (!InstallerKernel::installationAttempted() && $site_studio_api_key && $site_studio_org_key) {
+      set_site_studio_credentials($site_studio_api_key, $site_studio_org_key);
+      if (PHP_SAPI === 'cli') {
+        batch_set(AdministrationController::batchAction(TRUE));
+      }
     }
-  }
 
-  // Update search & search_fallback views display_options's style
-  // type as cohesion_layout and option's views_template & master_template
-  // if acquia_cms_site_studio module is present else use default one.
-  $module_handler = \Drupal::service('module_handler');
-  if ($module_handler->moduleExists('acquia_cms_search')) {
-    _acquia_cms_common_update_view_display_options_style('search');
-    _acquia_cms_common_update_view_display_options_style('search_fallback');
+    // Update search & search_fallback views display_options's style
+    // type as cohesion_layout and option's views_template & master_template
+    // if acquia_cms_site_studio module is present else use default one.
+    $module_handler = \Drupal::service('module_handler');
+    if ($module_handler->moduleExists('acquia_cms_search')) {
+      _acquia_cms_common_update_view_display_options_style('search');
+      _acquia_cms_common_update_view_display_options_style('search_fallback');
 
-    // Disable acquia_search view provided by Acquia Search Solrmodule,
-    // so that search view provided by acquia_cms_search module can be used
-    // which will allow content's related test to pass in isolation.
-    $view_storage = \Drupal::entityTypeManager()->getStorage('view');
-    if (!empty($view_storage->load('acquia_search'))) {
-      $view_storage->load('acquia_search')
-        ->setStatus(FALSE)
+      // Disable acquia_search view provided by Acquia Search Solrmodule,
+      // so that search view provided by acquia_cms_search module can be used
+      // which will allow content's related test to pass in isolation.
+      $view_storage = \Drupal::entityTypeManager()->getStorage('view');
+      if (!empty($view_storage->load('acquia_search'))) {
+        $view_storage->load('acquia_search')
+          ->setStatus(FALSE)
+          ->save();
+      }
+    }
+    $config_factory = \Drupal::service('config.factory');
+
+    // If module getting install stand alone.
+    if (!InstallerKernel::installationAttempted()) {
+      // Trigger save on page body field to update it.
+      if ($module_handler->moduleExists('acquia_cms_page')) {
+        $config = $config_factory->getEditable('field.field.node.page.body');
+        if (!empty($config)) {
+          $config->save();
+        }
+      }
+      // Update content views on module install.
+      if ($module_handler->moduleExists('acquia_cms_search')) {
+        if ($module_handler->moduleExists('acquia_cms_article')) {
+          _acquia_cms_common_update_view_display_options_style('articles');
+          _acquia_cms_common_update_view_display_options_style('articles_fallback');
+        }
+        if ($module_handler->moduleExists('acquia_cms_event')) {
+          _acquia_cms_common_update_view_display_options_style('events');
+          _acquia_cms_common_update_view_display_options_style('events_fallback');
+        }
+        if ($module_handler->moduleExists('acquia_cms_place')) {
+          _acquia_cms_common_update_view_display_options_style('places');
+          _acquia_cms_common_update_view_display_options_style('places_fallback');
+        }
+        if ($module_handler->moduleExists('acquia_cms_person')) {
+          _acquia_cms_common_update_view_display_options_style('people', 'default', 'view_tpl_people_grid');
+          _acquia_cms_common_update_view_display_options_style('people_fallback');
+        }
+      }
+    }
+
+    // Set default configurations for node revision delete module.
+    $config = $config_factory->getEditable('node_revision_delete.settings');
+    if (!empty($config)) {
+      $config->set('node_revision_delete_cron', '50')
+        ->set('node_revision_delete_time', '604800')
         ->save();
     }
-  }
 
-  // If module getting install stand alone.
-  if (!InstallerKernel::installationAttempted()) {
-    // Trigger save on page body field to update it.
+    // Set default node revision delete configuration for Page content type.
     if ($module_handler->moduleExists('acquia_cms_page')) {
-      $config = \Drupal::service('config.factory')->getEditable('field.field.node.page.body');
-      if (!empty($config)) {
-        $config->save();
+      $type = NodeType::load('page');
+      // @todo It's failing on acquia_cms profile, need to revisit.
+      $third_party_settings = $type ? $type->get('third_party_settings') : NULL;
+      if ($type && !isset($third_party_settings['node_revision_delete'])) {
+        $type->setThirdPartySetting('node_revision_delete', 'minimum_revisions_to_keep', '30');
+        $type->setThirdPartySetting('node_revision_delete', 'minimum_age_to_delete', '0');
+        $type->setThirdPartySetting('node_revision_delete', 'when_to_delete', '0');
+        $type->save();
       }
     }
-    // Update content views on module install.
-    if ($module_handler->moduleExists('acquia_cms_search')) {
-      if ($module_handler->moduleExists('acquia_cms_article')) {
-        _acquia_cms_common_update_view_display_options_style('articles');
-        _acquia_cms_common_update_view_display_options_style('articles_fallback');
-      }
-      if ($module_handler->moduleExists('acquia_cms_event')) {
-        _acquia_cms_common_update_view_display_options_style('events');
-        _acquia_cms_common_update_view_display_options_style('events_fallback');
-      }
-      if ($module_handler->moduleExists('acquia_cms_place')) {
-        _acquia_cms_common_update_view_display_options_style('places');
-        _acquia_cms_common_update_view_display_options_style('places_fallback');
-      }
-      if ($module_handler->moduleExists('acquia_cms_person')) {
-        _acquia_cms_common_update_view_display_options_style('people', 'default', 'view_tpl_people_grid');
-        _acquia_cms_common_update_view_display_options_style('people_fallback');
-      }
-    }
+
+    // Re-write the editor and filter format config from
+    // optional directory since we have done some update to it.
+    $module_path = $module_handler->getModule('acquia_cms_site_studio')->getPath();
+    $config_optional = $module_path . '/config/optional';
+    $source_optional_dir = new FileStorage($config_optional);
+
+    $config_storage = \Drupal::service('config.storage');
+    $config_storage->write('editor.editor.cohesion', $source_optional_dir->read('editor.editor.cohesion'));
+    $config_storage->write('filter.format.cohesion', $source_optional_dir->read('filter.format.cohesion'));
   }
-
-  // Set default configurations for node revision delete module.
-  $config = \Drupal::service('config.factory')->getEditable('node_revision_delete.settings');
-  if (!empty($config)) {
-    $config->set('node_revision_delete_cron', '50')
-      ->set('node_revision_delete_time', '604800')
-      ->save();
-  }
-
-  // Set default node revision delete configuration for Page content type.
-  if ($module_handler->moduleExists('acquia_cms_page')) {
-    $type = NodeType::load('page');
-    // @todo It's failing on acquia_cms profile, need to revisit.
-    $third_party_settings = $type ? $type->get('third_party_settings') : NULL;
-    if ($type && !isset($third_party_settings['node_revision_delete'])) {
-      $type->setThirdPartySetting('node_revision_delete', 'minimum_revisions_to_keep', '30');
-      $type->setThirdPartySetting('node_revision_delete', 'minimum_age_to_delete', '0');
-      $type->setThirdPartySetting('node_revision_delete', 'when_to_delete', '0');
-      $type->save();
-    }
-  }
-
-  // Re-write the editor and filter format config from
-  // optional directory since we have done some update to it.
-  $module_path = $module_handler->getModule('acquia_cms_site_studio')->getPath();
-  $config_optional = $module_path . '/config/optional';
-  $source_optional_dir = new FileStorage($config_optional);
-
-  $config_storage = \Drupal::service('config.storage');
-  $config_storage->write('editor.editor.cohesion', $source_optional_dir->read('editor.editor.cohesion'));
-  $config_storage->write('filter.format.cohesion', $source_optional_dir->read('filter.format.cohesion'));
 }
 
 /**
@@ -156,12 +159,14 @@ function set_theme_site_studio_as_default() {
  *
  * Reset page field body's label and description to default.
  */
-function acquia_cms_site_studio_uninstall() {
-  $config = \Drupal::service('config.factory')->getEditable('field.field.node.page.body');
-  if (!empty($config)) {
-    $config->set('label', 'Body');
-    $config->set('description', '');
-    $config->save();
+function acquia_cms_site_studio_uninstall($is_syncing) {
+  if (!$is_syncing) {
+    $config = \Drupal::service('config.factory')->getEditable('field.field.node.page.body');
+    if (!empty($config)) {
+      $config->set('label', 'Body');
+      $config->set('description', '');
+      $config->save();
+    }
   }
 }
 

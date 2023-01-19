@@ -166,8 +166,10 @@ function acquia_cms_search_form_acquia_cms_search_form_alter(array &$form) {
 /**
  * Implements hook_modules_installed().
  */
-function acquia_cms_search_modules_installed(array $modules) {
-  acquia_cms_search_add_category_facet($modules);
+function acquia_cms_search_modules_installed(array $modules, $is_syncing) {
+  if (!$is_syncing) {
+    acquia_cms_search_add_category_facet($modules);
+  }
 }
 
 /**

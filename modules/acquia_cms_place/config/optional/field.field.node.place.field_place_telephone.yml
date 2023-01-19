@@ -4,11 +4,11 @@ dependencies:
   config:
     - field.storage.node.field_place_telephone
     - node.type.place
+  module:
+    - telephone
   enforced:
     module:
       - acquia_cms_place
-  module:
-    - telephone
 id: node.place.field_place_telephone
 field_name: field_place_telephone
 entity_type: node
