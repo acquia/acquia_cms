@@ -8,10 +8,10 @@ drupal/lightning_page: ~
 drupal/lightning_search: ~
 drupal/lightning_media: ~
 
-# Including allowed composer plugins for ORCA.
-phpro/grumphp-shim:
+mnsami/composer-custom-directory-installer:
   type: composer-plugin
-webdriver-binary/binary-chromedriver:
-  type: composer-plugin
-wikimedia/composer-merge-plugin:
-  type: composer-plugin
+
+# DO not install acquia_contenthub_dashboard & acquia_dam_integration_links
+# as it's not yet Drupal Core 10 supported.
+drupal/acquia_dam_integration_links: ~
+drupal/acquia_contenthub_dashboard: ~
