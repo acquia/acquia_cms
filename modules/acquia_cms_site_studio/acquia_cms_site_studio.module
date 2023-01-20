@@ -29,7 +29,7 @@ function acquia_cms_site_studio_form_install_configure_form_alter(&$form, FormSt
 /**
  * Imports all Cohesion elements.
  */
-function install_acms_site_studio_initialize(): array {
+function _acquia_cms_site_studio_install_initialize(): array {
   // Build and run the batch job for the initial import of Cohesion elements and
   // assets.
   // @todo When Cohesion provides a service to generate this batch job, use
@@ -51,7 +51,7 @@ function install_acms_site_studio_initialize(): array {
  *
  * @throws Exception
  */
-function site_studio_import_ui_kit(): array {
+function _acquia_cms_site_studio_import_ui_kit(): array {
   // During testing, we don't import the UI kit, because it takes forever.
   // Instead, we swap in a pre-built directory of Cohesion templates and assets.
   if (getenv('COHESION_ARTIFACT')) {
@@ -66,7 +66,7 @@ function site_studio_import_ui_kit(): array {
 /**
  * Update cohesion.settings config.
  */
-function update_site_studio_settings() {
+function _acquia_cms_site_studio_update_settings() {
   $config = \Drupal::service('config.factory')->getEditable('cohesion.settings');
   $config->set('image_browser', [
     'config' => [
@@ -91,11 +91,11 @@ function update_site_studio_settings() {
  *
  * @throws Exception
  */
-function acquia_cms_site_studio_init() {
+function _acquia_cms_site_studio_init() {
   // Instead of returning the batch array, we are just executing the batch here.
   $batch = install_acms_site_studio_initialize();
-  site_studio_import_ui_kit();
-  update_site_studio_settings();
+  _acquia_cms_site_studio_import_ui_kit();
+  _acquia_cms_site_studio_update_settings();
   batch_set($batch);
 }
 
@@ -109,7 +109,7 @@ function acquia_cms_site_studio_form_alter(array &$form, FormStateInterface $for
     $request = Drupal::request();
     $state = MediaLibraryState::fromRequest($request);
     if ($state->getOpenerId() === 'media_library.opener.cohesion') {
-      $form['actions']['submit']['#ajax']['callback'] = 'alter_update_widget';
+      $form['actions']['submit']['#ajax']['callback'] = '_acquia_cms_site_studio_alter_update_widget';
     }
   }
   // Trigger site studio config import and rebuild whenever user
@@ -125,7 +125,7 @@ function acquia_cms_site_studio_form_alter(array &$form, FormStateInterface $for
     $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
     // We should add submit handler, only if cohesion keys are not already set.
     if (!$cohesion_configured) {
-      $form['#submit'][] = 'acquia_cms_site_studio_init';
+      $form['#submit'][] = '_acquia_cms_site_studio_init';
       // Here we are adding a separate submit handler to rebuild the cohesion
       // styles. Now the reason why we are doing this is because the rebuild is
       // expecting that all the entities of cohesion are in place but as the
@@ -144,7 +144,7 @@ function acquia_cms_site_studio_form_alter(array &$form, FormStateInterface $for
 /**
  * Callback for the media library image widget.
  */
-function alter_update_widget(array &$form, FormStateInterface $form_state, Request $request) {
+function _acquia_cms_site_studio_alter_update_widget(array &$form, FormStateInterface $form_state, Request $request) {
   // As cohesion is using angular for the media library popup, So the modal id
   // mismatch is causing the issue of no media selection. To resolve this we are
   // passing the selector in the CloseDialogCommand.
@@ -166,7 +166,7 @@ function alter_update_widget(array &$form, FormStateInterface $form_state, Reque
  *
  * @throws Exception
  */
-function acquia_cms_site_studio_rebuild_styles() {
+function _acquia_cms_site_studio_rebuild_styles() {
   // Get the batch array filled with operations that should be performed during
   // rebuild.
   batch_set(install_acms_site_studio_rebuild());

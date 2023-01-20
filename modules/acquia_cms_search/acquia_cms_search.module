@@ -168,7 +168,7 @@ function acquia_cms_search_form_acquia_cms_search_form_alter(array &$form) {
  */
 function acquia_cms_search_modules_installed(array $modules, $is_syncing) {
   if (!$is_syncing) {
-    acquia_cms_search_add_category_facet($modules);
+    _acquia_cms_search_add_category_facet($modules);
   }
 }
 
@@ -178,7 +178,7 @@ function acquia_cms_search_modules_installed(array $modules, $is_syncing) {
  * @param array $modules
  *   An array of installed modules.
  */
-function acquia_cms_search_add_category_facet(array $modules) {
+function _acquia_cms_search_add_category_facet(array $modules) {
   $acquiaCmsSearchModules = ["acquia_cms_person", "acquia_cms_place",
     "acquia_cms_article", "acquia_cms_event", "acquia_cms_page",
   ];
