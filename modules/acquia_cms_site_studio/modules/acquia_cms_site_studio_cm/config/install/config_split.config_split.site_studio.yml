@@ -5,12 +5,12 @@ id: site_studio
 label: 'Site Studio'
 description: 'Split site studio package.'
 weight: 0
+stackable: false
+storage: database
 folder: sitestudio
 module: {  }
 theme: {  }
-blacklist:
-  - 'cohesion.*'
+complete_list:
   - 'cohesion_*'
-graylist: {  }
-graylist_dependents: true
-graylist_skip_equal: true
+  - 'cohesion.*'
+partial_list: {  }
