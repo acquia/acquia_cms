@@ -1,15 +1,9 @@
 acquia/acquia_cms:
   type: drupal-module
-  version_dev: 1.x-dev
+  version_dev: 2.0.x-dev
 
 # Do not install Lightning modules explicitly excluded by ACMS.
 drupal/lightning_layout: ~
 drupal/lightning_page: ~
 drupal/lightning_search: ~
 drupal/lightning_media: ~
-
-# Including allowed composer plugins for ORCA.
-phpro/grumphp-shim:
-  type: composer-plugin
-webdriver-binary/binary-chromedriver:
-  type: composer-plugin
