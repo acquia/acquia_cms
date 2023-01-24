@@ -54,7 +54,7 @@ class DashboardApiKeysTest extends DashboardWebDriverTestBase {
     // Test API Keys section exists, get API Keys section.
     $consumersFieldset = $assertSession->elementExists('css', $this->sectionSelector);
 
-    // Test add API user button link has destination.
+    // Test create new consumer button link has destination.
     $this->assertButtonLink($consumersFieldset, '/admin/config/services/consumer/add?destination=/admin/headless/dashboard');
 
     // Test table body exist and has data in same order.
