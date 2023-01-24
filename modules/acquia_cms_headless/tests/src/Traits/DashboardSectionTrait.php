@@ -82,18 +82,6 @@ trait DashboardSectionTrait {
   }
 
   /**
-   * Asserts that the section has link.
-   *
-   * @param mixed $section
-   *   The section.
-   * @param string $link
-   *   An button label.
-   */
-  private function assertSectionLink(mixed $section, string $link): void {
-    $this->assertSession()->elementExists('named', ['link', $link], $section);
-  }
-
-  /**
    * Tests the section title.
    */
   public function testTitle(): void {
