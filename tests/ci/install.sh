@@ -20,7 +20,7 @@ create_fixture() {
   CORE_VERSION=$(echo ${ORCA_JOB} | sed -E -e 's/(INTEGRATED_TEST_ON_|INTEGRATED_UPGRADE_TEST_FROM_|ISOLATED_TEST_ON_|INTEGRATED_UPGRADE_TEST_TO_|ISOLATED_UPGRADE_TEST_TO_)//')
   echo "The CORE_VERSION is: ${CORE_VERSION}"
   orca debug:packages ${CORE_VERSION}
-  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=${CORE_VERSION} --dev --profile=minimal --no-sqlite --no-site-install
+  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=${CORE_VERSION} --profile=minimal --no-sqlite --no-site-install
 }
 
 if [ "${JOB_TYPE}" == "static-code-analysis" ]; then
@@ -35,6 +35,17 @@ fi
 [[ -d "${ORCA_FIXTURE_DIR}" ]] || exit 0
 
 cd ${ORCA_FIXTURE_DIR}
+
+# Below added to add swagger/chart.js libraries in CI.
+# Without this CI is failing.
+# @todo remove below workaround to add proper fix.
+mkdir ${ORCA_FIXTURE_DIR}/docroot/libraries
+curl "https://codeload.github.com/swagger-api/swagger-ui/zip/refs/tags/v3.0.17" -o ${ORCA_FIXTURE_DIR}/docroot/libraries/v3.0.17.zip
+unzip ${ORCA_FIXTURE_DIR}/docroot/libraries/v3.0.17.zip
+mv swagger-ui-3.0.17 ${ORCA_FIXTURE_DIR}/docroot/libraries/swagger-ui
+
+mkdir -p ${ORCA_FIXTURE_DIR}/docroot/libraries/chartjs/dist/
+curl "https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js" -o ${ORCA_FIXTURE_DIR}/docroot/libraries/chartjs/dist/chart.min.js
 
 # Install acquia_cms only for the Integrated & ExistingSite PHPUnit tests.
 if [ -n "${ACMS_JOB}" ]; then
