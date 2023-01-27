@@ -70,15 +70,17 @@
                 "[project-root]/.gitattributes": false,
                 "[web-root]/.csslintrc": false,
                 "[web-root]/INSTALL.txt": false,
+                "[web-root]/core/assets/scaffold/files/default.settings.php": {
+                    "append": "./patches/d9-acms-settings.patch",
+                    "force-append": true
+                },
+                "[web-root]/drush/Commands/SiteInstallCommands.php": "modules/acquia_cms_site_studio/modules/acquia_cms_site_studio_cm/src/Commands/ConfigImportExportCommands.php",
                 "[web-root]/drush/drush.yml": "drush/drush.yml",
                 "[web-root]/example.gitignore": false,
                 "[web-root]/modules/README.txt": false,
                 "[web-root]/profiles/README.txt": false,
                 "[web-root]/robots.txt": false,
                 "[web-root]/sites/README.txt": false,
-                "[web-root]/sites/default/default.settings.php": {
-                    "append": "./patches/d9-acms-settings.patch"
-                },
                 "[web-root]/themes/README.txt": false,
                 "[web-root]/themes/contrib/cohesion-theme/templates/maintenance-page.html.twig": "./patches/maintenance-page.patch",
                 "[web-root]/web.config": false
