@@ -62,7 +62,7 @@ fi
 # Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.
 # This is important for now, otherwise PHPUnit tests: MaintenancePageTest will fail.
 # @todo look for alternative way setting maintenance theme template.
-composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms"]' --merge && composer update --lock
+composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms", "drupal/acquia_cms_site_studio"]' --merge && composer update --lock
 
 # Enable Starter on full installs if Appropriate.
 if [[ "${ACMS_JOB}" == "backstop_tests" ]]; then

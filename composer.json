@@ -63,18 +63,14 @@
     "extra": {
         "drupal-scaffold": {
             "allowed-packages": [
-                "drupal/core"
+                "drupal/core",
+                "drupal/acquia_cms_site_studio"
             ],
             "file-mapping": {
                 "[project-root]/.editorconfig": false,
                 "[project-root]/.gitattributes": false,
                 "[web-root]/.csslintrc": false,
                 "[web-root]/INSTALL.txt": false,
-                "[web-root]/core/assets/scaffold/files/default.settings.php": {
-                    "append": "./patches/d9-acms-settings.patch",
-                    "force-append": true
-                },
-                "[web-root]/drush/Commands/SiteInstallCommands.php": "modules/acquia_cms_site_studio/modules/acquia_cms_site_studio_cm/src/Commands/ConfigImportExportCommands.php",
                 "[web-root]/drush/drush.yml": "drush/drush.yml",
                 "[web-root]/example.gitignore": false,
                 "[web-root]/modules/README.txt": false,
