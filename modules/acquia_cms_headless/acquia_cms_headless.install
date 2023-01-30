@@ -112,7 +112,8 @@ function acquia_cms_headless_update_8003() {
 
 /**
  * Implements hook_update_N().
- * Update existing permission with new permission
+ *
+ * Update existing permission with new permission.
  */
 function acquia_cms_headless_update_8004() {
   $role_obj = Role::load('headless');
@@ -126,10 +127,25 @@ function acquia_cms_headless_update_8004() {
 }
 
 /**
+ * Implements hook_update_N().
+ *
  * Execute method to update client_id field.
  */
 function acquia_cms_headless_update_8005() {
   if (\Drupal::moduleHandler()->moduleExists('consumers') && function_exists('consumers_update_8109')) {
     consumers_update_8109();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Remove `frontend_preview_headless` role.
+ */
+function acquia_cms_headless_update_8006() {
+  // Delete the frontend preview headless role from the system.
+  $role = Role::load('frontend_preview_headless');
+  if (!empty($role)) {
+    $role->delete();
   }
 }

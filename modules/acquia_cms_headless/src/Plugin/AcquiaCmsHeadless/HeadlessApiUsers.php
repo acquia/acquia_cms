@@ -75,11 +75,19 @@ class HeadlessApiUsers extends AcquiaCmsDashboardBase {
   protected $module = 'consumers';
 
   /**
+   * Provides headless role label.
+   *
+   * @var string
+   */
+  protected $headlessRoleLabel;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser, EntityTypeManagerInterface $entity_type_manager, StarterkitNextjsService $starterkit_nextjs_service) {
     parent::__construct($state, $module_handler, $link_generator, $info_parser);
     $this->entityTypeManager = $entity_type_manager;
+    $this->headlessRoleLabel = $entity_type_manager->getStorage('user_role')->load('headless')->label();
     $this->starterKitNextjsService = $starterkit_nextjs_service;
   }
 
@@ -245,7 +253,7 @@ class HeadlessApiUsers extends AcquiaCmsDashboardBase {
       $row = [
         'name' => Link::fromTextAndUrl($user->label(), $operations[$user->id()]['edit']['url']),
         // Currently only displaying users assigned the headless role.
-        'role' => $this->t('Headless Role'),
+        'role' => $this->headlessRoleLabel,
         'status' => $this->t('<span class="@status"></span>', ['@status' => $status]),
         'operations' => [
           'data' => [
@@ -286,7 +294,7 @@ class HeadlessApiUsers extends AcquiaCmsDashboardBase {
 
     $form[$module]['info_text'] = [
       '#type' => 'markup',
-      '#markup' => $this->t('<p>Only users assigned the <strong>Headless</strong> user role will appear in this list.  If adding new Headless users, make sure to assign the <strong>Headless</strong> role.</p>'),
+      '#markup' => $this->t('<p>Only users assigned the <strong> @label </strong> user role will appear in this list.  If adding new Headless users, make sure to assign the <strong>Headless</strong> role.</p>', ['@label' => $this->headlessRoleLabel]),
       '#prefix' => '<div class="headless-dashboard-admin-heading"><div class="headless-dashboard-user-info">',
       '#suffix' => '</div>',
     ];
