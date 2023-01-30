@@ -19,28 +19,16 @@
     "require": {
         "acquia/acquia-cms-starterkit": "^1.0",
         "drupal/acquia_claro": "^1.3.4@alpha",
+        "drupal/acquia_cms_audio": "dev-develop",
+        "drupal/acquia_cms_component": "dev-develop",
+        "drupal/acquia_cms_dam": "dev-develop",
+        "drupal/acquia_cms_headless": "dev-develop",
+        "drupal/acquia_cms_site_studio": "dev-develop",
+        "drupal/acquia_cms_starter": "dev-develop",
+        "drupal/acquia_cms_toolbar": "dev-develop",
+        "drupal/acquia_cms_tour": "dev-develop",
         "drush/drush": "^10 || ^11",
-        "wikimedia/composer-merge-plugin": "^2.0"
-    },
-    "replace": {
-        "drupal/acquia_cms_article": "*",
-        "drupal/acquia_cms_audio": "*",
-        "drupal/acquia_cms_common": "*",
-        "drupal/acquia_cms_component": "*",
-        "drupal/acquia_cms_dam": "*",
-        "drupal/acquia_cms_document": "*",
-        "drupal/acquia_cms_event": "*",
-        "drupal/acquia_cms_headless": "*",
-        "drupal/acquia_cms_image": "*",
-        "drupal/acquia_cms_page": "*",
-        "drupal/acquia_cms_person": "*",
-        "drupal/acquia_cms_place": "*",
-        "drupal/acquia_cms_search": "*",
-        "drupal/acquia_cms_site_studio": "*",
-        "drupal/acquia_cms_starter": "*",
-        "drupal/acquia_cms_toolbar": "*",
-        "drupal/acquia_cms_tour": "*",
-        "drupal/acquia_cms_video": "*"
+        "mnsami/composer-custom-directory-installer": "^2.0"
     },
     "require-dev": {
         "acquia/coding-standards": "^1.0",
@@ -60,11 +48,11 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "drupal/core-composer-scaffold": true,
             "ergebnis/composer-normalize": true,
+            "mnsami/composer-custom-directory-installer": true,
             "oomphinc/composer-installers-extender": true,
             "phpro/grumphp-shim": true,
             "phpstan/extension-installer": true,
-            "webdriver-binary/binary-chromedriver": true,
-            "wikimedia/composer-merge-plugin": true
+            "webdriver-binary/binary-chromedriver": true
         },
         "preferred-install": {
             "drupal/core": "dist"
@@ -108,7 +96,9 @@
             "docroot/libraries/{$name}": [
                 "type:drupal-library",
                 "type:bower-asset",
-                "type:npm-asset"
+                "type:npm-asset",
+                "swagger-api/swagger-ui",
+                "nnnick/chartjs"
             ],
             "docroot/modules/contrib/{$name}": [
                 "type:drupal-module"
@@ -124,18 +114,6 @@
             "bower-asset",
             "npm-asset"
         ],
-        "merge-plugin": {
-            "ignore-duplicates": false,
-            "include": [
-                "modules/*/composer.json"
-            ],
-            "merge-dev": true,
-            "merge-extra": true,
-            "merge-extra-deep": true,
-            "merge-scripts": false,
-            "recurse": true,
-            "replace": false
-        },
         "patchLevel": {
             "drupal/core": "-p2"
         },
@@ -155,6 +133,168 @@
         ]
     },
     "repositories": {
+        "acquia_cms_article": {
+            "type": "path",
+            "url": "./modules/acquia_cms_article",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_article": "dev-develop"
+                }
+            }
+        },
+        "acquia_cms_audio": {
+            "type": "path",
+            "url": "./modules/acquia_cms_audio",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_audio": "dev-develop"
+                }
+            }
+        },
+        "acquia_cms_common": {
+            "type": "path",
+            "url": "./modules/acquia_cms_common",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_common": "dev-develop"
+                }
+            }
+        },
+        "acquia_cms_component": {
+            "type": "path",
+            "url": "./modules/acquia_cms_component",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_component": "dev-develop"
+                }
+            }
+        },
+        "acquia_cms_dam": {
+            "type": "path",
+            "url": "./modules/acquia_cms_dam",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_dam": "dev-develop"
+                }
+            }
+        },
+        "acquia_cms_document": {
+            "type": "path",
+            "url": "./modules/acquia_cms_document",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_document": "dev-develop"
+                }
+            }
+        },
+        "acquia_cms_event": {
+            "type": "path",
+            "url": "./modules/acquia_cms_event",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_event": "dev-develop"
+                }
+            }
+        },
+        "acquia_cms_headless": {
+            "type": "path",
+            "url": "./modules/acquia_cms_headless",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_headless": "dev-develop"
+                }
+            }
+        },
+        "acquia_cms_image": {
+            "type": "path",
+            "url": "./modules/acquia_cms_image",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_image": "dev-develop"
+                }
+            }
+        },
+        "acquia_cms_page": {
+            "type": "path",
+            "url": "./modules/acquia_cms_page",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_page": "dev-develop"
+                }
+            }
+        },
+        "acquia_cms_person": {
+            "type": "path",
+            "url": "./modules/acquia_cms_person",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_person": "dev-develop"
+                }
+            }
+        },
+        "acquia_cms_place": {
+            "type": "path",
+            "url": "./modules/acquia_cms_place",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_place": "dev-develop"
+                }
+            }
+        },
+        "acquia_cms_search": {
+            "type": "path",
+            "url": "./modules/acquia_cms_search",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_search": "dev-develop"
+                }
+            }
+        },
+        "acquia_cms_site_studio": {
+            "type": "path",
+            "url": "./modules/acquia_cms_site_studio",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_site_studio": "dev-develop"
+                }
+            }
+        },
+        "acquia_cms_starter": {
+            "type": "path",
+            "url": "./modules/acquia_cms_starter",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_starter": "dev-develop"
+                }
+            }
+        },
+        "acquia_cms_toolbar": {
+            "type": "path",
+            "url": "./modules/acquia_cms_toolbar",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_toolbar": "dev-develop"
+                }
+            }
+        },
+        "acquia_cms_tour": {
+            "type": "path",
+            "url": "./modules/acquia_cms_tour",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_tour": "dev-develop"
+                }
+            }
+        },
+        "acquia_cms_video": {
+            "type": "path",
+            "url": "./modules/acquia_cms_video",
+            "options": {
+                "versions": {
+                    "drupal/acquia_cms_video": "dev-develop"
+                }
+            }
+        },
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"

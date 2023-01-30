@@ -2,16 +2,16 @@ acquia/acquia_cms:
   type: drupal-module
   version_dev: 1.x-dev
 
+mnsami/composer-custom-directory-installer:
+  type: composer-plugin
+
 # Do not install Lightning modules explicitly excluded by ACMS.
 drupal/lightning_layout: ~
 drupal/lightning_page: ~
 drupal/lightning_search: ~
 drupal/lightning_media: ~
 
-# Including allowed composer plugins for ORCA.
-phpro/grumphp-shim:
-  type: composer-plugin
-webdriver-binary/binary-chromedriver:
-  type: composer-plugin
-wikimedia/composer-merge-plugin:
-  type: composer-plugin
+# DO not install acquia_contenthub_dashboard & acquia_dam_integration_links
+# as it's not yet Drupal Core 10 supported.
+drupal/acquia_dam_integration_links: ~
+drupal/acquia_contenthub_dashboard: ~

@@ -46,14 +46,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/56497e23daa300d0634139828e98cb04/raw/b2bbe36dd58806aaca5e7da4f415a8b623fdbc88/merge_plugin.patch | git -C ../orca apply
-          # Remove internal module dependencies, so that ORCA CI doesn't report error.
-          if [ "${ORCA_JOB}" != "STATIC_CODE_ANALYSIS" ]; then for path in $(find modules -type f -maxdepth 2 -name "composer.json" -exec ls '{}' ';'); do sed -i '/\"drupal\/acquia_cms.*\":.*\".*\"/d' $path; done; fi
-
-          # The strict deprecated code scan runs on current drupal core version.
-          # So, we've added workabound to run the CI on current drupal core version
-          # @todo: Remove below once we are done with making all acquia_cms modules as Drupal 10 compatible.
-          if [ "${ORCA_JOB}" = "STRICT_DEPRECATED_CODE_SCAN" ]; then sed -i 's/\(\"drupal\/core\"\: \"\^\)\(9.5\)/\19.4/' modules/acquia_cms_common/composer.json; fi
+          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: ../orca/bin/ci/before_install.sh
       - name: Install
@@ -128,7 +121,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/56497e23daa300d0634139828e98cb04/raw/b2bbe36dd58806aaca5e7da4f415a8b623fdbc88/merge_plugin.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
 #      - name: Configure AWS Credentials
 #        uses: aws-actions/configure-aws-credentials@v1
 #        with:
@@ -137,11 +130,6 @@ jobs:
 #          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Before Install
         run: |
-          # Remove internal module dependencies, so that ORCA CI doesn't report error.
-          for path in $(find modules -type f -maxdepth 2 -name "composer.json" -exec ls '{}' ';'); do sed -i '/\"drupal\/acquia_cms.*\":.*\".*\"/d' $path; done;
-
-          #if [ "${ACMS_JOB}" = "starter" ] || [ "${ACMS_JOB}" = "starter_full" ] || [ "${ACMS_JOB}" = "base" ]; then aws s3 cp --recursive ${AWS_S3_BUCKET_PATH}/artifacts/ ${ORCA_SUT_DIR}/tests/; fi
-
           # Remove all PHPUnit tests from individual modules, except the integrated & ExistingSite tests.
           if [ "${ACMS_JOB}" = "integrated_existing_site_tests" ]; then
             find modules/*/tests tests -type f -name "*Test.php" ! -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
@@ -239,13 +227,9 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/56497e23daa300d0634139828e98cb04/raw/b2bbe36dd58806aaca5e7da4f415a8b623fdbc88/merge_plugin.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
-          # Remove internal module dependencies, so that ORCA CI doesn't report error.
-          for path in $(find modules -type f -maxdepth 2 -name "composer.json" -exec ls '{}' ';'); do sed -i '/\"drupal\/acquia_cms.*\":.*\".*\"/d' $path; done;
-          # Remove all PHPUnit test files, exlcuding the current module's PHPUnit tests.
-          # find modules -type f -name "*Test.php" ! -path "*/${MODULE}/*" -exec rm -fr '{}' ';'
           modules_list=$(echo ${MODULES} | tr "," "\n")
           declare -a commands
           for module in ${modules_list}
