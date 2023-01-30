@@ -38,18 +38,25 @@ cd ${ORCA_FIXTURE_DIR}
 # We are using composer-plugin mnsami/composer-custom-directory-installer,
 # which by default loads libraries in vendor folder but we are expecting
 # them to be in libraries folder hence running below command.
-composer config --json extra.installer-paths.'docroot/libraries/{$name}' '["swagger-api/swagger-ui","nnnick/chartjs"]' --merge
+composer config --json extra.installer-paths.'docroot/libraries/{$name}' '["swagger-api/swagger-ui"]' --merge
 
-# Below added to add swagger/chart.js libraries in CI.
-# Without this CI is failing.
-# @todo remove below workaround to add proper fix.
-mkdir ${ORCA_FIXTURE_DIR}/docroot/libraries
-curl "https://codeload.github.com/swagger-api/swagger-ui/zip/refs/tags/v3.0.17" -o ${ORCA_FIXTURE_DIR}/docroot/libraries/v3.0.17.zip
-unzip ${ORCA_FIXTURE_DIR}/docroot/libraries/v3.0.17.zip
-mv swagger-ui-3.0.17 ${ORCA_FIXTURE_DIR}/docroot/libraries/swagger-ui
+# Add the chart.js repository in orca fixture directory.
+CHAR_JS_REPOSITORY=$(composer config repositories.chart.js -d ${ORCA_SUT_DIR})
+composer config repositories.chart.js "${CHAR_JS_REPOSITORY}"
 
-mkdir -p ${ORCA_FIXTURE_DIR}/docroot/libraries/chartjs/dist/
-curl "https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js" -o ${ORCA_FIXTURE_DIR}/docroot/libraries/chartjs/dist/chart.min.js
+# Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.
+# This is important for now, otherwise PHPUnit tests: MaintenancePageTest will fail.
+# @todo look for alternative way setting maintenance theme template.
+composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms", "drupal/acquia_cms_site_studio"]' --merge
+
+# The acquia/drupal-recommended-project adds the drupal scaffold for default.settings.php file.
+# We need to remove it as drupal core already add the same file.
+# @todo We should remove this from acquia/drupal-recommended-project and then we can remove below code from here.
+FILE_MAPPING=$(composer config --json extra.drupal-scaffold.file-mapping | sed 's/\(,"\[web-root\]\/sites\/default\/default\.settings\.php\":.*\}\)}/}/')
+composer config --json extra.drupal-scaffold.file-mapping "${FILE_MAPPING}"
+
+# Run composer install command to download libraries and apply scaffolding.
+composer install && composer update --lock
 
 # Install acquia_cms only for the Integrated & ExistingSite PHPUnit tests.
 if [ -n "${ACMS_JOB}" ]; then
@@ -58,11 +65,6 @@ if [ -n "${ACMS_JOB}" ]; then
   # @todo We should probably move this in acms site:install command.
   drush en acquia_cms_dam --yes --uri=http://127.0.0.1:8080
 fi
-
-# Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.
-# This is important for now, otherwise PHPUnit tests: MaintenancePageTest will fail.
-# @todo look for alternative way setting maintenance theme template.
-composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms", "drupal/acquia_cms_site_studio"]' --merge && composer update --lock
 
 # Enable Starter on full installs if Appropriate.
 if [[ "${ACMS_JOB}" == "backstop_tests" ]]; then
