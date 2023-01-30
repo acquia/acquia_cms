@@ -5,8 +5,11 @@ management between core config and site studio.
 
 ## Usages
 In order to utilise this module's functionality, user needs to add scaffolding to their project.
-they can run command `composer config --json extra.drupal-scaffold.allowed-packages ["acquia/acquia_cms_site_studio"] --merge && composer instal`
-will do the scaffolding, and then enabling this module will create a config split named _sitestudio_
+they can run command
+```
+composer config --json extra.drupal-scaffold.allowed-packages ["acquia/acquia_cms_site_studio"] --merge && composer install
+```
+It will do the scaffolding, and then enabling this module will create a config split named _sitestudio_
 along with a config ignore and default Site Studio full export settings.
 - Manually do scaffolding
 - Enable this module.
@@ -14,7 +17,10 @@ along with a config ignore and default Site Studio full export settings.
 
 ### Scaffolding
 This module provides composer scaffolding which updates default.settings.php to include _site_studio_sync_ directory path.
-`$settings['site_studio_sync'] = '../config/sitestudio';`. It also provides post commands for `drush cex` & `drush cim`,
+```
+$settings['site_studio_sync'] = '../config/sitestudio';
+```
+It also provides post commands for `drush cex` & `drush cim`,
 it means running commands will automatically run `drush sitestudio:package:export`
 & `drush sitestudio:package:import`
 
