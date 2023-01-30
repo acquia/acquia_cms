@@ -27,7 +27,8 @@
         "drupal/acquia_cms_starter": "dev-develop",
         "drupal/acquia_cms_toolbar": "dev-develop",
         "drupal/acquia_cms_tour": "dev-develop",
-        "drush/drush": "^10 || ^11"
+        "drush/drush": "^10 || ^11",
+        "mnsami/composer-custom-directory-installer": "^2.0"
     },
     "require-dev": {
         "acquia/coding-standards": "^1.0",
@@ -47,6 +48,7 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "drupal/core-composer-scaffold": true,
             "ergebnis/composer-normalize": true,
+            "mnsami/composer-custom-directory-installer": true,
             "oomphinc/composer-installers-extender": true,
             "phpro/grumphp-shim": true,
             "phpstan/extension-installer": true,
@@ -94,7 +96,9 @@
             "docroot/libraries/{$name}": [
                 "type:drupal-library",
                 "type:bower-asset",
-                "type:npm-asset"
+                "type:npm-asset",
+                "swagger-api/swagger-ui",
+                "nnnick/chartjs"
             ],
             "docroot/modules/contrib/{$name}": [
                 "type:drupal-module"
