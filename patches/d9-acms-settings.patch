@@ -48,5 +48,4 @@ $memcacheSettingsFile = $repo_root . '/vendor/acquia/memcache-settings/memcache.
 if (file_exists($memcacheSettingsFile) && getenv('ENABLE_MEMCACHED')) {
   require $memcacheSettingsFile;
 }
-$settings['site_studio_sync'] = '../config/sitestudio';
 $settings['config_sync_directory'] = '../config';
