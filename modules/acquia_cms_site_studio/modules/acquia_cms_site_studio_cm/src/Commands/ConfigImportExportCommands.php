@@ -21,10 +21,7 @@ class ConfigImportExportCommands extends DrushCommands implements SiteAliasManag
    */
   public function configExportPostCommand($result, CommandData $commandData): CommandResult {
 
-    $moduleHandler = \Drupal::service('module_handler');
-    if ($moduleHandler->moduleExists('acquia_cms_site_studio_cm')) {
-      $this->runDrushCommand('sitestudio:package:export');
-    }
+    $this->runDrushCommand('sitestudio:package:export');
     return is_array($result) && isset(array_shift($result)['error']) ? CommandResult::exitCode(self::EXIT_FAILURE) : CommandResult::exitCode(self::EXIT_SUCCESS);
   }
 
@@ -35,10 +32,7 @@ class ConfigImportExportCommands extends DrushCommands implements SiteAliasManag
    */
   public function configImportPostCommand($result, CommandData $commandData): CommandResult {
 
-    $moduleHandler = \Drupal::service('module_handler');
-    if ($moduleHandler->moduleExists('acquia_cms_site_studio_cm')) {
-      $this->runDrushCommand('sitestudio:package:import');
-    }
+    $this->runDrushCommand('sitestudio:package:import');
     return is_array($result) && isset(array_shift($result)['error']) ? CommandResult::exitCode(self::EXIT_FAILURE) : CommandResult::exitCode(self::EXIT_SUCCESS);
   }
 
@@ -49,10 +43,13 @@ class ConfigImportExportCommands extends DrushCommands implements SiteAliasManag
    *   The command to execute.
    */
   private function runDrushCommand(string $command): void {
-    $this->yell("Running site $command command.");
-    $selfAlias = $this->siteAliasManager()->getSelf();
-    $process = $this->processManager()->drush($selfAlias, $command, [], []);
-    $process->mustRun($process->showRealtime());
+    $moduleHandler = \Drupal::service('module_handler');
+    if ($moduleHandler->moduleExists('acquia_cms_site_studio') && $moduleHandler->moduleExists('acquia_cms_site_studio_cm')) {
+      $this->yell("Running site $command command.");
+      $selfAlias = $this->siteAliasManager()->getSelf();
+      $process = $this->processManager()->drush($selfAlias, $command, [], []);
+      $process->mustRun($process->showRealtime());
+    }
   }
 
 }
