@@ -8,6 +8,8 @@
         "acquia/cohesion-theme": "^6.9 || ^7.0",
         "drupal/acquia_cms_common": "1.x-dev",
         "drupal/collapsiblock": "^4.0",
+        "drupal/config_split": "^2",
+        "drupal/config_filter": "^2.4",
         "drupal/node_revision_delete": "^1.0"
     },
     "config": {
@@ -24,6 +26,14 @@
     },
     "extra": {
         "branch-alias" : {"dev-develop" : "1.x-dev"},
+        "drupal-scaffold": {
+            "file-mapping": {
+                "[web-root]/drush/Commands/SiteInstallCommands.php": "modules/acquia_cms_site_studio_cm/src/Commands/ConfigImportExportCommands.php",
+                "[web-root]/sites/default/default.settings.php": {
+                    "append": "modules/acquia_cms_site_studio_cm/patch/site-studio-settings.patch"
+                }
+            }
+        },
         "drush": {
             "services": {
                 "drush.services.yml": "^10"
