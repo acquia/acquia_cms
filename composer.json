@@ -72,7 +72,8 @@
     "extra": {
         "drupal-scaffold": {
             "allowed-packages": [
-                "drupal/core"
+                "drupal/core",
+                "drupal/acquia_cms_site_studio"
             ],
             "file-mapping": {
                 "[project-root]/.editorconfig": false,
@@ -85,9 +86,6 @@
                 "[web-root]/profiles/README.txt": false,
                 "[web-root]/robots.txt": false,
                 "[web-root]/sites/README.txt": false,
-                "[web-root]/sites/default/default.settings.php": {
-                    "append": "./patches/d9-acms-settings.patch"
-                },
                 "[web-root]/themes/README.txt": false,
                 "[web-root]/themes/contrib/cohesion-theme/templates/maintenance-page.html.twig": "./patches/maintenance-page.patch",
                 "[web-root]/web.config": false
@@ -106,8 +104,7 @@
                 "type:drupal-library",
                 "type:bower-asset",
                 "type:npm-asset",
-                "swagger-api/swagger-ui",
-                "nnnick/chartjs"
+                "swagger-api/swagger-ui"
             ],
             "docroot/modules/contrib/{$name}": [
                 "type:drupal-module"
@@ -323,6 +320,18 @@
             "options": {
                 "versions": {
                     "drupal/acquia_cms_video": "dev-develop"
+                }
+            }
+        },
+        "chart.js": {
+            "type": "package",
+            "package": {
+                "name": "nnnick/chartjs",
+                "version": "v3.9.1",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/chartjs/Chart.js/releases/download/v3.9.1/chart.js-3.9.1.tgz",
+                    "type": "tar"
                 }
             }
         },
