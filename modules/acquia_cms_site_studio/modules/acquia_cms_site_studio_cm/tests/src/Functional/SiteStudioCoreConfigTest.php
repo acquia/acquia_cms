@@ -103,7 +103,8 @@ class SiteStudioCoreConfigTest extends BrowserTestBase {
     // We have added `site_studio_sync` using scaffolding
     // from acquia_cms_site_studio module, we need to test
     // that config exists in setting.php file.
-    $site_studio_sync = '../config/sitestudio';
+    $site_path = $this->container->getParameter('site.path');
+    $site_studio_sync = "../config/$site_path/sitestudio";
     $this->assertEquals($site_studio_sync, Settings::get('site_studio_sync'));
   }
 
