@@ -10,6 +10,21 @@ use Behat\Mink\Element\NodeElement;
 trait DashboardSectionTrait {
 
   /**
+   * Visits the headless dashboard page.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  protected function visitHeadlessDashboardAdmin(): void {
+    $account = $this->drupalCreateUser();
+    $account->addRole('administrator');
+    $account->save();
+    $this->drupalLogin($account);
+
+    // Visit headless dashboard.
+    $this->drupalGet("/admin/headless/dashboard");
+  }
+
+  /**
    * Returns the section element.
    */
   public function getSection(): NodeElement {
