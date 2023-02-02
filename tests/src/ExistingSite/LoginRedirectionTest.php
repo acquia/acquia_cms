@@ -25,7 +25,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() :void {
+  protected function setUp(): void {
     parent::setUp();
 
     // Store the current config flag so we can restore it in tearDown().
@@ -60,7 +60,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown() :void {
+  public function tearDown(): void {
     $this->container->get('config.factory')
       ->getEditable('acquia_cms_common.settings')
       ->set('user_login_redirection', $this->enabled)
@@ -84,7 +84,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
    *
    * @dataProvider providerLoginDestination
    */
-  public function testLoginDestination(bool $enable, array $destination_map = [], array $roles = []) : void {
+  public function testLoginDestination(bool $enable, array $destination_map = [], array $roles = []): void {
     $this->container->get('config.factory')
       ->getEditable('acquia_cms_common.settings')
       ->set('user_login_redirection', $enable)
@@ -100,7 +100,6 @@ class LoginRedirectionTest extends ExistingSiteBase {
 
     foreach ($destination_map as $destination) {
       [$destination_parameter, $expected_destination_after_login] = str_replace('{uid}', $account->id(), $destination);
-
       $options = [];
       if ($destination_parameter) {
         $options['query']['destination'] = $destination_parameter;
@@ -121,7 +120,7 @@ class LoginRedirectionTest extends ExistingSiteBase {
    * @return array[]
    *   Sets of arguments to pass to the test method.
    */
-  public function providerLoginDestination() : array {
+  public function providerLoginDestination(): array {
     return [
       'content author with redirect' => [
         TRUE,

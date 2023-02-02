@@ -1,31 +1,34 @@
-name: "Acquia CMS CI"
+name: "Acquia CMS CRON"
 on:
-  push:
-    branches: [ develop, qa, stage, main, release/*, feature/* ]
-    paths-ignore:
-      - README.md
-  pull_request:
-#    branches: [ develop ]
-    paths-ignore:
-      - README.md
+  schedule:
+    - cron: "0 0 * * *"
+
+# Set ORCA related environment variables.
+env:
+  # Provide your package's name.
+  ORCA_SUT_NAME: acquia/acquia_cms
+  ORCA_SUT_BRANCH: develop
+  ORCA_VERSION: ^3
+  ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
+  ORCA_ENABLE_NIGHTWATCH: "FALSE"
+  ORCA_PHPCS_STANDARD: AcquiaPHP
+  ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
+  # Set Required API Keys.
+  CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
+  GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
+  SEARCH_UUID: ${{ secrets.SEARCH_UUID }}
+  SITESTUDIO_API_KEY: ${{ secrets.SITESTUDIO_API_KEY }}
+  SITESTUDIO_ORG_KEY: ${{ secrets.SITESTUDIO_ORG_KEY }}
+  #Add other required environment variables.
+  COMPOSER_PROCESS_TIMEOUT: 1800
+  CI: true
 jobs:
   static_code_analysis:
     runs-on: ubuntu-latest
     env:
-      # Provide your package's name.
-      ORCA_SUT_NAME: acquia/acquia_cms
-      ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^3
-      ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
-      ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
-      ORCA_ENABLE_NIGHTWATCH: "FALSE"
-      ORCA_PHPCS_STANDARD: AcquiaPHP
-      ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
-      COMPOSER_PROCESS_TIMEOUT: 1800
       ORCA_JOB: ${{ matrix.orca-job }}
       GITHUB_EVENT: $ {{ github.event_name }}
       JOB_TYPE: "static-code-analysis"
-      #ACMS_JOB: ${{ matrix.acms-job}}
     strategy:
       matrix:
         orca-job:
@@ -62,43 +65,18 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
-
   integrated_tests:
     name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
     runs-on: ubuntu-latest
     env:
-      # Site test artifacts.
-      #ACMS_DB_ARTIFACT: "/home/runner/work/acquia_cms/acquia_cms/tests/acms.sql.gz"
-      #ACMS_FILES_ARTIFACT: "/home/runner/work/acquia_cms/acquia_cms/tests/acms-files.tar.gz"
-      #ACMS_STARTER_DB_ARTIFACT: "/home/runner/work/acquia_cms/acquia_cms/tests/acms-starter.sql.gz"
-      #ACMS_STARTER_FILES_ARTIFACT: "/home/runner/work/acquia_cms/acquia_cms/tests/acms-files-starter.tar.gz"
-      # Provide your package's name.
-      ORCA_SUT_NAME: acquia/acquia_cms
-      ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^3
-      ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
-      ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
-      ORCA_ENABLE_NIGHTWATCH: "FALSE"
-      ORCA_PHPCS_STANDARD: AcquiaPHP
-      ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
-      COMPOSER_PROCESS_TIMEOUT: 1800
       ORCA_JOB: ${{ matrix.orca-job }}
-      #AWS_S3_BUCKET_PATH: s3://acquia-cms-artifacts/backstop
-      # Set Required API Keys.
-      CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
-      GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
-      SEARCH_UUID: ${{ secrets.SEARCH_UUID }}
-      SITESTUDIO_API_KEY: ${{ secrets.SITESTUDIO_API_KEY }}
-      SITESTUDIO_ORG_KEY: ${{ secrets.SITESTUDIO_ORG_KEY }}
       ACMS_JOB: ${{ matrix.acms_job }}
       JOB_TYPE: "integrated-tests"
-      CI: true
     strategy:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_CURRENT
-        #php-version: [ "8.1" ]
+          - INTEGRATED_TEST_ON_PREVIOUS_MINOR
         acms_job:
           - integrated_php_unit_tests
           - integrated_existing_site_tests
@@ -112,7 +90,6 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 8.1
-          #coverage: xdebug
       - name: Setup MySQL
         run: |
           sudo /etc/init.d/mysql start
@@ -122,14 +99,14 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
-#      - name: Configure AWS Credentials
-#        uses: aws-actions/configure-aws-credentials@v1
-#        with:
-#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Before Install
         run: |
+          # One of the patch is failing on Drupal Core 9.5. So remove that patch.
+          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_PREVIOUS_MINOR" ]; then
+            NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
+            composer config extra.patches.drupal/core "${NEW_JSON}" --json
+          fi
+
           # Remove all PHPUnit tests from individual modules, except the integrated & ExistingSite tests.
           if [ "${ACMS_JOB}" = "integrated_existing_site_tests" ]; then
             find modules/*/tests tests -type f -name "*Test.php" ! -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
@@ -157,62 +134,23 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
-
   isolated_tests:
-    name: acquia_cms (${{ matrix.orca-job }}, ${{ matrix.modules }})
+    name: acquia_cms (${{ matrix.orca-job }})
     runs-on: ubuntu-latest
     env:
       # Set ORCA related environment variables.
-      ORCA_SUT_NAME: acquia/acquia_cms
-      ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^3
-      ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
-      ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
-      ORCA_ENABLE_NIGHTWATCH: "FALSE"
-      ORCA_PHPCS_STANDARD: AcquiaPHP
-      ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
       ORCA_JOB: ${{ matrix.orca-job }}
-
       # Set Required API Keys.
-      CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
-      GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
-      SEARCH_UUID: ${{ secrets.SEARCH_UUID }}
-      SITESTUDIO_API_KEY: ${{ secrets.SITESTUDIO_API_KEY }}
-      SITESTUDIO_ORG_KEY: ${{ secrets.SITESTUDIO_ORG_KEY }}
-
-      #Add other required environment variables.
-      COMPOSER_PROCESS_TIMEOUT: 1800
       MODULES: ${{ matrix.modules }}
       JOB_TYPE: "isolated-tests"
-      CI: true
     strategy:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_CURRENT
+          - ISOLATED_TEST_ON_CURRENT_DEV
+          - ISOLATED_TEST_ON_NEXT_MINOR_DEV
+          - INTEGRATED_TEST_ON_PREVIOUS_MINOR
         #php-version: [ "8.1" ]
-        modules:
-          - acquia_cms_article, acquia_cms_person, acquia_cms_place, acquia_cms_event
-          - acquia_cms_page, acquia_cms_site_studio
-          - acquia_cms_image, acquia_cms_document, acquia_cms_video, acquia_cms_audio
-          - acquia_cms_search, acquia_cms_common, acquia_cms_tour
-#          - acquia_cms_article
-#          - acquia_cms_audio
-#          - acquia_cms_common
-#          - acquia_cms_document
-#          - acquia_cms_event
-#          - acquia_cms_image
-#          - acquia_cms_page
-#          - acquia_cms_person
-#          - acquia_cms_place
-#          - acquia_cms_search
-#          - acquia_cms_site_studio
-#          - acquia_cms_tour
-#          - acquia_cms_video
-          #- acquia_cms_audio
-          #- acquia_cms_headless
-          #- acquia_cms_starter
-          #- acquia_cms_toolbar
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -230,17 +168,12 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
-          modules_list=$(echo ${MODULES} | tr "," "\n")
-          declare -a commands
-          for module in ${modules_list}
-          do
-            command=$(echo ${module} | xargs)
-            commands=("${commands[@]}" ! -path "*/${command}/*")
-          done
-          find modules -type f -name "*Test.php" "${commands[@]}" -exec rm -fr '{}' ';'
-
+          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_PREVIOUS_MINOR" ]; then
+            NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
+            composer config extra.patches.drupal/core "${NEW_JSON}" --json
+          fi
           # Do not run any existing site tests. We run them seperately.
-          find modules -type d -name ExistingSite | xargs rm -rf && rm -rf tests/src/
+          find tests/src modules -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
           CHROMEDRIVER_PID=$!
@@ -259,35 +192,3 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
-
-  deploy_code:
-    if: ${{ github.ref == 'refs/heads/main' }}
-    name: "Continuous Deployment (CD)"
-    env:
-      GIT_AUTHOR_NAME: "Vishal Khode"
-      GIT_COMMITTER_NAME: "Vishal Khode"
-      GIT_COMMITTER_EMAIL: "vishal.khode@acquia.com"
-      GIT_AUTHOR_EMAIL: "vishal.khode@acquia.com"
-    needs: [ static_code_analysis, integrated_tests, isolated_tests ]
-    runs-on: ubuntu-latest
-    environment: code_deployment
-    concurrency: production
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Configure SSH keys
-        run: |
-          mkdir -p ~/.ssh
-          echo "${DRUPAL_SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          eval `ssh-agent -s`
-          ssh-add ~/.ssh/id_rsa
-          ssh-keyscan "${DRUPAL_SSH_KNOWN_HOSTS}" >> ~/.ssh/known_hosts
-        shell: bash
-        env:
-          DRUPAL_SSH_PRIVATE_KEY: ${{ secrets.DRUPAL_SSH_PRIVATE_KEY }}
-          DRUPAL_SSH_KNOWN_HOSTS: git.drupal.org
-      - name: deploy_code
-        run: |
-          ${GITHUB_WORKSPACE}/scripts/deploy_code.sh
