@@ -82,9 +82,9 @@ class AcmsUtilityService {
     if ($this->moduleHandler->moduleExists('acquia_cms_site_studio')) {
       $config = $this->configFactory->get('cohesion.settings');
       if ($config->get('api_key') && $config->get('organization_key')) {
-        batch_set(install_acms_site_studio_initialize());
-        site_studio_import_ui_kit();
-        update_site_studio_settings();
+        batch_set(_acquia_cms_site_studio_install_initialize());
+        _acquia_cms_site_studio_import_ui_kit();
+        _acquia_cms_site_studio_update_settings();
         return drush_backend_batch_process();
       }
     }
