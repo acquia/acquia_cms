@@ -36,13 +36,29 @@ fi
 
 cd ${ORCA_FIXTURE_DIR}
 
+# We are using composer-plugin mnsami/composer-custom-directory-installer,
+# which by default loads libraries in vendor folder but we are expecting
+# them to be in libraries folder hence running below command.
+composer config --json extra.installer-paths.'docroot/libraries/{$name}' '["swagger-api/swagger-ui","nnnick/chartjs"]' --merge
+
+# Below added to add swagger/chart.js libraries in CI.
+# Without this CI is failing.
+# @todo remove below workaround to add proper fix.
+mkdir ${ORCA_FIXTURE_DIR}/docroot/libraries
+curl "https://codeload.github.com/swagger-api/swagger-ui/zip/refs/tags/v3.0.17" -o ${ORCA_FIXTURE_DIR}/docroot/libraries/v3.0.17.zip
+unzip ${ORCA_FIXTURE_DIR}/docroot/libraries/v3.0.17.zip
+mv swagger-ui-3.0.17 ${ORCA_FIXTURE_DIR}/docroot/libraries/swagger-ui
+
+mkdir -p ${ORCA_FIXTURE_DIR}/docroot/libraries/chartjs/dist/
+curl "https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js" -o ${ORCA_FIXTURE_DIR}/docroot/libraries/chartjs/dist/chart.min.js
+
+# We require this patch in order to pass CI.
+composer config --json extra.patches '{"drupal/core":{"3313342 - [PHP 8.1] Deprecated function: strpos(): Passing null to parameter #1 LayoutBuilderUiCacheContext.php on line 28":"https://git.drupalcode.org/project/drupal/-/merge_requests/3143.patch","3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112":"https://git.drupalcode.org/project/drupal/-/merge_requests/3142.patch"}}'
+
 # Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.
 # This is important for now, otherwise PHPUnit tests: MaintenancePageTest will fail.
 # @todo look for alternative way setting maintenance theme template.
 composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms"]' --merge && composer update --lock
-
-# We require this patch in order to pass CI.
-composer config --json extra.patches '{"drupal/core":{"3313342 - [PHP 8.1] Deprecated function: strpos(): Passing null to parameter #1 LayoutBuilderUiCacheContext.php on line 28":"https://git.drupalcode.org/project/drupal/-/merge_requests/3143.patch","3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112":"https://git.drupalcode.org/project/drupal/-/merge_requests/3142.patch"}}'
 
 # Install acquia_cms only for the Integrated & ExistingSite PHPUnit tests.
 if [ -n "${ACMS_JOB}" ]; then
