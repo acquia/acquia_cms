@@ -41,6 +41,9 @@ cd ${ORCA_FIXTURE_DIR}
 # @todo look for alternative way setting maintenance theme template.
 composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms"]' --merge && composer update --lock
 
+# We require this patch in order to pass CI.
+composer config --json extra.patches '{"drupal/core":{"3313342 - [PHP 8.1] Deprecated function: strpos(): Passing null to parameter #1 LayoutBuilderUiCacheContext.php on line 28":"https://git.drupalcode.org/project/drupal/-/merge_requests/3143.patch","3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112":"https://git.drupalcode.org/project/drupal/-/merge_requests/3142.patch"}}'
+
 # Install acquia_cms only for the Integrated & ExistingSite PHPUnit tests.
 if [ -n "${ACMS_JOB}" ]; then
   ./vendor/bin/drush site:install minimal --yes && ./vendor/bin/drush en acquia_cms --yes
