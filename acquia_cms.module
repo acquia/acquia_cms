@@ -34,7 +34,7 @@ function acquia_cms_form_user_login_form_alter(array &$form) {
  * @see template_preprocess_maintenance_page()
  */
 function acquia_cms_preprocess_maintenance_page(array &$variables) {
-  $variables['#attached']['library'][] = 'seven/install-page';
+  $variables['#attached']['library'][] = 'claro/install-page';
   $variables['#attached']['library'][] = 'acquia_claro/install-page';
   $acquia_cms_path = \Drupal::service('extension.list.module')->getPath('acquia_cms');
   $variables['install_page_logo_path'] = '/' . $acquia_cms_path . '/acquia_cms.png';
