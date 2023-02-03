@@ -20,7 +20,7 @@ create_fixture() {
   CORE_VERSION=$(echo ${ORCA_JOB} | sed -E -e 's/(INTEGRATED_TEST_ON_|INTEGRATED_UPGRADE_TEST_FROM_|ISOLATED_TEST_ON_|INTEGRATED_UPGRADE_TEST_TO_|ISOLATED_UPGRADE_TEST_TO_)//')
   echo "The CORE_VERSION is: ${CORE_VERSION}"
   orca debug:packages ${CORE_VERSION}
-  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=${CORE_VERSION} --dev --profile=acquia_cms --no-sqlite --no-site-install
+  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=${CORE_VERSION} --profile=minimal --no-sqlite --no-site-install
 }
 
 if [ "${JOB_TYPE}" == "static-code-analysis" ]; then
@@ -35,7 +35,6 @@ fi
 [[ -d "${ORCA_FIXTURE_DIR}" ]] || exit 0
 
 cd ${ORCA_FIXTURE_DIR}
-
 # We are using composer-plugin mnsami/composer-custom-directory-installer,
 # which by default loads libraries in vendor folder but we are expecting
 # them to be in libraries folder hence running below command.
@@ -67,6 +66,7 @@ fi
 
 # Enable Starter on full installs if Appropriate.
 if [[ "${ACMS_JOB}" == "backstop_tests" ]]; then
+
     echo "Installing Starter Kit"
     drush en acquia_cms_development -y
     drush en acquia_cms_starter -y
