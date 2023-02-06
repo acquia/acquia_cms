@@ -8,7 +8,7 @@ use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 /**
  * Base class for the HeadlessDashboard web_driver tests.
  */
-abstract class DashboardWebDriverTestBase extends WebDriverTestBase {
+abstract class DashboardTestBase extends WebDriverTestBase {
 
   /**
    * {@inheritdoc}

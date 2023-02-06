@@ -2,6 +2,8 @@
 
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
+use Drupal\Tests\acquia_cms_headless\Traits\DashboardSectionTrait;
+
 /**
  * Tests headless dashboard API Document.
  *
@@ -10,7 +12,9 @@ namespace Drupal\Tests\acquia_cms_headless\Functional;
  * @group medium_risk
  * @group push
  */
-class DashboardApiDocumentTest extends DashboardWebDriverTestBase {
+class DashboardApiDocumentTest extends DashboardTestBase {
+
+  use DashboardSectionTrait;
 
   /**
    * {@inheritdoc}
