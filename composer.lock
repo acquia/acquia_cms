@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5ebaffb05130172db20e3b63b7e8e9d5",
+    "content-hash": "0024d7f14a11392867cd9402d82f2bf6",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2948,7 +2948,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_site_studio",
-                "reference": "0923005f6a26c7660423dafae20fef465cba747d"
+                "reference": "b66e65a9adeaa47ba104cc68367c2bcbaf718e3f"
             },
             "require": {
                 "acquia/cohesion": "^6.9 || ^7.0",
@@ -2973,9 +2973,9 @@
                 },
                 "drupal-scaffold": {
                     "file-mapping": {
-                        "[web-root]/drush/Commands/ConfigImportExportCommands.php": "modules/acquia_cms_site_studio_cm/src/Commands/ConfigImportExportCommands.php",
+                        "[web-root]/drush/Commands/ConfigImportExportCommands.php": "modules/acquia_cms_site_studio_cm/assets/scaffold/files/ConfigImportExportCommands.php",
                         "[web-root]/sites/default/default.settings.php": {
-                            "append": "modules/acquia_cms_site_studio_cm/patch/site-studio-settings.patch"
+                            "append": "modules/acquia_cms_site_studio_cm/assets/scaffold/files/site-studio-settings.txt"
                         }
                     }
                 },
@@ -11717,8 +11717,7 @@
                 "type": "tar",
                 "url": "https://github.com/chartjs/Chart.js/releases/download/v3.9.1/chart.js-3.9.1.tgz"
             },
-            "type": "drupal-library",
-            "time": "2022-08-03T12:46:38+00:00"
+            "type": "drupal-library"
         },
         {
             "name": "paragonie/random_compat",
