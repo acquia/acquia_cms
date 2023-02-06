@@ -2,17 +2,16 @@ acquia/acquia_cms:
   type: drupal-module
   version_dev: 2.0.x-dev
 
+mnsami/composer-custom-directory-installer:
+  type: composer-plugin
+
 # Do not install Lightning modules explicitly excluded by ACMS.
 drupal/lightning_layout: ~
 drupal/lightning_page: ~
 drupal/lightning_search: ~
 drupal/lightning_media: ~
 
-# Include company packages to ORCA fixture of release which acquia_cms supports
-drupal/acquia_search:
-  version: ^3.1.2
-
 # DO not install acquia_contenthub as one of the sub-module is not yet
 # Drupal Core 10 supported.
 # see here: https://git.drupalcode.org/project/acquia_contenthub/-/blob/3.0.3/modules/acquia_contenthub_dashboard/composer.json
-drupal/acquia_contenthub: ~
+drupal/acquia_contenthub_dashboard: ~

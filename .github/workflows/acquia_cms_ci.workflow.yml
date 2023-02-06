@@ -128,6 +128,8 @@ jobs:
         run: |
           #if [ "${ACMS_JOB}" = "starter" ] || [ "${ACMS_JOB}" = "starter_full" ] || [ "${ACMS_JOB}" = "base" ]; then aws s3 cp --recursive ${AWS_S3_BUCKET_PATH}/artifacts/ ${ORCA_SUT_DIR}/tests/; fi
           ../orca/bin/ci/before_install.sh
+          # Remove all existing_site phpunit tests from acquia_cms repo as those get's covered from integrated_existing_site_tests.
+          find tests/src -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
           CHROMEDRIVER_PID=$!
           echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
