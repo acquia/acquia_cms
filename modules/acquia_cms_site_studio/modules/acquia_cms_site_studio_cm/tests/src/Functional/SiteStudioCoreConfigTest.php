@@ -97,13 +97,12 @@ class SiteStudioCoreConfigTest extends BrowserTestBase {
    * Assert that site_studio_sync directory set in Settings.php file.
    */
   public function testSiteStudioSyncDirectorySettings() {
-    // `site_studio_sync` is being set using acquia/drupal-recommended-settings,
-    // we need to test that config exists in setting.php file.
-    // @todo enable this code to check function once ADRS support multisite.
-    /* $site_path = $this->container->getParameter('site.path');
-    $site_name = str_replace('sites/', '', $site_path);
-    $site_studio_sync = "../config/$site_name/sitestudio";
-    $this->assertEquals($site_studio_sync, Settings::get('site_studio_sync')); */
+    // We have added `site_studio_sync` using scaffolding
+    // from acquia_cms_site_studio module, we need to test
+    // that config exists in setting.php file.
+    $site_path = $this->container->getParameter('site.path');
+    $site_studio_sync = "../config/$site_path/sitestudio";
+    $this->assertEquals($site_studio_sync, Settings::get('site_studio_sync'));
   }
 
 }
