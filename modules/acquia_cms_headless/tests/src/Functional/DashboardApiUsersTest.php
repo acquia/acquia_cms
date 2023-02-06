@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
+use Drupal\Tests\acquia_cms_headless\Traits\DashboardSectionTrait;
 use Drupal\Tests\acquia_cms_headless\Traits\DashboardTableTrait;
 
 /**
@@ -12,9 +13,9 @@ use Drupal\Tests\acquia_cms_headless\Traits\DashboardTableTrait;
  * @group medium_risk
  * @group push
  */
-class DashboardApiUsersTest extends DashboardBrowserTestBase {
+class DashboardApiUsersTest extends DashboardWebDriverTestBase {
 
-  use DashboardTableTrait;
+  use DashboardTableTrait, DashboardSectionTrait;
 
   /**
    * {@inheritdoc}
@@ -67,10 +68,12 @@ class DashboardApiUsersTest extends DashboardBrowserTestBase {
 
     // Click on Edit button.
     $expectedUrl = $this->baseUrl . '/user/2/edit?destination=/admin/headless/dashboard';
+    $usersFieldset->findButton('List additional actions')->click();
     $this->testOperation($usersFieldset, 'Edit', $expectedUrl, 'Whoops!');
 
     // Click on Clone button.
     $this->drupalGet("/admin/headless/dashboard");
+    $usersFieldset->findButton('List additional actions')->click();
     $expectedUrl = $this->baseUrl . '/entity_clone/user/2?destination=/admin/headless/dashboard';
     $this->testOperation($usersFieldset, 'Clone', $expectedUrl, 'Whoops!');
   }

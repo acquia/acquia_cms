@@ -4,14 +4,11 @@ namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
-use Drupal\Tests\acquia_cms_headless\Traits\DashboardSectionTrait;
 
 /**
  * Base class for the HeadlessDashboard web_driver tests.
  */
 abstract class DashboardWebDriverTestBase extends WebDriverTestBase {
-
-  use DashboardSectionTrait;
 
   /**
    * {@inheritdoc}
@@ -35,7 +32,13 @@ abstract class DashboardWebDriverTestBase extends WebDriverTestBase {
       $this->markTestSkipped('This test cannot run in an Acquia Cloud IDE.');
     }
     parent::setUp();
-    $this->visitHeadlessDashboard();
+    $account = $this->drupalCreateUser();
+    $account->addRole('headless');
+    $account->save();
+    $this->drupalLogin($account);
+
+    // Visit headless dashboard.
+    $this->drupalGet("/admin/headless/dashboard");
   }
 
 }
