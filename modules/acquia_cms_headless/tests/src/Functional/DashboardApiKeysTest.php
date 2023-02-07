@@ -69,7 +69,7 @@ class DashboardApiKeysTest extends HeadlessTestBase {
     $this->assertCount(5, $dropdownList);
 
     // Click on Generate New Secret button.
-    $this->testGenerateNewSecrete($consumersFieldset);
+    $this->testGenerateNewSecret($consumersFieldset);
 
     // Click Generate New Keys button.
     $this->testGenerateNewKeys($consumersFieldset);
@@ -84,7 +84,7 @@ class DashboardApiKeysTest extends HeadlessTestBase {
   /**
    * {@inheritdoc}
    */
-  private function testGenerateNewSecrete(mixed $consumersFieldset): void {
+  private function testGenerateNewSecret(mixed $consumersFieldset): void {
     $consumersFieldset->findButton('List additional actions')->click();
     $this->assertSession()->elementExists('named', ['link', 'Generate New Secret'], $consumersFieldset)->click();
     $consumerModal = $this->assertSession()->waitForElementVisible('css', '.ui-dialog');
