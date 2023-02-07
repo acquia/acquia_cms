@@ -1,8 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_headless_ui\Functional;
-
-use Drupal\Tests\acquia_cms_headless\Functional\HeadlessBrowserTestBase;
+namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 /**
  * Tests for acquia_cms_headless frontpage.
@@ -10,7 +8,7 @@ use Drupal\Tests\acquia_cms_headless\Functional\HeadlessBrowserTestBase;
  * @group acquia_cms_headless
  * @group low_risk
  */
-class HeadlessFrontpageTest extends HeadlessBrowserTestBase {
+class HeadlessFrontpageTest extends HeadlessTestBase {
 
   /**
    * {@inheritdoc}
@@ -23,9 +21,10 @@ class HeadlessFrontpageTest extends HeadlessBrowserTestBase {
    * Assert that frontpage for non logged-in user is login page.
    */
   public function testFrontPageIsLoginPage(): void {
+    $this->drupalLogout();
     $this->drupalGet('/frontpage');
     $assert_session = $this->assertSession();
-    $assert_session->elementExists('css', '.user-login-form');
+    $assert_session->elementExists('css', '#user-login-form');
   }
 
   /**
