@@ -12,7 +12,7 @@ use Drupal\Tests\acquia_cms_headless\Traits\DashboardSectionTrait;
  * @group medium_risk
  * @group push
  */
-class DashboardApiDocumentTest extends DashboardTestBase {
+class DashboardApiDocumentTest extends HeadlessTestBase {
 
   use DashboardSectionTrait;
 
