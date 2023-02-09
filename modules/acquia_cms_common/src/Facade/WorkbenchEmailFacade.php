@@ -125,55 +125,70 @@ final class WorkbenchEmailFacade implements ContainerInjectionInterface {
 
     // Node types can opt into using this template by mentioning it their
     // acquia_cms.workbench_email_templates third-party setting.
-    $node_types = $this->nodeTypeStorage->loadMultiple();
-    $enabled_bundles = $template->getBundles();
-    foreach ($node_types as $id => $node_type) {
-      $variables['%node_type'] = $node_type->label();
+    $nodeTypes = $this->nodeTypeStorage->loadMultiple();
+    $enabledBundles = $template->getBundles();
+    foreach ($nodeTypes as $id => $nodeType) {
+      $variables['%node_type'] = $nodeType->label();
 
-      $email_templates = $node_type->getThirdPartySetting('acquia_cms_common', 'workbench_email_templates', []);
-      if (array_key_exists($template->id(), $email_templates)) {
-        $enabled_bundles["node:$id"] = "node:$id";
+      $emailTemplates = $nodeType->getThirdPartySetting('acquia_cms_common', 'workbench_email_templates', []);
+      if (array_key_exists($template->id(), $emailTemplates)) {
+        $enabledBundles["node:$id"] = "node:$id";
       }
       else {
         $this->logger->debug('The %template e-mail notification template was not enabled for the %node_type content type.', $variables);
       }
     }
-    $template->setBundles($enabled_bundles)->save();
+    $template->setBundles($enabledBundles)->save();
 
     // Add the template to the workflow specified in its third-party settings.
     // If the template does not specify a workflow, there's nothing to do.
-    $workflow_id = $template->getThirdPartySetting('acquia_cms_common', 'workflow_id');
-    if (empty($workflow_id)) {
+    $workflowId = $template->getThirdPartySetting('acquia_cms_common', 'workflow_id');
+    if (empty($workflowId)) {
       return;
     }
 
     /** @var \Drupal\workflows\WorkflowInterface $workflow */
-    $workflow = $this->workflowStorage->load($workflow_id);
+    $workflow = $this->workflowStorage->load($workflowId);
     if (empty($workflow)) {
-      $variables['%workflow'] = $workflow_id;
+      $variables['%workflow'] = $workflowId;
       $this->logger->warning('Could not add the %template email notification template to the %workflow workflow because the workflow does not exist.', $variables);
       return;
     }
 
-    $enabled_templates = $workflow->getThirdPartySetting('workbench_email', 'workbench_email_templates', []);
-    $transitions = $template->getThirdPartySetting('acquia_cms_common', 'workflow_transitions', []);
-    foreach ($transitions as $transition_id) {
-      // Enable this template for the specified transition, but only if the
-      // transition is not already associated with a template.
-      $enabled_templates += [
-        $transition_id => [
-          $template->id() => $template->id(),
-        ],
-      ];
+    $isWorkBenchThirdPartySettings = $workflow->getThirdPartySetting('workbench_email', 'workbench_email_templates');
+    // Storing template value varies from 2.x to 3.x in workbench email.
+    $enabledTemplates = $isWorkBenchThirdPartySettings ?? $template->getTransitions();
+    // Check whether templates are empty.
+    if (!empty($enabledTemplates)) {
+      $transitions = $template->getThirdPartySetting('acquia_cms_common', 'workflow_transitions', []);
+      foreach ($transitions as $transition_id) {
+        // Enable this template for the specified transition, but only if the
+        // transition is not already associated with a template.
+        $enabledTemplates += [
+          $transition_id => [
+            $template->id() => $template->id(),
+          ],
+        ];
+      }
+      // Set third party for 2.x workbench email templates.
+      if (!empty($isWorkBenchThirdPartySettings)) {
+        $workflow->setThirdPartySetting('workbench_email', 'workbench_email_templates', $enabledTemplates);
+      }
+      else {
+        // Set transitions for 3.x workbench email templates.
+        $template->setTransitions($enabledTemplates);
+        $template->save();
+        $workflow->unsetThirdPartySetting('workbench_email', 'workbench_email_templates');
+      }
+
+      // Saving this workflow will update config object with required key
+      // along with enforced key after calculating dependencies so, we are going
+      // to update configuration object manually to clear enforced config key
+      // from the configuration that will prevent config deletion.
+      $this->workflowStorage->save($workflow);
+      // Update configuration object by clearing dependencies.enforced.config.
+      $this->configFactory->getEditable('workflows.workflow.' . $workflowId)->clear('dependencies.enforced.config')->save();
     }
-    $workflow->setThirdPartySetting('workbench_email', 'workbench_email_templates', $enabled_templates);
-    // Saving this workflow will update config object with required key
-    // along with enforced key after calculating dependencies so, we are going
-    // to update configuration object manually to clear enforced config key
-    // from the configuration that will prevent config deletion.
-    $this->workflowStorage->save($workflow);
-    // Update configuration object by clearing dependencies.enforced.config.
-    $this->configFactory->getEditable('workflows.workflow.' . $workflow_id)->clear('dependencies.enforced.config')->save();
   }
 
 }
