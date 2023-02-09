@@ -54,6 +54,17 @@ class DashboardApiDocumentTest extends HeadlessTestBase {
     // Test OpenAPI Resources is a link.
     $buttonAction = $openApiResource->getAttribute('target');
     $this->assertEquals($buttonAction, "_blank");
+
+    // Test Explore with Swagger UI with headless role.
+    $this->drupalGet("/admin/config/services/openapi/swagger/jsonapi");
+    $this->assertSession()->pageTextContains('Access denied!');
+
+    // Test Explore with Swagger UI with admin role.
+    $this->visitHeadlessDashboardAdmin();
+    $this->drupalGet("/admin/config/services/openapi/swagger/jsonapi");
+    $this->assertSession()->waitForElementVisible('css', '#swagger-ui');
+    $swaggerUi = $this->getSession()->getPage()->find('css', '#swagger-ui');
+    $this->assertNotEmpty($swaggerUi);
   }
 
 }
