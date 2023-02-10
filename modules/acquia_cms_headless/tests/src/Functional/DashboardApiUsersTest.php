@@ -60,7 +60,7 @@ class DashboardApiUsersTest extends HeadlessTestBase {
 
     // Test table body exist and has data in same order.
     $this->assertEquals('Headless', $this->getTableBodyColumn(0)->getText());
-    $this->assertEquals('Headless Role', $this->getTableBodyColumn(1)->getText());
+    $this->assertEquals('Headless Administrator', $this->getTableBodyColumn(1)->getText());
 
     // Get the API Users operations dropdown elements.
     $dropdownList = $usersFieldset->findAll('css', 'tbody tr:nth-child(1) ul li a');
