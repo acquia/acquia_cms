@@ -49,6 +49,7 @@
         "nnnick/chartjs": "^3.9"
     },
     "conflict": {
+        "acquia/acquia_cms": "<1.5.2",
         "drupal/acquia_cms_article": "<1.4",
         "drupal/acquia_cms_audio": "<1.4",
         "drupal/acquia_cms_component": "<1.3.3",
@@ -64,8 +65,7 @@
         "drupal/acquia_cms_starter": "<1.3.3",
         "drupal/acquia_cms_toolbar": "<1.4",
         "drupal/acquia_cms_tour": "2.0.* || <1.3.2",
-        "drupal/acquia_cms_video": "<1.4",
-        "acquia/acquia_cms": "<1.5.2"
+        "drupal/acquia_cms_video": "<1.4"
     },
     "config": {
         "allow-plugins": {
@@ -80,7 +80,9 @@
         }
     },
     "extra": {
-        "branch-alias" : {"dev-develop" : "1.x-dev"},
+        "branch-alias": {
+            "dev-develop": "1.x-dev"
+        },
         "drush": {
             "services": {
                 "drush.services.yml": "^10"
@@ -100,5 +102,16 @@
                 "3162210 - Preview link accidentally closes the media library": "https://www.drupal.org/files/issues/2020-10-06/3162210-17.patch"
             }
         }
-    }
+    },
+    "repositories": {
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "minimum-stability": "dev"
 }
