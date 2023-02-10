@@ -7,9 +7,6 @@
         "drupal/acquia_cms_common": "1.x-dev",
         "drupal/admin_toolbar": "^3.3"
     },
-    "extra": {
-        "branch-alias" : {"dev-develop" : "1.x-dev"}
-    },
     "config": {
         "allow-plugins": {
             "composer/installers": true,
@@ -20,6 +17,11 @@
             "oomphinc/composer-installers-extender": true,
             "phpro/grumphp-shim": true,
             "webdriver-binary/binary-chromedriver": true
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "1.x-dev"
         }
     },
     "repositories": {
