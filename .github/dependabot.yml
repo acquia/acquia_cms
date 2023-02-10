@@ -10,7 +10,6 @@ updates:
     allow:
       # Allow both direct and indirect updates for all packages
       - dependency-type: "all"
-    versioning-strategy: widen
     ignore:
       # We don't want check for acquia_cms modules.
       - dependency-name: "drupal/acquia_cms*"
@@ -42,7 +41,6 @@ updates:
     allow:
       # Allow both direct and indirect updates for all packages
       - dependency-type: "all"
-    versioning-strategy: widen
     ignore:
       # We don't want check for acquia_cms modules.
       - dependency-name: "drupal/acquia_cms*"
