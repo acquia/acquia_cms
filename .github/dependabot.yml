@@ -7,6 +7,10 @@ updates:
       # Use Indian Standard Time (UTC +05:30)
       timezone: "Asia/Kolkata"
       time: "09:00"
+    allow:
+      # Allow both direct and indirect updates for all packages
+      - dependency-type: "all"
+    versioning-strategy: widen
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -40,6 +44,10 @@ updates:
       # Use Indian Standard Time (UTC +05:30)
       timezone: "Asia/Kolkata"
       time: "09:00"
+    allow:
+      # Allow both direct and indirect updates for all packages
+      - dependency-type: "all"
+    versioning-strategy: widen
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -208,3 +216,33 @@ updates:
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
+
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      # Use Indian Standard Time (UTC +05:30)
+      timezone: "Asia/Kolkata"
+      time: "09:00"
+    allow:
+      # Allow both direct and indirect updates for all packages
+      - dependency-type: "all"
+    versioning-strategy: widen
+    # Raise pull requests for version updates
+    # to pip against the `develop` branch
+    target-branch: "1.5.x"
+
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      # Use Indian Standard Time (UTC +05:30)
+      timezone: "Asia/Kolkata"
+      time: "09:00"
+    allow:
+      # Allow both direct and indirect updates for all packages
+      - dependency-type: "all"
+    versioning-strategy: widen
+    # Raise pull requests for version updates
+    # to pip against the `develop` branch
+    target-branch: "2.0.x"
