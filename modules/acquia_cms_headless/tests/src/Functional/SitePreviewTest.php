@@ -4,7 +4,6 @@ namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
-use Drupal\next\Entity\NextEntityTypeConfig;
 
 /**
  * Tests headless content site preview.
@@ -93,33 +92,27 @@ class SitePreviewTest extends WebDriverTestBase {
     $assert->waitForElementVisible('css', '.admin-link');
     $assert->elementExists('named', ['button', 'Save'])->click();
 
-    // Configure nextJs entity types.
-    $nextEntityTypeConfig = NextEntityTypeConfig::create([
-      'id' => 'node.test',
-      'site_resolver' => 'site_selector',
-      'configuration' => [
-        'sites' => [
-          'headless_site_one' => 'headless_site_one',
-          'headless_site_two' => 'headless_site_two',
-        ],
-      ],
-    ]);
-    $nextEntityTypeConfig->save();
+    // Configure nextJs entity types and Validate nextJs entity config.
+    $this->drupalGet("admin/config/services/next/entity-types/add");
+    $assert->selectExists('id')->selectOption('node.test');
+    $assert->waitForElementVisible('css', '.settings-container');
+    $this->assertTrue($assert->optionExists('id', 'node.test')->isSelected());
+    $assert->selectExists('site_resolver')->selectOption('site_selector');
+    $assert->assertWaitOnAjaxRequest();
+    $assert->waitForText('Next.js sites');
+    $this->assertTrue($assert->optionExists('site_resolver', 'site_selector')->isSelected());
+    $page->checkField('sites[headless_site_one]');
+    $assert->checkboxChecked('sites[headless_site_one]');
+    $page->checkField('sites[headless_site_two]');
+    $assert->checkboxChecked('sites[headless_site_two]');
+    $assert->buttonExists('Save')->press();
 
-    // Create test content page.
+    // Create test node.
     $node = $this->drupalCreateNode([
       'type' => 'test',
       'title' => 'Headless Test Page',
     ]);
     $this->drupalGet('node/' . $node->id() . '/edit');
-
-    // Validate nextJs entity config.
-    $this->drupalGet("admin/config/services/next/entity-types/node.test/edit");
-    $this->assertTrue($assert->optionExists('id', 'node.test')->isSelected());
-    $this->assertTrue($assert->optionExists('site_resolver', 'site_selector')->isSelected());
-    $assert->checkboxChecked('sites[headless_site_one]');
-    $assert->checkboxChecked('sites[headless_site_two]');
-    $assert->buttonExists('Save')->press();
 
     // Visit content preview.
     $this->drupalGet('node/' . $node->id() . '/site-preview');
