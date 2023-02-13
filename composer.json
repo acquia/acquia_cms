@@ -26,6 +26,10 @@
         "drupal/acquia_cms_tour": "^1.3.0",
         "drush/drush": "^10 || ^11"
     },
+    "conflict": {
+        "drupal/acquia_cms_common": "<1.7.1",
+        "drupal/acquia_cms_site_studio": "<1.5.5"
+    },
     "require-dev": {
         "acquia/coding-standards": "^1.0",
         "axelerant/drupal-quality-checker": "^1.1",
@@ -38,9 +42,6 @@
         "phpunit/phpunit": "~9.4.0 || ~9.5.0",
         "weitzman/drupal-test-traits": "^1.5"
     },
-    "conflict": {
-        "drupal/acquia_cms_common": "<1.7.1"
-    },
     "config": {
         "allow-plugins": {
             "composer/installers": true,
@@ -49,6 +50,7 @@
             "drupal/core-composer-scaffold": true,
             "ergebnis/composer-normalize": true,
             "oomphinc/composer-installers-extender": true,
+            "php-http/discovery": true,
             "phpro/grumphp-shim": true,
             "webdriver-binary/binary-chromedriver": true
         },
