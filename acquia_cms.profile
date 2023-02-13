@@ -161,7 +161,7 @@ function install_acms_send_heartbeat_event() {
  *   Returns an array of operations (If site is installed through UI).
  */
 function install_acms_site_studio_base() {
-  $batch = install_acms_site_studio_initialize();
+  $batch = _acquia_cms_site_studio_install_initialize();
   if (PHP_SAPI != "cli") {
     return $batch;
   }
@@ -178,7 +178,7 @@ function install_acms_site_studio_base() {
  * @throws Exception
  */
 function install_acms_site_studio_packages() {
-  site_studio_import_ui_kit();
+  _acquia_cms_site_studio_import_ui_kit();
   if (PHP_SAPI != "cli") {
     // When site is installed through UI, the profile installation tasks
     // expects the function to return an array of operations and then it calls
