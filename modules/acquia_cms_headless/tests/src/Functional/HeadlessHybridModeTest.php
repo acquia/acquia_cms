@@ -27,18 +27,18 @@ class HeadlessHybridModeTest extends HeadlessTestBase {
     $this->drupalLogin($account);
     $assertSession = $this->assertSession();
 
+    // Click on Setup manually button to close the modal,
+    // note there are two button with same label 'Setup manually'.
+    $this->drupalGet('/admin/tour/dashboard');
+    $acmsWelcomeModal = $assertSession->waitForElementVisible('css', '.acms-welcome-modal');
+    $btnPanes = $assertSession->elementExists('css', '.ui-dialog-buttonpane', $acmsWelcomeModal);
+    $assertSession->buttonExists('Setup Manually', $btnPanes)->press();
+
     $acmsWizardLi = $assertSession->elementExists('css', '.toolbar-icon-acquia-cms-tour-tour')->getParent();
     $this->assertNotEmpty($acmsWizardLi);
     $acmsWizardLi->mouseOver();
     $headlessDashboard = $assertSession->waitForElementVisible('css', '.toolbar-icon-acquia-cms-headless-dashboard');
     $this->assertEquals('Headless dashboard', $headlessDashboard->getText());
-
-    // Click on Setup manually button to close the modal,
-    // note there are two button with same label 'Setup manually'.
-    $this->drupalGet('/admin/tour/dashboard');
-    $acmsWelcomeModal = $assertSession->waitForElementVisible('css', '.acms-welcome-modal');
-    $btn_panes = $assertSession->elementExists('css', '.ui-dialog-buttonpane', $acmsWelcomeModal);
-    $assertSession->buttonExists('Setup Manually', $btn_panes)->press();
 
     // Test Enable headless mode checkbox functionality.
     $headlessForm = $assertSession->elementExists('css', '#acquia-cms-headless-form');
