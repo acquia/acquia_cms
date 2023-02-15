@@ -7,6 +7,7 @@
 
 use Drupal\Core\Config\FileStorage;
 use Drupal\user\RoleInterface;
+use Drupal\workbench_email\Entity\Template;
 
 /**
  * Implements hook_install().
@@ -69,7 +70,7 @@ function acquia_cms_common_install($is_syncing) {
      * We've to explicitly set purge plugin as acquia_purge, If Acquia Purge
      * module is enabled, else this would give below error:
      *
-     * ERROR: Purgers:There is no purger loaded which means that you need a module
+     * ERROR: Purgers:There is no purger loaded which means you need a module
      * enabled to provide a purger plugin to clear your external cache or CDN.
      */
     if ($module_handler->moduleExists('acquia_purge')) {
@@ -185,4 +186,19 @@ function acquia_cms_common_content_model_role_presave_alter(RoleInterface &$role
 function acquia_cms_common_update_8003() {
   // Add referenced image view mode.
   _acquia_cms_common_rewrite_configuration('core.entity_view_mode.node.referenced_image', 'acquia_cms_common');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Remove third party settings for workbench email.
+ */
+function acquia_cms_common_update_8004() {
+  foreach (Template::loadMultiple() as $template) {
+    if (!empty($template->getThirdPartySetting('acquia_cms_common', 'workflow_transitions'))) {
+      $template->unsetThirdPartySetting('acquia_cms_common', 'workflow_transitions');
+      $template->unsetThirdPartySetting('acquia_cms_common', 'workflow_id');
+      $template->save();
+    }
+  }
 }
