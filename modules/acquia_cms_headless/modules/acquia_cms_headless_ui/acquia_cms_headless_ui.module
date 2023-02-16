@@ -10,7 +10,6 @@ use Drupal\acquia_cms_headless_ui\Redirect;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
-use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\node\NodeTypeInterface;
 use Drupal\user\UserInterface;
@@ -283,7 +282,6 @@ function acquia_cms_headless_ui_menu_links_discovered_alter(array &$links) {
 
   $moduleHandler = \Drupal::service('module_handler');
   $links['system.themes_page']['enabled'] = FALSE;
-  $links['system.admin_structure']['enabled'] = FALSE;
 
   // Move headless dashboard under the API menu.
   $links['acquia_cms_headless.dashboard']['parent'] = 'admin.access_control';
