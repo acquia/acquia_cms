@@ -2,45 +2,10 @@
 
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
-use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
-use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
-
 /**
  * Base class for the Headless Content administrator browser tests.
  */
-class HeadlessContentTest extends WebDriverTestBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $defaultTheme = 'stark';
-
-  /**
-   * {@inheritdoc}
-   */
-  protected static $modules = [
-    'acquia_cms_headless',
-    'node',
-  ];
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp(): void {
-    // @todo Remove this check when Acquia Cloud IDEs support running functional
-    // JavaScript tests.
-    if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
-      $this->markTestSkipped('This test cannot run in an Acquia Cloud IDE.');
-    }
-    parent::setUp();
-    $account = $this->drupalCreateUser();
-    $account->addRole('administrator');
-    $account->save();
-    $this->drupalLogin($account);
-
-    // Visit content page.
-    $this->drupalGet("admin/content");
-  }
+class HeadlessContentTest extends HeadlessContentAdminTestBase {
 
   /**
    * Content admin test.
@@ -53,13 +18,7 @@ class HeadlessContentTest extends WebDriverTestBase {
       'Media' => '/admin/content/media',
     ];
     // Assertion test for tabs of content page.
-    $this->assertTabMenus($primaryTabs);
-
-    // Create test content type.
-    $this->drupalCreateContentType([
-      'type' => 'test',
-      'name' => 'Test',
-    ]);
+    $this->assertTabMenus($primaryTabs, "admin/content");
 
     // Enable pure headless mode.
     $this->enableHeadlessMode();
@@ -67,16 +26,18 @@ class HeadlessContentTest extends WebDriverTestBase {
     $node = $this->drupalCreateNode([
       'type' => 'test',
       'title' => 'Headless Test Page',
-      'status' => '1',
+      'status' => 'published',
     ]);
     $nid = $node->id();
     $this->drupalGet("admin/content");
     // Check title is not clickable.
     $this->assertNull($this->clickLink($node->getTitle()));
     // Node edit page.
-    $this->drupalGet("node/$nid/edit");
+    $path = "node/$nid/edit";
+    $this->drupalGet($path);
     $this->assertSession()->pageTextContains('Edit Test Headless Test Page');
-    // $this->assertFalse($this->clickLink('View'));
+    $this->assertSession()->linkNotExists('View');
+    // $this->assertNull($this->getSession()->getPage()->findLink('View'));
     $nodePageMenus = [
       'API' => '/jsonapi/node/test/' . $node->uuid(),
       'Edit' => '/node/' . $nid . '/edit',
@@ -85,21 +46,30 @@ class HeadlessContentTest extends WebDriverTestBase {
       'Revisions' => '/node/' . $nid . '/revisions',
       'Clone' => '/entity_clone/node/' . $nid,
     ];
+    $menuList = $this->cssSelect('ul.tabs--primary li');
+    // Check the total count of node tabs.
+    $this->assertCount(6, $menuList);
+    foreach ($menuList as $menu) {
+      $menuOrder[] = str_replace(' (active tab)', '', $menu->getText());
+    }
+    // Assertion for menu order.
+    $this->assertEquals($menuOrder, array_keys($nodePageMenus));
     // Assertion test for tabs of node page.
-    $this->assertTabMenus($nodePageMenus);
+    $this->assertTabMenus($nodePageMenus, $path);
   }
 
   /**
    * Perfom assertions for tabs/menus.
    */
-  protected function assertTabMenus(array $data): void {
+  protected function assertTabMenus(array $data, string $path): void {
     $assert = $this->assertSession();
     $page = $this->getSession()->getPage();
     $assert->elementExists('css', 'ul.tabs--primary ');
     foreach ($data as $name => $url) {
       $originalUrl = $page->findLink($name)->getAttribute('href');
       $this->assertEquals($url, $originalUrl);
-      // $assert->statusCodeEquals(200);
+      $page->findLink($name)->click();
+      $this->drupalGet($path);
     }
   }
 
