@@ -200,3 +200,19 @@ function acquia_cms_common_update_8004() {
     }
   }
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update config_ignore.settings.
+ */
+function acquia_cms_common_update_8005() {
+  $config = \Drupal::configFactory()->getEditable('config_ignore.settings');
+  if ($config) {
+    $existing_ignore_config = $config->get('ignored_config_entities');
+    $remove_ignore_config = ['purge.plugins', 'purge.logger_channels'];
+    $updated_ignore_config = array_diff($existing_ignore_config, $remove_ignore_config);
+    $config->set('ignored_config_entities', $updated_ignore_config);
+    $config->save(TRUE);
+  }
+}
