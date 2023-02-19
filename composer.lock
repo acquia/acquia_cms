@@ -2487,7 +2487,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "a4587c1a42618641b2858bc6bb62cf1a2db6a175"
+                "reference": "b189b381d4342057e75c3672664adc7fc1dcf367"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2501,7 +2501,7 @@
                 "drupal/acsf": "^2.73",
                 "drupal/autologout": "^1.4",
                 "drupal/checklistapi": "^2.1",
-                "drupal/config_ignore": "3.x-dev#5cf158b8",
+                "drupal/config_ignore": "^3.0@beta",
                 "drupal/config_rewrite": "^1.5",
                 "drupal/core": "^9.5 || ^10",
                 "drupal/default_content": "2.0.0-alpha2",
@@ -4382,11 +4382,17 @@
         },
         {
             "name": "drupal/config_ignore",
-            "version": "dev-3.x",
+            "version": "3.0.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/config_ignore.git",
-                "reference": "5cf158b8ac62929512a9f45d63ca28ec5b251f40"
+                "reference": "8.x-3.0-beta2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/config_ignore-8.x-3.0-beta2.zip",
+                "reference": "8.x-3.0-beta2",
+                "shasum": "882918528615ec79312946d5256c192c8d5c982b"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9 || ^10"
@@ -4397,15 +4403,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-3.0-beta1+2-dev",
-                    "datestamp": "1662296851",
+                    "version": "8.x-3.0-beta2",
+                    "datestamp": "1676045569",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
