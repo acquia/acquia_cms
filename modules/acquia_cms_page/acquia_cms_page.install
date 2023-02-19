@@ -218,3 +218,48 @@ function acquia_cms_page_update_8005() {
     }
   }
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set layout canvas field to translatable false.
+ */
+function acquia_cms_page_update_8006() {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $fields = $entity_type_manager
+    ->getStorage('field_config')
+    ->loadByProperties([
+      'entity_type' => 'node',
+      'field_name' => 'field_layout_canvas',
+      'bundle' => 'page',
+      'translatable' => TRUE,
+    ]);
+  $field = reset($fields);
+  if ($field) {
+    $field->setTranslatable(FALSE)->save();
+  }
+
+  $language_content_settings = $entity_type_manager
+    ->getStorage('language_content_settings')
+    ->load('cohesion_layout.cohesion_layout');
+
+  if (!$language_content_settings) {
+    $entity_type_manager
+      ->getStorage('language_content_settings')
+      ->create([
+        'target_entity_type_id' => 'cohesion_layout',
+        'target_bundle' => 'cohesion_layout',
+        'default_langcode' => 'site_default',
+        'language_alterable' => TRUE,
+        'third_party_settings' => [
+          'content_translation' => [
+            'enabled' => TRUE,
+            'bundle_settings' => [
+              'untranslatable_fields_hide' => 1,
+            ],
+          ],
+        ],
+      ])->save();
+  }
+  drupal_flush_all_caches();
+}
