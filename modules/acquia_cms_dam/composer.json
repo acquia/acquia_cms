@@ -8,9 +8,6 @@
         "drupal/acquia_cms_video": "1.x-dev",
         "drupal/acquia_dam": "^1"
     },
-    "extra": {
-        "branch-alias" : {"dev-develop" : "1.x-dev"}
-    },
     "conflict": {
         "drupal/acquia_cms_article": "<1.5",
         "drupal/acquia_cms_event": "<1.5",
@@ -33,10 +30,19 @@
             "webdriver-binary/binary-chromedriver": true
         }
     },
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "1.x-dev"
+        }
+    },
     "repositories": {
         "assets": {
             "type": "composer",
             "url": "https://asset-packagist.org"
+        },
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
         }
     }
 }

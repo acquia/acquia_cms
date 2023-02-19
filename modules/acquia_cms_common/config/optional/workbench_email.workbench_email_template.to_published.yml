@@ -1,22 +1,26 @@
 langcode: en
 status: true
-dependencies: {  }
-third_party_settings:
-  acquia_cms_common:
-    workflow_id: editorial
-    workflow_transitions:
-      - publish
-      - archived_published
+dependencies:
+  config:
+    - workflows.workflow.editorial
+  module:
+    - acquia_cms_common
 id: to_published
 label: 'To Published'
+format: plain_text
 subject: '[node:title] State Changed'
-body:
-  value: '[node:title] is published now'
-  format: plain_text
-bundles: {  }
 recipient_types:
   author:
     id: author
     provider: workbench_email
     status: true
     settings: {  }
+bundles: {  }
+body:
+  value: '[node:title] is published now'
+  format: plain_text
+replyTo: ''
+transitions:
+  editorial:
+    publish: publish
+    archived_published: archived_published

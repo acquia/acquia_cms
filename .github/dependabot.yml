@@ -7,17 +7,12 @@ updates:
       # Use Indian Standard Time (UTC +05:30)
       timezone: "Asia/Kolkata"
       time: "09:00"
-    # Raise pull requests for version updates
-    # to pip against the `develop` branch
-    target-branch: "develop"
-
-  - package-ecosystem: "composer"
-    directory: "/modules/acquia_cms_article"
-    schedule:
-      interval: "daily"
-      # Use Indian Standard Time (UTC +05:30)
-      timezone: "Asia/Kolkata"
-      time: "09:00"
+    allow:
+      # Allow both direct and indirect updates for all packages
+      - dependency-type: "all"
+    ignore:
+      # We don't want check for acquia_cms modules.
+      - dependency-name: "drupal/acquia_cms*"
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -29,6 +24,9 @@ updates:
       # Use Indian Standard Time (UTC +05:30)
       timezone: "Asia/Kolkata"
       time: "09:00"
+    ignore:
+      # We don't want check for acquia_cms modules.
+      - dependency-name: "drupal/acquia_cms_common"
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -40,6 +38,12 @@ updates:
       # Use Indian Standard Time (UTC +05:30)
       timezone: "Asia/Kolkata"
       time: "09:00"
+    allow:
+      # Allow both direct and indirect updates for all packages
+      - dependency-type: "all"
+    ignore:
+      # We don't want check for acquia_cms modules.
+      - dependency-name: "drupal/acquia_cms*"
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -51,6 +55,9 @@ updates:
       # Use Indian Standard Time (UTC +05:30)
       timezone: "Asia/Kolkata"
       time: "09:00"
+    ignore:
+      # We don't want check for acquia_cms modules.
+      - dependency-name: "drupal/acquia_cms*"
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -62,28 +69,9 @@ updates:
       # Use Indian Standard Time (UTC +05:30)
       timezone: "Asia/Kolkata"
       time: "09:00"
-    # Raise pull requests for version updates
-    # to pip against the `develop` branch
-    target-branch: "develop"
-
-  - package-ecosystem: "composer"
-    directory: "/modules/acquia_cms_document"
-    schedule:
-      interval: "daily"
-      # Use Indian Standard Time (UTC +05:30)
-      timezone: "Asia/Kolkata"
-      time: "09:00"
-    # Raise pull requests for version updates
-    # to pip against the `develop` branch
-    target-branch: "develop"
-
-  - package-ecosystem: "composer"
-    directory: "/modules/acquia_cms_event"
-    schedule:
-      interval: "daily"
-      # Use Indian Standard Time (UTC +05:30)
-      timezone: "Asia/Kolkata"
-      time: "09:00"
+    ignore:
+      # We don't want check for acquia_cms modules.
+      - dependency-name: "drupal/acquia_cms*"
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -95,6 +83,9 @@ updates:
       # Use Indian Standard Time (UTC +05:30)
       timezone: "Asia/Kolkata"
       time: "09:00"
+    ignore:
+      # We don't want check for acquia_cms modules.
+      - dependency-name: "drupal/acquia_cms*"
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -106,17 +97,9 @@ updates:
       # Use Indian Standard Time (UTC +05:30)
       timezone: "Asia/Kolkata"
       time: "09:00"
-    # Raise pull requests for version updates
-    # to pip against the `develop` branch
-    target-branch: "develop"
-
-  - package-ecosystem: "composer"
-    directory: "/modules/acquia_cms_page"
-    schedule:
-      interval: "daily"
-      # Use Indian Standard Time (UTC +05:30)
-      timezone: "Asia/Kolkata"
-      time: "09:00"
+    ignore:
+      # We don't want check for acquia_cms modules.
+      - dependency-name: "drupal/acquia_cms*"
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -128,6 +111,9 @@ updates:
       # Use Indian Standard Time (UTC +05:30)
       timezone: "Asia/Kolkata"
       time: "09:00"
+    ignore:
+      # We don't want check for acquia_cms modules.
+      - dependency-name: "drupal/acquia_cms*"
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -139,6 +125,9 @@ updates:
       # Use Indian Standard Time (UTC +05:30)
       timezone: "Asia/Kolkata"
       time: "09:00"
+    ignore:
+      # We don't want check for acquia_cms modules.
+      - dependency-name: "drupal/acquia_cms*"
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -150,6 +139,9 @@ updates:
       # Use Indian Standard Time (UTC +05:30)
       timezone: "Asia/Kolkata"
       time: "09:00"
+    ignore:
+      # We don't want check for acquia_cms modules.
+      - dependency-name: "drupal/acquia_cms*"
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -161,6 +153,9 @@ updates:
       # Use Indian Standard Time (UTC +05:30)
       timezone: "Asia/Kolkata"
       time: "09:00"
+    ignore:
+      # We don't want check for acquia_cms modules.
+      - dependency-name: "drupal/acquia_cms*"
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -172,6 +167,9 @@ updates:
       # Use Indian Standard Time (UTC +05:30)
       timezone: "Asia/Kolkata"
       time: "09:00"
+    ignore:
+      # We don't want check for acquia_cms modules.
+      - dependency-name: "drupal/acquia_cms*"
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -183,28 +181,39 @@ updates:
       # Use Indian Standard Time (UTC +05:30)
       timezone: "Asia/Kolkata"
       time: "09:00"
+    ignore:
+      # We don't want check for acquia_cms modules.
+      - dependency-name: "drupal/acquia_cms*"
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
 
   - package-ecosystem: "composer"
-    directory: "/modules/acquia_cms_tour"
+    directory: "/"
     schedule:
       interval: "daily"
       # Use Indian Standard Time (UTC +05:30)
       timezone: "Asia/Kolkata"
       time: "09:00"
+    allow:
+      # Allow both direct and indirect updates for all packages
+      - dependency-type: "all"
+    versioning-strategy: widen
     # Raise pull requests for version updates
     # to pip against the `develop` branch
-    target-branch: "develop"
+    target-branch: "1.5.x"
 
   - package-ecosystem: "composer"
-    directory: "/modules/acquia_cms_video"
+    directory: "/"
     schedule:
       interval: "daily"
       # Use Indian Standard Time (UTC +05:30)
       timezone: "Asia/Kolkata"
       time: "09:00"
+    allow:
+      # Allow both direct and indirect updates for all packages
+      - dependency-type: "all"
+    versioning-strategy: widen
     # Raise pull requests for version updates
     # to pip against the `develop` branch
-    target-branch: "develop"
+    target-branch: "2.0.x"
