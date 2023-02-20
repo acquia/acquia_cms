@@ -269,10 +269,10 @@ function acquia_cms_site_studio_update_8006() {
   if (\Drupal::config('cohesion.settings')->get('use_dx8')) {
     $modules = [
       'acquia_cms_article' => 'pack_acquia_cms_article',
-      'acquia_cms_article' => 'pack_acquia_cms_audio',
+      'acquia_cms_audio' => 'pack_acquia_cms_audio',
       'acquia_cms_site_studio' => 'pack_acquia_cms_core',
       'acquia_cms_event' => 'pack_acquia_cms_event',
-      'acquia_cms_site_studio' => 'pack_acquia_cms_video',
+      'acquia_cms_video' => 'pack_acquia_cms_video',
     ];
     $module_handler = \Drupal::service('module_handler');
     foreach ($modules as $key => $module) {
