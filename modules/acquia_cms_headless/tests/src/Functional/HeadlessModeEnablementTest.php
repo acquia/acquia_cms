@@ -7,10 +7,12 @@ use Drupal\Core\Extension\Exception\UnknownExtensionException;
 /**
  * Tests for acquia_cms_headless Hybrid mode.
  *
+ * @group acquia_cms
  * @group acquia_cms_headless
- * @group low_risk
+ * @group medium_risk
+ * @group push
  */
-class HeadlessHybridModeTest extends HeadlessTestBase {
+class HeadlessModeEnablementTest extends HeadlessTestBase {
 
   /**
    * The module installer object.
@@ -76,6 +78,24 @@ class HeadlessHybridModeTest extends HeadlessTestBase {
 
       // Headless dashboard should not show up.
       $assertSession->elementNotExists('named', ['link', 'Headless dashboard'], $toolbar);
+
+      // Test if next js gets enabled or not.
+      $assertSession->elementExists('css', '.claro-details__summary', $headlessForm)->press();
+
+      // Test if next js gets enabled or not.
+      $headlessForm->checkField('Enable Next.js starter kit');
+      $headlessForm->pressButton('Save');
+
+      // Ensure that after save button next.js mode is enabled.
+      $assertSession->pageTextContains('Acquia CMS Next.js starter kit has been enabled.');
+
+      // Test disabling headless works or not.
+      $assertSession->elementExists('css', '.claro-details__summary', $headlessForm)->press();
+      $headlessForm->uncheckField('Enable Headless mode');
+      $headlessForm->pressButton('Save');
+
+      // Ensure that after save button headless mode is disabled.
+      $assertSession->pageTextContains('Acquia CMS Pure Headless has been disabled.');
     }
   }
 
