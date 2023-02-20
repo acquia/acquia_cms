@@ -1,21 +1,33 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_headless\Functional;
+namespace Drupal\Tests\acquia_cms_headless\Traits;
 
 /**
- * Tests headless content site preview.
- *
- * @group acquia_cms
- * @group acquia_cms_headless
- * @group medium_risk
- * @group push
+ * Trait table assertions.
  */
-class SitePreviewTest extends HeadlessContentAdminTestBase {
+trait HeadlessNextJsTrait {
 
   /**
-   * Content preview test.
+   * Function to enable headless mode.
    */
-  public function testContentPreview(): void {
+  protected function enableHeadlessMode(): void {
+    $assert = $this->assertSession();
+    $page = $this->getSession()->getPage();
+    $this->drupalGet("admin/tour/dashboard");
+    $assert->waitForElementVisible('css', '.ui-dialog .acms-welcome-modal');
+    $assert->waitForText('Welcome to Acquia CMS.');
+    $assert->elementExists('css', '.ui-icon-closethick')->click();
+    $assert->elementExists('css', 'summary[role="button"].claro-details__summary')->click();
+    $page->checkField('headless_mode');
+    $assert->checkboxChecked('edit-headless-mode');
+    $page->pressButton('Save');
+    $this->drupalGet("admin/content");
+  }
+
+  /**
+   * Assert new nextjs site.
+   */
+  protected function assertNewNextJsSites(): void {
     $assert = $this->assertSession();
     $page = $this->getSession()->getPage();
     // Visit add nextJs site page.
@@ -26,7 +38,6 @@ class SitePreviewTest extends HeadlessContentAdminTestBase {
     $assert->fieldExists('preview_url');
     $assert->fieldExists('preview_secret');
     $assert->buttonExists('Save');
-
     // Setup nextJS site.
     $page->fillField('Label', 'Headless Site One');
     $page->fillField('base_url', 'https://localhost.com:3000');
@@ -43,8 +54,14 @@ class SitePreviewTest extends HeadlessContentAdminTestBase {
     $page->fillField('preview_secret', 'secret2two');
     $assert->waitForElementVisible('css', '.admin-link');
     $assert->elementExists('named', ['button', 'Save'])->click();
+  }
 
-    // Configure nextJs entity types and Validate nextJs entity config.
+  /**
+   * Assert configure nextJs entity type.
+   */
+  protected function assertNextJsEntityTypeConfigure(): void {
+    $assert = $this->assertSession();
+    $page = $this->getSession()->getPage();
     $this->drupalGet("admin/config/services/next/entity-types/add");
     $assert->selectExists('id')->selectOption('node.test');
     $assert->waitForElementVisible('css', '.settings-container');
@@ -58,23 +75,6 @@ class SitePreviewTest extends HeadlessContentAdminTestBase {
     $page->checkField('sites[headless_site_two]');
     $assert->checkboxChecked('sites[headless_site_two]');
     $assert->buttonExists('Save')->press();
-
-    // Create test node.
-    $node = $this->drupalCreateNode([
-      'type' => 'test',
-      'title' => 'Headless Test Page',
-    ]);
-    $this->drupalGet('node/' . $node->id() . '/edit');
-
-    // Visit content preview.
-    $this->drupalGet('node/' . $node->id() . '/site-preview');
-    $this->assertTrue($assert->optionExists('edit-site', 'headless_site_one')->isSelected());
-    $assert->selectExists('edit-site')->selectOption('headless_site_two');
-    $assert->buttonExists('Submit')->press();
-    $this->assertTrue($assert->optionExists('edit-site', 'headless_site_two')->isSelected());
-    $assert->elementExists('css', 'li.live-link a[target=_blank]');
-    $assert->selectExists('edit-new-state')->selectOption('published');
-    $assert->buttonExists('Apply')->press();
   }
 
 }
