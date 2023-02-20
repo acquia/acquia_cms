@@ -2,18 +2,26 @@
 
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
+use Drupal\Tests\BrowserTestBase;
+
 /**
  * Tests for acquia_cms_headless frontpage.
  *
  * @group acquia_cms_headless
  * @group low_risk
  */
-class HeadlessFrontpageTest extends HeadlessTestBase {
+class HeadlessFrontpageTest extends BrowserTestBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
 
   /**
    * {@inheritdoc}
    */
   protected static $modules = [
+    'acquia_cms_headless',
     'acquia_cms_headless_ui',
   ];
 
@@ -21,10 +29,9 @@ class HeadlessFrontpageTest extends HeadlessTestBase {
    * Assert that frontpage for non logged-in user is login page.
    */
   public function testFrontPageIsLoginPage(): void {
-    $this->drupalLogout();
     $this->drupalGet('/frontpage');
-    $assert_session = $this->assertSession();
-    $assert_session->elementExists('css', '#user-login-form');
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->elementExists('css', '#user-login-form');
   }
 
   /**
@@ -35,8 +42,8 @@ class HeadlessFrontpageTest extends HeadlessTestBase {
     $account->addRole('administrator');
     $account->save();
     $this->drupalLogin($account);
-    $assert_session = $this->assertSession();
-    $assert_session->addressEquals('/admin/content');
+    $this->assertSession()->addressEquals('/admin/content');
+    $this->assertSession()->statusCodeEquals(200);
   }
 
 }
