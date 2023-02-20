@@ -4,13 +4,12 @@ dependencies:
   config:
     - user.role.content_administrator
     - user.role.content_editor
-third_party_settings:
-  acquia_cms_common:
-    workflow_id: editorial
-    workflow_transitions:
-      - review
+    - workflows.workflow.editorial
+  module:
+    - acquia_cms_common
 id: transition_to_review
 label: 'Transition to Review'
+format: plain_text
 subject: '[node:title] State Changed'
 recipient_types:
   role:
@@ -21,7 +20,11 @@ recipient_types:
       roles:
         content_administrator: content_administrator
         content_editor: content_editor
+bundles: {  }
 body:
   value: '[node:title] needs review.'
   format: plain_text
-bundles: {  }
+replyTo: ''
+transitions:
+  editorial:
+    review: review
