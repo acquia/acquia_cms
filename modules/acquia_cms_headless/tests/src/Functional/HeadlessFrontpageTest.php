@@ -21,7 +21,6 @@ class HeadlessFrontpageTest extends BrowserTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
-    'acquia_cms_headless',
     'acquia_cms_headless_ui',
   ];
 
