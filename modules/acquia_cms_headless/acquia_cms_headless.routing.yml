@@ -5,6 +5,7 @@ acquia_cms_headless.dashboard:
     _controller: '\Drupal\acquia_cms_headless\Controller\HeadlessDashboardController::content'
   requirements:
     _permission: 'access acquia cms headless dashboard'
+
 acquia_cms_headless.generate_keys:
   path: '/admin/headless/dashboard/generate/keys'
   defaults:
@@ -12,6 +13,7 @@ acquia_cms_headless.generate_keys:
     _controller: '\Drupal\acquia_cms_headless\Controller\HeadlessKeyGenerator::generateApiKeys'
   requirements:
     _permission: 'administer acquia cms headless keys'
+
 acquia_cms_headless.generate_consumer_secret:
   path: '/admin/headless/dashboard/generate/secret/consumer/{consumer}'
   defaults:
@@ -23,6 +25,7 @@ acquia_cms_headless.generate_consumer_secret:
     parameters:
       consumer:
         type: entity:consumer
+
 acquia_cms_headless.generate_preview_secret:
   path: '/admin/headless/dashboard/generate/secret/preview/{next_site}'
   defaults:

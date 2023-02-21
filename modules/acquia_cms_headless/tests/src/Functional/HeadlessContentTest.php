@@ -56,12 +56,20 @@ class HeadlessContentTest extends WebDriverTestBase {
         ],
       ],
     ]);
+    // Enable pure headless mode.
+    $this->enableHeadlessMode();
+    // Visit add nextJs site page.
+    $this->assertNewNextJsSites();
+    // Configure nextJs entity types and Validate nextJs entity config.
+    $this->assertNextJsEntityTypeConfigure();
   }
 
   /**
    * Content admin test.
    */
   public function testContentAdmin(): void {
+    // Visit content page.
+    $this->drupalGet("admin/content");
     // Validating the primary menu tabs on admin content page.
     $primaryTabs = [
       'Content' => '/admin/content',
@@ -71,12 +79,6 @@ class HeadlessContentTest extends WebDriverTestBase {
     // Assertion test for tabs of content page.
     $this->assertTabMenus($primaryTabs, "admin/content");
 
-    // Enable pure headless mode.
-    $this->enableHeadlessMode();
-    // Visit add nextJs site page.
-    $this->assertNewNextJsSites();
-    // Configure nextJs entity types and Validate nextJs entity config.
-    $this->assertNextJsEntityTypeConfigure();
     // Create test node.
     $node = $this->drupalCreateNode([
       'type' => 'test',
@@ -117,11 +119,6 @@ class HeadlessContentTest extends WebDriverTestBase {
    */
   public function testContentPreview(): void {
     $assert = $this->assertSession();
-    // Visit add nextJs site page.
-    $this->assertNewNextJsSites();
-    // Configure nextJs entity types and Validate nextJs entity config.
-    $this->assertNextJsEntityTypeConfigure();
-
     // Create test node.
     $node = $this->drupalCreateNode([
       'type' => 'test',
@@ -141,59 +138,6 @@ class HeadlessContentTest extends WebDriverTestBase {
   }
 
   /**
-   * Assert configure nextJs entity type.
-   */
-  protected function assertNextJsEntityTypeConfigure(): void {
-    $assert = $this->assertSession();
-    $page = $this->getSession()->getPage();
-    $this->drupalGet("admin/config/services/next/entity-types/add");
-    $assert->selectExists('id')->selectOption('node.test');
-    $assert->waitForElementVisible('css', '.settings-container');
-    $this->assertTrue($assert->optionExists('id', 'node.test')->isSelected());
-    $assert->selectExists('site_resolver')->selectOption('site_selector');
-    $assert->assertWaitOnAjaxRequest();
-    $assert->waitForText('Next.js sites');
-    $this->assertTrue($assert->optionExists('site_resolver', 'site_selector')->isSelected());
-    $page->checkField('sites[headless_site_one]');
-    $assert->checkboxChecked('sites[headless_site_one]');
-    $page->checkField('sites[headless_site_two]');
-    $assert->checkboxChecked('sites[headless_site_two]');
-    $assert->buttonExists('Save')->press();
-  }
-
-  /**
-   * Assert new nextjs site.
-   */
-  protected function assertNewNextJsSites() {
-    $assert = $this->assertSession();
-    $page = $this->getSession()->getPage();
-    // Visit add nextJs site page.
-    $this->drupalGet("admin/config/services/next/sites/add");
-    // Fields exists check.
-    $assert->fieldExists('label');
-    $assert->fieldExists('base_url');
-    $assert->fieldExists('preview_url');
-    $assert->fieldExists('preview_secret');
-    $assert->buttonExists('Save');
-    // Setup nextJS site.
-    $page->fillField('Label', 'Headless Site One');
-    $page->fillField('base_url', 'https://localhost.com:3000');
-    $page->fillField('preview_url', 'https://localhost.com:3000/api/preview');
-    $page->fillField('preview_secret', 'secret1one');
-    $assert->waitForElementVisible('css', '.admin-link');
-    $assert->elementExists('named', ['button', 'Save'])->click();
-
-    // Setup another nextJs site.
-    $this->drupalGet("admin/config/services/next/sites/add");
-    $page->fillField('Label', 'Headless Site Two');
-    $page->fillField('base_url', 'https://localhost.com:3001');
-    $page->fillField('preview_url', 'https://localhost.com:3001/api/preview');
-    $page->fillField('preview_secret', 'secret2two');
-    $assert->waitForElementVisible('css', '.admin-link');
-    $assert->elementExists('named', ['button', 'Save'])->click();
-  }
-
-  /**
    * Perfom assertions for tabs/menus.
    */
   protected function assertTabMenus(array $data, string $path): void {
@@ -206,23 +150,6 @@ class HeadlessContentTest extends WebDriverTestBase {
       $page->findLink($name)->click();
       $this->drupalGet($path);
     }
-  }
-
-  /**
-   * Function to enable headless mode.
-   */
-  protected function enableHeadlessMode(): void {
-    $assert = $this->assertSession();
-    $page = $this->getSession()->getPage();
-    $this->drupalGet("admin/tour/dashboard");
-    $assert->waitForElementVisible('css', '.ui-dialog .acms-welcome-modal');
-    $assert->waitForText('Welcome to Acquia CMS.');
-    $assert->elementExists('css', '.ui-icon-closethick')->click();
-    $assert->elementExists('css', 'summary[role="button"].claro-details__summary')->click();
-    $page->checkField('headless_mode');
-    $assert->checkboxChecked('edit-headless-mode');
-    $page->pressButton('Save');
-    $this->drupalGet("admin/content");
   }
 
 }
