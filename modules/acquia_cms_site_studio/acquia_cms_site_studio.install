@@ -10,6 +10,7 @@ use Drupal\cohesion_sync\Event\SiteStudioSyncFilesEvent;
 use Drupal\cohesion_sync\EventSubscriber\Import\SiteStudioSyncFilesSubscriber;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Installer\InstallerKernel;
+use Drupal\editor\Entity\Editor;
 use Drupal\node\Entity\NodeType;
 use Drupal\user\Entity\Role;
 
@@ -44,6 +45,7 @@ function acquia_cms_site_studio_install($is_syncing) {
     // type as cohesion_layout and option's views_template & master_template
     // if acquia_cms_site_studio module is present else use default one.
     $module_handler = \Drupal::service('module_handler');
+    $entity_type_manager = \Drupal::entityTypeManager();
     if ($module_handler->moduleExists('acquia_cms_search')) {
       _acquia_cms_common_update_view_display_options_style('search');
       _acquia_cms_common_update_view_display_options_style('search_fallback');
@@ -51,7 +53,7 @@ function acquia_cms_site_studio_install($is_syncing) {
       // Disable acquia_search view provided by Acquia Search Solrmodule,
       // so that search view provided by acquia_cms_search module can be used
       // which will allow content's related test to pass in isolation.
-      $view_storage = \Drupal::entityTypeManager()->getStorage('view');
+      $view_storage = $entity_type_manager->getStorage('view');
       if (!empty($view_storage->load('acquia_search'))) {
         $view_storage->load('acquia_search')
           ->setStatus(FALSE)
@@ -120,6 +122,24 @@ function acquia_cms_site_studio_install($is_syncing) {
     $config_storage = \Drupal::service('config.storage');
     $config_storage->write('editor.editor.cohesion', $source_optional_dir->read('editor.editor.cohesion'));
     $config_storage->write('filter.format.cohesion', $source_optional_dir->read('filter.format.cohesion'));
+
+    // Re-write filter format filtered html.
+    $editor_object = $entity_type_manager
+      ->getStorage('editor')
+      ->load('filtered_html');
+    if ($editor_object instanceof Editor) {
+      $filters_object = $editor_object->getFilterFormat();
+      $filters_instance_ids = $editor_object->getFilterFormat()->filters()->getInstanceIds();
+      if (!in_array('black_list_html_tags', $filters_instance_ids)) {
+        $filters_object->setFilterConfig('black_list_html_tags', [
+          'id' => 'black_list_html_tags',
+          'provider' => 'cohesion',
+          'status' => FALSE,
+          'weight' => '-41',
+          'settings' => [],
+        ]);
+      }
+    }
   }
 }
 
