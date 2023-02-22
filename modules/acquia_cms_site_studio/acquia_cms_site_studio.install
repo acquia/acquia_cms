@@ -124,14 +124,14 @@ function acquia_cms_site_studio_install($is_syncing) {
     $config_storage->write('filter.format.cohesion', $source_optional_dir->read('filter.format.cohesion'));
 
     // Re-write filter format filtered html.
-    $editorObject = $entity_type_manager
+    $editor_object = $entity_type_manager
       ->getStorage('editor')
       ->load('filtered_html');
-    if ($editorObject instanceof Editor) {
-      $filtersObj = $editorObject->getFilterFormat();
-      $filters_instance_ids = $editorObject->getFilterFormat()->filters()->getInstanceIds();
+    if ($editor_object instanceof Editor) {
+      $filters_object = $editor_object->getFilterFormat();
+      $filters_instance_ids = $editor_object->getFilterFormat()->filters()->getInstanceIds();
       if (!in_array('black_list_html_tags', $filters_instance_ids)) {
-        $filtersObj->setFilterConfig('black_list_html_tags', [
+        $filters_object->setFilterConfig('black_list_html_tags', [
           'id' => 'black_list_html_tags',
           'provider' => 'cohesion',
           'status' => FALSE,
