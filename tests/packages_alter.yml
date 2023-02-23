@@ -2,11 +2,13 @@ acquia/acquia_cms:
   type: drupal-profile
   version_dev: 1.x-dev
 
+mnsami/composer-custom-directory-installer:
+  type: composer-plugin
+php-http/discovery:
+  type: composer-plugin
+
 # Do not install Lightning modules explicitly excluded by ACMS.
 drupal/lightning_layout: ~
 drupal/lightning_page: ~
 drupal/lightning_search: ~
 drupal/lightning_media: ~
-
-php-http/discovery:
-  type: composer-plugin
