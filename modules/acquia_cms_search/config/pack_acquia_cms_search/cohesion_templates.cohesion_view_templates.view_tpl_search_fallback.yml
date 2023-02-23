@@ -4,6 +4,10 @@ status: true
 dependencies:
   config:
     - views.view.search_fallback
+  enforced:
+    module:
+      - acquia_cms_search
+      - acquia_cms_site_studio
 label: 'Search fallback'
 id: view_tpl_search_fallback
 json_values: |
