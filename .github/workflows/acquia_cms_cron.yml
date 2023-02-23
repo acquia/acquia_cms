@@ -53,6 +53,7 @@ jobs:
       - name: Before Install
         run: ../orca/bin/ci/before_install.sh
       - name: Install
+        shell: 'script -q -e -c "bash {0}"'
         run: ./tests/ci/install.sh
       - name: Before script
         run: ../orca/bin/ci/before_script.sh
@@ -121,6 +122,7 @@ jobs:
           CHROMEDRIVER_PID=$!
           echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
       - name: Install
+        shell: 'script -q -e -c "bash {0}"'
         run: ./tests/ci/install.sh
       - name: Before script
         run: ../orca/bin/ci/before_script.sh
@@ -179,6 +181,7 @@ jobs:
           CHROMEDRIVER_PID=$!
           echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
       - name: Install
+        shell: 'script -q -e -c "bash {0}"'
         run: ./tests/ci/install.sh
       - name: Before script
         run: ../orca/bin/ci/before_script.sh
