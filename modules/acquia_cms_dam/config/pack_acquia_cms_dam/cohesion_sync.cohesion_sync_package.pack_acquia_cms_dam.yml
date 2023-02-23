@@ -1,7 +1,11 @@
 uuid: 7fcf6ca9-9755-4080-a22f-ec966f6a7298
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - acquia_cms_dam
+      - acquia_cms_site_studio
 id: pack_acquia_cms_dam
 label: 'Acquia CMS DAM'
 description: 'DAM related templates and image styles under this package.'
