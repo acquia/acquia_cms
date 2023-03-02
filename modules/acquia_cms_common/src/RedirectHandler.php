@@ -90,7 +90,9 @@ final class RedirectHandler implements ContainerInjectionInterface {
    *   The current form state.
    */
   public static function submitForm(array &$form, FormStateInterface $form_state): void {
-    \Drupal::classResolver(static::class)->handleRedirect($form_state);
+    if ($form_state->get('uid')) {
+      \Drupal::classResolver(static::class)->handleRedirect($form_state);
+    }
   }
 
   /**
