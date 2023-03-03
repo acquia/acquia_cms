@@ -37,3 +37,18 @@ admin.cms:
     _title: System administration
   requirements:
     _permission: 'administer site configuration'
+
+entity.node.headless_preview:
+  path: '/node/{node}/site-preview'
+  defaults:
+    _title_callback: '\Drupal\acquia_cms_headless_ui\Controller\SitePreviewController::nodePreviewTitle'
+    _controller: '\Drupal\acquia_cms_headless_ui\Controller\SitePreviewController::nodePreview'
+  requirements:
+    _entity_access: node.view
+    _module_dependencies: content_moderation
+  options:
+    _node_operation_route: TRUE
+    _admin_route: TRUE
+    parameters:
+      node:
+        type: entity:node
