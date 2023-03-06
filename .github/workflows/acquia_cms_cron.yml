@@ -240,11 +240,7 @@ jobs:
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
-        run: |
-          ../orca/bin/ci/before_install.sh
-          chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
-          CHROMEDRIVER_PID=$!
-          echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
+        run: ../orca/bin/ci/before_install.sh
       - name: Install
         shell: 'script -q -e -c "bash {0}"'
         run: ./tests/ci/install.sh
@@ -255,7 +251,6 @@ jobs:
         run: ../orca/bin/ci/before_cache.sh
       - name: After script
         run: |
-          kill -0 ${{ env.CHROMEDRIVER_PID }}
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
