@@ -9,13 +9,10 @@ use Drupal\acquia_cms_site_studio\Facade\CohesionFacade;
 use Drupal\acquia_cms_site_studio\Form\AcquiaCmsSiteStudioSiteConfigureForm;
 use Drupal\acquia_cms_site_studio\Helper\SiteStudioPermissionHelper;
 use Drupal\cohesion\Controller\AdministrationController;
-use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\media_library\MediaLibraryState;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Extends drupal core site installer form to add SiteStudio config form.
@@ -103,15 +100,6 @@ function _acquia_cms_site_studio_init() {
  * Implements hook_form_alter().
  */
 function acquia_cms_site_studio_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
-  // Instead of directly adding a patch in core, we are modifying the ajax
-  // callback.
-  if ($form_id === 'views_form_media_library_widget_image') {
-    $request = Drupal::request();
-    $state = MediaLibraryState::fromRequest($request);
-    if ($state->getOpenerId() === 'media_library.opener.cohesion') {
-      $form['actions']['submit']['#ajax']['callback'] = '_acquia_cms_site_studio_alter_update_widget';
-    }
-  }
   // Trigger site studio config import and rebuild whenever user
   // try to save site studio account settings or the site studio core
   // form from tour dashboard page.
@@ -139,26 +127,6 @@ function acquia_cms_site_studio_form_alter(array &$form, FormStateInterface $for
       // $form['#submit'][] = 'acquia_cms_site_studio_rebuild_styles';
     }
   }
-}
-
-/**
- * Callback for the media library image widget.
- */
-function _acquia_cms_site_studio_alter_update_widget(array &$form, FormStateInterface $form_state, Request $request) {
-  // As cohesion is using angular for the media library popup, So the modal id
-  // mismatch is causing the issue of no media selection. To resolve this we are
-  // passing the selector in the CloseDialogCommand.
-  // @see \Drupal\media_library\Plugin\views\field\MediaLibrarySelectForm::updateWidget().
-  $field_id = $form_state->getTriggeringElement()['#field_id'];
-  $selected_ids = $form_state->getValue($field_id);
-  $selected_ids = $selected_ids ? array_filter(explode(',', $selected_ids)) : [];
-
-  // Allow the opener service to handle the selection.
-  $state = MediaLibraryState::fromRequest($request);
-  return Drupal::service('media_library.opener_resolver')
-    ->get($state)
-    ->getSelectionResponse($state, $selected_ids)
-    ->addCommand(new CloseDialogCommand('#modal-body'));
 }
 
 /**
