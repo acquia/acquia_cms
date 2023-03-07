@@ -97,6 +97,7 @@ class StarterKitService {
         }
       }
       $modulesAndThemes['enableModules'][] = 'acquia_cms_site_studio';
+      $batch['finished'] = 'cohesion_website_settings_batch_import_finished';
     }
     if (!empty($modulesAndThemes['enableModules'])) {
       foreach ($modulesAndThemes['enableModules'] as $module) {
