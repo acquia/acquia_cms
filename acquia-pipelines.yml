@@ -18,13 +18,14 @@ events:
             - mkdir -p docroot/modules/acquia_cms
             - composer archive --format zip --file acquia_cms
             - unzip acquia_cms.zip -d docroot/modules/acquia_cms
-      - front-end:
-          type: script
-          script:
-            - cd docroot/themes/contrib/acquia_claro
-            - npm install
-            - npm run build
-            - cd -
+      # Commenting as it's no longer needed and this is failing deployment.
+      # - front-end:
+      #    type: script
+      #    script:
+      #      - cd docroot/themes/contrib/acquia_claro
+      #      - npm install
+      #      - npm run build
+      #      - cd -
       - cleanup:
           type: script
           script:
