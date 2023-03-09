@@ -90,7 +90,7 @@ function _acquia_cms_site_studio_update_settings() {
  */
 function _acquia_cms_site_studio_init() {
   // Instead of returning the batch array, we are just executing the batch here.
-  $batch = install_acms_site_studio_initialize();
+  $batch = _acquia_cms_site_studio_install_initialize();
   _acquia_cms_site_studio_import_ui_kit();
   _acquia_cms_site_studio_update_settings();
   batch_set($batch);
