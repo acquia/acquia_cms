@@ -263,6 +263,69 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
+  run_update_hooks:
+    name: "Module Upgrades"
+    runs-on: ubuntu-latest
+    env:
+      # Set ORCA related environment variables.
+      ORCA_SUT_NAME: acquia/acquia_cms
+      ORCA_SUT_BRANCH: develop
+      ORCA_VERSION: ^3
+      ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
+      ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
+      ORCA_ENABLE_NIGHTWATCH: "FALSE"
+      ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
+
+      # Set Required API Keys.
+      CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
+      GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
+      SEARCH_UUID: ${{ secrets.SEARCH_UUID }}
+      SITESTUDIO_API_KEY: ${{ secrets.SITESTUDIO_API_KEY }}
+      SITESTUDIO_ORG_KEY: ${{ secrets.SITESTUDIO_ORG_KEY }}
+
+      #Add other required environment variables.
+      COMPOSER_PROCESS_TIMEOUT: 1800
+      CI: true
+      GIT_AUTHOR_NAME: "Github Actions"
+      GIT_AUTHOR_EMAIL: "github-actions@exmaple.com"
+
+      GIT_COMMITTER_NAME: "Github Actions"
+      GIT_COMMITTER_EMAIL: "github-actions@exmaple.com"
+      ORCA_JOB: ISOLATED_TEST_ON_CURRENT
+      ACMS_JOB: "module-upgrades-ci"
+    strategy:
+      fail-fast: false
+      #php-version: [ "8.1" ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 12.13.1
+        uses: actions/setup-node@v3
+        with:
+          node-version: 12.13.1
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          #coverage: xdebug
+      - name: Setup MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -uroot -proot < ./tests/ci/install.sql
+      - name: Download ORCA
+        run: |
+          composer self-update
+          composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
+          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+      - name: Before Install
+        run: ./tests/ci/before_install.blt.sh
+      - name: Install
+        shell: 'script -q -e -c "bash {0}"'
+        run: ./tests/ci/install.sh
+      - name: Run Update hooks
+        shell: 'script -q -e -c "bash {0}"'
+        run: ./tests/ci/run_update_hooks.sh
+        env:
+          # @see ./tests/ci/before_install.blt.sh
+          DRUPAL_ORG_CHANGES: ${{ env.DRUPAL_ORG_CHANGES }}
 
   deploy_code:
     if: ${{ github.ref == 'refs/heads/main' }}
