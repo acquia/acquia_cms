@@ -200,3 +200,36 @@ function acquia_cms_common_update_8004() {
     }
   }
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Re-run hook: acquia_cms_common_update_8004().
+ */
+function acquia_cms_common_update_8005() {
+  // Re-running hook: hook_update_8004() as 1.8.x release of acquia_cms_common
+  // module contains another hook.
+  acquia_cms_common_update_8004();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update the config_ignore.settings.
+ */
+function acquia_cms_common_update_8006() {
+  $config = \Drupal::configFactory()->getEditable('config_ignore.settings');
+  if ($config) {
+    $existing_ignore_configs = $config->get('ignored_config_entities');
+    $updated_ignored_configs = array_values(
+      array_diff($existing_ignore_configs, [
+        "media.type.image:uuid",
+        "crop.type.focal_point:uuid",
+      ]),
+    );
+    if ($existing_ignore_configs != $updated_ignored_configs) {
+      $config->set('ignored_config_entities', $updated_ignored_configs)
+        ->save(TRUE);
+    }
+  }
+}
