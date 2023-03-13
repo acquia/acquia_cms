@@ -23,16 +23,10 @@ function acquia_cms_headless_install($is_syncing) {
     // Adds the necessary permissions to roles.
     add_next_site_permissions();
   }
-}
-
-/**
- * Implements hook_module_preinstall().
- */
-function acquia_cms_headless_module_preinstall($module) {
-  if ($module === 'acquia_cms_headless') {
-    \Drupal::service('acquia_cms_common.utility')->setModulePreinstallTriggered($module);
+  else {
+    // Set acquia_cms_headless status variable.
+    \Drupal::state()->set('acquia_cms_headless.status', 'enabled');
   }
-
 }
 
 /**
