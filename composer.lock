@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "acfc45a66ab881b7ffac4ce6dad797f5",
+    "content-hash": "414dfcb01a3b20158ef5d18588924a95",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2718,7 +2718,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_headless",
-                "reference": "37bac73c6aef8dbbe7be9bfabf9c28fe6e7828df"
+                "reference": "b3f6bcb388a69db8df4b3402afb36458e9574b20"
             },
             "require": {
                 "drupal/acquia_cms_tour": "2.x-dev",
@@ -2737,6 +2737,11 @@
             "extra": {
                 "branch-alias": {
                     "dev-develop": "1.x-dev"
+                },
+                "drupal-scaffold": {
+                    "file-mapping": {
+                        "[web-root]/drush/Commands/GenerateHeadlessUser.php": "acquia_cms_headless/assets/global/files/GenerateHeadlessUser.php"
+                    }
                 },
                 "drush": {
                     "services": {
@@ -17341,8 +17346,14 @@
             "version": "8.3.17",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/coder.git",
+                "url": "https://github.com/pfrenssen/coder.git",
                 "reference": "1c4662337418ab88c9ddf40348f0638e35d49182"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pfrenssen/coder/zipball/1c4662337418ab88c9ddf40348f0638e35d49182",
+                "reference": "1c4662337418ab88c9ddf40348f0638e35d49182",
+                "shasum": ""
             },
             "require": {
                 "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1 || ^1.0.0",
