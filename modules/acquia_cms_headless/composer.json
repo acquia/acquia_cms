@@ -32,6 +32,11 @@
         "branch-alias": {
             "dev-develop": "1.x-dev"
         },
+        "drupal-scaffold": {
+            "file-mapping": {
+                "[web-root]/drush/Commands/GenerateHeadlessUser.php": "acquia_cms_headless/assets/global/files/GenerateHeadlessUser.php"
+            }
+        },
         "drush": {
             "services": {
                 "drush.services.yml": "^10.6 || ^11"

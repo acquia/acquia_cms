@@ -26,6 +26,16 @@ function acquia_cms_headless_install($is_syncing) {
 }
 
 /**
+ * Implements hook_module_preinstall().
+ */
+function acquia_cms_headless_module_preinstall($module) {
+  if ($module === 'acquia_cms_headless') {
+    \Drupal::service('acquia_cms_common.utility')->setModulePreinstallTriggered($module);
+  }
+
+}
+
+/**
  * Adds the necessary permissions to anonymous & authenticated roles.
  *
  * @throws \Drupal\Core\Entity\EntityStorageException
