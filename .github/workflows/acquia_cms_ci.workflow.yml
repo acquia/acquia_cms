@@ -262,32 +262,39 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
-
-  upgrade_tests:
-    name: "acquia_cms (upgrade_tests)"
+  run_update_hooks:
+    name: "Module Upgrades"
     runs-on: ubuntu-latest
     env:
-      # Provide your package's name.
-      ACMS_JOB: "upgrade_modules"
+      # Set ORCA related environment variables.
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
       ORCA_VERSION: ^3
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
-      ORCA_PHPCS_STANDARD: AcquiaPHP
       ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
-      COMPOSER_PROCESS_TIMEOUT: 1800
-      ORCA_JOB: ISOLATED_TEST_ON_CURRENT
-      CI: true
+
       # Set Required API Keys.
       CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
       GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
       SEARCH_UUID: ${{ secrets.SEARCH_UUID }}
       SITESTUDIO_API_KEY: ${{ secrets.SITESTUDIO_API_KEY }}
       SITESTUDIO_ORG_KEY: ${{ secrets.SITESTUDIO_ORG_KEY }}
+
+      #Add other required environment variables.
+      COMPOSER_PROCESS_TIMEOUT: 1800
+      CI: true
+      GIT_AUTHOR_NAME: "Github Actions"
+      GIT_AUTHOR_EMAIL: "github-actions@exmaple.com"
+
+      GIT_COMMITTER_NAME: "Github Actions"
+      GIT_COMMITTER_EMAIL: "github-actions@exmaple.com"
+      ORCA_JOB: ISOLATED_TEST_ON_CURRENT
+      ACMS_JOB: "upgrade_modules"
     strategy:
       fail-fast: false
+      #php-version: [ "8.1" ]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -297,6 +304,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 8.1
+          #coverage: xdebug
       - name: Setup MySQL
         run: |
           sudo /etc/init.d/mysql start
@@ -307,50 +315,16 @@ jobs:
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
-        run: |
-          # Delete Modules folder and save commit hash.
-          rm -rf modules/
-          composer config --unset repositories.acquia_cms_article
-          composer config --unset repositories.acquia_cms_audio
-          composer config --unset repositories.acquia_cms_common
-          composer config --unset repositories.acquia_cms_component
-          composer config --unset repositories.acquia_cms_dam
-          composer config --unset repositories.acquia_cms_document
-          composer config --unset repositories.acquia_cms_event
-          composer config --unset repositories.acquia_cms_headless
-          composer config --unset repositories.acquia_cms_image
-          composer config --unset repositories.acquia_cms_page
-          composer config --unset repositories.acquia_cms_person
-          composer config --unset repositories.acquia_cms_place
-          composer config --unset repositories.acquia_cms_search
-          composer config --unset repositories.acquia_cms_site_studio
-          composer config --unset repositories.acquia_cms_starter
-          composer config --unset repositories.acquia_cms_toolbar
-          composer config --unset repositories.acquia_cms_tour
-          composer config --unset repositories.acquia_cms_video
-          composer require drupal/acquia_cms_audio drupal/acquia_cms_component drupal/acquia_cms_dam drupal/acquia_cms_headless drupal/acquia_cms_site_studio drupal/acquia_cms_starter drupal/acquia_cms_toolbar drupal/acquia_cms_tour --no-update --no-install
-          git config --global user.email "deepak.mishra@acquia.com"
-          git config --global user.name "Deepak Mishra"
-          git add .
-          git commit -m "Removed all acquia_cms modules"
-          COMMIT_HASH_ID=$(git rev-parse HEAD)
-          echo "COMMIT_HASH_ID=${COMMIT_HASH_ID}" >> ${GITHUB_ENV}
-          ../orca/bin/ci/before_install.sh
+        run: ./tests/ci/before_install.blt.sh
       - name: Install
         shell: 'script -q -e -c "bash {0}"'
         run: ./tests/ci/install.sh
-      - name: Run Modules Hook Update
+      - name: Run Update hooks
         shell: 'script -q -e -c "bash {0}"'
-        run: |
-          source ../orca/bin/ci/_includes.sh
-          git revert --no-edit ${COMMIT_HASH_ID}
-          composer install
-          rm -rf ${ORCA_FIXTURE_DIR}/docroot/modules/contrib
-          cp -r docroot/modules/contrib ${ORCA_FIXTURE_DIR}/docroot/modules/contrib
-          cp -r modules ${ORCA_FIXTURE_DIR}/modules
-          rm -rf docroot vendor
-          cd ${ORCA_FIXTURE_DIR}
-          ./vendor/bin/drush updb --yes
+        run: ./tests/ci/run_update_hooks.sh
+        env:
+          # @see ./tests/ci/before_install.blt.sh
+          DRUPAL_ORG_CHANGES: ${{ env.DRUPAL_ORG_CHANGES }}
       - name: Script - run backstop tests
         run: |
           source ../orca/bin/ci/_includes.sh
@@ -363,13 +337,6 @@ jobs:
           ./vendor/bin/drush cr
           cd ${ORCA_SUT_DIR}
           ./tests/ci/script.sh
-      - name: Before Cache
-        run: ../orca/bin/ci/before_cache.sh
-      - name: After script
-        run: |
-          ../orca/bin/ci/after_success.sh
-          ../orca/bin/ci/after_failure.sh
-          ../orca/bin/ci/after_script.sh
 
   deploy_code:
     if: ${{ github.ref == 'refs/heads/main' }}
