@@ -83,6 +83,11 @@
         "branch-alias": {
             "dev-develop": "2.x-dev"
         },
+        "drupal-scaffold": {
+            "file-mapping": {
+                "[web-root]/drush/Commands/PostConfigurationCommands.php": "acquia_cms_common/assets/scaffold/files/PostConfigurationCommands.php"
+            }
+        },
         "drush": {
             "services": {
                 "drush.services.yml": "^10"

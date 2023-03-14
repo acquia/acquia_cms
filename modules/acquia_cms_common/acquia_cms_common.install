@@ -13,6 +13,7 @@ use Drupal\workbench_email\Entity\Template;
  * Implements hook_install().
  */
 function acquia_cms_common_install($is_syncing) {
+
   if (!$is_syncing) {
     user_role_grant_permissions('anonymous', [
       'access content',
@@ -83,6 +84,10 @@ function acquia_cms_common_install($is_syncing) {
       'purge_processor_cron',
       'purge_ui',
     ]);
+  }
+  else {
+    // Set acquia_cms is_sync state to true.
+    \Drupal::state()->set('acquia_cms.is_syncing', TRUE);
   }
 }
 

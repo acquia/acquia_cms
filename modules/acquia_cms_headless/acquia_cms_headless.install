@@ -23,10 +23,6 @@ function acquia_cms_headless_install($is_syncing) {
     // Adds the necessary permissions to roles.
     add_next_site_permissions();
   }
-  else {
-    // Set acquia_cms_headless status variable.
-    \Drupal::state()->set('acquia_cms_headless.status', 'enabled');
-  }
 }
 
 /**
