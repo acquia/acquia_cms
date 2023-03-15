@@ -490,9 +490,12 @@ function acquia_cms_common_module_implements_alter(array &$implementations, stri
     }
   }
   // Prevent installation of site studio package on module install
-  // during site installation from other modules, this causes issue.
-  if ($hook == 'modules_installed' && InstallerKernel::installationAttempted()) {
-    unset($implementations['cohesion_sync']);
+  // during site installation configuration synchronization
+  // from other modules, this causes issue.
+  if ($hook == 'modules_installed') {
+    if (InstallerKernel::installationAttempted() || \Drupal::service('config.installer')->isSyncing()) {
+      unset($implementations['cohesion_sync']);
+    }
   }
 }
 
