@@ -146,6 +146,7 @@ function _acquia_cms_site_studio_rebuild_styles() {
 function acquia_cms_site_studio_content_model_role_presave_alter(RoleInterface &$role) {
   if (\Drupal::getContainer()->has('cohesion.utils') &&
     \Drupal::service('cohesion.utils')->usedx8Status() &&
+    !\Drupal::service('config.installer')->isSyncing() &&
     in_array($role->id(), [
       'content_administrator',
       'content_editor',
@@ -165,7 +166,9 @@ function acquia_cms_site_studio_content_model_role_presave_alter(RoleInterface &
  * Adds the permissions to role.
  */
 function acquia_cms_site_studio_cohesion_helper_category_insert(EntityInterface $entity) {
-  _acquia_cms_site_studio_add_permissions($entity);
+  if (!\Drupal::service('config.installer')->isSyncing()) {
+    _acquia_cms_site_studio_add_permissions($entity);
+  }
 }
 
 /**
@@ -174,7 +177,9 @@ function acquia_cms_site_studio_cohesion_helper_category_insert(EntityInterface 
  * Adds the permissions to role.
  */
 function acquia_cms_site_studio_cohesion_component_category_insert(EntityInterface $entity) {
-  _acquia_cms_site_studio_add_permissions($entity);
+  if (!\Drupal::service('config.installer')->isSyncing()) {
+    _acquia_cms_site_studio_add_permissions($entity);
+  }
 }
 
 /**
