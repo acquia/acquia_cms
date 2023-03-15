@@ -159,20 +159,20 @@ function acquia_cms_common_update_8002() {
  */
 function acquia_cms_common_content_model_role_presave_alter(RoleInterface &$role) {
   // Update permissions to specified role on the basis of the module.
-  $modules_permission = [
-    'shield' => 'administer shield',
-    'honeypot' => 'administer honeypot',
-    'captcha' => 'administer CAPTCHA settings',
-    'recaptcha' => 'administer recaptcha',
-  ];
-  switch ($role->id()) {
-    case 'user_administrator':
+  if (!\Drupal::service('config.installer')->isSyncing()) {
+    $modules_permission = [
+      'shield' => 'administer shield',
+      'honeypot' => 'administer honeypot',
+      'captcha' => 'administer CAPTCHA settings',
+      'recaptcha' => 'administer recaptcha',
+    ];
+    if ($role->id() == 'user_administrator') {
       foreach ($modules_permission as $module => $permission) {
         if (\Drupal::moduleHandler()->moduleExists($module)) {
           $role->grantPermission($permission);
         }
       }
-      break;
+    }
   }
 }
 
