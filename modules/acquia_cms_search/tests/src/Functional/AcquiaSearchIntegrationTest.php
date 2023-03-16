@@ -4,7 +4,6 @@ namespace Drupal\Tests\acquia_cms_search\Functional;
 
 use Drupal\search_api\Entity\Index;
 use Drupal\Tests\BrowserTestBase;
-use Drupal\views\Entity\View;
 
 /**
  * Tests integration with Acquia Search Solr.
@@ -53,12 +52,12 @@ class AcquiaSearchIntegrationTest extends BrowserTestBase {
   public function testAcquiaSearchIntegration() {
     $this->assertSame('database', Index::load('content')->getServerId());
 
-    $index = Index::load('acquia_search_index');
-    $this->assertTrue($index->status());
-    $this->assertSame('acquia_search_server', $index->getServerId());
-
-    $this->assertTrue(View::load('acquia_search')->status());
-
+    // @todo this is removed from acquia_search, hence commenting.
+    // This will be fixed in ACMS-1707
+    // $index = Index::load('acquia_search_index');
+    // $this->assertTrue($index->status());
+    // $this->assertSame('acquia_search_server', $index->getServerId());
+    // $this->assertTrue(View::load('acquia_search')->status());
     $account = $this->drupalCreateUser([
       'administer site configuration',
       'administer search_api',
