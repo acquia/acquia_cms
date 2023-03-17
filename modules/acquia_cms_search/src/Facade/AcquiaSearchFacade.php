@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_search\Facade;
 
+use Drupal\acquia_connector\Subscription;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -68,6 +69,13 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
   private $state;
 
   /**
+   * The acquia subscription service.
+   *
+   * @var \Drupal\acquia_connector\Subscription
+   */
+  private $acquiaSubscription;
+
+  /**
    * AcquiaSearchFacade constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -76,6 +84,8 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
    *   The state service.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The logger channel.
+   * @param \Drupal\acquia_connector\Subscription $subscription
+   *   The acquia subscription service object.
    * @param \Drupal\Core\Entity\EntityStorageInterface $index_storage
    *   The search index entity storage handler.
    * @param \Drupal\Core\Entity\EntityStorageInterface $server_storage
@@ -87,6 +97,7 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
     ConfigFactoryInterface $config_factory,
     StateInterface $state,
     LoggerChannelInterface $logger,
+    Subscription $subscription,
     EntityStorageInterface $index_storage,
     EntityStorageInterface $server_storage,
     EntityStorageInterface $view_storage) {
@@ -96,6 +107,7 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
     $this->indexStorage = $index_storage;
     $this->serverStorage = $server_storage;
     $this->viewStorage = $view_storage;
+    $this->acquiaSubscription = $subscription;
   }
 
   /**
@@ -108,6 +120,7 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
       $container->get('config.factory'),
       $container->get('state'),
       $container->get('logger.factory')->get('acquia_cms_search'),
+      $container->get('acquia_connector.subscription'),
       $entity_type_manager->getStorage('search_api_index'),
       $entity_type_manager->getStorage('search_api_server'),
       $entity_type_manager->getStorage('view')
@@ -120,6 +133,7 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
   public static function submitSettingsForm() : void {
     $class_resolver = \Drupal::classResolver(static::class);
     if ($class_resolver->isConfigured()) {
+      $class_resolver->ensureActiveSubscription();
       $class_resolver->switchIndexToSolrServer();
     }
   }
@@ -133,9 +147,9 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
    */
   protected function isConfigured() : bool {
     $api_host = $this->configFactory->getEditable('acquia_search.settings')->get('api_host');
-    $api_key = $this->state->get('acquia_search.api_key');
-    $identifier = $this->state->get('acquia_search.identifier');
-    $uuid = $this->state->get('acquia_search.uuid');
+    $api_key = $this->state->get('acquia_connector.key');
+    $identifier = $this->state->get('acquia_connector.identifier');
+    $uuid = $this->state->get('acquia_connector.application_uuid');
     if ($api_host && $api_key && $identifier && $uuid) {
       return TRUE;
     }
@@ -150,11 +164,9 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
     $index = $this->indexStorage->load('content');
     /** @var \Drupal\search_api\ServerInterface $server */
     $server = $this->serverStorage->load('acquia_search_server');
-
     if ($index && $server && $index->getServerId() === 'database') {
       $index->setServer($server)->reindex();
       $this->indexStorage->save($index);
-
       $message = $this->t('The %index search index is now using the %server server. All content will be reindexed.', [
         '%index' => $index->label(),
         '%server' => $server->label(),
@@ -167,28 +179,11 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
     // as well as they should. To get past that, load the index that ships
     // with Acquia Search Solr and unlink it from the Solr server.
     // Database server is now idle so disbale the database server.
+    /** @var \Drupal\search_api\IndexInterface $index */
     $index = $this->indexStorage->load('acquia_search_index');
-    /** @var \Drupal\search_api\ServerInterface $server */
-    $databaseServer = $this->serverStorage->load('database');
     if ($index && $index->getServerId() === $server->id()) {
-      $index->setServer(NULL);
-
-      try {
-        $this->indexStorage->save($index);
-        $databaseServer->disable()->save();
-      }
-      catch (SolariumException $e) {
-        // Look...we're just trying to unlink the index from the server, man.
-        // Solarium might throw an error if Acquia Search hasn't been properly
-        // set up yet, but that's obviously harmless. Then again, we might have
-        // also caught a not-so-harmless error condition, so let's just log it
-        // and hope for the best.
-        $this->logger->warning('An error occurred while unlinking the %server server from the %index index: @error', [
-          '%server' => $server->label(),
-          '%index' => $index->label(),
-          '@error' => $e->getMessage(),
-        ]);
-      }
+      $index->disable()->setServer(NULL);
+      $this->indexStorage->save($index);
 
       // Disable any views that are using the now-disabled index.
       $views = $this->viewStorage->loadByProperties([
@@ -200,6 +195,35 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
         $view->disable();
         $this->viewStorage->save($view);
       }
+    }
+
+    /** @var \Drupal\search_api\ServerInterface $server */
+    $databaseServer = $this->serverStorage->load('database');
+    try {
+      $databaseServer->disable()->save();
+    }
+    catch (SolariumException $e) {
+      // Look...we're just trying to unlink the index from the server, man.
+      // Solarium might throw an error if Acquia Search hasn't been properly
+      // set up yet, but that's obviously harmless. Then again, we might have
+      // also caught a not-so-harmless error condition, so let's just log it
+      // and hope for the best.
+      $this->logger->warning('An error occurred while unlinking the %server server from the %index index: @error', [
+        '%server' => $server->label(),
+        '%index' => $index->label(),
+        '@error' => $e->getMessage(),
+      ]);
+    }
+
+  }
+
+  /**
+   * Make sure acquia subscription is active.
+   */
+  protected function ensureActiveSubscription(): void {
+    if (!$this->acquiaSubscription->isActive()) {
+      $this->acquiaSubscription->populateSettings();
+      $this->acquiaSubscription->getSubscription(TRUE);
     }
   }
 
