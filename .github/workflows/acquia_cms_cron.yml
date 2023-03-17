@@ -263,10 +263,22 @@ jobs:
       - name: BLT Site Install
         shell: 'script -q -e -c "bash {0}"'
         run: ./tests/ci/blt_si.sh
+      - name: Script - run backstop tests
+        run: |
+         source ../orca/bin/ci/_includes.sh
+         cd ${ORCA_FIXTURE_DIR}
+         chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
+         CHROMEDRIVER_PID=$!
+         echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
+         ./vendor/bin/drush en acquia_cms_development -y
+         ./vendor/bin/drush en acquia_cms_starter -y
+         ./vendor/bin/drush cr
+         cd ${ORCA_SUT_DIR}
+         ./tests/ci/script.sh
       - name: Before Cache
         run: ../orca/bin/ci/before_cache.sh
       - name: After script
         run: |
-          ../orca/bin/ci/after_success.sh
-          ../orca/bin/ci/after_failure.sh
-          ../orca/bin/ci/after_script.sh
+         ../orca/bin/ci/after_success.sh
+         ../orca/bin/ci/after_failure.sh
+         ../orca/bin/ci/after_script.sh
