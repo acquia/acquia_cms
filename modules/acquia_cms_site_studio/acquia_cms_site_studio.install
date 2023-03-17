@@ -6,8 +6,6 @@
  */
 
 use Drupal\cohesion\Controller\AdministrationController;
-use Drupal\cohesion_sync\Event\SiteStudioSyncFilesEvent;
-use Drupal\cohesion_sync\EventSubscriber\Import\SiteStudioSyncFilesSubscriber;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\editor\Entity\Editor;
@@ -21,21 +19,18 @@ use Drupal\user\Entity\Role;
  */
 function acquia_cms_site_studio_install($is_syncing) {
   if (!$is_syncing) {
-    // If site studio key available in the environment variables
-    // then pick it from there else check for settings overrides.
-    $config = \Drupal::config('cohesion.settings');
-    $site_studio_api_key = getenv('SITESTUDIO_API_KEY') ?? $config->get('api_key');
-    $site_studio_org_key = getenv('SITESTUDIO_ORG_KEY') ?? $config->get('organization_key');
-
     // Set default theme as cohesion.
     _acquia_cms_site_studio_set_theme();
 
     // Update cohesion.settings config.
     _acquia_cms_site_studio_update_settings();
 
+    // Get site studio credentials if its set.
+    $site_studio_credentials = _acquia_cms_site_studio_get_credentials();
+
     // Set credentials if module being installed independently.
-    if (!InstallerKernel::installationAttempted() && $site_studio_api_key && $site_studio_org_key) {
-      _acquia_cms_site_studio_set_credentials($site_studio_api_key, $site_studio_org_key);
+    if (!InstallerKernel::installationAttempted() && $site_studio_credentials['status']) {
+      _acquia_cms_site_studio_set_credentials($site_studio_credentials['api_key'], $site_studio_credentials['organization_key']);
       if (PHP_SAPI === 'cli') {
         batch_set(AdministrationController::batchAction(TRUE));
       }
@@ -148,21 +143,6 @@ function acquia_cms_site_studio_install($is_syncing) {
  */
 function acquia_cms_site_studio_module_preinstall($module) {
   \Drupal::service('acquia_cms_common.utility')->setModulePreinstallTriggered($module);
-}
-
-/**
- * Update site studio credentials from environment.
- *
- * @param string $site_studio_api_key
- *   The site studio api key.
- * @param string $site_studio_org_key
- *   The site studio organisation key.
- */
-function _acquia_cms_site_studio_set_credentials(string $site_studio_api_key, string $site_studio_org_key) {
-  \Drupal::configFactory()->getEditable('cohesion.settings')
-    ->set('api_key', $site_studio_api_key)
-    ->set('organization_key', $site_studio_org_key)
-    ->save(TRUE);
 }
 
 /**
@@ -286,33 +266,7 @@ function acquia_cms_site_studio_update_8005() {
  * Update missing image previews in Site Studio components.
  */
 function acquia_cms_site_studio_update_8006() {
-  if (\Drupal::config('cohesion.settings')->get('use_dx8')) {
-    $modules = [
-      'acquia_cms_article' => 'pack_acquia_cms_article',
-      'acquia_cms_audio' => 'pack_acquia_cms_audio',
-      'acquia_cms_site_studio' => 'pack_acquia_cms_core',
-      'acquia_cms_event' => 'pack_acquia_cms_event',
-      'acquia_cms_video' => 'pack_acquia_cms_video',
-    ];
-    $module_handler = \Drupal::service('module_handler');
-    foreach ($modules as $key => $module) {
-      if ($module_handler->moduleExists($key)) {
-        $module_path = \Drupal::service('extension.list.module')->getPath($key);
-        $package_file = $module_path . "/config/" . $module . "/sitestudio_package_files.json";
-        if (file_exists($package_file)) {
-          $files = file_get_contents($package_file);
-          $files = json_decode($files, TRUE);
-          $event = new SiteStudioSyncFilesEvent($files, $module_path . "/config/" . $module . "/");
-          $event_subscriber = new SiteStudioSyncFilesSubscriber(
-            \Drupal::entityTypeManager(),
-            \Drupal::service('file_system'),
-            \Drupal::service('logger.factory'),
-          );
-          $event_subscriber->handleFileImport($event);
-        }
-      }
-    }
-  }
+  _acquia_cms_site_studio_generate_image_assets();
 }
 
 /**
