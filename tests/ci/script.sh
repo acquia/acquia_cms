@@ -23,7 +23,7 @@ fi
 [[ -d "${ORCA_FIXTURE_DIR}" ]] || exit 0
 
 cd ${ORCA_FIXTURE_DIR}
-if [ "${ACMS_JOB}" == "backstop_tests" ] || [ "${ACMS_JOB}" == "upgrade_modules" ] || [ "${ACMS_JOB}" != "blt" ]; then
+if [ "${ACMS_JOB}" == "backstop_tests" ] || [ "${ACMS_JOB}" == "upgrade_modules" ] || [ "${ACMS_JOB}" == "blt" ]; then
   # Install npm dependencies and run JS test suites.
   cd ${ORCA_SUT_DIR}
   npm install
