@@ -24,8 +24,8 @@ function acquia_cms_site_studio_install($is_syncing) {
     // If site studio key available in the environment variables
     // then pick it from there else check for settings overrides.
     $config = \Drupal::config('cohesion.settings');
-    $site_studio_api_key = getenv('SITESTUDIO_API_KEY') ?? $config->get('api_key');
-    $site_studio_org_key = getenv('SITESTUDIO_ORG_KEY') ?? $config->get('organization_key');
+    $site_studio_api_key = getenv('SITESTUDIO_API_KEY') !== FALSE ? getenv('SITESTUDIO_API_KEY') : $config->get('api_key');
+    $site_studio_org_key = getenv('SITESTUDIO_ORG_KEY') !== FALSE ? getenv('SITESTUDIO_ORG_KEY') : $config->get('organization_key');
 
     // Set default theme as cohesion.
     _acquia_cms_site_studio_set_theme();
@@ -36,9 +36,7 @@ function acquia_cms_site_studio_install($is_syncing) {
     // Set credentials if module being installed independently.
     if (!InstallerKernel::installationAttempted() && $site_studio_api_key && $site_studio_org_key) {
       _acquia_cms_site_studio_set_credentials($site_studio_api_key, $site_studio_org_key);
-      if (PHP_SAPI === 'cli') {
-        batch_set(AdministrationController::batchAction(TRUE));
-      }
+      batch_set(AdministrationController::batchAction(TRUE));
     }
 
     // Update search & search_fallback views display_options's style
