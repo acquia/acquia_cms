@@ -500,17 +500,6 @@ function acquia_cms_common_module_implements_alter(array &$implementations, stri
 }
 
 /**
- * Implements hook_css_alter().
- */
-function acquia_cms_common_css_alter(array &$css) {
-  if (\Drupal::service('module_handler')->moduleExists('collapsiblock')) {
-    // Remove the default css provided by module: `collapsiblock`.
-    $path = \Drupal::service('extension.list.module')->getPath('collapsiblock') . '/theme/dist/css/collapsiblock.min.css';
-    unset($css[$path]);
-  }
-}
-
-/**
  * Function to rewrite filtered_html & full_html configurations.
  *
  * @param bool $include_imce_plugin
