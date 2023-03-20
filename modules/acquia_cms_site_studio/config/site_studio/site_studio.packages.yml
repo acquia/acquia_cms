@@ -8,7 +8,8 @@
 -
   type: default_module_package
   source:
-    required: FALSE
+    dependencies:
+      - acquia_cms_video
     module_name: acquia_cms_video
     path: config/pack_acquia_cms_video
   options:
@@ -16,7 +17,8 @@
 -
   type: default_module_package
   source:
-    required: FALSE
+    dependencies:
+      - acquia_cms_search
     module_name: acquia_cms_search
     path: config/pack_acquia_cms_search
   options:
@@ -24,7 +26,8 @@
 -
   type: default_module_package
   source:
-    required: FALSE
+    dependencies:
+      - acquia_cms_image
     module_name: acquia_cms_image
     path: config/pack_acquia_cms_image
   options:
@@ -32,15 +35,17 @@
 -
   type: default_module_package
   source:
-    required: FALSE
+    dependencies:
+      - acquia_cms_image
     module_name: acquia_cms_image
-    path: config/pack_acquia_cms_core_image
+    path: config/pack_acquia_cms_image_core
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
-    required: FALSE
+    dependencies:
+      - acquia_cms_page
     module_name: acquia_cms_page
     path: config/pack_acquia_cms_page
   options:
@@ -48,7 +53,8 @@
 -
   type: default_module_package
   source:
-    required: FALSE
+    dependencies:
+      - acquia_cms_place
     module_name: acquia_cms_place
     path: config/pack_acquia_cms_place
   options:
@@ -56,7 +62,18 @@
 -
   type: default_module_package
   source:
-    required: FALSE
+    dependencies:
+      - acquia_cms_place
+      - acquia_cms_search
+    module_name: acquia_cms_place
+    path: config/pack_acquia_cms_place_search
+  options:
+    extra-validation: false
+-
+  type: default_module_package
+  source:
+    dependencies:
+      - acquia_cms_event
     module_name: acquia_cms_event
     path: config/pack_acquia_cms_event
   options:
@@ -64,7 +81,18 @@
 -
   type: default_module_package
   source:
-    required: FALSE
+    dependencies:
+      - acquia_cms_event
+      - acquia_cms_search
+    module_name: acquia_cms_event
+    path: config/pack_acquia_cms_event_search
+  options:
+    extra-validation: false
+-
+  type: default_module_package
+  source:
+    dependencies:
+      - acquia_cms_person
     module_name: acquia_cms_person
     path: config/pack_acquia_cms_person
   options:
@@ -72,7 +100,18 @@
 -
   type: default_module_package
   source:
-    required: FALSE
+    dependencies:
+      - acquia_cms_person
+      - acquia_cms_search
+    module_name: acquia_cms_person
+    path: config/pack_acquia_cms_person_search
+  options:
+    extra-validation: false
+-
+  type: default_module_package
+  source:
+    dependencies:
+      - acquia_cms_article
     module_name: acquia_cms_article
     path: config/pack_acquia_cms_article
   options:
@@ -80,7 +119,18 @@
 -
   type: default_module_package
   source:
-    required: FALSE
+    dependencies:
+      - acquia_cms_article
+      - acquia_cms_search
+    module_name: acquia_cms_article
+    path: config/pack_acquia_cms_article_search
+  options:
+    extra-validation: false
+-
+  type: default_module_package
+  source:
+    dependencies:
+      - acquia_cms_dam
     module_name: acquia_cms_dam
     path: config/pack_acquia_cms_dam
   options:
@@ -88,7 +138,8 @@
 -
   type: default_module_package
   source:
-    required: FALSE
+    dependencies:
+      - acquia_cms_audio
     module_name: acquia_cms_audio
     path: config/pack_acquia_cms_audio
   options:
