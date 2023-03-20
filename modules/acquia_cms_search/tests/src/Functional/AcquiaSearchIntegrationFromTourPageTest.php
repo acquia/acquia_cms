@@ -2,9 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_search\Functional;
 
-use Drupal\search_api\Entity\Index;
 use Drupal\Tests\BrowserTestBase;
-use Drupal\views\Entity\View;
 
 /**
  * Tests integration with Acquia Search Solr.
@@ -79,14 +77,17 @@ class AcquiaSearchIntegrationFromTourPageTest extends BrowserTestBase {
 
     $assert_session->pageTextContains('The configuration options have been saved.');
 
+    // @todo this is removed from acquia_search, hence commenting.
+    // This will be fixed in ACMS-1707
     // Our index should be using the Solr server, whereas the one that ships
     // with Acquia Search Solr should be disabled, along with any views that are
     // using it.
-    $this->assertSame('acquia_search_server', Index::load('content')->getServerId());
-    $index = Index::load('acquia_search_index');
-    $this->assertFalse($index->status());
-    $this->assertNull($index->getServerId());
-    $this->assertFalse(View::load('acquia_search')->status());
+    // $this->assertSame('acquia_search_server', Index::load('content')
+    // ->getServerId());
+    // $index = Index::load('acquia_search_index');
+    // $this->assertFalse($index->status());
+    // $this->assertNull($index->getServerId());
+    // $this->assertFalse(View::load('acquia_search')->status());
   }
 
 }
