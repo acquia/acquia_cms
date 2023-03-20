@@ -197,6 +197,13 @@ class ConfigEventsSubscriber implements EventSubscriberInterface {
         }
       }
     }
+    // Clear cache once acquia purge.
+    else {
+      $config = $event->getConfig();
+      if ($config->getName() == 'purge.plugins') {
+        drupal_flush_all_caches();
+      }
+    }
   }
 
 }
