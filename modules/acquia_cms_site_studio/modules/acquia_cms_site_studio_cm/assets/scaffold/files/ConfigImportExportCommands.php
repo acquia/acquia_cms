@@ -25,7 +25,7 @@ class ConfigImportExportCommands extends DrushCommands implements SiteAliasManag
     $moduleHandler = \Drupal::service('module_handler');
     if ($moduleHandler->moduleExists('acquia_cms_site_studio') && $moduleHandler->moduleExists('acquia_cms_site_studio_cm')) {
       $configSyncDirectory = Settings::get('config_sync_directory');
-      $cohesionSettingFile = $moduleHandler->getModule('acquia_cms_site_studio_cm')->getPath() . '/config/optional/cohesion.setting.yml';
+      $cohesionSettingFile = $moduleHandler->getModule('acquia_cms_site_studio_cm')->getPath() . '/config/optional/cohesion.settings.yml';
       \Drupal::service('file_system')->copy($cohesionSettingFile, $configSyncDirectory, FileSystemInterface::EXISTS_REPLACE);
       $this->runDrushCommand('sitestudio:package:export');
     }
