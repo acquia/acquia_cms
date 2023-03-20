@@ -276,3 +276,15 @@ function _acquia_cms_site_studio_get_credentials(): array {
     'status' => ($site_studio_api_key && $site_studio_org_key),
   ];
 }
+
+/**
+ * Implements hook_css_alter().
+ */
+function acquia_cms_site_studio_css_alter(array &$css) {
+  if (\Drupal::service('module_handler')->moduleExists('collapsiblock')) {
+    // Remove the default css provided by module: `collapsiblock`.
+    // It causes issue with site studio template.
+    $path = \Drupal::service('extension.list.module')->getPath('collapsiblock') . '/theme/dist/css/collapsiblock.min.css';
+    unset($css[$path]);
+  }
+}
