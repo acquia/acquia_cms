@@ -254,9 +254,11 @@ function _acquia_cms_site_studio_generate_image_assets(): void {
 function _acquia_cms_site_studio_get_credentials(): array {
   // If site studio key available in the environment variables
   // then pick it from there else check for settings overrides.
-  $config = \Drupal::config('cohesion.settings');
-  $site_studio_api_key = getenv('SITESTUDIO_API_KEY') ?? $config->get('api_key');
-  $site_studio_org_key = getenv('SITESTUDIO_ORG_KEY') ?? $config->get('organization_key');
+  $site_studio_settings = \Drupal::config('cohesion.settings');
+  $site_studio_api_key = getenv('SITESTUDIO_API_KEY') !== FALSE
+    ? getenv('SITESTUDIO_API_KEY') : $site_studio_settings->get('api_key');
+  $site_studio_org_key = getenv('SITESTUDIO_ORG_KEY') !== FALSE
+    ? getenv('SITESTUDIO_ORG_KEY') : $site_studio_settings->get('organization_key');
   return [
     'api_key' => $site_studio_api_key,
     'organization_key' => $site_studio_org_key,
