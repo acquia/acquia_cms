@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the module.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_install().
+ */
+function acquia_cms_config_management_install($is_syncing) {
+  if ($is_syncing && !Settings::get('existing_site_status', FALSE)) {
+    \Drupal::service("acquia_cms_config_management.site_install")
+      ->setStatus(TRUE);
+  }
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function acquia_cms_config_management_requirements(string $phase): array {
+  $requirements = [];
+  $status = t("Enabled");
+  if (Settings::get("existing_site_status", FALSE)) {
+    $status = t("Disabled");
+  }
+  $title = t('Post Existing Site Install hooks');
+  if ($phase == 'runtime') {
+    $requirements['existing_site'] = [
+      'title' => $title,
+      'description' => $status,
+      'severity' => REQUIREMENT_INFO,
+    ];
+  }
+  elseif ($phase == "install") {
+    \Drupal::logger("acquia_cms_config_management")->notice($title . ": " . $status);
+  }
+  return $requirements;
+}
