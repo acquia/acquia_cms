@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "833edb6729b9433f81e18897f56e0d9e",
+    "content-hash": "3b6cd6b7d872142d903ab9e0ebf3995b",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2530,6 +2530,39 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Provides component and related configuration for Acquia CMS.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "drupal/acquia_cms_config_management",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./modules/acquia_cms_config_management",
+                "reference": "b716c4371d2cde97016cf94e7fe2cb9433fd395c"
+            },
+            "require": {
+                "acquia/drupal-environment-detector": "^1.5"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                },
+                "drupal-scaffold": {
+                    "file-mapping": {
+                        "[web-root]/drush/Commands/ConfigImportExportCommands.php": "assets/scaffold/files/ConfigImportExportCommands.php",
+                        "[web-root]/sites/default/default.settings.php": {
+                            "append": "assets/scaffold/files/site-studio-settings.txt"
+                        }
+                    }
+                }
+            },
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Provides Acquia CMS recommended configurations management.",
             "transport-options": {
                 "relative": true
             }
@@ -20324,6 +20357,7 @@
         "drupal/acquia_claro": 15,
         "drupal/acquia_cms_audio": 20,
         "drupal/acquia_cms_component": 20,
+        "drupal/acquia_cms_config_management": 20,
         "drupal/acquia_cms_dam": 20,
         "drupal/acquia_cms_headless": 20,
         "drupal/acquia_cms_site_studio": 20,
