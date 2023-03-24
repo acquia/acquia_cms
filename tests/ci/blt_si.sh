@@ -10,6 +10,7 @@ source ../../../orca/bin/ci/_includes.sh
 
 cd ${ORCA_FIXTURE_DIR}
 
+./vendor/bin/drush en acquia_cms_site_studio_cm -y
 ./vendor/bin/drush config:set system.site uuid ${UUID}
 ./vendor/bin/drush cex --yes
 ./vendor/bin/drush site:install minimal --yes --uri=http://127.0.0.1:8080
