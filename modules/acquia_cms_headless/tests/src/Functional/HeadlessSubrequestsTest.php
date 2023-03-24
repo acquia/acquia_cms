@@ -52,39 +52,55 @@ class HeadlessSubrequestsTest extends BrowserTestBase {
    */
   public function testSubrequests(): void {
     $host = \Drupal::request()->getSchemeAndHttpHost();
+    // Create test node.
+    $node = $this->drupalCreateNode([
+      'type' => 'test',
+      'title' => 'Headless Test Page 1',
+      'status' => 'published',
+    ]);
+    // Curl request post fields data.
+    $curl = curl_init();
+    $request = [
+      [
+        "requestId" => "router",
+        "action" => "view",
+        "uri" => "/router/translate-path?path=/node/" . $node->id() . "&_format=json",
+        "headers" => ["Accept" => "application/vnd.api+json"],
+      ],
+      [
+        "requestId" => "resolvedResource",
+        "action" => "view",
+        "uri" => "{{router.body@$.jsonapi.individual}}",
+        "waitFor" => ["router"],
+      ],
+    ];
+    $postFields = json_encode($request);
 
-    for ($i = 1; $i <= 5; $i++) {
-      // Create test node.
-      $node = $this->drupalCreateNode([
-        'type' => 'test',
-        'title' => 'Headless Test Page ' . $i,
-        'status' => 'published',
-      ]);
-      $client = \Drupal::httpClient();
-      $response = $client->post($host . '/subrequests?_format=json', [
-        'body' => json_encode([[
-          "requestId" => "router",
-          "action" => "view",
-          "uri" => "/router/translate-path?path=/node/" . $node->id() . "&_format=json",
-          "headers" => ["Accept" => "application/vnd.api+json"],
-        ],
-        [
-          "requestId" => "resolvedResource",
-          "action" => "view",
-          "uri" => "{{router.body@$.jsonapi.individual}}",
-          "waitFor" => ["router"],
-        ],
-        ]),
-        'headers' => [
-          'Accept' => "application/json",
-        ],
-        'http_errors' => FALSE,
-      ]);
-      $responseData = json_decode($response->getBody());
-      $body = json_decode($responseData->router->body);
-      $this->assertEquals('Headless Test Page ' . $i, $body->label);
+    curl_setopt_array($curl, [
+      CURLOPT_URL => $host . '/subrequests?_format=json',
+      CURLOPT_RETURNTRANSFER => TRUE,
+      CURLOPT_ENCODING => '',
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 0,
+      CURLOPT_FOLLOWLOCATION => TRUE,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => 'POST',
+      CURLOPT_POSTFIELDS => $postFields,
+      CURLOPT_HTTPHEADER => [
+        'Content-Type: application/json',
+      ],
+    ]);
 
-    }
+    $response = curl_exec($curl);
+    curl_close($curl);
+    $responseData = json_decode($response);
+    $body = json_decode($responseData->router->body);
+    $subrequest_response = end($responseData);
+    $subrequest_body = json_decode(end($subrequest_response));
+    // Assert title from first request.
+    $this->assertEquals('Headless Test Page 1', $body->label, "The node title in 'router' matches");
+    // Assert title from sub request.
+    $this->assertEquals('Headless Test Page 1', $subrequest_body->data->attributes->title, "The node title in 'subrequest' matches");
   }
 
 }
