@@ -46,7 +46,7 @@ class SiteStudioCoreConfigTest extends BrowserTestBase {
     // Check that config_split site studio contains cohesion.
     $config = $this->config('config_split.config_split.site_studio');
     if ($config) {
-      $this->assertEquals(['cohesion_*', 'cohesion.*'], $config->get('complete_list'));
+      $this->assertEquals(['cohesion_*'], $config->get('complete_list'));
     }
   }
 
@@ -56,7 +56,7 @@ class SiteStudioCoreConfigTest extends BrowserTestBase {
   public function testConfigIgnoreSettings() {
     $config = $this->config('config_ignore.settings');
     if ($config) {
-      $this->assertEquals(['cohesion.*', 'cohesion_*'], $config->get('ignored_config_entities'));
+      $this->assertEquals(['cohesion_*'], $config->get('ignored_config_entities'));
     }
   }
 
@@ -87,8 +87,6 @@ class SiteStudioCoreConfigTest extends BrowserTestBase {
         'cohesion_sync_package' => 'cohesion_sync_package',
         'cohesion_view_templates' => 'cohesion_view_templates',
         'cohesion_website_settings' => 'cohesion_website_settings',
-        'image_style' => 'image_style',
-        'view' => 'view',
       ];
       $this->assertEquals($enabled_entity_types_expected, $config->get('enabled_entity_types'));
       $this->assertEquals(10, $config->get('package_export_limit'));
