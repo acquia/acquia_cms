@@ -64,6 +64,24 @@ jobs:
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
 
+  drupal_check:
+    name: Execute Drupal-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 12.13.1
+        uses: actions/setup-node@v3
+        with:
+          node-version: 12.13.1
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          #coverage: xdebug
+      - name: Execute Drupal-check
+        run: |
+          composer install
+          php vendor/bin/drupal-check modules
+
   integrated_tests:
     name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
     runs-on: ubuntu-latest
