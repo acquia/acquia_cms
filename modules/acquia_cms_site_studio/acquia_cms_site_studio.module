@@ -187,11 +187,6 @@ function acquia_cms_site_studio_cohesion_component_category_insert(EntityInterfa
  * @throws \Drupal\Core\Entity\EntityStorageException
  */
 function _acquia_cms_site_studio_add_permissions(EntityInterface $entity) {
-  // We don't want to run below code
-  // if site studio package import is in progress.
-  if (\Drupal::state()->get('ss_package_import_in_progress')) {
-    return;
-  }
   $roles = [
     'content_administrator',
     'content_author',
