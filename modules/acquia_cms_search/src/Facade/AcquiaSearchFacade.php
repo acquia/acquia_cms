@@ -130,7 +130,7 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
   /**
    * Submit handler for the Acquia Search settings form.
    */
-  public static function submitSettingsForm() : void {
+  public static function submitSettingsForm(): void {
     $class_resolver = \Drupal::classResolver(static::class);
     if ($class_resolver->isConfigured()) {
       $class_resolver->ensureActiveSubscription();

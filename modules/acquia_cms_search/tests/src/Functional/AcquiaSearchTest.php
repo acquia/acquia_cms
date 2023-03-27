@@ -79,7 +79,7 @@ class AcquiaSearchTest extends BrowserTestBase {
     $this->assertSame($solrIdentifier, $dummyIdentifier);
     $solrApiHost = $this->config('acquia_search.settings')->get('api_host');
     $this->assertSame($solrApiHost, $dummyHostname);
-    $solrUuid = $state->get('acquia_connector.uuid');
+    $solrUuid = $state->get('acquia_connector.application_uuid');
     $this->assertSame($solrUuid, $dummyUuid);
   }
 

@@ -51,13 +51,11 @@ class AcquiaSearchIntegrationTest extends BrowserTestBase {
    */
   public function testAcquiaSearchIntegration() {
     $this->assertSame('database', Index::load('content')->getServerId());
-
-    // @todo this is removed from acquia_search, hence commenting.
-    // This will be fixed in ACMS-1707
-    // $index = Index::load('acquia_search_index');
-    // $this->assertTrue($index->status());
-    // $this->assertSame('acquia_search_server', $index->getServerId());
-    // $this->assertTrue(View::load('acquia_search')->status());
+    if ($index = Index::load('acquia_search_index')) {
+      $this->assertTrue($index->status());
+      $this->assertSame('acquia_search_server', $index->getServerId());
+      $this->assertTrue(View::load('acquia_search')->status());
+    }
     $account = $this->drupalCreateUser([
       'administer site configuration',
       'administer search_api',
