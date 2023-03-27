@@ -31,6 +31,15 @@ if [ "${ACMS_JOB}" == "backstop_tests" ] || [ "${ACMS_JOB}" == "upgrade_modules"
 
   # Runs Backstop.js
   npm run backstop-starter
+  npm run backstop-starter && error=false || error=true
+
+  # Enable below code to store backstop images on S3 bucket.
+  #if [ "${error}" = "true" ]; then
+  #  ./node_modules/.bin/backstop reference --config=tests/backstop/backstop-settings.js
+  #  ./node_modules/.bin/backstop approve --config=tests/backstop/backstop-settings.js
+  #  aws s3 ls "./tests/backstop/bitmaps_reference/" "${AWS_S3_BUCKET_PATH}/bitmaps_reference"
+  #  aws s3 cp --recursive "./tests/backstop/bitmaps_reference/" "${AWS_S3_BUCKET_PATH}/backstop/reference/${GITHUB_RUN_ID}"
+
   # Runs Pa11y.js
   # npm run pa11y-starter
 fi
