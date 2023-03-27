@@ -145,7 +145,7 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
    *   TRUE if Acquia Search has been configured satisfactorily, otherwise
    *   FALSE.
    */
-  protected function isConfigured() : bool {
+  protected function isConfigured(): bool {
     $api_host = $this->configFactory->getEditable('acquia_search.settings')->get('api_host');
     $api_key = $this->state->get('acquia_connector.key');
     $identifier = $this->state->get('acquia_connector.identifier');
@@ -159,7 +159,7 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
   /**
    * Configures the content index to use the Acquia Search server.
    */
-  protected function switchIndexToSolrServer() : void {
+  protected function switchIndexToSolrServer(): void {
     /** @var \Drupal\search_api\IndexInterface $index */
     $index = $this->indexStorage->load('content');
     /** @var \Drupal\search_api\ServerInterface $server */
