@@ -9,7 +9,6 @@ source ../../../orca/bin/ci/_includes.sh
 [[ -d "${ORCA_FIXTURE_DIR}" ]] || exit 0
 
 cd ${ORCA_FIXTURE_DIR}
-
 ./vendor/bin/drush en acquia_cms_site_studio_cm --yes
 ./vendor/bin/drush config:set system.site uuid ${UUID}
 ./vendor/bin/drush cex --yes

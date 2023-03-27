@@ -23,6 +23,12 @@ fi
 [[ -d "${ORCA_FIXTURE_DIR}" ]] || exit 0
 
 cd ${ORCA_FIXTURE_DIR}
+if [ "${ACMS_JOB}" == "blt" ]; then
+  echo "Installing Starter Kit"
+  drush en acquia_cms_development -y
+  drush en acquia_cms_starter -y
+  drush cr
+fi
 if [ "${ACMS_JOB}" == "backstop_tests" ] || [ "${ACMS_JOB}" == "upgrade_modules" ] || [ "${ACMS_JOB}" == "blt" ]; then
   # Install npm dependencies and run JS test suites.
   cd ${ORCA_SUT_DIR}
