@@ -5,7 +5,10 @@ dependencies:
   config:
     - cohesion_elements.cohesion_component.cpt_social_links
     - cohesion_elements.cohesion_component_category.cpt_cat_header_and_footer_compon
+    - cohesion_templates.cohesion_menu_templates.menu_tpl_utilities_menu
     - cohesion_website_settings.cohesion_icon_library.icomoon
+  content:
+    - 'file:file:94bd6a8c-018b-4391-903d-022546517992'
   enforced:
     module:
       - acquia_cms_site_studio
@@ -1156,7 +1159,7 @@ json_values: |
                   "type": "cohHelpText",
                   "options": {
                       "showClose": false,
-                      "helpType": "coh-help-text--help",
+                      "helpType": "help",
                       "helpText": "# Using the Vertical utilities bar.\n- This component displays a vertical Utilities menu and Social icons.\n- You can set which devices it is displayed on using display properties on the outer container.\n- For desktop width, use the Utilities bar - horizontal component.\n- If your site does not require a utilities bar, you can remove this component from the Header component."
                   }
               },

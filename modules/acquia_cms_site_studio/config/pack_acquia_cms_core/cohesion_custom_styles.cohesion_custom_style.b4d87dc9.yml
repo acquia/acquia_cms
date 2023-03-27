@@ -19,7 +19,12 @@ json_values: |
   {
       "preview": {
           "text": "<div class=\"coh-preview\">Default content for 'Generic'.<\/div>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
       "styles": {
           "settings": {
@@ -1811,7 +1816,6 @@ json_values: |
               }
           }
       },
-      "sBackgroundColour": "#FFFFFF",
       "variableFields": []
   }
 json_mapper: |
@@ -4501,5 +4505,6 @@ selectable: true
 class_name: .coh-style-header-colored-theme
 custom_style_type: generic
 available_in_wysiwyg: false
+available_in_wysiwyg_inline: false
 parent: null
 weight: 16

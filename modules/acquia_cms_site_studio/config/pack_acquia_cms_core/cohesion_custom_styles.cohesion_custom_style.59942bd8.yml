@@ -17,7 +17,12 @@ json_values: |
   {
       "preview": {
           "text": "<p style=\"color:black;text-decoration:underline;font-weight:bold;margin:30px 0\">ACCORDION MODE<\/p>\n\n<div class=\"coh-preview\">\n<div class=\"coh-accordion-title\"><a href=\"#\">Item 1 (default)<\/a><\/div>\n\n<div class=\"coh-accordion-title is-active\"><a href=\"#\">Item 2 (active)<\/a><\/div>\n<\/div>\n\n<p style=\"color:black;text-decoration:underline;font-weight:bold;margin:30px 0\">TAB MODE<\/p>\n\n<div class=\"coh-preview\">\n<ul class=\"coh-accordion-tabs-nav\" style=\"display:block\">\n\t<li><a href=\"#\">Item 1 (default)<\/a><\/li>\n\t<li class=\"is-active\"><a href=\"#\">Item 2 (active)<\/a><\/li>\n<\/ul>\n<\/div>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
       "styles": {
           "settings": {
@@ -809,7 +814,6 @@ json_values: |
               }
           }
       },
-      "sBackgroundColour": "#FFFFFF",
       "variableFields": []
   }
 json_mapper: |
@@ -2030,5 +2034,6 @@ selectable: true
 class_name: .coh-style-accordion-tabs-solid
 custom_style_type: generic
 available_in_wysiwyg: false
+available_in_wysiwyg_inline: false
 parent: null
 weight: 30

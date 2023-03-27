@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - cohesion_custom_styles.cohesion_custom_style.027d4396
     - cohesion_custom_styles.cohesion_custom_style.097f31b2
     - cohesion_custom_styles.cohesion_custom_style.63181883
     - cohesion_custom_styles.cohesion_custom_style.67d78f85
@@ -11,6 +12,9 @@ dependencies:
     - cohesion_custom_styles.cohesion_custom_style.f3dc1bea
     - cohesion_elements.cohesion_component_category.cpt_cat_card_components
     - cohesion_website_settings.cohesion_color.gray-10
+  content:
+    - 'file:file:0afe34a6-58f6-4790-90bc-a40de84c6605'
+    - 'file:file:df83e900-36da-4df4-afed-61d7950ac36b'
   enforced:
     module:
       - acquia_cms_site_studio
@@ -3635,7 +3639,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-2-col",
+                  "columnCount": "2",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -3677,8 +3681,7 @@ json_values: |
                   "title": "Alt tag",
                   "schema": {
                       "type": "string",
-                      "escape": true,
-                      "required": false
+                      "escape": true
                   },
                   "machineName": "alt-tag",
                   "tooltipPlacement": "auto top-left",
@@ -3686,7 +3689,8 @@ json_values: |
                       "302": ""
                   },
                   "showCondition": "[field.ba4b212e-191c-4df3-b712-25124d00e538]",
-                  "tooltipText": "Enter an alt tag unless image is decorative"
+                  "tooltipText": "Enter an alt tag unless image is decorative",
+                  "required": false
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -3700,7 +3704,7 @@ json_values: |
                   "type": "cohSection",
                   "title": "Text",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -3758,14 +3762,14 @@ json_values: |
                   "title": "Card heading",
                   "schema": {
                       "type": "string",
-                      "escape": true,
-                      "required": true
+                      "escape": true
                   },
                   "machineName": "card-heading",
                   "tooltipPlacement": "auto right",
                   "validationMessage": {
                       "302": "Please enter a heading."
-                  }
+                  },
+                  "required": true
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -3815,7 +3819,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -3839,8 +3843,7 @@ json_values: |
                   "typeaheadEditable": true,
                   "endpoint": "\/cohesionapi\/link-autocomplete?q=",
                   "schema": {
-                      "type": "string",
-                      "required": true
+                      "type": "string"
                   },
                   "machineName": "link-to-page-or-url",
                   "tooltipPlacement": "auto right",
@@ -3867,7 +3870,8 @@ json_values: |
                   },
                   "validationMessage": {
                       "302": "Please enter a link."
-                  }
+                  },
+                  "required": true
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -3892,7 +3896,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-col",
+                  "columnCount": "auto",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -3941,7 +3945,7 @@ json_values: |
                   "title": "Color",
                   "type": "cohSection",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-col",
+                  "columnCount": "auto",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -4026,7 +4030,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 1,
                   "removePadding": 1,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -4044,7 +4048,7 @@ json_values: |
                   "type": "cohHelpText",
                   "options": {
                       "showClose": false,
-                      "helpType": "coh-help-text--help",
+                      "helpType": "help",
                       "helpText": "Text color is automatic based on your background color selection."
                   },
                   "showCondition": "[field.66db3f85-2d91-4b1d-8de6-09c431b022f4] tags include 'Dark' OR [field.66db3f85-2d91-4b1d-8de6-09c431b022f4] tags include 'Light' OR [field.66db3f85-2d91-4b1d-8de6-09c431b022f4] tags include 'Color'"
@@ -4113,7 +4117,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-col",
+                  "columnCount": "auto",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -4197,7 +4201,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -4262,7 +4266,7 @@ json_values: |
                   "type": "cohHelpText",
                   "options": {
                       "showClose": false,
-                      "helpType": "coh-help-text--help",
+                      "helpType": "help",
                       "helpText": "Padding has been applied because you have set a background color or border."
                   },
                   "showCondition": "(!([field.66db3f85-2d91-4b1d-8de6-09c431b022f4] rgba is undefined OR [field.66db3f85-2d91-4b1d-8de6-09c431b022f4] is transparent)) OR [field.84004344-e839-477f-a840-387f41958606] == 'border' OR [field.hover-effects] != 'no-hover-effect'"
@@ -4276,7 +4280,7 @@ json_values: |
                   "title": "Height",
                   "type": "cohSection",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -4323,7 +4327,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -4380,7 +4384,7 @@ json_values: |
                   "options": {
                       "helpText": "# Using the Feature card\n- Use this card to add a feature that links to another page to your content.\n- The card is best placed within a Layout, Slide item or other container component.\n\n# Image\n- **Image icon -** Upload an image to display before the text. The image will display at 48px wide. For best results, upload a .png with a transparent background. Large images will be resized. The image is optional.\n- **Alt tag -** Enter an alt tag unless image is decorative.\n\n# Text\n- **Card heading element -** Select the required HTML heading element. Set as **Heading 3** by default.\n- **Card heading -** Enter a short card heading. The heading text is used as the card link and is required.\n- **Description -** Enter a short description. This field is optional.\n- **Call to action -** Enter call to action text. This text is used as a visible indicator that the card is a link.\n\n# Link\n- **Link to page or URL -** Add a link to an internal page or an external URL. When adding a link to an internal page, type the name of an internal page or external URL. This field is required.\n\n# Layout\n- **Card layout -** Select one of the three layout options available. These are Left aligned text with an icon image positioned above the text, Left aligned text with an icon image positioned to the left of the text and Center aligned text with an icon image positioned above the text.\n\n# Color\n- **Background color -** Choose a background color from the color palette. When a background color is selected, the text color will be selected automatically. \n- **Text color -** Select an appropriate Light or Dark text color to contrast with the color of where the card is placed. **Note:** The text field only shows if no background color is selected.\n\n# Border\n- **Border -** Add border will add a 1px border around the card.\n- **Border color -** Select a border color. **Note:** The border color field only shows if you have selected Add border.\n\n# Padding\n- **Padding -** Apply padding around the content of the card. **Note:** If a border or background color is applied to the card, padding around the content will be applied automatically.\n\n# Height\n- **Height -** Set the card height to either **Fit to content** or **Fill space available**. Fill space available will make the card expand to fill the height available within the parent component. This option allows you to create layouts where the height of multiple cards are the same, achieving horizontal alignment.\n\n# Space below\n- **Add space below -** Add a space (margin) below the card. This is required if a space is desirable when adding this component above another component within the same parent layout component.",
                       "showClose": false,
-                      "helpType": "coh-help-text--help"
+                      "helpType": "help"
                   }
               },
               "contextVisibility": {

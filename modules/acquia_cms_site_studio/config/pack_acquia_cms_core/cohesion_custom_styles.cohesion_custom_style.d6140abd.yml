@@ -15,9 +15,13 @@ json_values: |
   {
       "preview": {
           "text": "<ul class=\"coh-preview\">\n\t<li><a>Menu item 1<\/a><\/li>\n\t<li class=\"in-active-trail\"><a>Menu item 2<\/a>\n\t<ul style=\"\n\">\n\t\t<li><a style=\"\">Active trail item 1<\/a><\/li>\n\t\t<li class=\"is-active in-active-trail\"><a>Active trail item 2 - active<\/a><\/li>\n\t\t<li><a>Active trail item 3<\/a><\/li>\n\t<\/ul>\n\t<\/li>\n\t<li><a>Menu item 3<\/a><\/li>\n<\/ul>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
-      "sBackgroundColour": "#FFFFFF",
       "styles": {
           "settings": {
               "element": "ul,ol,dl",
@@ -1173,5 +1177,6 @@ selectable: true
 class_name: .coh-style-sidebar-nav
 custom_style_type: list
 available_in_wysiwyg: false
+available_in_wysiwyg_inline: false
 parent: null
 weight: 62

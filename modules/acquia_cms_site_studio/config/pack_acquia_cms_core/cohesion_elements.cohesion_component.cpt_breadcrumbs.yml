@@ -3,10 +3,14 @@ langcode: en
 status: true
 dependencies:
   config:
+    - cohesion_custom_styles.cohesion_custom_style.097f31b2
+    - cohesion_custom_styles.cohesion_custom_style.48e09c60
     - cohesion_elements.cohesion_component_category.cpt_cat_layout_components
     - cohesion_website_settings.cohesion_color.gray-10
     - cohesion_website_settings.cohesion_color.gray-90
     - cohesion_website_settings.cohesion_color.white
+  content:
+    - 'file:file:d20245c2-3660-42ce-b545-ea460d80dda3'
   enforced:
     module:
       - acquia_cms_site_studio
@@ -985,7 +989,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -1039,7 +1043,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -1086,7 +1090,7 @@ json_values: |
                   "type": "cohHelpText",
                   "options": {
                       "showClose": false,
-                      "helpType": "coh-help-text--help",
+                      "helpType": "help",
                       "helpText": "If using **Position absolute top left** place breadcrumbs on the **Layout canvas** at the outer most level."
                   },
                   "showCondition": "[field.e4721d63-485a-4c3f-bde4-5fb3e52c2e5e] == 'position-absolute-top-left'"
@@ -1111,7 +1115,7 @@ json_values: |
                   "type": "cohHelpText",
                   "options": {
                       "showClose": false,
-                      "helpType": "coh-help-text--help",
+                      "helpType": "help",
                       "helpText": "# Using the Breadcrumbs component\n- Use the breadcrumbs component to add breadcrumb links to a layout.\n- The breadcrumb component will display links in a format provided by your sites breadcrumb configuration.\n\n# Breadcrumb color\n- **Breadcrumb color -** Select the color theme for the breadcrumbs. These include both link and background color.\n\n# Breadcrumb position\n- **Breadcrumb position -** Select the position of the breadcrumbs. Choose **Absolute position top left** to position the breadcrumbs at the top of the page content. For best results, add the breadcrumb component directly to the Layout canvas without nesting it within another component."
                   }
               },
