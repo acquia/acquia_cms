@@ -4,15 +4,20 @@ status: true
 dependencies:
   config:
     - cohesion_website_settings.cohesion_color.brand-color
+    - cohesion_website_settings.cohesion_color.brand-color-light
 label: Link
 id: link
 json_values: |
   {
       "preview": {
           "text": "<p><a href=\"#\">Default content for 'Link'.<\/a><\/p>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
-      "sBackgroundColour": "#FFFFFF",
       "styles": {
           "settings": {
               "element": "a",

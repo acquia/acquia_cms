@@ -16,9 +16,13 @@ json_values: |
   {
       "preview": {
           "text": "<div class=\"coh-preview\">\n<h3><a class=\"card-link\">Card heading color<\/a><\/h3>\n\n<p>Card text color<\/p>\n\n<p><span class=\"fake-link\">Fake link<\/span><\/p>\n\n<p><span class=\"fake-button\">Fake button<\/span><\/p>\n\n<p><span class=\"card-date\">Card date<\/span><\/p>\n\n<p><a class=\"coh-style-tag card-tag\">Card tag<\/a><\/p>\n\n<p><a class=\"card-person\">Card person<\/a><\/p>\n\n<p><a class=\"card-place\">Card place<\/a><\/p>\n<\/div>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(0,0,0,1)"
+              }
+          }
       },
-      "sBackgroundColour": "#000000",
       "styles": {
           "settings": {
               "element": "div",
@@ -1291,5 +1295,6 @@ selectable: true
 class_name: .coh-style-card-text-dark-background
 custom_style_type: generic
 available_in_wysiwyg: false
+available_in_wysiwyg_inline: false
 parent: null
 weight: 25

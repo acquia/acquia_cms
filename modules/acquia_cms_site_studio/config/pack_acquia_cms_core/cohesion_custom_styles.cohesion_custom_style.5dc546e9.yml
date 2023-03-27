@@ -14,9 +14,13 @@ json_values: |
   {
       "preview": {
           "text": "<h1 class=\"coh-preview\">Default content for 'Heading'.<\/h1>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(38,163,221,1)"
+              }
+          }
       },
-      "sBackgroundColour": "#26a3dd",
       "styles": {
           "settings": {
               "element": "h1",
@@ -94,5 +98,6 @@ selectable: true
 class_name: .coh-style-pre-heading-dark
 custom_style_type: heading
 available_in_wysiwyg: true
+available_in_wysiwyg_inline: true
 parent: .coh-style-pre-heading
 weight: 51

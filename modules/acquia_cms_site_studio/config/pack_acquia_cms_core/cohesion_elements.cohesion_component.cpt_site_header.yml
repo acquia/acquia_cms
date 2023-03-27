@@ -3,10 +3,19 @@ langcode: en
 status: true
 dependencies:
   config:
+    - cohesion_custom_styles.cohesion_custom_style.138358a4
+    - cohesion_custom_styles.cohesion_custom_style.b4d87dc9
     - cohesion_custom_styles.cohesion_custom_style.e749d6f0
     - cohesion_custom_styles.cohesion_custom_style.e95bd02c
+    - cohesion_custom_styles.cohesion_custom_style.f13af119
+    - cohesion_elements.cohesion_component.cpt_utilities_bar_horizontal
+    - cohesion_elements.cohesion_component.cpt_utilities_bar_vertical
     - cohesion_elements.cohesion_component_category.cpt_cat_header_and_footer_compon
+    - cohesion_templates.cohesion_menu_templates.menu_tpl_main_navigation
     - cohesion_website_settings.cohesion_icon_library.icomoon
+  content:
+    - 'file:file:b8cce27d-8733-4c3f-92d9-4983d321a490'
+    - 'file:file:eeb910ad-092c-4766-bc2f-d90c8d43ddf0'
   enforced:
     module:
       - acquia_cms_site_studio
@@ -8361,7 +8370,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-2-col",
+                  "columnCount": "2",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -8439,7 +8448,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-2-col",
+                  "columnCount": "2",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -8464,14 +8473,14 @@ json_values: |
                   "isStyle": true,
                   "defaultActive": true,
                   "schema": {
-                      "type": "string",
-                      "required": true
+                      "type": "string"
                   },
                   "machineName": "site-logo",
                   "tooltipPlacement": "auto right",
                   "validationMessage": {
                       "302": "Please upload a logo."
-                  }
+                  },
+                  "required": true
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -8485,14 +8494,14 @@ json_values: |
                   "title": "Alt tag",
                   "schema": {
                       "type": "string",
-                      "escape": true,
-                      "required": false
+                      "escape": true
                   },
                   "machineName": "alt-tag",
                   "tooltipPlacement": "auto right",
                   "validationMessage": {
                       "302": ""
-                  }
+                  },
+                  "required": false
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -8507,7 +8516,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 1,
                   "removePadding": 1,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -8530,7 +8539,7 @@ json_values: |
               "settings": {
                   "title": "Desktop",
                   "type": "cohTabItem",
-                  "breakpointIcon": "coh-breakpoint-icon coh-icon-television"
+                  "breakpointIcon": "television"
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -8556,7 +8565,7 @@ json_values: |
               "settings": {
                   "title": "Tablet",
                   "type": "cohTabItem",
-                  "breakpointIcon": "coh-breakpoint-icon coh-icon-tablet"
+                  "breakpointIcon": "tablet"
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -8584,7 +8593,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-col",
+                  "columnCount": "auto",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -8670,7 +8679,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -8715,7 +8724,7 @@ json_values: |
                   "type": "cohHelpText",
                   "options": {
                       "showClose": false,
-                      "helpType": "coh-help-text--help",
+                      "helpType": "help",
                       "helpText": "# Using the Header component\n- The Header components should be used in the Site template.\n- The Header component provides a header with integrated menus, social links and website search\n\n# Site logo\n- **Site logo -** Upload an image as the website logo. No image style is applied to the logo. You must upload a logo at the appropriate size. The logo automatically links to the route of the website."
                   }
               },

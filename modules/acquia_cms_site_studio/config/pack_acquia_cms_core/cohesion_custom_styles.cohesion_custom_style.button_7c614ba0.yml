@@ -14,7 +14,12 @@ json_values: |
   {
       "preview": {
           "text": "<p><button class=\"coh-preview coh-style-slider-navigation-left\" type=\"button\">&nbsp;<\/button><\/p>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
       "styles": {
           "settings": {
@@ -43,8 +48,7 @@ json_values: |
                   }
               }
           }
-      },
-      "sBackgroundColour": "#FFFFFF"
+      }
   }
 json_mapper: |
   {
@@ -92,5 +96,6 @@ selectable: true
 class_name: .coh-style-slider-navigation-right
 custom_style_type: button
 available_in_wysiwyg: false
+available_in_wysiwyg_inline: false
 parent: .coh-style-slider-navigation-left
 weight: 43

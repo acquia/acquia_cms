@@ -7,6 +7,7 @@ dependencies:
     - cohesion_custom_styles.cohesion_custom_style.63181883
     - cohesion_custom_styles.cohesion_custom_style.67d78f85
     - cohesion_custom_styles.cohesion_custom_style.da806fdd
+    - cohesion_custom_styles.cohesion_custom_style.df0fe2c3
     - cohesion_custom_styles.cohesion_custom_style.f3dc1bea
     - cohesion_elements.cohesion_component_category.cpt_cat_card_components
     - cohesion_website_settings.cohesion_color.black
@@ -16,6 +17,8 @@ dependencies:
     - cohesion_website_settings.cohesion_color.gray-20
     - cohesion_website_settings.cohesion_color.gray-70
     - cohesion_website_settings.cohesion_icon_library.icomoon
+  content:
+    - 'file:file:7b382b47-c18d-4fe8-8369-c0a64eb8c20c'
   enforced:
     module:
       - acquia_cms_site_studio
@@ -4354,7 +4357,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -4389,7 +4392,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-col",
+                  "columnCount": "auto",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -4407,7 +4410,6 @@ json_values: |
                   "type": "cohArray",
                   "componentField": true,
                   "noTitle": true,
-                  "htmlClass": "coh-array--field-repeater",
                   "disableScrollbar": true,
                   "addText": "Add social link",
                   "key": "field-repeater",
@@ -4440,7 +4442,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 1,
                   "removePadding": 1,
-                  "columnCount": "coh-component-field-group-2-col",
+                  "columnCount": "2",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -4560,8 +4562,7 @@ json_values: |
                   "typeaheadEditable": true,
                   "endpoint": "\/cohesionapi\/link-autocomplete?q=",
                   "schema": {
-                      "type": "string",
-                      "required": true
+                      "type": "string"
                   },
                   "machineName": "link-to-social-network-page",
                   "tooltipPlacement": "auto right",
@@ -4588,7 +4589,8 @@ json_values: |
                   },
                   "validationMessage": {
                       "302": "Please enter a link."
-                  }
+                  },
+                  "required": true
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -4612,7 +4614,7 @@ json_values: |
                   "title": "Color",
                   "type": "cohSection",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-col",
+                  "columnCount": "auto",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -4730,7 +4732,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 1,
                   "removePadding": 1,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -4748,7 +4750,7 @@ json_values: |
                   "type": "cohHelpText",
                   "options": {
                       "showClose": false,
-                      "helpType": "coh-help-text--help",
+                      "helpType": "help",
                       "helpText": "Text and icon color is automatic based on your background color selection."
                   },
                   "showCondition": "[field.affa2413-96e8-44d6-9e44-befe63dcd93c] tags include 'Dark' OR [field.affa2413-96e8-44d6-9e44-befe63dcd93c] tags include 'Light' OR [field.affa2413-96e8-44d6-9e44-befe63dcd93c] tags include 'Color'"
@@ -4817,7 +4819,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-col",
+                  "columnCount": "auto",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -4901,7 +4903,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -4966,7 +4968,7 @@ json_values: |
                   "type": "cohHelpText",
                   "options": {
                       "showClose": false,
-                      "helpType": "coh-help-text--help",
+                      "helpType": "help",
                       "helpText": "Padding has been applied because you have set a background color or border."
                   },
                   "showCondition": "(!([field.affa2413-96e8-44d6-9e44-befe63dcd93c] rgba is undefined OR [field.affa2413-96e8-44d6-9e44-befe63dcd93c] is transparent)) OR [field.c7d68cc6-c123-41fb-87d0-d4a7130b25a8] == 'border'"
@@ -4980,7 +4982,7 @@ json_values: |
                   "title": "Height",
                   "type": "cohSection",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -5027,7 +5029,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -5084,7 +5086,7 @@ json_values: |
                   "options": {
                       "helpText": "# How to use the Social links card\n- Use this card to add icon based links to your social network pages.\n- The card is best placed within a Layout or other container component.\n\n# Label above icons\n- **Label -** Add a label to display above the social network links. This field is optional.\n\n# Social links\n- **Social network -** Select the social network.\n- **Link to social network page -** Enter your social network profile URL.\n- **Add social network -** Click the **Add social link** button to add multiple social network links.\n\n# Color\n- **Background color -** Choose a card background color from the color palette.\n- **Icon color -** Choose a color theme for the icons. \n\n# Border\n- **Border -** Add border will add a 1px border around the card.\n- **Border color -** Select a border color. **Note:** The border color field only shows if you have selected Add border.\n\n# Padding\n- **Padding -** Apply padding around the content of the card. **Note:** If a border or background color is applied to the card, padding around the content will be applied automatically.\n\n# Height\n- **Height -** Set the card height to either **Fit to content** or **Fill space available**. Fill space available will make the card expand to fill the height available within the parent component. This option allows you to create layouts where the height of multiple cards are the same, achieving horizontal alignment.\n\n# Space below\n- **Add space below -** Add a space (margin) below the card. This is required if a space is desirable when adding this component above another component within the same parent layout component.",
                       "showClose": false,
-                      "helpType": "coh-help-text--help"
+                      "helpType": "help"
                   }
               },
               "contextVisibility": {

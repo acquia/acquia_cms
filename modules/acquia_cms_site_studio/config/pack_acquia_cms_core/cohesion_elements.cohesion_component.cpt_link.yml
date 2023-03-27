@@ -3,8 +3,14 @@ langcode: en
 status: true
 dependencies:
   config:
+    - cohesion_custom_styles.cohesion_custom_style.31dc06a9
+    - cohesion_custom_styles.cohesion_custom_style.45861218
     - cohesion_custom_styles.cohesion_custom_style.63181883
+    - cohesion_custom_styles.cohesion_custom_style.6377b09a
+    - cohesion_custom_styles.cohesion_custom_style.bdb6b17a
     - cohesion_elements.cohesion_component_category.cpt_cat_basic_components
+  content:
+    - 'file:file:b08a41bf-9584-4095-b858-0fd14e355a93'
   enforced:
     module:
       - acquia_cms_site_studio
@@ -1211,7 +1217,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -1229,7 +1235,6 @@ json_values: |
                   "type": "cohArray",
                   "componentField": true,
                   "noTitle": true,
-                  "htmlClass": "coh-array--field-repeater",
                   "disableScrollbar": true,
                   "addText": "Add another button",
                   "key": "field-repeater",
@@ -1261,7 +1266,7 @@ json_values: |
                   "title": "Link",
                   "type": "cohSection",
                   "hideRowHeading": 1,
-                  "columnCount": "coh-component-field-group-2-col",
+                  "columnCount": "2",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -1286,8 +1291,7 @@ json_values: |
                   "typeaheadEditable": true,
                   "endpoint": "\/cohesionapi\/link-autocomplete?q=",
                   "schema": {
-                      "type": "string",
-                      "required": true
+                      "type": "string"
                   },
                   "tooltipPlacement": "auto right",
                   "entityTypes": {
@@ -1314,7 +1318,8 @@ json_values: |
                   "validationMessage": {
                       "302": "Please enter a link."
                   },
-                  "machineName": "link-to-page-or-url"
+                  "machineName": "link-to-page-or-url",
+                  "required": true
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -1325,14 +1330,14 @@ json_values: |
                   "title": "Button text",
                   "schema": {
                       "type": "string",
-                      "escape": true,
-                      "required": true
+                      "escape": true
                   },
                   "tooltipPlacement": "auto right",
                   "validationMessage": {
                       "302": "Please enter button text."
                   },
-                  "machineName": "button-text"
+                  "machineName": "button-text",
+                  "required": true
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -1422,7 +1427,7 @@ json_values: |
                   "title": "Button layout",
                   "type": "cohSection",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -1473,7 +1478,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 1,
                   "removePadding": 1,
-                  "columnCount": "coh-component-field-group-3-col",
+                  "columnCount": "3",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -1491,8 +1496,8 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
-                  "breakpointIcon": "coh-breakpoint-icon coh-icon-desktop",
+                  "columnCount": "1",
+                  "breakpointIcon": "desktop",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -1537,8 +1542,8 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
-                  "breakpointIcon": "coh-breakpoint-icon coh-icon-tablet",
+                  "columnCount": "1",
+                  "breakpointIcon": "tablet",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -1583,8 +1588,8 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
-                  "breakpointIcon": "coh-breakpoint-icon coh-icon-mobile",
+                  "columnCount": "1",
+                  "breakpointIcon": "mobile",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -1629,7 +1634,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -1686,7 +1691,7 @@ json_values: |
                   "options": {
                       "helpText": "# Using the Button(s) component\n- Use the Button(s) component to add one or multiple button styled links to a layout.\n- The button element is best placed within a Layout or other containing component.\n\n# Button(s)\n- **Link to page or URL -** Add a link to an internal page or an external URL. When adding a link to an internal page, type the name of an internal page or external URL. This field is required.\n- **Button text -** Enter the text for the button.\n- **Target -** Select the target for the link.\n- **Button style -** Select a style for the button.\n- **Add another button -** Add multiple buttons. These can be displayed in a row or stacked as a column.\n\n# Button layout\n- **Align buttons -** Align the buttons to the Left, Center or Right.\n- **Desktop\/Tablet\/Phone layout -** Set the layout of multiple buttons to either a horizontal row or a column.\n\n# Space below\n- **Add space below -** Add a space (margin) below the card. This is required if a space is desirable when adding this component above another component within the same parent layout component.",
                       "showClose": false,
-                      "helpType": "coh-help-text--help"
+                      "helpType": "help"
                   }
               },
               "contextVisibility": {

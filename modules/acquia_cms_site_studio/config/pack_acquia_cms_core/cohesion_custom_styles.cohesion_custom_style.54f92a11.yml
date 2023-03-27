@@ -15,7 +15,12 @@ json_values: |
   {
       "preview": {
           "text": "<ul class=\"coh-preview\">\n\t<li>List item with tick icon<\/li>\n\t<li>List item with tick icon<\/li>\n\t<li>List item with tick icon<\/li>\n<\/ul>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
       "styles": {
           "settings": {
@@ -164,7 +169,6 @@ json_values: |
               }
           }
       },
-      "sBackgroundColour": "#ffffff",
       "variableFields": []
   }
 json_mapper: |
@@ -793,5 +797,6 @@ selectable: true
 class_name: .coh-style-tick-list
 custom_style_type: list
 available_in_wysiwyg: true
+available_in_wysiwyg_inline: true
 parent: null
 weight: 76
