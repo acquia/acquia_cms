@@ -48,7 +48,6 @@ class ConfigImportExportCommands extends DrushCommands implements SiteAliasManag
         _acquia_cms_site_studio_set_credentials($siteStudioCredentials['api_key'], $siteStudioCredentials['organization_key']);
         $this->runDrushCommand('coh:import');
         $this->runDrushCommand('sitestudio:package:import');
-        _acquia_cms_site_studio_generate_image_assets();
         $this->runDrushCommand('cr');
       }
       else {
