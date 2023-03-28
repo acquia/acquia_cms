@@ -314,3 +314,38 @@ function acquia_cms_site_studio_update_8007() {
     }
   }
 }
+
+/**
+ * Re-save all cohesion config to recalculate dependencies.
+ */
+function acquia_cms_site_studio_update_8706() {
+  $dx8_no_send_to_api = &drupal_static('dx8_no_send_to_api');
+  $dx8_no_send_to_api = TRUE;
+  $cohesion_sync_lock = &drupal_static('running_dx8_batch');
+  $cohesion_sync_lock = TRUE;
+
+  $ignore_list = [
+    'cohesion.settings',
+    'cohesion.sync.settings',
+    'cohesion_amp.settings',
+    'cohesion_devel.settings',
+    'cohesion_theme.settings',
+  ];
+
+  $configFactory = \Drupal::service('config.factory');
+  foreach ($configFactory->listAll('cohesion') as $name) {
+    if (in_array($name, $ignore_list)) {
+      continue;
+    }
+    $name_array = explode('.', $name);
+    if (isset($name_array[1]) && isset($name_array[2])) {
+      if ($name_array[1] == 'cohesion_custom_style_type') {
+        $entity = \Drupal::entityTypeManager()->getStorage('custom_style_type')->load($name_array[2]);
+      }
+      else {
+        $entity = \Drupal::entityTypeManager()->getStorage($name_array[1])->load($name_array[2]);
+      }
+      $entity->save();
+    }
+  }
+}
