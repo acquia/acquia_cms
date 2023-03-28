@@ -3,7 +3,7 @@
 namespace Drupal\Tests\acquia_cms_search\Functional;
 
 use Drupal\search_api\Entity\Index;
-use Drupal\Tests\BrowserTestBase;
+use Drupal\views\Entity\View;
 
 /**
  * Tests integration with Acquia Search Solr.
@@ -15,75 +15,54 @@ use Drupal\Tests\BrowserTestBase;
  * @group pr
  * @group push
  */
-class AcquiaSearchIntegrationFromTourPageTest extends BrowserTestBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $defaultTheme = 'stark';
+class AcquiaSearchIntegrationFromTourPageTest extends AcquiaSearchConnectionTestBase {
 
   /**
    * {@inheritdoc}
    */
   protected static $modules = [
-    'acquia_cms_search',
-    'acquia_search',
     'acquia_cms_tour',
-    'search_api_db',
   ];
-  /**
-   * Disable strict config schema checks in this test.
-   *
-   * Cohesion has a lot of config schema errors, and until they are all fixed,
-   * this test cannot pass unless we disable strict config schema checking
-   * altogether. Since strict config schema isn't critically important in
-   * testing this functionality, it's okay to disable it for now, but it should
-   * be re-enabled (i.e., this property should be removed) as soon as possible.
-   *
-   * @var bool
-   */
-  // @codingStandardsIgnoreStart
-  protected $strictConfigSchema = FALSE;
 
-  // @codingStandardsIgnoreEnd
+  /**
+   * {@inheritdoc}
+   */
+  protected $permissions = [
+    'access acquia cms tour dashboard',
+  ];
 
   /**
    * Tests Acquia Search Solr integration from tour page.
    */
   public function testAcquiaSearchIntegrationFromTourPage() {
-    $assert_session = $this->assertSession();
-    $account = $this->drupalCreateUser([
-      'administer site configuration',
-      'administer search_api',
-      'access acquia cms tour dashboard',
-    ]);
-    $this->drupalLogin($account);
+    $assert = $this->assertSession();
     // Visit the tour page.
     $this->drupalGet('/admin/tour/dashboard');
-    $assert_session->statusCodeEquals(200);
+    $assert->statusCodeEquals(200);
 
-    $container = $assert_session->elementExists('css', '.acquia-cms-search-form');
+    $container = $assert->elementExists('css', '.acquia-cms-search-form');
     // Assert that save button is present on form.
-    $assert_session->buttonExists('Save');
+    $assert->buttonExists('Save');
     // Assert that the expected fields show up.
-    $assert_session->fieldExists('Acquia Subscription identifier');
-    $assert_session->fieldExists('Acquia Connector key');
-    $assert_session->fieldExists('Acquia Application UUID');
+    $assert->fieldExists('Acquia Subscription identifier');
+    $assert->fieldExists('Acquia Connector key');
+    $assert->fieldExists('Acquia Application UUID');
 
     // Save Fields.
+    // @todo to check with environment variable and
+    // then check acquia search api server is working.
     $container->fillField('Acquia Subscription identifier', 'ABCD-12345');
     $container->fillField('Acquia Connector key', $this->randomString());
     $container->fillField('Acquia Application UUID', $this->container->get('uuid')->generate());
     $container->pressButton('Save');
 
-    $assert_session->pageTextContains('The configuration options have been saved.');
+    $assert->pageTextContains('The configuration options have been saved.');
 
     // Our index should be using the Solr server, whereas the one that ships
     // with Acquia Search Solr should be disabled, along with any views that are
     // using it.
     $this->assertSame('acquia_search_server', Index::load('content')
       ->getServerId());
-
     if ($index = Index::load('acquia_search_index')) {
       $this->assertFalse($index->status());
       $this->assertNull($index->getServerId());
