@@ -11,7 +11,12 @@ json_values: |
   {
       "preview": {
           "text": "<h1 class=\"coh-preview\">Pre heading<\/h1>\n\n<h2>This is a heading below the pre heading<\/h2>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
       "styles": {
           "settings": {
@@ -59,7 +64,6 @@ json_values: |
               }
           }
       },
-      "sBackgroundColour": "#FFFFFF",
       "variableFields": []
   }
 json_mapper: |
@@ -195,5 +199,6 @@ selectable: true
 class_name: .coh-style-pre-heading
 custom_style_type: heading
 available_in_wysiwyg: true
+available_in_wysiwyg_inline: true
 parent: null
 weight: 50

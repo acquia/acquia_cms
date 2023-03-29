@@ -2,6 +2,8 @@ uuid: 5fe0ca88-8562-4997-a582-53431e8a41cf
 langcode: en
 status: true
 dependencies:
+  config:
+    - cohesion_custom_styles.cohesion_custom_style.dd48edd1
   enforced:
     module:
       - acquia_cms_site_studio
@@ -11,7 +13,12 @@ json_values: |
   {
       "preview": {
           "text": "<p class=\"coh-preview\">98% Uplift<\/p>\n\n<p class=\"coh-style-paragraph-large\">Gartner Peer Insights<\/p>\n\n<p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet I feel that I never was a greater artist than now.<\/p>\n\n<p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet I feel that I never was a greater artist than now.<\/p>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
       "styles": {
           "settings": {
@@ -49,7 +56,6 @@ json_values: |
               }
           }
       },
-      "sBackgroundColour": "#ffffff",
       "variableFields": []
   }
 json_mapper: |
@@ -188,5 +194,6 @@ selectable: true
 class_name: .coh-style-paragraph-extra-large
 custom_style_type: paragraph
 available_in_wysiwyg: true
+available_in_wysiwyg_inline: true
 parent: null
 weight: 79

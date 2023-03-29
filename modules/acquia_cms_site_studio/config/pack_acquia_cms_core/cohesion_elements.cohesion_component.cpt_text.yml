@@ -4,9 +4,16 @@ status: true
 dependencies:
   config:
     - cohesion_custom_styles.cohesion_custom_style.097f31b2
+    - cohesion_custom_styles.cohesion_custom_style.46d78cbf
     - cohesion_custom_styles.cohesion_custom_style.63181883
+    - cohesion_custom_styles.cohesion_custom_style.7f4f36dd
+    - cohesion_custom_styles.cohesion_custom_style.a0b51e88
+    - cohesion_custom_styles.cohesion_custom_style.b03f97e5
+    - cohesion_custom_styles.cohesion_custom_style.bc331715
     - cohesion_elements.cohesion_component_category.cpt_cat_basic_components
     - cohesion_website_settings.cohesion_color.gray-10
+  content:
+    - 'file:file:57dc5cab-9498-4dd2-ad63-8b54f6d4eae1'
   enforced:
     module:
       - acquia_cms_site_studio
@@ -901,7 +908,7 @@ json_values: |
                   "type": "cohSection",
                   "title": "Text",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -949,7 +956,7 @@ json_values: |
                   "title": "Color",
                   "type": "cohSection",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-col",
+                  "columnCount": "auto",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -1016,7 +1023,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 1,
                   "removePadding": 1,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -1034,7 +1041,7 @@ json_values: |
                   "type": "cohHelpText",
                   "options": {
                       "showClose": false,
-                      "helpType": "coh-help-text--help",
+                      "helpType": "help",
                       "helpText": "Text color is automatic based on your background color selection."
                   },
                   "showCondition": "[field.c095870a-5422-4332-bbad-d6699bdcf7fd] tags include 'Dark' OR [field.c095870a-5422-4332-bbad-d6699bdcf7fd] tags include 'Light' OR [field.c095870a-5422-4332-bbad-d6699bdcf7fd] tags include 'Color'"
@@ -1103,7 +1110,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-col",
+                  "columnCount": "auto",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -1187,7 +1194,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -1252,7 +1259,7 @@ json_values: |
                   "type": "cohHelpText",
                   "options": {
                       "showClose": false,
-                      "helpType": "coh-help-text--help",
+                      "helpType": "help",
                       "helpText": "Padding has been applied because you have set a background color or border."
                   },
                   "showCondition": "(!([field.c095870a-5422-4332-bbad-d6699bdcf7fd] rgba is undefined OR [field.c095870a-5422-4332-bbad-d6699bdcf7fd] is transparent)) OR [field.f8e05754-678a-4864-9304-c742b959b852] == 'border'"
@@ -1266,7 +1273,7 @@ json_values: |
                   "title": "Height",
                   "type": "cohSection",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -1313,7 +1320,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -1358,7 +1365,7 @@ json_values: |
                   "title": "Text columns",
                   "type": "cohSection",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -1420,7 +1427,7 @@ json_values: |
                   "options": {
                       "helpText": "# Using the Text component\n- Use the text component to add formatted text to a layout.\n- The text component is best placed within a Layout or other container component.\n- The text component can be given a background color and be used as a text based card.\n\n# Text\n- **Text editor -** use the text editor to add and format your text. To format the text, highlight the text to format, select the element to apply using the icon based buttons or the **Format drop-down menu**. Once a format has been applied, you can use the **Element styles drop-down menu** to apply a specific visual style.\n\n# Color\n- **Background color -** Choose a background color from the color palette. When a background color is selected, the text color will be selected automatically. \n- **Text color -** Select an appropriate Light or Dark text color to contrast with the color of where the text component is placed. **Note:** The text field only shows if no background color is selected.\n\n# Border\n- **Border -** Add border will add a 1px border around the text component.\n- **Border color -** Select a border color. **Note:** The border color field only shows if you have selected Add border.\n\n# Padding\n- **Padding -** Apply padding around the text. **Note:** If a border or background color is applied, padding around the content will be applied automatically.\n\n# Height\n- **Height -** Set the text component height to either **Fit to content** or **Fill space available**. Fill space available will make the text component expand to fill the height available within the parent component. This option allows you to achieve horizontal alignment. **Note:** This option is only useful if a background color or border has been applied.\n\n# Space below\n- **Add space below -** Add a space (margin) below the text component. This is required if a space is desirable when adding this component above another component within the same parent layout component.",
                       "showClose": false,
-                      "helpType": "coh-help-text--help"
+                      "helpType": "help"
                   }
               },
               "contextVisibility": {

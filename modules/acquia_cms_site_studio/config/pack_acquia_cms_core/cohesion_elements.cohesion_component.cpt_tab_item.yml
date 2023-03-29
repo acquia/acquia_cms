@@ -5,6 +5,8 @@ dependencies:
   config:
     - cohesion_custom_styles.cohesion_custom_style.097f31b2
     - cohesion_elements.cohesion_component_category.cpt_cat_tab_components
+  content:
+    - 'file:file:57f36efa-2909-4bce-a687-40f59c0d7fa4'
   enforced:
     module:
       - acquia_cms_site_studio
@@ -673,7 +675,7 @@ json_values: |
                   "title": "Navigation label",
                   "type": "cohSection",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-col",
+                  "columnCount": "auto",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -691,13 +693,13 @@ json_values: |
                   "title": "Navigation label",
                   "schema": {
                       "type": "string",
-                      "escape": true,
-                      "required": true
+                      "escape": true
                   },
                   "validationMessage": {
                       "302": "Please enter a navigation label."
                   },
-                  "machineName": "navigation-label"
+                  "machineName": "navigation-label",
+                  "required": true
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -721,7 +723,7 @@ json_values: |
                   "title": "Color",
                   "type": "cohSection",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -758,7 +760,7 @@ json_values: |
                   "title": "Padding",
                   "type": "cohSection",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-col",
+                  "columnCount": "auto",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -816,7 +818,7 @@ json_values: |
                   "options": {
                       "helpText": "# Using the Tab item component\n- Use Tab items within the Horizontal and Vertical tabs container components to create a tabbed area of content.\n- Add content to each Tab item.\n\n# Navigation label\n- **Navigation label -** Enter text for the tab navigation.\n\n# Padding\n- **Padding around content -** Add padding around the content within the Tab item.",
                       "showClose": false,
-                      "helpType": "coh-help-text--help"
+                      "helpType": "help"
                   }
               },
               "contextVisibility": {

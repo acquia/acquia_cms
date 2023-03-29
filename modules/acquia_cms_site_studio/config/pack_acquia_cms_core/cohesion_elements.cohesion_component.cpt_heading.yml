@@ -3,10 +3,20 @@ langcode: en
 status: true
 dependencies:
   config:
+    - cohesion_custom_styles.cohesion_custom_style.352f0649
+    - cohesion_custom_styles.cohesion_custom_style.4cd5c1b0
+    - cohesion_custom_styles.cohesion_custom_style.5d3e1401
+    - cohesion_custom_styles.cohesion_custom_style.5f5e8fba
+    - cohesion_custom_styles.cohesion_custom_style.6d265e74
+    - cohesion_custom_styles.cohesion_custom_style.7e6bdf2a
+    - cohesion_custom_styles.cohesion_custom_style.a13b8c94
+    - cohesion_custom_styles.cohesion_custom_style.ee93d997
     - cohesion_elements.cohesion_component_category.cpt_cat_basic_components
     - cohesion_website_settings.cohesion_color.black
     - cohesion_website_settings.cohesion_color.brand-color
     - cohesion_website_settings.cohesion_color.white
+  content:
+    - 'file:file:74ab5ad0-04f9-4c87-8f05-7ab432ffe2cd'
   enforced:
     module:
       - acquia_cms_site_studio
@@ -907,7 +917,7 @@ json_values: |
                   "title": "Heading",
                   "type": "cohSection",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -962,15 +972,15 @@ json_values: |
                   "type": "cohTextarea",
                   "schema": {
                       "type": "string",
-                      "escape": true,
-                      "required": true
+                      "escape": true
                   },
                   "machineName": "heading",
                   "tooltipPlacement": "auto right",
                   "validationMessage": {
                       "302": "Please enter a heading."
                   },
-                  "showCondition": "![field.ad025039-96c5-4cce-a27b-48778043471c]"
+                  "showCondition": "![field.ad025039-96c5-4cce-a27b-48778043471c]",
+                  "required": true
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -1043,7 +1053,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-col",
+                  "columnCount": "auto",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -1149,7 +1159,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -1200,7 +1210,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -1257,7 +1267,7 @@ json_values: |
                   "options": {
                       "helpText": "# Using the Heading\n- Use the heading component to add a heading to a layout.\n- The heading component is best placed within a Layout or other container component.\n\n# Heading\n- **Use page title -** Toggling this **ON** will hide the **Heading** field and use the page title as the heading text.\n- **Heading -** Enter a heading. This field is required.\n- **Heading element -** Select the heading type from H1 to H6. You can also select **Span** if you require text to look like a heading but not use a heading element.\n\n# Heading size and alignment\n- **Heading size override -** Override the style of the heading with the style of a different heading element. For example, you can make a Heading 3 element look like a Heading 2 element.\n- **Align heading text -** Set the alignment of the heading text.\n\n# Heading color\n- **Heading color -** Select the heading color theme.\n\n# Space below\n- **Add space below -** Add additional space below the heading.",
                       "showClose": false,
-                      "helpType": "coh-help-text--help"
+                      "helpType": "help"
                   }
               },
               "contextVisibility": {

@@ -16,9 +16,13 @@ json_values: |
   {
       "preview": {
           "text": "<p><button class=\"coh-preview\" type=\"button\">Default content for 'Button'<\/button><\/p>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
-      "sBackgroundColour": "#FFFFFF",
       "styles": {
           "settings": {
               "element": "button",
@@ -242,5 +246,6 @@ selectable: true
 class_name: .coh-style-modal-open-button-dark
 custom_style_type: button
 available_in_wysiwyg: false
+available_in_wysiwyg_inline: false
 parent: .coh-style-modal-open-button-light
 weight: 38

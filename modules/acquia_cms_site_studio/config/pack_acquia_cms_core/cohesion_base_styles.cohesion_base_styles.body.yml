@@ -4,13 +4,19 @@ status: true
 dependencies:
   config:
     - cohesion_website_settings.cohesion_color.brand-color
+    - cohesion_website_settings.cohesion_color.white
 label: Body
 id: body
 json_values: |
   {
       "preview": {
           "text": "",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
       "styles": {
           "settings": {
@@ -107,7 +113,6 @@ json_values: |
               }
           }
       },
-      "sBackgroundColour": "#ffffff",
       "variableFields": []
   }
 json_mapper: |

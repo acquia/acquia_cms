@@ -2,8 +2,16 @@ uuid: 4b7d6378-2e66-40a6-8d89-4efce8e8b16a
 langcode: en
 status: true
 dependencies:
+  config:
+    - cohesion_website_settings.cohesion_color.black
+    - cohesion_website_settings.cohesion_color.brand-color
+    - cohesion_website_settings.cohesion_color.gray-10
+    - cohesion_website_settings.cohesion_color.gray-70
+    - cohesion_website_settings.cohesion_color.white
+    - cohesion_website_settings.cohesion_icon_library.icomoon
   enforced:
     module:
+      - acquia_cms_search
       - acquia_cms_site_studio
 label: 'Search block'
 id: e95bd02c
@@ -11,7 +19,12 @@ json_values: |
   {
       "preview": {
           "text": "<div class=\"coh-preview\">\n<form accept-charset=\"UTF-8\" action=\"\/search\" id=\"views-exposed-form-search-search\" method=\"get\" style=\"\n\">\n<div class=\"js-form-item form-item js-form-type-search-api-autocomplete form-type-search-api-autocomplete js-form-item-keywords form-item-keywords form-no-label\"><input autocomplete=\"off\" class=\"form-autocomplete form-text ui-autocomplete-input\" data-autocomplete-path=\"\/search_api_autocomplete\/search?display=search&amp;&amp;filter=keywords\" data-drupal-selector=\"edit-keywords\" data-search-api-autocomplete-search=\"search\" id=\"edit-keywords\" maxlength=\"128\" name=\"keywords\" size=\"30\" type=\"text\" value=\"Search\" \/><\/div>\n<label class=\"visually-hidden\" for=\"edit-keywords\">Search<\/label>\n\n<div class=\"form-actions js-form-wrapper form-wrapper\" data-drupal-selector=\"edit-actions\" id=\"edit-actions\"><input class=\"button js-form-submit form-submit\" data-drupal-selector=\"edit-submit-search\" id=\"edit-submit-search\" type=\"submit\" value=\"Search\" \/><\/div>\n<\/form>\n<\/div>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
       "styles": {
           "settings": {
@@ -422,7 +435,6 @@ json_values: |
               }
           }
       },
-      "sBackgroundColour": "#FFFFFF",
       "variableFields": []
   }
 json_mapper: |
@@ -1623,5 +1635,6 @@ selectable: true
 class_name: .coh-style-search-block
 custom_style_type: generic
 available_in_wysiwyg: false
+available_in_wysiwyg_inline: false
 parent: null
 weight: 7

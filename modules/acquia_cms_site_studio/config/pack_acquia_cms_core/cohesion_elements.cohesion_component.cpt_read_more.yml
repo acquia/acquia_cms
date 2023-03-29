@@ -3,8 +3,14 @@ langcode: en
 status: true
 dependencies:
   config:
+    - cohesion_custom_styles.cohesion_custom_style.04aaf141
     - cohesion_custom_styles.cohesion_custom_style.63181883
+    - cohesion_custom_styles.cohesion_custom_style.91a0d518
+    - cohesion_custom_styles.cohesion_custom_style.ec270c6c
+    - cohesion_custom_styles.cohesion_custom_style.f9ad5373
     - cohesion_elements.cohesion_component_category.cpt_cat_read_more_components
+  content:
+    - 'file:file:2dc7a962-eb07-4aad-946d-7c4f6840c8b0'
   enforced:
     module:
       - acquia_cms_site_studio
@@ -380,7 +386,7 @@ json_values: |
                   "title": "Button",
                   "type": "cohSection",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-3-col",
+                  "columnCount": "3",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -398,14 +404,14 @@ json_values: |
                   "title": "Button text - collapsed",
                   "schema": {
                       "type": "string",
-                      "escape": true,
-                      "required": true
+                      "escape": true
                   },
                   "tooltipPlacement": "auto right",
                   "validationMessage": {
                       "302": "Please enter button text."
                   },
-                  "machineName": "button-text--collapsed"
+                  "machineName": "button-text--collapsed",
+                  "required": true
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -419,14 +425,14 @@ json_values: |
                   "title": "Button text expanded",
                   "schema": {
                       "type": "string",
-                      "escape": true,
-                      "required": true
+                      "escape": true
                   },
                   "tooltipPlacement": "auto right",
                   "validationMessage": {
                       "302": "Please enter button text."
                   },
-                  "machineName": "button-text-expanded"
+                  "machineName": "button-text-expanded",
+                  "required": true
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -477,7 +483,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -533,7 +539,7 @@ json_values: |
                   "type": "cohHelpText",
                   "options": {
                       "showClose": false,
-                      "helpType": "coh-help-text--help",
+                      "helpType": "help",
                       "helpText": "# Using the Read more component\n- Use the Read more component to add content that is collapsed (hidden) until a button is clicked to expand it.\n- The Read more component is useful to provide expandable details content after summary content.\n- The Read more component is best placed within a Layout or other containing component.\n\n# Button\n- **Button text collapsed -** Enter the text for the button that expands and collapses the content as it will display when the content is collapsed.\n- **Button text expanded -** Enter the text for the button that expands and collapses the content as it will display when the content is expanded.\n- **Button style -** Select the style for the button that expands and collapses the content.\n\n# Space below\n- **Add space below -** Add a space (margin) below the content. This is required if a space is desirable when adding this component above another component within the same parent layout component."
                   }
               },
