@@ -26,8 +26,7 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  */
 class DecoupledTest extends ExistingSiteBase {
 
-  use JsonApiRequestTestTrait;
-  use MediaTestTrait;
+  use JsonApiRequestTestTrait, MediaTestTrait;
 
   /**
    * @var bool
@@ -46,7 +45,7 @@ class DecoupledTest extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp():void {
+  protected function setUp(): void {
     parent::setUp();
 
     // If the samlauth module is installed, ensure that it is configured (in
@@ -75,7 +74,7 @@ class DecoupledTest extends ExistingSiteBase {
    *
    * @dataProvider providerRoles
    */
-  public function testResourceTypes(?array $roles) {
+  public function testResourceTypes(?array $roles): void {
     if (isset($roles)) {
       $account = $this->createUser();
       array_walk($roles, [$account, 'addRole']);
@@ -128,14 +127,6 @@ class DecoupledTest extends ExistingSiteBase {
       ],
       'PATCH' => [
         'name' => 'Pastafazoul',
-      ],
-    ]);
-
-    // The user resource type should be disabled, so we should not be able to
-    // do anything with it.
-    $this->assertResourceType(FALSE, $this->createUser(), [
-      'PATCH' => [
-        'display_name' => 'Superman',
       ],
     ]);
 
@@ -210,7 +201,7 @@ class DecoupledTest extends ExistingSiteBase {
    *   Arrays of attributes to send when testing the POST and PATCH methods,
    *   keyed by method (e.g., 'POST' => [...], 'PATCH' => [...]).
    */
-  private function assertResourceType(bool $is_enabled, EntityInterface $entity, array $attributes) : void {
+  private function assertResourceType(bool $is_enabled, EntityInterface $entity, array $attributes): void {
     $resource_type = $entity->getEntityTypeId() . '--' . $entity->bundle();
     $base_uri = '/jsonapi/' . str_replace('--', '/', $resource_type);
     $resource_uri = $base_uri . '/' . $entity->uuid();
@@ -227,6 +218,7 @@ class DecoupledTest extends ExistingSiteBase {
     // individual resource and a collection of this resource type. Otherwise,
     // we should just get a 404.
     $expected_status = $is_enabled ? 200 : 404;
+
     $assert_status('GET', $base_uri, $request_options, $expected_status);
     $assert_status('GET', $resource_uri, $request_options, $expected_status);
 
@@ -273,7 +265,7 @@ class DecoupledTest extends ExistingSiteBase {
    * @return array[]
    *   Sets of arguments to pass to the test method.
    */
-  public function providerRoles() {
+  public function providerRoles(): array {
     return [
       'anonymous user' => [
         NULL,

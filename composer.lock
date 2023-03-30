@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5ebaffb05130172db20e3b63b7e8e9d5",
+    "content-hash": "2b8d8a6021a813d1b35cab00186689df",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2499,7 +2499,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "e8731287a314028e511418eee47d7d01d4f25fe4"
+                "reference": "546014eaf83f082c2620e66d6c0f4d7c05fad09d"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2512,33 +2512,21 @@
                 "drupal/acquia_search": "^3.1",
                 "drupal/acsf": "^2.73",
                 "drupal/autologout": "^1.4",
-                "drupal/checklistapi": "^2.1",
                 "drupal/config_ignore": "^3.0@beta",
                 "drupal/config_rewrite": "^1.5",
                 "drupal/core": "^9.5 || ^10",
-                "drupal/default_content": "2.0.0-alpha2",
                 "drupal/diff": "^1.1",
                 "drupal/entity_clone": "^2.0@beta",
                 "drupal/field_group": "^3.4",
-                "drupal/focal_point": "^2.0@alpha",
-                "drupal/google_analytics": "^4.0",
-                "drupal/google_tag": "^1.6",
-                "drupal/honeypot": "^2.1",
-                "drupal/imagemagick": "^3.4",
-                "drupal/jsonapi_extras": "^3.23",
                 "drupal/memcache": "^2.5",
                 "drupal/moderation_dashboard": "^2.1",
                 "drupal/moderation_sidebar": "^1.7",
                 "drupal/password_policy": "^4.0",
                 "drupal/pathauto": "^1.11",
-                "drupal/recaptcha": "^3.1",
                 "drupal/redirect": "^1.8",
-                "drupal/reroute_email": "^2.2",
-                "drupal/responsive_preview": "^2.1",
                 "drupal/scheduler_content_moderation_integration": "^2.0",
                 "drupal/schema_metatag": "^2.4",
                 "drupal/seckit": "^2.0",
-                "drupal/shield": "^1.7",
                 "drupal/simple_sitemap": "^4.1",
                 "drupal/smart_trim": "^2.0",
                 "drupal/social_media_links": "^2.9",
@@ -2581,12 +2569,6 @@
                         "3059955 - It is possible to overflow the number of items allowed in Media Library": "https://www.drupal.org/files/issues/2019-12-28/3082690-80.patch",
                         "3222107 - jQuery UI library order is incorrect when a large number of javascript files is loaded between two jQuery UI libraries": "https://www.drupal.org/files/issues/2022-11-11/3222107-2.patch",
                         "3301692: Passing null to parameter to mb_strtolower() is deprecated with PHP 8.1": "https://git.drupalcode.org/project/drupal/-/merge_requests/2598.patch"
-                    },
-                    "drupal/default_content": {
-                        "2698425 - Duplicate content issues in default content": "https://git.drupalcode.org/project/default_content/-/merge_requests/5.patch"
-                    },
-                    "drupal/focal_point": {
-                        "3162210 - Preview link accidentally closes the media library": "https://www.drupal.org/files/issues/2020-10-06/3162210-17.patch"
                     }
                 }
             },
@@ -2718,10 +2700,11 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_headless",
-                "reference": "37bac73c6aef8dbbe7be9bfabf9c28fe6e7828df"
+                "reference": "67ccecf3932cb85743e2ff069fc89631ebe764a9"
             },
             "require": {
                 "drupal/acquia_cms_tour": "2.x-dev",
+                "drupal/jsonapi_extras": "^3.23",
                 "drupal/jsonapi_menu_items": "^1.2",
                 "drupal/next": "^1.6",
                 "drupal/openapi_jsonapi": "^3.0",
@@ -2793,16 +2776,24 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_image",
-                "reference": "b25c557cf564d036860fa19ef0513984b37bc99c"
+                "reference": "beb7a5cb5c21f4ca4423d2189b8210dde2b8221d"
             },
             "require": {
                 "drupal/acquia_cms_common": "1.x-dev || 2.x-dev",
-                "drupal/imce": "^3.0"
+                "drupal/focal_point": "^2.0@alpha",
+                "drupal/imagemagick": "^3.4",
+                "drupal/imce": "^2.2 || ^3.0"
             },
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
                     "dev-develop": "1.x-dev"
+                },
+                "enable-patching": true,
+                "patches": {
+                    "drupal/focal_point": {
+                        "3162210 - Preview link accidentally closes the media library": "https://www.drupal.org/files/issues/2020-10-06/3162210-17.patch"
+                    }
                 }
             },
             "license": [
@@ -2948,14 +2939,15 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_site_studio",
-                "reference": "0923005f6a26c7660423dafae20fef465cba747d"
+                "reference": "6af16541c6bdf9fcb3113213340ff4cb3782db23"
             },
             "require": {
-                "acquia/cohesion": "^6.9 || ^7.0",
+                "acquia/cohesion": "^6.9.2 || ^7.0",
                 "acquia/cohesion-theme": "^6.9 || ^7.0",
                 "drupal/acquia_cms_common": "1.x-dev || 2.x-dev",
                 "drupal/collapsiblock": "^4.0",
-                "drupal/node_revision_delete": "^1.0"
+                "drupal/node_revision_delete": "^1.0",
+                "drupal/responsive_preview": "^2.1"
             },
             "conflict": {
                 "drupal/acquia_cms_article": "<1.5.4",
@@ -2995,7 +2987,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_starter",
-                "reference": "a44d2953b365a13a4fd714bc04e6d39a0b367dfb"
+                "reference": "dc94c8ac526b7d5e417418b5b400d407238629e0"
             },
             "require": {
                 "drupal/acquia_cms_article": "1.x-dev",
@@ -3003,12 +2995,19 @@
                 "drupal/acquia_cms_event": "1.x-dev",
                 "drupal/acquia_cms_page": "1.x-dev",
                 "drupal/acquia_cms_search": "1.x-dev",
-                "drupal/acquia_cms_video": "1.x-dev"
+                "drupal/acquia_cms_video": "1.x-dev",
+                "drupal/default_content": "^2.0@alpha"
             },
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
                     "dev-develop": "1.x-dev"
+                },
+                "enable-patching": true,
+                "patches": {
+                    "drupal/default_content": {
+                        "2698425 - Duplicate content issues in default content": "https://git.drupalcode.org/project/default_content/-/merge_requests/5.patch"
+                    }
                 }
             },
             "license": [
@@ -3051,10 +3050,11 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_tour",
-                "reference": "64bb80c8f78e542763011ed658f95758cec08fec"
+                "reference": "45c8888363d58c44e2fc6c5618ea1ddfb2295402"
             },
             "require": {
-                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev"
+                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev",
+                "drupal/checklistapi": "^2.1"
             },
             "type": "drupal-module",
             "extra": {
@@ -3182,17 +3182,17 @@
         },
         {
             "name": "drupal/acquia_contenthub",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/acquia_contenthub.git",
-                "reference": "3.1.0"
+                "reference": "3.1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_contenthub-3.1.0.zip",
-                "reference": "3.1.0",
-                "shasum": "75206daf9344cae5f68ca30a0b6fcba8fc1db5a4"
+                "url": "https://ftp.drupal.org/files/projects/acquia_contenthub-3.1.1.zip",
+                "reference": "3.1.1",
+                "shasum": "4c3869594f80bb6744d3bb2bb2908836f4179058"
             },
             "require": {
                 "acquia/content-hub-php": "3.2",
@@ -3222,8 +3222,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.1.0",
-                    "datestamp": "1679987640",
+                    "version": "3.1.1",
+                    "datestamp": "1680095826",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10499,20 +10499,20 @@
         },
         {
             "name": "lcobucci/clock",
-            "version": "3.0.0",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/clock.git",
-                "reference": "039ef98c6b57b101d10bd11d8fdfda12cbd996dc"
+                "reference": "30a854ceb22bd87d83a7a4563b3f6312453945fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/clock/zipball/039ef98c6b57b101d10bd11d8fdfda12cbd996dc",
-                "reference": "039ef98c6b57b101d10bd11d8fdfda12cbd996dc",
+                "url": "https://api.github.com/repos/lcobucci/clock/zipball/30a854ceb22bd87d83a7a4563b3f6312453945fc",
+                "reference": "30a854ceb22bd87d83a7a4563b3f6312453945fc",
                 "shasum": ""
             },
             "require": {
-                "php": "~8.1.0 || ~8.2.0",
+                "php": "~8.2.0",
                 "psr/clock": "^1.0"
             },
             "provide": {
@@ -10520,13 +10520,13 @@
             },
             "require-dev": {
                 "infection/infection": "^0.26",
-                "lcobucci/coding-standard": "^9.0",
+                "lcobucci/coding-standard": "^10.0.0",
                 "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan": "^1.9.4",
-                "phpstan/phpstan-deprecation-rules": "^1.1.1",
-                "phpstan/phpstan-phpunit": "^1.3.2",
-                "phpstan/phpstan-strict-rules": "^1.4.4",
-                "phpunit/phpunit": "^9.5.27"
+                "phpstan/phpstan": "^1.10.7",
+                "phpstan/phpstan-deprecation-rules": "^1.1.3",
+                "phpstan/phpstan-phpunit": "^1.3.10",
+                "phpstan/phpstan-strict-rules": "^1.5.0",
+                "phpunit/phpunit": "^10.0.17"
             },
             "type": "library",
             "autoload": {
@@ -10547,7 +10547,7 @@
             "description": "Yet another clock abstraction",
             "support": {
                 "issues": "https://github.com/lcobucci/clock/issues",
-                "source": "https://github.com/lcobucci/clock/tree/3.0.0"
+                "source": "https://github.com/lcobucci/clock/tree/3.1.0"
             },
             "funding": [
                 {
@@ -10559,7 +10559,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2022-12-19T15:00:24+00:00"
+            "time": "2023-03-20T19:12:25+00:00"
         },
         {
             "name": "lcobucci/jwt",
@@ -18974,16 +18974,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.8",
+            "version": "1.10.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "0166aef76e066f0dd2adc2799bdadfa1635711e9"
+                "reference": "9b13dafe3d66693d20fe5729c3dde1d31bb64703"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/0166aef76e066f0dd2adc2799bdadfa1635711e9",
-                "reference": "0166aef76e066f0dd2adc2799bdadfa1635711e9",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9b13dafe3d66693d20fe5729c3dde1d31bb64703",
+                "reference": "9b13dafe3d66693d20fe5729c3dde1d31bb64703",
                 "shasum": ""
             },
             "require": {
@@ -19032,7 +19032,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-24T10:28:16+00:00"
+            "time": "2023-03-30T08:58:01+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
