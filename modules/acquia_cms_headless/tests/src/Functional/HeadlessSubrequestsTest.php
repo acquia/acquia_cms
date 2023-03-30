@@ -20,9 +20,12 @@ class HeadlessSubrequestsTest extends BrowserTestBase {
    *
    * @var array
    */
+
   protected static $modules = [
-    'acquia_cms_headless',
+    'subrequests',
+    'decoupled_router',
     'node',
+    'node_test',
   ];
 
   /**
@@ -35,12 +38,6 @@ class HeadlessSubrequestsTest extends BrowserTestBase {
       $this->markTestSkipped('This test cannot run in an Acquia Cloud IDE.');
     }
     parent::setUp();
-    $account = $this->drupalCreateUser();
-    $account->addRole('administrator');
-    $account->save();
-    $this->drupalLogin($account);
-
-    // Set up a content type.
     $this->drupalCreateContentType([
       'type' => 'test',
       'name' => 'Test',
@@ -48,25 +45,22 @@ class HeadlessSubrequestsTest extends BrowserTestBase {
   }
 
   /**
-   * Content admin test.
+   * Tests that subrequests work properly with Page Cache enabled.
    */
-  public function testSubrequests(): void {
-    $host = \Drupal::request()->getSchemeAndHttpHost();
-
+  public function testPageCache(): void {
+    $account = $this->drupalCreateUser(['access content', 'issue subrequests']);
+    $this->drupalLogin($account);
     for ($i = 1; $i <= 5; $i++) {
-      // Create test node.
       $node = $this->drupalCreateNode([
         'type' => 'test',
         'title' => 'Headless Test Page ' . $i,
         'status' => 'published',
       ]);
-      $client = \Drupal::httpClient();
-      $response = $client->post($host . '/subrequests?_format=json', [
-        'body' => json_encode([[
+      $blueprint = [
+        [
           "requestId" => "router",
           "action" => "view",
           "uri" => "/router/translate-path?path=/node/" . $node->id() . "&_format=json",
-          "headers" => ["Accept" => "application/vnd.api+json"],
         ],
         [
           "requestId" => "resolvedResource",
@@ -74,21 +68,21 @@ class HeadlessSubrequestsTest extends BrowserTestBase {
           "uri" => "{{router.body@$.jsonapi.individual}}",
           "waitFor" => ["router"],
         ],
-        ]),
-        'headers' => [
-          'Accept' => "application/json",
-        ],
-        'http_errors' => FALSE,
-      ]);
-      $responseData = json_decode($response->getBody());
-      $body = json_decode($responseData->router->body);
-      $subrequest_response = end($responseData);
-      $subrequest_body = json_decode(end($subrequest_response));
-      // Assert title from first request.
-      $this->assertEquals('Headless Test Page ' . $i, $body->label);
-      // Assert title from sub request.
-      $this->assertEquals('Headless Test Page ' . $i, $subrequest_body->data->attributes->title);
+      ];
 
+      $options = [
+        'query' => [
+          'query' => json_encode($blueprint, JSON_UNESCAPED_SLASHES),
+        ],
+      ];
+      $headers = [
+        'Content-Type' => 'application/json',
+      ];
+      $this->drupalGet('/subrequests', $options, $headers);
+
+      $assert_session = $this->assertSession();
+      $assert_session->statusCodeEquals(207);
+      $assert_session->responseContains('Headless Test Page ' . $i);
     }
   }
 
