@@ -16,7 +16,12 @@ json_values: |
   {
       "preview": {
           "text": "<p><button class=\"coh-preview\" type=\"button\"><\/button><\/p>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
       "styles": {
           "settings": {
@@ -167,7 +172,6 @@ json_values: |
               }
           }
       },
-      "sBackgroundColour": "#ffffff",
       "variableFields": []
   }
 json_mapper: |
@@ -534,5 +538,6 @@ selectable: true
 class_name: .coh-style-modal-close-button-light
 custom_style_type: button
 available_in_wysiwyg: false
+available_in_wysiwyg_inline: false
 parent: null
 weight: 32

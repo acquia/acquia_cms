@@ -3,7 +3,12 @@ langcode: en
 status: true
 dependencies:
   config:
+    - cohesion_custom_styles.cohesion_custom_style.11692184
+    - cohesion_custom_styles.cohesion_custom_style.67e16f88
+    - cohesion_custom_styles.cohesion_custom_style.6d37c715
     - cohesion_elements.cohesion_component_category.cpt_cat_layout_components
+  content:
+    - 'file:file:8183c3b1-cae2-485b-a5a4-0dec6f3cd795'
   enforced:
     module:
       - acquia_cms_site_studio
@@ -463,7 +468,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-3-col",
+                  "columnCount": "3",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -481,15 +486,15 @@ json_values: |
                   "title": "Button ID",
                   "schema": {
                       "type": "string",
-                      "escape": true,
-                      "required": true
+                      "escape": true
                   },
                   "machineName": "modal-open-button-id",
                   "tooltipPlacement": "auto top-left",
                   "tooltipText": "The ID must be unique to the page.",
                   "validationMessage": {
                       "302": "Please provide an ID."
-                  }
+                  },
+                  "required": true
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -503,14 +508,14 @@ json_values: |
                   "title": "Button text",
                   "schema": {
                       "type": "string",
-                      "escape": true,
-                      "required": true
+                      "escape": true
                   },
                   "machineName": "modal-open-button-text",
                   "tooltipPlacement": "auto right",
                   "validationMessage": {
                       "302": "Please enter button text."
-                  }
+                  },
+                  "required": true
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -554,7 +559,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-col",
+                  "columnCount": "auto",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -572,15 +577,15 @@ json_values: |
                   "title": "Modal window ID",
                   "schema": {
                       "type": "string",
-                      "escape": true,
-                      "required": true
+                      "escape": true
                   },
                   "machineName": "modal-window-id",
                   "tooltipPlacement": "auto top-left",
                   "tooltipText": "The ID must be unique to the page.",
                   "validationMessage": {
                       "302": "Please provide an ID."
-                  }
+                  },
+                  "required": true
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -602,7 +607,7 @@ json_values: |
                   "type": "cohHelpText",
                   "options": {
                       "showClose": false,
-                      "helpType": "coh-help-text--help",
+                      "helpType": "help",
                       "helpText": "# Using the modal button component\n- Use this component to add a button to your page that can launch a modal window.\n- Add this button component to your layout, where you would like it to appear to the user. \n\n# Modal button\n- **Open button ID -** The button used to open the modal must be given an ID that is unique to the page. The ID is required to provide focus to the button when the modal is closed. This is an accessibility requirement. The ID should be formed from letters, numbers and hyphens and not include spaces. For example **modal-one-button**.\n- **Open button text -** Set the text to display on the button that will open the modal.\n- **Open button style -** Set the style of the button.\n\n# Modal\n- **Modal window ID -** The modal must be given an ID that is unique to the page. The ID is required for the button to target the modal when clicked. The ID should be formed from letters, numbers and hyphens and not include spaces. For example **modal-one**."
                   }
               },

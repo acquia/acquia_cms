@@ -14,7 +14,12 @@ json_values: |
   {
       "preview": {
           "text": "<p><a class=\"coh-preview\">Link with icon<\/a><\/p>\n\n<p>Content below link<\/p>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
       "styles": {
           "settings": {
@@ -127,7 +132,6 @@ json_values: |
               }
           }
       },
-      "sBackgroundColour": "#ffffff",
       "variableFields": []
   }
 json_mapper: |
@@ -423,5 +427,6 @@ selectable: true
 class_name: .coh-style-link-with-icon
 custom_style_type: link
 available_in_wysiwyg: true
+available_in_wysiwyg_inline: true
 parent: null
 weight: 71

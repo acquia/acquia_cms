@@ -2,6 +2,8 @@ uuid: 109c4332-9d77-4391-94ec-0301bc0f30ec
 langcode: en
 status: true
 dependencies:
+  config:
+    - cohesion_website_settings.cohesion_color.gray-20
   enforced:
     module:
       - acquia_cms_search
@@ -12,7 +14,12 @@ json_values: |
   {
       "preview": {
           "text": "<div class=\"coh-preview\">Default content for 'Layout'.<\/div>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
       "styles": {
           "settings": {
@@ -72,7 +79,6 @@ json_values: |
               }
           }
       },
-      "sBackgroundColour": "#FFFFFF",
       "variableFields": []
   }
 json_mapper: |
@@ -339,5 +345,6 @@ selectable: true
 class_name: .coh-style-search-result-container
 custom_style_type: layout
 available_in_wysiwyg: false
+available_in_wysiwyg_inline: false
 parent: null
 weight: 2

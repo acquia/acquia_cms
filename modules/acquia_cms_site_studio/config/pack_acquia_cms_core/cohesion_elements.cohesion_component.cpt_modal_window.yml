@@ -3,8 +3,13 @@ langcode: en
 status: true
 dependencies:
   config:
+    - cohesion_custom_styles.cohesion_custom_style.1782d7b4
+    - cohesion_custom_styles.cohesion_custom_style.54909223
+    - cohesion_custom_styles.cohesion_custom_style.da97307a
     - cohesion_elements.cohesion_component_category.cpt_cat_layout_components
     - cohesion_website_settings.cohesion_color.white
+  content:
+    - 'file:file:421653e6-445a-4a8c-8cf3-6959b37fe82f'
   enforced:
     module:
       - acquia_cms_site_studio
@@ -1263,7 +1268,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -1299,7 +1304,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-2-col",
+                  "columnCount": "2",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -1317,15 +1322,15 @@ json_values: |
                   "title": "Modal window ID",
                   "schema": {
                       "type": "string",
-                      "escape": true,
-                      "required": true
+                      "escape": true
                   },
                   "machineName": "modal-window-id",
                   "tooltipPlacement": "auto top-left",
                   "tooltipText": "The ID must be unique to the page.",
                   "validationMessage": {
                       "302": "Please provide an ID."
-                  }
+                  },
+                  "required": true
               },
               "contextVisibility": {
                   "condition": "ALL"
@@ -1452,7 +1457,7 @@ json_values: |
                   "type": "cohHelpText",
                   "options": {
                       "showClose": false,
-                      "helpType": "coh-help-text--help",
+                      "helpType": "help",
                       "helpText": "# Using the modal window component\n- Use this component to add a modal to your page that can be launched on page load or clicking a button.\n- Add the modal content to the Drop zone. \n\n# Modal trigger\n- **Auto open modal -** Toggle on to open the modal automatically on page load.\n\n# Modal\n- **Modal window ID -** The modal must be given an ID that is unique to the page. The ID is required for the button to target the modal when clicked. The ID should be formed from letters, numbers and hyphens and not include spaces. For example **modal-one**.\n- **Modal size -** Set the size of the modal window.\n- **Modal background color -** Set the background color of the modal window.\n- **Close button style -** Set the style of the button used to close the modal."
                   }
               },

@@ -66,7 +66,7 @@ class AcquiaSearchForm extends AcquiaCmsDashboardBase {
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Acquia Subscription identifier'),
-        '#default_value' => $this->state->get('acquia_search.identifier'),
+        '#default_value' => $this->state->get('acquia_connector.identifier'),
         '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI. Example: ABCD-12345'),
         '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
       ];
@@ -86,7 +86,7 @@ class AcquiaSearchForm extends AcquiaCmsDashboardBase {
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Acquia Application UUID'),
-        '#default_value' => $this->state->get('acquia_search.uuid'),
+        '#default_value' => $this->state->get('acquia_connector.application_uuid'),
         '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI.'),
         '#suffix' => "</div>",
       ];
@@ -132,11 +132,11 @@ class AcquiaSearchForm extends AcquiaCmsDashboardBase {
     $solr_api_host = $form_state->getValue(['api_host']);
     $solr_api_uuid = $form_state->getValue(['uuid']);
     $this->config('acquia_search.settings')->set('api_host', $solr_api_host)->save(TRUE);
-    $this->state->set('acquia_search.identifier', $solr_identifier);
+    $this->state->set('acquia_connector.identifier', $solr_identifier);
     if ($solr_api_key) {
-      $this->state->set('acquia_search.api_key', $solr_api_key);
+      $this->state->set('acquia_connector.key', $solr_api_key);
     }
-    $this->state->set('acquia_search.uuid', $solr_api_uuid);
+    $this->state->set('acquia_connector.application_uuid', $solr_api_uuid);
     $this->setConfigurationState();
     $this->messenger()->addStatus('The configuration options have been saved.');
   }
@@ -153,9 +153,9 @@ class AcquiaSearchForm extends AcquiaCmsDashboardBase {
    */
   public function checkMinConfiguration() {
     $api_host = $this->config('acquia_search.settings')->get('api_host');
-    $solr_identifier = $this->state->get('acquia_search.identifier');
-    $api_key = $this->state->get('acquia_search.api_key');
-    $uuid = $this->state->get('acquia_search.uuid');
+    $solr_identifier = $this->state->get('acquia_connector.identifier');
+    $api_key = $this->state->get('acquia_connector.api_key');
+    $uuid = $this->state->get('acquia_connector.uuid');
     return !empty($api_host) && !empty($uuid) && !empty($api_key) && !empty($solr_identifier);
   }
 

@@ -11,9 +11,13 @@ json_values: |
   {
       "preview": {
           "text": "<p class=\"coh-preview\">Default content for 'Paragraph'.<\/p>\n",
-          "textFormat": "cohesion"
+          "textFormat": "cohesion",
+          "background": {
+              "value": {
+                  "rgba": "rgba(255,255,255,1)"
+              }
+          }
       },
-      "sBackgroundColour": "#FFFFFF",
       "styles": {
           "settings": {
               "element": "p",
@@ -88,5 +92,6 @@ selectable: true
 class_name: .coh-style-paragraph-small
 custom_style_type: paragraph
 available_in_wysiwyg: true
+available_in_wysiwyg_inline: true
 parent: null
 weight: 31

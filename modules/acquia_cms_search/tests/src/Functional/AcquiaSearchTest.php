@@ -46,41 +46,41 @@ class AcquiaSearchTest extends BrowserTestBase {
   /**
    * Tests the Acquia Search Solr Form.
    */
-  public function testAcquiaSearch() {
-    $assert_session = $this->assertSession();
+  public function testAcquiaSearch(): void {
+    $assert = $this->assertSession();
 
     $account = $this->drupalCreateUser(['access acquia cms tour dashboard']);
     $this->drupalLogin($account);
 
     // Visit the tour page.
     $this->drupalGet('/admin/tour/dashboard');
-    $assert_session->statusCodeEquals(200);
-    $container = $assert_session->elementExists('css', '.acquia-cms-search-form');
+    $assert->statusCodeEquals(200);
+    $container = $assert->elementExists('css', '.acquia-cms-search-form');
     // Assert that save and advanced buttons are present on form.
-    $assert_session->buttonExists('Save');
+    $assert->buttonExists('Save');
     // Assert that the expected fields show up.
-    $assert_session->fieldExists('Acquia Subscription identifier');
-    $assert_session->fieldExists('Acquia Search API hostname');
-    $assert_session->fieldExists('Acquia Application UUID');
+    $assert->fieldExists('Acquia Subscription identifier');
+    $assert->fieldExists('Acquia Search API hostname');
+    $assert->fieldExists('Acquia Application UUID');
     // Save Subscription identifier.
-    $dummy_identifier = getenv('CONNECTOR_ID');
-    $container->fillField('edit-identifier', $dummy_identifier);
+    $dummyIdentifier = getenv('CONNECTOR_ID') ?: 'ABCD-12345';
+    $container->fillField('edit-identifier', $dummyIdentifier);
     // Save Search API hostname.
-    $dummy_hostname = 'https://api.sr-prod02.acquia.com';
-    $container->fillField('edit-api-host', $dummy_hostname);
+    $dummyHostname = 'https://api.sr-prod02.acquia.com';
+    $container->fillField('edit-api-host', $dummyHostname);
     // Save Application UUID.
-    $dummy_uuid = getenv('SEARCH_UUID');
-    $container->fillField('edit-uuid', $dummy_uuid);
+    $dummyUuid = getenv('SEARCH_UUID');
+    $container->fillField('edit-uuid', $dummyUuid);
     $container->pressButton('Save');
-    $assert_session->pageTextContains('The configuration options have been saved.');
+    $assert->pageTextContains('The configuration options have been saved.');
     // Test that the config values we expect are set correctly.
     $state = $this->container->get('state');
-    $solr_identifier = $state->get('acquia_search.identifier');
-    $this->assertSame($solr_identifier, $dummy_identifier);
-    $solr_api_host = $this->config('acquia_search.settings')->get('api_host');
-    $this->assertSame($solr_api_host, $dummy_hostname);
-    $solr_uuid = $state->get('acquia_search.uuid');
-    $this->assertSame($solr_uuid, $dummy_uuid);
+    $solrIdentifier = $state->get('acquia_connector.identifier');
+    $this->assertSame($solrIdentifier, $dummyIdentifier);
+    $solrApiHost = $this->config('acquia_search.settings')->get('api_host');
+    $this->assertSame($solrApiHost, $dummyHostname);
+    $solrUuid = $state->get('acquia_connector.application_uuid');
+    $this->assertSame($solrUuid, $dummyUuid);
   }
 
 }

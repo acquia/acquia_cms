@@ -4,18 +4,22 @@
     "description": "Handles code for Site Studio Installation & Related Configurations.",
     "license": "GPL-2.0-or-later",
     "require": {
-        "acquia/cohesion": "^6.9 || ^7.0",
+        "acquia/cohesion": "^6.9.2 || ^7.0",
         "acquia/cohesion-theme": "^6.9 || ^7.0",
         "drupal/acquia_cms_common": "1.x-dev || 2.x-dev",
         "drupal/collapsiblock": "^4.0",
         "drupal/node_revision_delete": "^1.0"
     },
     "conflict": {
-        "drupal/acquia_cms_article": "<1.5.4",
-        "drupal/acquia_cms_audio": "<1.4.4",
-        "drupal/acquia_cms_event": "<1.5.4",
-        "drupal/acquia_cms_page": "<1.5.4",
-        "drupal/acquia_cms_video": "<1.5.4"
+        "drupal/acquia_cms_article": "<1.5.6",
+        "drupal/acquia_cms_audio": "<1.4.6",
+        "drupal/acquia_cms_event": "<1.5.6",
+        "drupal/acquia_cms_image": "<1.5.8",
+        "drupal/acquia_cms_page": "<1.5.6",
+        "drupal/acquia_cms_person": "<1.5.6",
+        "drupal/acquia_cms_page": "<1.5.6",
+        "drupal/acquia_cms_search": "<1.4.11",
+        "drupal/acquia_cms_video": "<1.5.6"
     },
     "config": {
         "allow-plugins": {
@@ -41,7 +45,7 @@
         "enable-patching": true,
         "patches": {
             "acquia/cohesion": {
-                "3340269 - Site Studio: Allow optional packages to import": "https://www.drupal.org/files/issues/2023-02-28/site-studio-allow-optional-packages.patch"
+                "3340269 - Site Studio: Allow optional packages to import": "https://www.drupal.org/files/issues/2023-03-16/3340269-site-studio-allow-optional-packages-6.patch"
             }
         }
     },

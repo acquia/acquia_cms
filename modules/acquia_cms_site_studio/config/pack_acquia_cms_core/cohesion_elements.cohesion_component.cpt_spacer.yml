@@ -4,6 +4,8 @@ status: true
 dependencies:
   config:
     - cohesion_elements.cohesion_component_category.cpt_cat_layout_components
+  content:
+    - 'file:file:b8c42bb3-8cec-4cc0-aa2f-c99d3c980234'
   enforced:
     module:
       - acquia_cms_site_studio
@@ -413,7 +415,7 @@ json_values: |
                   "title": "Space (Height)",
                   "type": "cohSection",
                   "hideRowHeading": 0,
-                  "columnCount": "coh-component-field-group-3-col",
+                  "columnCount": "3",
                   "breakpoints": false,
                   "propertiesMenu": false,
                   "disableScrollbar": true,
@@ -505,7 +507,7 @@ json_values: |
                   "type": "cohHelpText",
                   "options": {
                       "showClose": false,
-                      "helpType": "coh-help-text--help",
+                      "helpType": "help",
                       "helpText": "# Using the Spacer component\n- Use the spacer component to add additional vertical space within a layout.\n- The spacer component is useful for fine control over content position by device width. For example, if content is sat over a background image, the spacer component can be used to push the content down to expose more of the image."
                   }
               },

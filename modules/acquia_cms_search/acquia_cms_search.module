@@ -11,7 +11,6 @@ use Drupal\acquia_cms_search\Facade\SearchFacade;
 use Drupal\acquia_cms_search\Plugin\views\query\SearchApiQuery;
 use Drupal\acquia_search\Helper\Runtime;
 use Drupal\Core\DestructableInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\field\FieldConfigInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\search_api\Entity\Index;
@@ -150,7 +149,7 @@ function acquia_cms_search_config_schema_info_alter(array &$definitions) {
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
-function acquia_cms_search_search_api_server_update(EntityInterface $entity) {
+function acquia_cms_search_search_api_server_update(ServerInterface $entity) {
   if (Drupal::moduleHandler()->moduleExists('acquia_search') && Runtime::isAcquiaServer($entity)) {
     \Drupal::classResolver(AcquiaSearchFacade::class)->submitSettingsForm();
   }

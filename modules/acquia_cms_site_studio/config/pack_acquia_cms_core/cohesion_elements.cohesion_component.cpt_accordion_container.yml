@@ -3,8 +3,13 @@ langcode: en
 status: true
 dependencies:
   config:
+    - cohesion_custom_styles.cohesion_custom_style.59942bd8
     - cohesion_custom_styles.cohesion_custom_style.63181883
+    - cohesion_custom_styles.cohesion_custom_style.77af1043
+    - cohesion_custom_styles.cohesion_custom_style.a5bad395
     - cohesion_elements.cohesion_component_category.cpt_cat_accordion_components
+  content:
+    - 'file:file:59cbd158-f274-4150-97eb-6393b4fc782b'
   enforced:
     module:
       - acquia_cms_site_studio
@@ -779,7 +784,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -829,7 +834,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -866,7 +871,7 @@ json_values: |
                   "type": "cohSection",
                   "hideRowHeading": 0,
                   "removePadding": 0,
-                  "columnCount": "coh-component-field-group-1-col",
+                  "columnCount": "1",
                   "breakpointIcon": "",
                   "breakpoints": false,
                   "propertiesMenu": false,
@@ -923,7 +928,7 @@ json_values: |
                   "options": {
                       "helpText": "# Using the Accordion container component\n- Use the Accordion container to add an accordion to a layout. \n- To create an accordion, nest Accordion item components directly within this Accordion container.\n- Add content to the Accordion item components.\n\n# Accordion navigation style\n- **Navigation style -** Select the style of the accordion navigation links. Choose a style that's appropriate the background color of where the accordion is placed.\n\n# Color\n- **Background color -** Choose the background color of the accordion container.\n\nSpace below\n- **Add space below -** Add a space (margin) below the accordion. This is required if a space is desirable when adding this component above another component within the same parent layout component.",
                       "showClose": false,
-                      "helpType": "coh-help-text--help"
+                      "helpType": "help"
                   }
               },
               "contextVisibility": {
