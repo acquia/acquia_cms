@@ -36,7 +36,7 @@ class NodeBreadcrumbTest extends BrowserTestBase {
   /**
    * The drupal user object.
    *
-   * @var Drupal\user\Entity\User
+   * @var \Drupal\user\Entity\User
    */
   protected $adminUser;
 

@@ -36,7 +36,6 @@ final class MainListingPagesView extends Text {
    */
   public function render($empty = FALSE) {
     if (!$this->isServerAvailable()) {
-      $this->isEmpty = TRUE;
       return [];
     }
     return parent::render($empty);
