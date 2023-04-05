@@ -103,7 +103,7 @@ final class WorkflowFacade implements ContainerInjectionInterface {
     // Ensure the workflow exists, and log a warning if it doesn't.
     /** @var \Drupal\workflows\WorkflowInterface $workflow */
     $workflow = $this->workflowStorage->load($workflow_id);
-    if (empty($workflow)) {
+    if (!$workflow) {
       $this->logger->warning('Could not add the %node_type content type to the %workflow workflow because the workflow does not exist.', $variables);
       return;
     }

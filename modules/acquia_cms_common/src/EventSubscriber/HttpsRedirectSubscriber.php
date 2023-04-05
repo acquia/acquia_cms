@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_common\EventSubscriber;
 
+use Drupal\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
@@ -34,7 +35,7 @@ class HttpsRedirectSubscriber implements EventSubscriberInterface {
   /**
    * The Request URI Service.
    *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
+   * @var \Symfony\Component\HttpFoundation\RequestStack|\Symfony\Component\HttpFoundation\Request
    */
   protected $request;
 
@@ -45,7 +46,7 @@ class HttpsRedirectSubscriber implements EventSubscriberInterface {
    *   The config factory service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   A cache backend used to store configuration.
-   * @param Symfony\Component\HttpFoundation\RequestStack $request_stack
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request URI service to get request URL.
    */
   public function __construct(ConfigFactoryInterface $config_factory, CacheBackendInterface $cache, RequestStack $request_stack) {
@@ -58,9 +59,7 @@ class HttpsRedirectSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('request_stack')
-    );
+    return new static($container->get('request_stack'));
   }
 
   /**

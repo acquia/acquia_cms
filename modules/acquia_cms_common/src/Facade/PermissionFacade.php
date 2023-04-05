@@ -128,7 +128,7 @@ class PermissionFacade implements ContainerInjectionInterface {
       "dependencies" => [],
       "id" => $role,
       "label" => $label,
-      "weight" => $configurations['weight'] ?? 0,
+      "weight" => 0,
       "is_admin" => NULL,
     ];
   }

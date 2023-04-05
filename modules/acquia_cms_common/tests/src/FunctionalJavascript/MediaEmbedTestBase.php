@@ -125,7 +125,9 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
   protected function doTestCreateMedia() {
     $this->openMediaLibrary();
     $this->addMedia();
-    $added_media = $this->assertSession()->waitForElementVisible('css', '.js-media-library-add-form-added-media > li');
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    $added_media = $assertSession->waitForElementVisible('css', '.js-media-library-add-form-added-media > li');
     $this->assertNotEmpty($added_media);
     $this->assertAddedMedia($added_media);
   }
@@ -155,7 +157,9 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
    * Asserts that an embedded media item is visible in CKEditor5.
    */
   protected function assertMediaIsEmbedded() {
-    $result = $this->assertSession()->waitForElementVisible('css', '.ck-content .ck-widget.drupal-media .media');
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    $result = $assertSession->waitForElementVisible('css', '.ck-content .ck-widget.drupal-media .media');
     $this->assertNotEmpty($result);
   }
 
@@ -175,7 +179,9 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
    *   The zero-based index of the media item to select.
    */
   protected function selectMedia(int $position) {
-    $checkbox = $this->assertSession()
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    $checkbox = $assertSession
       ->waitForElementVisible('named', ['field', "media_library_select_form[$position]"]);
     $this->assertNotEmpty($checkbox);
     $checkbox->check();
@@ -194,7 +200,9 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
     // additional button to navigate to other elements.
     $this->pressEditorButton('Show more items');
     $this->pressEditorButton('Insert Media');
-    $result = $this->assertSession()->waitForText('Add or select media');
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    $result = $assertSession->waitForText('Add or select media');
     $this->assertNotEmpty($result);
   }
 
