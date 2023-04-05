@@ -18,7 +18,7 @@ function acquia_cms_development_install($is_syncing) {
     $config_factory = \Drupal::configFactory();
     $key = getenv('CONNECTOR_KEY');
     $identifier = getenv('CONNECTOR_ID');
-    if (isset($key, $identifier)) {
+    if ($key && $identifier) {
       _acquia_connector_config($key, $identifier);
       _acquia_search_config($key, $identifier);
     }
@@ -27,7 +27,7 @@ function acquia_cms_development_install($is_syncing) {
 
       $shield_user = getenv('SHIELD_USER');
       $shield_pass = getenv('SHIELD_PASS');
-      if (isset($shield_user, $shield_pass)) {
+      if ($shield_user && $shield_pass) {
         \Drupal::service('module_installer')->install(['shield']);
         $config_factory->getEditable('shield.settings')
           ->set('credentials.shield.user', $shield_user)
@@ -105,7 +105,7 @@ function _acquia_search_config(string $key, string $identifier) {
 
   // Replicating Storage from acquia_search/src/Helper/Storage.php.
   $search_uuid = getenv('SEARCH_UUID');
-  if (isset($search_uuid)) {
+  if ($search_uuid) {
     \Drupal::configFactory()->getEditable('acquia_search.settings')
       ->set('api_host', 'https://api.sr-prod02.acquia.com')->save();
     \Drupal::state()->set('acquia_search.api_key', $key);
