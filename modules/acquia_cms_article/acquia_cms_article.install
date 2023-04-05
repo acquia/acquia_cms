@@ -5,6 +5,7 @@
  * Install, update and uninstall functions for the acquia_cms_article module.
  */
 
+use Drupal\Core\Field\FieldConfigBase;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\user\RoleInterface;
 
@@ -53,8 +54,9 @@ function acquia_cms_article_update_8001() {
  * Make Display Author field optional.
  */
 function acquia_cms_article_update_8002() {
+  /** @var \Drupal\Core\Field\FieldConfigBase $field */
   $field = FieldConfig::loadByName('node', 'article', 'field_display_author');
-  if ($field instanceof FieldConfig && $field->isRequired()) {
+  if ($field instanceof FieldConfigBase && $field->isRequired()) {
     $field->setRequired(FALSE);
     $field->save();
   }
