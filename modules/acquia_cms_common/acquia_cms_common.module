@@ -197,10 +197,19 @@ function _acquia_cms_common_rewrite_configuration(string $config, string $module
 /**
  * Helper function to update views display_options's style.
  *
+ * @param string $view_name
+ *   The view names.
+ * @param string $display_id
+ *   The view display_id.
+ * @param string|null $views_template
+ *   The view template name.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
  * @throws \Drupal\Core\Entity\EntityStorageException
  */
-function _acquia_cms_common_update_view_display_options_style($view_name, $display_id = 'default', $views_template = NULL) {
-  /** @var \Drupal\views\ViewEntityInterface $view */
+function _acquia_cms_common_update_view_display_options_style(string $view_name, string $display_id = 'default', string $views_template = NULL) {
+  /** @var \Drupal\views\ViewEntityInterface $view_storage */
   $view_storage = \Drupal::entityTypeManager()->getStorage('view');
   $view = $view_storage->load($view_name);
   if (empty($view)) {
@@ -214,7 +223,7 @@ function _acquia_cms_common_update_view_display_options_style($view_name, $displ
       'views_template' => $views_template ?? 'view_tpl_' . $view_name,
       'master_template' => 'master_template_boxed',
     ];
-    $view_storage->save($view);
+    $view_storage->save();
   }
 }
 
@@ -232,7 +241,7 @@ function _acquia_cms_common_update_page_configurations(string $config_name, arra
   $configFactory = \Drupal::service('config.factory');
   $config = $configFactory->getEditable($config_name);
   $need_save = FALSE;
-  if (!empty($config)) {
+  if ($config) {
     foreach ($configurations as $key => $value) {
       if ($config->get($key) != $value) {
         $config->set($key, $value);
@@ -392,12 +401,9 @@ function acquia_cms_common_modules_installed($modules, $is_syncing) {
         // configurations which is dependent on any of these roles.
         /** @var \Drupal\Core\Config\ConfigInstallerInterface $config_installer */
         $config_installer = \Drupal::service('config.installer');
-        $restrict_by_dependency = [
-          'config' => 'user.role.content_administrator',
-          'config' => 'user.role.content_author',
-          'config' => 'user.role.content_editor',
-        ];
-        $config_installer->installOptionalConfig(NULL, $restrict_by_dependency);
+        $config_installer->installOptionalConfig(NULL, ['config' => 'user.role.content_administrator']);
+        $config_installer->installOptionalConfig(NULL, ['config' => 'user.role.content_author']);
+        $config_installer->installOptionalConfig(NULL, ['config' => 'user.role.content_editor']);
       }
       if ($rolesToUpdate) {
         // We need to update only those roles, which are not created earlier.

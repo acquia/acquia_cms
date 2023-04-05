@@ -111,7 +111,7 @@ final class RedirectHandler implements ContainerInjectionInterface {
     $loginObject = get_class($form_state->getFormObject());
     // If the user is about to be redirected to their user page, do our special
     // sauce redirect handling based on the role(s) the user has.
-    if ((stripos($loginObject ?? '', 'userloginform') != FALSE) &&
+    if ((stripos($loginObject, 'userloginform') != FALSE) &&
       $this->willRedirectToUserPage()) {
       // Remove the 'destination' query sting parameter, since it will cause our
       // redirect to be totally ignored due to a core quirk.

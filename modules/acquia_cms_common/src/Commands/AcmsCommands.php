@@ -34,14 +34,14 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
   /**
    * Logger Factory.
    *
-   * @var \Drupal\Core\Logger\LoggerChannelFactory
+   * @var \Psr\Log\LoggerInterface
    */
   protected $loggerFactory;
 
   /**
    * The System schema object from KeyValue factory.
    *
-   * @var \Drupal\Core\KeyValueStore\KeyValueFactory
+   * @var \Drupal\Core\KeyValueStore\KeyValueStoreInterface
    */
   protected $systemSchema;
 
@@ -151,7 +151,12 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
       'entity-updates' => FALSE,
       'post-updates' => TRUE,
     ];
-    $process = $this->processManager()->drush($selfAlias, 'updatedb', [], $options);
+    $process = $this->processManager();
+
+    /** @var \Drush\SiteAlias\ProcessManager $process */
+    $process->drush($selfAlias, 'updatedb', [], $options);
+
+    /** @var \Symfony\Component\Process\Process $process */
     $process->mustRun();
 
     // Use symfony process component getIterator to get all output
@@ -202,8 +207,15 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
       'entity-updates' => FALSE,
       'post-updates' => TRUE,
     ];
-    $process = $this->processManager()->drush($selfAlias, 'updatedb', [], $options);
-    $process->mustRun($process->showRealtime());
+    $process = $this->processManager();
+    /** @var \Drush\SiteAlias\ProcessManager $process */
+    $process->drush($selfAlias, 'updatedb', [], $options);
+
+    /** @var \Consolidation\SiteProcess\ProcessBase $process */
+    $showRealtime = $process->showRealtime();
+
+    /** @var \Symfony\Component\Process\Process $process */
+    $process->mustRun($showRealtime);
   }
 
   /**
