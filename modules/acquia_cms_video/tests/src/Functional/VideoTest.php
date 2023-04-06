@@ -47,10 +47,12 @@ class VideoTest extends MediaTypeTestBase {
    */
   protected function setUp(): void {
     parent::setUp();
-    // Set the a default value for field_media_oembed_video so that we can
+    // Set the default value for field_media_oembed_video so that we can
     // bypass the oEmbed system's URL validation. (It's not necessary for this
     // test anyway).
-    FieldConfig::loadByName('media', $this->mediaType, 'field_media_oembed_video')
+    /** @var \Drupal\Core\Field\FieldConfigBase $fieldConfig */
+    $fieldConfig = FieldConfig::loadByName('media', $this->mediaType, 'field_media_oembed_video');
+    $fieldConfig
       ->setDefaultValue('https://www.youtube.com/watch?v=6e8QyfvQMmU&list=PLpVC00PAQQxHzlDeQvCNDKkyKRV1G3_vT')
       ->save();
   }
