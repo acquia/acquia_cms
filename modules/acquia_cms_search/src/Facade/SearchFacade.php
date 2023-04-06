@@ -136,7 +136,7 @@ final class SearchFacade implements ContainerInjectionInterface {
     // Update the view mode used for this node type in the Search view.
     /** @var \Drupal\views\ViewEntityInterface $view */
     $view = $this->viewStorage->load('search');
-    if (empty($view)) {
+    if (!$view) {
       return;
     }
 
@@ -160,6 +160,9 @@ final class SearchFacade implements ContainerInjectionInterface {
    *
    * @param \Drupal\field\FieldStorageConfigInterface $field_storage
    *   The new field's storage definition.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Drupal\search_api\SearchApiException
    */
   public function addTaxonomyField(FieldStorageConfigInterface $field_storage) {
     $index = $this->loadIndexFromSettings($field_storage);
@@ -211,6 +214,9 @@ final class SearchFacade implements ContainerInjectionInterface {
    *
    * @param \Drupal\field\FieldStorageConfigInterface $field_storage
    *   The new field's storage definition.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Drupal\search_api\SearchApiException
    */
   public function addFields(FieldStorageConfigInterface $field_storage) {
     $index = $this->loadIndexFromSettings($field_storage);
