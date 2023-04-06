@@ -36,7 +36,7 @@ class PageWithLayoutCanvasFieldTest extends FieldKernelTestBase {
   /**
    * The field_config object.
    *
-   * @var \Drupal\Core\Field\FieldDefinitionInterface
+   * @var \Drupal\field\FieldConfigStorage
    */
   protected $fieldDefinition;
 
