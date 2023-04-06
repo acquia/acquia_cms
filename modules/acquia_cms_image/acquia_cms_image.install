@@ -102,7 +102,7 @@ function acquia_cms_image_update_8002() {
         'third_party_settings' => [],
       ],
     ];
-    if (!empty($config)) {
+    if ($config) {
       $config->set('content', $content)->save();
     }
   }
