@@ -67,7 +67,7 @@ function acquia_cms_site_studio_install($is_syncing) {
       // Trigger save on page body field to update it.
       if ($module_handler->moduleExists('acquia_cms_page')) {
         $config = $config_factory->getEditable('field.field.node.page.body');
-        if (!empty($config)) {
+        if ($config) {
           $config->save();
         }
       }
@@ -94,7 +94,7 @@ function acquia_cms_site_studio_install($is_syncing) {
 
     // Set default configurations for node revision delete module.
     $config = $config_factory->getEditable('node_revision_delete.settings');
-    if (!empty($config)) {
+    if ($config) {
       $config->set('node_revision_delete_cron', '50')
         ->set('node_revision_delete_time', '604800')
         ->save();
@@ -184,7 +184,7 @@ function _acquia_cms_site_studio_set_theme() {
 function acquia_cms_site_studio_uninstall($is_syncing) {
   if (!$is_syncing) {
     $config = \Drupal::service('config.factory')->getEditable('field.field.node.page.body');
-    if (!empty($config)) {
+    if ($config) {
       $config->set('label', 'Body');
       $config->set('description', '');
       $config->save();
@@ -201,7 +201,7 @@ function acquia_cms_site_studio_update_8001() {
   // as the media entity won't be included as Site Studio
   // does not export content entities as part of packages.
   $config = \Drupal::service('config.factory')->getEditable('cohesion.settings');
-  if (!empty($config)) {
+  if ($config) {
     $config->set('image_browser.config', [
       'type' => 'imce_imagebrowser',
       'dx8_entity_browser' => 'media_browser',
@@ -229,7 +229,7 @@ function acquia_cms_site_studio_update_8003() {
   // Install node revision delete module and set default configurations.
   \Drupal::service('module_installer')->install(['node_revision_delete']);
   $config = \Drupal::service('config.factory')->getEditable('node_revision_delete.settings');
-  if (!empty($config)) {
+  if ($config) {
     $config->set('node_revision_delete_cron', '50')
       ->set('node_revision_delete_time', '604800')
       ->save();
