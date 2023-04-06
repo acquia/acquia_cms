@@ -82,6 +82,7 @@ jobs:
           - integrated_php_unit_tests
           - integrated_existing_site_tests
           - backstop_tests
+          - cypress_tests
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -100,6 +101,16 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+      - name: Configure SSH keys
+        run: |
+          mkdir -p ~/.ssh
+          echo "${DRUPAL_SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval `ssh-agent -s`
+          ssh-add ~/.ssh/id_rsa
+        shell: bash
+        env:
+          DRUPAL_SSH_PRIVATE_KEY: ${{ secrets.DRUPAL_SSH_PRIVATE_KEY }}
       - name: Before Install
         run: |
           # One of the patch is failing on Drupal Core 9.5. So remove that patch.
@@ -116,6 +127,8 @@ jobs:
             find modules/*/tests -type f -name "*Test.php" -exec rm -fr '{}' ';'
             # Remove all existing_site phpunit tests from acquia_cms repo as those get's covered from integrated_existing_site_tests.
             find tests/src -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
+          elif [ "${ACMS_JOB}" = "cypress_tests" ]; then
+            composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
           fi
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &

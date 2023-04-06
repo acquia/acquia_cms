@@ -65,12 +65,18 @@ fi
 composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms"]' --merge && composer update --lock
 
 # Enable Starter on full installs if Appropriate.
-if [[ "${ACMS_JOB}" == "backstop_tests" ]]; then
+if [[ "${ACMS_JOB}" == "backstop_tests" ]] || [ "${ACMS_JOB}" == "cypress_tests" ]; then
 
     echo "Installing Starter Kit"
     drush en acquia_cms_development -y
     drush en acquia_cms_starter -y
     drush cr
+fi
+
+# Clone cypress repo for cypress tests.
+if [ "${ACMS_JOB}" == "cypress_tests" ]; then
+    cd tests
+    git clone git@github.com:acquia/acms-ss-cypress.git
 fi
 
 # Set the fixture state to reset to between tests.

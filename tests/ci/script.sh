@@ -34,3 +34,12 @@ if [ "${ACMS_JOB}" == "backstop_tests" ] || [ "${ACMS_JOB}" == "upgrade_modules"
   # Runs Pa11y.js
   # npm run pa11y-starter
 fi
+if [ "${ACMS_JOB}" == "cypress_tests" ]; then
+  # Install npm dependencies and run JS test suites.
+  cd ${ORCA_SUT_DIR}
+  npm install
+  orca fixture:run-server &
+
+  # Runs Cypress tests
+  npx cypress run
+fi
