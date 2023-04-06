@@ -8,6 +8,13 @@ namespace Drupal\acquia_cms_tour;
 abstract class AcquiaCmsTourPluginBase implements AcquiaCmsTourInterface {
 
   /**
+   * The plugin definition.
+   *
+   * @var mixed
+   */
+  protected $pluginDefinition;
+
+  /**
    * {@inheritdoc}
    */
   public function label() {
