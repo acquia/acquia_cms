@@ -209,10 +209,11 @@ function _acquia_cms_common_rewrite_configuration(string $config, string $module
  * @throws \Drupal\Core\Entity\EntityStorageException
  */
 function _acquia_cms_common_update_view_display_options_style(string $view_name, string $display_id = 'default', string $views_template = NULL) {
-  /** @var \Drupal\views\ViewEntityInterface $view_storage */
+  /** @var \Drupal\Core\Entity\EntityStorageInterface $view_storage */
   $view_storage = \Drupal::entityTypeManager()->getStorage('view');
+  /** @var \Drupal\views\ViewEntityInterface $view */
   $view = $view_storage->load($view_name);
-  if (empty($view)) {
+  if (!$view) {
     return;
   }
   $display = &$view->getDisplay($display_id);
@@ -223,7 +224,7 @@ function _acquia_cms_common_update_view_display_options_style(string $view_name,
       'views_template' => $views_template ?? 'view_tpl_' . $view_name,
       'master_template' => 'master_template_boxed',
     ];
-    $view_storage->save();
+    $view_storage->save($view);
   }
 }
 
