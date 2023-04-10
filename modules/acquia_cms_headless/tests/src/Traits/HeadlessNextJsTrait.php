@@ -11,6 +11,7 @@ trait HeadlessNextJsTrait {
    * Function to enable headless mode.
    */
   protected function enableHeadlessMode(): void {
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assert */
     $assert = $this->assertSession();
     $page = $this->getSession()->getPage();
     $this->drupalGet("admin/tour/dashboard");
@@ -28,6 +29,7 @@ trait HeadlessNextJsTrait {
    * Assert new nextjs site.
    */
   protected function assertNewNextJsSites(): void {
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assert */
     $assert = $this->assertSession();
     $page = $this->getSession()->getPage();
     // Visit add nextJs site page.
@@ -60,6 +62,7 @@ trait HeadlessNextJsTrait {
    * Assert configure nextJs entity type.
    */
   protected function assertNextJsEntityTypeConfigure(): void {
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assert */
     $assert = $this->assertSession();
     $page = $this->getSession()->getPage();
     $this->drupalGet("admin/config/services/next/entity-types/add");

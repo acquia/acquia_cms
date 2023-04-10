@@ -257,6 +257,7 @@ class HeadlessApiKeys extends AcquiaCmsDashboardBase {
     $entity_type = 'consumer';
     $consumer_data = $this->getEntityData();
     $storage = $this->entityTypeManager->getStorage($entity_type);
+    /** @var \Drupal\Core\Entity\EntityStorageInterface $consumers */
     $consumers = $storage->loadMultiple($consumer_data);
     $operations = $this->createOperationLinks($entity_type);
 

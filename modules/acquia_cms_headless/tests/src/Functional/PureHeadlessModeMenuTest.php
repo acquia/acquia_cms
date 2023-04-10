@@ -4,6 +4,7 @@ namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\Core\Extension\Exception\UnknownExtensionException;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 
 /**
@@ -40,7 +41,7 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
   /**
    * The module installer object.
    *
-   * @var \Drupal\Core\Extension\ModuleInstallerInterface
+   * @var \Drupal\Core\Extension\ModuleExtensionList
    */
   protected $moduleList;
 
@@ -77,11 +78,13 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
   public function testChildMenu(string $selector, string $parentMenuName, array $childs): void {
     if ($this->installModule('acquia_cms_toolbar')) {
       $this->drupalGet('/admin/headless/dashboard');
-      $menu = $this->assertSession()->waitForElementVisible('css', $selector);
+      /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+      $assertSession = $this->assertSession();
+      $menu = $assertSession->waitForElementVisible('css', $selector);
       $this->assertEquals($parentMenuName, $menu->getText());
       $menu->mouseOver();
       foreach ($childs as $key => $child) {
-        $this->assertEquals($child, $this->assertSession()->waitForElementVisible('css', $selector . ' + ul > li:nth-child(' . ++$key . ')')->getText());
+        $this->assertEquals($child, $assertSession->waitForElementVisible('css', $selector . ' + ul > li:nth-child(' . ++$key . ')')->getText());
       }
     }
   }
@@ -97,7 +100,9 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
    */
   protected function installModule(string $module): bool {
     try {
-      $this->moduleList->get($module);
+      if ($this->moduleList instanceof ModuleExtensionList) {
+        $this->moduleList->get($module);
+      }
     }
     catch (UnknownExtensionException $e) {
       return FALSE;
