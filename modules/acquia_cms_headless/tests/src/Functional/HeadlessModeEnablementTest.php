@@ -46,6 +46,7 @@ class HeadlessModeEnablementTest extends HeadlessTestBase {
       $account->addRole('administrator');
       $account->save();
       $this->drupalLogin($account);
+      /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
       $assertSession = $this->assertSession();
 
       // Click on Setup manually button to close the modal,

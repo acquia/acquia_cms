@@ -5,6 +5,7 @@ namespace Drupal\Tests\acquia_cms_headless\Functional;
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Behat\Mink\Element\NodeElement;
 use Drupal\Core\Extension\Exception\UnknownExtensionException;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 
 /**
@@ -41,7 +42,7 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
   /**
    * The module installer object.
    *
-   * @var \Drupal\Core\Extension\ModuleInstallerInterface
+   * @var \Drupal\Core\Extension\ModuleExtensionList
    */
   protected $moduleList;
 
@@ -86,8 +87,11 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
       $this->assertInstanceOf(NodeElement::class, $menu, "Page doesn't contain element: `$selector`.");
       $this->assertEquals($parentMenuName, $menu->getText());
       $menu->mouseOver();
+
+      /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+      $assertSession = $this->assertSession();
       // Wait for menu items to visible.
-      $menuItem = $this->assertSession()->waitForElementVisible('css', '.hover-intent.menu-item');
+      $menuItem = $assertSession->waitForElementVisible('css', '.hover-intent.menu-item');
       $this->assertInstanceOf(NodeElement::class, $menuItem);
       $childrenMenuItems = $menuItem->findAll("css", "ul.toolbar-menu li.level-2");
       $this->assertCount(count($children), $childrenMenuItems);
@@ -111,7 +115,9 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
    */
   protected function installModule(string $module): bool {
     try {
-      $this->moduleList->get($module);
+      if ($this->moduleList instanceof ModuleExtensionList) {
+        $this->moduleList->get($module);
+      }
     }
     catch (UnknownExtensionException $e) {
       return FALSE;

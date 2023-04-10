@@ -272,6 +272,7 @@ class HeadlessNextSites extends AcquiaCmsDashboardBase {
     $operations = $this->createOperationLinks($entity_type);
 
     // Match the data with the columns.
+    /** @var \Drupal\next\Entity\NextSiteInterface $site */
     foreach ($sites as $site) {
       $site_link = $site->getBaseUrl();
       $site_uri = Url::fromUri($site_link, ['external' => TRUE]);
