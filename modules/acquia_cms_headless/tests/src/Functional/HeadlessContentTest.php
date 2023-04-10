@@ -105,6 +105,7 @@ class HeadlessContentTest extends WebDriverTestBase {
     $menuList = $this->cssSelect('ul.tabs--primary li');
     // Check the total count of node tabs.
     $this->assertCount(6, $menuList);
+    $menuOrder = [];
     foreach ($menuList as $menu) {
       $menuOrder[] = str_replace(' (active tab)', '', $menu->getText());
     }

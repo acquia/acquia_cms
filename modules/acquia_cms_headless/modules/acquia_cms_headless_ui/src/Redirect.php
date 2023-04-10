@@ -30,7 +30,7 @@ class Redirect {
 
     $redirect = [
       static::class,
-      static::camelize($form_id),
+      Redirect::camelize($form_id),
     ];
 
     if (is_callable($redirect)) {

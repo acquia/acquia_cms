@@ -121,10 +121,18 @@ class StarterkitNextjsService {
    *   Gets the site path, useful in cases of multi-site arrangements.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   Lets us create a directory.
-   * @param Symfony\Component\HttpFoundation\RequestStack $request_stack
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The current request.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, DefaultPasswordGenerator $defaultPasswordGenerator, EntityTypeManagerInterface $entity_type_manager, KeyGeneratorService $key_generator_service, MessengerInterface $messenger, string $site_path, FileSystemInterface $file_system, RequestStack $request_stack) {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    DefaultPasswordGenerator $defaultPasswordGenerator,
+    EntityTypeManagerInterface $entity_type_manager,
+    KeyGeneratorService $key_generator_service,
+    MessengerInterface $messenger,
+    string $site_path,
+    FileSystemInterface $file_system,
+    RequestStack $request_stack) {
     $this->configFactory = $config_factory;
     $this->defaultPasswordGenerator = $defaultPasswordGenerator;
     $this->entityTypeManager = $entity_type_manager;
@@ -617,9 +625,11 @@ class StarterkitNextjsService {
     // that is passed to the $isDefault var.
     if (!empty($cid)) {
       $consumer = $consumerStorage->load($cid[0]);
-      $consumer
-        ->set('is_default', $isDefault)
-        ->save();
+      if ($consumer instanceof Consumer) {
+        $consumer
+          ->set('is_default', $isDefault)
+          ->save();
+      }
     }
   }
 
@@ -721,9 +731,13 @@ class StarterkitNextjsService {
 
     if ($secret = $next_site->getPreviewSecret()) {
       $consumer = $this->getHeadlessConsumerData($next_site->label());
+      if ($consumer instanceof Consumer) {
+        $variables += [
+          'DRUPAL_CLIENT_ID' => $consumer->getClientId(),
+        ];
+      }
       $variables += [
         'DRUPAL_PREVIEW_SECRET' => $secret,
-        'DRUPAL_CLIENT_ID' => $consumer->getClientId(),
         'DRUPAL_CLIENT_SECRET' => $this->consumerSecret ?? 'insert secret here',
       ];
     }

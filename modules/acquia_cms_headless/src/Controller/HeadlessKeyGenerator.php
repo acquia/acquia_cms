@@ -163,9 +163,10 @@ class HeadlessKeyGenerator extends ControllerBase {
     // Get the Consumer name.
     $consumer_name = $this->routeMatch->getParameter($entity_type)->label();
     // Load the consumer.
+    /** @var \Drupal\consumers\Entity\Consumer $consumer */
     $consumer = $this->entityTypeManager->getStorage($entity_type)->load($cid);
     // Apply the new secret to the consumer.
-    $consumer->secret = $secret;
+    $consumer->set('secret', $secret);
     // Update the consumer.
     $consumer->save();
 
