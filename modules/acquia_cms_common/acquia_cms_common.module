@@ -272,6 +272,18 @@ function acquia_cms_common_mail_alter(&$message) {
 }
 
 /**
+ * Implements hook_library_info_alter().
+ */
+function acquia_cms_common_library_info_alter(array &$libraries, $module) {
+  if ($module === 'eu_cookie_compliance' && isset($libraries['eu_cookie_compliance_default'])) {
+    $acquia_cms_common_path = \Drupal::service('extension.path.resolver')->getPath('module', 'acquia_cms_common');
+    $libraries['eu_cookie_compliance_default']['css']['state'] = [
+      '/' . $acquia_cms_common_path . '/css/cookie-compliance.css' => [],
+    ];
+  }
+}
+
+/**
  * Implements hook_system_breadcrumb_alter().
  *
  * This fixes the issue: https://www.drupal.org/project/drupal/issues/3220437.
