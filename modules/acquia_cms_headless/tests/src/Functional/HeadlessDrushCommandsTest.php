@@ -47,8 +47,8 @@ class HeadlessDrushCommandsTest extends BrowserTestBase {
     $this->assertEquals("NEXT_IMAGE_DOMAIN=default", $newNextJsData[2]);
     $this->assertEquals("DRUPAL_SITE_ID=headless_site", $newNextJsData[3]);
     $this->assertEquals("DRUPAL_FRONT_PAGE=/user/login", $newNextJsData[4]);
-    $this->assertStringStartsWith("DRUPAL_PREVIEW_SECRET", $newNextJsData[5]);
-    $this->assertStringStartsWith("DRUPAL_CLIENT_ID", $newNextJsData[6]);
+    $this->assertStringStartsWith("DRUPAL_CLIENT_ID", $newNextJsData[5]);
+    $this->assertStringStartsWith("DRUPAL_PREVIEW_SECRET", $newNextJsData[6]);
     $this->assertStringStartsWith("DRUPAL_CLIENT_SECRET", $newNextJsData[7]);
 
     // Validate for same site-name.
