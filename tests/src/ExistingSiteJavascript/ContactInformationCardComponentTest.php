@@ -21,15 +21,18 @@ class ContactInformationCardComponentTest extends CohesionComponentTestBase {
     $account->addRole('administrator');
     $account->save();
     $this->drupalLogin($account);
-
     // Create a random image that we can select in the media library when
     // editing the component.
     $this->createMedia(['bundle' => 'image']);
 
     $this->drupalGet('/node/add/page');
-
     // Add the component to the layout canvas.
     $edit_form = $this->getLayoutCanvas()->add('Contact information card')->edit();
+    $this->openMediaLibrary($edit_form, 'Select image');
+    $this->selectMediaSource("Media Types");
+    $this->selectMedia(0);
+    $this->insertSelectedMedia();
+    $this->assertSession()->waitForElementVisible('css', '.ssa-modal-sidebar-editor');
     $edit_form->fillField('Card heading element', 'h3');
     $edit_form->fillField('Card heading', 'This is the Heading');
     $edit_form->fillField('Contact name', 'Leia Organa');
@@ -37,12 +40,6 @@ class ContactInformationCardComponentTest extends CohesionComponentTestBase {
     $edit_form->fillField('Address', 'City Hall,200 main ST,Acquiaville');
     $edit_form->fillField('Telephone', '9820964326');
     $edit_form->fillField('Email', 'acquiaindia@test.com');
-
-    // @todo this need to be removed once ACO fixes ACO-2372.
-    /*$this->openMediaLibrary($edit_form, 'Select image');
-    $this->selectMediaSource("Media Types");
-    $this->selectMedia(0);
-    $this->insertSelectedMedia();*/
   }
 
   /**
