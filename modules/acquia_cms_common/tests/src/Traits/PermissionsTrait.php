@@ -74,10 +74,10 @@ trait PermissionsTrait {
    */
   public function testRoleExistNotExist(array $roles, array $roles_not_exist = []) {
     foreach ($roles as $role) {
-      $this->assertInstanceOf(Role::class, Role::load($role), "Role `${role}` should exist.");
+      $this->assertInstanceOf(Role::class, Role::load($role), "Role `$role` should exist.");
     }
     foreach ($roles_not_exist as $role) {
-      $this->assertNotInstanceOf(Role::class, Role::load($role), "Role `${role}` should not exist.");
+      $this->assertNotInstanceOf(Role::class, Role::load($role), "Role `$role` should not exist.");
     }
   }
 
