@@ -6,7 +6,9 @@
  */
 
 use Drupal\Core\Installer\InstallerKernel;
+use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\media\Entity\Media;
 
 /**
  * Implements hook_install().
@@ -14,6 +16,31 @@ use Drupal\image\Entity\ImageStyle;
 function acquia_cms_image_install($is_syncing) {
   if (!$is_syncing) {
     _acquia_cms_common_editor_config_rewrite(TRUE);
+
+    // Create file entity.
+    $image = File::create();
+    $image->setFileUri('public://2021-02/Acquia CMS.png');
+    $image->setOwnerId(11);
+    $image->setFileName('Acquia CMS logo');
+    $image->setMimeType('image/png');
+    $image->setPermanent();
+    $image->save();
+
+    // Create media for Acquia CMS logo.
+    $acquiaCmsLogo = Media::create([
+      'name' => 'Acquia CMS.png',
+      'bundle' => 'image',
+      'uid' => 11,
+      'uuid' => '0c6f0f26-9fbb-4c2e-804c-418815aba162',
+      'image' => [
+        'target_id' => $image->id(),
+        'alt' => t('Acquia CMS logo'),
+        'width' => 286,
+        'height' => 112,
+      ],
+      'langcode' => 'en',
+    ]);
+    $acquiaCmsLogo->save();
   }
 }
 
