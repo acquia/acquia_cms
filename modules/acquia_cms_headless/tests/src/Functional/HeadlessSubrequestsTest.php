@@ -22,10 +22,7 @@ class HeadlessSubrequestsTest extends BrowserTestBase {
    */
 
   protected static $modules = [
-    'subrequests',
-    'decoupled_router',
-    'node',
-    'node_test',
+    'acquia_cms_headless',
   ];
 
   /**
@@ -42,20 +39,27 @@ class HeadlessSubrequestsTest extends BrowserTestBase {
       'type' => 'test',
       'name' => 'Test',
     ]);
+    for ($i = 1; $i <= 5; $i++) {
+      $this->drupalCreateNode([
+        'type' => 'test',
+        'title' => 'Headless Test Page ' . $i,
+        'status' => 'published',
+      ]);
+    }
   }
 
   /**
    * Tests that subrequests work properly with Page Cache enabled.
    */
   public function testPageCache(): void {
-    $account = $this->drupalCreateUser(['access content', 'issue subrequests']);
+    $account = $this->drupalCreateUser();
+    $account->addRole('headless');
+    $account->save();
+
     $this->drupalLogin($account);
     for ($i = 1; $i <= 5; $i++) {
-      $node = $this->drupalCreateNode([
-        'type' => 'test',
-        'title' => 'Headless Test Page ' . $i,
-        'status' => 'published',
-      ]);
+      $node = $this->container->get('entity_type.manager')
+        ->getStorage('node')->load($i);
       $blueprint = [
         [
           "requestId" => "router",
@@ -79,7 +83,6 @@ class HeadlessSubrequestsTest extends BrowserTestBase {
         'Content-Type' => 'application/json',
       ];
       $this->drupalGet('/subrequests', $options, $headers);
-
       $assert_session = $this->assertSession();
       $assert_session->statusCodeEquals(207);
       $assert_session->responseContains('Headless Test Page ' . $i);
