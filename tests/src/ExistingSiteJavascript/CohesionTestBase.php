@@ -23,7 +23,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    * @return \Drupal\Tests\acquia_cms\ExistingSiteJavascript\LayoutCanvas
    *   A wrapper object for interacting with the layout canvas.
    */
-  protected function getLayoutCanvas() : LayoutCanvas {
+  protected function getLayoutCanvas(): LayoutCanvas {
     $element = $this->waitForElementVisible('css', '.ssa-layout-canvas', $this->getSession()->getPage());
     return new LayoutCanvas($element->getXpath(), $this->getSession());
   }
@@ -117,7 +117,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    * (probably due to Cohesion interference) and we need to be sure we're
    * pressing the one is that is part of the form's actions area.
    */
-  protected function pressSaveButton() : void {
+  protected function pressSaveButton(): void {
     $this->assertSession()
       ->elementExists('css', '#edit-actions')
       ->pressButton('Save');
@@ -129,7 +129,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    * @return \Drupal\Tests\acquia_cms\ExistingSiteJavascript\Search
    *   A wrapper object for interacting with Cohesion's search container.
    */
-  protected function getSearch() : Search {
+  protected function getSearch(): Search {
     $element = $this->waitForElementVisible('css', '.search-toggle-button', $this->getSession()->getPage());
     return new Search($element->getXpath(), $this->getSession());
   }
