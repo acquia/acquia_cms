@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "da2b9864b6bd706553e7df1780fa393f",
+    "content-hash": "087e5b18e8b7bc57b00cf28dc4618bdb",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2714,7 +2714,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_headless",
-                "reference": "ad4db97721a406f67ff326fc98911cefcaf6156f"
+                "reference": "9e0e4ee4781e56882cab3ef88593ae952adebd7c"
             },
             "require": {
                 "drupal/acquia_cms_tour": "2.x-dev",
@@ -2727,7 +2727,8 @@
             },
             "conflict": {
                 "drupal/consumers": "<1.16",
-                "drupal/decoupled_router": "<2.0.4"
+                "drupal/decoupled_router": "<2.0.4",
+                "drupal/subrequests": "<3.0.7"
             },
             "type": "drupal-module",
             "extra": {
@@ -2768,12 +2769,10 @@
                 },
                 "patches": {
                     "drupal/decoupled_router": {
-                        "3111456 - Unable to resolve path on node in other language than default": "https://www.drupal.org/files/issues/2022-11-30/decouple_router-3111456-resolve-language-issue-58.patch",
-                        "RouteNotFoundException when a jsonapi individual route is not available": "https://gist.githubusercontent.com/chandan-singh7929/b61efa05845d0c578a1c6093ee6b9762/raw/b4f5e48b53696cf490c42e002ffed475fdf51765/RouteNotFoundException.patch"
+                        "3111456 - Unable to resolve path on node in other language than default": "https://www.drupal.org/files/issues/2022-11-30/decouple_router-3111456-resolve-language-issue-58.patch"
                     },
                     "drupal/subrequests": {
-                        "3049395 - Page Cache causes different subrequests to return the same responses": "https://www.drupal.org/files/issues/2019-07-18/change_request_type-63049395-09.patch",
-                        "3338312 - Incompatible with latest versions of symfony/http-foundation": "https://git.drupalcode.org/project/subrequests/-/merge_requests/14.patch"
+                        "3049395 - Page Cache causes different subrequests to return the same responses": "https://www.drupal.org/files/issues/2019-07-18/change_request_type-63049395-09.patch"
                     }
                 }
             },
@@ -8833,17 +8832,17 @@
         },
         {
             "name": "drupal/subrequests",
-            "version": "3.0.6",
+            "version": "3.0.7",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/subrequests.git",
-                "reference": "3.0.6"
+                "reference": "3.0.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/subrequests-3.0.6.zip",
-                "reference": "3.0.6",
-                "shasum": "426a4cb77829648e3b67ec15ded57eb4b97a8e78"
+                "url": "https://ftp.drupal.org/files/projects/subrequests-3.0.7.zip",
+                "reference": "3.0.7",
+                "shasum": "f78f5a382583007b8844fc26b9f4ba7b58f9fa3d"
             },
             "require": {
                 "drupal/core": "^8 || ^9 || ^10",
@@ -8855,8 +8854,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.6",
-                    "datestamp": "1664452852",
+                    "version": "3.0.7",
+                    "datestamp": "1682600732",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
