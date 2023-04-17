@@ -23,7 +23,7 @@ class TextPanelOverImageHelperTest extends CohesionHelperTestBase {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function testHelper(array $roles = []) {
+  public function testHelper(array $roles = []): void {
     $account = $this->createUser();
     array_walk($roles, [$account, 'addRole']);
     $account->save();
@@ -47,7 +47,7 @@ class TextPanelOverImageHelperTest extends CohesionHelperTestBase {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function testEditAccess(string $role) {
+  public function testEditAccess(string $role): void {
     $account = $this->createUser();
     $account->addRole($role);
     $account->save();

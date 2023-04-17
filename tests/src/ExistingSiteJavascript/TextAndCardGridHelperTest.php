@@ -21,7 +21,7 @@ class TextAndCardGridHelperTest extends CohesionHelperTestBase {
    *
    * @dataProvider providerAddHelperToLayoutCanvas
    */
-  public function testHelper(array $roles = []) {
+  public function testHelper(array $roles = []): void {
     $account = $this->createUser();
     array_walk($roles, [$account, 'addRole']);
     $account->save();
@@ -43,7 +43,7 @@ class TextAndCardGridHelperTest extends CohesionHelperTestBase {
    *
    * @dataProvider providerEditAccess
    */
-  public function testEditAccess(string $role) {
+  public function testEditAccess(string $role): void {
     $account = $this->createUser();
     $account->addRole($role);
     $account->save();
