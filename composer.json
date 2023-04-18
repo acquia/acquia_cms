@@ -18,6 +18,7 @@
     ],
     "require": {
         "acquia/acquia-cms-starterkit": "^1.0",
+        "acquia/drupal-recommended-settings": "dev-develop",
         "drupal/acquia_claro": "^1.3.4@alpha",
         "drupal/acquia_cms_audio": "dev-develop",
         "drupal/acquia_cms_component": "dev-develop",
@@ -43,6 +44,7 @@
     },
     "config": {
         "allow-plugins": {
+            "acquia/drupal-recommended-settings": true,
             "composer/installers": true,
             "cweagans/composer-patches": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
@@ -131,6 +133,15 @@
         ]
     },
     "repositories": {
+        "drupal-recommended-settings": {
+            "type": "vcs",
+            "url": "git@github.com:acquia/drupal-recommended-settings.git",
+            "options": {
+                "versions": {
+                    "acquia/drupal-recommended-settings": "dev-develop"
+                }
+            }
+        },
         "acquia_cms_article": {
             "type": "path",
             "url": "./modules/acquia_cms_article",

@@ -46,6 +46,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
+          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: ../orca/bin/ci/before_install.sh
@@ -122,6 +123,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
+          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       #- name: Configure AWS Credentials
       #  uses: aws-actions/configure-aws-credentials@v1
@@ -230,6 +232,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
+          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
@@ -313,6 +316,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
+          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: ./tests/ci/before_install.blt.sh
@@ -380,6 +384,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
+          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: ../orca/bin/ci/before_install.sh
