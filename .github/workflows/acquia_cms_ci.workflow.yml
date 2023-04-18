@@ -123,7 +123,6 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       #- name: Configure AWS Credentials
       #  uses: aws-actions/configure-aws-credentials@v1
@@ -131,6 +130,13 @@ jobs:
       #    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       #    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       #    aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+      - name: Clone Recommended settings
+        run: |
+          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
+          git clone https://${{ secrets.OAUTH_TOKEN }}@github.com/acquia/drupal-recommended-settings.git --branch=develop ../plugins/drupal-recommended-settings
+          REPO_DATA=$(composer config repositories.drupal-recommended-settings)
+          REPO_DATA=$(echo "${REPO_DATA}" | sed 's/vcs/path/' | sed 's/git.*git/..\/plugins\/drupal\-recommended\-settings/')
+          composer config repositories.drupal-recommended-settings --json "${REPO_DATA}"
       - name: Before Install
         run: |
           # Remove all PHPUnit tests from individual modules, except the integrated & ExistingSite tests.
@@ -232,8 +238,14 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+      - name: Clone Recommended settings
+        run: |
+          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
+          git clone https://${{ secrets.OAUTH_TOKEN }}@github.com/acquia/drupal-recommended-settings.git --branch=develop ../plugins/drupal-recommended-settings
+          REPO_DATA=$(composer config repositories.drupal-recommended-settings)
+          REPO_DATA=$(echo "${REPO_DATA}" | sed 's/vcs/path/' | sed 's/git.*git/..\/plugins\/drupal\-recommended\-settings/')
+          composer config repositories.drupal-recommended-settings --json "${REPO_DATA}"
       - name: Before Install
         run: |
           modules_list=$(echo ${MODULES} | tr "," "\n")
@@ -316,8 +328,14 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+      - name: Clone Recommended settings
+        run: |
+          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
+          git clone https://${{ secrets.OAUTH_TOKEN }}@github.com/acquia/drupal-recommended-settings.git --branch=develop ../plugins/drupal-recommended-settings
+          REPO_DATA=$(composer config repositories.drupal-recommended-settings)
+          REPO_DATA=$(echo "${REPO_DATA}" | sed 's/vcs/path/' | sed 's/git.*git/..\/plugins\/drupal\-recommended\-settings/')
+          composer config repositories.drupal-recommended-settings --json "${REPO_DATA}"
       - name: Before Install
         run: ./tests/ci/before_install.blt.sh
       - name: Install
@@ -384,8 +402,14 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+      - name: Clone Recommended settings
+        run: |
+          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
+          git clone https://${{ secrets.OAUTH_TOKEN }}@github.com/acquia/drupal-recommended-settings.git --branch=develop ../plugins/drupal-recommended-settings
+          REPO_DATA=$(composer config repositories.drupal-recommended-settings)
+          REPO_DATA=$(echo "${REPO_DATA}" | sed 's/vcs/path/' | sed 's/git.*git/..\/plugins\/drupal\-recommended\-settings/')
+          composer config repositories.drupal-recommended-settings --json "${REPO_DATA}"
       - name: Before Install
         run: ../orca/bin/ci/before_install.sh
       - name: Install
