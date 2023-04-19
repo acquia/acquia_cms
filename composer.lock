@@ -2430,7 +2430,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "8b8ffc2485588f20ad3d308a9965355e38dd9e6b"
+                "reference": "0f008022f97ba1ac4a0f51cb58e161c9a41acb4d"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2825,13 +2825,13 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_search",
-                "reference": "cc669fcd01ec8c7f63f21cb6b1de381fdcde5a3c"
+                "reference": "aa8bece4f1ac85788493495b31756fb7b1127691"
             },
             "require": {
                 "cweagans/composer-patches": "^1.7",
                 "drupal/acquia_cms_common": "1.x-dev || 2.x-dev",
                 "drupal/acquia_search": "^3.1",
-                "drupal/collapsiblock": "^4.0",
+                "drupal/collapsiblock": "4.0.0",
                 "drupal/facets": "^2.0.6",
                 "drupal/facets_pretty_paths": "^1.4",
                 "drupal/search_api": "1.28",
@@ -3698,17 +3698,17 @@
         },
         {
             "name": "drupal/collapsiblock",
-            "version": "4.0.1",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/collapsiblock.git",
-                "reference": "4.0.1"
+                "reference": "4.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/collapsiblock-4.0.1.zip",
-                "reference": "4.0.1",
-                "shasum": "1e2d7bc28c2ae079b349b38f3517ed91ac3f9e64"
+                "url": "https://ftp.drupal.org/files/projects/collapsiblock-4.0.0.zip",
+                "reference": "4.0.0",
+                "shasum": "182b1aa4a61d8a985e48730ed15ca6869785b45e"
             },
             "require": {
                 "drupal/core": "^9.2 || ^10"
@@ -3716,8 +3716,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "4.0.1",
-                    "datestamp": "1681642840",
+                    "version": "4.0.0",
+                    "datestamp": "1670190899",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5205,10 +5205,6 @@
                 {
                     "name": "mglaman",
                     "homepage": "https://www.drupal.org/user/2416470"
-                },
-                {
-                    "name": "pfaocle",
-                    "homepage": "https://www.drupal.org/user/9740"
                 },
                 {
                     "name": "roberto.rivera.ixis",
@@ -9171,22 +9167,22 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.5.0",
+            "version": "7.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "b50a2a1251152e43f6a37f0fa053e730a67d25ba"
+                "reference": "b964ca597e86b752cd994f27293e9fa6b6a95ed9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/b50a2a1251152e43f6a37f0fa053e730a67d25ba",
-                "reference": "b50a2a1251152e43f6a37f0fa053e730a67d25ba",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/b964ca597e86b752cd994f27293e9fa6b6a95ed9",
+                "reference": "b964ca597e86b752cd994f27293e9fa6b6a95ed9",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/promises": "^1.5",
-                "guzzlehttp/psr7": "^1.9 || ^2.4",
+                "guzzlehttp/psr7": "^1.9.1 || ^2.4.5",
                 "php": "^7.2.5 || ^8.0",
                 "psr/http-client": "^1.0",
                 "symfony/deprecation-contracts": "^2.2 || ^3.0"
@@ -9279,7 +9275,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.5.0"
+                "source": "https://github.com/guzzle/guzzle/tree/7.5.1"
             },
             "funding": [
                 {
@@ -9295,7 +9291,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-28T15:39:27+00:00"
+            "time": "2023-04-17T16:30:08+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -9383,22 +9379,22 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "2.4.4",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "3cf1b6d4f0c820a2cf8bcaec39fc698f3443b5cf"
+                "reference": "b635f279edd83fc275f822a1188157ffea568ff6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/3cf1b6d4f0c820a2cf8bcaec39fc698f3443b5cf",
-                "reference": "3cf1b6d4f0c820a2cf8bcaec39fc698f3443b5cf",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/b635f279edd83fc275f822a1188157ffea568ff6",
+                "reference": "b635f279edd83fc275f822a1188157ffea568ff6",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2.5 || ^8.0",
                 "psr/http-factory": "^1.0",
-                "psr/http-message": "^1.0",
+                "psr/http-message": "^1.1 || ^2.0",
                 "ralouphie/getallheaders": "^3.0"
             },
             "provide": {
@@ -9418,9 +9414,6 @@
                 "bamarni-bin": {
                     "bin-links": true,
                     "forward-command": false
-                },
-                "branch-alias": {
-                    "dev-master": "2.4-dev"
                 }
             },
             "autoload": {
@@ -9482,7 +9475,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.4.4"
+                "source": "https://github.com/guzzle/psr7/tree/2.5.0"
             },
             "funding": [
                 {
@@ -9498,7 +9491,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-09T13:19:02+00:00"
+            "time": "2023-04-17T16:11:26+00:00"
         },
         {
             "name": "http-interop/http-factory-guzzle",
@@ -16273,16 +16266,16 @@
         },
         {
             "name": "drupal/coder",
-            "version": "8.3.17",
+            "version": "8.3.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pfrenssen/coder.git",
-                "reference": "1c4662337418ab88c9ddf40348f0638e35d49182"
+                "reference": "d5911f812b69ca3bda5524899bdd06b3b4e687ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pfrenssen/coder/zipball/1c4662337418ab88c9ddf40348f0638e35d49182",
-                "reference": "1c4662337418ab88c9ddf40348f0638e35d49182",
+                "url": "https://api.github.com/repos/pfrenssen/coder/zipball/d5911f812b69ca3bda5524899bdd06b3b4e687ff",
+                "reference": "d5911f812b69ca3bda5524899bdd06b3b4e687ff",
                 "shasum": ""
             },
             "require": {
@@ -16320,7 +16313,7 @@
                 "issues": "https://www.drupal.org/project/issues/coder",
                 "source": "https://www.drupal.org/project/coder"
             },
-            "time": "2023-02-19T21:05:01+00:00"
+            "time": "2023-04-18T12:07:59+00:00"
         },
         {
             "name": "drupal/core-composer-scaffold",
@@ -16812,16 +16805,16 @@
         },
         {
             "name": "mglaman/phpstan-drupal",
-            "version": "1.1.29",
+            "version": "1.1.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mglaman/phpstan-drupal.git",
-                "reference": "e6f6191c53b159013fcbd186d7f85511f3f96ff8"
+                "reference": "21b62499bb1233667f4d2bc6ce11db73500734fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/e6f6191c53b159013fcbd186d7f85511f3f96ff8",
-                "reference": "e6f6191c53b159013fcbd186d7f85511f3f96ff8",
+                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/21b62499bb1233667f4d2bc6ce11db73500734fe",
+                "reference": "21b62499bb1233667f4d2bc6ce11db73500734fe",
                 "shasum": ""
             },
             "require": {
@@ -16896,7 +16889,7 @@
             "description": "Drupal extension and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/mglaman/phpstan-drupal/issues",
-                "source": "https://github.com/mglaman/phpstan-drupal/tree/1.1.29"
+                "source": "https://github.com/mglaman/phpstan-drupal/tree/1.1.30"
             },
             "funding": [
                 {
@@ -16912,7 +16905,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-08T21:44:03+00:00"
+            "time": "2023-04-07T13:36:19+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -17748,16 +17741,16 @@
         },
         {
             "name": "phpspec/prophecy-phpunit",
-            "version": "v2.0.1",
+            "version": "v2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy-phpunit.git",
-                "reference": "2d7a9df55f257d2cba9b1d0c0963a54960657177"
+                "reference": "9f26c224a2fa335f33e6666cc078fbf388255e87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy-phpunit/zipball/2d7a9df55f257d2cba9b1d0c0963a54960657177",
-                "reference": "2d7a9df55f257d2cba9b1d0c0963a54960657177",
+                "url": "https://api.github.com/repos/phpspec/prophecy-phpunit/zipball/9f26c224a2fa335f33e6666cc078fbf388255e87",
+                "reference": "9f26c224a2fa335f33e6666cc078fbf388255e87",
                 "shasum": ""
             },
             "require": {
@@ -17794,22 +17787,22 @@
             ],
             "support": {
                 "issues": "https://github.com/phpspec/prophecy-phpunit/issues",
-                "source": "https://github.com/phpspec/prophecy-phpunit/tree/v2.0.1"
+                "source": "https://github.com/phpspec/prophecy-phpunit/tree/v2.0.2"
             },
-            "time": "2020-07-09T08:33:42+00:00"
+            "time": "2023-04-18T11:58:05+00:00"
         },
         {
             "name": "phpstan/extension-installer",
-            "version": "1.2.0",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/extension-installer.git",
-                "reference": "f06dbb052ddc394e7896fcd1cfcd533f9f6ace40"
+                "reference": "f5e02d40f277d28513001976f444d9ff1dc15e9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/extension-installer/zipball/f06dbb052ddc394e7896fcd1cfcd533f9f6ace40",
-                "reference": "f06dbb052ddc394e7896fcd1cfcd533f9f6ace40",
+                "url": "https://api.github.com/repos/phpstan/extension-installer/zipball/f5e02d40f277d28513001976f444d9ff1dc15e9a",
+                "reference": "f5e02d40f277d28513001976f444d9ff1dc15e9a",
                 "shasum": ""
             },
             "require": {
@@ -17824,7 +17817,12 @@
             },
             "type": "composer-plugin",
             "extra": {
-                "class": "PHPStan\\ExtensionInstaller\\Plugin"
+                "class": "PHPStan\\ExtensionInstaller\\Plugin",
+                "phpstan/extension-installer": {
+                    "ignore": [
+                        "phpstan/phpstan-phpunit"
+                    ]
+                }
             },
             "autoload": {
                 "psr-4": {
@@ -17838,9 +17836,9 @@
             "description": "Composer plugin for automatic installation of PHPStan extensions",
             "support": {
                 "issues": "https://github.com/phpstan/extension-installer/issues",
-                "source": "https://github.com/phpstan/extension-installer/tree/1.2.0"
+                "source": "https://github.com/phpstan/extension-installer/tree/1.3.0"
             },
-            "time": "2022-10-17T12:59:16+00:00"
+            "time": "2023-04-18T13:08:02+00:00"
         },
         {
             "name": "phpstan/phpdoc-parser",
@@ -17889,16 +17887,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.13",
+            "version": "1.10.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "f07bf8c6980b81bf9e49d44bd0caf2e737614a70"
+                "reference": "d232901b09e67538e5c86a724be841bea5768a7c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f07bf8c6980b81bf9e49d44bd0caf2e737614a70",
-                "reference": "f07bf8c6980b81bf9e49d44bd0caf2e737614a70",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d232901b09e67538e5c86a724be841bea5768a7c",
+                "reference": "d232901b09e67538e5c86a724be841bea5768a7c",
                 "shasum": ""
             },
             "require": {
@@ -17947,7 +17945,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-04-12T19:29:52+00:00"
+            "time": "2023-04-19T13:47:27+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
