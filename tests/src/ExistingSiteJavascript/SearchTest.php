@@ -178,7 +178,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
-  private function assertLinkExists(string $title, ElementInterface $container = NULL): ElementInterface {
+  private function assertLinkExists(string $title, ElementInterface $container = NULL): ?ElementInterface {
     return $this->assertSession()->elementExists('named', ['link', $title], $container);
   }
 
@@ -195,7 +195,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
-  private function assertElementWithTitleExists(string $title, ElementInterface $container = NULL): ElementInterface {
+  private function assertElementWithTitleExists(string $title, ElementInterface $container = NULL): ?ElementInterface {
     return $this->assertSession()->elementExists('named', ['content', $title], $container);
   }
 
@@ -210,7 +210,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @throws \Behat\Mink\Exception\ExpectationException
    */
-  private function assertLinkNotExists(string $title): ElementInterface {
+  private function assertLinkNotExists(string $title): ?ElementInterface {
     return $this->assertSession()->elementNotExists('named', ['link', $title]);
   }
 
@@ -243,7 +243,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
-  private function assertFacetLinkExists(ElementInterface $facets = NULL): ?ElementInterface {
+  private function assertFacetLinkExists(ElementInterface $facets = NULL): void {
     // Get the container which holds the facets, and assert that, initially, the
     // Test that none of the dependent facets are visible for fallback.
     $this->assertFalse($this->assertElementWithTitleExists('Content Type', $facets)->isVisible());
