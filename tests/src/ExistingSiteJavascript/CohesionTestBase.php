@@ -65,6 +65,10 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
     $edit_form->pressButton($button_text);
     $this->assertNotEmpty($this->assertSession()->waitForText('Media Library'));
     $this->assertSession()->waitForElementVisible("css", ".media-library-content");
+    if ($this->assertSession()->waitForElementVisible("css", ".media-library-content")->find("css", "#acquia-dam-user-authorization-skip")) {
+      $this->assertSession()->waitForElementVisible("css", ".media-library-content #acquia-dam-user-authorization-skip")->click();
+    }
+    $this->assertSession()->waitForElementVisible("css", ".media-library-content #acquia-dam-source-menu-wrapper");
   }
 
   /**
