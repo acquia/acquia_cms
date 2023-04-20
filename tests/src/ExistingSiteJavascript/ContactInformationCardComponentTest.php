@@ -30,15 +30,24 @@ class ContactInformationCardComponentTest extends CohesionComponentTestBase {
     $edit_form = $this->getLayoutCanvas()->add('Contact information card')->edit();
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMediaSource("Media Types");
+    $this->assertSession()->waitForElementVisible('css', '.media-library-content');
     $this->selectMedia(0);
     $this->insertSelectedMedia();
     $this->assertSession()->waitForElementVisible('css', '.ssa-modal-sidebar-editor');
+    $this->assertSession()->waitForElementVisible('css', '.ssa-modal-sidebar-editor .sc-45mvqj-0');
+    $this->assertSession()->waitForText('Card heading element');
     $edit_form->fillField('Card heading element', 'h3');
-    $edit_form->fillField('Card heading', 'This is the Heading');
+    $this->assertSession()->waitForText('This is the Heading');
+    $edit_form->fillField('Card heading', 'Card heading');
+    $this->assertSession()->waitForText('Contact name');
     $edit_form->fillField('Contact name', 'Leia Organa');
+    $this->assertSession()->waitForText('Company');
     $edit_form->fillField('Company', 'Acquiaville');
+    $this->assertSession()->waitForText('Address');
     $edit_form->fillField('Address', 'City Hall,200 main ST,Acquiaville');
+    $this->assertSession()->waitForText('Telephone');
     $edit_form->fillField('Telephone', '9820964326');
+    $this->assertSession()->waitForText('Email');
     $edit_form->fillField('Email', 'acquiaindia@test.com');
   }
 
