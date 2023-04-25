@@ -88,7 +88,7 @@ function acquia_cms_headless_update_8002() {
     ->execute();
   $config = \Drupal::configFactory()->getEditable('acquia_cms_headless.settings');
   if ($config->get('consumer_uuid')) {
-    /** @var \Drupal\consumers\Entity\ConsumerInterface $consumer */
+    /** @var \Drupal\consumers\Entity\Consumer $consumer */
     $consumer = \Drupal::service('entity.repository')->loadEntityByUuid("consumer", $config->get('consumer_uuid'));
     $uid = $consumer->user_id;
     if ($consumer instanceof EntityInterface && $uid->entity instanceof EntityInterface) {
