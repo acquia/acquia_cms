@@ -89,11 +89,10 @@ final class SubtypeBreadcrumb implements BreadcrumbBuilderInterface {
    *   defines those settings. If it does not, or we are not viewing a node
    *   page, an empty array is returned.
    */
-  private function getSettings(RouteMatchInterface $route_match) : array {
+  private function getSettings(RouteMatchInterface $route_match): ?array {
     if ($route_match->getRouteName() === 'entity.node.canonical') {
-      /** @var \Drupal\node\NodeInterface $node */
+      /** @var \Drupal\node\Entity\Node $node */
       $node = $route_match->getParameter('node');
-
       /** @var \Drupal\node\Entity\NodeType $entity_type */
       $entity_type = $node->type->entity;
       return $entity_type->getThirdPartySetting('acquia_cms_common', 'subtype', []);
@@ -123,7 +122,7 @@ final class SubtypeBreadcrumb implements BreadcrumbBuilderInterface {
     $breadcrumb->addCacheContexts(['route']);
 
     $settings = $this->getSettings($route_match);
-    /** @var \Drupal\node\NodeInterface $node */
+    /** @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
     $breadcrumb->addCacheableDependency($node);
 

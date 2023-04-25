@@ -51,7 +51,7 @@ class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
    *
    * @var bool
    */
-  private $isNextJs;
+  protected $isNextJs;
 
   /**
    * {@inheritdoc}

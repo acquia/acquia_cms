@@ -233,7 +233,7 @@ abstract class MediaTypeTestBase extends ContentModelTestBase {
    *   The value to fill in the source field. If the media type under test is
    *   file-based, this should be an instance of \Drupal\file\FileInterface.
    */
-  protected function fillSourceField($value = NULL) {
+  protected function fillSourceField($value = NULL): void {
     $media_type = MediaType::load($this->mediaType);
 
     if ($value === NULL) {

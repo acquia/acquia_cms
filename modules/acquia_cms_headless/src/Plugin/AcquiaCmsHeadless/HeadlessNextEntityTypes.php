@@ -254,7 +254,7 @@ class HeadlessNextEntityTypes extends AcquiaCmsDashboardBase {
       }
 
       // If the entity type is a node, get the entity type label.
-      if (isset($node_types[0]) && $entity_data[0] === 'node') {
+      if ($node_types && $entity_data[0] === 'node') {
         $node_type = $node_types->load($entity_data[1]);
         $bundle_label = $node_type->label();
         $bundle_uri = $node_type->toUrl('edit-form', $destination);
