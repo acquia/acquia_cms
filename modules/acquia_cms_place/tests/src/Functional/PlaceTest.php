@@ -55,7 +55,7 @@ class PlaceTest extends ContentTypeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function doTestEditForm() : void {
+  protected function doTestEditForm(): void {
     /** @var \Drupal\taxonomy\VocabularyInterface $place_type */
     $place_type = Vocabulary::load('place_type');
     $this->createTerm($place_type, ['name' => 'Residential']);

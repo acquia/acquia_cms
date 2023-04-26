@@ -10,7 +10,7 @@ final class Search extends CohesionElement {
   /**
    * Shows the search form.
    */
-  public function showSearch() {
+  public function showSearch(): void {
     $this->pressAriaButton('Show search');
   }
 

@@ -21,7 +21,7 @@ class UpdatePageTest extends ExistingSiteSelenium2DriverTestBase {
    * @throws \Behat\Mink\Exception\ResponseTextException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function testUpdatePage() {
+  public function testUpdatePage(): void {
     $account = $this->createUser();
     $account->addRole('administrator');
     $account->save();
@@ -29,6 +29,7 @@ class UpdatePageTest extends ExistingSiteSelenium2DriverTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/update.php');
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assert_session */
     $assert_session = $this->assertSession();
     $site_name_element = $assert_session->elementExists('css', 'header .site-name');
     $this->assertSame($site_name, $site_name_element->getText());
