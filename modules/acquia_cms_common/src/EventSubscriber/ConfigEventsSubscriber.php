@@ -197,7 +197,9 @@ class ConfigEventsSubscriber implements EventSubscriberInterface {
         }
       }
     }
-    // Clear cache once acquia purge.
+    // Clear cache once acquia purge imported.
+    // @todo revisit later for better solution,
+    // because clearing cache is not a good idea.
     else {
       $config = $event->getConfig();
       if ($config->getName() == 'purge.plugins') {
