@@ -81,7 +81,7 @@ jobs:
         run: |
           composer install
           php vendor/bin/drupal-check modules
-
+          php vendor/bin/drupal-check tests/src
   integrated_tests:
     name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
     runs-on: ubuntu-latest

@@ -16,7 +16,7 @@ final class ElementBrowser extends CohesionElement {
    * @return $this
    *   The called object, for chaining.
    */
-  public function select(string $label) : self {
+  public function select(string $label): self {
     $selector = sprintf('#ssa-sidebar-browser [data-ssa-name="%s"]', $label);
     $item = $this->waitForElementVisible('css', $selector, $this);
     $this->pressAriaButton('Add to canvas', $item);
@@ -30,7 +30,7 @@ final class ElementBrowser extends CohesionElement {
   /**
    * Closes the element browser.
    */
-  public function close() : void {
+  public function close(): void {
     $this->pressAriaButton('Close sidebar browser');
   }
 
@@ -43,9 +43,13 @@ final class ElementBrowser extends CohesionElement {
    * @return $this
    *   The called object, for chaining.
    */
-  public function switchToGroup(string $group) : self {
-    $this->waitForElementVisible('css', '.ssa-dropdown-toggle')->press();
-    $this->waitForElementVisible('css', ".ssa-dropdown-item:contains('$group')")->press();
+  public function switchToGroup(string $group): self {
+    /** @var \Behat\Mink\Element\NodeElement $dropdownToggle */
+    $dropdownToggle = $this->waitForElementVisible('css', '.ssa-dropdown-toggle');
+    $dropdownToggle->press();
+    /** @var \Behat\Mink\Element\NodeElement $groupToggle */
+    $groupToggle = $this->waitForElementVisible('css', ".ssa-dropdown-item:contains('$group')");
+    $groupToggle->press();
     return $this;
   }
 

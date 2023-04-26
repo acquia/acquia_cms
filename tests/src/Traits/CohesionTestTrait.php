@@ -16,7 +16,7 @@ trait CohesionTestTrait {
    * @param string $title
    *   The title of the link.
    */
-  private function assertLinkExistsByTitle(string $title) : void {
+  private function assertLinkExistsByTitle(string $title): void {
     $this->assertSession()->elementExists('css', 'a.coh-link[title="' . $title . '"]');
   }
 
@@ -29,7 +29,7 @@ trait CohesionTestTrait {
    * @param string $title
    *   The title of the link.
    */
-  private function assertLinkNotExistsByTitle(string $title) : void {
+  private function assertLinkNotExistsByTitle(string $title): void {
     $this->assertSession()->elementNotExists('css', 'a.coh-link[title="' . $title . '"]');
   }
 

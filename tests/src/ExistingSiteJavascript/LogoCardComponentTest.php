@@ -16,7 +16,7 @@ class LogoCardComponentTest extends CohesionComponentTestBase {
   /**
    * Tests that the component can be added to a layout canvas.
    */
-  public function testComponent() {
+  public function testComponent(): void {
     $account = $this->createUser();
     $account->addRole('administrator');
     $account->save();
@@ -44,7 +44,7 @@ class LogoCardComponentTest extends CohesionComponentTestBase {
    *
    * @dataProvider providerEditAccess
    */
-  public function testEditAccess(string $role) {
+  public function testEditAccess(string $role): void {
     $account = $this->createUser();
     $account->addRole($role);
     $account->save();
