@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "207a10e6564eaeba65235cf1a99904f9",
+    "content-hash": "d50b76b28a63d477785cf89bc328298a",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2930,7 +2930,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_site_studio",
-                "reference": "bc853c91488a44940f87c96e26ac4e35884310d0"
+                "reference": "eb1940f5b68a9c7e99312c818a782b970e3de3e5"
             },
             "require": {
                 "acquia/cohesion": "^6.9.2 || ^7.0",
@@ -2957,19 +2957,6 @@
             "extra": {
                 "branch-alias": {
                     "dev-develop": "1.x-dev"
-                },
-                "drupal-scaffold": {
-                    "file-mapping": {
-                        "[web-root]/drush/Commands/ConfigImportExportCommands.php": "modules/acquia_cms_site_studio_cm/assets/scaffold/files/ConfigImportExportCommands.php",
-                        "[web-root]/sites/default/default.settings.php": {
-                            "append": "modules/acquia_cms_site_studio_cm/assets/scaffold/files/site-studio-settings.txt"
-                        }
-                    }
-                },
-                "drush": {
-                    "services": {
-                        "drush.services.yml": "^10"
-                    }
                 },
                 "enable-patching": true,
                 "patches": {

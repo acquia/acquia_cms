@@ -2,8 +2,8 @@
 
 namespace Drupal\acquia_cms_site_studio_cm\EventSubscriber;
 
-use Drupal\ACMS_1730_namespace\Commands\DrushCommand;
-use Drupal\ACMS_1730_namespace\Event\PostConfigEvent;
+use Drupal\acquia_config_management\Commands\DrushCommand;
+use Drupal\acquia_config_management\Event\PostConfigEvent;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -31,7 +31,7 @@ class PostConfigEventsSubscriber implements EventSubscriberInterface {
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The ModuleHandlerInterface.
-   * @param \Drupal\ACMS_1730_namespace\Commands\DrushCommand $drush_command
+   * @param \Drupal\acquia_config_management\Commands\DrushCommand $drush_command
    *   The Drush command object.
    */
   public function __construct(
@@ -57,7 +57,7 @@ class PostConfigEventsSubscriber implements EventSubscriberInterface {
   /**
    * Post config import manipulation.
    */
-  public function onPostConfigImport() {
+  public function onPostConfigImport($event) {
     if ($this->moduleHandler->moduleExists('acquia_cms_site_studio') && $this->moduleHandler->moduleExists('acquia_cms_site_studio_cm')) {
       // Get site studio credentials if its set.
       $siteStudioCredentials = _acquia_cms_site_studio_get_credentials();
@@ -65,6 +65,7 @@ class PostConfigEventsSubscriber implements EventSubscriberInterface {
       // Set credentials if module being installed independently.
       if ($siteStudioCredentials['status']) {
         _acquia_cms_site_studio_set_credentials($siteStudioCredentials['api_key'], $siteStudioCredentials['organization_key']);
+        $event->getDrushCommand()->execute('coh:import');
         $this->drushCommand->execute('coh:import');
         $this->drushCommand->execute('sitestudio:package:import');
         $this->drushCommand->execute('cr');
