@@ -72,6 +72,12 @@ jobs:
   drupal_check:
     name: Execute Drupal-check
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - "8.1"
+          - "8.2"
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -80,7 +86,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: ${{ matrix.php-version }}
           #coverage: xdebug
       - name: Execute Drupal-check
         run: |
