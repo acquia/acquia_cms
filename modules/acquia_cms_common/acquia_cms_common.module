@@ -21,20 +21,6 @@ use Drupal\node\NodeTypeInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Implements hook_preinstall().
- */
-function acquia_cms_common_module_preinstall($module) {
-  // Since we have moved config 'workflows.workflow.editorial.yml'
-  // to optional folder just to avoid error when common module
-  // get installed on vanilla drupal with standard profile,
-  // standard profile ship with 'workflows.workflow.editorial.yml'
-  // config by default.
-  if ($module == 'acquia_cms_common') {
-    _acquia_cms_common_rewrite_configuration('workflows.workflow.editorial', 'acquia_cms_common');
-  }
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  */
 function acquia_cms_common_form_user_login_form_alter(array &$form) {
