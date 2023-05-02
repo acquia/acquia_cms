@@ -19,6 +19,16 @@ if (!file_exists($contribModulesDirectory)) {
 }
 $moduleDir = $destinationRootDir . "/docroot/modules/contrib/" . $module;
 if (file_exists($moduleDir)) {
+  $moduleJson = file_get_contents($moduleDir . "/composer.json");
+  $moduleJson = json_decode($moduleJson);
+  if (isset($moduleJson->{'require-dev'}) && $moduleJson->{'require-dev'}) {
+    foreach ($moduleJson->{'require-dev'} as $devDependency => $version) {
+      shell_exec("composer -d $destinationRootDir require \"$devDependency:$version\"");
+    }
+  }
+  else {
+    log_message("The contributed module: `$module` doesn't contain dev dependencies.");
+  }
   symlink($moduleDir, $contribModulesDirectory . "/" . $module);
 }
 else {
