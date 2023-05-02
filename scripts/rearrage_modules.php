@@ -5,23 +5,25 @@
  * Create symlink for contributed modules.
  */
 
-$fileContent = file_get_contents(__DIR__ . "/contrib_module_tests.json");
-$json = json_decode($fileContent);
+if (!isset($argv[1])) {
+  log_message("Please provide module name. Ex: php ./scripts/rearrage_modules.php pathauto", "error");
+  exit(1);
+}
+$module = $argv[1];
+
 $destinationRootDir = getenv("ORCA_FIXTURE_DIR") ?: dirname(__DIR__);
 $sourceRootDir = getenv("ORCA_SUT_DIR") ?: dirname(__DIR__);
 $contribModulesDirectory = $sourceRootDir . "/modules";
 if (!file_exists($contribModulesDirectory)) {
   mkdir($contribModulesDirectory, 0755, TRUE);
 }
-foreach ($json->modules as $module) {
-  $moduleDir = $destinationRootDir . "/docroot/modules/contrib/" . $module;
-  if (file_exists($moduleDir)) {
-    symlink($moduleDir, $contribModulesDirectory . "/" . $module);
-  }
-  else {
-    log_message("The contributed module: `$module` doesn't exist at path: `$moduleDir`.", "error");
-    exit(1);
-  }
+$moduleDir = $destinationRootDir . "/docroot/modules/contrib/" . $module;
+if (file_exists($moduleDir)) {
+  symlink($moduleDir, $contribModulesDirectory . "/" . $module);
+}
+else {
+  log_message("The contributed module: `$module` doesn't exist at path: `$moduleDir`.", "error");
+  exit(1);
 }
 
 /**
