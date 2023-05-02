@@ -18,6 +18,16 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+    // Set a standard window size so that all javascript tests start with the
+    // same viewport.
+    $this->getDriverInstance()->resizeWindow(1920, 1200);
+  }
+
+  /**
    * Waits for a layout canvas to appear.
    *
    * @return \Drupal\Tests\acquia_cms\ExistingSiteJavascript\LayoutCanvas
