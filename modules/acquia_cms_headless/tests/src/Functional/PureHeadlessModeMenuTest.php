@@ -3,6 +3,7 @@
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
+use Behat\Mink\Element\NodeElement;
 use Drupal\Core\Extension\Exception\UnknownExtensionException;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 
@@ -69,19 +70,29 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
    *   Parent menu selector.
    * @param string $parentMenuName
    *   Parent menu name.
-   * @param array $childs
-   *   Child menu list.
+   * @param array $children
+   *   An array of child menu items.
+   *
+   * @throws \Drupal\Core\Extension\ExtensionNameLengthException
+   * @throws \Drupal\Core\Extension\MissingDependencyException
    *
    * @dataProvider providerMenu
    */
-  public function testChildMenu(string $selector, string $parentMenuName, array $childs): void {
+  public function testChildMenu(string $selector, string $parentMenuName, array $children): void {
     if ($this->installModule('acquia_cms_toolbar')) {
       $this->drupalGet('/admin/headless/dashboard');
-      $menu = $this->assertSession()->waitForElementVisible('css', $selector);
+      $page = $this->getSession()->getPage();
+      $menu = $page->find("css", $selector);
+      $this->assertInstanceOf(NodeElement::class, $menu, "Page doesn't contain element: `$selector`.");
       $this->assertEquals($parentMenuName, $menu->getText());
       $menu->mouseOver();
-      foreach ($childs as $key => $child) {
-        $this->assertEquals($child, $this->assertSession()->waitForElementVisible('css', $selector . ' + ul > li:nth-child(' . ++$key . ')')->getText());
+      // Wait for menu items to visible.
+      $menuItem = $this->assertSession()->waitForElementVisible('css', '.hover-intent.menu-item');
+      $this->assertInstanceOf(NodeElement::class, $menuItem);
+      $childrenMenuItems = $menuItem->findAll("css", "ul.toolbar-menu li.level-2");
+      $this->assertCount(count($children), $childrenMenuItems);
+      foreach ($childrenMenuItems as $key => $child) {
+        $this->assertEquals($children[$key], $child->find("css", ".toolbar-box > a")->getText());
       }
     }
   }
@@ -94,6 +105,9 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
    *
    * @return bool
    *   Returns true|false based on module exist and on successful installation.
+   *
+   * @throws \Drupal\Core\Extension\ExtensionNameLengthException
+   * @throws \Drupal\Core\Extension\MissingDependencyException
    */
   protected function installModule(string $module): bool {
     try {
