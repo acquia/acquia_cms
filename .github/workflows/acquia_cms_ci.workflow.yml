@@ -284,7 +284,11 @@ jobs:
       - name: Before script
         run: ../orca/bin/ci/before_script.sh
       - name: Script
-        run: ./tests/ci/script.sh
+        run: |
+          source ../orca/bin/ci/_includes.sh
+          php ./scripts/rearrage_modules.php
+          ls -ltr ${ORCA_SUT_DIR}/modules
+          ./tests/ci/script.sh
       - name: Before Cache
         run: ../orca/bin/ci/before_cache.sh
       - name: After script
