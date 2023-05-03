@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "087e5b18e8b7bc57b00cf28dc4618bdb",
+    "content-hash": "40ddf842927d7994bfe14fbd2fa69b99",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2499,7 +2499,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "73fc1671fd294392fa02e1e27ce00e5848055058"
+                "reference": "05cbba24f2184beea5d525a64f5c7d24b68bcd7c"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2515,7 +2515,7 @@
                 "drupal/checklistapi": "^2.1",
                 "drupal/config_ignore": "^3.0@beta",
                 "drupal/config_rewrite": "^1.5",
-                "drupal/core": "^9.5 || ^10",
+                "drupal/core": "^10",
                 "drupal/diff": "^1.1",
                 "drupal/entity_clone": "^2.0@beta",
                 "drupal/field_group": "^3.4",
@@ -2578,7 +2578,6 @@
                 "patches": {
                     "drupal/core": {
                         "3059955 - It is possible to overflow the number of items allowed in Media Library": "https://www.drupal.org/files/issues/2019-12-28/3082690-80.patch",
-                        "3222107 - jQuery UI library order is incorrect when a large number of javascript files is loaded between two jQuery UI libraries": "https://www.drupal.org/files/issues/2022-11-11/3222107-2.patch",
                         "3301692: Passing null to parameter to mb_strtolower() is deprecated with PHP 8.1": "https://git.drupalcode.org/project/drupal/-/merge_requests/2598.patch"
                     },
                     "drupal/focal_point": {
@@ -2600,10 +2599,10 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_component",
-                "reference": "870cc09772b5497af33e9236970891c08e4f41a5"
+                "reference": "b8845cb23ff491ca0f33c8df1d0b22b8779ff7d7"
             },
             "require": {
-                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev",
+                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
                 "drupal/component": "^1.0",
                 "drupal/jsonapi_extras": "^3.23"
             },
@@ -2664,10 +2663,10 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_document",
-                "reference": "bfd88277ef56948c38c4a00ce59dd3b3ba6292e3"
+                "reference": "f5d2a48185ed2c7872989b7c8ddff0a6dc1313ee"
             },
             "require": {
-                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev"
+                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev"
             },
             "type": "drupal-module",
             "extra": {
@@ -2790,10 +2789,10 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_image",
-                "reference": "8960c43baafd2518c122a1a03fc4d212d21addd7"
+                "reference": "23149661e5869cb4625a39b00c15591278fdd8a8"
             },
             "require": {
-                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev",
+                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
                 "drupal/imce": "^2.2 || ^3.0"
             },
             "type": "drupal-module",
@@ -2903,11 +2902,11 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_search",
-                "reference": "aa8bece4f1ac85788493495b31756fb7b1127691"
+                "reference": "28dec80b6d09f744e3b035f56725839c308386d1"
             },
             "require": {
                 "cweagans/composer-patches": "^1.7",
-                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev",
+                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
                 "drupal/acquia_search": "^3.1",
                 "drupal/collapsiblock": "4.0.0",
                 "drupal/facets": "^2.0.6",
@@ -2945,12 +2944,12 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_site_studio",
-                "reference": "1a0a5012e74744e6f2639852cdf4664a4cc8c050"
+                "reference": "81293e1366e5dff0be8524a1910805681d3018ad"
             },
             "require": {
                 "acquia/cohesion": "^6.9.2 || ^7.0",
                 "acquia/cohesion-theme": "^6.9 || ^7.0",
-                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev",
+                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
                 "drupal/collapsiblock": "4.0.0",
                 "drupal/node_revision_delete": "^1.0"
             },
@@ -3033,10 +3032,10 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_toolbar",
-                "reference": "52d70a3b62cafd72da53f7e7d90f5c7ad9159026"
+                "reference": "ff8fe4ffb2b7c0d87aaeecc8c4626ea79c93a433"
             },
             "require": {
-                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev",
+                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
                 "drupal/admin_toolbar": "^3.3"
             },
             "type": "drupal-module",
@@ -3059,10 +3058,10 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_tour",
-                "reference": "64bb80c8f78e542763011ed658f95758cec08fec"
+                "reference": "ae79e8380a9bc39eb560400df40cc86a17239f4b"
             },
             "require": {
-                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev"
+                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev"
             },
             "type": "drupal-module",
             "extra": {
@@ -3084,10 +3083,10 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_video",
-                "reference": "0d8acc9db82c3b655d4e41aaa8d31a8dd1f5c3ea"
+                "reference": "b0789f54baaf2a7b5d6afe2fa06c9d1f5f47d9f9"
             },
             "require": {
-                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev"
+                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev"
             },
             "type": "drupal-module",
             "extra": {
@@ -4574,16 +4573,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "10.0.7",
+            "version": "10.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "d9fe0494de876ede8f778041212fcb02bb70591a"
+                "reference": "9392af9833c4397984c0992a3b4f136ddced6668"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/d9fe0494de876ede8f778041212fcb02bb70591a",
-                "reference": "d9fe0494de876ede8f778041212fcb02bb70591a",
+                "url": "https://api.github.com/repos/drupal/core/zipball/9392af9833c4397984c0992a3b4f136ddced6668",
+                "reference": "9392af9833c4397984c0992a3b4f136ddced6668",
                 "shasum": ""
             },
             "require": {
@@ -4726,9 +4725,9 @@
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
             "support": {
-                "source": "https://github.com/drupal/core/tree/10.0.7"
+                "source": "https://github.com/drupal/core/tree/10.0.8"
             },
-            "time": "2023-03-24T16:45:21+00:00"
+            "time": "2023-04-19T16:14:25+00:00"
         },
         {
             "name": "drupal/crop",
@@ -17373,7 +17372,7 @@
         },
         {
             "name": "drupal/core-composer-scaffold",
-            "version": "10.0.7",
+            "version": "10.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-composer-scaffold.git",
@@ -17417,13 +17416,13 @@
                 "drupal"
             ],
             "support": {
-                "source": "https://github.com/drupal/core-composer-scaffold/tree/10.0.7"
+                "source": "https://github.com/drupal/core-composer-scaffold/tree/10.0.8"
             },
             "time": "2023-03-09T21:24:32+00:00"
         },
         {
             "name": "drupal/core-dev",
-            "version": "10.0.7",
+            "version": "10.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-dev.git",
@@ -17469,7 +17468,7 @@
             ],
             "description": "require-dev dependencies from drupal/drupal; use in addition to drupal/core-recommended to run tests from drupal/core.",
             "support": {
-                "source": "https://github.com/drupal/core-dev/tree/10.0.7"
+                "source": "https://github.com/drupal/core-dev/tree/10.0.8"
             },
             "time": "2023-02-23T15:40:18+00:00"
         },

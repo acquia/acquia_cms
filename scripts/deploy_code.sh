@@ -27,7 +27,7 @@ done
 ./acms-split.sh --branch=2.x --push=drupal --module=acquia_cms_tour && success=true || success=false
 exit_script ${success}
 
-./acms-split.sh --branch=2.x --push=drupal --module=acquia_cms_common && success=true || success=false
+./acms-split.sh --branch=3.x --push=drupal --module=acquia_cms_common && success=true || success=false
 exit_script ${success}
 
 # We need to do workaround to push code on drupal.org for acquia_cms_dam module
