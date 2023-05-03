@@ -23,7 +23,7 @@ if (!$module && !$all) {
 $modules = [
   "acquia_cms_article" => "1.x",
   "acquia_cms_audio" => "1.x",
-  "acquia_cms_common" => "2.x",
+  "acquia_cms_common" => "3.x",
   "acquia_cms_component" => "1.x",
   "acquia_cms_dam" => "1.x",
   "acquia_cms_document" => "1.x",
