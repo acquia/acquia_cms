@@ -5,190 +5,86 @@ on:
     paths-ignore:
       - README.md
   pull_request:
-#    branches: [ develop ]
+    #    branches: [ develop ]
     paths-ignore:
       - README.md
 jobs:
-  static_code_analysis:
-    runs-on: ubuntu-latest
-    env:
-      # Provide your package's name.
-      ORCA_SUT_NAME: acquia/acquia_cms
-      ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^3
-      ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
-      ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
-      ORCA_ENABLE_NIGHTWATCH: "FALSE"
-      ORCA_PHPCS_STANDARD: AcquiaPHP
-      ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
-      COMPOSER_PROCESS_TIMEOUT: 1800
-      ORCA_JOB: ${{ matrix.orca-job }}
-      GITHUB_EVENT: $ {{ github.event_name }}
-      JOB_TYPE: "static-code-analysis"
-      #ACMS_JOB: ${{ matrix.acms-job}}
-    strategy:
-      matrix:
-        orca-job:
-          - STATIC_CODE_ANALYSIS
-          - STRICT_DEPRECATED_CODE_SCAN
-        #php-version: [ "8.1" ]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 12.13.1
-        uses: actions/setup-node@v3
-        with:
-          node-version: 12.13.1
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-          #coverage: xdebug
-      - name: Download ORCA
-        run: |
-          composer self-update
-          composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
-      - name: Before Install
-        run: |
-          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
-          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
-
-          ../orca/bin/ci/before_install.sh
-      - name: Install
-        shell: 'script -q -e -c "bash {0}"'
-        run: ./tests/ci/install.sh
-      - name: Before script
-        run: ../orca/bin/ci/before_script.sh
-      - name: Script
-        run: ./tests/ci/script.sh
-      - name: Before Cache
-        run: ../orca/bin/ci/before_cache.sh
-      - name: After script
-        run: |
-          ../orca/bin/ci/after_success.sh
-          ../orca/bin/ci/after_failure.sh
-          ../orca/bin/ci/after_script.sh
-
-  drupal_check:
-    name: Execute Drupal-check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 12.13.1
-        uses: actions/setup-node@v3
-        with:
-          node-version: 12.13.1
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-          #coverage: xdebug
-      - name: Execute Drupal-check
-        run: |
-          composer install
-          php vendor/bin/drupal-check modules
-          php vendor/bin/drupal-check tests/src
-  integrated_tests:
-    name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
-    runs-on: ubuntu-latest
-    env:
-      # Site test artifacts.
-      #ACMS_DB_ARTIFACT: "/home/runner/work/acquia_cms/acquia_cms/tests/acms.sql.gz"
-      #ACMS_FILES_ARTIFACT: "/home/runner/work/acquia_cms/acquia_cms/tests/acms-files.tar.gz"
-      #ACMS_STARTER_DB_ARTIFACT: "/home/runner/work/acquia_cms/acquia_cms/tests/acms-starter.sql.gz"
-      #ACMS_STARTER_FILES_ARTIFACT: "/home/runner/work/acquia_cms/acquia_cms/tests/acms-files-starter.tar.gz"
-      # Provide your package's name.
-      ORCA_SUT_NAME: acquia/acquia_cms
-      ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^3
-      ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
-      ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
-      ORCA_ENABLE_NIGHTWATCH: "FALSE"
-      ORCA_PHPCS_STANDARD: AcquiaPHP
-      ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
-      COMPOSER_PROCESS_TIMEOUT: 1800
-      ORCA_JOB: ${{ matrix.orca-job }}
-      #AWS_S3_BUCKET_PATH: s3://acquia-cms-artifacts/backstop
-      # Set Required API Keys.
-      CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
-      GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
-      SEARCH_UUID: ${{ secrets.SEARCH_UUID }}
-      SITESTUDIO_API_KEY: ${{ secrets.SITESTUDIO_API_KEY }}
-      SITESTUDIO_ORG_KEY: ${{ secrets.SITESTUDIO_ORG_KEY }}
-      ACMS_JOB: ${{ matrix.acms_job }}
-      JOB_TYPE: "integrated-tests"
-      CI: true
-    strategy:
-      fail-fast: false
-      matrix:
-        orca-job:
-          - ISOLATED_TEST_ON_CURRENT
-        #php-version: [ "8.1" ]
-        acms_job:
-          - integrated_php_unit_tests
-          - integrated_existing_site_tests
-          - backstop_tests
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 12.13.1
-        uses: actions/setup-node@v3
-        with:
-          node-version: 12.13.1
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-          #coverage: xdebug
-      - name: Setup MySQL
-        run: |
-          sudo /etc/init.d/mysql start
-          mysql -uroot -proot < ./tests/ci/install.sql
-      - name: Download ORCA
-        run: |
-          composer self-update
-          composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
-#      - name: Configure AWS Credentials
-#        uses: aws-actions/configure-aws-credentials@v1
+#  static_code_analysis:
+#    runs-on: ubuntu-latest
+#    env:
+#      # Provide your package's name.
+#      ORCA_SUT_NAME: acquia/acquia_cms
+#      ORCA_SUT_BRANCH: develop
+#      ORCA_VERSION: ^3
+#      ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
+#      ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
+#      ORCA_ENABLE_NIGHTWATCH: "FALSE"
+#      ORCA_PHPCS_STANDARD: AcquiaPHP
+#      ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
+#      COMPOSER_PROCESS_TIMEOUT: 1800
+#      ORCA_JOB: ${{ matrix.orca-job }}
+#      GITHUB_EVENT: $ {{ github.event_name }}
+#      JOB_TYPE: "static-code-analysis"
+#      #ACMS_JOB: ${{ matrix.acms-job}}
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        orca-job:
+#          - STATIC_CODE_ANALYSIS
+#          - STRICT_DEPRECATED_CODE_SCAN
+#        #php-version: [ "8.1" ]
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Use Node.js 12.13.1
+#        uses: actions/setup-node@v3
 #        with:
-#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-      - name: Before Install
-        run: |
-          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
-          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
+#          node-version: 12.13.1
+#      - uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: 8.2
+#          #coverage: xdebug
+#      - name: Download ORCA
+#        run: |
+#          composer self-update
+#          composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
+#          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+#      - name: Before Install
+#        run: ../orca/bin/ci/before_install.sh
+#      - name: Install
+#        shell: 'script -q -e -c "bash {0}"'
+#        run: ./tests/ci/install.sh
+#      - name: Before script
+#        run: ../orca/bin/ci/before_script.sh
+#      - name: Script
+#        run: ./tests/ci/script.sh
+#      - name: Before Cache
+#        run: ../orca/bin/ci/before_cache.sh
+#      - name: After script
+#        run: |
+#          ../orca/bin/ci/after_success.sh
+#          ../orca/bin/ci/after_failure.sh
+#          ../orca/bin/ci/after_script.sh
 
-          # Remove all PHPUnit tests from individual modules, except the integrated & ExistingSite tests.
-          if [ "${ACMS_JOB}" = "integrated_existing_site_tests" ]; then
-            find modules/*/tests tests -type f -name "*Test.php" ! -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
-          elif [ "${ACMS_JOB}" = "integrated_php_unit_tests" ]; then
-            # Remove all isolated/existing_site phpunit tests from acquia_cms modules.
-            find modules/*/tests -type f -name "*Test.php" -exec rm -fr '{}' ';'
-            # Remove all existing_site phpunit tests from acquia_cms repo as those get's covered from integrated_existing_site_tests.
-            find tests/src -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
-          fi
-          ../orca/bin/ci/before_install.sh
-          chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
-          CHROMEDRIVER_PID=$!
-          echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
-      - name: Install
-        shell: 'script -q -e -c "bash {0}"'
-        run: ./tests/ci/install.sh
-      - name: Before script
-        run: ../orca/bin/ci/before_script.sh
-      - name: Script
-        run: ./tests/ci/script.sh
-      - name: Before Cache
-        run : ../orca/bin/ci/before_cache.sh
-      - name: After script
-        run: |
-          kill -0 ${{ env.CHROMEDRIVER_PID }}
-          ../orca/bin/ci/after_success.sh
-          ../orca/bin/ci/after_failure.sh
-          ../orca/bin/ci/after_script.sh
-
-  isolated_tests:
-    name: acquia_cms (${{ matrix.orca-job }}, ${{ matrix.modules }})
+  #  drupal_check:
+  #    name: Execute Drupal-check
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #      - uses: actions/checkout@v3
+  #      - name: Use Node.js 12.13.1
+  #        uses: actions/setup-node@v3
+  #        with:
+  #          node-version: 12.13.1
+  #      - uses: shivammathur/setup-php@v2
+  #        with:
+  #          php-version: 8.2
+  #          #coverage: xdebug
+  #      - name: Execute Drupal-check
+  #        run: |
+  #          composer install
+  #          php vendor/bin/drupal-check modules
+  #          php vendor/bin/drupal-check tests/src
+  orca_build_project:
+    name: ${{ matrix.orca-job }}
     runs-on: ubuntu-latest
     env:
       # Set ORCA related environment variables.
@@ -211,7 +107,73 @@ jobs:
 
       #Add other required environment variables.
       COMPOSER_PROCESS_TIMEOUT: 1800
-      MODULES: ${{ matrix.modules }}
+      JOB_TYPE: "isolated-tests"
+      CI: true
+    strategy:
+      matrix:
+        orca-job:
+          - ISOLATED_TEST_ON_CURRENT
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 12.13.1
+        uses: actions/setup-node@v3
+        with:
+          node-version: 12.13.1
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          #coverage: xdebug
+      - name: Download ORCA
+        run: |
+          composer self-update
+          composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
+          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+      - name: Before Install
+        run: |
+          find modules tests -type f -name "*Test.php" -exec rm -fr '{}' ';'
+          ../orca/bin/ci/before_install.sh
+          chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
+          CHROMEDRIVER_PID=$!
+          echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
+      - name: Install
+        shell: 'script -q -e -c "bash {0}"'
+        run: ./tests/ci/install.sh
+      - name: Tar files
+        run: |
+          source ../orca/bin/ci/_includes.sh
+          cd ${ORCA_FIXTURE_DIR}
+          tar -cvf orca-fixture-dir.tar composer.json composer.lock
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: orca-fixture-dir
+          path: /home/runner/work/acquia_cms/orca-build/orca-fixture-dir.tar
+          retention-days: 1
+  contributed_module_tests:
+    needs: [ orca_build_project ]
+    name: ${{ matrix.orca-job }} - ${{ matrix.module }}
+    runs-on: ubuntu-latest
+    env:
+      # Set ORCA related environment variables.
+      ORCA_SUT_NAME: acquia/acquia_cms
+      ORCA_SUT_BRANCH: develop
+      ORCA_VERSION: ^3
+      ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
+      ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
+      ORCA_ENABLE_NIGHTWATCH: "FALSE"
+      ORCA_PHPCS_STANDARD: AcquiaPHP
+      ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
+      ORCA_JOB: ${{ matrix.orca-job }}
+
+      # Set Required API Keys.
+      CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
+      GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
+      SEARCH_UUID: ${{ secrets.SEARCH_UUID }}
+      SITESTUDIO_API_KEY: ${{ secrets.SITESTUDIO_API_KEY }}
+      SITESTUDIO_ORG_KEY: ${{ secrets.SITESTUDIO_ORG_KEY }}
+
+      #Add other required environment variables.
+      COMPOSER_PROCESS_TIMEOUT: 1800
       JOB_TYPE: "isolated-tests"
       CI: true
     strategy:
@@ -219,30 +181,56 @@ jobs:
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
-        #php-version: [ "8.1" ]
-        modules:
-          - acquia_cms_article, acquia_cms_person, acquia_cms_place, acquia_cms_event
-          - acquia_cms_page, acquia_cms_site_studio
-          - acquia_cms_image, acquia_cms_document, acquia_cms_video, acquia_cms_audio
-          - acquia_cms_search, acquia_cms_common, acquia_cms_tour
-          - acquia_cms_headless
-#          - acquia_cms_article
-#          - acquia_cms_audio
-#          - acquia_cms_common
-#          - acquia_cms_document
-#          - acquia_cms_event
-#          - acquia_cms_image
-#          - acquia_cms_page
-#          - acquia_cms_person
-#          - acquia_cms_place
-#          - acquia_cms_search
-#          - acquia_cms_site_studio
-#          - acquia_cms_tour
-#          - acquia_cms_video
-          #- acquia_cms_audio
-          #- acquia_cms_headless
-          #- acquia_cms_starter
-          #- acquia_cms_toolbar
+        module:
+          #          - "acquia_connector"
+          #          - "acquia_contenthub"
+          #          - "acquia_lift"
+          #          - "acquia_purge"
+          #          - "acquia_search"
+          #          - "acsf"
+          #          - "memcache"
+          #          - "acquia_dam"
+          #          - "acquia_search"
+          #          - "cohesion"
+          - "autologout"
+          - "captcha"
+          - "component"
+          - "config_rewrite"
+          - "consumers"
+          - "crop"
+          - "ctools"
+          - "decoupled_router"
+          - "depcalc"
+          - "diff"
+          - "entity_clone"
+          - "entity_reference_revisions"
+          - "file_mdm"
+          - "geofield"
+          - "imagemagick"
+          - "imce"
+          - "jquery_ui"
+          - "jquery_ui_draggable"
+          - "jsonapi_resources"
+          - "metatag"
+          - "moderation_dashboard"
+          - "moderation_sidebar"
+          - "node_revision_delete"
+          - "openapi"
+          - "openapi_ui"
+          - "openapi_ui_redoc"
+          - "purge"
+          - "reroute_email"
+          - "responsive_preview"
+          - "schemata"
+          - "search_api"
+          - "search_api_solr"
+          - "simple_oauth"
+          - "social_media_links"
+          - "sophron"
+          - "subrequests"
+          - "token"
+          - "username_enumeration_prevention"
+          - "views_remote_data"
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -260,34 +248,39 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
-          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
-          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
-
-          modules_list=$(echo ${MODULES} | tr "," "\n")
-          declare -a commands
-          for module in ${modules_list}
-          do
-            command=$(echo ${module} | xargs)
-            commands=("${commands[@]}" ! -path "*/${command}/*")
-          done
-          find modules -type f -name "*Test.php" "${commands[@]}" -exec rm -fr '{}' ';'
-          # Do not run any existing site tests. We run them seperately.
-          find modules -type d -name ExistingSite | xargs rm -rf && rm -rf tests/src/
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
           CHROMEDRIVER_PID=$!
           echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
-      - name: Install
+      - uses: actions/download-artifact@v3
+        with:
+          name: orca-fixture-dir
+          path: /home/runner/work/acquia_cms/orca-build
+      - name: Untar Files
         shell: 'script -q -e -c "bash {0}"'
-        run: ./tests/ci/install.sh
+        run: |
+          source ../orca/bin/ci/_includes.sh
+          cd ${ORCA_FIXTURE_DIR}
+          tar -xvf orca-fixture-dir.tar
+          ALL_REPO=$(php ${ORCA_SUT_DIR}/scripts/cleanup_local_repo.php composer.json)
+          echo "${ALL_REPO}" | while read MODULE;
+          do
+            composer config --unset repositories.${MODULE}
+          done
+          rm composer.lock
+          composer remove "drupal/acquia_cms_*" --no-update --no-install
+          composer install
+          find ${ORCA_SUT_DIR}/modules ${ORCA_SUT_DIR}/tests -type f -name "*Test.php" -exec rm -fr '{}' ';'
+          orca fixture:backup --force
+          cd -
       - name: Before script
         run: ../orca/bin/ci/before_script.sh
       - name: Script
         run: |
           source ../orca/bin/ci/_includes.sh
-          php ./scripts/rearrage_modules.php
-          ls -ltr ${ORCA_SUT_DIR}/modules
+          php ./scripts/rearrage_modules.php ${{ matrix.module }}
+          composer show --direct -d ${ORCA_FIXTURE_DIR}
+          orca fixture:backup --force
           ./tests/ci/script.sh
       - name: Before Cache
         run: ../orca/bin/ci/before_cache.sh
@@ -297,114 +290,308 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
-  run_update_hooks:
-    name: "Module Upgrades"
-    runs-on: ubuntu-latest
-    env:
-      # Set ORCA related environment variables.
-      ORCA_SUT_NAME: acquia/acquia_cms
-      ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^3
-      ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
-      ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
-      ORCA_ENABLE_NIGHTWATCH: "FALSE"
-      ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
-
-      # Set Required API Keys.
-      CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
-      GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
-      SEARCH_UUID: ${{ secrets.SEARCH_UUID }}
-      SITESTUDIO_API_KEY: ${{ secrets.SITESTUDIO_API_KEY }}
-      SITESTUDIO_ORG_KEY: ${{ secrets.SITESTUDIO_ORG_KEY }}
-
-      #Add other required environment variables.
-      COMPOSER_PROCESS_TIMEOUT: 1800
-      CI: true
-      GIT_AUTHOR_NAME: "Github Actions"
-      GIT_AUTHOR_EMAIL: "github-actions@exmaple.com"
-
-      GIT_COMMITTER_NAME: "Github Actions"
-      GIT_COMMITTER_EMAIL: "github-actions@exmaple.com"
-      ORCA_JOB: ISOLATED_TEST_ON_CURRENT
-      ACMS_JOB: "upgrade_modules"
-    strategy:
-      fail-fast: false
-      #php-version: [ "8.1" ]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 12.13.1
-        uses: actions/setup-node@v3
-        with:
-          node-version: 12.13.1
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-          #coverage: xdebug
-      - name: Setup MySQL
-        run: |
-          sudo /etc/init.d/mysql start
-          mysql -uroot -proot < ./tests/ci/install.sql
-      - name: Download ORCA
-        run: |
-          composer self-update
-          composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
-      - name: Before Install
-        run: |
-          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
-          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
-          ./tests/ci/before_install.blt.sh
-      - name: Install
-        shell: 'script -q -e -c "bash {0}"'
-        run: ./tests/ci/install.sh
-      - name: Run Update hooks
-        shell: 'script -q -e -c "bash {0}"'
-        run: ./tests/ci/run_update_hooks.sh
-        env:
-          # @see ./tests/ci/before_install.blt.sh
-          DRUPAL_ORG_CHANGES: ${{ env.DRUPAL_ORG_CHANGES }}
-      - name: Script - run backstop tests
-        run: |
-          source ../orca/bin/ci/_includes.sh
-          cd ${ORCA_FIXTURE_DIR}
-          chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
-          CHROMEDRIVER_PID=$!
-          echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
-          ./vendor/bin/drush en acquia_cms_development -y
-          ./vendor/bin/drush en acquia_cms_starter -y
-          ./vendor/bin/drush cr
-          cd ${ORCA_SUT_DIR}
-          ./tests/ci/script.sh
-
-  deploy_code:
-    if: ${{ github.ref == 'refs/heads/main' }}
-    name: "Continuous Deployment (CD)"
-    env:
-      GIT_AUTHOR_NAME: "Vishal Khode"
-      GIT_COMMITTER_NAME: "Vishal Khode"
-      GIT_COMMITTER_EMAIL: "vishal.khode@acquia.com"
-      GIT_AUTHOR_EMAIL: "vishal.khode@acquia.com"
-    needs: [ static_code_analysis, integrated_tests, isolated_tests ]
-    runs-on: ubuntu-latest
-    environment: code_deployment
-    concurrency: production
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Configure SSH keys
-        run: |
-          mkdir -p ~/.ssh
-          echo "${DRUPAL_SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          eval `ssh-agent -s`
-          ssh-add ~/.ssh/id_rsa
-          ssh-keyscan "${DRUPAL_SSH_KNOWN_HOSTS}" >> ~/.ssh/known_hosts
-        shell: bash
-        env:
-          DRUPAL_SSH_PRIVATE_KEY: ${{ secrets.DRUPAL_SSH_PRIVATE_KEY }}
-          DRUPAL_SSH_KNOWN_HOSTS: git.drupal.org
-      - name: deploy_code
-        run: |
-          ${GITHUB_WORKSPACE}/scripts/deploy_code.sh
+#  integrated_tests:
+#    name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
+#    runs-on: ubuntu-latest
+#    env:
+#      # Site test artifacts.
+#      #ACMS_DB_ARTIFACT: "/home/runner/work/acquia_cms/acquia_cms/tests/acms.sql.gz"
+#      #ACMS_FILES_ARTIFACT: "/home/runner/work/acquia_cms/acquia_cms/tests/acms-files.tar.gz"
+#      #ACMS_STARTER_DB_ARTIFACT: "/home/runner/work/acquia_cms/acquia_cms/tests/acms-starter.sql.gz"
+#      #ACMS_STARTER_FILES_ARTIFACT: "/home/runner/work/acquia_cms/acquia_cms/tests/acms-files-starter.tar.gz"
+#      # Provide your package's name.
+#      ORCA_SUT_NAME: acquia/acquia_cms
+#      ORCA_SUT_BRANCH: develop
+#      ORCA_VERSION: ^3
+#      ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
+#      ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
+#      ORCA_ENABLE_NIGHTWATCH: "FALSE"
+#      ORCA_PHPCS_STANDARD: AcquiaPHP
+#      ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
+#      COMPOSER_PROCESS_TIMEOUT: 1800
+#      ORCA_JOB: ${{ matrix.orca-job }}
+#      #AWS_S3_BUCKET_PATH: s3://acquia-cms-artifacts/backstop
+#      # Set Required API Keys.
+#      CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
+#      GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
+#      SEARCH_UUID: ${{ secrets.SEARCH_UUID }}
+#      SITESTUDIO_API_KEY: ${{ secrets.SITESTUDIO_API_KEY }}
+#      SITESTUDIO_ORG_KEY: ${{ secrets.SITESTUDIO_ORG_KEY }}
+#      ACMS_JOB: ${{ matrix.acms_job }}
+#      JOB_TYPE: "integrated-tests"
+#      CI: true
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        orca-job:
+#          - ISOLATED_TEST_ON_CURRENT
+#        #php-version: [ "8.1" ]
+#        acms_job:
+#          - integrated_php_unit_tests
+#          - integrated_existing_site_tests
+#          - backstop_tests
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Use Node.js 12.13.1
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: 12.13.1
+#      - uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: 8.2
+#          #coverage: xdebug
+#      - name: Setup MySQL
+#        run: |
+#          sudo /etc/init.d/mysql start
+#          mysql -uroot -proot < ./tests/ci/install.sql
+#      - name: Download ORCA
+#        run: |
+#          composer self-update
+#          composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
+#          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+##      - name: Configure AWS Credentials
+##        uses: aws-actions/configure-aws-credentials@v1
+##        with:
+##          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+##          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+##          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+#      - name: Before Install
+#        run: |
+#          # Remove all PHPUnit tests from individual modules, except the integrated & ExistingSite tests.
+#          if [ "${ACMS_JOB}" = "integrated_existing_site_tests" ]; then
+#            find modules/*/tests tests -type f -name "*Test.php" ! -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
+#          elif [ "${ACMS_JOB}" = "integrated_php_unit_tests" ]; then
+#            # Remove all isolated/existing_site phpunit tests from acquia_cms modules.
+#            find modules/*/tests -type f -name "*Test.php" -exec rm -fr '{}' ';'
+#            # Remove all existing_site phpunit tests from acquia_cms repo as those get's covered from integrated_existing_site_tests.
+#            find tests/src -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
+#          fi
+#          ../orca/bin/ci/before_install.sh
+#          chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
+#          CHROMEDRIVER_PID=$!
+#          echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
+#      - name: Install
+#        shell: 'script -q -e -c "bash {0}"'
+#        run: ./tests/ci/install.sh
+#      - name: Before script
+#        run: ../orca/bin/ci/before_script.sh
+#      - name: Script
+#        run: ./tests/ci/script.sh
+#      - name: Before Cache
+#        run : ../orca/bin/ci/before_cache.sh
+#      - name: After script
+#        run: |
+#          kill -0 ${{ env.CHROMEDRIVER_PID }}
+#          ../orca/bin/ci/after_success.sh
+#          ../orca/bin/ci/after_failure.sh
+#          ../orca/bin/ci/after_script.sh
+#
+#  isolated_tests:
+#    name: acquia_cms (${{ matrix.orca-job }}, ${{ matrix.modules }})
+#    runs-on: ubuntu-latest
+#    env:
+#      # Set ORCA related environment variables.
+#      ORCA_SUT_NAME: acquia/acquia_cms
+#      ORCA_SUT_BRANCH: develop
+#      ORCA_VERSION: ^3
+#      ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
+#      ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
+#      ORCA_ENABLE_NIGHTWATCH: "FALSE"
+#      ORCA_PHPCS_STANDARD: AcquiaPHP
+#      ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
+#      ORCA_JOB: ${{ matrix.orca-job }}
+#
+#      # Set Required API Keys.
+#      CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
+#      GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
+#      SEARCH_UUID: ${{ secrets.SEARCH_UUID }}
+#      SITESTUDIO_API_KEY: ${{ secrets.SITESTUDIO_API_KEY }}
+#      SITESTUDIO_ORG_KEY: ${{ secrets.SITESTUDIO_ORG_KEY }}
+#
+#      #Add other required environment variables.
+#      COMPOSER_PROCESS_TIMEOUT: 1800
+#      MODULES: ${{ matrix.modules }}
+#      JOB_TYPE: "isolated-tests"
+#      CI: true
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        orca-job:
+#          - ISOLATED_TEST_ON_CURRENT
+#        #php-version: [ "8.1" ]
+#        modules:
+#          - acquia_cms_article, acquia_cms_person, acquia_cms_place, acquia_cms_event
+#          - acquia_cms_page, acquia_cms_site_studio
+#          - acquia_cms_image, acquia_cms_document, acquia_cms_video, acquia_cms_audio
+#          - acquia_cms_search, acquia_cms_common, acquia_cms_tour
+#          - acquia_cms_headless
+##          - acquia_cms_article
+##          - acquia_cms_audio
+##          - acquia_cms_common
+##          - acquia_cms_document
+##          - acquia_cms_event
+##          - acquia_cms_image
+##          - acquia_cms_page
+##          - acquia_cms_person
+##          - acquia_cms_place
+##          - acquia_cms_search
+##          - acquia_cms_site_studio
+##          - acquia_cms_tour
+##          - acquia_cms_video
+#          #- acquia_cms_audio
+#          #- acquia_cms_headless
+#          #- acquia_cms_starter
+#          #- acquia_cms_toolbar
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Use Node.js 12.13.1
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: 12.13.1
+#      - uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: 8.2
+#          #coverage: xdebug
+#      - name: Download ORCA
+#        run: |
+#          composer self-update
+#          composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
+#          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+#      - name: Before Install
+#        run: |
+#          modules_list=$(echo ${MODULES} | tr "," "\n")
+#          declare -a commands
+#          for module in ${modules_list}
+#          do
+#            command=$(echo ${module} | xargs)
+#            commands=("${commands[@]}" ! -path "*/${command}/*")
+#          done
+#          find modules -type f -name "*Test.php" "${commands[@]}" -exec rm -fr '{}' ';'
+#          # Do not run any existing site tests. We run them seperately.
+#          find modules -type d -name ExistingSite | xargs rm -rf && rm -rf tests/src/
+#          ../orca/bin/ci/before_install.sh
+#          chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
+#          CHROMEDRIVER_PID=$!
+#          echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
+#      - name: Install
+#        shell: 'script -q -e -c "bash {0}"'
+#        run: ./tests/ci/install.sh
+#      - name: Before script
+#        run: ../orca/bin/ci/before_script.sh
+#      - name: Script
+#        run: ./tests/ci/script.sh
+#      - name: Before Cache
+#        run: ../orca/bin/ci/before_cache.sh
+#      - name: After script
+#        run: |
+#          kill -0 ${{ env.CHROMEDRIVER_PID }}
+#          ../orca/bin/ci/after_success.sh
+#          ../orca/bin/ci/after_failure.sh
+#          ../orca/bin/ci/after_script.sh
+#  run_update_hooks:
+#    name: "Module Upgrades"
+#    runs-on: ubuntu-latest
+#    env:
+#      # Set ORCA related environment variables.
+#      ORCA_SUT_NAME: acquia/acquia_cms
+#      ORCA_SUT_BRANCH: develop
+#      ORCA_VERSION: ^3
+#      ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
+#      ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
+#      ORCA_ENABLE_NIGHTWATCH: "FALSE"
+#      ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
+#
+#      # Set Required API Keys.
+#      CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
+#      GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
+#      SEARCH_UUID: ${{ secrets.SEARCH_UUID }}
+#      SITESTUDIO_API_KEY: ${{ secrets.SITESTUDIO_API_KEY }}
+#      SITESTUDIO_ORG_KEY: ${{ secrets.SITESTUDIO_ORG_KEY }}
+#
+#      #Add other required environment variables.
+#      COMPOSER_PROCESS_TIMEOUT: 1800
+#      CI: true
+#      GIT_AUTHOR_NAME: "Github Actions"
+#      GIT_AUTHOR_EMAIL: "github-actions@exmaple.com"
+#
+#      GIT_COMMITTER_NAME: "Github Actions"
+#      GIT_COMMITTER_EMAIL: "github-actions@exmaple.com"
+#      ORCA_JOB: ISOLATED_TEST_ON_CURRENT
+#      ACMS_JOB: "upgrade_modules"
+#    strategy:
+#      fail-fast: false
+#      #php-version: [ "8.1" ]
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Use Node.js 12.13.1
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: 12.13.1
+#      - uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: 8.2
+#          #coverage: xdebug
+#      - name: Setup MySQL
+#        run: |
+#          sudo /etc/init.d/mysql start
+#          mysql -uroot -proot < ./tests/ci/install.sql
+#      - name: Download ORCA
+#        run: |
+#          composer self-update
+#          composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
+#          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+#      - name: Before Install
+#        run: ./tests/ci/before_install.blt.sh
+#      - name: Install
+#        shell: 'script -q -e -c "bash {0}"'
+#        run: ./tests/ci/install.sh
+#      - name: Run Update hooks
+#        shell: 'script -q -e -c "bash {0}"'
+#        run: ./tests/ci/run_update_hooks.sh
+#        env:
+#          # @see ./tests/ci/before_install.blt.sh
+#          DRUPAL_ORG_CHANGES: ${{ env.DRUPAL_ORG_CHANGES }}
+#      - name: Script - run backstop tests
+#        run: |
+#          source ../orca/bin/ci/_includes.sh
+#          cd ${ORCA_FIXTURE_DIR}
+#          chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
+#          CHROMEDRIVER_PID=$!
+#          echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
+#          ./vendor/bin/drush en acquia_cms_development -y
+#          ./vendor/bin/drush en acquia_cms_starter -y
+#          ./vendor/bin/drush cr
+#          cd ${ORCA_SUT_DIR}
+#          ./tests/ci/script.sh
+#
+#  deploy_code:
+#    if: ${{ github.ref == 'refs/heads/main' }}
+#    name: "Continuous Deployment (CD)"
+#    env:
+#      GIT_AUTHOR_NAME: "Vishal Khode"
+#      GIT_COMMITTER_NAME: "Vishal Khode"
+#      GIT_COMMITTER_EMAIL: "vishal.khode@acquia.com"
+#      GIT_AUTHOR_EMAIL: "vishal.khode@acquia.com"
+#    needs: [ static_code_analysis, integrated_tests, isolated_tests ]
+#    runs-on: ubuntu-latest
+#    environment: code_deployment
+#    concurrency: production
+#    steps:
+#      - uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0
+#      - name: Configure SSH keys
+#        run: |
+#          mkdir -p ~/.ssh
+#          echo "${DRUPAL_SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+#          chmod 600 ~/.ssh/id_rsa
+#          eval `ssh-agent -s`
+#          ssh-add ~/.ssh/id_rsa
+#          ssh-keyscan "${DRUPAL_SSH_KNOWN_HOSTS}" >> ~/.ssh/known_hosts
+#        shell: bash
+#        env:
+#          DRUPAL_SSH_PRIVATE_KEY: ${{ secrets.DRUPAL_SSH_PRIVATE_KEY }}
+#          DRUPAL_SSH_KNOWN_HOSTS: git.drupal.org
+#      - name: deploy_code
+#        run: |
+#          ${GITHUB_WORKSPACE}/scripts/deploy_code.sh
