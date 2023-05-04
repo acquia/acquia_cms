@@ -29,12 +29,11 @@ class LogoCardComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
-    // @todo this need to be removed once ACO fixes ACO-2372.
-    /*$edit_form = $this->getLayoutCanvas()->add('Logo card')->edit();
+    $edit_form = $this->getLayoutCanvas()->add('Logo card')->edit();
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMediaSource("Media Types");
     $this->selectMedia(0);
-    $this->insertSelectedMedia();*/
+    $this->insertSelectedMedia();
   }
 
   /**

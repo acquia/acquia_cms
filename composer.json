@@ -120,8 +120,16 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/acquia_dam": {
+                "3349130 - PJavascript error in Drupal 10 - migrate poperjs to FloatingUI": "https://git.drupalcode.org/project/acquia_dam/-/merge_requests/10.patch",
+                "3354625 - Acquia DAM + Site Studio throw JS warning": "https://git.drupalcode.org/project/acquia_dam/-/merge_requests/11.patch"
+            },
             "drupal/core": {
                 "3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112": "https://git.drupalcode.org/project/drupal/-/merge_requests/3142.patch"
+            },
+            "drupal/decoupled_router": {
+                "3111456 - Unable to resolve path on node in other language than default": "https://www.drupal.org/files/issues/2022-11-30/decouple_router-3111456-resolve-language-issue-58.patch",
+                "3176615 - RouteNotFoundException when a jsonapi individual route is not available": "https://www.drupal.org/files/issues/2023-04-26/route-not-found-exception.patch"
             }
         }
     },
@@ -134,6 +142,18 @@
         ]
     },
     "repositories": {
+        "chart.js": {
+            "type": "package",
+            "package": {
+                "name": "nnnick/chartjs",
+                "version": "v3.9.1",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/chartjs/Chart.js/releases/download/v3.9.1/chart.js-3.9.1.tgz",
+                    "type": "tar"
+                }
+            }
+        },
         "acquia_cms_article": {
             "type": "path",
             "url": "./modules/acquia_cms_article",

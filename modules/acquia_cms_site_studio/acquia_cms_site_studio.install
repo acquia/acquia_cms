@@ -391,7 +391,9 @@ function acquia_cms_site_studio_update_8008() {
       else {
         $entity = \Drupal::entityTypeManager()->getStorage($name_array[1])->load($name_array[2]);
       }
-      $entity->save();
+      if ($entity) {
+        $entity->save();
+      }
     }
   }
 }

@@ -1,0 +1,70 @@
+name: Create Release
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        type: choice
+        description: Choose module to create tag.
+        options:
+          - acquia_cms_article
+          - acquia_cms_audio
+          - acquia_cms_common
+          - acquia_cms_component
+          - acquia_cms_dam
+          - acquia_cms_document
+          - acquia_cms_event
+          - acquia_cms_headless
+          - acquia_cms_image
+          - acquia_cms_page
+          - acquia_cms_person
+          - acquia_cms_place
+          - acquia_cms_search
+          - acquia_cms_site_studio
+          - acquia_cms_starter
+          - acquia_cms_toolbar
+          - acquia_cms_tour
+          - acquia_cms_video
+          - all
+        required: true
+        default: 'all'
+      type:
+        type: choice
+        description: Choose release type.
+        options:
+          - patch
+          - minor
+          - major
+        required: true
+        default: 'patch'
+      tag:
+        description: 'Choose release tag (Leave empty for automatically creating next tag)'
+        default: ''
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    env:
+      GIT_AUTHOR_NAME: "Github CI"
+      GIT_COMMITTER_NAME: "Github CI"
+      GIT_COMMITTER_EMAIL: "no-reply@acquia.com"
+      GIT_AUTHOR_EMAIL: "no-reply@acquia.com"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Configure SSH keys
+        run: |
+          mkdir -p ~/.ssh
+          echo "${DRUPAL_SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval `ssh-agent -s`
+          ssh-add ~/.ssh/id_rsa
+          ssh-keyscan "${DRUPAL_SSH_KNOWN_HOSTS}" >> ~/.ssh/known_hosts
+        shell: bash
+        env:
+          DRUPAL_SSH_PRIVATE_KEY: ${{ secrets.DRUPAL_SSH_PRIVATE_KEY }}
+          DRUPAL_SSH_KNOWN_HOSTS: git.drupal.org
+      - name: Create Release
+        run: |
+          if [ -z "${{ github.event.inputs.tag }}" ]; then
+            ./scripts/create_tags.sh --module=${{ github.event.inputs.name }} --type=${{ github.event.inputs.type }}
+          else
+            ./scripts/create_tags.sh --module=${{ github.event.inputs.name }} --type=${{ github.event.inputs.type }} --tag=${{ github.event.inputs.tag }}
+          fi
