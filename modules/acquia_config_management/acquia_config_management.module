@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the module.
+ */
+
+use Drupal\acquia_config_management\Event\ConfigEvents;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_form_install_configure_form_alter().
+ */
+function acquia_config_management_form_install_configure_form_alter(&$form, FormStateInterface $form_state) {
+  global $install_state;
+  if (!empty($install_state['config_install_path'])) {
+    $form['#submit'][] = 'acquia_config_management_form_install_configure_submit';
+  }
+}
+
+/**
+ * Trigger `POST_SITE_INSTALL_EXISTING_CONFIG` event for existing site install.
+ */
+function acquia_config_management_form_install_configure_submit(&$form, FormStateInterface $form_state) {
+  if (!Settings::get('existing_site_status', FALSE)) {
+    $event = new ConfigEvents();
+    $event_dispatcher = \Drupal::service('event_dispatcher');
+    $event_dispatcher->dispatch($event, ConfigEvents::POST_SITE_INSTALL_EXISTING_CONFIG);
+  }
+}

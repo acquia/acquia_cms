@@ -18,17 +18,16 @@
     ],
     "require": {
         "acquia/acquia-cms-starterkit": "^1.0",
-        "acquia/acquia_global_commands": "dev-main",
         "drupal/acquia_claro": "^1.3.4@alpha",
         "drupal/acquia_cms_audio": "dev-develop",
         "drupal/acquia_cms_component": "dev-develop",
-        "drupal/acquia_cms_config_management": "dev-main",
         "drupal/acquia_cms_dam": "dev-develop",
         "drupal/acquia_cms_headless": "dev-develop",
         "drupal/acquia_cms_site_studio": "dev-develop",
         "drupal/acquia_cms_starter": "dev-develop",
         "drupal/acquia_cms_toolbar": "dev-develop",
         "drupal/acquia_cms_tour": "dev-develop",
+        "drupal/acquia_config_management": "dev-develop",
         "drupal/google_analytics": "^4.0",
         "drupal/google_tag": "^1.6",
         "drupal/honeypot": "^2.1",
@@ -52,6 +51,7 @@
     },
     "config": {
         "allow-plugins": {
+            "acquia/drupal-recommended-settings": true,
             "composer/installers": true,
             "cweagans/composer-patches": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
@@ -119,6 +119,9 @@
             ],
             "docroot/themes/contrib/{$name}": [
                 "type:drupal-theme"
+            ],
+            "drush/Commands/contrib/{$name}": [
+                "type:drupal-drush"
             ]
         },
         "installer-types": [
@@ -328,9 +331,14 @@
                 }
             }
         },
-        "acquia_cms_config_management": {
-            "type": "vcs",
-            "url": "git@github.com:vishalkhode1/acquia_cms_config_management.git"
+        "acquia_config_management": {
+            "type": "path",
+            "url": "./modules/acquia_config_management",
+            "options": {
+                "versions": {
+                    "drupal/acquia_config_management": "dev-develop"
+                }
+            }
         },
         "acquia_global_commands": {
             "type": "vcs",
