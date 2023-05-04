@@ -1,0 +1,7 @@
+services:
+  acquia_config_management.site_install:
+    class: Drupal\acquia_config_management\SiteInstall
+  acquia_config_management.post_config_export_acquia:
+    class: '\Drupal\acquia_config_management\EventSubscriber\AcquiaPostConfigExport'
+    tags:
+      - { name: 'event_subscriber' }

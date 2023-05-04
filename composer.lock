@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3f69dd7d95a685bd6596812e819d8644",
+    "content-hash": "31a984765ef6a27b6d4cd0b8905cb9ca",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2578,10 +2578,10 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_audio",
-                "reference": "49efdf7b6e7cc1d3d7a72f560e4d5798b47ce987"
+                "reference": "26327066b33d8ed59c5ec0efa8c5ec56d7700cf4"
             },
             "require": {
-                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev",
+                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
                 "drupal/media_entity_soundcloud": "^3.1"
             },
             "type": "drupal-module",
@@ -2724,49 +2724,6 @@
             "transport-options": {
                 "relative": true
             }
-        },
-        {
-            "name": "drupal/acquia_cms_config_management",
-            "version": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/vishalkhode1/acquia_cms_config_management.git",
-                "reference": "66b3ce0097f5740c321daebb716d11e800d456c3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/vishalkhode1/acquia_cms_config_management/zipball/66b3ce0097f5740c321daebb716d11e800d456c3",
-                "reference": "66b3ce0097f5740c321daebb716d11e800d456c3",
-                "shasum": ""
-            },
-            "require": {
-                "acquia/acquia_global_commands": "dev-main",
-                "acquia/drupal-environment-detector": "^1.5"
-            },
-            "default-branch": true,
-            "type": "drupal-module",
-            "extra": {
-                "branch-alias": {
-                    "dev-develop": "1.x-dev"
-                },
-                "drupal-scaffold": {
-                    "file-mapping": {
-                        "[web-root]/drush/Commands/ConfigImportExportCommands.php": "assets/scaffold/files/ConfigImportExportCommands.php",
-                        "[web-root]/sites/default/default.settings.php": {
-                            "append": "assets/scaffold/files/site-studio-settings.txt"
-                        }
-                    }
-                }
-            },
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "description": "Provides Acquia CMS recommended configurations management.",
-            "support": {
-                "source": "https://github.com/vishalkhode1/acquia_cms_config_management/tree/main",
-                "issues": "https://github.com/vishalkhode1/acquia_cms_config_management/issues"
-            },
-            "time": "2023-04-27T17:23:54+00:00"
         },
         {
             "name": "drupal/acquia_cms_dam",
@@ -3257,6 +3214,32 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Provides a Video media type and related configuration.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "drupal/acquia_config_management",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./modules/acquia_config_management",
+                "reference": "3574941e05d92183700fb9811a3f87f6ccd4d798"
+            },
+            "require": {
+                "acquia/acquia_global_commands": "dev-main",
+                "acquia/drupal-environment-detector": "^1.5"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Provides Acquia recommended configurations management.",
             "transport-options": {
                 "relative": true
             }
@@ -4132,17 +4115,17 @@
         },
         {
             "name": "drupal/admin_toolbar",
-            "version": "3.3.1",
+            "version": "3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/admin_toolbar.git",
-                "reference": "3.3.1"
+                "reference": "3.3.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/admin_toolbar-3.3.1.zip",
-                "reference": "3.3.1",
-                "shasum": "e1fabe5d1521b73bc07aa3dd37b770c7e895780c"
+                "url": "https://ftp.drupal.org/files/projects/admin_toolbar-3.3.2.zip",
+                "reference": "3.3.2",
+                "shasum": "edb5d281e4940a655e706cfb9a0b367e8d37cbdb"
             },
             "require": {
                 "drupal/core": "^9.2 || ^10"
@@ -4153,8 +4136,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.3.1",
-                    "datestamp": "1682689348",
+                    "version": "3.3.2",
+                    "datestamp": "1683055364",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10843,20 +10826,20 @@
         },
         {
             "name": "lcobucci/clock",
-            "version": "3.1.0",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/clock.git",
-                "reference": "30a854ceb22bd87d83a7a4563b3f6312453945fc"
+                "reference": "039ef98c6b57b101d10bd11d8fdfda12cbd996dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/clock/zipball/30a854ceb22bd87d83a7a4563b3f6312453945fc",
-                "reference": "30a854ceb22bd87d83a7a4563b3f6312453945fc",
+                "url": "https://api.github.com/repos/lcobucci/clock/zipball/039ef98c6b57b101d10bd11d8fdfda12cbd996dc",
+                "reference": "039ef98c6b57b101d10bd11d8fdfda12cbd996dc",
                 "shasum": ""
             },
             "require": {
-                "php": "~8.2.0",
+                "php": "~8.1.0 || ~8.2.0",
                 "psr/clock": "^1.0"
             },
             "provide": {
@@ -10864,13 +10847,13 @@
             },
             "require-dev": {
                 "infection/infection": "^0.26",
-                "lcobucci/coding-standard": "^10.0.0",
+                "lcobucci/coding-standard": "^9.0",
                 "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan": "^1.10.7",
-                "phpstan/phpstan-deprecation-rules": "^1.1.3",
-                "phpstan/phpstan-phpunit": "^1.3.10",
-                "phpstan/phpstan-strict-rules": "^1.5.0",
-                "phpunit/phpunit": "^10.0.17"
+                "phpstan/phpstan": "^1.9.4",
+                "phpstan/phpstan-deprecation-rules": "^1.1.1",
+                "phpstan/phpstan-phpunit": "^1.3.2",
+                "phpstan/phpstan-strict-rules": "^1.4.4",
+                "phpunit/phpunit": "^9.5.27"
             },
             "type": "library",
             "autoload": {
@@ -10891,7 +10874,7 @@
             "description": "Yet another clock abstraction",
             "support": {
                 "issues": "https://github.com/lcobucci/clock/issues",
-                "source": "https://github.com/lcobucci/clock/tree/3.1.0"
+                "source": "https://github.com/lcobucci/clock/tree/3.0.0"
             },
             "funding": [
                 {
@@ -10903,7 +10886,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2023-03-20T19:12:25+00:00"
+            "time": "2022-12-19T15:00:24+00:00"
         },
         {
             "name": "lcobucci/jwt",
@@ -12402,16 +12385,16 @@
         },
         {
             "name": "php-http/discovery",
-            "version": "1.17.0",
+            "version": "1.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/discovery.git",
-                "reference": "bd810d15957cf165230e65d9e1a130793265e3b7"
+                "reference": "29ae6fae35f4116bbfe4c8b96ccc3f687eb07cd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/discovery/zipball/bd810d15957cf165230e65d9e1a130793265e3b7",
-                "reference": "bd810d15957cf165230e65d9e1a130793265e3b7",
+                "url": "https://api.github.com/repos/php-http/discovery/zipball/29ae6fae35f4116bbfe4c8b96ccc3f687eb07cd9",
+                "reference": "29ae6fae35f4116bbfe4c8b96ccc3f687eb07cd9",
                 "shasum": ""
             },
             "require": {
@@ -12474,9 +12457,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-http/discovery/issues",
-                "source": "https://github.com/php-http/discovery/tree/1.17.0"
+                "source": "https://github.com/php-http/discovery/tree/1.18.0"
             },
-            "time": "2023-04-26T15:39:13+00:00"
+            "time": "2023-05-03T14:49:12+00:00"
         },
         {
             "name": "php-http/guzzle7-adapter",
@@ -13362,23 +13345,23 @@
         },
         {
             "name": "react/promise",
-            "version": "v2.9.0",
+            "version": "v2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/promise.git",
-                "reference": "234f8fd1023c9158e2314fa9d7d0e6a83db42910"
+                "reference": "f913fb8cceba1e6644b7b90c4bfb678ed8a3ef38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise/zipball/234f8fd1023c9158e2314fa9d7d0e6a83db42910",
-                "reference": "234f8fd1023c9158e2314fa9d7d0e6a83db42910",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/f913fb8cceba1e6644b7b90c4bfb678ed8a3ef38",
+                "reference": "f913fb8cceba1e6644b7b90c4bfb678ed8a3ef38",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^9.3 || ^5.7 || ^4.8.36"
+                "phpunit/phpunit": "^9.5 || ^5.7 || ^4.8.36"
             },
             "type": "library",
             "autoload": {
@@ -13422,19 +13405,15 @@
             ],
             "support": {
                 "issues": "https://github.com/reactphp/promise/issues",
-                "source": "https://github.com/reactphp/promise/tree/v2.9.0"
+                "source": "https://github.com/reactphp/promise/tree/v2.10.0"
             },
             "funding": [
                 {
-                    "url": "https://github.com/WyriHaximus",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/clue",
-                    "type": "github"
+                    "url": "https://opencollective.com/reactphp",
+                    "type": "open_collective"
                 }
             ],
-            "time": "2022-02-11T10:27:51+00:00"
+            "time": "2023-05-02T15:15:43+00:00"
         },
         {
             "name": "seld/jsonlint",
@@ -16928,16 +16907,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v3.5.1",
+            "version": "v3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "a6e0510cc793912b451fd40ab983a1d28f611c15"
+                "reference": "106c170d08e8415d78be2d16c3d057d0d108262b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/a6e0510cc793912b451fd40ab983a1d28f611c15",
-                "reference": "a6e0510cc793912b451fd40ab983a1d28f611c15",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/106c170d08e8415d78be2d16c3d057d0d108262b",
+                "reference": "106c170d08e8415d78be2d16c3d057d0d108262b",
                 "shasum": ""
             },
             "require": {
@@ -16946,15 +16925,10 @@
                 "symfony/polyfill-mbstring": "^1.3"
             },
             "require-dev": {
-                "psr/container": "^1.0",
+                "psr/container": "^1.0|^2.0",
                 "symfony/phpunit-bridge": "^4.4.9|^5.0.9|^6.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.5-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Twig\\": "src/"
@@ -16988,7 +16962,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.5.1"
+                "source": "https://github.com/twigphp/Twig/tree/v3.6.0"
             },
             "funding": [
                 {
@@ -17000,7 +16974,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-08T07:49:20+00:00"
+            "time": "2023-05-03T19:06:57+00:00"
         },
         {
             "name": "webflo/drupal-finder",
@@ -17774,16 +17748,16 @@
         },
         {
             "name": "drupal/core-composer-scaffold",
-            "version": "10.0.8",
+            "version": "10.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-composer-scaffold.git",
-                "reference": "5ff3916feeeecd15f982803fc2203559623e5ae0"
+                "reference": "22c8b48a5b34864bf433ab3eb6ee7670191c0468"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core-composer-scaffold/zipball/5ff3916feeeecd15f982803fc2203559623e5ae0",
-                "reference": "5ff3916feeeecd15f982803fc2203559623e5ae0",
+                "url": "https://api.github.com/repos/drupal/core-composer-scaffold/zipball/22c8b48a5b34864bf433ab3eb6ee7670191c0468",
+                "reference": "22c8b48a5b34864bf433ab3eb6ee7670191c0468",
                 "shasum": ""
             },
             "require": {
@@ -17818,22 +17792,22 @@
                 "drupal"
             ],
             "support": {
-                "source": "https://github.com/drupal/core-composer-scaffold/tree/10.0.8"
+                "source": "https://github.com/drupal/core-composer-scaffold/tree/10.0.9"
             },
-            "time": "2023-03-09T21:24:32+00:00"
+            "time": "2023-04-30T16:15:41+00:00"
         },
         {
             "name": "drupal/core-dev",
-            "version": "10.0.8",
+            "version": "10.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-dev.git",
-                "reference": "88ef23ed37d23891afde3a1d10433fb82898a30a"
+                "reference": "22a053f9de0ce6ce9db2755693b9c81ddf86b3b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core-dev/zipball/88ef23ed37d23891afde3a1d10433fb82898a30a",
-                "reference": "88ef23ed37d23891afde3a1d10433fb82898a30a",
+                "url": "https://api.github.com/repos/drupal/core-dev/zipball/22a053f9de0ce6ce9db2755693b9c81ddf86b3b7",
+                "reference": "22a053f9de0ce6ce9db2755693b9c81ddf86b3b7",
                 "shasum": ""
             },
             "require": {
@@ -17844,7 +17818,7 @@
                 "drupal/coder": "^8.3.10",
                 "instaclick/php-webdriver": "^1.4.1",
                 "justinrainbow/json-schema": "^5.2",
-                "mglaman/phpstan-drupal": "^1.1.29",
+                "mglaman/phpstan-drupal": "^1.1.31",
                 "mikey179/vfsstream": "^1.6.11",
                 "phpspec/prophecy-phpunit": "^2",
                 "phpstan/extension-installer": "^1.1",
@@ -17870,9 +17844,9 @@
             ],
             "description": "require-dev dependencies from drupal/drupal; use in addition to drupal/core-recommended to run tests from drupal/core.",
             "support": {
-                "source": "https://github.com/drupal/core-dev/tree/10.0.8"
+                "source": "https://github.com/drupal/core-dev/tree/10.0.9"
             },
-            "time": "2023-02-23T15:40:18+00:00"
+            "time": "2023-05-01T11:13:00+00:00"
         },
         {
             "name": "ergebnis/composer-normalize",
@@ -21566,13 +21540,13 @@
         "drupal/acquia_claro": 15,
         "drupal/acquia_cms_audio": 20,
         "drupal/acquia_cms_component": 20,
-        "drupal/acquia_cms_config_management": 20,
         "drupal/acquia_cms_dam": 20,
         "drupal/acquia_cms_headless": 20,
         "drupal/acquia_cms_site_studio": 20,
         "drupal/acquia_cms_starter": 20,
         "drupal/acquia_cms_toolbar": 20,
-        "drupal/acquia_cms_tour": 20
+        "drupal/acquia_cms_tour": 20,
+        "drupal/acquia_config_management": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
