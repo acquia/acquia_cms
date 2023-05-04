@@ -151,7 +151,7 @@ jobs:
           retention-days: 1
   contributed_module_tests:
     needs: [ orca_build_project ]
-    name: ${{ matrix.orca-job }} - ${{ matrix.module }}
+    name: ${{ matrix.module }}
     runs-on: ubuntu-latest
     env:
       # Set ORCA related environment variables.
@@ -276,10 +276,11 @@ jobs:
       - name: Before script
         run: ../orca/bin/ci/before_script.sh
       - name: Script
+        shell: 'script -q -e -c "bash {0}"'
         run: |
           source ../orca/bin/ci/_includes.sh
           php ./scripts/rearrage_modules.php ${{ matrix.module }}
-          composer show --direct -d ${ORCA_FIXTURE_DIR}
+          composer show --direct -d ${ORCA_FIXTURE_DIR} "drupal/*"
           orca fixture:backup --force
           ./tests/ci/script.sh
       - name: Before Cache
