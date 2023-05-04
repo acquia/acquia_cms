@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4fb36f57fb01793f7616ed9778dcff5c",
+    "content-hash": "1d4404187eca6f17c462fb8b01a321a7",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2404,10 +2404,10 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_audio",
-                "reference": "49efdf7b6e7cc1d3d7a72f560e4d5798b47ce987"
+                "reference": "26327066b33d8ed59c5ec0efa8c5ec56d7700cf4"
             },
             "require": {
-                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev",
+                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
                 "drupal/media_entity_soundcloud": "^3.1"
             },
             "type": "drupal-module",
@@ -2430,7 +2430,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "0f008022f97ba1ac4a0f51cb58e161c9a41acb4d"
+                "reference": "63e20d8ad15b416c778143b828aaeda609ffbc89"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2627,7 +2627,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_headless",
-                "reference": "67ccecf3932cb85743e2ff069fc89631ebe764a9"
+                "reference": "9a4d384a161a59af3dbbccf627f32567295b5f3a"
             },
             "require": {
                 "drupal/acquia_cms_tour": "2.x-dev",
@@ -2704,10 +2704,12 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_image",
-                "reference": "23149661e5869cb4625a39b00c15591278fdd8a8"
+                "reference": "5fcb08a23c722aac22f261e81e24ec30790677e0"
             },
             "require": {
                 "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
+                "drupal/focal_point": "^2.0@alpha",
+                "drupal/imagemagick": "^3.4",
                 "drupal/imce": "^2.2 || ^3.0"
             },
             "type": "drupal-module",
@@ -2865,7 +2867,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_site_studio",
-                "reference": "1a5390f9f5866baad8a54b6881788039ab089d51"
+                "reference": "87dce59d6b08c85ade271b8147c1e6de5fe0c312"
             },
             "require": {
                 "acquia/cohesion": "^6.9.2 || ^7.0",
@@ -2980,10 +2982,11 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_tour",
-                "reference": "ae79e8380a9bc39eb560400df40cc86a17239f4b"
+                "reference": "2c7f3b24150ff29d3012cd4cd4a2a3c592bba42e"
             },
             "require": {
-                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev"
+                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
+                "drupal/checklistapi": "^2.1"
             },
             "type": "drupal-module",
             "extra": {
