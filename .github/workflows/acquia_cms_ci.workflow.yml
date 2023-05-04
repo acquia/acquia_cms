@@ -48,7 +48,12 @@ jobs:
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
-        run: ../orca/bin/ci/before_install.sh
+        run: |
+          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
+          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
+          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
+
+          ../orca/bin/ci/before_install.sh
       - name: Install
         shell: 'script -q -e -c "bash {0}"'
         run: ./tests/ci/install.sh
@@ -131,6 +136,10 @@ jobs:
 #          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Before Install
         run: |
+          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
+          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
+          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
+
           # Remove all PHPUnit tests from individual modules, except the integrated & ExistingSite tests.
           if [ "${ACMS_JOB}" = "integrated_existing_site_tests" ]; then
             find modules/*/tests tests -type f -name "*Test.php" ! -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
@@ -233,6 +242,10 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
+          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
+          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
+          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
+
           modules_list=$(echo ${MODULES} | tr "," "\n")
           declare -a commands
           for module in ${modules_list}
@@ -315,7 +328,11 @@ jobs:
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
-        run: ./tests/ci/before_install.blt.sh
+        run: |
+          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
+          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
+          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
+          ./tests/ci/before_install.blt.sh
       - name: Install
         shell: 'script -q -e -c "bash {0}"'
         run: ./tests/ci/install.sh
