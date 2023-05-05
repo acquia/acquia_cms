@@ -16,9 +16,14 @@ services:
   acquia_cms_headless.preview_link_route_subscriber:
     class: 'Drupal\acquia_cms_headless\Routing\PreviewLinkRouteSubscriber'
     tags:
-      - { name: event_subscriber }  
+      - { name: event_subscriber }
   acquia_cms_headless.preview_link_access:
     class: Drupal\acquia_cms_headless\Access\PreviewLinkAccessCheck
     arguments: ['@current_user']
     tags:
       - { name: access_check, applies_to: _preview_link_access_check }
+  acquia_cms_headless.post_config_event_subscriber:
+    class: 'Drupal\acquia_cms_headless\EventSubscriber\HeadlessPostConfigEventsSubscriber'
+    arguments: ['@acquia_cms_headless.starterkit_nextjs']
+    tags:
+      - { name: 'event_subscriber' }
