@@ -2,7 +2,7 @@
 
 namespace Drupal\acquia_cms_site_studio\EventSubscriber;
 
-use Drupal\acquia_config_management\Event\ConfigEvent;
+use Drupal\acquia_config_management\Event\ConfigEvents;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Site\Settings;
@@ -49,19 +49,21 @@ class PostConfigEventsSubscriber implements EventSubscriberInterface {
    *   The event names to listen for, and the methods that should be executed.
    */
   public static function getSubscribedEvents() {
-    return [
-      ConfigEvent::POST_CONFIG_IMPORT => 'onPostConfigImport',
-      ConfigEvent::POST_CONFIG_EXPORT => 'onPostConfigExport',
-    ];
+    $events = [];
+    if (class_exists(ConfigEvents::class)) {
+      $events[ConfigEvents::POST_CONFIG_IMPORT] = 'onPostConfigImport';
+      $events[ConfigEvents::POST_CONFIG_EXPORT] = 'onPostConfigExport';
+    }
+
+    return $events;
   }
 
   /**
    * Post config import manipulation.
    */
   public function onPostConfigImport($event) {
-    if ($this->moduleHandler->moduleExists('acquia_cms_site_studio')) {
-      // Get site studio credentials if its set.
-      $siteStudioCredentials = _acquia_cms_site_studio_get_credentials();
+    // Get site studio credentials if its set.
+    $siteStudioCredentials = _acquia_cms_site_studio_get_credentials();
 
     // Set credentials if module being installed independently.
     if ($siteStudioCredentials['status']) {

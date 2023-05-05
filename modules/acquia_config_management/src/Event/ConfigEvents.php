@@ -3,6 +3,7 @@
 namespace Drupal\acquia_config_management\Event;
 
 use Consolidation\AnnotatedCommand\CommandData;
+use Consolidation\AnnotatedCommand\CommandResult;
 use Drupal\Component\EventDispatcher\Event;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -30,7 +31,7 @@ class ConfigEvents extends Event {
   /**
    * Holds the command result data.
    *
-   * @var array|null
+   * @var \Consolidation\AnnotatedCommand\CommandResult|null
    */
   protected $result;
 
@@ -44,12 +45,12 @@ class ConfigEvents extends Event {
   /**
    * Constructs the object.
    *
-   * @param array|null $result
+   * @param \Consolidation\AnnotatedCommand\CommandData|null $result
    *   The result array or null.
    * @param \Consolidation\AnnotatedCommand\CommandData|null $commandData
    *   The command data object.
    */
-  public function __construct(?array $result = [], ?CommandData $commandData = NULL) {
+  public function __construct(?CommandResult $result, ?CommandData $commandData = NULL) {
     $this->result = $result;
     $this->commandData = $commandData;
   }
@@ -71,7 +72,7 @@ class ConfigEvents extends Event {
   /**
    * Returns the command result.
    */
-  public function getResult(): ?array {
+  public function getResult(): ?CommandResult {
     return $this->result;
   }
 

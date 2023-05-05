@@ -3,7 +3,7 @@
 namespace Drupal\acquia_cms_headless\EventSubscriber;
 
 use Drupal\acquia_cms_headless\Service\StarterkitNextjsService;
-use Drupal\acquia_config_management\Event\ConfigEvent;
+use Drupal\acquia_config_management\Event\ConfigEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -37,9 +37,12 @@ class HeadlessPostConfigEventsSubscriber implements EventSubscriberInterface {
    *   The event names to listen for, and the methods that should be executed.
    */
   public static function getSubscribedEvents() {
-    return [
-      ConfigEvent::POST_CONFIG_IMPORT => 'onPostConfigImport',
-    ];
+    $events = [];
+    if (class_exists(ConfigEvents::class)) {
+      $events[ConfigEvents::POST_CONFIG_IMPORT] = 'onPostConfigImport';
+    }
+
+    return $events;
   }
 
   /**
