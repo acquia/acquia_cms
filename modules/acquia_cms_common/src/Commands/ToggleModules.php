@@ -13,7 +13,7 @@ class ToggleModules extends DrushCommands {
   /**
    * Toggle module Service.
    *
-   * @var Drupal\acquia_cms_common\Services\ToggleModulesService
+   * @var \Drupal\acquia_cms_common\Services\ToggleModulesService
    */
   private $toggleModuleServices;
 

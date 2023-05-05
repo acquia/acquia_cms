@@ -130,17 +130,6 @@ function acquia_cms_site_studio_form_alter(array &$form, FormStateInterface $for
 }
 
 /**
- * Rebuilds cohesion styles & components.
- *
- * @throws Exception
- */
-function _acquia_cms_site_studio_rebuild_styles() {
-  // Get the batch array filled with operations that should be performed during
-  // rebuild.
-  batch_set(install_acms_site_studio_rebuild());
-}
-
-/**
  * Implements hook_content_model_role_presave_alter().
  */
 function acquia_cms_site_studio_content_model_role_presave_alter(RoleInterface &$role) {

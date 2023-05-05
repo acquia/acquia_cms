@@ -17,7 +17,7 @@ class MaintenancePageTest extends ExistingSiteSelenium2DriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() :void {
+  protected function setUp(): void {
     parent::setUp();
     $this->container->get('state')->set('system.maintenance_mode', TRUE);
   }
@@ -25,8 +25,9 @@ class MaintenancePageTest extends ExistingSiteSelenium2DriverTestBase {
   /**
    * Tests maintenance page design.
    */
-  public function testMaintenancePage() {
+  public function testMaintenancePage(): void {
     $this->drupalGet('/node');
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assert_session */
     $assert_session = $this->assertSession();
     $banner_container = $assert_session->elementExists('css', '.banner-title-img > img');
     $acquia_cms_path = $this->container->get('module_handler')->getModule('acquia_cms_common')->getPath();
@@ -37,7 +38,7 @@ class MaintenancePageTest extends ExistingSiteSelenium2DriverTestBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown() :void {
+  public function tearDown(): void {
     $this->container->get('state')->set('system.maintenance_mode', FALSE);
     parent::tearDown();
   }

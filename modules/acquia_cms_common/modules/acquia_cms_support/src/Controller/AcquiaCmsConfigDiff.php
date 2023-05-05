@@ -115,7 +115,7 @@ class AcquiaCmsConfigDiff implements ContainerInjectionInterface {
    *   The storage of the configuration file.
    * @param string $source_name
    *   The name of the configuration file.
-   * @param string $target_name
+   * @param string|null $target_name
    *   (optional) The name of the target configuration file if different from
    *   the $source_name.
    *
@@ -124,8 +124,8 @@ class AcquiaCmsConfigDiff implements ContainerInjectionInterface {
    *
    * @throws \Drupal\Core\Config\StorageTransformerException
    */
-  public function diff($name, $type, $storage, $source_name, $target_name = NULL) {
-
+  public function diff(string $name, string $type, string $storage, string $source_name, string $target_name = NULL) {
+    $module_path = '';
     if ($type == "profile") {
       $module_path = $this->profileExtensionList->getPath($name);
     }
@@ -217,14 +217,13 @@ class AcquiaCmsConfigDiff implements ContainerInjectionInterface {
    */
   private function removeNonRequiredKeys(array $data) {
     // Remove the _core, uuid, default_config_hash from the configuration.
-    $data = array_values(array_filter(
+    return array_values(array_filter(
       $data,
-      function ($val) use (&$data) {
+      function ($val) {
         return (strpos($val, '_core') !== 0) && (strpos(trim($val), 'default_config_hash:') !== 0) && (strpos($val, 'uuid:') !== 0);
       },
       ARRAY_FILTER_USE_BOTH
     ));
-    return $data;
   }
 
 }

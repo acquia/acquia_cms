@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_headless_ui\Controller;
 
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\next\NextEntityTypeManager;
@@ -91,8 +92,13 @@ class SitePreviewController extends ControllerBase {
    *
    * @return array
    *   Site preview data.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function nodePreview(Node $node): array {
+    /** @var \Drupal\Core\Entity\RevisionableStorageInterface $storage */
     $storage = $this->entityTypeManager->getStorage($node->getEntityTypeId());
     $revision = $storage->loadRevision($storage->getLatestRevisionId($node->id()));
     $nextEntityTypeConfig = $this->nextEntityTypeManager->getConfigForEntityType($revision->getEntityTypeId(), $revision->bundle());
@@ -108,7 +114,7 @@ class SitePreviewController extends ControllerBase {
     $config = $this->config('next.settings');
     $sitePreviewerId = $config->get('site_previewer') ?? 'iframe';
 
-    /** @var \Drupal\next\Plugin\SitePreviewerInterface $site_previewer */
+    /** @var \Drupal\next\Plugin\SitePreviewerInterface $sitePreviewer */
     $sitePreviewer = $this->sitePreviewerManager->createInstance($sitePreviewerId, $config->get('site_previewer_configuration') ?? []);
     if (!$sitePreviewer) {
       throw new PluginNotFoundException('Invalid site previewer.');

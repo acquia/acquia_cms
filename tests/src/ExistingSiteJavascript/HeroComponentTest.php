@@ -16,7 +16,7 @@ class HeroComponentTest extends CohesionComponentTestBase {
   /**
    * Test that the Hero component can be added to a layout canvas.
    */
-  public function testComponentInstalled() {
+  public function testComponentInstalled(): void {
     $account = $this->createUser();
     $account->addRole('administrator');
     $account->save();
@@ -26,6 +26,7 @@ class HeroComponentTest extends CohesionComponentTestBase {
     $assert_session = $this->assertSession();
 
     // Add the component to the layout canvas.
+    /** @var \Behat\Mink\Element\TraversableElement $edit_form */
     $edit_form = $this->getLayoutCanvas()->add('Hero')->edit();
     $edit_form->fillField('Button text', 'Button Text');
     $edit_form->selectFieldOption('Target', 'New window');
@@ -75,7 +76,7 @@ class HeroComponentTest extends CohesionComponentTestBase {
    *
    * @dataProvider providerEditAccess
    */
-  public function testEditAccess(string $role) {
+  public function testEditAccess(string $role): void {
     $account = $this->createUser();
     $account->addRole($role);
     $account->save();

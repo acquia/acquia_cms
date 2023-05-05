@@ -49,7 +49,7 @@ class DashboardApiKeysTest extends HeadlessTestBase {
    * {@inheritdoc}
    */
   public function testSection(): void {
-
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
 
     // Test API Keys section exists, get API Keys section.
@@ -85,9 +85,11 @@ class DashboardApiKeysTest extends HeadlessTestBase {
    * {@inheritdoc}
    */
   private function testGenerateNewSecret(mixed $consumersFieldset): void {
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
     $consumersFieldset->findButton('List additional actions')->click();
-    $this->assertSession()->elementExists('named', ['link', 'Generate New Secret'], $consumersFieldset)->click();
-    $consumerModal = $this->assertSession()->waitForElementVisible('css', '.ui-dialog');
+    $assertSession->elementExists('named', ['link', 'Generate New Secret'], $consumersFieldset)->click();
+    $consumerModal = $assertSession->waitForElementVisible('css', '.ui-dialog');
     $this->assertNotEmpty($consumerModal);
     $this->assertEquals('Generate New Consumer Secret', $consumerModal->find('css', '.ui-dialog-title')->getText());
     $this->assertNotEmpty($consumerModal->find('css', '.headless-dashboard-modal'));
@@ -98,13 +100,15 @@ class DashboardApiKeysTest extends HeadlessTestBase {
    * {@inheritdoc}
    */
   private function testGenerateNewKeys(mixed $consumersFieldset): void {
-    $this->assertSession()->elementExists('named', ['link', 'Generate New Keys'], $consumersFieldset)->click();
-    $keysModal = $this->assertSession()->waitForElementVisible('css', '.ui-dialog');
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    $assertSession->elementExists('named', ['link', 'Generate New Keys'], $consumersFieldset)->click();
+    $keysModal = $assertSession->waitForElementVisible('css', '.ui-dialog');
     $this->assertNotEmpty($keysModal);
     $this->assertEquals('Generate New API Keys', $keysModal->find('css', '.ui-dialog-title')->getText());
     $keysModalContent = $keysModal->find('css', '.headless-dashboard-modal');
     $this->assertNotEmpty($keysModalContent);
-    $this->assertSession()->elementExists('named', ['link', 'Oauth Settings'], $keysModalContent);
+    $assertSession->elementExists('named', ['link', 'Oauth Settings'], $keysModalContent);
     $keysModal->find('css', '.ui-dialog-titlebar-close')->click();
   }
 
@@ -112,11 +116,13 @@ class DashboardApiKeysTest extends HeadlessTestBase {
    * {@inheritdoc}
    */
   private function testDelete(mixed $consumersFieldset): void {
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
     $consumersFieldset->findButton('List additional actions')->click();
-    $this->assertSession()->elementExists('named', ['link', 'Delete'], $consumersFieldset)->click();
+    $assertSession->elementExists('named', ['link', 'Delete'], $consumersFieldset)->click();
     $page = $this->getSession()->getPage();
     $this->assertNotEmpty($page);
-    $this->assertSession()->pageTextContains('Access denied!');
+    $assertSession->pageTextContains('Access denied!');
     $expectedUrl = $this->baseUrl . '/admin/config/services/consumer/1/delete?destination=/admin/headless/dashboard';
     $this->assertSame($expectedUrl, $this->getSession()->getCurrentUrl());
   }
@@ -125,12 +131,14 @@ class DashboardApiKeysTest extends HeadlessTestBase {
    * {@inheritdoc}
    */
   private function testClone(mixed $consumersFieldset): void {
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
     $this->drupalGet("/admin/headless/dashboard");
     $consumersFieldset->findButton('List additional actions')->click();
-    $this->assertSession()->elementExists('named', ['link', 'Clone'], $consumersFieldset)->click();
+    $assertSession->elementExists('named', ['link', 'Clone'], $consumersFieldset)->click();
     $page = $this->getSession()->getPage();
     $this->assertNotEmpty($page);
-    $this->assertSession()->pageTextContains('Access denied!');
+    $assertSession->pageTextContains('Access denied!');
     $expectedUrl = $this->baseUrl . '/entity_clone/consumer/1?destination=/admin/headless/dashboard';
     $this->assertSame($expectedUrl, $this->getSession()->getCurrentUrl());
   }

@@ -230,6 +230,7 @@ class DecoupledTest extends ExistingSiteBase {
     $assert_status('GET', $base_uri, $request_options, $expected_status);
     $assert_status('GET', $resource_uri, $request_options, $expected_status);
 
+    /** @var \Drupal\user\Entity\User $account */
     $account = $this->container->get('current_user')->getAccount();
     if ($account->isAuthenticated()) {
       $request_options['auth'] = [

@@ -23,7 +23,7 @@ trait AwaitTrait {
    * @return \Behat\Mink\Element\ElementInterface
    *   The element that has become visible.
    */
-  protected function waitForElementVisible(string $selector, $locator, ElementInterface $container) : ElementInterface {
+  protected function waitForElementVisible(string $selector, $locator, ElementInterface $container): ElementInterface {
     $element = $container->waitFor(10, function (ElementInterface $container) use ($selector, $locator) {
       $element = $container->find($selector, $locator);
       return $element && $element->isVisible() ? $element : NULL;

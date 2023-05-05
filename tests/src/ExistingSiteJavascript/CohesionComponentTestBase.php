@@ -12,7 +12,7 @@ abstract class CohesionComponentTestBase extends CohesionTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function editDefinition(string $group, string $label) : ElementInterface {
+  protected function editDefinition(string $group, string $label): ElementInterface {
     parent::editDefinition($group, $label);
     return $this->waitForElementVisible('css', '.cohesion-component-edit-form', $this->getSession()->getPage());
   }

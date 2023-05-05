@@ -70,12 +70,12 @@ class EventTest extends ContentTypeTestBase {
     // us to choose dates and times in the UI. To work around that, give the
     // date/time fields of this content type a default value.
     foreach (['field_event_start', 'field_door_time', 'field_event_end'] as $field) {
-      FieldConfig::loadByName('node', $this->nodeType, $field)
-        ->setDefaultValue([
-          'default_date_type' => 'relative',
-          'default_date' => gmdate('c', $this->defaultTime),
-        ])
-        ->save();
+      /** @var \Drupal\Core\Field\FieldConfigBase $fieldConfig */
+      $fieldConfig = FieldConfig::loadByName('node', $this->nodeType, $field);
+      $fieldConfig->setDefaultValue([
+        'default_date_type' => 'relative',
+        'default_date' => gmdate('c', $this->defaultTime),
+      ])->save();
     }
   }
 

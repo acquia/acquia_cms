@@ -38,7 +38,7 @@ class AcmsUtilityService {
    * @see acquia_cms_search_modules_installed()
    */
 
-  private static $modulePreinstallTriggered;
+  protected static $modulePreinstallTriggered;
 
   /**
    * The state service.
@@ -57,9 +57,7 @@ class AcmsUtilityService {
    * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
    */
-  public function __construct(ModuleHandlerInterface $moduleHandler,
-                              ConfigFactoryInterface $config_factory,
-                              StateInterface $state) {
+  public function __construct(ModuleHandlerInterface $moduleHandler, ConfigFactoryInterface $config_factory, StateInterface $state) {
     $this->moduleHandler = $moduleHandler;
     $this->configFactory = $config_factory;
     $this->state = $state;

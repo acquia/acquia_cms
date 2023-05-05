@@ -103,14 +103,13 @@ class AcquiaCmsConfigSyncService {
    */
   public function removeNonRequiredKeys(array $data) {
     // Remove the _core, uuid, default_config_hash from the configuration.
-    $data = array_values(array_filter(
+    return array_values(array_filter(
       $data,
-      function ($val) use (&$data) {
+      function ($val) {
         return (strpos($val, '_core') !== 0) && (strpos(trim($val), 'default_config_hash:') !== 0) && (strpos($val, 'uuid:') !== 0);
       },
       ARRAY_FILTER_USE_BOTH
     ));
-    return $data;
   }
 
   /**

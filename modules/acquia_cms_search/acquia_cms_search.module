@@ -53,7 +53,7 @@ function acquia_cms_search_node_type_insert(NodeTypeInterface $node_type) {
  * Implements hook_ENTITY_TYPE_insert() for configurable field.
  */
 function acquia_cms_search_field_config_insert(FieldConfigInterface $field_config) {
-
+  /** @var \Drupal\Core\Field\FieldConfigBase $field_storage */
   $field_storage = $field_config->getFieldStorageDefinition();
 
   // Adding the third party settings in the node.body storage configuration to

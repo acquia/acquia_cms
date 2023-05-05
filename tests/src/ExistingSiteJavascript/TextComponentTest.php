@@ -16,7 +16,7 @@ class TextComponentTest extends CohesionComponentTestBase {
   /**
    * Test that the Text component can be added to a layout canvas.
    */
-  public function testComponentInstalled() {
+  public function testComponentInstalled(): void {
     $account = $this->createUser();
     $account->addRole('administrator');
     $account->save();
@@ -36,7 +36,7 @@ class TextComponentTest extends CohesionComponentTestBase {
    *
    * @dataProvider providerEditAccess
    */
-  public function testEditAccess(string $role) {
+  public function testEditAccess(string $role): void {
     $account = $this->createUser();
     $account->addRole($role);
     $account->save();
