@@ -3,7 +3,6 @@
 namespace Drupal\acquia_cms_tour\Plugin\AcquiaCmsStarterKit;
 
 use Drupal\acquia_cms_tour\Form\AcquiaCmsStarterKitBase;
-use Drupal\acquia_cms_tour\Services\StarterKitService;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -29,9 +28,9 @@ class StarterKitConfigForm extends AcquiaCmsStarterKitBase {
   /**
    * Starterkit service.
    *
-   * @var Drupal\acquia_cms_tour\Services\StarterKitService
+   * @var \Drupal\acquia_cms_tour\Services\StarterKitService
    */
-  protected StarterKitService $starterKitService;
+  protected $starterKitService;
 
   /**
    * {@inheritdoc}

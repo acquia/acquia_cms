@@ -25,7 +25,7 @@ class ArticleListTest extends ContentTypeListTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function getView() {
+  protected function getView(): ?View {
     if ($this->container->get('module_handler')->moduleExists('acquia_cms_search')) {
       return View::load('articles');
     }
@@ -35,7 +35,7 @@ class ArticleListTest extends ContentTypeListTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function visitListPage($langcode = NULL) : void {
+  protected function visitListPage($langcode = NULL): void {
     $page = $langcode ? "/$langcode/articles" : "/articles";
     $this->drupalGet($page);
   }

@@ -37,18 +37,24 @@ class DefaultContentEventUpdate {
    * Update event node with modified date & time.
    *
    * @param \Drupal\node\NodeInterface $entity
-   *   The entity object.
+   *   The entity objects.
    * @param array $updated_data
    *   Contains the updated event dates & time.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function updateEventNode(NodeInterface $entity, array $updated_data) {
-    $entity->set('field_event_start', date('Y-m-d\T' . $entity->get('field_event_start')->date->format('H:i:s'), strtotime($updated_data['start_date'])));
+
+    $field_event_start = new \DateTime($entity->get('field_event_start')->value);
+    $field_event_end = new \DateTime($entity->get('field_event_end')->value);
+    $field_door_time = new \DateTime($entity->get('field_door_time')->value);
+
+    $entity->set('field_event_start', date('Y-m-d\T' . $field_event_start->format('H:i:s'), strtotime($updated_data['start_date'])));
     if (!empty($updated_data['end_date']) && !empty($entity->get('field_event_end')->date)) {
-      $entity->set('field_event_end', date('Y-m-d\T' . $entity->get('field_event_end')->date->format('H:i:s'), strtotime($updated_data['end_date'])));
+      $entity->set('field_event_end', date('Y-m-d\T' . $field_event_end->format('H:i:s'), strtotime($updated_data['end_date'])));
+
       // Updating the duration field based on start and end date of event.
-      $time_diff = date_diff(
-        new \DateTime($entity->get('field_event_end')->value),
-        new \DateTime($entity->get('field_event_start')->value));
+      $time_diff = date_diff($field_event_end, $field_event_start);
 
       $day = $time_diff->d > 1 ? 'days' : 'day';
       $hour = $time_diff->h > 1 ? 'hours' : 'hour';
@@ -57,7 +63,7 @@ class DefaultContentEventUpdate {
         'field_event_duration',
         $time_diff->format("%a " . $day . ", %h " . $hour . ", %i " . $minute));
     }
-    $entity->set('field_door_time', date('Y-m-d\T' . $entity->get('field_door_time')->date->format('H:i:s'), strtotime($updated_data['door_time'])));
+    $entity->set('field_door_time', date('Y-m-d\T' . $field_door_time->format('H:i:s'), strtotime($updated_data['door_time'])));
 
     $entity->save();
   }

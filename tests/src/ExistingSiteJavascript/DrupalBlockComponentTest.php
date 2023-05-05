@@ -28,15 +28,17 @@ class DrupalBlockComponentTest extends CohesionComponentTestBase {
    *
    * @dataProvider providerAddComponentToLayoutCanvas
    */
-  public function testComponent(array $roles = []) {
+  public function testComponent(array $roles = []): void {
     $account = $this->createUser();
     array_walk($roles, [$account, 'addRole']);
     $account->save();
     $this->drupalLogin($account);
 
     $this->drupalGet('/node/add/page');
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assert_session */
     $assert_session = $this->assertSession();
     // Add the component to the layout canvas & edit it.
+    /** @var \Behat\Mink\Element\TraversableElement $edit_form */
     $edit_form = $this->getLayoutCanvas()->add('Drupal blocks')->edit();
     $assert_session->waitForElementVisible('css', '.coh-select .form-control');
 
@@ -62,7 +64,7 @@ class DrupalBlockComponentTest extends CohesionComponentTestBase {
    *
    * @dataProvider providerEditAccess
    */
-  public function testEditAccess(string $role) {
+  public function testEditAccess(string $role): void {
     $account = $this->createUser();
     $account->addRole($role);
     $account->save();
@@ -79,7 +81,7 @@ class DrupalBlockComponentTest extends CohesionComponentTestBase {
    * @return array[]
    *   Sets of arguments to pass to the test method.
    */
-  public function providerAddComponentToLayoutCanvas() {
+  public function providerAddComponentToLayoutCanvas(): array {
     // @todo Find a solution and remove this function from here.
     return [
       [

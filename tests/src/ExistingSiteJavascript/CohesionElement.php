@@ -22,6 +22,7 @@ abstract class CohesionElement extends NodeElement {
    * {@inheritdoc}
    */
   public function __construct($xpath, Session $session) {
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $session */
     $this->session = $session;
     parent::__construct($xpath, $session);
   }
@@ -33,7 +34,7 @@ abstract class CohesionElement extends NodeElement {
   /**
    * {@inheritdoc}
    */
-  protected function waitForElementVisible(string $selector, $locator, ElementInterface $container = NULL) : ElementInterface {
+  protected function waitForElementVisible(string $selector, $locator, ElementInterface $container = NULL): ElementInterface {
     return $this->traitWaitForElementVisible($selector, $locator, $container ?: $this->session->getPage());
   }
 

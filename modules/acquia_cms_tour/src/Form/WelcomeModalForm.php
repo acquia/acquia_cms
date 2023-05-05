@@ -48,7 +48,7 @@ class WelcomeModalForm extends FormBase {
    *
    * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
-   * @param \Drupal\Core\State\ProfileExtensionList $profile_extension_list
+   * @param \Drupal\Core\Extension\ProfileExtensionList $profile_extension_list
    *   The profile extension list object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config.factory service object.

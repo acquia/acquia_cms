@@ -72,9 +72,9 @@ final class AcmsConfigImportCommands extends DrushCommands {
   protected $stringTranslation;
 
   /**
-   * The ClassResolver.
+   * The cohesion facade.
    *
-   * @var \Drupal\Core\DependencyInjection\ClassResolver
+   * @var \Drupal\acquia_cms_site_studio\Facade\CohesionFacade
    */
   protected $cohesionFacade;
 

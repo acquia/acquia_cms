@@ -43,7 +43,7 @@ class VideoEmbedTest extends MediaEmbedTestBase {
   /**
    * {@inheritdoc}
    */
-  public function testEmbedMedia() {
+  public function testEmbedMedia(): void {
     if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
       $this->markTestSkipped('This cannot be run in a Cloud IDE right now');
     }
@@ -66,7 +66,7 @@ class VideoEmbedTest extends MediaEmbedTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
-  protected function addMedia() {
+  protected function addMedia(): void {
     $this->getSession()
       ->getPage()->fillField('Add Video via URL', 'https://youtu.be/lg879YYbihU');
     $this->getSession()->getPage()->pressButton('Add');

@@ -193,12 +193,13 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
   ]) {
     if ($options['site-url']) {
       $cid = $this->starterKit->getHeadlessConsumerDataByUri($options['site-url'])->id();
+      /** @var \Drupal\consumers\Entity\Consumer $consumer */
       $consumer = $this->entityTypeManager->getStorage('consumer')->load($cid);
       if ($consumer) {
         // Generate a new secret key.
         $secret = $this->starterKit->createHeadlessSecret();
         // Apply the new secret to the consumer.
-        $consumer->secret = $secret;
+        $consumer->set('secret', $secret);
         // Set consumer secret.
         $this->starterKit->setConsumerSecret($secret);
         // Update the consumer.

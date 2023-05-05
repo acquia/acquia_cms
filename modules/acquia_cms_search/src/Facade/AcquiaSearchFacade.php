@@ -197,7 +197,7 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
       }
     }
 
-    /** @var \Drupal\search_api\ServerInterface $server */
+    /** @var \Drupal\Core\Config\Entity\ConfigEntityInterface $databaseServer */
     $databaseServer = $this->serverStorage->load('database');
     try {
       $databaseServer->disable()->save();

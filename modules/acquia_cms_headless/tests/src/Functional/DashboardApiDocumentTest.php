@@ -38,6 +38,7 @@ class DashboardApiDocumentTest extends HeadlessTestBase {
    * {@inheritdoc}
    */
   public function testSection(): void {
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
 
     // Test API Documentation section exists, get API Documentation section.
@@ -57,12 +58,12 @@ class DashboardApiDocumentTest extends HeadlessTestBase {
 
     // Test Explore with Swagger UI with headless role.
     $this->drupalGet("/admin/config/services/openapi/swagger/jsonapi");
-    $this->assertSession()->pageTextContains('Access denied!');
+    $assertSession->pageTextContains('Access denied!');
 
     // Test Explore with Swagger UI with admin role.
     $this->visitHeadlessDashboardAdmin();
     $this->drupalGet("/admin/config/services/openapi/swagger/jsonapi");
-    $this->assertSession()->waitForElementVisible('css', '#swagger-ui');
+    $assertSession->waitForElementVisible('css', '#swagger-ui');
     $swaggerUi = $this->getSession()->getPage()->find('css', '#swagger-ui');
     $this->assertNotEmpty($swaggerUi);
   }

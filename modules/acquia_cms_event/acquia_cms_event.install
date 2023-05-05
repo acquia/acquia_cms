@@ -43,7 +43,7 @@ function acquia_cms_event_module_preinstall($module) {
 function acquia_cms_event_update_8001() {
   $configFactory = \Drupal::service('config.factory');
   $config = $configFactory->getEditable('views.view.event_cards');
-  if (!empty($config)) {
+  if ($config) {
     $config->set('display.past_events_block.display_title', 'Past Events')
       ->set('display.past_events_block.display_options.title', '')->save();
   }

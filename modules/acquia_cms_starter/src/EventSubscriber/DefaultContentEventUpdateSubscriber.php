@@ -45,12 +45,15 @@ class DefaultContentEventUpdateSubscriber implements EventSubscriberInterface {
     $module = $event->getModule();
     if ($module === 'acquia_cms_starter') {
       foreach ($event->getImportedEntities() as $entity) {
-        /** @var \Drupal\node\NodeInterface */
+        /** @var \Drupal\node\NodeInterface  $entity*/
         if ($entity instanceof NodeInterface && $entity->bundle() === 'event') {
+          $field_event_start = new \DateTime($entity->get('field_event_start')->value);
+          $field_event_end = new \DateTime($entity->get('field_event_end')->value);
+          $field_door_time = new \DateTime($entity->get('field_door_time')->value);
           $date_time = [
-            'start_date' => $entity->get('field_event_start')->date->format('Y-m-d'),
-            'end_date' => !empty($entity->get('field_event_end')->value) ? $entity->get('field_event_end')->date->format('Y-m-d') : '',
-            'door_time' => $entity->get('field_door_time')->date->format('Y-m-d'),
+            'start_date' => $field_event_start->format('Y-m-d'),
+            'end_date' => $field_event_end->format('Y-m-d'),
+            'door_time' => $field_door_time->format('Y-m-d'),
           ];
           $updated_data = $this->updateEventImport->getUpdatedDates($date_time);
           // Updating event node with modified dates.

@@ -69,6 +69,30 @@ jobs:
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
 
+  drupal_check:
+    name: Execute Drupal-check
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - "8.1"
+          - "8.2"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 12.13.1
+        uses: actions/setup-node@v3
+        with:
+          node-version: 12.13.1
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          #coverage: xdebug
+      - name: Execute Drupal-check
+        run: |
+          composer install
+          php vendor/bin/drupal-check modules
+          php vendor/bin/drupal-check tests/src
   integrated_tests:
     name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
     runs-on: ubuntu-latest

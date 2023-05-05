@@ -55,7 +55,7 @@ class PlaceTest extends ContentTypeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function doTestEditForm() : void {
+  protected function doTestEditForm(): void {
     /** @var \Drupal\taxonomy\VocabularyInterface $place_type */
     $place_type = Vocabulary::load('place_type');
     $this->createTerm($place_type, ['name' => 'Residential']);
@@ -64,11 +64,11 @@ class PlaceTest extends ContentTypeTestBase {
     // for us to set address values in the UI, because we'd need to select a
     // country first, and that requires AJAX. To get around that, we set the
     // default country of field_place_address.
-    FieldConfig::loadByName('node', 'place', 'field_place_address')
-      ->setDefaultValue([
-        'country_code' => 'US',
-      ])
-      ->save();
+    /** @var \Drupal\Core\Field\FieldConfigBase $fieldConfig */
+    $fieldConfig = FieldConfig::loadByName('node', 'place', 'field_place_address');
+    $fieldConfig->setDefaultValue([
+      'country_code' => 'US',
+    ])->save();
 
     // Use a random geocoder, since we don't want to actually call out to Google
     // Maps or any other real geocoding service in tests.
