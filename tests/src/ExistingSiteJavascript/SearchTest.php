@@ -24,10 +24,7 @@ use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
  */
 class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
-  use AwaitTrait;
-  use CohesionTestTrait;
-  use AssertLinksTrait;
-  use SetBackendAvailabilityTrait;
+  use AwaitTrait, AssertLinksTrait, CohesionTestTrait, SetBackendAvailabilityTrait;
 
   /**
    * {@inheritdoc}
@@ -138,7 +135,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
   /**
    * Tests autocomplete search functionality.
    */
-  public function testAutocomplete() {
+  public function testAutocomplete(): void {
     $page = $this->getSession()->getPage();
     $node_types = NodeType::loadMultiple();
 
@@ -181,7 +178,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
-  private function assertLinkExists(string $title, ElementInterface $container = NULL) : ElementInterface {
+  private function assertLinkExists(string $title, ElementInterface $container = NULL): ?ElementInterface {
     return $this->assertSession()->elementExists('named', ['link', $title], $container);
   }
 
@@ -198,7 +195,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
-  private function assertElementWithTitleExists(string $title, ElementInterface $container = NULL) : ElementInterface {
+  private function assertElementWithTitleExists(string $title, ElementInterface $container = NULL): ?ElementInterface {
     return $this->assertSession()->elementExists('named', ['content', $title], $container);
   }
 
@@ -213,7 +210,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @throws \Behat\Mink\Exception\ExpectationException
    */
-  private function assertLinkNotExists(string $title) {
+  private function assertLinkNotExists(string $title): ?ElementInterface {
     return $this->assertSession()->elementNotExists('named', ['link', $title]);
   }
 
@@ -222,7 +219,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
-  public function testFallback() {
+  public function testFallback(): void {
     // Simulate an unavailable search backend, which is the only condition under
     // which we display the fallback view.
     $this->setBackendAvailability(FALSE);
@@ -246,7 +243,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
-  private function assertFacetLinkExists(ElementInterface $facets = NULL) {
+  private function assertFacetLinkExists(ElementInterface $facets = NULL): void {
     // Get the container which holds the facets, and assert that, initially, the
     // Test that none of the dependent facets are visible for fallback.
     $this->assertFalse($this->assertElementWithTitleExists('Content Type', $facets)->isVisible());
@@ -263,14 +260,14 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    * @return \Drupal\views\Entity\View
    *   The listing page's view.
    */
-  protected function getView() : View {
+  protected function getView(): View {
     return View::load('search');
   }
 
   /**
    * {@inheritdoc}
    */
-  protected function getLinks() : array {
+  protected function getLinks(): array {
     $links = $this->getSession()
       ->getPage()
       ->findAll('css', 'article a');
@@ -284,7 +281,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function getExpectedLinks() : array {
+  protected function getExpectedLinks(): array {
     return [
       'Test published Article',
       'Test published Event',
@@ -307,7 +304,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    * @return \Drupal\Tests\acquia_cms\ExistingSiteJavascript\Search
    *   A wrapper object for interacting with Cohesion's search container.
    */
-  protected function getSearch() : Search {
+  protected function getSearch(): Search {
     $element = $this->waitForElementVisible('css', '.search-toggle-button', $this->getSession()->getPage());
     return new Search($element->getXpath(), $this->getSession());
   }
