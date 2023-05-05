@@ -101,6 +101,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
 
     // While testing the add/edit form, make the required fields behave as they
     // normally would.
+    /** @var \Drupal\field\Entity\FieldConfig $required_field */
     foreach ($required_fields as $required_field) {
       $required_field->setRequired(TRUE);
       $field_storage->save($required_field);
@@ -441,6 +442,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     ]);
     $media->save();
 
+    /** @var \Drupal\field\Entity\FieldConfig $field */
     $field->setDefaultValue($media->id())->save();
 
     return $file->createFileUrl(FALSE);

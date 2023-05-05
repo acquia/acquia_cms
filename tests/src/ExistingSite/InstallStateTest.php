@@ -25,7 +25,7 @@ class InstallStateTest extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() :void {
+  protected function setUp(): void {
     parent::setUp();
     // Update configuration so that password policy can be tested by
     // registering an account through UI.
@@ -61,7 +61,7 @@ class InstallStateTest extends ExistingSiteBase {
    * a 200 status code. That doesn't mean they work as intended, of course, but
    * at least they are not producing scary blank (or error) screens.
    */
-  public function testKeyAdministrativePages() : void {
+  public function testKeyAdministrativePages(): void {
     $account = $this->createUser();
     $account->addRole('administrator');
     $account->save();
@@ -85,7 +85,7 @@ class InstallStateTest extends ExistingSiteBase {
    *
    * See acquia_cms_install_tasks().
    */
-  public function testConfig() {
+  public function testConfig(): void {
     // Check that the default and admin themes are set as expected.
     $theme_config = $this->config('system.theme');
     $this->assertSame('cohesion_theme', $theme_config->get('default'));
@@ -135,14 +135,14 @@ class InstallStateTest extends ExistingSiteBase {
    *   The config object, read-only to discourage this test from making any
    *   changes.
    */
-  private function config(string $name) : ImmutableConfig {
+  private function config(string $name): ImmutableConfig {
     return $this->container->get('config.factory')->get($name);
   }
 
   /**
    * Tests Categories and Tags filters in administrative content/media lists.
    */
-  public function testAdminDashboardTagsCategories() {
+  public function testAdminDashboardTagsCategories(): void {
     $page = $this->getSession()->getPage();
     $assert_session = $this->assertSession();
 
@@ -241,7 +241,7 @@ class InstallStateTest extends ExistingSiteBase {
    * Check if newly created content type's content can be
    * cloned by user or not.
    */
-  public function testEntityCloneForNewContentType() {
+  public function testEntityCloneForNewContentType(): void {
     // Create new content type.
     $test_node_type = NodeType::create([
       'type' => 'test_node',
@@ -281,7 +281,7 @@ class InstallStateTest extends ExistingSiteBase {
    * - User roles without permission 'access acquia cms tour dashboard'
    *   should not be able to access Acquia CMS Wizard.
    */
-  public function testTourPermissions() {
+  public function testTourPermissions(): void {
     $assert_session = $this->assertSession();
 
     // Regular users should not be able to access the dashboard
@@ -329,7 +329,7 @@ class InstallStateTest extends ExistingSiteBase {
    *   - recaptcha
    *   - password_policy.
    */
-  public function testSecurityModulesPermissions() {
+  public function testSecurityModulesPermissions(): void {
     $assert_session = $this->assertSession();
 
     $account = $this->createUser();
@@ -375,7 +375,7 @@ class InstallStateTest extends ExistingSiteBase {
    * - Passwords must be at least 8 characters long.
    * - Passwords must not contain the username.
    */
-  public function testPasswordPolicy() {
+  public function testPasswordPolicy(): void {
     $page = $this->getSession()->getPage();
     $assert_session = $this->assertSession();
 
@@ -411,7 +411,7 @@ class InstallStateTest extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown() :void {
+  public function tearDown(): void {
     // Delete user created during testing password policy.
     $user = user_load_by_mail('example@example.com');
     if ($user) {

@@ -16,7 +16,7 @@ class SliderComponentTest extends CohesionComponentTestBase {
   /**
    * Tests that the component can be added to a layout canvas.
    */
-  public function testComponent() {
+  public function testComponent(): void {
     $account = $this->createUser();
     $account->addRole('administrator');
     $account->save();
@@ -39,7 +39,7 @@ class SliderComponentTest extends CohesionComponentTestBase {
    *
    * @dataProvider providerEditAccess
    */
-  public function testEditAccess(string $role) {
+  public function testEditAccess(string $role): void {
     $account = $this->createUser();
     $account->addRole($role);
     $account->save();

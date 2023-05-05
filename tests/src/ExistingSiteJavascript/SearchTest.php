@@ -24,7 +24,7 @@ use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
  */
 class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
-  use AwaitTrait, AssertLinksTrait, CohesionTestTrait, SetBackendAvailabilityTrait;
+  use AwaitTrait, CohesionTestTrait, AssertLinksTrait, SetBackendAvailabilityTrait;
 
   /**
    * {@inheritdoc}
@@ -73,7 +73,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    * @throws \Drupal\Core\Entity\EntityStorageException
    * @throws \Behat\Mink\Exception\ExpectationException
    */
-  public function testSearch() {
+  public function testSearch(): void {
     $account = $this->createUser();
     $account->addRole('content_administrator');
     $account->save();
@@ -81,6 +81,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
     $node_types = NodeType::loadMultiple();
 
     $this->drupalGet('/search');
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assert_session */
     $assert_session = $this->assertSession();
     $assert_session->elementExists('css', '.views-element-container .coh-style-search-block')->fillField('keywords', 'Test');
     $assert_session->elementExists('css', '.views-element-container input.button')->keyPress('enter');
@@ -90,17 +91,11 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
     // Get the container which holds the facets, and assert that, initially,
     // the content type facet is visible but none of the dependent facets are.
-    $this->assertTrue($this->assertElementWithTitleExists('Content Type', $facets)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Article Type', $facets)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Event Type', $facets)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Person Type', $facets)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Place Type', $facets)->isVisible());
+    $this->assertFacetLinkExists($facets, TRUE);
     foreach ($node_types as $node_type_id => $type) {
       // Clear all selected facets.
       $this->drupalGet('/search');
       $node_type_label = $type->label();
-
-      $assert_session = $this->assertSession();
       $assert_session->elementExists('css', '.views-element-container .coh-style-search-block')->fillField('keywords', 'Test');
       $assert_session->elementExists('css', '.views-element-container input.button')->keyPress('enter');
       // Assert that the search by title shows the proper result.
@@ -108,7 +103,9 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
       $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
 
       // Activate the facet for this content type.
-      $this->assertLinkExists($node_type_label . ' (1)', $facets)->click();
+      /** @var \Behat\Mink\Element\NodeElement $linkElement */
+      $linkElement = $this->assertLinkExists($node_type_label . ' (1)', $facets);
+      $linkElement->click();
 
       $this->assertLinkExists('Test published ' . $node_type_label);
       $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
@@ -148,7 +145,9 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
       // By default autocomplete dropdown does not appears after
       // filling field value so, let's trigger keydown event to open it.
       $this->getSession()->executeScript("jQuery('#edit-keywords--2').trigger('keydown')");
-      $autocomplete_results = $this->assertSession()->waitForElementVisible('css', '.search-api-autocomplete-search');
+      /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assert_session */
+      $assert_session = $this->assertSession();
+      $autocomplete_results = $assert_session->waitForElementVisible('css', '.search-api-autocomplete-search');
       $this->assertNotEmpty($autocomplete_results);
 
       $published_title = 'Test published ' . $node_type_label;
@@ -156,11 +155,11 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
       // Assert that autocomplete dropdown contains the title
       // of published node of the particular node type.
-      $this->assertSession()->elementExists('css', 'span:contains("' . $published_title . '")', $autocomplete_results);
+      $assert_session->elementExists('css', 'span:contains("' . $published_title . '")', $autocomplete_results);
 
       // Assert that autocomplete dropdown does not contains
       // the title of unpublished node of the particular node type.
-      $this->assertSession()->elementNotExists('css', 'span:contains("' . $unpublished_title . '")', $autocomplete_results);
+      $assert_session->elementNotExists('css', 'span:contains("' . $unpublished_title . '")', $autocomplete_results);
     }
 
   }
@@ -179,6 +178,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
   private function assertLinkExists(string $title, ElementInterface $container = NULL): ?ElementInterface {
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert */
     return $this->assertSession()->elementExists('named', ['link', $title], $container);
   }
 
@@ -195,7 +195,8 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
-  private function assertElementWithTitleExists(string $title, ElementInterface $container = NULL): ?ElementInterface {
+  private function assertElementWithTitleExists(string $title, ElementInterface $container = NULL): ElementInterface {
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert */
     return $this->assertSession()->elementExists('named', ['content', $title], $container);
   }
 
@@ -205,12 +206,13 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    * @param string $title
    *   The title, text, or rel of the link.
    *
-   * @return \Behat\Mink\Element\ElementInterface
+   * @return \Behat\Mink\Element\ElementInterface|null
    *   The link element.
    *
    * @throws \Behat\Mink\Exception\ExpectationException
    */
   private function assertLinkNotExists(string $title): ?ElementInterface {
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert */
     return $this->assertSession()->elementNotExists('named', ['link', $title]);
   }
 
@@ -230,9 +232,9 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('/search');
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert */
     $facets = $this->assertSession()->elementExists('css', '.coh-style-facet-accordion');
-    $this->assertFacetLinkExists($facets);
-    $this->assertLinksExistInOrder();
+    $this->assertFacetLinkExists($facets, FALSE);
   }
 
   /**
@@ -240,17 +242,28 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @param \Behat\Mink\Element\ElementInterface|null $facets
    *   The facet container.
+   * @param bool $title
+   *   TRUE/FALSE.
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
-  private function assertFacetLinkExists(ElementInterface $facets = NULL): void {
+  private function assertFacetLinkExists(ElementInterface $facets = NULL, bool $title = FALSE) {
     // Get the container which holds the facets, and assert that, initially, the
     // Test that none of the dependent facets are visible for fallback.
-    $this->assertFalse($this->assertElementWithTitleExists('Content Type', $facets)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Article Type', $facets)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Event Type', $facets)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Person Type', $facets)->isVisible());
-    $this->assertFalse($this->assertLinkExists('Place Type', $facets)->isVisible());
+    /** @var \Behat\Mink\Element\NodeElement $titleElement */
+    $titleElement = $this->assertElementWithTitleExists('Content Type', $facets);
+    if ($title) {
+      $this->assertTrue($titleElement->isVisible());
+    }
+    else {
+      $this->assertFalse($titleElement->isVisible());
+    }
+
+    foreach (['Article Type', 'Event Type', 'Person Type', 'Place Type'] as $facet) {
+      /** @var \Behat\Mink\Element\NodeElement $linkElement */
+      $linkElement = $this->assertLinkExists($facet, $facets);
+      $this->assertFalse($linkElement->isVisible());
+    }
     $this->assertLinksExistInOrder();
   }
 

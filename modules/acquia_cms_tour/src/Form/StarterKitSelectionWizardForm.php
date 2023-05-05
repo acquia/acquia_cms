@@ -38,9 +38,9 @@ class StarterKitSelectionWizardForm extends FormBase {
   protected $useAjax = TRUE;
 
   /**
-   * The rendered array renderer.
+   * The renderer service.
    *
-   * @var array
+   * @var \Drupal\Core\Render\Renderer
    */
   protected $renderer;
 
@@ -399,7 +399,9 @@ class StarterKitSelectionWizardForm extends FormBase {
     ];
     // Change details to fieldset for all form.
     $form[$key]['#type'] = 'fieldset';
-    unset($form[$key]['#title']);
+    if (isset($form[$key]['#title'])) {
+      unset($form[$key]['#title']);
+    }
     return $form;
   }
 

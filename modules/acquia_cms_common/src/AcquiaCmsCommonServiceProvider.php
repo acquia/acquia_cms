@@ -39,8 +39,8 @@ final class AcquiaCmsCommonServiceProvider extends ServiceProviderBase {
    * {@inheritdoc}
    */
   public function alter(ContainerBuilder $container) {
-    /** @var \Symfony\Component\DependencyInjection\Definition $definition */
     if ($container->hasDefinition('acquia_connector.telemetry')) {
+      /** @var \Symfony\Component\DependencyInjection\Definition $definition */
       $definition = $container->getDefinition('acquia_connector.telemetry');
       $definition->setClass('Drupal\acquia_cms_common\EventSubscriber\KernelTerminate\AcquiaConnectorTelemetryOverride');
     }

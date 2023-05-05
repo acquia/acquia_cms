@@ -143,22 +143,24 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
    * {@inheritdoc}
    */
   private function testEnvironmentVariables(mixed $nextjsSitesFieldset): void {
-    $this->assertSession()->elementExists('named', ['link', 'Environment variables'], $nextjsSitesFieldset)->click();
-    $nextjsSitesModal = $this->assertSession()->waitForElementVisible('css', '.ui-dialog');
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    $assertSession->elementExists('named', ['link', 'Environment variables'], $nextjsSitesFieldset)->click();
+    $nextjsSitesModal = $assertSession->waitForElementVisible('css', '.ui-dialog');
     $this->assertNotEmpty($nextjsSitesModal);
     $this->assertEquals('Environment variables', $nextjsSitesModal->find('css', '.ui-dialog-title')->getText());
     $nextjsSitesModalContent = $nextjsSitesModal->find('css', '#drupal-modal');
     $this->assertNotEmpty($nextjsSitesModalContent);
-    $this->assertSession()->elementExists('named', ['content', 'Copy and paste these values in your .env or .env.local files. To learn more about required and optional environment variables, refer to the documentation.'], $nextjsSitesModalContent);
-    $this->assertSession()->elementExists('named', ['content', '# See https://next-drupal.org/docs/environment-variables'], $nextjsSitesModalContent);
+    $assertSession->elementExists('named', ['content', 'Copy and paste these values in your .env or .env.local files. To learn more about required and optional environment variables, refer to the documentation.'], $nextjsSitesModalContent);
+    $assertSession->elementExists('named', ['content', '# See https://next-drupal.org/docs/environment-variables'], $nextjsSitesModalContent);
     // Required section.
-    $this->assertSession()->elementExists('named', ['content', 'NEXT_PUBLIC_DRUPAL_BASE_URL=' . $this->baseUrl], $nextjsSitesModalContent);
-    $this->assertSession()->elementExists('named', ['content', 'NEXT_IMAGE_DOMAIN=' . str_replace(":8080", "", str_replace("http://", "", $this->baseUrl))], $nextjsSitesModalContent);
+    $assertSession->elementExists('named', ['content', 'NEXT_PUBLIC_DRUPAL_BASE_URL=' . $this->baseUrl], $nextjsSitesModalContent);
+    $assertSession->elementExists('named', ['content', 'NEXT_IMAGE_DOMAIN=' . str_replace(":8080", "", str_replace("http://", "", $this->baseUrl))], $nextjsSitesModalContent);
     // Authentication section.
-    $this->assertSession()->elementExists('named', ['content', 'DRUPAL_CLIENT_ID=Retrieve this from /admin/config/services/consumer'], $nextjsSitesModalContent);
-    $this->assertSession()->elementExists('named', ['content', 'DRUPAL_CLIENT_SECRET=Retrieve this from /admin/config/services/consumer'], $nextjsSitesModalContent);
+    $assertSession->elementExists('named', ['content', 'DRUPAL_CLIENT_ID=Retrieve this from /admin/config/services/consumer'], $nextjsSitesModalContent);
+    $assertSession->elementExists('named', ['content', 'DRUPAL_CLIENT_SECRET=Retrieve this from /admin/config/services/consumer'], $nextjsSitesModalContent);
     // Required for Preview Mode.
-    $this->assertSession()->elementExists('named', ['content', 'DRUPAL_PREVIEW_SECRET=preview_secrete'], $nextjsSitesModalContent);
+    $assertSession->elementExists('named', ['content', 'DRUPAL_PREVIEW_SECRET=preview_secrete'], $nextjsSitesModalContent);
     $nextjsSitesModal->find('css', '.ui-dialog-titlebar-close')->click();
   }
 
@@ -166,15 +168,17 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
    * {@inheritdoc}
    */
   private function testEdit(mixed $nextjsSitesFieldset): void {
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
     $nextjsSitesFieldset->findButton('List additional actions')->click();
-    $this->assertSession()->elementExists('named', ['link', 'Edit'], $nextjsSitesFieldset)->click();
-    $nextjsSitesModal = $this->assertSession()->waitForElementVisible('css', '.ui-dialog');
+    $assertSession->elementExists('named', ['link', 'Edit'], $nextjsSitesFieldset)->click();
+    $nextjsSitesModal = $assertSession->waitForElementVisible('css', '.ui-dialog');
     $this->assertNotEmpty($nextjsSitesModal);
     $this->assertEquals('Edit headless clone', $nextjsSitesModal->find('css', '.ui-dialog-title')->getText());
     $nextjsSitesModalContent = $nextjsSitesModal->find('css', '#drupal-modal');
     $this->assertNotEmpty($nextjsSitesModalContent);
     $nextjsSitesModalContent->fillField('Label', 'headless clone edit');
-    $this->assertSession()->waitForElementVisible('css', '.ui-dialog-buttonpane .ui-dialog-buttonset .button--primary');
+    $assertSession->waitForElementVisible('css', '.ui-dialog-buttonpane .ui-dialog-buttonset .button--primary');
     $nextjsSitesModal->find('css', '.ui-dialog-buttonpane')->findButton('Save')->click();
   }
 
@@ -182,15 +186,17 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
    * {@inheritdoc}
    */
   private function testDelete(mixed $nextjsSitesFieldset): void {
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
     $nextjsSitesFieldset->findButton('List additional actions')->click();
-    $this->assertSession()->elementExists('named', ['link', 'Delete'], $nextjsSitesFieldset)->click();
-    $nextjsSitesModal = $this->assertSession()->waitForElementVisible('css', '.ui-dialog');
+    $assertSession->elementExists('named', ['link', 'Delete'], $nextjsSitesFieldset)->click();
+    $nextjsSitesModal = $assertSession->waitForElementVisible('css', '.ui-dialog');
     $this->assertNotEmpty($nextjsSitesModal);
     $this->assertEquals('Are you sure you want to delete the Next.js site headless clone edit?', $nextjsSitesModal->find('css', '.ui-dialog-title')->getText());
     $nextjsSitesModalContent = $nextjsSitesModal->find('css', '#drupal-modal');
     $this->assertNotEmpty($nextjsSitesModalContent);
-    $this->assertSession()->elementExists('named', ['content', 'This action cannot be undone.'], $nextjsSitesModalContent);
-    $this->assertSession()->waitForElementVisible('css', '.ui-dialog-buttonpane .ui-dialog-buttonset .button--primary');
+    $assertSession->elementExists('named', ['content', 'This action cannot be undone.'], $nextjsSitesModalContent);
+    $assertSession->waitForElementVisible('css', '.ui-dialog-buttonpane .ui-dialog-buttonset .button--primary');
     $nextjsSitesModal->find('css', '.ui-dialog-buttonpane')->findButton('Delete')->click();
   }
 
@@ -198,16 +204,18 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
    * {@inheritdoc}
    */
   private function testClone(mixed $nextjsSitesFieldset): void {
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
     $nextjsSitesFieldset->findButton('List additional actions')->click();
-    $this->assertSession()->elementExists('named', ['link', 'Clone'], $nextjsSitesFieldset)->click();
-    $nextjsSitesModal = $this->assertSession()->waitForElementVisible('css', '.ui-dialog');
+    $assertSession->elementExists('named', ['link', 'Clone'], $nextjsSitesFieldset)->click();
+    $nextjsSitesModal = $assertSession->waitForElementVisible('css', '.ui-dialog');
     $this->assertNotEmpty($nextjsSitesModal);
     $this->assertEquals('Clone Next.js site', $nextjsSitesModal->find('css', '.ui-dialog-title')->getText());
     $nextjsSitesModalContent = $nextjsSitesModal->find('css', '#drupal-modal');
     $this->assertNotEmpty($nextjsSitesModalContent);
     $nextjsSitesModalContent->fillField('New Label', 'headless clone');
-    $this->assertSession()->waitForElementVisible('css', '.admin-link');
-    $this->assertSession()->waitForElementVisible('css', '.ui-dialog-buttonpane .ui-dialog-buttonset .button--primary');
+    $assertSession->waitForElementVisible('css', '.admin-link');
+    $assertSession->waitForElementVisible('css', '.ui-dialog-buttonpane .ui-dialog-buttonset .button--primary');
     $nextjsSitesModal->find('css', '.ui-dialog-buttonpane')->findButton('Clone')->click();
   }
 
@@ -215,15 +223,17 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
    * {@inheritdoc}
    */
   private function testNewPreviewSecret(mixed $nextjsSitesFieldset): void {
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
     $nextjsSitesFieldset->findButton('List additional actions')->click();
-    $this->assertSession()->elementExists('named', ['link', 'New preview secret'], $nextjsSitesFieldset)->click();
-    $nextjsSitesModal = $this->assertSession()->waitForElementVisible('css', '.ui-dialog');
+    $assertSession->elementExists('named', ['link', 'New preview secret'], $nextjsSitesFieldset)->click();
+    $nextjsSitesModal = $assertSession->waitForElementVisible('css', '.ui-dialog');
     $this->assertNotEmpty($nextjsSitesModal);
     $this->assertEquals('Generate New Preview Secret', $nextjsSitesModal->find('css', '.ui-dialog-title')->getText());
     $nextjsSitesModalContent = $nextjsSitesModal->find('css', '#drupal-modal');
     $this->assertNotEmpty($nextjsSitesModalContent);
-    $this->assertSession()->elementExists('named', ['content', 'A preview secret has been generated for the headless next.js site:'], $nextjsSitesModalContent);
-    $this->assertSession()->elementExists('named', ['content', 'This value can also be retrieved from the next.js site entity.'], $nextjsSitesModalContent);
+    $assertSession->elementExists('named', ['content', 'A preview secret has been generated for the headless next.js site:'], $nextjsSitesModalContent);
+    $assertSession->elementExists('named', ['content', 'This value can also be retrieved from the next.js site entity.'], $nextjsSitesModalContent);
     $nextjsSitesModal->find('css', '.ui-dialog-titlebar-close')->click();
   }
 

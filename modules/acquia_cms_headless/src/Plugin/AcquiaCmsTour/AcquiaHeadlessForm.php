@@ -47,6 +47,13 @@ class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
   protected $starterkitNextjsService;
 
   /**
+   * Provides nextjs status..
+   *
+   * @var bool
+   */
+  protected $isNextJs;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {

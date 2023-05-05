@@ -8,6 +8,13 @@ namespace Drupal\acquia_cms_headless;
 abstract class AcquiaCmsHeadlessPluginBase implements AcquiaCmsHeadlessInterface {
 
   /**
+   * The plugin definition.
+   *
+   * @var mixed
+   */
+  protected $pluginDefinition;
+
+  /**
    * {@inheritdoc}
    */
   public function label() {

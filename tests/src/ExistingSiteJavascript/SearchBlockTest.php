@@ -51,7 +51,7 @@ class SearchBlockTest extends CohesionComponentTestBase {
    *
    * @dataProvider providerSearchBlock
    */
-  public function testSearchBlock(?array $roles) {
+  public function testSearchBlock(?array $roles): void {
     if (isset($roles)) {
       $account = $this->createUser();
       array_walk($roles, [$account, 'addRole']);
@@ -73,13 +73,14 @@ class SearchBlockTest extends CohesionComponentTestBase {
     ]);
     $this->assertFalse($unpublished_node->isPublished());
 
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assert_session */
     $assert_session = $this->assertSession();
     $this->drupalGet('/node');
     $this->getSearch()->showSearch();
     $search_block = $assert_session->elementExists('css', '#views-exposed-form-search-search');
     $search_block->fillField('keywords', 'Test');
-    $assert_session->waitForElementVisible('css', '#edit-submit-search')->keyPress('enter');
 
+    $assert_session->waitForElementVisible('css', '#edit-submit-search')->keyPress('enter');
     // Assert that the search by title shows the proper result.
     $assert_session->linkExists('Test published');
     $assert_session->linkNotExists('Test unpublished');

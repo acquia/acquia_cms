@@ -18,7 +18,7 @@ class ButtonComponentTest extends CohesionComponentTestBase {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function testComponent() {
+  public function testComponent(): void {
     $account = $this->createUser();
     $account->addRole('administrator');
     $account->save();
@@ -27,8 +27,8 @@ class ButtonComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
+    /** @var \Behat\Mink\Element\TraversableElement $edit_form */
     $edit_form = $this->getLayoutCanvas()->add('Button(s)')->edit();
-
     $edit_form->clickLink('Layout and style');
     // Check if all the button styles are there in the select list.
     $styles = [
@@ -36,6 +36,7 @@ class ButtonComponentTest extends CohesionComponentTestBase {
       'Center',
       'Right',
     ];
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assert_session */
     $assert_session = $this->assertSession();
     foreach ($styles as $style) {
       $assert_session->optionExists('Align buttons', $style, $edit_form);
@@ -53,7 +54,7 @@ class ButtonComponentTest extends CohesionComponentTestBase {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function testEditAccess(string $role) {
+  public function testEditAccess(string $role): void {
     $account = $this->createUser();
     $account->addRole($role);
     $account->save();

@@ -235,7 +235,7 @@ class HeadlessNextEntityTypes extends AcquiaCmsDashboardBase {
     $operations = $this->createOperationLinks($entity_type);
     // Call the dashboard destination service.
     $destination = $this->starterKitNextjsService->dashboardDestination();
-
+    /** @var \Drupal\next\Entity\NextEntityTypeConfigInterface $next_type */
     foreach ($next_types as $next_type) {
       // Init some variables.
       $site_data = '';
@@ -247,14 +247,14 @@ class HeadlessNextEntityTypes extends AcquiaCmsDashboardBase {
 
       // Iterate through site data via referenced site id in order to get
       // labels, etc. from next sites.
-      if (!empty($sites)) {
+      if ($sites) {
         foreach ($sites as $site) {
           $site_data = $next_sites->load($site)->label();
         }
       }
 
       // If the entity type is a node, get the entity type label.
-      if (!empty($node_types) && $entity_data[0] === 'node') {
+      if ($node_types && $entity_data[0] === 'node') {
         $node_type = $node_types->load($entity_data[1]);
         $bundle_label = $node_type->label();
         $bundle_uri = $node_type->toUrl('edit-form', $destination);
