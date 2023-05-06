@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e174ada0609a68173a1b9f1d065a5f42",
+    "content-hash": "ffe1604e59104facb2836edaf6a2df53",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2473,10 +2473,10 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_audio",
-                "reference": "49efdf7b6e7cc1d3d7a72f560e4d5798b47ce987"
+                "reference": "26327066b33d8ed59c5ec0efa8c5ec56d7700cf4"
             },
             "require": {
-                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev",
+                "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
                 "drupal/media_entity_soundcloud": "^3.1"
             },
             "type": "drupal-module",
@@ -9225,6 +9225,109 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/workbench_email",
                 "issues": "http://drupal.org/project/issues/workbench_email"
+            }
+        },
+        {
+            "name": "drupal/workbench_moderation",
+            "version": "1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/workbench_moderation.git",
+                "reference": "8.x-1.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/workbench_moderation-8.x-1.7.zip",
+                "reference": "8.x-1.7",
+                "shasum": "1eedf7d913d72348919d6b13541b380c44646b3f"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10"
+            },
+            "require-dev": {
+                "drupal/publishing_dropbutton": "~1.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.7",
+                    "datestamp": "1668804480",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "agentrickard",
+                    "homepage": "https://www.drupal.org/user/20975"
+                },
+                {
+                    "name": "becw",
+                    "homepage": "https://www.drupal.org/user/81067"
+                },
+                {
+                    "name": "caroltron",
+                    "homepage": "https://www.drupal.org/user/171342"
+                },
+                {
+                    "name": "colan",
+                    "homepage": "https://www.drupal.org/user/58704"
+                },
+                {
+                    "name": "Crell",
+                    "homepage": "https://www.drupal.org/user/26398"
+                },
+                {
+                    "name": "das-peter",
+                    "homepage": "https://www.drupal.org/user/762870"
+                },
+                {
+                    "name": "Dave Reid",
+                    "homepage": "https://www.drupal.org/user/53892"
+                },
+                {
+                    "name": "josephdpurcell@gmail.com",
+                    "homepage": "https://www.drupal.org/user/2944035"
+                },
+                {
+                    "name": "larowlan",
+                    "homepage": "https://www.drupal.org/user/395439"
+                },
+                {
+                    "name": "robeano",
+                    "homepage": "https://www.drupal.org/user/67660"
+                },
+                {
+                    "name": "srjosh",
+                    "homepage": "https://www.drupal.org/user/165878"
+                },
+                {
+                    "name": "stevector",
+                    "homepage": "https://www.drupal.org/user/179805"
+                },
+                {
+                    "name": "tedbow",
+                    "homepage": "https://www.drupal.org/user/240860"
+                },
+                {
+                    "name": "timmillwood",
+                    "homepage": "https://www.drupal.org/user/227849"
+                }
+            ],
+            "description": "Provides moderation states for content",
+            "homepage": "http://drupal.org/project/workbench_moderation",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/workbench_moderation",
+                "issues": "http://drupal.org/project/issues/workbench_moderation"
             }
         },
         {
@@ -21529,7 +21632,8 @@
         "drupal/acquia_cms_site_studio": 20,
         "drupal/acquia_cms_starter": 20,
         "drupal/acquia_cms_toolbar": 20,
-        "drupal/acquia_cms_tour": 20
+        "drupal/acquia_cms_tour": 20,
+        "drupal/seven": 15
     },
     "prefer-stable": true,
     "prefer-lowest": false,
