@@ -68,21 +68,20 @@ class PostConfigEventsSubscriber implements EventSubscriberInterface {
     // Set credentials if module being installed independently.
     if ($siteStudioCredentials['status']) {
       _acquia_cms_site_studio_set_credentials($siteStudioCredentials['api_key'], $siteStudioCredentials['organization_key']);
-      // $event->getDrushCommand()->execute('coh:import');
-      // $event->getDrushCommand()->execute('coh:import');
-      // $event->getDrushCommand()->execute('sitestudio:package:import');
-      // $event->getDrushCommand()->execute('cr');
+      $event->acquiaGlobalCommand->runDrushCommand('coh:import');
+      $event->acquiaGlobalCommand->runDrushCommand('sitestudio:package:import');
+      $event->acquiaGlobalCommand->runDrushCommand('cr');
     }
   }
 
   /**
    * Post config export manipulation.
    */
-  public function onPostConfigExport() {
+  public function onPostConfigExport($event) {
     $configSyncDirectory = Settings::get('config_sync_directory');
     $cohesionSettingFile = $this->moduleHandler->getModule('acquia_cms_site_studio')->getPath() . '/config/optional/cohesion.settings.yml';
     $this->fileSystem->copy($cohesionSettingFile, $configSyncDirectory, FileSystemInterface::EXISTS_REPLACE);
-    // $event->getDrushCommand()->execute('sitestudio:package:export');
+    $event->acquiaGlobalCommand->runDrushCommand('sitestudio:package:export');
   }
 
 }
