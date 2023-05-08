@@ -39,7 +39,7 @@ class HeadlessPostConfigEventsSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents() {
     $events = [];
     if (class_exists(ConfigEvents::class)) {
-      $events[ConfigEvents::POST_CONFIG_IMPORT] = 'onPostConfigImport';
+      $events[ConfigEvents::POST_CONFIG_IMPORT] = 'createHeadlessUser';
     }
 
     return $events;
@@ -48,7 +48,7 @@ class HeadlessPostConfigEventsSubscriber implements EventSubscriberInterface {
   /**
    * Post config import manipulation.
    */
-  public function onPostConfigImport() {
+  public function createHeadlessUser($event) {
     // Create headless user.
     $this->starterKitService->createHeadlessUser();
   }
