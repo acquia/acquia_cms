@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acquia_cms_site_studio\EventSubscriber;
+namespace Drupal\acquia_cms_site_studio_cm\EventSubscriber;
 
 use Drupal\acquia_config_management\Event\ConfigEvents;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -79,7 +79,7 @@ class PostConfigEventsSubscriber implements EventSubscriberInterface {
    */
   public function onPostConfigExport($event) {
     $configSyncDirectory = Settings::get('config_sync_directory');
-    $cohesionSettingFile = $this->moduleHandler->getModule('acquia_cms_site_studio')->getPath() . '/config/optional/cohesion.settings.yml';
+    $cohesionSettingFile = $this->moduleHandler->getModule('acquia_cms_site_studio_cm')->getPath() . '/config/optional/cohesion.settings.yml';
     $this->fileSystem->copy($cohesionSettingFile, $configSyncDirectory, FileSystemInterface::EXISTS_REPLACE);
     $event->acquiaGlobalCommand->runDrushCommand('sitestudio:package:export');
   }
