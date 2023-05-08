@@ -31,7 +31,7 @@ class AcquiaPostConfigExport implements EventSubscriberInterface {
    * @param \Drupal\acquia_config_management\Event\ConfigEvents $event
    *   Config crud event.
    */
-  public function postConfigExport(ConfigEvents $event,) {
+  public function postConfigExport(ConfigEvents $event) {
     if (!AcquiaDrupalEnvironmentDetector::isAhIdeEnv() && AcquiaDrupalEnvironmentDetector::isAhEnv()) {
       $event->stopPropagation();
     }

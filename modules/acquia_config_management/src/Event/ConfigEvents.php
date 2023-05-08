@@ -32,7 +32,7 @@ class ConfigEvents extends Event {
   /**
    * Holds the command result data.
    *
-   * @var \Consolidation\AnnotatedCommand\CommandResult|null
+   * @var \Consolidation\AnnotatedCommand\CommandResult|array|null
    */
   protected $result;
 
@@ -53,7 +53,7 @@ class ConfigEvents extends Event {
   /**
    * Constructs the object.
    *
-   * @param \Consolidation\AnnotatedCommand\CommandData|null $result
+   * @param \Consolidation\AnnotatedCommand\CommandResult|array|null $result
    *   The result array or null.
    * @param \Consolidation\AnnotatedCommand\CommandData|null $commandData
    *   The command data object.
@@ -61,7 +61,7 @@ class ConfigEvents extends Event {
    *   The config import export command.
    */
   public function __construct(
-    ?CommandResult $result,
+    CommandResult|array|null $result = NULL,
     ?CommandData $commandData = NULL,
     ?ConfigImportExportCommands $acquiaGlobalCommand = NULL) {
     $this->result = $result;
@@ -86,7 +86,7 @@ class ConfigEvents extends Event {
   /**
    * Returns the command result.
    */
-  public function getResult(): ?CommandResult {
+  public function getResult(): CommandResult|array|null {
     return $this->result;
   }
 

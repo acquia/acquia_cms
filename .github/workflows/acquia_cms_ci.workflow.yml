@@ -236,11 +236,11 @@ jobs:
           - ISOLATED_TEST_ON_CURRENT
         #php-version: [ "8.1" ]
         modules:
-          # - acquia_cms_article, acquia_cms_person, acquia_cms_place, acquia_cms_event
-          # - acquia_cms_page, acquia_cms_site_studio
-          # - acquia_cms_image, acquia_cms_document, acquia_cms_video, acquia_cms_audio
-          # - acquia_cms_search, acquia_cms_common, acquia_cms_tour
-          # - acquia_cms_headless
+          - acquia_cms_article, acquia_cms_person, acquia_cms_place, acquia_cms_event
+          - acquia_cms_page, acquia_cms_site_studio
+          - acquia_cms_image, acquia_cms_document, acquia_cms_video, acquia_cms_audio
+          - acquia_cms_search, acquia_cms_common, acquia_cms_tour
+          - acquia_cms_headless
           - acquia_config_management
     steps:
       - uses: actions/checkout@v3

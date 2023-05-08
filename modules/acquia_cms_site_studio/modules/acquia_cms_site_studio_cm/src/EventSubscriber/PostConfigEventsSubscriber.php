@@ -51,8 +51,8 @@ class PostConfigEventsSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents() {
     $events = [];
     if (class_exists(ConfigEvents::class)) {
-      $events[ConfigEvents::POST_CONFIG_IMPORT] = 'onPostConfigImport';
-      $events[ConfigEvents::POST_CONFIG_EXPORT] = 'onPostConfigExport';
+      $events[ConfigEvents::POST_CONFIG_IMPORT] = 'importSiteStudioPackages';
+      $events[ConfigEvents::POST_CONFIG_EXPORT] = 'exportSiteStudioPackages';
     }
 
     return $events;
@@ -61,7 +61,7 @@ class PostConfigEventsSubscriber implements EventSubscriberInterface {
   /**
    * Post config import manipulation.
    */
-  public function onPostConfigImport($event) {
+  public function importSiteStudioPackages($event) {
     // Get site studio credentials if its set.
     $siteStudioCredentials = _acquia_cms_site_studio_get_credentials();
 
@@ -77,7 +77,7 @@ class PostConfigEventsSubscriber implements EventSubscriberInterface {
   /**
    * Post config export manipulation.
    */
-  public function onPostConfigExport($event) {
+  public function exportSiteStudioPackages($event) {
     $configSyncDirectory = Settings::get('config_sync_directory');
     $cohesionSettingFile = $this->moduleHandler->getModule('acquia_cms_site_studio_cm')->getPath() . '/config/optional/cohesion.settings.yml';
     $this->fileSystem->copy($cohesionSettingFile, $configSyncDirectory, FileSystemInterface::EXISTS_REPLACE);
