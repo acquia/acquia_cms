@@ -1,13 +1,13 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_site_studio\Functional;
+namespace Drupal\Tests\acquia_cms_site_studio_cm\Functional;
 
 use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests the Site Studio core configuration.
  *
- * @group acquia_cms_site_studio
+ * @group acquia_cms_site_studio_cm
  */
 class SiteStudioCoreConfigTest extends BrowserTestBase {
 
