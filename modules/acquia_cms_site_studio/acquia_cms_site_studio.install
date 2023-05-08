@@ -161,21 +161,6 @@ function acquia_cms_site_studio_module_preinstall($module) {
 }
 
 /**
- * Update site studio credentials from environment.
- *
- * @param string $site_studio_api_key
- *   The site studio api key.
- * @param string $site_studio_org_key
- *   The site studio organisation key.
- */
-function _acquia_cms_site_studio_set_credentials(string $site_studio_api_key, string $site_studio_org_key) {
-  \Drupal::configFactory()->getEditable('cohesion.settings')
-    ->set('api_key', $site_studio_api_key)
-    ->set('organization_key', $site_studio_org_key)
-    ->save(TRUE);
-}
-
-/**
  * Set default theme as site studio theme.
  */
 function _acquia_cms_site_studio_set_theme() {
