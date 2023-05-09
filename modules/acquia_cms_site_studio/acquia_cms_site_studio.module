@@ -192,3 +192,34 @@ function _acquia_cms_site_studio_add_permissions(EntityInterface $entity) {
     }
   }
 }
+
+/**
+ * Get site studio credentials.
+ */
+function _acquia_cms_site_studio_get_credentials(): array {
+  // If site studio key available in the environment variables
+  // then pick it from there else check for settings overrides.
+  $config = \Drupal::config('cohesion.settings');
+  $site_studio_api_key = getenv('SITESTUDIO_API_KEY') ?? $config->get('api_key');
+  $site_studio_org_key = getenv('SITESTUDIO_ORG_KEY') ?? $config->get('organization_key');
+  return [
+    'api_key' => $site_studio_api_key,
+    'organization_key' => $site_studio_org_key,
+    'status' => ($site_studio_api_key && $site_studio_org_key),
+  ];
+}
+
+/**
+ * Update site studio credentials from environment.
+ *
+ * @param string $site_studio_api_key
+ *   The site studio api key.
+ * @param string $site_studio_org_key
+ *   The site studio organisation key.
+ */
+function _acquia_cms_site_studio_set_credentials(string $site_studio_api_key, string $site_studio_org_key): void {
+  \Drupal::configFactory()->getEditable('cohesion.settings')
+    ->set('api_key', $site_studio_api_key)
+    ->set('organization_key', $site_studio_org_key)
+    ->save(TRUE);
+}

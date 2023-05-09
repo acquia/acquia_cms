@@ -1,0 +1,13 @@
+services:
+  acquia_post_config_events_test.post_config_export:
+    class: '\Drupal\acquia_post_config_events_test\EventSubscriber\TestPostConfigExport'
+    tags:
+      - { name: 'event_subscriber' }
+  acquia_post_config_events_test.post_config_import:
+    class: '\Drupal\acquia_post_config_events_test\EventSubscriber\TestPostConfigImport'
+    tags:
+      - { name: 'event_subscriber' }
+  acquia_post_config_events_test.post_config_site_install_existing:
+    class: '\Drupal\acquia_post_config_events_test\EventSubscriber\TestPostSiteInstallExistingConfig'
+    tags:
+      - { name: 'event_subscriber' }

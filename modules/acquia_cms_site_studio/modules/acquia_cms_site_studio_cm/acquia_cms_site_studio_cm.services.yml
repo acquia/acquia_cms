@@ -1,0 +1,6 @@
+services:
+  acquia_cms_site_studio_cm.post_config_event_subscriber:
+    class: 'Drupal\acquia_cms_site_studio_cm\EventSubscriber\PostConfigEventsSubscriber'
+    arguments: ['@module_handler', '@file_system']
+    tags:
+      - { name: 'event_subscriber' }
