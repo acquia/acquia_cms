@@ -2930,7 +2930,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_site_studio",
-                "reference": "eb1940f5b68a9c7e99312c818a782b970e3de3e5"
+                "reference": "6b11bacd1bbc42302d785950b904a8a832df2ecc"
             },
             "require": {
                 "acquia/cohesion": "^6.9.2 || ^7.0",
@@ -2961,7 +2961,8 @@
                 "enable-patching": true,
                 "patches": {
                     "acquia/cohesion": {
-                        "3340269 - Site Studio: Allow optional packages to import": "https://www.drupal.org/files/issues/2023-03-16/3340269-site-studio-allow-optional-packages-6.patch"
+                        "3340269 - Site Studio: Allow optional packages to import": "https://www.drupal.org/files/issues/2023-03-16/3340269-site-studio-allow-optional-packages-6.patch",
+                        "2571235 - Roles should depend on objects that are building the granted permissions": "https://www.drupal.org/files/issues/2023-05-09/3340269-acquia_cms_site_studio-allow-site-studio-dynamic-permissions-10.patch"
                     }
                 }
             },
