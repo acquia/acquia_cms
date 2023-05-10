@@ -52,7 +52,7 @@ mkdir -p ${ORCA_FIXTURE_DIR}/docroot/libraries/chartjs/dist/
 curl "https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js" -o ${ORCA_FIXTURE_DIR}/docroot/libraries/chartjs/dist/chart.min.js
 
 # We require this patch in order to pass CI.
-composer config --json extra.patches '{"drupal/core":{"3313342 - [PHP 8.1] Deprecated function: strpos(): Passing null to parameter #1 LayoutBuilderUiCacheContext.php on line 28":"https://git.drupalcode.org/project/drupal/-/merge_requests/3143.patch","3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112":"https://git.drupalcode.org/project/drupal/-/merge_requests/3142.patch"}}'
+composer config --json extra.patches '{"drupal/core":{"3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112":"https://git.drupalcode.org/project/drupal/-/merge_requests/3142.patch"}}'
 
 # Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.
 # This is important for now, otherwise PHPUnit tests: MaintenancePageTest will fail.
