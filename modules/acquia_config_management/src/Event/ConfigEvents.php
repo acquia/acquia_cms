@@ -55,18 +55,18 @@ class ConfigEvents extends Event {
    *
    * @param \Consolidation\AnnotatedCommand\CommandResult|array|null $result
    *   The result array or null.
-   * @param \Consolidation\AnnotatedCommand\CommandData|null $commandData
+   * @param \Consolidation\AnnotatedCommand\CommandData|null $command_data
    *   The command data object.
-   * @param \Drush\Commands\acquia_global_commands\ConfigImportExportCommands|null $acquiaGlobalCommand
+   * @param \Drush\Commands\acquia_global_commands\ConfigImportExportCommands|null $acquia_global_command
    *   The config import export command.
    */
   public function __construct(
     CommandResult|array|null $result = NULL,
-    ?CommandData $commandData = NULL,
-    ?ConfigImportExportCommands $acquiaGlobalCommand = NULL) {
+    ?CommandData $command_data = NULL,
+    ?ConfigImportExportCommands $acquia_global_command = NULL) {
     $this->result = $result;
-    $this->commandData = $commandData;
-    $this->acquiaGlobalCommand = $acquiaGlobalCommand;
+    $this->commandData = $command_data;
+    $this->acquiaGlobalCommand = $acquia_global_command;
   }
 
   /**

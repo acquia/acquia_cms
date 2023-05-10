@@ -87,7 +87,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_global_commands",
-                "reference": "928e73faed108b6b1ae918267ecb6f9993594a5d"
+                "reference": "91224981acc04b6867203f014bdca8dc87d1826b"
             },
             "type": "drupal-drush",
             "extra": {
@@ -2966,7 +2966,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_site_studio",
-                "reference": "0491aa061f0267bba5e1658df0d87c9231822c45"
+                "reference": "6dbbe6bb9da894e292ab4225ebb033b507690f31"
             },
             "require": {
                 "acquia/cohesion": "^6.9.2 || ^7.0",
@@ -2994,6 +2994,7 @@
                 "branch-alias": {
                     "dev-develop": "1.x-dev"
                 },
+<<<<<<< HEAD
                 "drupal-scaffold": {
                     "file-mapping": {
                         "[web-root]/drush/Commands/ConfigImportExportCommands.php": "modules/acquia_cms_site_studio_cm/assets/scaffold/files/ConfigImportExportCommands.php",
@@ -3002,6 +3003,8 @@
                         }
                     }
                 },
+=======
+>>>>>>> 867abdc2 (ACMS-1730: remove scaffolding and update CI accordingly.)
                 "drush": {
                     "services": {
                         "drush.services.yml": "^10"
