@@ -47,7 +47,7 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/b15ae1e0eb28e8758f1d6d30c7e12c00/raw/64469e8ae999f430e066e7f543140e813a92aebd/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
@@ -161,7 +161,7 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/b15ae1e0eb28e8758f1d6d30c7e12c00/raw/64469e8ae999f430e066e7f543140e813a92aebd/sut-path-reposories.patch | git -C ../orca apply
       #- name: Configure AWS Credentials
       #  uses: aws-actions/configure-aws-credentials@v1
       #  with:
@@ -265,7 +265,7 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/b15ae1e0eb28e8758f1d6d30c7e12c00/raw/64469e8ae999f430e066e7f543140e813a92aebd/sut-path-reposories.patch | git -C ../orca apply
       - name: Clone Recommended settings
         run: |
           composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
@@ -361,7 +361,7 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/b15ae1e0eb28e8758f1d6d30c7e12c00/raw/64469e8ae999f430e066e7f543140e813a92aebd/sut-path-reposories.patch | git -C ../orca apply
       - name: Clone Recommended settings
         run: |
           composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
@@ -441,7 +441,7 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/b15ae1e0eb28e8758f1d6d30c7e12c00/raw/64469e8ae999f430e066e7f543140e813a92aebd/sut-path-reposories.patch | git -C ../orca apply
       - name: Clone Recommended settings
         run: |
           composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
