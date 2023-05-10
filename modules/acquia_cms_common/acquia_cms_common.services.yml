@@ -12,6 +12,7 @@ services:
 
   acquia_cms_common.toggle_modules:
     class:  Drupal\acquia_cms_common\Services\ToggleModulesService
+    arguments: ['@extension.list.module', '@module_installer']
 
   acquia_cms_common.utility:
     class:  Drupal\acquia_cms_common\Services\AcmsUtilityService
