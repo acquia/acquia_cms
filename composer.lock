@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bad247b0391c4356f4d328aecd22fe29",
+    "content-hash": "1a23c8f5c6eeb80f73c6955d5540ea30",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/acquia-cms-starterkit.git",
-                "reference": "8f6d7c6257febaac09e959cfd452641f471eeb2d"
+                "reference": "e22907e27d9b8907908cb68de1a463b4519fa248"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/acquia-cms-starterkit/zipball/8f6d7c6257febaac09e959cfd452641f471eeb2d",
-                "reference": "8f6d7c6257febaac09e959cfd452641f471eeb2d",
+                "url": "https://api.github.com/repos/acquia/acquia-cms-starterkit/zipball/e22907e27d9b8907908cb68de1a463b4519fa248",
+                "reference": "e22907e27d9b8907908cb68de1a463b4519fa248",
                 "shasum": ""
             },
             "require": {
@@ -77,26 +77,24 @@
             ],
             "support": {
                 "issues": "https://github.com/acquia/acquia-cms-starterkit/issues",
-                "source": "https://github.com/acquia/acquia-cms-starterkit/tree/1.1.0"
+                "source": "https://github.com/acquia/acquia-cms-starterkit/tree/1.1.1"
             },
-            "time": "2023-05-02T05:49:13+00:00"
+            "time": "2023-05-09T20:33:23+00:00"
         },
         {
             "name": "acquia/acquia_global_commands",
-            "version": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/vishalkhode1/acquia_global_commands.git",
-                "reference": "0b017d2752b3e0254c4a6c55fbfb0be51c779736"
-            },
+            "version": "dev-develop",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/vishalkhode1/acquia_global_commands/zipball/0b017d2752b3e0254c4a6c55fbfb0be51c779736",
-                "reference": "0b017d2752b3e0254c4a6c55fbfb0be51c779736",
-                "shasum": ""
+                "type": "path",
+                "url": "./modules/acquia_global_commands",
+                "reference": "928e73faed108b6b1ae918267ecb6f9993594a5d"
             },
-            "default-branch": true,
             "type": "drupal-drush",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -117,11 +115,9 @@
                 "drupal",
                 "drush"
             ],
-            "support": {
-                "source": "https://github.com/vishalkhode1/acquia_global_commands/tree/main",
-                "issues": "https://github.com/vishalkhode1/acquia_global_commands/issues"
-            },
-            "time": "2023-04-27T17:27:59+00:00"
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "acquia/cohesion",
@@ -193,16 +189,16 @@
         },
         {
             "name": "acquia/cohesion-theme",
-            "version": "7.0.5",
+            "version": "7.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/cohesion-theme.git",
-                "reference": "d86a4c009a63c5afb52f5df3f40f7db216d2d9ca"
+                "reference": "6f6ab1ebbd9a7a7c01501d467fa7ec438926d24e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/cohesion-theme/zipball/d86a4c009a63c5afb52f5df3f40f7db216d2d9ca",
-                "reference": "d86a4c009a63c5afb52f5df3f40f7db216d2d9ca",
+                "url": "https://api.github.com/repos/acquia/cohesion-theme/zipball/6f6ab1ebbd9a7a7c01501d467fa7ec438926d24e",
+                "reference": "6f6ab1ebbd9a7a7c01501d467fa7ec438926d24e",
                 "shasum": ""
             },
             "type": "drupal-theme",
@@ -220,9 +216,9 @@
             "description": "Site Studio minimal theme",
             "support": {
                 "issues": "https://github.com/acquia/cohesion-theme/issues",
-                "source": "https://github.com/acquia/cohesion-theme/tree/7.0.5"
+                "source": "https://github.com/acquia/cohesion-theme/tree/7.1.0"
             },
-            "time": "2023-04-26T15:30:44+00:00"
+            "time": "2023-05-02T15:17:52+00:00"
         },
         {
             "name": "acquia/drupal-environment-detector",
@@ -280,16 +276,10 @@
         {
             "name": "acquia/drupal-recommended-settings",
             "version": "dev-develop",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:acquia/drupal-recommended-settings.git",
-                "reference": "1668e3cb2bd5bad1811c3aec72071be21a6e02b1"
-            },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/acquia/drupal-recommended-settings/zipball/1668e3cb2bd5bad1811c3aec72071be21a6e02b1",
-                "reference": "1668e3cb2bd5bad1811c3aec72071be21a6e02b1",
-                "shasum": ""
+                "type": "path",
+                "url": "./modules/drupal-recommended-settings",
+                "reference": "cc3f0616e1e21486d5707090fb4e10c4bf031035"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5.3",
@@ -311,7 +301,10 @@
             },
             "type": "composer-plugin",
             "extra": {
-                "class": "Acquia\\Drupal\\RecommendedSettings\\Plugin"
+                "class": "Acquia\\Drupal\\RecommendedSettings\\Plugin",
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
             },
             "autoload": {
                 "psr-4": {
@@ -335,10 +328,11 @@
             ],
             "support": {
                 "issues": "https://github.com/acquia/drupal-recommended-settings/issues",
-                "docs": "https://docs.acquia.com/drupal-recommended-settings/",
-                "source": "https://github.com/acquia/drupal-recommended-settings/tree/develop"
+                "docs": "https://docs.acquia.com/drupal-recommended-settings/"
             },
-            "time": "2023-04-12T08:03:01+00:00"
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "acquia/http-hmac-php",
@@ -2972,7 +2966,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_site_studio",
-                "reference": "62f2c1593f317b0d7a2ba4469e51efc8b1c3d0ff"
+                "reference": "0491aa061f0267bba5e1658df0d87c9231822c45"
             },
             "require": {
                 "acquia/cohesion": "^6.9.2 || ^7.0",
@@ -3016,6 +3010,7 @@
                 "enable-patching": true,
                 "patches": {
                     "acquia/cohesion": {
+                        "2571235 - Roles should depend on objects that are building the granted permissions": "https://www.drupal.org/files/issues/2023-05-09/3340269-acquia_cms_site_studio-allow-site-studio-dynamic-permissions-10.patch",
                         "3340269 - Site Studio: Allow optional packages to import": "https://www.drupal.org/files/issues/2023-03-16/3340269-site-studio-allow-optional-packages-6.patch"
                     }
                 }
@@ -3148,10 +3143,10 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_config_management",
-                "reference": "32d3d48e72253afc8106f489cbb21b645498e100"
+                "reference": "62a56eda3988396ee102e9555d1953921a6cb5d3"
             },
             "require": {
-                "acquia/acquia_global_commands": "dev-main",
+                "acquia/acquia_global_commands": "dev-develop",
                 "acquia/drupal-environment-detector": "^1.5"
             },
             "type": "drupal-module",
@@ -3255,22 +3250,23 @@
         },
         {
             "name": "drupal/acquia_dam",
-            "version": "1.0.6",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/acquia_dam.git",
-                "reference": "1.0.6"
+                "reference": "1.0.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_dam-1.0.6.zip",
-                "reference": "1.0.6",
-                "shasum": "d254735a94a7e43de4d79c4782ddcf01afd35fa0"
+                "url": "https://ftp.drupal.org/files/projects/acquia_dam-1.0.7.zip",
+                "reference": "1.0.7",
+                "shasum": "9db94513ab0ee832b495cc193f4b5b0cfc0c98b2"
             },
             "require": {
                 "drupal/core": ">=9.4",
                 "drupal/views_remote_data": "^1.0.1",
-                "guzzlehttp/psr7": "^1.0 || ^2.0"
+                "guzzlehttp/psr7": "^1.0 || ^2.0",
+                "php": "^7.4 || ^8"
             },
             "conflict": {
                 "acquia/cohesion": "<6.9.3"
@@ -3287,8 +3283,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.6",
-                    "datestamp": "1681230965",
+                    "version": "1.0.7",
+                    "datestamp": "1683551754",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6308,17 +6304,17 @@
         },
         {
             "name": "drupal/moderation_dashboard",
-            "version": "2.1.2",
+            "version": "2.1.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/moderation_dashboard.git",
-                "reference": "2.1.2"
+                "reference": "2.1.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/moderation_dashboard-2.1.2.zip",
-                "reference": "2.1.2",
-                "shasum": "a9d4d10b72c446133101fae82e08f2cab003deca"
+                "url": "https://ftp.drupal.org/files/projects/moderation_dashboard-2.1.3.zip",
+                "reference": "2.1.3",
+                "shasum": "5226a532601d46893033f15d27e9f3b7b26a3da4"
             },
             "require": {
                 "drupal/core": "^9 || ^10"
@@ -6326,8 +6322,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.1.2",
-                    "datestamp": "1672245388",
+                    "version": "2.1.3",
+                    "datestamp": "1683659472",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -11711,23 +11707,23 @@
         },
         {
             "name": "php-http/message",
-            "version": "1.14.0",
+            "version": "1.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/message.git",
-                "reference": "2ccee04a28c3d98eb3f2b85ce1e2fcff70c0e63b"
+                "reference": "2a1fbaa00cf5ffc82f379adf47388663bce8190d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/message/zipball/2ccee04a28c3d98eb3f2b85ce1e2fcff70c0e63b",
-                "reference": "2ccee04a28c3d98eb3f2b85ce1e2fcff70c0e63b",
+                "url": "https://api.github.com/repos/php-http/message/zipball/2a1fbaa00cf5ffc82f379adf47388663bce8190d",
+                "reference": "2a1fbaa00cf5ffc82f379adf47388663bce8190d",
                 "shasum": ""
             },
             "require": {
                 "clue/stream-filter": "^1.5",
-                "php": "^7.1 || ^8.0",
+                "php": "^7.2 || ^8.0",
                 "php-http/message-factory": "^1.0.2",
-                "psr/http-message": "^1.0 || ^2.0"
+                "psr/http-message": "^1.1 || ^2.0"
             },
             "provide": {
                 "php-http/message-factory-implementation": "1.0"
@@ -11735,8 +11731,8 @@
             "require-dev": {
                 "ergebnis/composer-normalize": "^2.6",
                 "ext-zlib": "*",
-                "guzzlehttp/psr7": "^1.0",
-                "laminas/laminas-diactoros": "^2.0",
+                "guzzlehttp/psr7": "^1.0 || ^2.0",
+                "laminas/laminas-diactoros": "^2.0 || ^3.0",
                 "phpspec/phpspec": "^5.1 || ^6.3 || ^7.1",
                 "slim/slim": "^3.0"
             },
@@ -11774,9 +11770,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-http/message/issues",
-                "source": "https://github.com/php-http/message/tree/1.14.0"
+                "source": "https://github.com/php-http/message/tree/1.15.0"
             },
-            "time": "2023-04-14T14:26:18+00:00"
+            "time": "2023-05-10T08:19:58+00:00"
         },
         {
             "name": "php-http/message-factory",
@@ -12354,16 +12350,16 @@
         },
         {
             "name": "psy/psysh",
-            "version": "v0.11.16",
+            "version": "v0.11.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "151b145906804eea8e5d71fea23bfb470c904bfb"
+                "reference": "3dc5d4018dabd80bceb8fe1e3191ba8460569f0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/151b145906804eea8e5d71fea23bfb470c904bfb",
-                "reference": "151b145906804eea8e5d71fea23bfb470c904bfb",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/3dc5d4018dabd80bceb8fe1e3191ba8460569f0a",
+                "reference": "3dc5d4018dabd80bceb8fe1e3191ba8460569f0a",
                 "shasum": ""
             },
             "require": {
@@ -12424,9 +12420,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bobthecow/psysh/issues",
-                "source": "https://github.com/bobthecow/psysh/tree/v0.11.16"
+                "source": "https://github.com/bobthecow/psysh/tree/v0.11.17"
             },
-            "time": "2023-04-26T12:53:57+00:00"
+            "time": "2023-05-05T20:02:42+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -18433,16 +18429,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.14",
+            "version": "1.10.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "d232901b09e67538e5c86a724be841bea5768a7c"
+                "reference": "762c4dac4da6f8756eebb80e528c3a47855da9bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d232901b09e67538e5c86a724be841bea5768a7c",
-                "reference": "d232901b09e67538e5c86a724be841bea5768a7c",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/762c4dac4da6f8756eebb80e528c3a47855da9bd",
+                "reference": "762c4dac4da6f8756eebb80e528c3a47855da9bd",
                 "shasum": ""
             },
             "require": {
@@ -18491,7 +18487,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-04-19T13:47:27+00:00"
+            "time": "2023-05-09T15:28:01+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
@@ -19261,16 +19257,16 @@
         },
         {
             "name": "sebastian/diff",
-            "version": "4.0.4",
+            "version": "4.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "3461e3fccc7cfdfc2720be910d3bd73c69be590d"
+                "reference": "74be17022044ebaaecfdf0c5cd504fc9cd5a7131"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/3461e3fccc7cfdfc2720be910d3bd73c69be590d",
-                "reference": "3461e3fccc7cfdfc2720be910d3bd73c69be590d",
+                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/74be17022044ebaaecfdf0c5cd504fc9cd5a7131",
+                "reference": "74be17022044ebaaecfdf0c5cd504fc9cd5a7131",
                 "shasum": ""
             },
             "require": {
@@ -19315,7 +19311,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/diff/issues",
-                "source": "https://github.com/sebastianbergmann/diff/tree/4.0.4"
+                "source": "https://github.com/sebastianbergmann/diff/tree/4.0.5"
             },
             "funding": [
                 {
@@ -19323,7 +19319,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-10-26T13:10:38+00:00"
+            "time": "2023-05-07T05:35:17+00:00"
         },
         {
             "name": "sebastian/environment",
@@ -20699,6 +20695,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "acquia/acquia_global_commands": 20,
         "acquia/drupal-recommended-settings": 20,
         "drupal/acquia_claro": 15,
         "drupal/acquia_cms_audio": 20,

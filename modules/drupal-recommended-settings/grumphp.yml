@@ -1,0 +1,24 @@
+parameters:
+    git_dir: .
+grumphp:
+    ascii:
+        failed: grumphp-grumpy.txt
+        succeeded: grumphp-happy.txt
+    process_timeout: 60
+    tasks:
+        git_commit_message:
+            enforce_no_subject_trailing_period: false
+            matchers:
+                'Must begin with a JIRA issue number': '/^ACMS-[0-9]+: /'
+            max_body_width: 0
+            max_subject_width: 0
+        yamllint: ~
+        composer: ~
+        composer_normalize: ~
+        phpcs:
+            standard: ['phpcs.xml.dist']
+            ignore_patterns:
+                - .github
+                - vendor
+            triggered_by:
+                - php

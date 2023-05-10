@@ -89,13 +89,6 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           #coverage: xdebug
-      - name: Clone Recommended settings
-        run: |
-          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
-          git clone https://${{ secrets.OAUTH_TOKEN }}@github.com/acquia/drupal-recommended-settings.git --branch=develop ../plugins/drupal-recommended-settings
-          REPO_DATA=$(composer config repositories.drupal-recommended-settings)
-          REPO_DATA=$(echo "${REPO_DATA}" | sed 's/vcs/path/' | sed 's/git.*git/..\/plugins\/drupal\-recommended\-settings/')
-          composer config repositories.drupal-recommended-settings --json "${REPO_DATA}"
       - name: Execute Drupal-check
         run: |
           composer install
@@ -168,13 +161,6 @@ jobs:
       #    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       #    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       #    aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-      - name: Clone Recommended settings
-        run: |
-          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
-          git clone https://${{ secrets.OAUTH_TOKEN }}@github.com/acquia/drupal-recommended-settings.git --branch=develop ../plugins/drupal-recommended-settings
-          REPO_DATA=$(composer config repositories.drupal-recommended-settings)
-          REPO_DATA=$(echo "${REPO_DATA}" | sed 's/vcs/path/' | sed 's/git.*git/..\/plugins\/drupal\-recommended\-settings/')
-          composer config repositories.drupal-recommended-settings --json "${REPO_DATA}"
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
@@ -266,13 +252,6 @@ jobs:
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
           curl https://gist.githubusercontent.com/rajeshreeputra/b15ae1e0eb28e8758f1d6d30c7e12c00/raw/64469e8ae999f430e066e7f543140e813a92aebd/sut-path-reposories.patch | git -C ../orca apply
-      - name: Clone Recommended settings
-        run: |
-          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
-          git clone https://${{ secrets.OAUTH_TOKEN }}@github.com/acquia/drupal-recommended-settings.git --branch=develop ../plugins/drupal-recommended-settings
-          REPO_DATA=$(composer config repositories.drupal-recommended-settings)
-          REPO_DATA=$(echo "${REPO_DATA}" | sed 's/vcs/path/' | sed 's/git.*git/..\/plugins\/drupal\-recommended\-settings/')
-          composer config repositories.drupal-recommended-settings --json "${REPO_DATA}"
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
@@ -362,13 +341,6 @@ jobs:
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
           curl https://gist.githubusercontent.com/rajeshreeputra/b15ae1e0eb28e8758f1d6d30c7e12c00/raw/64469e8ae999f430e066e7f543140e813a92aebd/sut-path-reposories.patch | git -C ../orca apply
-      - name: Clone Recommended settings
-        run: |
-          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
-          git clone https://${{ secrets.OAUTH_TOKEN }}@github.com/acquia/drupal-recommended-settings.git --branch=develop ../plugins/drupal-recommended-settings
-          REPO_DATA=$(composer config repositories.drupal-recommended-settings)
-          REPO_DATA=$(echo "${REPO_DATA}" | sed 's/vcs/path/' | sed 's/git.*git/..\/plugins\/drupal\-recommended\-settings/')
-          composer config repositories.drupal-recommended-settings --json "${REPO_DATA}"
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
@@ -442,13 +414,6 @@ jobs:
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
           curl https://gist.githubusercontent.com/rajeshreeputra/b15ae1e0eb28e8758f1d6d30c7e12c00/raw/64469e8ae999f430e066e7f543140e813a92aebd/sut-path-reposories.patch | git -C ../orca apply
-      - name: Clone Recommended settings
-        run: |
-          composer config -g github-oauth.github.com ${{ secrets.OAUTH_TOKEN }}
-          git clone https://${{ secrets.OAUTH_TOKEN }}@github.com/acquia/drupal-recommended-settings.git --branch=develop ../plugins/drupal-recommended-settings
-          REPO_DATA=$(composer config repositories.drupal-recommended-settings)
-          REPO_DATA=$(echo "${REPO_DATA}" | sed 's/vcs/path/' | sed 's/git.*git/..\/plugins\/drupal\-recommended\-settings/')
-          composer config repositories.drupal-recommended-settings --json "${REPO_DATA}"
       - name: Before Install
         run: ../orca/bin/ci/before_install.sh
       - name: Install

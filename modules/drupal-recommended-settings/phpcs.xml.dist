@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-Ruleset -->
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
+
+  <description>PHP CodeSniffer configuration for analyzing acquia/drupal-recommended-settings project.</description>
+
+  <!-- Use colors in output. -->
+  <arg name="colors"/>
+  <!-- Show progress. -->
+  <arg value="p"/>
+  <!-- Run in parallel. -->
+  <arg name="parallel" value="10"/>
+
+  <file>.</file>
+
+  <exclude-pattern>.idea/</exclude-pattern>
+  <exclude-pattern>var/</exclude-pattern>
+  <exclude-pattern>vendor/</exclude-pattern>
+
+  <rule ref="AcquiaDrupalStrict"/>
+
+</ruleset>

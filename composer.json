@@ -18,6 +18,7 @@
     ],
     "require": {
         "acquia/acquia-cms-starterkit": "^1.0",
+        "acquia/acquia_global_commands": "dev-develop",
         "acquia/drupal-recommended-settings": "dev-develop",
         "drupal/acquia_claro": "^1.3.4@alpha",
         "drupal/acquia_cms_audio": "dev-develop",
@@ -322,12 +323,22 @@
             }
         },
         "acquia_global_commands": {
-            "type": "vcs",
-            "url": "git@github.com:acquia/drupal-recommended-settings.git"
+            "type": "path",
+            "url": "./modules/acquia_global_commands",
+            "options": {
+                "versions": {
+                    "acquia/acquia_global_commands": "dev-develop"
+                }
+            }
         },
         "drupal-recommended-settings": {
-            "type": "vcs",
-            "url": "git@github.com:acquia/drupal-recommended-settings.git"
+            "type": "path",
+            "url": "./modules/drupal-recommended-settings",
+            "options": {
+                "versions": {
+                    "acquia/drupal-recommended-settings": "dev-develop"
+                }
+            }
         },
         "chart.js": {
             "type": "package",
