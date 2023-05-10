@@ -133,6 +133,7 @@ jobs:
           - integrated_php_unit_tests
           - integrated_existing_site_tests
           - backstop_tests
+          - run_test_on_dev
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -299,8 +300,9 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
+
   run_update_hooks:
-    name: "Module Upgrades"
+    name: "Module Upgrades (${{ matrix.job_name }})" 
     runs-on: ubuntu-latest
     env:
       # Set ORCA related environment variables.
@@ -328,9 +330,16 @@ jobs:
       GIT_COMMITTER_NAME: "Github Actions"
       GIT_COMMITTER_EMAIL: "github-actions@exmaple.com"
       ORCA_JOB: ISOLATED_TEST_ON_CURRENT
-      ACMS_JOB: "upgrade_modules"
+      ACMS_JOB: ${{ matrix.acms_job }}
     strategy:
       fail-fast: false
+      matrix:
+        acms_job:
+          - upgrade_modules
+          - run_test_on_dev
+        job_name:
+          - "on develop branch"
+          - "on Drupal.Org dev release"
       #php-version: [ "8.1" ]
     steps:
       - uses: actions/checkout@v3

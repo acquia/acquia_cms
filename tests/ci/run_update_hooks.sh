@@ -39,7 +39,14 @@ echo -e "${GREEN}---------------------------------------------------------------
 
 # Remove composer.lock file and re-download all modules.
 # This time it would download acquia_cms modules from your branch.
-rm composer.lock && composer install && composer update --lock
+if [[ "${ACMS_JOB}" == "upgrade_modules" ]]; then
+    rm composer.lock && composer install && composer update --lock
+fi
+
+# Update modules to dev version.
+if [[ "${ACMS_JOB}" == "run_test_on_dev" ]]; then
+    composer require "drupal/acquia_cms_audio:dev-1.x" "drupal/acquia_cms_component:dev-1.x" "drupal/acquia_cms_headless:dev-1.x" "drupal/acquia_cms_site_studio:dev-1.x" "drupal/acquia_cms_starter:dev-1.x" "drupal/acquia_cms_toolbar:dev-1.x" "drupal/acquia_cms_tour:dev-2.x"
+fi
 
 echo -e "${GREEN}-----------------------------------------------After-----------------------------------------------${NOCOLOR}"
 composer show "drupal/*" | awk -F ' ' '{print $1,$2}' | column -t -s' '
