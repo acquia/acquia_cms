@@ -19,6 +19,14 @@ function acquia_cms_image_install($is_syncing) {
   if (!$is_syncing) {
     _acquia_cms_common_editor_config_rewrite(TRUE);
 
+    // While module installtion from profile, configuration does not existing
+    // When ACMS Image module try to create media, hence return from here and do
+    // not attempt to create media.
+    global $install_state;
+    if (isset($install_state['active_task']) && $install_state['active_task'] == "install_profile_modules") {
+      return;
+    }
+
     // Check Image file path exists.
     $acms_image_logo_path = \Drupal::moduleHandler()->getModule('acquia_cms_image')->getPath() . '/assets/images/acquia_cms_logo.png';
     if (!file_exists($acms_image_logo_path)) {
