@@ -1,0 +1,6 @@
+services:
+  acquia_cms_image.site_install:
+    class: Drupal\acquia_cms_image\Services\SiteInstall
+  acquia_cms_image.config_subscriber:
+    class: Drupal\acquia_cms_image\Config\AcquiaCmsImageConfigSubscriber
+    tags: [{ name: event_subscriber }]
