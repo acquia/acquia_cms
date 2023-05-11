@@ -5,12 +5,8 @@
  * Install, update and uninstall functions for the acquia_cms_image module.
  */
 
-use Drupal\Core\File\Exception\FileNotExistsException;
-use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\image\Entity\ImageStyle;
-use Drupal\media\Entity\Media;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Implements hook_install().
@@ -18,61 +14,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 function acquia_cms_image_install($is_syncing) {
   if (!$is_syncing) {
     _acquia_cms_common_editor_config_rewrite(TRUE);
-
-    // While module installtion from profile, configuration does not existing
-    // When ACMS Image module try to create media, hence return from here and do
-    // not attempt to create media.
-    global $install_state;
-    if (isset($install_state['active_task']) && $install_state['active_task'] == "install_profile_modules") {
-      return;
-    }
-
-    // Check Image file path exists.
-    $acms_image_logo_path = \Drupal::moduleHandler()->getModule('acquia_cms_image')->getPath() . '/assets/images/acquia_cms_logo.png';
-    if (!file_exists($acms_image_logo_path)) {
-      throw new FileNotExistsException("Could not load metadata from $acms_image_logo_path because it does not exist.");
-    }
-    $image_data = file_get_contents($acms_image_logo_path);
-
-    // Check the destination file path is writable.
-    $public_file_system_path = "public://media-icons";
-    /** @var \Drupal\Core\File\FileSystemInterface $file_system */
-    $file_system = \Drupal::service('file_system');
-    if (!$file_system->prepareDirectory($public_file_system_path, FileSystemInterface::CREATE_DIRECTORY)) {
-      throw new HttpException(500, 'Destination public file path is not writable.');
-    }
-
-    // Upload image to public file system.
-    $file_repository = \Drupal::service('file.repository');
-    $acquia_cms_logo_uri = $public_file_system_path . "/acquia_cms_logo.png";
-    $image = $file_repository->writeData($image_data, $acquia_cms_logo_uri, FileSystemInterface::EXISTS_REPLACE);
-    $image->setFileName('Acquia CMS logo');
-    $image->setMimeType('image/png');
-    $image->setPermanent();
-    $image->save();
-
-    // Create media for Acquia CMS logo.
-    $acquia_cms_logo = Media::create([
-      'name' => 'Acquia CMS Logo',
-      'bundle' => 'image',
-      'uuid' => '0c6f0f26-9fbb-4c2e-804c-418815aba162',
-      'image' => [
-        'target_id' => $image->id(),
-        'alt' => t('Acquia CMS logo'),
-        'title' => t('Acquia CMS logo'),
-      ],
-      'langcode' => 'en',
-    ]);
-    $acquia_cms_logo->save();
-
-    // Set Logo programatically.
-    $config = \Drupal::configFactory()->getEditable('system.theme.global');
-    if (!$config->get('logo.path')) {
-      $config
-        ->set("logo.use_default", FALSE)
-        ->set("logo.path", $acquia_cms_logo_uri)
-        ->save(TRUE);
-    }
   }
 }
 
