@@ -3,7 +3,6 @@
 namespace Drush\Commands\acquia_global_commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
-use Consolidation\AnnotatedCommand\CommandResult;
 use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Drupal\acquia_config_management\Event\ConfigEvents;
@@ -26,7 +25,7 @@ class ConfigImportExportCommands extends DrushCommands implements SiteAliasManag
    *
    * @hook post-command config-export
    */
-  public function postConfigExportCommand(array|CommandResult|null $result, CommandData $commandData) {
+  public function postConfigExportCommand($result, CommandData $commandData) {
     if (\Drupal::service('module_handler')->moduleExists("acquia_config_management")) {
       $event = new ConfigEvents($result, $commandData, $this);
       $event_dispatcher = \Drupal::service('event_dispatcher');
@@ -44,7 +43,7 @@ class ConfigImportExportCommands extends DrushCommands implements SiteAliasManag
    *
    * @hook post-command config-import
    */
-  public function postConfigImportCommand(array|CommandResult|null $result, CommandData $commandData) {
+  public function postConfigImportCommand($result, CommandData $commandData) {
     if (\Drupal::service('module_handler')->moduleExists("acquia_config_management")) {
       $status = \Drupal::service("acquia_config_management.site_install")->status();
       $event = new ConfigEvents($result, $commandData, $this);
@@ -68,7 +67,7 @@ class ConfigImportExportCommands extends DrushCommands implements SiteAliasManag
    *
    * @hook post-command site:install
    */
-  public function siteInstallExistingConfigCommand(array|CommandResult|null $result, CommandData $commandData) {
+  public function siteInstallExistingConfigCommand($result, CommandData $commandData) {
     if (\Drupal::service('module_handler')->moduleExists("acquia_config_management")) {
       $options = $commandData->options();
       if (isset($options['existing-config']) && $options['existing-config']) {

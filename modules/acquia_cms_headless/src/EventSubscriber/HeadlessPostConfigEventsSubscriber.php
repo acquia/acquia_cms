@@ -39,7 +39,7 @@ class HeadlessPostConfigEventsSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents() {
     $events = [];
     if (class_exists(ConfigEvents::class)) {
-      $events[ConfigEvents::POST_CONFIG_IMPORT] = 'createHeadlessUser';
+      $events[ConfigEvents::POST_SITE_INSTALL_EXISTING_CONFIG] = 'createHeadlessUser';
     }
 
     return $events;

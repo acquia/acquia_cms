@@ -61,7 +61,7 @@ class ConfigEvents extends Event {
    *   The config import export command.
    */
   public function __construct(
-    CommandResult|array|null $result = NULL,
+    $result = NULL,
     ?CommandData $command_data = NULL,
     ?ConfigImportExportCommands $acquia_global_command = NULL) {
     $this->result = $result;

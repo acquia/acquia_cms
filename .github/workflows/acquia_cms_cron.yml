@@ -71,6 +71,7 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
+
   integrated_tests:
     name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
     runs-on: ubuntu-latest
@@ -145,6 +146,7 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
+
   isolated_tests:
     name: acquia_cms (${{ matrix.orca-job }})
     runs-on: ubuntu-latest
@@ -209,6 +211,7 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
+
   # blt_test:
   #   name: "BLT site install"
   #   runs-on: ubuntu-latest

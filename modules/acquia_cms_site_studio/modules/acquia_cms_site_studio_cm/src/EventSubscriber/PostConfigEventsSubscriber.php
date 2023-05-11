@@ -53,6 +53,7 @@ class PostConfigEventsSubscriber implements EventSubscriberInterface {
     if (class_exists(ConfigEvents::class)) {
       $events[ConfigEvents::POST_CONFIG_IMPORT] = 'importSiteStudioPackages';
       $events[ConfigEvents::POST_CONFIG_EXPORT] = 'exportSiteStudioPackages';
+      $events[ConfigEvents::POST_SITE_INSTALL_EXISTING_CONFIG] = 'importSiteStudioPackages';
     }
 
     return $events;
@@ -64,7 +65,6 @@ class PostConfigEventsSubscriber implements EventSubscriberInterface {
   public function importSiteStudioPackages($event) {
     // Get site studio credentials if its set.
     $siteStudioCredentials = _acquia_cms_site_studio_get_credentials();
-
     // Set credentials if module being installed independently.
     if ($siteStudioCredentials['status']) {
       _acquia_cms_site_studio_set_credentials($siteStudioCredentials['api_key'], $siteStudioCredentials['organization_key']);

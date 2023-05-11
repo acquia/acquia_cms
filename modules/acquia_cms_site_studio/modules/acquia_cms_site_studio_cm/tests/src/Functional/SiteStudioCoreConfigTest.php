@@ -55,7 +55,11 @@ class SiteStudioCoreConfigTest extends BrowserTestBase {
   public function testConfigIgnoreSettings() {
     $config = $this->config('config_ignore.settings');
     if ($config) {
-      $this->assertEquals(['cohesion_*'], $config->get('ignored_config_entities'));
+      $this->assertEquals([
+        'language.entity.*',
+        'cohesion.settings',
+        'cohesion_*',
+      ], $config->get('ignored_config_entities'));
     }
   }
 
