@@ -124,7 +124,6 @@ function acquia_cms_install_tasks(): array {
       'run' => Drupal::service('module_handler')->moduleExists('acquia_connector') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
     ];
   }
-
   return $tasks;
 }
 
