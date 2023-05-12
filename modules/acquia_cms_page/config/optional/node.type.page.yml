@@ -1,10 +1,13 @@
 langcode: en
 status: true
 dependencies:
+  config:
+    - workflows.workflow.editorial
   module:
     - acquia_cms_common
     - menu_ui
     - scheduler
+    - workflows
   enforced:
     module:
       - acquia_cms_page
