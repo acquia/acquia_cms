@@ -3,6 +3,10 @@
 namespace Drupal\acquia_cms_image;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ConfigInstallerInterface;
+use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Config\InstallStorage;
+use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -42,6 +46,13 @@ final class SiteLogo implements ContainerInjectionInterface {
   protected $logoPath;
 
   /**
+   * The module_handler service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * The file_system service object.
    *
    * @var \Drupal\Core\File\FileSystemInterface
@@ -63,6 +74,13 @@ final class SiteLogo implements ContainerInjectionInterface {
   protected $configFactory;
 
   /**
+   * The config_installer service object.
+   *
+   * @var \Drupal\Core\Config\ConfigInstallerInterface
+   */
+  protected $configInstaller;
+
+  /**
    * The logger service object.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -82,18 +100,22 @@ final class SiteLogo implements ContainerInjectionInterface {
    *   The file.repository service object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config.factory service object.
+   * @param \Drupal\Core\Config\ConfigInstallerInterface $config_installer
+   *   The config_installer service object.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The logger.factory interface service object.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(EntityTypeManager $entity_type_manager, ModuleHandlerInterface $module_handler, FileSystemInterface $file_system, FileRepositoryInterface $file_repository, ConfigFactoryInterface $config_factory, LoggerChannelInterface $logger) {
+  public function __construct(EntityTypeManager $entity_type_manager, ModuleHandlerInterface $module_handler, FileSystemInterface $file_system, FileRepositoryInterface $file_repository, ConfigFactoryInterface $config_factory, ConfigInstallerInterface $config_installer, LoggerChannelInterface $logger) {
     $this->mediaStorage = $entity_type_manager->getStorage("media");
     $this->logoPath = $module_handler->getModule('acquia_cms_image')->getPath() . '/assets/images/acquia_cms_logo.png';
+    $this->moduleHandler = $module_handler;
     $this->fileSystem = $file_system;
     $this->fileRepository = $file_repository;
     $this->configFactory = $config_factory;
+    $this->configInstaller = $config_installer;
     $this->logger = $logger;
   }
 
@@ -107,6 +129,7 @@ final class SiteLogo implements ContainerInjectionInterface {
       $container->get('file_system'),
       $container->get('file.repository'),
       $container->get('config.factory'),
+      $container->get('config.installer'),
       $container->get('logger.factory')->get('acquia_cms_image')
     );
   }
@@ -115,17 +138,18 @@ final class SiteLogo implements ContainerInjectionInterface {
    * Decides if logo media/image needs to be created.
    */
   public function validate(): bool {
-    $isValidated = TRUE;
-    global $install_state;
-    if (isset($install_state['active_task']) && $install_state['active_task'] == "install_profile_modules") {
-      $this->logger->debug('Skipping creating logo during profile installation.');
-      $isValidated = FALSE;
-    }
     if ($this->checkIfMediaExists()) {
       $this->logger->warning('Media already exists with the uuid: 0c6f0f26-9fbb-4c2e-804c-418815aba162.');
-      $isValidated = FALSE;
+      return FALSE;
     }
-    return $isValidated;
+    try {
+      $this->ensureDirectoryExists(dirname($this->logoPath));
+    }
+    catch (DirectoryNotReadyException $exception) {
+      $this->logger->error($exception->getMessage());
+      return FALSE;
+    }
+    return TRUE;
   }
 
   /**
@@ -134,6 +158,21 @@ final class SiteLogo implements ContainerInjectionInterface {
   protected function checkIfMediaExists(): bool {
     $node_loaded_by_uuid = $this->mediaStorage->loadByProperties(['uuid' => '0c6f0f26-9fbb-4c2e-804c-418815aba162']);
     return (bool) reset($node_loaded_by_uuid);
+  }
+
+  /**
+   * Ensures media & dependent configurations exists.
+   */
+  public function ensureMediaExists(): void {
+    global $install_state;
+    // Import the media & related configurations, if module is being installed
+    // through custom/acquia_cms profile.
+    if (isset($install_state['active_task']) && $install_state['active_task'] == "install_profile_modules") {
+      $optional_install_path = $this->moduleHandler->getModule('acquia_cms_image')->getPath() . "/" . InstallStorage::CONFIG_OPTIONAL_DIRECTORY;
+      $storage = new FileStorage($optional_install_path, StorageInterface::DEFAULT_COLLECTION);
+      $this->configInstaller->installOptionalConfig($storage, ['module' => 'media']);
+      $this->logger->info('Imported media & dependent configurations, before creating media content for logo.');
+    }
   }
 
   /**
@@ -157,12 +196,7 @@ final class SiteLogo implements ContainerInjectionInterface {
    */
   public function createLogo(): SiteLogo {
     if ($this->validate()) {
-      try {
-        $this->ensureDirectoryExists(dirname($this->logoPath));
-      }
-      catch (DirectoryNotReadyException $exception) {
-        $this->logger->error($exception->getMessage());
-      }
+      $this->ensureMediaExists();
       // Upload image to public file system.
       $image_data = file_get_contents($this->logoPath);
       $image = $this->fileRepository->writeData($image_data, self::LOGO_PATH, FileSystemInterface::EXISTS_REPLACE);
