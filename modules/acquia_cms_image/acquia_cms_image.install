@@ -5,27 +5,17 @@
  * Install, update and uninstall functions for the acquia_cms_image module.
  */
 
+use Drupal\acquia_cms_image\SiteLogo;
 use Drupal\Core\Installer\InstallerKernel;
-use Drupal\Core\Site\Settings;
 use Drupal\image\Entity\ImageStyle;
 
 /**
  * Implements hook_install().
  */
 function acquia_cms_image_install($is_syncing) {
-  if (!$is_syncing || ($is_syncing && !Settings::get('existing_site_status', FALSE))) {
-    \Drupal::service("acquia_cms_image.site_install")->setStatus(TRUE);
-    if (!$is_syncing) {
-      _acquia_cms_common_editor_config_rewrite(TRUE);
-      // While module installtion from profile, configuration does not existing
-      // When ACMS Image module try to create media, hence return from here and
-      // do not attempt to create media.
-      global $install_state;
-      if (isset($install_state['active_task']) && $install_state['active_task'] == "install_profile_modules") {
-        return;
-      }
-      _acquia_cms_image_import_logo();
-    }
+  if (!$is_syncing) {
+    _acquia_cms_common_editor_config_rewrite(TRUE);
+    \Drupal::classResolver(SiteLogo::class)->createLogo()->setLogo();
   }
 }
 
