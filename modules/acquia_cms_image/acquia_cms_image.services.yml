@@ -1,0 +1,6 @@
+services:
+  acquia_cms_image.config_subscriber:
+    class: Drupal\acquia_cms_image\Config\AcquiaCmsImageConfigSubscriber
+    arguments: [ "@class_resolver" ]
+    tags:
+      - { name: event_subscriber }
