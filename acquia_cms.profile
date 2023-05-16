@@ -82,9 +82,6 @@ function acquia_cms_set_install_time() {
 function acquia_cms_install_tasks(): array {
   $tasks = [];
 
-  // Set default logo for ACMS.
-  $tasks['install_acms_set_logo'] = [];
-
   // Set default favicon for ACMS.
   $tasks['install_acms_set_favicon'] = [];
 
@@ -277,22 +274,6 @@ function install_acms_additional_modules() {
     \Drupal::service('module_handler')->alter('content_model_role_presave', $roleObj);
     $roleObj->save();
   }
-}
-
-/**
- * Set the path to the logo file based on install directory.
- */
-function install_acms_set_logo() {
-  $acquia_cms_path = \Drupal::service('extension.list.profile')->getPath('acquia_cms');
-
-  Drupal::configFactory()
-    ->getEditable('system.theme.global')
-    ->set('logo', [
-      'path' => $acquia_cms_path . '/acquia_cms.png',
-      'url' => '',
-      'use_default' => FALSE,
-    ])
-    ->save(TRUE);
 }
 
 /**
