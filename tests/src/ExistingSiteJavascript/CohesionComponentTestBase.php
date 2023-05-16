@@ -10,15 +10,9 @@ use Behat\Mink\Element\ElementInterface;
 abstract class CohesionComponentTestBase extends CohesionTestBase {
 
   /**
-   * @var bool
-   * @todo this need to be removed once ACO fixes ACO-2372.
-   */
-  protected $failOnPhpWatchdogMessages = FALSE;
-
-  /**
    * {@inheritdoc}
    */
-  protected function editDefinition(string $group, string $label) : ElementInterface {
+  protected function editDefinition(string $group, string $label): ElementInterface {
     parent::editDefinition($group, $label);
     return $this->waitForElementVisible('css', '.cohesion-component-edit-form', $this->getSession()->getPage());
   }

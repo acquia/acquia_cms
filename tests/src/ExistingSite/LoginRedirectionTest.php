@@ -93,23 +93,20 @@ class LoginRedirectionTest extends ExistingSiteBase {
     $account = $this->createUser();
     array_walk($roles, [$account, 'addRole']);
     $account->save();
-
-    $session = $this->getSession();
-    $page = $session->getPage();
-    $assert_session = $this->assertSession();
-
+    $assert = $this->assertSession();
+    $page = $this->getSession()->getPage();
     foreach ($destination_map as $destination) {
-      [$destination_parameter, $expected_destination_after_login] = str_replace('{uid}', $account->id(), $destination);
+      [$destinationPath, $redirectedPath] = str_replace('{uid}', $account->id(), $destination);
       $options = [];
-      if ($destination_parameter) {
-        $options['query']['destination'] = $destination_parameter;
+      if ($destinationPath) {
+        $options['query']['destination'] = $destinationPath;
       }
       $this->drupalGet('/user/login', $options);
       $page->fillField('name', $account->getAccountName());
       $page->fillField('pass', $account->passRaw);
       $page->pressButton('Log in');
-      $assert_session->statusCodeEquals(200);
-      $assert_session->addressEquals($expected_destination_after_login);
+      $assert->statusCodeEquals(200);
+      $assert->addressEquals($redirectedPath);
       $this->drupalLogout();
     }
   }

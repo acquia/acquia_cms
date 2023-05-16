@@ -16,7 +16,7 @@ final class LayoutCanvas extends CohesionElement {
    * @return \Drupal\Tests\acquia_cms\ExistingSiteJavascript\Component
    *   The added component.
    */
-  public function add(string $label) : Component {
+  public function add(string $label): Component {
     $this->pressAriaButton('Add content');
     $this->waitForElementBrowser()->select($label)->close();
     return $this->assertComponent($label);
@@ -30,7 +30,7 @@ final class LayoutCanvas extends CohesionElement {
    * @param string[] $expected_components
    *   The labels of the components that will be added by the helper.
    */
-  public function addHelper(string $label, array $expected_components = []) : void {
+  public function addHelper(string $label, array $expected_components = []): void {
     $this->pressAriaButton('Add content');
     $this->waitForElementBrowser()
       ->switchToGroup('Helpers')

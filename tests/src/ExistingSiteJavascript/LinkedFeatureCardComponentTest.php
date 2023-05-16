@@ -16,7 +16,7 @@ class LinkedFeatureCardComponentTest extends CohesionComponentTestBase {
   /**
    * Tests that the component can be added to a layout canvas.
    */
-  public function testComponent() {
+  public function testComponent(): void {
     $account = $this->createUser();
     $account->addRole('administrator');
     $account->save();
@@ -29,16 +29,16 @@ class LinkedFeatureCardComponentTest extends CohesionComponentTestBase {
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
+    /** @var \Behat\Mink\Element\TraversableElement $edit_form */
     $edit_form = $this->getLayoutCanvas()->add('Linked feature card')->edit();
     $edit_form->fillField('Card heading', 'Example component 123');
     $edit_form->fillField('Description', 'Example');
     $edit_form->fillField('Link to page or URL', 'https://www.acquia.com');
     $this->assertSession()->optionExists('Card heading element', 'Heading 3');
-    // @todo this need to be removed once ACO fixes ACO-2372.
-    /*$this->openMediaLibrary($edit_form, 'Select image');
+    $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMediaSource("Media Types");
     $this->selectMedia(0);
-    $this->insertSelectedMedia();*/
+    $this->insertSelectedMedia();
   }
 
   /**
@@ -49,7 +49,7 @@ class LinkedFeatureCardComponentTest extends CohesionComponentTestBase {
    *
    * @dataProvider providerEditAccess
    */
-  public function testEditAccess(string $role) {
+  public function testEditAccess(string $role): void {
     $account = $this->createUser();
     $account->addRole($role);
     $account->save();

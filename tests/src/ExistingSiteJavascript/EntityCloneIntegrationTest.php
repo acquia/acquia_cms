@@ -18,7 +18,7 @@ class EntityCloneIntegrationTest extends CohesionComponentTestBase {
   /**
    * Tests that a user is able to clone a node and its components.
    */
-  public function testClone() {
+  public function testClone(): void {
     $account = $this->createUser();
     $account->addRole('administrator');
     $account->save();

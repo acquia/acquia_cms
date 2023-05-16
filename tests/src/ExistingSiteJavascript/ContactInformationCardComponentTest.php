@@ -16,33 +16,42 @@ class ContactInformationCardComponentTest extends CohesionComponentTestBase {
   /**
    * Tests that the component can be added to a layout canvas.
    */
-  public function testComponent() {
+  public function testComponent(): void {
     $account = $this->createUser();
     $account->addRole('administrator');
     $account->save();
     $this->drupalLogin($account);
-
     // Create a random image that we can select in the media library when
     // editing the component.
     $this->createMedia(['bundle' => 'image']);
 
     $this->drupalGet('/node/add/page');
-
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
     // Add the component to the layout canvas.
+    /** @var \Behat\Mink\Element\TraversableElement $edit_form */
     $edit_form = $this->getLayoutCanvas()->add('Contact information card')->edit();
-    $edit_form->fillField('Card heading element', 'h3');
-    $edit_form->fillField('Card heading', 'This is the Heading');
-    $edit_form->fillField('Contact name', 'Leia Organa');
-    $edit_form->fillField('Company', 'Acquiaville');
-    $edit_form->fillField('Address', 'City Hall,200 main ST,Acquiaville');
-    $edit_form->fillField('Telephone', '9820964326');
-    $edit_form->fillField('Email', 'acquiaindia@test.com');
-
-    // @todo this need to be removed once ACO fixes ACO-2372.
-    /*$this->openMediaLibrary($edit_form, 'Select image');
+    $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMediaSource("Media Types");
+    $assertSession->waitForElementVisible('css', '.media-library-content');
     $this->selectMedia(0);
-    $this->insertSelectedMedia();*/
+    $this->insertSelectedMedia();
+    $assertSession->waitForElementVisible('css', '.ssa-modal-sidebar-editor');
+    $assertSession->waitForElementVisible('css', '.ssa-modal-sidebar-editor .sc-45mvqj-0');
+    $assertSession->waitForText('Card heading element');
+    $edit_form->fillField('Card heading element', 'h3');
+    $assertSession->waitForText('This is the Heading');
+    $edit_form->fillField('Card heading', 'Card heading');
+    $assertSession->waitForText('Contact name');
+    $edit_form->fillField('Contact name', 'Leia Organa');
+    $assertSession->waitForText('Company');
+    $edit_form->fillField('Company', 'Acquiaville');
+    $assertSession->waitForText('Address');
+    $edit_form->fillField('Address', 'City Hall,200 main ST,Acquiaville');
+    $assertSession->waitForText('Telephone');
+    $edit_form->fillField('Telephone', '9820964326');
+    $assertSession->waitForText('Email');
+    $edit_form->fillField('Email', 'acquiaindia@test.com');
   }
 
   /**
@@ -55,7 +64,7 @@ class ContactInformationCardComponentTest extends CohesionComponentTestBase {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function testEditAccess(string $role) {
+  public function testEditAccess(string $role): void {
     $account = $this->createUser();
     $account->addRole($role);
     $account->save();

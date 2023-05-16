@@ -16,7 +16,7 @@ class VerticalCardComponent extends CohesionComponentTestBase {
   /**
    * Tests that the component can be added to a layout canvas.
    */
-  public function testComponent() {
+  public function testComponent(): void {
     $account = $this->createUser();
     $account->addRole('administrator');
     $account->save();
@@ -33,7 +33,7 @@ class VerticalCardComponent extends CohesionComponentTestBase {
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMedia(0);
     $this->insertSelectedMedia();
-
+    /** @var \Behat\Mink\Element\TraversableElement $edit_form */
     $edit_form->fillField('Heading', 'Test Heading');
     $edit_form->fillField('Paragraph', 'Test Paragraph');
     $edit_form->fillField('Link text', 'Test link text');
@@ -48,6 +48,7 @@ class VerticalCardComponent extends CohesionComponentTestBase {
       'Center',
       'Right',
     ];
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assert_session */
     $assert_session = $this->assertSession();
     foreach ($styles as $style) {
       $assert_session->optionExists('Image alignment', $style, $edit_form);

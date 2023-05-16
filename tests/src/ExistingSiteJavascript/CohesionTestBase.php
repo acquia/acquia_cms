@@ -18,12 +18,22 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+    // Set a standard window size so that all javascript tests start with the
+    // same viewport.
+    $this->getDriverInstance()->resizeWindow(1920, 1200);
+  }
+
+  /**
    * Waits for a layout canvas to appear.
    *
    * @return \Drupal\Tests\acquia_cms\ExistingSiteJavascript\LayoutCanvas
    *   A wrapper object for interacting with the layout canvas.
    */
-  protected function getLayoutCanvas() : LayoutCanvas {
+  protected function getLayoutCanvas(): LayoutCanvas {
     $element = $this->waitForElementVisible('css', '.ssa-layout-canvas', $this->getSession()->getPage());
     return new LayoutCanvas($element->getXpath(), $this->getSession());
   }
@@ -37,6 +47,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    *   The label of the component.
    */
   protected function editDefinition(string $group, string $label) {
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assert_session */
     $assert_session = $this->assertSession();
 
     // Ensure that the component's group container is open.
@@ -61,10 +72,13 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    * @param string $button_text
    *   The text of the button which opens the media library.
    */
-  protected function openMediaLibrary(ElementInterface $edit_form, string $button_text) {
+  protected function openMediaLibrary(ElementInterface $edit_form, string $button_text): void {
+    /** @var \Behat\Mink\Element\TraversableElement $edit_form */
     $edit_form->pressButton($button_text);
-    $this->assertNotEmpty($this->assertSession()->waitForText('Media Library'));
-    $this->assertSession()->waitForElementVisible("css", ".media-library-content");
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    $this->assertNotEmpty($assertSession->waitForText('Media Library'));
+    $assertSession->waitForElementVisible("css", ".media-library-content");
   }
 
   /**
@@ -73,14 +87,16 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    * @param int $position
    *   The zero-based index of the media item to select.
    */
-  protected function selectMedia(int $position) : void {
-    $this->waitForElementVisible('named', ['field', "media_library_select_form[$position]"], $this->getSession()->getPage())->check();
+  protected function selectMedia(int $position): void {
+    /** @var \Behat\Mink\Element\NodeElement $waitElement */
+    $waitElement = $this->waitForElementVisible('named', ['field', "media_library_select_form[$position]"], $this->getSession()->getPage());
+    $waitElement->check();
   }
 
   /**
    * Inserts the selected media items and exits the media library's iFrame.
    */
-  protected function insertSelectedMedia() : void {
+  protected function insertSelectedMedia(): void {
     $session = $this->getSession();
     $session->getPage()->find("css", '.ui-dialog-buttonset button')->click();
     $this->assertTrue($session->wait(10000, 'typeof window.media_library_iframe === "undefined"'));
@@ -95,10 +111,14 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
   protected function selectMediaSource(string $source = "DAM"): void {
-    $field = $this->getSession()->getPage()->find('css', '.js-acquia-dam-source-field');
-    $field->selectOption($source);
-    // Wait while container is rendered based on selected Media Source.
-    $this->waitForElementVisible('css', '#media-library-view', $this->getSession()->getPage());
+    /** @var \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler */
+    $moduleHandler = $this->container->get("module_handler");
+    if ($moduleHandler->moduleExists("acquia_cms_dam")) {
+      $field = $this->getSession()->getPage()->find('css', '.js-acquia-dam-source-field');
+      $field->selectOption($source);
+      // Wait while container is rendered based on selected Media Source.
+      $this->waitForElementVisible('css', '#media-library-view', $this->getSession()->getPage());
+    }
   }
 
   /**
@@ -117,7 +137,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    * (probably due to Cohesion interference) and we need to be sure we're
    * pressing the one is that is part of the form's actions area.
    */
-  protected function pressSaveButton() : void {
+  protected function pressSaveButton(): void {
     $this->assertSession()
       ->elementExists('css', '#edit-actions')
       ->pressButton('Save');
@@ -129,7 +149,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    * @return \Drupal\Tests\acquia_cms\ExistingSiteJavascript\Search
    *   A wrapper object for interacting with Cohesion's search container.
    */
-  protected function getSearch() : Search {
+  protected function getSearch(): Search {
     $element = $this->waitForElementVisible('css', '.search-toggle-button', $this->getSession()->getPage());
     return new Search($element->getXpath(), $this->getSession());
   }
@@ -140,7 +160,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    * @return array[]
    *   Sets of arguments to pass to the test method.
    */
-  public function providerEditAccess() {
+  public function providerEditAccess(): array {
     return [
       ['site_builder'],
       ['developer'],
