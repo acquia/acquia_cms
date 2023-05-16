@@ -381,7 +381,7 @@ function acquia_cms_common_modules_installed($modules, $is_syncing) {
       ];
       $rolesToUpdate = array_merge($rolesToUpdate, array_diff($roles, $rolesToUpdate));
     }
-    if (in_array('shield', $modules)) {
+    if (in_array('shield', $modules) || in_array('honeypot', $modules)) {
       $roles = [
         'user_administrator',
       ];
