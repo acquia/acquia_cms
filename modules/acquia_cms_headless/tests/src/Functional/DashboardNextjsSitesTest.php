@@ -49,7 +49,9 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
    * {@inheritdoc}
    */
   public function testSection(): void {
-
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    $assertSession->waitForElementVisible('css', '#acquia-cms-headless-next-sites');
     // Test API Keys section exists, get API Keys section.
     $nextjsSitesFieldset = $this->getSection();
 
@@ -70,7 +72,9 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
    */
   public function testSectionAdmin(): void {
     $this->visitHeadlessDashboardAdmin();
-
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    $assertSession->waitForElementVisible('css', '#acquia-cms-headless-next-sites');
     // Test API Keys section exists, get API Keys section.
     $nextjsSitesFieldset = $this->getSection();
 
