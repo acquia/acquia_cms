@@ -4,6 +4,8 @@ on:
     branches: [ develop, qa, stage, main, release/*, feature/* , 1.5.x, 2.0.x ]
     paths-ignore:
       - README.md
+    tags:
+      - '*'
   pull_request:
 #    branches: [ develop ]
     paths-ignore:
@@ -95,7 +97,7 @@ jobs:
     strategy:
       matrix:
         orca-job:
-          - INTEGRATED_TEST_ON_PREVIOUS_MINOR
+          - INTEGRATED_TEST_ON_LATEST_LTS
         #php-version: [ "8.1" ]
         acms_job:
           - integrated_php_unit_tests
