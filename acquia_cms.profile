@@ -82,14 +82,8 @@ function acquia_cms_set_install_time() {
 function acquia_cms_install_tasks(): array {
   $tasks = [];
 
-  // Set default logo for ACMS.
-  $tasks['install_acms_set_logo'] = [];
-
   // Set default favicon for ACMS.
   $tasks['install_acms_set_favicon'] = [];
-
-  // Install default content for ACMS.
-  $tasks['install_acms_import_default_content'] = [];
 
   // Install additional acquia cms modules.
   $tasks['install_acms_additional_modules'] = [];
@@ -127,7 +121,6 @@ function acquia_cms_install_tasks(): array {
       'run' => Drupal::service('module_handler')->moduleExists('acquia_connector') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
     ];
   }
-
   return $tasks;
 }
 
@@ -192,15 +185,6 @@ function install_acms_site_studio_packages() {
     return $batchArray ?? [];
   }
   drush_backend_batch_process();
-}
-
-/**
- * Install default content as part of install task.
- */
-function install_acms_import_default_content() {
-  if (\Drupal::moduleHandler()->moduleExists('acquia_cms_image')) {
-    \Drupal::service('default_content.importer')->importContent('acquia_cms_image');
-  }
 }
 
 /**
@@ -290,22 +274,6 @@ function install_acms_additional_modules() {
     \Drupal::service('module_handler')->alter('content_model_role_presave', $roleObj);
     $roleObj->save();
   }
-}
-
-/**
- * Set the path to the logo file based on install directory.
- */
-function install_acms_set_logo() {
-  $acquia_cms_path = \Drupal::service('extension.list.profile')->getPath('acquia_cms');
-
-  Drupal::configFactory()
-    ->getEditable('system.theme.global')
-    ->set('logo', [
-      'path' => $acquia_cms_path . '/acquia_cms.png',
-      'url' => '',
-      'use_default' => FALSE,
-    ])
-    ->save(TRUE);
 }
 
 /**
