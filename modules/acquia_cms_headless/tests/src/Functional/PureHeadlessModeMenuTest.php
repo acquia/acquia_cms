@@ -93,10 +93,10 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
       // Wait for menu items to visible.
       $menuItem = $assertSession->waitForElementVisible('css', '.hover-intent.menu-item');
       $this->assertInstanceOf(NodeElement::class, $menuItem);
-      $childrenMenuItems = $menuItem->findAll("css", "ul.toolbar-menu li.level-2");
+      $childrenMenuItems = $page->findAll("css", ".claro-toolbar-menu > .hover-intent.menu-item >  ul.toolbar-menu:first-of-type > li");
       $this->assertCount(count($children), $childrenMenuItems);
       foreach ($childrenMenuItems as $key => $child) {
-        $this->assertEquals($children[$key], $child->find("css", ".toolbar-box > a")->getText());
+        $this->assertEquals($children[$key], $child->find("css", "a:first-child")->getText());
       }
     }
   }
