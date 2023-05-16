@@ -6,6 +6,8 @@
  */
 
 use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Config\InstallStorage;
+use Drupal\Core\Config\StorageInterface;
 use Drupal\user\RoleInterface;
 use Drupal\workbench_email\Entity\Template;
 
@@ -14,6 +16,7 @@ use Drupal\workbench_email\Entity\Template;
  */
 function acquia_cms_common_install($is_syncing) {
   if (!$is_syncing) {
+    _acquia_cms_common_import_configurations();
     user_role_grant_permissions('anonymous', [
       'access content',
       'view media',
@@ -83,6 +86,22 @@ function acquia_cms_common_install($is_syncing) {
       'purge_processor_cron',
       'purge_ui',
     ]);
+  }
+}
+
+/**
+ * Helper function to import the configurations for custom profile.
+ */
+function _acquia_cms_common_import_configurations() {
+  global $install_state;
+  $activeTask = $install_state['active_task'] ?? "";
+  if ($activeTask == "install_profile_modules") {
+    $optional_install_path = \Drupal::moduleHandler()->getModule('acquia_cms_common')->getPath() . "/" . InstallStorage::CONFIG_OPTIONAL_DIRECTORY;
+    $storage = new FileStorage($optional_install_path, StorageInterface::DEFAULT_COLLECTION);
+
+    /** @var \Drupal\Core\Config\ConfigInstallerInterface $config_installer */
+    $config_installer = \Drupal::service('config.installer');
+    $config_installer->installOptionalConfig($storage, ['module' => 'workflows']);
   }
 }
 
