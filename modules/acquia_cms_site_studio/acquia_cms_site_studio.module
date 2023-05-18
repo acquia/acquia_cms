@@ -192,3 +192,19 @@ function _acquia_cms_site_studio_add_permissions(EntityInterface $entity) {
     }
   }
 }
+
+/**
+ * Implements hook_modules_installed().
+ */
+function acquia_cms_site_studio_modules_installed($modules, $is_syncing) {
+  if (!$is_syncing) {
+    if (in_array('cohesion_style_guide', $modules)) {
+      user_role_grant_permissions('developer', [
+        'administer style_guide',
+      ]);
+      user_role_grant_permissions('site_builder', [
+        'administer style_guide',
+      ]);
+    }
+  }
+}
