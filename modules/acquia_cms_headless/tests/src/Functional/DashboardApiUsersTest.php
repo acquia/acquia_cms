@@ -49,11 +49,11 @@ class DashboardApiUsersTest extends HeadlessTestBase {
    * {@inheritdoc}
    */
   public function testSection(): void {
-
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
 
     // Test API Users section exists, get API Users section.
-    $usersFieldset = $assertSession->elementExists('css', $this->sectionSelector);
+    $usersFieldset = $assertSession->waitForElementVisible('css', $this->sectionSelector);
 
     // Test add API user button link has destination.
     $this->assertButtonLink($usersFieldset, '/admin/people/create?destination=/admin/headless/dashboard');

@@ -53,7 +53,7 @@ class DashboardApiKeysTest extends HeadlessTestBase {
     $assertSession = $this->assertSession();
 
     // Test API Keys section exists, get API Keys section.
-    $consumersFieldset = $assertSession->elementExists('css', $this->sectionSelector);
+    $consumersFieldset = $assertSession->waitForElementVisible('css', $this->sectionSelector);
 
     // Test create new consumer button link has destination.
     $this->assertButtonLink($consumersFieldset, '/admin/config/services/consumer/add?destination=/admin/headless/dashboard');

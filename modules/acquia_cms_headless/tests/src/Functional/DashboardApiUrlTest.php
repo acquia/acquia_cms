@@ -37,7 +37,12 @@ class DashboardApiUrlTest extends HeadlessTestBase {
    * {@inheritdoc}
    */
   public function testSection(): void {
-    $element = $this->getSection()->find("css", ".headless-dashboard-api-url");
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+
+    // Test API Keys section exists, get API Keys section.
+    $assertSession->waitForElementVisible('css', $this->sectionSelector);
+    $element = $assertSession->waitForElementVisible('css', '.headless-dashboard-api-url');
     $this->assertSame($element->getText(), 'Base API Url: ' . $this->baseUrl . "/jsonapi");
   }
 
