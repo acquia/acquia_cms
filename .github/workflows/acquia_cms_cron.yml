@@ -81,7 +81,7 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - INTEGRATED_TEST_ON_PREVIOUS_MINOR
+          - INTEGRATED_TEST_ON_LATEST_LTS
         acms_job:
           - integrated_php_unit_tests
           - integrated_existing_site_tests
@@ -111,7 +111,7 @@ jobs:
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
 
           # One of the patch is failing on Drupal Core 9.5. So remove that patch.
-          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_PREVIOUS_MINOR" ]; then
+          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
             composer config extra.patches.drupal/core '{ "3222107 - jQuery UI library order is incorrect when a large number of javascript files is loaded between two jQuery UI libraries":"https://www.drupal.org/files/issues/2022-11-11/3222107-2.patch" }' --json
           fi
 
@@ -158,7 +158,7 @@ jobs:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT_DEV
           - ISOLATED_TEST_ON_NEXT_MINOR_DEV
-          - INTEGRATED_TEST_ON_PREVIOUS_MINOR
+          - INTEGRATED_TEST_ON_LATEST_LTS
         #php-version: [ "8.1" ]
     steps:
       - uses: actions/checkout@v3
@@ -181,7 +181,7 @@ jobs:
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
 
-          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_PREVIOUS_MINOR" ]; then
+          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
             NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
             composer config extra.patches.drupal/core "${NEW_JSON}" --json
           fi
