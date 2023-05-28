@@ -78,9 +78,11 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
     $this->assertNotEmpty($assertSession->waitForText('Media Library'));
-    $assertSession->waitForElementVisible("css", ".media-library-content");
-    if ($assertSession->waitForElementVisible("css", ".media-library-content")->find("css", "#acquia-dam-user-authorization-skip")) {
-      $assertSession->waitForElementVisible("css", ".media-library-content #acquia-dam-user-authorization-skip")->click();
+    $mediaLibraryContent = $assertSession->waitForElementVisible("css", ".media-library-content");
+    if ($mediaLibraryContent) {
+      // The condition check added here, because once we click on Skip button.
+      // It no longer shows the skip button.
+      $mediaLibraryContent->find("css", "#acquia-dam-user-authorization-skip")->click();
     }
     $assertSession->waitForElementVisible("css", ".media-library-content #acquia-dam-source-menu-wrapper");
   }
@@ -102,8 +104,9 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    */
   protected function insertSelectedMedia(): void {
     $session = $this->getSession();
-    $session->getPage()->find("css", '.ui-dialog-buttonset button')->click();
+    $session->getPage()->find("css", '.media-library-select')->click();
     $this->assertTrue($session->wait(10000, 'typeof window.media_library_iframe === "undefined"'));
+    $this->getSession()->switchToIFrame();
   }
 
   /**
@@ -115,6 +118,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
   protected function selectMediaSource(string $source = "DAM"): void {
+    $this->getSession()->switchToIFrame("ssa-dialog-iframe");
     $field = $this->getSession()->getPage()->find('css', '.js-acquia-dam-source-field');
     $field->selectOption($source);
     // Wait while container is rendered based on selected Media Source.
