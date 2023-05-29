@@ -39,6 +39,7 @@ $modules = [
   "acquia_cms_toolbar" => "1.x",
   "acquia_cms_tour" => "2.x",
   "acquia_cms_video" => "1.x",
+  "sitestudio_config_management" => "1.x",
 ];
 
 

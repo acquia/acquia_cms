@@ -56,7 +56,7 @@ if [ -n "${ACMS_JOB}" ]; then
   ./vendor/bin/acms site:install --yes --uri=http://127.0.0.1:8080
   # Enable Acquia CMS DAM module.
   # @todo We should probably move this in acms site:install command.
-  drush en acquia_cms_dam --yes --uri=http://127.0.0.1:8080
+  drush en acquia_cms_dam sitestudio_config_management --yes --uri=http://127.0.0.1:8080
 fi
 
 # Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.
