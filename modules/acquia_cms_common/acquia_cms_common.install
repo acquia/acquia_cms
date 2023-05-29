@@ -15,6 +15,7 @@ use Drupal\workbench_email\Entity\Template;
  * Implements hook_install().
  */
 function acquia_cms_common_install($is_syncing) {
+  $module_handler = \Drupal::moduleHandler();
   if (!$is_syncing) {
     _acquia_cms_common_import_configurations();
     user_role_grant_permissions('anonymous', [
@@ -38,7 +39,6 @@ function acquia_cms_common_install($is_syncing) {
       \Drupal::configFactory()->getEditable('system.theme')->set('admin', "acquia_claro")->save();
     }
 
-    $module_handler = \Drupal::moduleHandler();
     // Re-write the content and media view on module install,
     // since we have moved this config in optional directory.
     $module_path = $module_handler->getModule('acquia_cms_common')->getPath();
@@ -54,7 +54,7 @@ function acquia_cms_common_install($is_syncing) {
     $existing_ignore_config = $config->get('ignored_config_entities');
     $new_ignore_config = [
       'language.entity.*',
-      'cohesion.settings',
+      'cohesion_*',
     ];
     $updated_ignore_config = array_unique(array_merge($existing_ignore_config, $new_ignore_config));
     $config->set('ignored_config_entities', $updated_ignore_config);
@@ -67,18 +67,6 @@ function acquia_cms_common_install($is_syncing) {
       $module_installer->uninstall(['page_cache']);
     }
 
-    /*
-     * We've to explicitly set purge plugin as acquia_purge, If Acquia Purge
-     * module is enabled, else this would give below error:
-     *
-     * ERROR: Purgers:There is no purger loaded which means you need a module
-     * enabled to provide a purger plugin to clear your external cache or CDN.
-     */
-    if ($module_handler->moduleExists('acquia_purge')) {
-      $config = \Drupal::service('purge.purgers');
-      $config->setPluginsEnabled(['cee22bc3fe' => 'acquia_purge']);
-    }
-
     // Install the syslog module and purge sub-modules.
     $module_installer->install([
       'syslog',
@@ -87,6 +75,22 @@ function acquia_cms_common_install($is_syncing) {
       'purge_ui',
     ]);
   }
+
+  /*
+   * We've to explicitly set purge plugin as acquia_purge, If Acquia Purge
+   * module is enabled, else this would give below error:
+   *
+   * ERROR: Purgers:There is no purger loaded which means you need a module
+   * enabled to provide a purger plugin to clear your external cache or CDN.
+   *
+   * @todo: Remove below code, if in future we decided to uninstall
+   * module: purge_processor_lateruntime.
+   */
+  if ($module_handler->moduleExists('acquia_purge')) {
+    $config = \Drupal::service('purge.purgers');
+    $config->setPluginsEnabled(['cee22bc3fe' => 'acquia_purge']);
+  }
+
 }
 
 /**

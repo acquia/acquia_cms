@@ -42,7 +42,7 @@ class DashboardApiDocumentTest extends HeadlessTestBase {
     $assertSession = $this->assertSession();
 
     // Test API Documentation section exists, get API Documentation section.
-    $element = $assertSession->elementExists('css', $this->sectionSelector);
+    $element = $assertSession->waitForElementVisible('css', $this->sectionSelector);
 
     // Test OpenAPI Resources label exist.
     $openApiResource = $element->find("css", '.headless-dashboard-openapi-resources > p > a');

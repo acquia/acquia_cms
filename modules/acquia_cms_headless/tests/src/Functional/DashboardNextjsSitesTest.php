@@ -49,7 +49,9 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
    * {@inheritdoc}
    */
   public function testSection(): void {
-
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    $assertSession->waitForElementVisible('css', $this->sectionSelector);
     // Test API Keys section exists, get API Keys section.
     $nextjsSitesFieldset = $this->getSection();
 
@@ -70,7 +72,9 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
    */
   public function testSectionAdmin(): void {
     $this->visitHeadlessDashboardAdmin();
-
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    $assertSession->waitForElementVisible('css', $this->sectionSelector);
     // Test API Keys section exists, get API Keys section.
     $nextjsSitesFieldset = $this->getSection();
 
@@ -129,10 +133,13 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
    * {@inheritdoc}
    */
   private function testAddNextjsSiteAdmin(mixed $nextjsSitesFieldset): void {
-    $this->assertSession()->elementExists('named', ['link', 'Add Next.js site'], $nextjsSitesFieldset)->click();
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    $assertSession->elementExists('named', ['link', 'Add Next.js site'], $nextjsSitesFieldset)->click();
     $page = $this->getSession()->getPage();
     $this->assertNotEmpty($page);
     $page->fillField('Label', 'headless');
+    $assertSession->waitForElementVisible('css', '#edit-label-machine-name-suffix .machine-name-value');
     $page->fillField('Base URL', 'http://localhost:3000');
     $page->fillField('Preview URL', 'http://localhost:3000');
     $page->fillField('Preview secret', 'preview_secrete');

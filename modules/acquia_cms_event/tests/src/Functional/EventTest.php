@@ -207,11 +207,11 @@ class EventTest extends ContentTypeTestBase {
         [
           '@type' => 'Event',
           'name' => 'Science fiction meetup',
-          'description' => 'A thrilling meetup',
           'image' => [
             '@type' => 'ImageObject',
             'url' => $image_url,
           ],
+          'description' => 'A thrilling meetup',
           'doorTime'  => $expected_date,
           'startDate' => $expected_date,
           'endDate' => $expected_date,

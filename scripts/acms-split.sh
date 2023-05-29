@@ -10,7 +10,7 @@ RED="\033[0;31m"
 RED_BG="\033[41m"
 WHITE="\033[1;37m"
 
-declare -a acquia_cms_modules=("acquia_cms_article" "acquia_cms_audio" "acquia_cms_common" "acquia_cms_component" "acquia_cms_dam" "acquia_cms_document" "acquia_cms_event" "acquia_cms_headless" "acquia_cms_image" "acquia_cms_page" "acquia_cms_person" "acquia_cms_place" "acquia_cms_search" "acquia_cms_site_studio" "acquia_cms_starter" "acquia_cms_toolbar" "acquia_cms_tour" "acquia_cms_video" )
+declare -a acquia_cms_modules=("acquia_cms_article" "acquia_cms_audio" "acquia_cms_common" "acquia_cms_component" "acquia_cms_dam" "acquia_cms_document" "acquia_cms_event" "acquia_cms_headless" "acquia_cms_image" "acquia_cms_page" "acquia_cms_person" "acquia_cms_place" "acquia_cms_search" "acquia_cms_site_studio" "acquia_cms_starter" "acquia_cms_toolbar" "acquia_cms_tour" "acquia_cms_video" "sitestudio_config_management")
 
 # Displays the command help text.
 display_help() {
@@ -211,38 +211,6 @@ echo -e "Script running for split on branch: ${GREEN}$CURRENT_BRANCH${NOCOLOR}"
 # Pull current branch.
 #git pull origin $CURRENT_BRANCH
 
-# Function to add Acquia git remote.
-function add_acquia_remote() {
-  if [[ ! -z ${MODULE} ]]; then
-    remote ${MODULE} git@github.com:acquia/${MODULE}.git
-    split_acquia_repo
-    exit 0
-  fi
-  # Adding remote for acquia git branches.
-  remote acquia_claro git@github.com:acquia/acquia_claro.git
-  remote acquia_cms_article git@github.com:acquia/acquia_cms_article.git
-  remote acquia_cms_audio git@github.com:acquia/acquia_cms_audio.git
-  remote acquia_cms_common git@github.com:acquia/acquia_cms_common.git
-  remote acquia_cms_component git@github.com:acquia/acquia_cms_component.git
-  remote acquia_cms_dam git@github.com:acquia/acquia_cms_dam.git
-  remote acquia_cms_document git@github.com:acquia/acquia_cms_document.git
-  remote acquia_cms_event git@github.com:acquia/acquia_cms_event.git
-  remote acquia_cms_headless git@github.com:acquia/acquia_cms_headless.git
-  remote acquia_cms_image git@github.com:acquia/acquia_cms_image.git
-  remote acquia_cms_page git@github.com:acquia/acquia_cms_page.git
-  remote acquia_cms_person git@github.com:acquia/acquia_cms_person.git
-  remote acquia_cms_place git@github.com:acquia/acquia_cms_place.git
-  remote acquia_cms_search git@github.com:acquia/acquia_cms_search.git
-  remote acquia_cms_site_studio git@github.com:acquia/acquia_cms_site_studio.git
-  remote acquia_cms_starter git@github.com:acquia/acquia_cms_starter.git
-  remote acquia_cms_toolbar git@github.com:acquia/acquia_cms_toolbar.git
-  remote acquia_cms_tour git@github.com:acquia/acquia_cms_tour.git
-  remote acquia_cms_video git@github.com:acquia/acquia_cms_video.git
-
-  # Call the split function to push the code.
-  split_acquia_repo
-}
-
 # Function to add Drupal git remote.
 function add_drupal_remote() {
   if [[ ! -z ${MODULE} ]]; then
@@ -271,36 +239,10 @@ function add_drupal_remote() {
   remote drupal_acquia_cms_toolbar git@git.drupal.org:project/acquia_cms_toolbar.git
   remote drupal_acquia_cms_tour git@git.drupal.org:project/acquia_cms_tour.git
   remote drupal_acquia_cms_video git@git.drupal.org:project/acquia_cms_video.git
+  remote sitestudio_config_management git@git.drupal.org:project/sitestudio_config_management.git
 
   # Call the split function to push the code.
   split_drupal_repo
-}
-
-function split_acquia_repo() {
-  if [[ ! -z ${MODULE} ]]; then
-    split "modules/${MODULE}" ${MODULE}
-    exit 0
-  fi
-  # Calling split method for mapping acquia remote branches to splits.
-#  split 'themes/acquia_claro' acquia_claro
-  split 'modules/acquia_cms_article' acquia_cms_article
-  split 'modules/acquia_cms_audio' acquia_cms_audio
-  split 'modules/acquia_cms_common' acquia_cms_common
-  split 'modules/acquia_cms_component' acquia_cms_component
-  split 'modules/acquia_cms_dam' acquia_cms_dam
-  split 'modules/acquia_cms_document' acquia_cms_document
-  split 'modules/acquia_cms_event' acquia_cms_event
-  split 'modules/acquia_cms_headless' acquia_cms_headless
-  split 'modules/acquia_cms_image' acquia_cms_image
-  split 'modules/acquia_cms_page' acquia_cms_page
-  split 'modules/acquia_cms_person' acquia_cms_person
-  split 'modules/acquia_cms_place' acquia_cms_place
-  split 'modules/acquia_cms_search' acquia_cms_search
-  split 'modules/acquia_cms_site_studio' acquia_cms_site_studio
-  split 'modules/acquia_cms_starter' acquia_cms_starter
-  split 'modules/acquia_cms_toolbar' acquia_cms_toolbar
-  split 'modules/acquia_cms_tour' acquia_cms_tour
-  split 'modules/acquia_cms_video' acquia_cms_video
 }
 
 function split_drupal_repo() {
@@ -328,6 +270,7 @@ function split_drupal_repo() {
   split 'modules/acquia_cms_toolbar' drupal_acquia_cms_toolbar
   split 'modules/acquia_cms_tour' drupal_acquia_cms_tour
   split 'modules/acquia_cms_video' drupal_acquia_cms_video
+  split 'modules/sitestudio_config_management' sitestudio_config_management
 }
 
 if [[ ! -z ${MODULE} ]]; then

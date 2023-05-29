@@ -111,7 +111,6 @@ class SiteStudioPermissionHelper {
           'administer helper categories',
           'administer helpers',
           'administer style helpers',
-          'administer style_guide',
           'use text format cohesion',
         ];
 

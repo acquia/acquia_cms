@@ -28,6 +28,7 @@ trait DashboardSectionTrait {
    * Returns the section element.
    */
   public function getSection(): NodeElement {
+    $this->assertNotEmpty($this->getSession()->getPage()->find("css", $this->getSectionSelector()));
     return $this->getSession()->getPage()->find("css", $this->getSectionSelector());
   }
 

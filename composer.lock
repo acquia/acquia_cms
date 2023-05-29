@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9d82e564a7a91fe57febfdfd5fa539da",
+    "content-hash": "d58310544b7b2eff16a9ef246670360b",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -83,16 +83,16 @@
         },
         {
             "name": "acquia/cohesion",
-            "version": "7.0.4",
+            "version": "7.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/cohesion.git",
-                "reference": "58ceb44edb4619177286680d3cac00cea05fc5a7"
+                "reference": "91f6b1658643496cb6549d9840969d0f2d56d0d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/cohesion/zipball/58ceb44edb4619177286680d3cac00cea05fc5a7",
-                "reference": "58ceb44edb4619177286680d3cac00cea05fc5a7",
+                "url": "https://api.github.com/repos/acquia/cohesion/zipball/91f6b1658643496cb6549d9840969d0f2d56d0d3",
+                "reference": "91f6b1658643496cb6549d9840969d0f2d56d0d3",
                 "shasum": ""
             },
             "require": {
@@ -145,9 +145,9 @@
             ],
             "description": "Site Studio",
             "support": {
-                "source": "https://github.com/acquia/cohesion/tree/7.0.4"
+                "source": "https://github.com/acquia/cohesion/tree/7.1.1"
             },
-            "time": "2023-03-21T16:17:09+00:00"
+            "time": "2023-05-19T08:05:48+00:00"
         },
         {
             "name": "acquia/cohesion-theme",
@@ -2430,7 +2430,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "63e20d8ad15b416c778143b828aaeda609ffbc89"
+                "reference": "2a45b45dacd72abc02503251fbb0999334faa097"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -3825,6 +3825,75 @@
             }
         },
         {
+            "name": "drupal/config_filter",
+            "version": "2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/config_filter.git",
+                "reference": "8.x-2.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/config_filter-8.x-2.4.zip",
+                "reference": "8.x-2.4",
+                "shasum": "dcf442f228dafd6bbac8948db1d51e3f1ca1d0c7"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9 || ^10"
+            },
+            "conflict": {
+                "drush/drush": "<10"
+            },
+            "suggest": {
+                "drupal/config_split": "Split site configuration for different environments."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.4",
+                    "datestamp": "1656936801",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Fabian Bircher",
+                    "homepage": "https://www.drupal.org/u/bircher",
+                    "email": "opensource@fabianbircher.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Nuvole Web",
+                    "homepage": "http://nuvole.org",
+                    "email": "info@nuvole.org",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "pescetti",
+                    "homepage": "https://www.drupal.org/user/436244"
+                }
+            ],
+            "description": "Config Filter allows other modules to interact with a ConfigStorage through filter plugins.",
+            "homepage": "https://www.drupal.org/project/config_filter",
+            "keywords": [
+                "Drupal",
+                "configuration",
+                "configuration management"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/config_filter",
+                "issues": "https://www.drupal.org/project/issues/config_filter",
+                "slack": "https://drupal.slack.com/archives/C45342CDD"
+            }
+        },
+        {
             "name": "drupal/config_ignore",
             "version": "3.0.0-beta2",
             "source": {
@@ -3934,6 +4003,84 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/config_rewrite",
                 "issues": "https://www.drupal.org/project/issues/config_rewrite"
+            }
+        },
+        {
+            "name": "drupal/config_split",
+            "version": "2.0.0-rc4",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/config_split.git",
+                "reference": "2.0.0-rc4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/config_split-2.0.0-rc4.zip",
+                "reference": "2.0.0-rc4",
+                "shasum": "d4c06efbadd34793b0c9b71772162057afa58111"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9 || ^10"
+            },
+            "conflict": {
+                "drush/drush": "<10"
+            },
+            "require-dev": {
+                "drupal/config_filter": "^1||^2"
+            },
+            "suggest": {
+                "drupal/chosen": "Chosen uses the Chosen jQuery plugin to make the <select> elements more user-friendly.",
+                "drupal/select2_all": "Applies the Select2 library to all select fields on the site similar to the Chosen module."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0-rc4",
+                    "datestamp": "1662235380",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^10 || ^11"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Fabian Bircher",
+                    "homepage": "https://www.drupal.org/u/bircher",
+                    "email": "opensource@fabianbircher.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Nuvole Web",
+                    "homepage": "http://nuvole.org",
+                    "email": "info@nuvole.org",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "pescetti",
+                    "homepage": "https://www.drupal.org/user/436244"
+                }
+            ],
+            "description": "Configuration filter for importing and exporting extra config",
+            "homepage": "https://www.drupal.org/project/config_split",
+            "keywords": [
+                "Drupal",
+                "configuration",
+                "configuration management"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/config_split",
+                "issues": "https://www.drupal.org/project/issues/config_split",
+                "slack": "https://drupal.slack.com/archives/C45342CDD"
             }
         },
         {
@@ -5133,14 +5280,6 @@
                     "name": "Pablo López",
                     "homepage": "https://www.drupal.org/u/plopesc",
                     "role": "Drupal 7 Maintainer"
-                },
-                {
-                    "name": "phayes",
-                    "homepage": "https://www.drupal.org/user/47098"
-                },
-                {
-                    "name": "plopesc",
-                    "homepage": "https://www.drupal.org/user/282415"
                 }
             ],
             "description": "Stores geographic and location data (points, lines, and polygons).",
@@ -7948,6 +8087,41 @@
             "support": {
                 "source": "https://cgit.drupalcode.org/simple_sitemap",
                 "issues": "https://drupal.org/project/issues/simple_sitemap"
+            }
+        },
+        {
+            "name": "drupal/sitestudio_config_management",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./modules/sitestudio_config_management",
+                "reference": "7fd3b523f5402d4002bfff98e92d268dad51d4e8"
+            },
+            "require": {
+                "acquia/cohesion": "^6.9.2 || ^7.0",
+                "drupal/config_filter": "^2.4",
+                "drupal/config_ignore": "^3.0@beta",
+                "drupal/config_split": "^2.0",
+                "php": ">=7.4"
+            },
+            "conflict": {
+                "acquia/blt-site-studio": "*"
+            },
+            "require-dev": {
+                "drush/drush": "^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Contains configuration for config filter, config ignore & config split.",
+            "transport-options": {
+                "relative": true
             }
         },
         {
@@ -11447,6 +11621,7 @@
                 "issues": "https://github.com/php-http/message-factory/issues",
                 "source": "https://github.com/php-http/message-factory/tree/1.1.0"
             },
+            "abandoned": "psr/http-factory",
             "time": "2023-04-14T14:16:17+00:00"
         },
         {
@@ -20329,7 +20504,8 @@
         "drupal/acquia_cms_site_studio": 20,
         "drupal/acquia_cms_starter": 20,
         "drupal/acquia_cms_toolbar": 20,
-        "drupal/acquia_cms_tour": 20
+        "drupal/acquia_cms_tour": 20,
+        "drupal/sitestudio_config_management": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

@@ -142,9 +142,11 @@ class HeadlessContentTest extends WebDriverTestBase {
    * Perfom assertions for tabs/menus.
    */
   protected function assertTabMenus(array $data, string $path): void {
-    $assert = $this->assertSession();
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
     $page = $this->getSession()->getPage();
-    $assert->elementExists('css', 'ul.tabs--primary ');
+    $assertSession->waitForElementVisible('css', 'ul.tabs--primary ');
+    $assertSession->elementExists('css', 'ul.tabs--primary ');
     foreach ($data as $name => $url) {
       $originalUrl = $page->findLink($name)->getAttribute('href');
       $this->assertEquals($url, $originalUrl);

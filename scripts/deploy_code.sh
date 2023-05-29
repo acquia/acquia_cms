@@ -16,7 +16,7 @@ exit_script() {
     exit 1
   fi
 }
-declare -a acms_modules=("acquia_cms_article" "acquia_cms_audio" "acquia_cms_component" "acquia_cms_document" "acquia_cms_event" "acquia_cms_headless" "acquia_cms_image" "acquia_cms_page" "acquia_cms_person" "acquia_cms_place" "acquia_cms_search" "acquia_cms_site_studio" "acquia_cms_starter" "acquia_cms_toolbar" "acquia_cms_video" )
+declare -a acms_modules=("acquia_cms_article" "acquia_cms_audio" "acquia_cms_component" "acquia_cms_document" "acquia_cms_event" "acquia_cms_headless" "acquia_cms_image" "acquia_cms_page" "acquia_cms_person" "acquia_cms_place" "acquia_cms_search" "acquia_cms_site_studio" "acquia_cms_starter" "acquia_cms_toolbar" "acquia_cms_video" "sitestudio_config_management")
 
 for acms_module in "${acms_modules[@]}"
 do

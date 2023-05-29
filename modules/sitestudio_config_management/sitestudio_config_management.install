@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the site studio config module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function sitestudio_config_management_install($is_syncing) {
+  if (!$is_syncing) {
+    // Get existing config ignore settings and append the new one.
+    $config = \Drupal::configFactory()->getEditable('config_ignore.settings');
+    $existing_ignore_config = $config->get('ignored_config_entities');
+    $new_ignore_config = [
+      'cohesion_*',
+    ];
+    $updated_ignore_config = array_unique(array_merge($existing_ignore_config, $new_ignore_config));
+    $config->set('ignored_config_entities', $updated_ignore_config);
+    $config->save(TRUE);
+  }
+  /** @var \Drupal\sitestudio_config_management\SiteStudioConfigManagement $configManagementService */
+  $configManagementService = \Drupal::service("site_studio.config_management");
+  $configManagementService->initialize();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function sitestudio_config_management_uninstall() {
+  /** @var \Drupal\sitestudio_config_management\SiteStudioConfigManagement $configManagementService */
+  $configManagementService = \Drupal::service("site_studio.config_management");
+  $configManagementService->clear();
+}

@@ -1,0 +1,11 @@
+services:
+  sitestudio_config_management.post_config_export:
+    class: \Drupal\sitestudio_config_management\Commands\PostConfigExportHook
+    arguments: [ "@cohesion_sync.commands.export", "@site_studio.config_management" ]
+    tags:
+      - { name: drush.command }
+  sitestudio_config_management.post_config_import:
+    class: \Drupal\sitestudio_config_management\Commands\PostConfigImportHook
+    arguments: [ "@site_studio.config_management" ]
+    tags:
+      - { name: drush.command }
