@@ -6,6 +6,7 @@ use Drupal\acquia_cms_common\Services\AcmsUtilityService;
 use Drupal\acquia_cms_support\Service\AcquiaCmsConfigSyncService;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -29,16 +30,29 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
   protected $acmsUtilityService;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * AcquiaCmsConfigSyncOverridden constructor.
    *
    * @param \Drupal\acquia_cms_support\Service\AcquiaCmsConfigSyncService $acms_config_sync
    *   The acquia cms config sync.
    * @param \Drupal\acquia_cms_common\Services\AcmsUtilityService $acmsUtilityService
    *   The acquia cms utility service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   *   The ModuleHandlerInterface.
    */
-  public function __construct(AcquiaCmsConfigSyncService $acms_config_sync, AcmsUtilityService $acmsUtilityService) {
+  public function __construct(
+    AcquiaCmsConfigSyncService $acms_config_sync,
+    AcmsUtilityService $acmsUtilityService,
+    ModuleHandlerInterface $moduleHandler) {
     $this->acmsConfigSync = $acms_config_sync;
     $this->acmsUtilityService = $acmsUtilityService;
+    $this->moduleHandler = $moduleHandler;
   }
 
   /**
@@ -47,7 +61,8 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('acquia_cms_support.config_service'),
-      $container->get('acquia_cms_common.utility')
+      $container->get('acquia_cms_common.utility'),
+      $container->get('module_handler')
     );
   }
 
@@ -81,20 +96,23 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
         foreach ($configChangeList as $config) {
           $parity = $config['parity'];
           $configName = $config['name'];
-          $overriddenConfig[] = [
-            'name' => $configName,
-            'module' => $module->getName(),
-            'config' => [
-              'class' => $this->getParityClass($parity),
-              'data' => ['#markup' => "<span>$parity  %</span>"],
-            ],
-            'operations' => [
-              'data' => [
-                '#type' => 'operations',
-                '#links' => $this->getViewDifference($module->getName(), $module->getType(), $storageType, $configName),
+          $moduleName = array_shift(explode('.', $configName));
+          if ($this->moduleHandler->moduleExists($moduleName)) {
+            $overriddenConfig[] = [
+              'name' => $configName,
+              'module' => $module->getName(),
+              'config' => [
+                'class' => $this->getParityClass($parity),
+                'data' => ['#markup' => "<span>$parity  %</span>"],
               ],
-            ],
-          ];
+              'operations' => [
+                'data' => [
+                  '#type' => 'operations',
+                  '#links' => $this->getViewDifference($module->getName(), $module->getType(), $storageType, $configName),
+                ],
+              ],
+            ];
+          }
         }
       }
     }
