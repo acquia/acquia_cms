@@ -210,8 +210,8 @@ class PlaceTest extends ContentTypeTestBase {
       '@graph' => [
         [
           '@type' => 'Place',
-          'telephone' => '9829838487',
           'name' => 'Living with video',
+          'telephone' => '9829838487',
           'address' => [
             '@type' => 'PostalAddress',
             'streetAddress' => '12, block b,',
