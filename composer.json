@@ -40,8 +40,10 @@
     "require-dev": {
         "acquia/coding-standards": "^1.0",
         "axelerant/drupal-quality-checker": "^1.1",
-        "drupal/core-composer-scaffold": "^9.0.0 || ^10",
-        "drupal/core-dev": "^9 || ^10",
+        "drupal/core-composer-scaffold": "10.1.x-dev@dev",
+        "drupal/core-dev": "10.1.x-dev@dev",
+        "drupal/core-project-message": "10.1.x-dev@dev",
+        "drupal/core-recommended": "10.1.x-dev@dev",
         "ergebnis/composer-normalize": "~2.15.0",
         "mglaman/drupal-check": "^1.4",
         "oomphinc/composer-installers-extender": "^1.1 || ^2",
@@ -55,6 +57,7 @@
             "cweagans/composer-patches": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "drupal/core-composer-scaffold": true,
+            "drupal/core-project-message": true,
             "ergebnis/composer-normalize": true,
             "mnsami/composer-custom-directory-installer": true,
             "oomphinc/composer-installers-extender": true,
@@ -134,6 +137,39 @@
             "drupal/decoupled_router": {
                 "3111456 - Unable to resolve path on node in other language than default": "https://www.drupal.org/files/issues/2022-11-30/decouple_router-3111456-resolve-language-issue-58.patch",
                 "3176615 - RouteNotFoundException when a jsonapi individual route is not available": "https://www.drupal.org/files/issues/2023-04-26/route-not-found-exception.patch"
+            },
+            "drupal/facets": {
+                "3358295 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/facets/-/merge_requests/141.patch"
+            },
+            "drupal/jsonapi_extras": {
+                "3357832 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/jsonapi_extras/-/merge_requests/30.patch"
+            },
+            "drupal/pathauto": {
+                "3328670 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/pathauto/-/merge_requests/40.patch"
+            },
+            "drupal/redirect": {
+                "3357833 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/redirect/-/merge_requests/47.patch"
+            },
+            "drupal/responsive_preview": {
+                "3358290 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/responsive_preview/-/merge_requests/11.patch"
+            },
+            "drupal/scheduler": {
+                "3357836 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/scheduler/-/merge_requests/85.patch"
+            },
+            "drupal/schema_metatag": {
+                "3340957 - static callables deprecation": "https://www.drupal.org/files/issues/2023-02-16/schema_metatag-fix-deprecation-warning-3340957-3.patch"
+            },
+            "drupal/schemata": {
+                "3358292 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/schemata/-/merge_requests/8.patch"
+            },
+            "drupal/search_api_solr": {
+                "3358293 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/search_api_solr/-/merge_requests/22.patch"
+            },
+            "drupal/simple_sitemap": {
+                "3359295 - Deprecation in PHP 8.0": "https://git.drupalcode.org/project/simple_sitemap/-/merge_requests/68.patch"
+            },
+            "drupal/token": {
+                "3358295 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/token/-/merge_requests/38.patch"
             },
             "mglaman/drupal-check": {
                 "Add custom rules to bypass check for buildForm": "https://github.com/mglaman/drupal-check/pull/286.patch"
