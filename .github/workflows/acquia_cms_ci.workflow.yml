@@ -127,8 +127,10 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_CURRENT
-        #php-version: [ "8.1" ]
+          - ISOLATED_TEST_ON_NEXT_MINOR_DEV
+        php-version:
+          - "8.1"
+          - "8.2"
         acms_job:
           - integrated_php_unit_tests
           - integrated_existing_site_tests
@@ -140,7 +142,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: ${{ matrix.php-version }}
           #coverage: xdebug
       - name: Setup MySQL
         run: |
@@ -345,8 +347,10 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_CURRENT
-        #php-version: [ "8.1" ]
+          - ISOLATED_TEST_ON_NEXT_MINOR_DEV
+        php-version:
+          - "8.1"
+          - "8.2"
         modules:
           - acquia_cms_article, acquia_cms_person, acquia_cms_place, acquia_cms_event
           - acquia_cms_page, acquia_cms_site_studio, sitestudio_config_management
@@ -378,7 +382,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: ${{ matrix.php-version }}
           #coverage: xdebug
       - name: Download ORCA
         run: |

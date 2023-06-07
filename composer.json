@@ -40,8 +40,10 @@
     "require-dev": {
         "acquia/coding-standards": "^1.0",
         "axelerant/drupal-quality-checker": "^1.1",
-        "drupal/core-composer-scaffold": "^9.0.0 || ^10",
-        "drupal/core-dev": "^9 || ^10",
+        "drupal/core-composer-scaffold": "10.1.x-dev@dev",
+        "drupal/core-dev": "10.1.x-dev@dev",
+        "drupal/core-project-message": "10.1.x-dev@dev",
+        "drupal/core-recommended": "10.1.x-dev@dev",
         "ergebnis/composer-normalize": "~2.15.0",
         "mglaman/drupal-check": "^1.4",
         "oomphinc/composer-installers-extender": "^1.1 || ^2",
@@ -55,6 +57,7 @@
             "cweagans/composer-patches": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "drupal/core-composer-scaffold": true,
+            "drupal/core-project-message": true,
             "ergebnis/composer-normalize": true,
             "mnsami/composer-custom-directory-installer": true,
             "oomphinc/composer-installers-extender": true,
@@ -160,10 +163,17 @@
                 "3357836 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/scheduler/-/merge_requests/85.patch"
             },
             "drupal/schema_metatag": {
-                "PHP fatal error": "https://git.drupalcode.org/project/schema_metatag/-/merge_requests/33.patch"
+                "PHP fatal error": "https://git.drupalcode.org/project/schema_metatag/-/merge_requests/33.patch",
+                "3340957 - static callables deprecation": "https://www.drupal.org/files/issues/2023-02-16/schema_metatag-fix-deprecation-warning-3340957-3.patch"
             },
             "drupal/schemata": {
                 "3358292 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/schemata/-/merge_requests/8.patch"
+            },
+            "drupal/search_api_solr": {
+                "3358293 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/search_api_solr/-/merge_requests/22.patch"
+            },
+            "drupal/simple_sitemap": {
+                "3359295 - Deprecation in PHP 8.0": "https://git.drupalcode.org/project/simple_sitemap/-/merge_requests/68.patch"
             },
             "drupal/subrequests": {
                 "3361224 - Fix Subrequests unit tests Deprecations": "https://git.drupalcode.org/project/subrequests/-/merge_requests/16.patch"
