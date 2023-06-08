@@ -70,25 +70,24 @@ function acquia_cms_common_install($is_syncing) {
     // Install the syslog module and purge sub-modules.
     $module_installer->install([
       'syslog',
-      'purge_processor_lateruntime',
       'purge_processor_cron',
       'purge_ui',
     ]);
-  }
 
-  /*
-   * We've to explicitly set purge plugin as acquia_purge, If Acquia Purge
-   * module is enabled, else this would give below error:
-   *
-   * ERROR: Purgers:There is no purger loaded which means you need a module
-   * enabled to provide a purger plugin to clear your external cache or CDN.
-   *
-   * @todo: Remove below code, if in future we decided to uninstall
-   * module: purge_processor_lateruntime.
-   */
-  if ($module_handler->moduleExists('acquia_purge')) {
-    $config = \Drupal::service('purge.purgers');
-    $config->setPluginsEnabled(['cee22bc3fe' => 'acquia_purge']);
+    /*
+     * We've to explicitly set purge plugin as acquia_purge, If Acquia Purge
+     * module is enabled, else this would give below error:
+     *
+     * ERROR: Purgers:There is no purger loaded which means you need a module
+     * enabled to provide a purger plugin to clear your external cache or CDN.
+     *
+     * @todo: Remove below code, if in future we decided to uninstall
+     * module: purge_processor_lateruntime.
+     */
+    if ($module_handler->moduleExists('acquia_purge')) {
+      $config = \Drupal::service('purge.purgers');
+      $config->setPluginsEnabled(['cee22bc3fe' => 'acquia_purge']);
+    }
   }
 
 }
