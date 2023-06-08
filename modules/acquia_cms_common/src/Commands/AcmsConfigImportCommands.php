@@ -5,6 +5,7 @@ namespace Drupal\acquia_cms_common\Commands;
 use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\CommandError;
 use Drupal\acquia_cms_common\Services\AcmsUtilityService;
+use Drupal\acquia_cms_common\Services\ConfigImporterService;
 use Drupal\acquia_cms_site_studio\Facade\CohesionFacade;
 use Drupal\config\StorageReplaceDataWrapper;
 use Drupal\Core\Config\FileStorage;
@@ -14,8 +15,6 @@ use Drupal\Core\DependencyInjection\ClassResolver;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drush\Commands\DrushCommands;
-use Drush\Drupal\Commands\config\ConfigCommands;
-use Drush\Drupal\Commands\config\ConfigImportCommands;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
@@ -51,11 +50,18 @@ final class AcmsConfigImportCommands extends DrushCommands {
   protected $configStorage;
 
   /**
-   * The standard drush config import commands.
+   * The acquia_cms_common.config.importer service object.
    *
-   * @var \Drush\Drupal\Commands\config\ConfigImportCommands
+   * @var \Drupal\acquia_cms_common\Services\ConfigImporterService
    */
-  protected $configImportCommands;
+  protected $configImporter;
+
+  /**
+   * Holds the class name for ConfigCommands.
+   *
+   * @var string
+   */
+  protected $configCommands;
 
   /**
    * The module handler.
@@ -72,7 +78,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
   protected $stringTranslation;
 
   /**
-   * The cohesion facade.
+   * Cohesion Facade class object.
    *
    * @var \Drupal\acquia_cms_site_studio\Facade\CohesionFacade
    */
@@ -118,10 +124,10 @@ final class AcmsConfigImportCommands extends DrushCommands {
   /**
    * The class constructor.
    *
+   * @param \Drupal\acquia_cms_common\Services\ConfigImporterService $configImporterService
+   *   The acquia_cms_common.config.importer service.
    * @param \Drupal\Core\Config\StorageInterface $configStorage
    *   The StorageInterface.
-   * @param \Drush\Drupal\Commands\config\ConfigImportCommands $configImportCommands
-   *   The config importer class.
    * @param \Drupal\Core\StringTranslation\TranslationInterface $stringTranslation
    *   The TranslationInterface.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
@@ -132,8 +138,8 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *   The acquia cms service.
    */
   public function __construct(
+    ConfigImporterService $configImporterService,
     StorageInterface $configStorage,
-    ConfigImportCommands $configImportCommands,
     TranslationInterface $stringTranslation,
     ModuleHandlerInterface $moduleHandler,
     ClassResolver $classResolver,
@@ -141,7 +147,6 @@ final class AcmsConfigImportCommands extends DrushCommands {
     ) {
     parent::__construct();
     $this->configStorage = $configStorage;
-    $this->configImportCommands = $configImportCommands;
     $this->stringTranslation = $stringTranslation;
     $this->moduleHandler = $moduleHandler;
     if ($this->moduleHandler->moduleExists('acquia_cms_site_studio')) {
@@ -149,6 +154,13 @@ final class AcmsConfigImportCommands extends DrushCommands {
       $this->allowedScope = ['config', 'site-studio', 'all'];
     }
     $this->acmsUtilityService = $acmsUtilityService;
+    $this->configImporter = $configImporterService;
+    if (class_exists("Drush\Drupal\Commands\config\ConfigCommands")) {
+      $this->configCommands = "Drush\Drupal\Commands\config\ConfigCommands";
+    }
+    else {
+      $this->configCommands = "Drush\Commands\config\ConfigCommands";
+    }
   }
 
   /**
@@ -362,7 +374,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
 
     // Get optional configuration list for specified module.
     if (file_exists($source_optional)) {
-      $source_storage_dir = ConfigCommands::getDirectory($source_optional);
+      $source_storage_dir = $this->configCommands::getDirectory($source_optional);
       $source_storage = new FileStorage($source_storage_dir);
       foreach ($source_storage->listAll() as $name) {
         $config_files[$name] = $source_storage->read($name);
@@ -374,7 +386,7 @@ final class AcmsConfigImportCommands extends DrushCommands {
 
     // Now get default configurations.
     if (file_exists($source_install)) {
-      $source_storage_dir = ConfigCommands::getDirectory($source_install);
+      $source_storage_dir = $this->configCommands::getDirectory($source_install);
       $source_storage = new FileStorage($source_storage_dir);
       foreach ($source_storage->listAll() as $name) {
         $config_files[$name] = $source_storage->read($name);
@@ -455,13 +467,13 @@ final class AcmsConfigImportCommands extends DrushCommands {
     foreach ($storage_comparer->getAllCollectionNames() as $collection) {
       $change_list[$collection] = $storage_comparer->getChangelist(NULL, $collection);
     }
-    $table = ConfigCommands::configChangesTable($change_list, $this->output());
+    $table = $this->configCommands::configChangesTable($change_list, $this->output());
     $table->render();
     $this->io()->warning("Any overridden configurations will be reverted back with the one listed above which may result in unexpected behaviour.");
     if (!$this->io()->confirm(dt('Import these configuration changes?'))) {
       throw new UserAbortException();
     }
-    $this->configImportCommands->doImport($storage_comparer);
+    $this->configImporter->doImport($storage_comparer, $this->logger());
   }
 
   /**
