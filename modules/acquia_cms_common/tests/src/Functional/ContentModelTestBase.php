@@ -125,12 +125,33 @@ abstract class ContentModelTestBase extends BrowserTestBase {
     $element = $this->assertSession()->elementExists('css', 'script[type="application/ld+json"]');
     $actual_data = Json::decode($element->getText());
     $this->assertIsArray($actual_data);
-    // We were using assertArraySubset(), but it's been deprecated in
-    // PHPUnit 9. See: https://github.com/sebastianbergmann/phpunit/issues/3494
-    foreach ($expected_data as $key => $value) {
-      $this->assertArrayHasKey($key, $actual_data);
-      $this->assertSame($value, $actual_data[$key]);
+    // Sort the actual & expected schema data as the order of keys are not
+    // important. We just need to make sure both contains the exact same number
+    // of keys with same values.
+    [$actual_data, $expected_data] = $this->sortSchemaData($actual_data, $expected_data);
+    $this->assertSame($actual_data, $expected_data);
+  }
+
+  /**
+   * Sorts the given schema data array.
+   *
+   * @param array $actual
+   *   An actual array to sort.
+   * @param array $expected_data
+   *   An expected array to sort.
+   */
+  private function sortSchemaData(array &$actual, array &$expected_data): array {
+    ksort($actual);
+    ksort($expected_data);
+    $this->assertArrayHasKey("@graph", $actual);
+    $this->assertArrayHasKey("@graph", $expected_data);
+    foreach ($actual['@graph'] as &$data) {
+      ksort($data);
     }
+    foreach ($expected_data['@graph'] as &$data) {
+      ksort($data);
+    }
+    return [$actual, $expected_data];
   }
 
   /**
