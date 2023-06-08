@@ -96,8 +96,7 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
         foreach ($configChangeList as $config) {
           $parity = $config['parity'];
           $configName = $config['name'];
-          $moduleName = array_shift(explode('.', $configName));
-          if ($this->moduleHandler->moduleExists($moduleName)) {
+          if ($this->moduleHandler->moduleExists($module->getName()) && $parity > 0) {
             $overriddenConfig[] = [
               'name' => $configName,
               'module' => $module->getName(),
