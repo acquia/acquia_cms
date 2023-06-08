@@ -30,3 +30,18 @@ services:
     arguments: ['@config.factory', '@cache.config', '@request_stack']
     tags:
       - { name: 'event_subscriber' }
+
+  acquia_cms_common.config.importer:
+    class: 'Drupal\acquia_cms_common\Services\ConfigImporterService'
+    arguments:
+      - '@config.manager'
+      - '@config.storage'
+      - '@cache.config'
+      - '@module_handler'
+      - '@event_dispatcher'
+      - '@lock'
+      - '@config.typed'
+      - '@module_installer'
+      - '@theme_handler'
+      - '@string_translation'
+      - '@extension.list.module'

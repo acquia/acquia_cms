@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d58310544b7b2eff16a9ef246670360b",
+    "content-hash": "b40681fcba482c8755485a585246dd4a",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2430,7 +2430,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "2a45b45dacd72abc02503251fbb0999334faa097"
+                "reference": "63e20d8ad15b416c778143b828aaeda609ffbc89"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2867,7 +2867,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_site_studio",
-                "reference": "87dce59d6b08c85ade271b8147c1e6de5fe0c312"
+                "reference": "dffe4b614b6d536a9f8290e9eb365620204e281e"
             },
             "require": {
                 "acquia/cohesion": "^6.9.2 || ^7.0",
@@ -2901,7 +2901,8 @@
                 "enable-patching": true,
                 "patches": {
                     "acquia/cohesion": {
-                        "3340269 - Site Studio: Allow optional packages to import": "https://www.drupal.org/files/issues/2023-03-16/3340269-site-studio-allow-optional-packages-6.patch"
+                        "3340269 - Site Studio: Allow optional packages to import": "https://www.drupal.org/files/issues/2023-03-16/3340269-site-studio-allow-optional-packages-6.patch",
+                        "3340269 - Supports Drush 12. If using Drush 10 or Drush 11 & this patch is failing, then ignore this patch": "https://www.drupal.org/files/issues/2023-06-08/3340269-support-drush-12.patch"
                     }
                 }
             },
@@ -8095,7 +8096,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/sitestudio_config_management",
-                "reference": "7fd3b523f5402d4002bfff98e92d268dad51d4e8"
+                "reference": "7c9611f3520b1437e09bb860fe622b71fc1cf394"
             },
             "require": {
                 "acquia/cohesion": "^6.9.2 || ^7.0",
@@ -8108,7 +8109,7 @@
                 "acquia/blt-site-studio": "*"
             },
             "require-dev": {
-                "drush/drush": "^10 || ^11"
+                "drush/drush": "^10 || ^11 || ^12"
             },
             "type": "drupal-module",
             "extra": {

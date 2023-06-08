@@ -34,7 +34,7 @@
         "drupal/reroute_email": "^2.2",
         "drupal/shield": "^1.7",
         "drupal/sitestudio_config_management": "dev-develop",
-        "drush/drush": "^10 || ^11",
+        "drush/drush": "^10 || ^11 || ^12",
         "mnsami/composer-custom-directory-installer": "^2.0"
     },
     "require-dev": {
@@ -323,10 +323,6 @@
                 }
             }
         },
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        },
         "sitestudio_config_management": {
             "type": "path",
             "url": "./modules/sitestudio_config_management",
@@ -335,6 +331,10 @@
                     "drupal/sitestudio_config_management": "dev-develop"
                 }
             }
+        },
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
         }
     },
     "minimum-stability": "dev",
