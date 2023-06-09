@@ -22,10 +22,6 @@ class AudioComponentTest extends CohesionComponentTestBase {
     $account->save();
     $this->drupalLogin($account);
 
-    // Create a random image that we can select in the media library when
-    // editing the component.
-    $this->createMedia(['bundle' => 'image']);
-
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
