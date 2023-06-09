@@ -3,6 +3,7 @@
 namespace Drupal\acquia_cms_common\EventSubscriber;
 
 use Drupal\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
@@ -76,7 +77,7 @@ class HttpsRedirectSubscriber implements EventSubscriberInterface {
     if (!preg_match($hostPattern, $host) && $https_status) {
       $request = $event->getRequest();
       // Do not redirect from HTTPS requests.
-      if ($request->isSecure() || $request->server->get('HTTP_X_FORWARDED_PROTO') == 'https') {
+      if ($request->server->get('HTTP_X_FORWARDED_PROTO') == 'https') {
         return;
       }
       $url = Url::fromUri("internal:{$request->getPathInfo()}");
@@ -88,6 +89,15 @@ class HttpsRedirectSubscriber implements EventSubscriberInterface {
       $status = $this->getRedirectStatus($event);
       $url = $this->secureUrl($url->toString());
       $response = new TrustedRedirectResponse($url, $status);
+      $build = [
+        '#cache' => [
+          'max-age'  => 0,
+          'contexts' => ['url'],
+          'tags'     => ['config:acquia_cms_common.settings'],
+        ],
+      ];
+      $cache_meta = CacheableMetadata::createFromRenderArray($build);
+      $response->addCacheableDependency($cache_meta);
       $event->setResponse($response);
     }
   }
