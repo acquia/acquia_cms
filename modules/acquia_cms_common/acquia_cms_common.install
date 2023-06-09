@@ -254,3 +254,15 @@ function acquia_cms_common_update_8006() {
     }
   }
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Uninstall Late runtime processor module.
+ */
+function acquia_cms_common_update_8007() {
+  if (\Drupal::moduleHandler()->moduleExists('purge_processor_lateruntime')) {
+    // Uninstall purge_processor_lateruntime module.
+    \Drupal::service('module_installer')->uninstall(['purge_processor_lateruntime']);
+  }
+}
