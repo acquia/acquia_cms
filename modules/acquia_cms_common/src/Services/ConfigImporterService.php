@@ -16,6 +16,7 @@ use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drush\Log\DrushLoggerManager;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * The ConfigImporter class to import drupal configurations.
@@ -53,7 +54,7 @@ final class ConfigImporterService {
   /**
    * The event_dispatcher service object.
    *
-   * @var mixed
+   * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
    */
   protected $eventDispatcher;
 
@@ -110,7 +111,7 @@ final class ConfigImporterService {
    *   Holds cache.config service object.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Holds module_handler service object.
-   * @param mixed $eventDispatcher
+   * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher
    *   Holds event_dispatcher service object.
    * @param \Drupal\Core\Lock\LockBackendInterface $lock
    *   Holds lock service object.
@@ -130,8 +131,7 @@ final class ConfigImporterService {
     StorageInterface $configStorage,
     CacheBackendInterface $configCache,
     ModuleHandlerInterface $moduleHandler,
-    // phpcs:ignore Omit type hint as it changed in https://www.drupal.org/project/drupal/issues/3161983
-    mixed $eventDispatcher,
+    EventDispatcherInterface $eventDispatcher,
     LockBackendInterface $lock,
     TypedConfigManagerInterface $configTyped,
     ModuleInstallerInterface $moduleInstaller,
