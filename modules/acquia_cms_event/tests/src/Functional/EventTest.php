@@ -232,7 +232,9 @@ class EventTest extends ContentTypeTestBase {
     $this->assertMetaTag('twitter:card', 'summary_large_image');
     $this->assertMetaTag('twitter:title', 'Science fiction meetup');
     $this->assertMetaTag('twitter:description', 'A thrilling meetup');
-    $this->assertMetaTag('twitter:url', $session->getCurrentUrl());
+    // In the release of 2.x of metatag 'twitter:url' is removed.
+    // @see https://www.drupal.org/node/3329072
+    // $this->assertMetaTag('twitter:url', $session->getCurrentUrl());
     $this->assertMetaTag('twitter:image', $image_url);
     // Assert that the techno tag was created dynamically in the correct
     // vocabulary.

@@ -128,8 +128,12 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/checklistapi": {
+                "3350474 - PHP 8.2 Dynamic property creation": "https://git.drupalcode.org/project/checklistapi/-/merge_requests/9.patch"
+            },
             "drupal/core": {
-                "3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112": "https://git.drupalcode.org/project/drupal/-/merge_requests/3142.patch"
+                "3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112": "https://git.drupalcode.org/project/drupal/-/merge_requests/3142.patch",
+                "PHP fatal error fix": "https://git.drupalcode.org/project/drupal/-/merge_requests/4105.patch"
             },
             "drupal/decoupled_router": {
                 "3111456 - Unable to resolve path on node in other language than default": "https://www.drupal.org/files/issues/2022-11-30/decouple_router-3111456-resolve-language-issue-58.patch",
@@ -140,6 +144,9 @@
             },
             "drupal/jsonapi_extras": {
                 "3357832 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/jsonapi_extras/-/merge_requests/30.patch"
+            },
+            "drupal/node_revision_delete": {
+                "3361146 - PHP 8.2 deprecation": "https://git.drupalcode.org/project/node_revision_delete/-/merge_requests/19.patch"
             },
             "drupal/pathauto": {
                 "3328670 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/pathauto/-/merge_requests/40.patch"
@@ -154,19 +161,13 @@
                 "3357836 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/scheduler/-/merge_requests/85.patch"
             },
             "drupal/schema_metatag": {
-                "3340957 - static callables deprecation": "https://www.drupal.org/files/issues/2023-02-16/schema_metatag-fix-deprecation-warning-3340957-3.patch"
+                "PHP fatal error": "https://git.drupalcode.org/project/schema_metatag/-/merge_requests/33.patch"
             },
             "drupal/schemata": {
                 "3358292 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/schemata/-/merge_requests/8.patch"
             },
-            "drupal/search_api_solr": {
-                "3358293 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/search_api_solr/-/merge_requests/22.patch"
-            },
-            "drupal/simple_sitemap": {
-                "3359295 - Deprecation in PHP 8.0": "https://git.drupalcode.org/project/simple_sitemap/-/merge_requests/68.patch"
-            },
-            "drupal/smart_trim": {
-                "3342481 - Deprecated function: mb_convert_encoding()": "https://git.drupalcode.org/project/smart_trim/-/merge_requests/43.patch"
+            "drupal/subrequests": {
+                "3361224 - Fix Subrequests unit tests Deprecations": "https://git.drupalcode.org/project/subrequests/-/merge_requests/16.patch"
             },
             "drupal/token": {
                 "3358295 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/token/-/merge_requests/38.patch"
