@@ -53,7 +53,12 @@ curl "https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js" -o ${OR
 
 # Install acquia_cms only for the Integrated & ExistingSite PHPUnit tests.
 if [ -n "${ACMS_JOB}" ]; then
-  ./vendor/bin/acms site:install --yes --uri=http://127.0.0.1:8080
+  #./vendor/bin/acms site:install --yes --uri=http://127.0.0.1:8080
+  # @todo Remove below code and uncomment above code post issues fixed
+  # in acquia/acquia-cms-starterkit.
+  drush site:install minimal --yes
+  drush en acquia_cms_article acquia_cms_document acquia_cms_page acquia_cms_event acquia_cms_site_studio acquia_cms_search acquia_cms_tour acquia_cms_toolbar acquia_cms_video --yes --uri=http://127.0.0.1:8080
+
   # Enable Acquia CMS DAM module.
   # @todo We should probably move this in acms site:install command.
   drush en acquia_cms_audio acquia_cms_dam sitestudio_config_management --yes --uri=http://127.0.0.1:8080
