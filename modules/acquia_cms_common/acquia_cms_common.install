@@ -67,28 +67,26 @@ function acquia_cms_common_install($is_syncing) {
       $module_installer->uninstall(['page_cache']);
     }
 
+    /*
+     * We've to explicitly set purge plugin as acquia_purge, If Acquia Purge
+     * module is enabled, else this would give below error:
+     *
+     * ERROR: Purgers:There is no purger loaded which means you need a module
+     * enabled to provide a purger plugin to clear your external cache or CDN.
+     *
+     */
+    if ($module_handler->moduleExists('acquia_purge')) {
+      $config = \Drupal::service('purge.purgers');
+      $config->setPluginsEnabled(['cee22bc3fe' => 'acquia_purge']);
+    }
+
     // Install the syslog module and purge sub-modules.
     $module_installer->install([
       'syslog',
-      'purge_processor_lateruntime',
       'purge_processor_cron',
       'purge_ui',
     ]);
-  }
 
-  /*
-   * We've to explicitly set purge plugin as acquia_purge, If Acquia Purge
-   * module is enabled, else this would give below error:
-   *
-   * ERROR: Purgers:There is no purger loaded which means you need a module
-   * enabled to provide a purger plugin to clear your external cache or CDN.
-   *
-   * @todo: Remove below code, if in future we decided to uninstall
-   * module: purge_processor_lateruntime.
-   */
-  if ($module_handler->moduleExists('acquia_purge')) {
-    $config = \Drupal::service('purge.purgers');
-    $config->setPluginsEnabled(['cee22bc3fe' => 'acquia_purge']);
   }
 
 }
@@ -254,5 +252,17 @@ function acquia_cms_common_update_8006() {
       $config->set('ignored_config_entities', $updated_ignored_configs)
         ->save(TRUE);
     }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Uninstall Late runtime processor module.
+ */
+function acquia_cms_common_update_8007() {
+  if (\Drupal::moduleHandler()->moduleExists('purge_processor_lateruntime')) {
+    // Uninstall purge_processor_lateruntime module.
+    \Drupal::service('module_installer')->uninstall(['purge_processor_lateruntime']);
   }
 }

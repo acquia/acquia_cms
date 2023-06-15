@@ -3,6 +3,7 @@
 namespace Drupal\acquia_cms_common\EventSubscriber;
 
 use Drupal\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
@@ -73,24 +74,31 @@ class HttpsRedirectSubscriber implements EventSubscriberInterface {
     // Get the config value from cache if available.
     $https_status = $this->config->get('acquia_cms_common.settings')->get('acquia_cms_https');
     // Allow only if the host is not a localhost.
-    if (!preg_match($hostPattern, $host)) {
-      if ($https_status) {
-        $request = $event->getRequest();
-        // Do not redirect from HTTPS requests.
-        if ($request->isSecure()) {
-          return;
-        }
-        $url = Url::fromUri("internal:{$request->getPathInfo()}");
-        $url->setOption('absolute', TRUE)
-          ->setOption('external', FALSE)
-          ->setOption('https', TRUE)
-          ->setOption('query', $request->query->all());
-
-        $status = $this->getRedirectStatus($event);
-        $url = $this->secureUrl($url->toString());
-        $response = new TrustedRedirectResponse($url, $status);
-        $event->setResponse($response);
+    if (!preg_match($hostPattern, $host) && $https_status) {
+      $request = $event->getRequest();
+      // Do not redirect from HTTPS requests.
+      if ($request->server->get('HTTP_X_FORWARDED_PROTO') == 'https') {
+        return;
       }
+      $url = Url::fromUri("internal:{$request->getPathInfo()}");
+      $url->setOption('absolute', TRUE)
+        ->setOption('external', FALSE)
+        ->setOption('https', TRUE)
+        ->setOption('query', $request->query->all());
+
+      $status = $this->getRedirectStatus($event);
+      $url = $this->secureUrl($url->toString());
+      $response = new TrustedRedirectResponse($url, $status);
+      $build = [
+        '#cache' => [
+          'max-age'  => 0,
+          'contexts' => ['url'],
+          'tags'     => ['config:acquia_cms_common.settings'],
+        ],
+      ];
+      $cache_meta = CacheableMetadata::createFromRenderArray($build);
+      $response->addCacheableDependency($cache_meta);
+      $event->setResponse($response);
     }
   }
 

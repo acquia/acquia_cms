@@ -285,8 +285,7 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
 
       return $result;
     }
-
-    return $this->output()->writeln('Starter-kit is not installed yet.');
+    $this->output()->writeln('Starter-kit is not installed yet.');
   }
 
 }
