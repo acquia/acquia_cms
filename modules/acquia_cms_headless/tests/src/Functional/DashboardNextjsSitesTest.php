@@ -214,6 +214,7 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
     $nextjsSitesFieldset->findButton('List additional actions')->click();
+    $assertSession->waitForElementVisible('css', 'form.acquia-cms-headless-next-sites .dropbutton-wrapper .dropbutton .clone');
     $assertSession->elementExists('named', ['link', 'Clone'], $nextjsSitesFieldset)->click();
     $nextjsSitesModal = $assertSession->waitForElementVisible('css', '.ui-dialog');
     $this->assertNotEmpty($nextjsSitesModal);
