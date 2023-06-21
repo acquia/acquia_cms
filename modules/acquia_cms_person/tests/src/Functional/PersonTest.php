@@ -197,7 +197,9 @@ class PersonTest extends ContentTypeTestBase {
     $this->assertMetaTag('twitter:card', 'summary_large_image');
     $this->assertMetaTag('twitter:title', 'Hank Aaron');
     $this->assertMetaTag('twitter:description', 'This is an example of bio');
-    $this->assertMetaTag('twitter:url', $session->getCurrentUrl());
+    // In the release of 2.x of metatag 'twitter:url' is removed.
+    // @see https://www.drupal.org/node/3329072
+    // $this->assertMetaTag('twitter:url', $session->getCurrentUrl());
     $this->assertMetaTag('twitter:image', $image_url);
 
     // Assert that the Baseball tag was created dynamically in the correct

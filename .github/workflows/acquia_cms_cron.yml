@@ -43,7 +43,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.1
+          php-version: 8.2
           #coverage: xdebug
       - name: Download ORCA
         run: |
@@ -94,7 +94,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.1
+          php-version: 8.2
       - name: Setup MySQL
         run: |
           sudo /etc/init.d/mysql start
@@ -168,7 +168,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.1
+          php-version: 8.2
           #coverage: xdebug
       - name: Download ORCA
         run: |
@@ -240,7 +240,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.1
+          php-version: 8.2
       - name: Setup MySQL
         run: |
           sudo /etc/init.d/mysql start

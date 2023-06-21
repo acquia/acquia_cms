@@ -55,7 +55,7 @@ class HeadlessModeEnablementTest extends HeadlessTestBase {
       $acmsWelcomeModal = $assertSession->waitForElementVisible('css', '.acms-welcome-modal');
       $btnPanes = $assertSession->elementExists('css', '.ui-dialog-buttonpane', $acmsWelcomeModal);
       $assertSession->buttonExists('Setup Manually', $btnPanes)->press();
-
+      $assertSession->waitForElementVisible('css', '.toolbar-icon-acquia-cms-tour-tour');
       $acmsWizardLi = $assertSession->elementExists('css', '.toolbar-icon-acquia-cms-tour-tour')->getParent();
       $this->assertNotEmpty($acmsWizardLi);
       $acmsWizardLi->mouseOver();
