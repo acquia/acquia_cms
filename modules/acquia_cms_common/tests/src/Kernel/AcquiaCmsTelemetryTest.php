@@ -45,6 +45,9 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
     $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertFalse($shouldSendData, "Should not send telemetry data on Non Acquia environment.");
 
+    // This is required, otherwise test will fail on CI environment.
+    putenv("CI=");
+
     // Fake Acquia environment and then validate.
     putenv("AH_SITE_ENVIRONMENT=dev");
     $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
@@ -55,7 +58,7 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
     $this->assertFalse($shouldSendData, "Should not send telemetry data on CI environment.");
 
     // Remove `CI` environment variable, or we can set it to false.
-    putenv("CI");
+    putenv("CI=");
 
     $state_service->set("acquia_connector.telemetry.opted", FALSE);
     $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
