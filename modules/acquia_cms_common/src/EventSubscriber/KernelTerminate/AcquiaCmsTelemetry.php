@@ -102,17 +102,10 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    * @throws \Exception
    */
   public function onTerminateResponse(KernelEvent $event): void {
-    $isCI = (bool) getenv("CI");
-    if (!$isCI) {
-      $telemetryOpted = $this->state->get('acquia_connector.telemetry.opted', TRUE);
-      $isAcquiaTelemetryDataSent = $this->state->get('acquia_cms_telemetry.telemetry', FALSE);
-      if ($telemetryOpted && !$isAcquiaTelemetryDataSent) {
-        $event_properties = $this->getAcquiaCmsTelemetryData();
-        if ($event_properties) {
-          $this->sendTelemetry("ACMS Telemetry data", $event_properties);
-          $this->state->set('acquia_cms_telemetry.telemetry', TRUE);
-        }
-      }
+    if ($this->shouldSendTelemetryData()) {
+      $event_properties = $this->getAcquiaCmsTelemetryData();
+      $this->sendTelemetry("ACMS Telemetry data", $event_properties);
+      $this->state->set('acquia_cms_telemetry.status', TRUE);
     }
   }
 
@@ -218,30 +211,27 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    * Get Acquia CMS telemetry data.
    */
   private function getAcquiaCmsTelemetryData(): array {
-    if (AcquiaDrupalEnvironmentDetector::isAhEnv()) {
-      $appUuid = AcquiaDrupalEnvironmentDetector::getAhApplicationUuid();
-      $siteGroup = AcquiaDrupalEnvironmentDetector::getAhGroup();
-      $env = AcquiaDrupalEnvironmentDetector::getAhEnv();
-      $starterKitName = $this->state->get('acquia_cms.starter_kit', "existing_site_acquia_cms");
-      $starterKitUi = $this->state->get('starter_kit_wizard_completed', FALSE);
-      $installed_modules = $this->moduleList->getAllInstalledInfo();
+    $appUuid = AcquiaDrupalEnvironmentDetector::getAhApplicationUuid();
+    $siteGroup = AcquiaDrupalEnvironmentDetector::getAhGroup();
+    $env = AcquiaDrupalEnvironmentDetector::getAhEnv();
+    $starterKitName = $this->state->get('acquia_cms.starter_kit', "existing_site_acquia_cms");
+    $starterKitUi = $this->state->get('starter_kit_wizard_completed', FALSE);
+    $installed_modules = $this->moduleList->getAllInstalledInfo();
 
-      $telemetryData = [
-        'acquia_cms' => [
-          'application_uuid' => $appUuid,
-          'application_name' => $siteGroup,
-          'environment_name' => $env,
-          'starter_kit_name' => $starterKitName,
-          'starter_kit_ui' => $starterKitUi,
-          'site_studio_status' => $this->siteStudioStatus(),
-        ],
-      ];
-      if (isset($installed_modules['acquia_cms'])) {
-        $telemetryData['acquia_cms']['version'] = $installed_modules['acquia_cms']['version'];
-      }
-      return $telemetryData;
+    $telemetryData = [
+      'acquia_cms' => [
+        'application_uuid' => $appUuid,
+        'application_name' => $siteGroup,
+        'environment_name' => $env,
+        'starter_kit_name' => $starterKitName,
+        'starter_kit_ui' => $starterKitUi,
+        'site_studio_status' => $this->siteStudioStatus(),
+      ],
+    ];
+    if (isset($installed_modules['acquia_cms'])) {
+      $telemetryData['acquia_cms']['version'] = $installed_modules['acquia_cms']['version'];
     }
-    return [];
+    return $telemetryData;
   }
 
   /**
@@ -251,6 +241,24 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
     if (\Drupal::getContainer()->has('cohesion.utils') &&
       \Drupal::service('cohesion.utils')->usedx8Status()) {
       return TRUE;
+    }
+    return FALSE;
+  }
+
+  /**
+   * Decides if telemetry data should send or not.
+   */
+  private function shouldSendTelemetryData(): bool {
+    $isCI = (bool) getenv("CI");
+    if ($isCI) {
+      return FALSE;
+    }
+    if (AcquiaDrupalEnvironmentDetector::isAhEnv()) {
+      $telemetryOpted = $this->state->get('acquia_connector.telemetry.opted', TRUE);
+      $isAcquiaTelemetryDataSent = $this->state->get('acquia_cms_telemetry.status', FALSE);
+      if ($telemetryOpted && !$isAcquiaTelemetryDataSent) {
+        return TRUE;
+      }
     }
     return FALSE;
   }
