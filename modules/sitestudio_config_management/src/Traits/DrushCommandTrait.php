@@ -3,6 +3,7 @@
 namespace Drupal\sitestudio_config_management\Traits;
 
 use Drush\Drush;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
@@ -97,6 +98,6 @@ trait DrushCommandTrait {
   /**
    * Returns the Drupal or Drush logger object.
    */
-  abstract protected function logger(): mixed;
+  abstract protected function logger(): ?LoggerInterface;
 
 }

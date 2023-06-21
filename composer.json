@@ -128,12 +128,48 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/checklistapi": {
+                "3350474 - PHP 8.2 Dynamic property creation": "https://git.drupalcode.org/project/checklistapi/-/merge_requests/9.patch"
+            },
             "drupal/core": {
                 "3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112": "https://git.drupalcode.org/project/drupal/-/merge_requests/3142.patch"
             },
             "drupal/decoupled_router": {
                 "3111456 - Unable to resolve path on node in other language than default": "https://www.drupal.org/files/issues/2022-11-30/decouple_router-3111456-resolve-language-issue-58.patch",
                 "3176615 - RouteNotFoundException when a jsonapi individual route is not available": "https://www.drupal.org/files/issues/2023-04-26/route-not-found-exception.patch"
+            },
+            "drupal/facets": {
+                "3358295 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/facets/-/merge_requests/141.patch"
+            },
+            "drupal/jsonapi_extras": {
+                "3357832 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/jsonapi_extras/-/merge_requests/30.patch"
+            },
+            "drupal/node_revision_delete": {
+                "3361146 - PHP 8.2 deprecation": "https://git.drupalcode.org/project/node_revision_delete/-/merge_requests/19.patch"
+            },
+            "drupal/pathauto": {
+                "3328670 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/pathauto/-/merge_requests/40.patch"
+            },
+            "drupal/redirect": {
+                "3357833 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/redirect/-/merge_requests/47.patch"
+            },
+            "drupal/responsive_preview": {
+                "3358290 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/responsive_preview/-/merge_requests/11.patch"
+            },
+            "drupal/scheduler": {
+                "3357836 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/scheduler/-/merge_requests/85.patch"
+            },
+            "drupal/schema_metatag": {
+                "PHP fatal error": "https://git.drupalcode.org/project/schema_metatag/-/merge_requests/33.patch"
+            },
+            "drupal/schemata": {
+                "3358292 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/schemata/-/merge_requests/8.patch"
+            },
+            "drupal/subrequests": {
+                "3361224 - Fix Subrequests unit tests Deprecations": "https://git.drupalcode.org/project/subrequests/-/merge_requests/16.patch"
+            },
+            "drupal/token": {
+                "3358295 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/token/-/merge_requests/38.patch"
             },
             "mglaman/drupal-check": {
                 "Add custom rules to bypass check for buildForm": "https://github.com/mglaman/drupal-check/pull/286.patch"
