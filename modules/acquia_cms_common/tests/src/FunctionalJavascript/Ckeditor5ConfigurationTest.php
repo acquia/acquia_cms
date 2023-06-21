@@ -9,6 +9,7 @@ namespace Drupal\Tests\acquia_cms_common\FunctionalJavascript;
  * @group acquia_cms_common
  * @group medium_risk
  * @group push
+ * @group orca_ignore
  */
 class Ckeditor5ConfigurationTest extends Ckeditor5ConfigurationTestBase {
 

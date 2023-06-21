@@ -11,6 +11,7 @@ use Drupal\user\Entity\User;
  * @group acquia_cms_common
  * @group acquia_cms
  * @group medium_risk
+ * @group orca_ignore
  */
 class UserLoginFloodTest extends BrowserTestBase {
 

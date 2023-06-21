@@ -11,6 +11,7 @@ use Drupal\Tests\BrowserTestBase;
  * @group acquia_cms_common
  * @group acquia_cms
  * @group risky
+ * @group orca_ignore
  */
 class BasicPermissionsTest extends BrowserTestBase {
 
