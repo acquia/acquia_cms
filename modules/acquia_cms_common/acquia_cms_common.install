@@ -266,3 +266,26 @@ function acquia_cms_common_update_8007() {
     \Drupal::service('module_installer')->uninstall(['purge_processor_lateruntime']);
   }
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update config_ignore configuration.
+ */
+function acquia_cms_common_update_8008() {
+  $config = \Drupal::configFactory()->getEditable('config_ignore.settings');
+  if ($config) {
+    $existing_ignore_configs = $config->get('ignored_config_entities');
+    $updated_ignored_configs = $existing_ignore_configs;
+    $key = array_search("cohesion.settings", $updated_ignored_configs);
+    if ($key !== FALSE) {
+      unset($updated_ignored_configs[$key]);
+    }
+    $updated_ignored_configs[] = "cohesion_*";
+    $updated_ignored_configs = array_values(array_unique($updated_ignored_configs));
+    if ($existing_ignore_configs != $updated_ignored_configs) {
+      $config->set('ignored_config_entities', $updated_ignored_configs)
+        ->save(TRUE);
+    }
+  }
+}
