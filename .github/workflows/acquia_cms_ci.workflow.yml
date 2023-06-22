@@ -127,7 +127,7 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_NEXT_MINOR_DEV
+          - ISOLATED_TEST_ON_CURRENT
         php-version:
           - "8.1"
           - "8.2"
@@ -347,7 +347,7 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_NEXT_MINOR_DEV
+          - ISOLATED_TEST_ON_CURRENT
         php-version:
           - "8.1"
           - "8.2"
