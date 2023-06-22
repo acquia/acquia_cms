@@ -270,7 +270,7 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
   public function starterKit($filter = '', $options = [
     'project' => self::REQ,
     'format' => 'table',
-  ]) {
+  ]): bool|string|array {
     if ($starter_kit = $this->acmsUtilityService->getStarterKit()) {
       $data['starter-kit'] = $starter_kit;
       $result = new PropertyList($data);
@@ -286,6 +286,7 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
       return $result;
     }
     $this->output()->writeln('Starter-kit is not installed yet.');
+    return FALSE;
   }
 
 }
