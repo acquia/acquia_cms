@@ -82,9 +82,17 @@ class AcquiaCmsConfigSyncService {
     $diff = new Diff($original_configuration, $active_configuration);
     $totalLines = count($active_configuration);
     $editedLines = 0;
+    // @todo remove phpstan-ignore-next-line once we have the replcement
+    // for the deprecations in Drupal\Component\Diff\Diff, update accordingly
+    // in ACMS-1868.
+    // @phpstan-ignore-next-line
     if (!$diff->isEmpty()) {
       foreach ($diff->getEdits() as $diffOp) {
         if ($diffOp->type !== 'copy') {
+          // @todo remove phpstan-ignore-next-line once we have the replcement
+          // for the deprecations in Drupal\Component\Diff\Diff, update
+          // accordingly in ACMS-1868.
+          // @phpstan-ignore-next-line
           $editedLines += $diffOp->nclosing();
         }
       }

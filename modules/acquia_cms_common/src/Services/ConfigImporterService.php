@@ -15,6 +15,7 @@ use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\Core\Utility\Error;
 use Drush\Log\DrushLoggerManager;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -209,7 +210,7 @@ final class ConfigImporterService {
         $message = 'The import failed due to the following reasons:' . "\n";
         $message .= implode("\n", $config_importer->getErrors());
 
-        watchdog_exception('config_import', $e);
+        Error::logException('config_import', $e);
         throw new \Exception($message);
       }
     }
