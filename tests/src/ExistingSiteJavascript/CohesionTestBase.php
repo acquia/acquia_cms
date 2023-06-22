@@ -34,6 +34,9 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    *   A wrapper object for interacting with the layout canvas.
    */
   protected function getLayoutCanvas(): LayoutCanvas {
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    $assertSession->waitForElementVisible('css', '.ssa-layout-canvas');
     $element = $this->waitForElementVisible('css', '.ssa-layout-canvas', $this->getSession()->getPage());
     return new LayoutCanvas($element->getXpath(), $this->getSession());
   }

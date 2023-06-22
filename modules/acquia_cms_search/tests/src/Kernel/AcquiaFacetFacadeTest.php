@@ -19,7 +19,7 @@ class AcquiaFacetFacadeTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'facets',
     'search_api',
     'acquia_cms_search',

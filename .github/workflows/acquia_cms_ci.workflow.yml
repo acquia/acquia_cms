@@ -76,8 +76,9 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - "8.1"
           - "8.2"
+          # uncomment below once 8.3 have stable release.
+          # - "8.3"
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
