@@ -13,7 +13,7 @@
         "drupal/autologout": "^1.4",
         "drupal/config_ignore": "^3.0@beta",
         "drupal/config_rewrite": "^1.5",
-        "drupal/core": "10.1.x-dev@dev",
+        "drupal/core": "^10.1",
         "drupal/diff": "^1.1",
         "drupal/entity_clone": "^2.0@beta",
         "drupal/field_group": "^3.4",
@@ -24,7 +24,7 @@
         "drupal/pathauto": "^1.11",
         "drupal/redirect": "^1.8",
         "drupal/scheduler_content_moderation_integration": "^2.0",
-        "drupal/schema_metatag": "^2.4 || ^3.0",
+        "drupal/schema_metatag": "^3.0",
         "drupal/seckit": "^2.0",
         "drupal/simple_sitemap": "^4.1",
         "drupal/smart_trim": "^2.0",
@@ -76,7 +76,6 @@
         "enable-patching": true,
         "patches": {
             "drupal/core": {
-                "3059955 - It is possible to overflow the number of items allowed in Media Library": "https://www.drupal.org/files/issues/2019-12-28/3082690-80.patch",
                 "3301692: Passing null to parameter to mb_strtolower() is deprecated with PHP 8.1": "https://git.drupalcode.org/project/drupal/-/merge_requests/2598.patch"
             }
         }
