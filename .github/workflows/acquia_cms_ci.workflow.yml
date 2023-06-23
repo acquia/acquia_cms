@@ -192,7 +192,7 @@ jobs:
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
   backstop_tests:
-    name: ${{ matrix.orca-job }} on PHP ${{ matrix.php-version }}
+    name: backstop ${{ matrix.orca-job }} on PHP ${{ matrix.php-version }}
     runs-on: ubuntu-latest
     env:
       # Site test artifacts.
