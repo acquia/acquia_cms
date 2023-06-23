@@ -97,8 +97,8 @@ class InstallStateTest extends ExistingSiteBase {
     // Check page caching set for one year and css/js are aggregated.
     $performance_config = $this->config('system.performance');
     $this->assertSame(31536000, $performance_config->get('cache.page.max_age'));
-    $this->assertSame(TRUE, $performance_config->get('css.preprocess'));
-    $this->assertSame(TRUE, $performance_config->get('js.preprocess'));
+    $this->assertTrue($performance_config->get('css.preprocess'));
+    $this->assertTrue($performance_config->get('js.preprocess'));
 
     // Check purge configurations incorporating acquia purge.
     $purge_plugin_config = $this->config('purge.plugins');
