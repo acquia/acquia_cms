@@ -159,6 +159,7 @@ jobs:
 #          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Before Install
         run: |
+
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
