@@ -210,7 +210,14 @@ final class ConfigImporterService {
         $message = 'The import failed due to the following reasons:' . "\n";
         $message .= implode("\n", $config_importer->getErrors());
 
-        Error::logException('config_import', $e);
+        if (version_compare(\Drupal::VERSION, '10.1', '>=')) {
+          Error::logException('config_import', $e);
+        }
+        else {
+          // Versions prior to 10.1 logException methos does not exist.
+          // @phpstan-ignore-next-line
+          watchdog_exception('config_import', $e);
+        }
         throw new \Exception($message);
       }
     }
