@@ -198,7 +198,12 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
     // The `Show more items` button is clicked, because when tests running
     // on mobile device makes ckeditor5 responsive and requires click to
     // additional button to navigate to other elements.
-    $this->pressEditorButton('Show more items');
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    $showMoreItems = $assertSession->waitForElementVisible('named', ['button', 'Show more items']);
+    if ($showMoreItems) {
+      $this->pressEditorButton('Show more items');
+    }
     $this->pressEditorButton('Insert Media');
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
