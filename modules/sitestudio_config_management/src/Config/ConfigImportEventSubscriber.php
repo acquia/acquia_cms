@@ -47,7 +47,7 @@ class ConfigImportEventSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [ConfigEvents::IMPORT => 'onConfigImport'];
   }
 
