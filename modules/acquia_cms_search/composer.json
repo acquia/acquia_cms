@@ -8,7 +8,7 @@
         "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
         "drupal/acquia_search": "^3.1",
         "drupal/collapsiblock": "4.0.0",
-        "drupal/facets": "^2.0.6",
+        "drupal/facets": "2.0.6",
         "drupal/facets_pretty_paths": "^1.4",
         "drupal/search_api": "^1.29",
         "drupal/search_api_autocomplete": "^1.7"
@@ -32,7 +32,8 @@
         "enable-patching": true,
         "patches": {
             "drupal/facets": {
-                "3259123 - ViewsDisplayBase::isRenderedInCurrentRequest() doesn't let the facet link to reset to original URL": "https://www.drupal.org/files/issues/2022-01-18/3259123-search-facet-reset-link.patch"
+                "3259123 - ViewsDisplayBase::isRenderedInCurrentRequest() doesn't let the facet link to reset to original URL": "https://www.drupal.org/files/issues/2022-01-18/3259123-search-facet-reset-link.patch",
+                "3358295 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/facets/-/merge_requests/141.patch"
             },
             "drupal/search_api": {
                 "3151796 - Problems when executing Search API tasks during install, updates": "https://www.drupal.org/files/issues/2022-11-04/search_api-3151796-division-by-zero-error-7.patch",
