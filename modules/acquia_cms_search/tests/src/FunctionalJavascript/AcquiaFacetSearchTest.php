@@ -19,7 +19,7 @@ class AcquiaFacetSearchTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'acquia_cms_common',
     'acquia_cms_search',

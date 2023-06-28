@@ -4,12 +4,6 @@ namespace Drupal\Tests\sitestudio_config_management\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
 
-/**
- * Tests configuration.
- *
- * @group sitestudio_config_management
- * @group acquia_cms
- */
 class ConfigurationTest extends KernelTestBase {
 
   /**

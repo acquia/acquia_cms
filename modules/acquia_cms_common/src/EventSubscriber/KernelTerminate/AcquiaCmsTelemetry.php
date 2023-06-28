@@ -88,7 +88,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents(): array {
+  public static function getSubscribedEvents() {
     $events[KernelEvents::TERMINATE][] = ['onTerminateResponse'];
     return $events;
   }

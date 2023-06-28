@@ -49,7 +49,7 @@ class ConfigEventsSubscriber implements EventSubscriberInterface {
    * @return array
    *   The event names to listen for, and the methods that should be executed.
    */
-  public static function getSubscribedEvents(): array {
+  public static function getSubscribedEvents() {
     return [
       ConfigEvents::SAVE => 'configSave',
     ];
