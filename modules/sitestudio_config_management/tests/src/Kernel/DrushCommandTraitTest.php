@@ -14,6 +14,12 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Path;
 
+/**
+ * Tests drush commands traits.
+ *
+ * @group sitestudio_config_management
+ * @group acquia_cms
+ */
 class DrushCommandTraitTest extends KernelTestBase {
 
   use DrushCommandTrait;
