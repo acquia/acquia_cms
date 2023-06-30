@@ -15,6 +15,11 @@ class ConfigurationTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
+  protected static $modules = ["user"];
+
+  /**
+   * {@inheritdoc}
+   */
   public function setUp(): void {
     parent::setUp();
 

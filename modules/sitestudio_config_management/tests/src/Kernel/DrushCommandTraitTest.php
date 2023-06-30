@@ -40,6 +40,11 @@ class DrushCommandTraitTest extends KernelTestBase {
    * {@inheritdoc}
    */
   public function setUp(): void {
+    // For Symfony 4 only, include the "Path" class provided by drush/drush
+    // as this is introduced in Symfony 5.4.
+    if (!class_exists('\Symfony\Component\Filesystem\Path')) {
+      include DRUPAL_ROOT . "/../vendor/drush/drush/src-symfony-compatibility/Filesystem/Path.php";
+    }
     $this->logger = $this->createMock('\Psr\Log\LoggerInterface');
     $this->logger->expects($this->any())
       ->method('error')
