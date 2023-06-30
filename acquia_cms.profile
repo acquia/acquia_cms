@@ -205,7 +205,10 @@ function acquia_cms_modules_installed(array $modules) : void {
   }
 
   if ($module_handler->moduleExists('cohesion_sync')) {
-    $module_handler->invoke('cohesion_sync', 'modules_installed', [$modules]);
+    $module_handler->invoke('cohesion_sync', 'modules_installed', [
+      $modules,
+      FALSE,
+    ]);
   }
 }
 
