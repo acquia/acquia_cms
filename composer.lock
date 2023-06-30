@@ -2435,7 +2435,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "88d3d7fadc2fc467b082db4e09887c0bd84a277a"
+                "reference": "5198ca86413e964625da276911da465b79845e1b"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2499,7 +2499,8 @@
                 "enable-patching": true,
                 "patches": {
                     "drupal/core": {
-                        "3301692: Passing null to parameter to mb_strtolower() is deprecated with PHP 8.1": "https://git.drupalcode.org/project/drupal/-/merge_requests/2598.patch"
+                        "3301692: Passing null to parameter to mb_strtolower() is deprecated with PHP 8.1": "https://git.drupalcode.org/project/drupal/-/merge_requests/2598.patch",
+                        "3356894 - Make field selection less overwhelming by introducing groups": "https://www.drupal.org/files/issues/2023-06-20/3356894-mr_3896.patch"
                     },
                     "drupal/pathauto": {
                         "3328670 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/pathauto/-/merge_requests/40.patch"
