@@ -128,6 +128,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "acquia/cohesion": {
+                "Layout canvas doesn't load with JS aggregation enabled in Drupal Core 10.1.0": "https://gist.githubusercontent.com/vishalkhode1/2fbaad78ae99ae548cec8af12fe956d4/raw/b87c1d33c7cbb60fbb338af06a6da90921098ec5/drupal-10.1-support.patch"
+            },
             "drupal/core": {
                 "3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112": "https://git.drupalcode.org/project/drupal/-/merge_requests/3142.patch"
             },
