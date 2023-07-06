@@ -12,7 +12,6 @@ use Drush\Drush;
 use Drush\SiteAlias\ProcessManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Path;
 
 /**
  * Tests drush commands traits.
@@ -40,13 +39,6 @@ class DrushCommandTraitTest extends KernelTestBase {
    * {@inheritdoc}
    */
   public function setUp(): void {
-    // For Symfony 4 only, include the "Path" class provided by drush/drush
-    // as this is introduced in Symfony 5.4.
-    if (!class_exists('\Symfony\Component\Filesystem\Path')) {
-      $class = new \ReflectionClass(Drush::class);
-      $drushDir = dirname($class->getFileName(), '2');
-      include $drushDir . "/src-symfony-compatibility/Filesystem/Path.php";
-    }
     $this->logger = $this->createMock('\Psr\Log\LoggerInterface');
     $this->logger->expects($this->any())
       ->method('error')
@@ -101,12 +93,13 @@ class DrushCommandTraitTest extends KernelTestBase {
    * Configure & Initialize the Drush Process.
    */
   private function configureDrushProcess(): void {
+    $vendorDirectory = $this->getVendorDirectoryPath();
     $processManager = $this->prophesize(ProcessManager::class);
     $output = $this->prophesize(OutputInterface::class);
     $commands = $this->commandsDataProvider();
     $commands = array_map(fn($subArray) => $subArray[0], $commands);
     foreach ($commands as $command) {
-      $processBase = new ProcessBase(["./vendor/bin/drush", $command, "--root=" . DRUPAL_ROOT], Path::makeAbsolute("../", DRUPAL_ROOT));
+      $processBase = new ProcessBase([$vendorDirectory . "/bin/drush", $command, "--root=" . DRUPAL_ROOT]);
       $processBase->setRealtimeOutput($output->reveal());
       $processManager->drush(new SiteAlias(), $command)->willReturn($processBase); /* @phpstan-ignore-line */
     }
@@ -128,6 +121,14 @@ class DrushCommandTraitTest extends KernelTestBase {
       ["core:status", TRUE, 0],
       ["something", FALSE, 1],
     ];
+  }
+
+  /**
+   * Returns the vendor directory path.
+   */
+  protected function getVendorDirectoryPath(): string {
+    $class = new \ReflectionClass(Drush::class);
+    return dirname($class->getFileName(), '4');
   }
 
 }
