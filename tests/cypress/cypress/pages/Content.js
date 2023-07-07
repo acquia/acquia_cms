@@ -2,6 +2,16 @@ const testData = require("./TestData")
 
 class Content {
     get contentPage() {
+        cy.get("body").then($body => {
+            if ($body.find("#toolbar-item-administration-tray > nav > div.toolbar-menu-administration > ul > li:nth-child(2) > a").length > 0) {
+                //evaluates as true if button exists at all
+                cy.get("#toolbar-item-administration-tray > nav > div.toolbar-menu-administration > ul > li:nth-child(2) > a").then($header => {
+                  if ($header.is(':hidden')){
+                    cy.get('#toolbar-administration #toolbar-item-administration').click()
+                  }
+                });
+            }
+        });
         return cy.get("#toolbar-item-administration-tray > nav > div.toolbar-menu-administration > ul > li:nth-child(2) > a")
     }
 
@@ -30,7 +40,7 @@ class Content {
         return cy.get("#block-acquia-claro-primary-local-tasks > nav > ul > li.tabs__tab.js-tab.is-active.js-active-tab > a")
     }
 
-    //Get add content button 
+    //Get add content button
     get addContentButton() {
         return cy.get("#block-acquia-claro-local-actions > ul > li > a")
     }
@@ -50,19 +60,19 @@ class Content {
         return cy.get("#views-form-content-page-1 > table.views-table.views-view-table.cols-7.responsive-enabled.sticky-enabled.sticky-table > tbody > tr > td.views-field.views-field-title")
     }
 
-    //Get action dropdown 
+    //Get action dropdown
     get actionDropdown() {
         return cy.get("#edit-action")
     }
 
     //Get apply to selected items button
     get applyButton() {
-        return cy.get("#edit-submit--2")
+        return cy.get("#edit-submit")
     }
 
     //Get title bar
     get titleBar() {
-        return cy.get("#view-title-table-column > a")
+        return cy.get("table.views-view-table thead th#view-title-table-column > a")
     }
 
     //Navigation buttons at the footer
@@ -175,7 +185,7 @@ class Content {
     clickAndVerify() {
         //Verifying mouse hover on Content Tab
         this.contentPage.invoke('show').click()
-        //On mouse hover clicking on Add Content and navigating to Add Content page 
+        //On mouse hover clicking on Add Content and navigating to Add Content page
         this.addContentButton.click({
             force: true
         })

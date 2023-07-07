@@ -28,18 +28,8 @@
 beforeEach("Login", () => {
         //Clears browser cache
         cy.exec('npm cache clear --force')
-        //Dev Url
-        cy.visit(Cypress.config().urlDEVAdmin, {
-        //On demand environments URL's
-        //cy.visit(Cypress.config().urlODE7Admin, {
-        //PROD URL
-        //cy.visit(Cypress.config().urlPRODAdmin, {
-        //UAT/QA URL
-        //cy.visit(Cypress.config().urlUATAdmin, {
-        //ODE8 URL
-        //cy.visit(Cypress.config().urlODE8Admin,  {
-        //CI URL
-        //cy.visit(Cypress.config().urlCIAdmin,  {
+        //Login Url
+        cy.visit(Cypress.env('loginUrl'), {
             auth: {
                 username: Cypress.config().browserUname,
                 password: Cypress.config().browserPassword

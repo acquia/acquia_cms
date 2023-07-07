@@ -183,7 +183,7 @@ class Page {
 
     }
 
-    //Get Visual Page Builcder
+    //Get Visual Page Builder
     get vpb() {
         return cy.get("#coh-builder-btn")
     }
@@ -198,11 +198,11 @@ class Page {
     }
     //Get Save button VPB
     get saveVPB() {
-        return cy.get("#ssaApp > div.sc-wvs7do-0.ghBhLA.ssa-edit-button-container > div > div.sc-1j6p5lt-0.cTtgIT.save-button-wrapper > button")
+        return cy.get("#ssaApp > div.sc-wvs7do-0.ssa-edit-button-container > div > div.sc-1j6p5lt-0.save-button-wrapper > button")
     }
     //Get Exit VPB
     get exitVPB() {
-        return cy.get("#ssaApp > div.sc-wvs7do-0.ghBhLA.ssa-edit-button-container > button")
+        return cy.get("#ssaApp > div.sc-wvs7do-0.ssa-edit-button-container > button")
     }
     //Edit page with VPB - visual page builder
     editCreatedPageVPB() {

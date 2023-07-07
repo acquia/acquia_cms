@@ -184,7 +184,7 @@ class PasswordPolicy {
         this.confirmPassword.type(testData.$policy_password)
         cy.wait(200)
         this.saveButtonCreateAccount.click()
-        this.userCreatedVal.should('have.text','\n                  Created a new user account for QA_User. No email has been sent.\n              ')
+        this.userCreatedVal.should('have.text','\n                          Created a new user account for QA_User. No email has been sent.\n                      ')
         }
 
     //Cancel and delete the created user
@@ -194,14 +194,11 @@ class PasswordPolicy {
         this.filterUser.click()
         this.checkSearchedUser.check()
         this.selectAction.select("Cancel the selected user account(s)")
-        cy.get("#edit-submit--2").click()
+        cy.get("#edit-submit").click()
         cy.get("#edit-user-cancel-method-user-cancel-delete").check().click()
         this.cancleUserButton.click()
         cy.wait(1000)
-        //for validation of 1.4.0
-        this.userDeletedVal.should('have.text','\n                  Account QA_User has been deleted.\n              ')
-        //for validation before 1.4.0
-        //this.userDeletedVal.should('have.text','\n                  QA_User has been deleted.\n              ')
+        this.userDeletedVal.should('have.text','\n                          Account QA_User has been deleted.\n                      ')
     }
 }
 

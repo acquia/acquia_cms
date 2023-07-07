@@ -61,6 +61,7 @@ class MenuTabs {
         this.homeMenu.click({
             force: true
         })
+
         cy.url().should('eq', testData.$home_url)
 
         this.articlesMenu.click({

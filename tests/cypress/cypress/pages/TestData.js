@@ -87,18 +87,8 @@ class TestData {
     $heading_get_started ='CMS Dashboard'
 
     //Checkup
-    //URL (Variable)
-    //$baseURL ='http://orionacmsode7.prod.acquia-sites.com'
-    //URL for validations of UAT
-    //$baseURL ='http://orionacmsstage.prod.acquia-sites.com'
-    //URL for validations of QA
-    //$baseURL ='http://orionacmsode1.prod.acquia-sites.com'
-    //URL for validations of Dev
-    //$baseURL ='https://orionacmsdev.prod.acquia-sites.com'
-    //URL for ODE8
-    //$baseURL ='http://orionacmsode8.prod.acquia-sites.com'
-    //URL for CI
-    $baseURL ='http://127.0.0.1:8080'
+    $baseUrl = Cypress.config('baseUrl') || Cypress.env('baseUrl')
+    $baseURL = this.$baseUrl
     $published_url = this.$baseURL+'/qatestcypressss'
     $home_url = this.$baseURL+'/home-sitestudio'
     $article_url = this.$baseURL+'/articles'

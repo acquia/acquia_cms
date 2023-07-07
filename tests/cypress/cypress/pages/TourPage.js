@@ -236,7 +236,9 @@ class TourPage {
     get wizardSkipStepButton() {
         return cy.get("body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.acms-installation-wizard.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div > button.skip-button.button.js-form-submit.form-submit.ui-button.ui-corner-all.ui-widget")
     }
-
+    get sgetStartedWithWizard(){
+        return cy.get("body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.acms-welcome-modal.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div > button.button--primary.button.js-form-submit.form-submit.ui-button.ui-corner-all.ui-widget")
+    }
     get setupManually(){
         return cy.get("body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.acms-welcome-modal.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div > button.setup-manually.button.js-form-submit.form-submit.ui-button.ui-corner-all.ui-widget")
     }
@@ -244,7 +246,7 @@ class TourPage {
     //Click on setup wizard manually
     setupWizardManually() {
         this.tourPageLink.click()
-        //Todo - if else condition in cypress.
+        this.closePopUp
         this.wizardSetupButton.click()
     }
 
@@ -259,7 +261,7 @@ class TourPage {
         this.tourPageLink.click()
         cy.wait(1000)
         //TODO - Check the alternative - the popup will show only once
-        //this.wizardClose.click()
+        this.wizardClose.click()
         this.headingGetStarted.should('have.text', testData.$heading_get_started)
         this.wizardSetupButton.should('be.visible').and('have.text', 'Wizard set-up')
         this.progressBar.should('be.visible')
@@ -376,8 +378,7 @@ class TourPage {
         cy.wait(1000)
         this.closePopUp
         this.wizardSetupButton.click().should('have.text', 'Wizard set-up')
-        //TODO - not able to fetch the heading
-        //this.wizardHeading.should('have.text', 'Acquia CMS Installation wizard')
+        this.sgetStartedWithWizard.click()
         this.wizardSaveButton.should('be.visible')
         this.wizardSkipStepButton.should('be.visible').and('have.text', 'Skip this step')
         this.wizardClose

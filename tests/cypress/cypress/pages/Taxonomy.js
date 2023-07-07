@@ -47,12 +47,14 @@ class Taxonomy{
     get newlyAddedTerm(){
         return cy.get('[id*="edit-terms-"]')
     }
-    //Delete button to delete vocab and term
-    get deleteButton(){
+    //Delete button to delete vocab
+    get deleteButtonVocab(){
         return cy.get("#edit-submit")
     }
-
-
+    //Delete button to delete term
+    get deleteButtonTerm(){
+        return cy.get(".ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset .button--primary")
+    }
 
     //Create the vocabulary in the taxonomy
     addVocabulary(){
@@ -94,15 +96,14 @@ class Taxonomy{
 
     deleteTerm(){
         this.deleteTermLink.click({force:true})
-        this.deleteButton.click()
-        cy.get("#message-status-title").should('have.text','\n              Status message\n            ')
-
+        this.deleteButtonTerm.click()
+        cy.get(".messages-list .messages--status .messages__content").should('have.text','\n                          Deleted term QA_term.\n                      ')
     }
 
     deleteVocab(){
         this.deleteAddedVocab.click({force:true})
-        this.deleteButton.click()
-        cy.get("#message-status-title").should('have.text','\n              Status message\n            ')
+        this.deleteButtonVocab.click()
+        cy.get(".messages-list .messages--status .messages__content").should('have.text','\n                          \n                                  Your styles have been updated.\n                                  Deleted vocabulary QA_Test_Vocab.\n                              \n                      ')
     }
 
 }

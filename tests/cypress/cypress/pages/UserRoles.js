@@ -50,8 +50,7 @@ class UserRoles {
         this.confirmPassword.type(testData.$policy_password)
         cy.wait(2000)
         this.createNewAccButton.click()
-        //TODO-Validations
-        this.userCreatedVal.should('have.text', '\n                  Created a new user account for QA_User. No email has been sent.\n              ')
+        this.userCreatedVal.should('have.text', '\n                          Created a new user account for QA_User. No email has been sent.\n                      ')
     }
 
     deleteCreatedUser() {
