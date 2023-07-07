@@ -65,7 +65,7 @@ fi
 composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms"]' --merge && composer update --lock
 
 # Enable Starter on full installs if Appropriate.
-if [[ "${ACMS_JOB}" == "backstop_tests" ]]; then
+if [[ "${ACMS_JOB}" == "backstop_tests" ]] || [ "${ACMS_JOB}" == "cypress_tests" ]; then
 
     echo "Installing Starter Kit"
     drush en acquia_cms_development -y
