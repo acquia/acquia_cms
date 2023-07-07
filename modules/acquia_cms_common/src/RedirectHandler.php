@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_cms_common;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -51,6 +52,13 @@ final class RedirectHandler implements ContainerInjectionInterface {
   protected $moduleHandler;
 
   /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  private $configFactory;
+
+  /**
    * RedirectHandler constructor.
    *
    * @param \Drupal\Core\Entity\EntityStorageInterface $user_storage
@@ -61,12 +69,15 @@ final class RedirectHandler implements ContainerInjectionInterface {
    *   The path validator service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory service.
    */
-  public function __construct(EntityStorageInterface $user_storage, Request $current_request, PathValidatorInterface $path_validator, ModuleHandlerInterface $module_handler) {
+  public function __construct(EntityStorageInterface $user_storage, Request $current_request, PathValidatorInterface $path_validator, ModuleHandlerInterface $module_handler, ConfigFactoryInterface $config_factory) {
     $this->userStorage = $user_storage;
     $this->request = $current_request;
     $this->pathValidator = $path_validator;
     $this->moduleHandler = $module_handler;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -77,7 +88,8 @@ final class RedirectHandler implements ContainerInjectionInterface {
       $container->get('entity_type.manager')->getStorage('user'),
       $container->get('request_stack')->getCurrentRequest(),
       $container->get('path.validator'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('config.factory')
     );
   }
 
@@ -119,12 +131,14 @@ final class RedirectHandler implements ContainerInjectionInterface {
       // is fixed.
       $this->request->query->remove('destination');
 
-      if ($this->isContributor($user)) {
-        // @todo Don't redirect if Moderation Dashboard is not enabled.
+      if ($this->isContributor($user) &&
+      $this->moduleHandler->moduleExists('moderation_dashboard') &&
+      $this->configFactory->getEditable('moderation_dashboard.settings')->get('redirect_on_login')) {
         $url = Url::fromUri('internal:/user/' . $user->id() . '/moderation/dashboard');
         $form_state->setRedirectUrl($url);
       }
-      elseif ($this->isDeveloper($user) && $this->moduleHandler->moduleExists('cohesion')) {
+      elseif ($this->isDeveloper($user) &&
+      $this->moduleHandler->moduleExists('cohesion')) {
         $form_state->setRedirect('cohesion.settings');
       }
       elseif ($this->isUserAdministrator($user)) {
