@@ -353,7 +353,7 @@ function acquia_cms_site_studio_update_8007() {
     foreach ($files as $file) {
       if (!in_array($file->name, $base_templates)) {
         $sitestudio_template = \Drupal::configFactory()->getEditable($file->name);
-        if ($sitestudio_template && is_null($sitestudio_template->get('dependencies.enforced.module'))) {
+        if ($sitestudio_template && is_null($sitestudio_template->get('dependencies.enforced.module')) && $sitestudio_template->get('status')) {
           $sitestudio_template->set('dependencies.enforced.module', [
             'acquia_cms_site_studio',
           ]);
