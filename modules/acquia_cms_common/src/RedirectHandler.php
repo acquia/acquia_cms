@@ -133,7 +133,7 @@ final class RedirectHandler implements ContainerInjectionInterface {
 
       if ($this->isContributor($user) &&
       $this->moduleHandler->moduleExists('moderation_dashboard') &&
-      $this->configFactory->getEditable('moderation_dashboard.settings')->get('redirect_on_login')) {
+      $this->configFactory->get('moderation_dashboard.settings')->get('redirect_on_login')) {
         $url = Url::fromUri('internal:/user/' . $user->id() . '/moderation/dashboard');
         $form_state->setRedirectUrl($url);
       }
