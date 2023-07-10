@@ -83,12 +83,15 @@ class Place {
         return cy.get("#edit-field-place-image-open-button")
     }
     get placeCheckMedia() {
-        return cy.get('[id*="edit-media-library-select-form-3--"]')
+        return cy.get('[id*="edit-media-library-select-form-2--"]')
     }
-    get placeInsertSelectedMedia() {
-        return cy.get("body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.media-library-widget-modal.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div.ui-dialog-buttonset.form-actions > button")
+    get insertSelectedButton() {
+        return cy.get("body > div.ui-dialog.media-library-widget-modal > div.ui-dialog-buttonpane > div.ui-dialog-buttonset > button")
     }
-
+    //Select media source
+    get selectedMediaType() {
+        return cy.get(".ui-dialog.media-library-widget-modal #drupal-modal #media-library-wrapper #acquia-dam-source-menu-wrapper select").select('core')
+    }
 
     //Select state
     get placeState() {
@@ -222,10 +225,10 @@ class Place {
         })
         cy.wait(2000)
         cy.scrollTo(0, 500)
+        //Select media source
+        this.selectedMediaType
         this.placeCheckMedia.check()
-        this.placeInsertSelectedMedia.click({
-            force: true
-        })
+        this.insertSelectedButton.click()
         cy.wait(2000)
         //Select Saving Type
         this.placeSaveAsDropdown.select(testData.$publish_save_type, {
@@ -239,22 +242,23 @@ class Place {
 
     //fetch name of created place's title
     get fetchCreatedTitle() {
-        return cy.get("body > div.dialog-off-canvas-main-canvas > div.coh-container.coh-style-focusable-content.coh-ce-6f78460f > div > article > div.coh-container.coh-style-padding-top-bottom-medium.coh-container-boxed > div > div > div.coh-column.coh-style-padding-bottom-small.coh-visible-ps.coh-col-ps-12.coh-visible-md.coh-col-md-10.coh-visible-xl.coh-col-xl-8 > h1")
+        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-row-inner .coh-column h1")
     }
     //Fetch type of the place
     get fetchPlaceType() {
-        return cy.get("body > div.dialog-off-canvas-main-canvas > div.coh-container.coh-style-focusable-content.coh-ce-6f78460f > div > article > div.coh-container.coh-style-padding-top-bottom-medium.coh-container-boxed > div > div > div.coh-column.coh-style-padding-bottom-small.coh-visible-ps.coh-col-ps-12.coh-visible-md.coh-col-md-10.coh-visible-xl.coh-col-xl-8 > ul > li:nth-child(1) > a")
+        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-row-inner .coh-column:nth-child(1)  > ul > li:nth-child(1) > a")
     }
     //fetch place's city
     get fetchCity() {
-        return cy.get("body > div.dialog-off-canvas-main-canvas > div.coh-container.coh-style-focusable-content.coh-ce-6f78460f > div > article > div.coh-container.coh-style-padding-top-bottom-medium.coh-container-boxed > div > div > div.coh-column.coh-style-padding-bottom-small.coh-visible-ps.coh-col-ps-12.coh-visible-md.coh-col-md-10.coh-visible-xl.coh-col-xl-8 > ul > li:nth-child(2) > span")
+        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-row-inner .coh-column:nth-child(1) > ul > li:nth-child(2) > span")
     }
     //fetch content of the place
     get fetchContent() {
-        return cy.get("body > div.dialog-off-canvas-main-canvas > div.coh-container.coh-style-focusable-content.coh-ce-6f78460f > div > article > div.coh-container.coh-style-padding-top-bottom-medium.coh-container-boxed > div > div > div.coh-column.coh-visible-sm.coh-col-sm-12.coh-visible-md.coh-col-md-8.coh-visible-xl.coh-col-xl-6 > div > p")
+        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-row-inner .coh-column:nth-child(3) > div > p")
     }
     //Place - Validate
     validatePlace() {
+        cy.wait(2000)
         //Validate the title of the place
         this.fetchCreatedTitle.should('have.text', " " + testData.$content_title + " ")
         //validate the type of the place

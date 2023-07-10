@@ -23,27 +23,45 @@ class MenuTabs {
     }
 
     //Get primary menu items
+    //Get primary menu options
+    get primaryMenuOptions(){
+      cy.get("body").then($body => {
+        if ($body.find("#block-acquia-claro-primary-local-tasks > nav > ul > li.is-active button.reset-appearance").length > 0) {
+          cy.get("#block-acquia-claro-primary-local-tasks > nav > ul > li.is-active button.reset-appearance").then($dropdown => {
+            if ($dropdown.is(':visible')){
+              cy.get("#block-acquia-claro-primary-local-tasks > nav > ul > li.is-active button.reset-appearance").click()
+            }
+          })
+        }
+      })
+    }
     //Get view primary menu
     get viewMenu() {
         return cy.get("#block-tabs-2 > nav > ul > li:nth-child(1) > a")
     }
-
     //Get scheduled primary menu
     get scheduledMenu() {
         return cy.get("#block-tabs-2 > nav > ul > li:nth-child(2) > a")
+    }
+    //Get scheduled primary menu
+    get scheduledMediaMenu() {
+        return cy.get("#block-acquia-claro-primary-local-tasks > nav > ul > li:nth-child(3) > a")
     }
     //Get edit primary menu
     get editMenu() {
         return cy.get("#block-acquia-claro-primary-local-tasks > nav > ul > li:nth-child(4) > a")
     }
-
-    //Get clone primary menu
-    get cloneMenu() {
-        return cy.get("#block-acquia-claro-primary-local-tasks > nav > ul > li:nth-child(6) > a")
-    }
     //Get moderation dashboard primary menu
     get moderation_dashboardMenu() {
         return cy.get("#block-acquia-claro-primary-local-tasks > nav > ul > li:nth-child(5) > a")
+    }
+    //Get Acquia DAM primary menu
+    get acquiaDamMenu() {
+        return cy.get("#block-acquia-claro-primary-local-tasks > nav > ul > li:nth-child(6) > a")
+    }
+    //Get clone primary menu
+    get cloneMenu() {
+        return cy.get("#block-tabs-2 > nav > ul > li:nth-child(7) > a")
     }
 
     //Validate the spellsings for Menu items
@@ -86,26 +104,53 @@ class MenuTabs {
 
     }
     spell_validations_primary_menu() {
-        this.viewMenu.click().should('have.text', "View")
-        this.scheduledMenu.click().should('have.text', "Scheduled")
-        this.editMenu.click().should('have.text', "Edit")
-        this.cloneMenu.click().should('have.text', "Clone")
-        this.moderation_dashboardMenu.click().should('have.text', "Moderation Dashboard")
+        this.viewMenu.should('have.text', "View")
+        this.viewMenu.click()
+        this.scheduledMenu.should('have.text', "Scheduled")
+        cy.wait(4000)
+        this.scheduledMenu.click()
+        this.primaryMenuOptions
+        this.scheduledMediaMenu.should('have.text', "Scheduled Media")
+        this.scheduledMediaMenu.click()
+        cy.wait(4000)
+        this.primaryMenuOptions
+        this.editMenu.should('have.text', "Edit")
+        this.editMenu.click()
+        cy.wait(4000)
+        this.primaryMenuOptions
+        this.moderation_dashboardMenu.should('have.text', "Moderation Dashboard")
+        this.moderation_dashboardMenu.click()
+        this.cloneMenu.should('have.text', "Clone")
+        this.cloneMenu.click()
+        cy.wait(4000)
+        this.primaryMenuOptions
+        this.acquiaDamMenu.should('have.text', "Acquia DAM")
+        this.acquiaDamMenu.click()
     }
 
     click_primary_menu_items() {
-
         this.viewMenu.click()
         cy.url().should('eq', testData.$view_url)
         this.scheduledMenu.click()
         cy.url().should('eq', testData.$scheduled_url)
+        cy.wait(4000)
+        this.primaryMenuOptions
+        this.scheduledMediaMenu.click()
+        cy.url().should('eq', testData.$scheduled_media)
+        cy.wait(4000)
+        this.primaryMenuOptions
         this.editMenu.click()
         cy.url().should('eq', testData.$edit_url)
-        this.cloneMenu.click()
-        cy.url().should('eq', testData.$clone_url)
+        cy.wait(4000)
+        this.primaryMenuOptions
         this.moderation_dashboardMenu.click()
         cy.url().should('eq', testData.$moderation_dashboard_url)
-
+        this.cloneMenu.click()
+        cy.url().should('eq', testData.$clone_url)
+        cy.wait(4000)
+        this.primaryMenuOptions
+        this.acquiaDamMenu.click()
+        cy.url().should('eq', testData.$acquia_dam_url)
     }
 }
 const menuTabs = new MenuTabs();

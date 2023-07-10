@@ -2,7 +2,7 @@
 
 const passwordPolicy = require("../../pages/PasswordPolicy")
 
- 
+
 describe("Verify the password policy", () => {
     context('Password Policy - verify the checkboxes are present', () => {
         it("Verify the check boxes of password policy page", () => {

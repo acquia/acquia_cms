@@ -231,13 +231,13 @@ class TourPage {
         //return cy.xpath("//*[@id=\"ui-id-2\"]")
     }
     get wizardSaveButton() {
-        return cy.get("body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.acms-installation-wizard.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div > button:nth-child(2)")
+        return cy.get("body > div.ui-dialog.acms-installation-wizard > .ui-dialog-buttonpane > .ui-dialog-buttonset > button:nth-child(2)")
     }
     get wizardSkipStepButton() {
-        return cy.get("body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.acms-installation-wizard.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div > button.skip-button.button.js-form-submit.form-submit.ui-button.ui-corner-all.ui-widget")
+        return cy.get("body > div.ui-dialog.acms-installation-wizard > .ui-dialog-buttonpane > .ui-dialog-buttonset > button:nth-child(1)")
     }
-    get sgetStartedWithWizard(){
-        return cy.get("body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.acms-welcome-modal.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div > button.button--primary.button.js-form-submit.form-submit.ui-button.ui-corner-all.ui-widget")
+    get getStartedWithWizard(){
+        cy.get("body > div.ui-dialog.acms-welcome-modal > div.ui-dialog-buttonpane > div > button.button--primary.form-submit").click()
     }
     get setupManually(){
         return cy.get("body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.acms-welcome-modal.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div > button.setup-manually.button.js-form-submit.form-submit.ui-button.ui-corner-all.ui-widget")
@@ -247,6 +247,7 @@ class TourPage {
     setupWizardManually() {
         this.tourPageLink.click()
         this.closePopUp
+        this.wizardClose
         this.wizardSetupButton.click()
     }
 
@@ -377,8 +378,12 @@ class TourPage {
         this.tourPageLink.click()
         cy.wait(1000)
         this.closePopUp
-        this.wizardSetupButton.click().should('have.text', 'Wizard set-up')
-        this.sgetStartedWithWizard.click()
+        this.wizardClose
+        this.wizardSetupButton.should('have.text', 'Wizard set-up')
+        this.wizardSetupButton.click()
+        cy.wait(4000)
+        this.getStartedWithWizard
+        cy.wait(2000)
         this.wizardSaveButton.should('be.visible')
         this.wizardSkipStepButton.should('be.visible').and('have.text', 'Skip this step')
         this.wizardClose

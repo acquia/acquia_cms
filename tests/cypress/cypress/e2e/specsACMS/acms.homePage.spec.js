@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 const adminToolBar = require("../../pages/AdminToolBar")
 
- 
+
 describe("Verify the home page and its elements", () => {
     //TC-69
     context('Verify tool bar items - Admin tool bar', () => {

@@ -28,13 +28,17 @@ class Person {
     get addMedia() {
         return cy.get("#edit-field-person-image-open-button")
     }
+    //Select media source
+    get selectedMediaType() {
+        return cy.get(".ui-dialog.media-library-widget-modal #drupal-modal #media-library-wrapper #acquia-dam-source-menu-wrapper select").select('core')
+    }
     //select the profile picture
     get profilePicture() {
-        return cy.get('[id*="edit-media-library-select-form-3--"]')
+        return cy.get('[id*="edit-media-library-select-form-2--"]')
     }
     //Insert the profile picture
     get insertSelectedButton() {
-        return cy.get("body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.media-library-widget-modal.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div.ui-dialog-buttonset.form-actions > button")
+        return cy.get("body > div.ui-dialog.media-library-widget-modal > div.ui-dialog-buttonpane > div.ui-dialog-buttonset > button")
     }
     //Add place of the person
     get personPlace() {
@@ -122,6 +126,8 @@ class Person {
         this.addMedia.click()
         cy.wait(2000)
         cy.scrollTo(0, 1000)
+        //Select media source
+        this.selectedMediaType
         //select the profile picture
         this.profilePicture.check()
         //Insert the profile picture
@@ -142,26 +148,26 @@ class Person {
 
     //Get created person's name
     get createdPersonsName() {
-        return cy.get("body > div.dialog-off-canvas-main-canvas > div.coh-container.coh-style-focusable-content.coh-ce-6f78460f > div > article > div.coh-container.coh-style-padding-top-bottom-medium.coh-container-boxed > div > div > div.coh-column.coh-visible-xs.coh-col-xs-12.coh-col-xs-pull-0.coh-visible-ps.coh-col-ps-8.coh-col-ps-pull-0.coh-visible-md.coh-col-md-7.coh-col-md-pull-0.coh-visible-xl.coh-col-xl-6.coh-col-xl-pull-1 > h1")
+        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-column > h1")
     }
     //Get Created person's job title
     get createdPJobTitle() {
-        return cy.get("body > div.dialog-off-canvas-main-canvas > div.coh-container.coh-style-focusable-content.coh-ce-6f78460f > div > article > div.coh-container.coh-style-padding-top-bottom-medium.coh-container-boxed > div > div > div.coh-column.coh-visible-xs.coh-col-xs-12.coh-col-xs-pull-0.coh-visible-ps.coh-col-ps-8.coh-col-ps-pull-0.coh-visible-md.coh-col-md-7.coh-col-md-pull-0.coh-visible-xl.coh-col-xl-6.coh-col-xl-pull-1 > ul > li.coh-list-item.coh-ce-fa57ab88")
+        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-column > ul > li:nth-child(1)")
     }
     //Get Created persons offce address, email address and telephone number
     get createdPOffice() {
-        return cy.get("body > div.dialog-off-canvas-main-canvas > div.coh-container.coh-style-focusable-content.coh-ce-6f78460f > div > article > div.coh-container.coh-style-padding-top-bottom-medium.coh-container-boxed > div > div > div.coh-column.coh-visible-xs.coh-col-xs-12.coh-col-xs-pull-0.coh-visible-ps.coh-col-ps-8.coh-col-ps-pull-0.coh-visible-md.coh-col-md-7.coh-col-md-pull-0.coh-visible-xl.coh-col-xl-6.coh-col-xl-pull-1 > ul > li:nth-child(2) > a")
+        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-column > ul > li:nth-child(2) > a")
     }
     get createdPEmail() {
-        return cy.get("body > div.dialog-off-canvas-main-canvas > div.coh-container.coh-style-focusable-content.coh-ce-6f78460f > div > article > div.coh-container.coh-style-padding-top-bottom-medium.coh-container-boxed > div > div > div.coh-column.coh-visible-xs.coh-col-xs-12.coh-col-xs-pull-0.coh-visible-ps.coh-col-ps-8.coh-col-ps-pull-0.coh-visible-md.coh-col-md-7.coh-col-md-pull-0.coh-visible-xl.coh-col-xl-6.coh-col-xl-pull-1 > ul > li:nth-child(3) > a")
+        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-column > ul > li:nth-child(3) > a")
     }
     get createdPTelephone() {
-        return cy.get("body > div.dialog-off-canvas-main-canvas > div.coh-container.coh-style-focusable-content.coh-ce-6f78460f > div > article > div.coh-container.coh-style-padding-top-bottom-medium.coh-container-boxed > div > div > div.coh-column.coh-visible-xs.coh-col-xs-12.coh-col-xs-pull-0.coh-visible-ps.coh-col-ps-8.coh-col-ps-pull-0.coh-visible-md.coh-col-md-7.coh-col-md-pull-0.coh-visible-xl.coh-col-xl-6.coh-col-xl-pull-1 > ul > li:nth-child(4) > span")
+        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-column > ul > li:nth-child(4) > span")
     }
 
     //Validation of the cases of created person
     validateCreatedPerson() {
-
+        cy.wait(2000)
         //Validate created person's name
         this.createdPersonsName.should('have.text', " " + testData.$content_title + " ")
         //validate created person's job title

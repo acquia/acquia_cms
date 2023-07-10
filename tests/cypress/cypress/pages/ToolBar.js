@@ -1,6 +1,6 @@
 const testData = require("./TestData")
 class ToolBar {
-    //Get extend link 
+    //Get extend link
     get extendLink() {
         return cy.get("#toolbar-item-administration-tray > nav > div.toolbar-menu-administration > ul > li:nth-child(6) > a")
     }

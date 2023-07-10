@@ -267,6 +267,8 @@ jobs:
           - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
             orca-version: ^4
             php-version: 7.4
+          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
+            acms_job: cypress_tests
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1

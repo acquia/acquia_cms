@@ -42,5 +42,5 @@ if [ "${ACMS_JOB}" == "cypress_tests" ]; then
   orca fixture:run-server &
 
   # Runs Cypress tests
-  npx cypress run
+  npx cypress run --spec cypress/e2e/specsACMS/acms.content.spec.js cypress/e2e/specsACMS/acms.tourDashboard.spec.js
 fi

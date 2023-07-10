@@ -3,9 +3,9 @@ class TestData {
     //Content creation data
     $content_title = "QA_Test_CypressSS"
     $content = "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum"
-    $first_name = "Prashik"
-    $last_name = "Bansod"
-    $company_name = "Acquia"
+    $first_name = "John"
+    $last_name = "Doe"
+    $company_name = "Acquia Inc."
     $adress_line_01 = "Cerebrum IT Park"
     $adress_line_02 = "Kalyani Nagar"
     $latitude = "18.5204"
@@ -97,8 +97,10 @@ class TestData {
     $people_url = this.$baseURL+'/people'
     $view_url = this.$baseURL+'/user/1'
     $scheduled_url = this.$baseURL+'/user/1/scheduled'
+    $scheduled_media = this.$baseURL+'/user/1/scheduled_media'
     $edit_url = this.$baseURL+'/user/1/edit'
     $clone_url = this.$baseURL+'/entity_clone/user/1'
+    $acquia_dam_url = this.$baseURL+'/user/1/acquia-dam'
     $moderation_dashboard_url = this.$baseURL+'/user/1/moderation-dashboard'
 
     //Tour Page
