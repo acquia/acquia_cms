@@ -86,6 +86,7 @@ jobs:
           - integrated_php_unit_tests
           - integrated_existing_site_tests
           - backstop_tests
+          - cypress_tests
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
