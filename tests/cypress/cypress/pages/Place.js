@@ -231,34 +231,29 @@ class Place {
         this.insertSelectedButton.click()
         cy.wait(2000)
         //Select Saving Type
-        this.placeSaveAsDropdown.select(testData.$publish_save_type, {
-            force: true
-        })
+        this.placeSaveAsDropdown.select('Published')
         //Save the place
-        this.placeSave.click({
-            force: true
-        })
+        this.placeSave.click()
     }
 
     //fetch name of created place's title
     get fetchCreatedTitle() {
-        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-row-inner .coh-column h1")
+        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-column h1")
     }
     //Fetch type of the place
     get fetchPlaceType() {
-        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-row-inner .coh-column:nth-child(1)  > ul > li:nth-child(1) > a")
+        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-column:nth-child(1)  > ul > li:nth-child(1) > a")
     }
     //fetch place's city
     get fetchCity() {
-        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-row-inner .coh-column:nth-child(1) > ul > li:nth-child(2) > span")
+        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-column:nth-child(1) > ul > li:nth-child(2) > span")
     }
     //fetch content of the place
     get fetchContent() {
-        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-row-inner .coh-column:nth-child(3) > div > p")
+        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-column:nth-child(3) > div > p")
     }
     //Place - Validate
     validatePlace() {
-        cy.wait(2000)
         //Validate the title of the place
         this.fetchCreatedTitle.should('have.text', " " + testData.$content_title + " ")
         //validate the type of the place

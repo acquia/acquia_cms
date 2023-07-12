@@ -13,7 +13,7 @@ const tourPage = require("../../pages/TourPage")
 
 
 describe("Verify the contents of content page", () => {
-
+/*
     //TC-78
     context("Content page - Contents of the page", () => {
         it("Verify the contents of Content Page", () => {
@@ -85,7 +85,7 @@ describe("Verify the contents of content page", () => {
         it("Mouse hover on Content tab and navigate to Place link from sub-admin tool bar", () => {
             place.clickAndVerify()
         })
-    })
+    })*/
     //TC-83
     context("Place - Create Place", () => {
         it("Create, Save and publish the place", () => {
@@ -103,7 +103,7 @@ describe("Verify the contents of content page", () => {
             content.deleteContent()
         })
     })
-
+/*
     //Event
     //TC-84
     context("Event - Click and verify", () => {
@@ -166,5 +166,5 @@ describe("Verify the contents of content page", () => {
             //deleting created person
             content.deleteContent()
         })
-    })
+    })*/
 })

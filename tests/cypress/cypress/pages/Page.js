@@ -179,8 +179,6 @@ class Page {
             multiple: true
         })
         cy.wait(500)
-
-
     }
 
     //Get Visual Page Builder
@@ -228,9 +226,6 @@ class Page {
         this.exitVPB.click({
             force: true
         })
-
-
-
     }
 
     //TODO - More validations are needed

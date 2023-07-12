@@ -42,5 +42,8 @@ if [ "${ACMS_JOB}" == "cypress_tests" ]; then
   orca fixture:run-server &
 
   # Runs Cypress tests
-  npx cypress run --spec cypress/e2e/specsACMS/acms.content.spec.js cypress/e2e/specsACMS/acms.tourDashboard.spec.js
+  npx cypress run && error=false || error=true
+  if [ "${error}" = "true" ]; then
+     aws s3 cp --recursive "./tests/cypress/cypress/screenshots/" "${AWS_S3_BUCKET_PATH}/backstop/logs/screenshots"
+  fi
 fi
