@@ -1,29 +1,28 @@
 const testData = require("./TestData")
 class MenuTabs {
 
-    //Get Home menu tab
+    // Get Home menu tab.
     get homeMenu() {
         return cy.get("body > div.dialog-off-canvas-main-canvas > header > div.coh-container.coh-ce-cpt_site_header-6577ed22 > div.coh-container.coh-ce-cpt_site_header-e2a0ade6 > div > div > nav > ul > li:nth-child(1) > a")
     }
-    //Get Articles menu tab
+    // Get Articles menu tab.
     get articlesMenu() {
         return cy.get("body > div.dialog-off-canvas-main-canvas > header > div.coh-container.coh-ce-cpt_site_header-6577ed22 > div.coh-container.coh-ce-cpt_site_header-e2a0ade6 > div > div > nav > ul > li:nth-child(2) > a")
     }
-    //Get Event menu tab
+    // Get Event menu tab.
     get eventMenu() {
         return cy.get("body > div.dialog-off-canvas-main-canvas > header > div.coh-container.coh-ce-cpt_site_header-6577ed22 > div.coh-container.coh-ce-cpt_site_header-e2a0ade6 > div > div > nav > ul > li:nth-child(3) > a")
     }
-    //Get People menu tab
+    // Get People menu tab.
     get peopleMenu() {
         return cy.get("body > div.dialog-off-canvas-main-canvas > header > div.coh-container.coh-ce-cpt_site_header-6577ed22 > div.coh-container.coh-ce-cpt_site_header-e2a0ade6 > div > div > nav > ul > li:nth-child(4) > a")
     }
-    //Get Places menu tab
+    // Get Places menu tab.
     get placesMenu() {
         return cy.get("body > div.dialog-off-canvas-main-canvas > header > div.coh-container.coh-ce-cpt_site_header-6577ed22 > div.coh-container.coh-ce-cpt_site_header-e2a0ade6 > div > div > nav > ul > li:nth-child(5) > a")
     }
 
-    //Get primary menu items
-    //Get primary menu options
+    // Get primary menu items & menu options.
     get primaryMenuOptions(){
       cy.get("body").then($body => {
         if ($body.find("#block-acquia-claro-primary-local-tasks > nav > ul > li.is-active button.reset-appearance").length > 0) {
@@ -35,36 +34,36 @@ class MenuTabs {
         }
       })
     }
-    //Get view primary menu
+    // Get view primary menu.
     get viewMenu() {
         return cy.get("#block-tabs-2 > nav > ul > li:nth-child(1) > a")
     }
-    //Get scheduled primary menu
+    // Get scheduled primary menu.
     get scheduledMenu() {
         return cy.get("#block-tabs-2 > nav > ul > li:nth-child(2) > a")
     }
-    //Get scheduled primary menu
+    // Get scheduled primary menu.
     get scheduledMediaMenu() {
         return cy.get("#block-acquia-claro-primary-local-tasks > nav > ul > li:nth-child(3) > a")
     }
-    //Get edit primary menu
+    // Get edit primary menu.
     get editMenu() {
         return cy.get("#block-acquia-claro-primary-local-tasks > nav > ul > li:nth-child(4) > a")
     }
-    //Get moderation dashboard primary menu
+    // Get moderation dashboard primary menu.
     get moderation_dashboardMenu() {
         return cy.get("#block-acquia-claro-primary-local-tasks > nav > ul > li:nth-child(5) > a")
     }
-    //Get Acquia DAM primary menu
+    // Get Acquia DAM primary menu.
     get acquiaDamMenu() {
         return cy.get("#block-acquia-claro-primary-local-tasks > nav > ul > li:nth-child(6) > a")
     }
-    //Get clone primary menu
+    // Get clone primary menu.
     get cloneMenu() {
         return cy.get("#block-tabs-2 > nav > ul > li:nth-child(7) > a")
     }
 
-    //Validate the spellsings for Menu items
+    // Validate the spellsings for Menu items.
     spell_Validations_Menu() {
         this.homeMenu.should('have.text', 'Home')
         this.articlesMenu.should('have.text', 'Articles')
@@ -73,7 +72,7 @@ class MenuTabs {
         this.placesMenu.should('have.text', 'Places')
     }
 
-    //Validate menu items are clickable
+    // Validate menu items are clickable.
     click_menu_items() {
 
         this.homeMenu.click({
@@ -103,6 +102,8 @@ class MenuTabs {
         cy.url().should('eq', testData.$places_url)
 
     }
+
+    // Verify name of menu items.
     spell_validations_primary_menu() {
         this.viewMenu.should('have.text', "View")
         this.viewMenu.click()
@@ -128,6 +129,7 @@ class MenuTabs {
         this.acquiaDamMenu.click()
     }
 
+    // Verify menu items and make sure its clickable.
     click_primary_menu_items() {
         this.viewMenu.click()
         cy.url().should('eq', testData.$view_url)

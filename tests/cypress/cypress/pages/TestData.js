@@ -1,6 +1,6 @@
 class TestData {
 
-    //Content creation data
+    // Content creation data.
     $content_title = "QA_Test_CypressSS"
     $content = "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum"
     $first_name = "John"
@@ -32,23 +32,22 @@ class TestData {
     default_hero_text = 'Medium length placeholder heading.'
     $publish_save_type = "Published"
 
-    //Password policy
+    // Password policy.
     $policy1 = 'Minimum password character types: 3'
     $policy2 = 'Password character length of at least 8 characters'
     $policy3 = 'Password must not contain the user\'s username.'
-
     $policy_password = 'A1234567890b!'
     $policy_username = 'QA_User'
+    $Deletion_msg_1_4_version = 'Account QA_User has been deleted.'
 
-    //Taxonomy
+    // Taxonomy.
     $vocab_name = 'QA_Test_Vocab'
     $vocab_description = 'QA test vocabulary description'
     $term_name = 'QA_term'
     $term_description = 'QA test term description'
 
-    //Extend
+    // Extend.
     $starter_module = 'Acquia CMS Starter'
-    //Modules with Aquia CMS prefixed
     $article_module = 'Acquia CMS Article'
     $audio_module = 'Acquia CMS Audio'
     $common_module = 'Acquia CMS Common'
@@ -65,7 +64,8 @@ class TestData {
     $toolbar_module = 'Acquia CMS Toolbar'
     $tour_module = 'Acquia CMS Tour'
     $video_module = 'Acquia CMS Video'
-    //Name of the tabs
+
+    // Name of the tabs.
     $content_tab = 'Content'
     $structure_tab = 'Structure'
     $site_studio_tab = 'Site Studio'
@@ -76,17 +76,15 @@ class TestData {
     $reports_tab = 'Reports'
     $tour_tab = 'Acquia CMS Wizard'
 
-    //Tour page content
+    // Tour page content.
     $heading_tour_page = 'CMS Dashboard'
+    $setupManuallyWizButton = 'body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.acms-welcome-modal.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div > button.setup-manually.button.js-form-submit.form-submit.ui-button.ui-corner-all.ui-widget'
 
-    //Password policy contents
-    $Deletion_msg_1_4_version = 'Account QA_User has been deleted.'
-
-    //Get Started page content
+    // Get Started page content.
     $popup_title_description = 'Welcome to Acquia CMSWe\'ve created an easy step by step installation wizard to guide you through the necessary configurations\n'
     $heading_get_started ='CMS Dashboard'
 
-    //Checkup
+    // Links.
     $baseUrl = Cypress.config('baseUrl') || Cypress.env('baseUrl')
     $baseURL = this.$baseUrl
     $published_url = this.$baseURL+'/qatestcypressss'
@@ -102,10 +100,6 @@ class TestData {
     $clone_url = this.$baseURL+'/entity_clone/user/1'
     $acquia_dam_url = this.$baseURL+'/user/1/acquia-dam'
     $moderation_dashboard_url = this.$baseURL+'/user/1/moderation-dashboard'
-
-    //Tour Page
-    $setupManuallyWizButton = 'body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.acms-welcome-modal.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div > button.setup-manually.button.js-form-submit.form-submit.ui-button.ui-corner-all.ui-widget'
-
 }
 const testData = new TestData()
 module.exports = testData

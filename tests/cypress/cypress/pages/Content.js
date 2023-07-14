@@ -4,7 +4,7 @@ class Content {
     get contentPage() {
         cy.get("body").then($body => {
             if ($body.find("#toolbar-item-administration-tray > nav > div.toolbar-menu-administration > ul > li:nth-child(2) > a").length > 0) {
-                //evaluates as true if button exists at all
+                // Evaluates as true if button exists at all.
                 cy.get("#toolbar-item-administration-tray > nav > div.toolbar-menu-administration > ul > li:nth-child(2) > a").then($header => {
                   if ($header.is(':hidden')){
                     cy.get('#toolbar-administration #toolbar-item-administration').click()
@@ -15,67 +15,67 @@ class Content {
         return cy.get("#toolbar-item-administration-tray > nav > div.toolbar-menu-administration > ul > li:nth-child(2) > a")
     }
 
-    //Get page title
+    // Get page title.
     get pageTitle() {
         return cy.get("#block-acquia-claro-page-title > h1")
     }
 
-    //Get content tab on the page
+    // Get content tab on the page.
     get contentTab() {
         return cy.get("#block-acquia-claro-primary-local-tasks > nav > ul > li:nth-child(1) > a")
     }
 
-    //Get file tab on the page
+    // Get file tab on the page.
     get fileTab() {
         return cy.get("#block-acquia-claro-primary-local-tasks > nav > ul > li:nth-child(2) > a")
     }
 
-    //Get media tab on the page
+    // Get media tab on the page.
     get mediaTab() {
         return cy.get("#block-acquia-claro-primary-local-tasks > nav > ul > li:nth-child(3) > a")
     }
 
-    //Get name of the tab for assertion
+    // Get name of the tab for assertion.
     get tabName() {
         return cy.get("#block-acquia-claro-primary-local-tasks > nav > ul > li.tabs__tab.js-tab.is-active.js-active-tab > a")
     }
 
-    //Get add content button
+    // Get add content button.
     get addContentButton() {
         return cy.get("#block-acquia-claro-local-actions > ul > li > a")
     }
 
-    //Get search box from filter
+    // Get search box from filter.
     get searchFilter() {
         return cy.get("#edit-title")
     }
 
-    //Get filter button
+    // Get filter button.
     get filterButton() {
         return cy.get("#edit-submit-content")
     }
 
-    //Get filtered article name- todo (ask akshay)
+    // Get filtered article name- todo (ask akshay).
     get articleName() {
         return cy.get("#views-form-content-page-1 > table.views-table.views-view-table.cols-7.responsive-enabled.sticky-enabled.sticky-table > tbody > tr > td.views-field.views-field-title")
     }
 
-    //Get action dropdown
+    // Get action dropdown.
     get actionDropdown() {
         return cy.get("#edit-action")
     }
 
-    //Get apply to selected items button
+    // Get apply to selected items button.
     get applyButton() {
         return cy.get("#edit-submit")
     }
 
-    //Get title bar
+    // Get title bar.
     get titleBar() {
         return cy.get("table.views-view-table thead th#view-title-table-column > a")
     }
 
-    //Navigation buttons at the footer
+    // Navigation buttons at the footer.
     get nextNavButton() {
         return cy.get("#block-acquia-claro-content > div > div > nav > ul > li.pager__item.pager__item--action.pager__item--next > a")
     }
@@ -84,7 +84,7 @@ class Content {
         return cy.get("#block-acquia-claro-content > div > div > nav > ul > li.pager__item.pager__item--action.pager__item--last > a")
     }
 
-    //Mouse hover content tab and accessing add content
+    // Mouse hover content tab and accessing add content.
     get addContent() {
         return cy.get("#toolbar-item-administration-tray > nav > div.toolbar-menu-administration > ul > li:nth-child(2) > ul > li:nth-child(1) > a")
     }
@@ -104,22 +104,22 @@ class Content {
         return cy.get("#block-acquia-claro-content > dl > div:nth-child(5) > dt")
     }
 
-    //Delete checkbox
+    // Delete checkbox.
     get articleToDelete() {
         return cy.get("#views-form-content-page-1 > table.views-table.views-view-table.cols-7.responsive-enabled.sticky-enabled.sticky-table > thead > tr > th.select-all.views-field.views-field-node-bulk-form > input")
     }
-    //Confirm Delete
+    // Confirm Delete.
     get delete() {
         return cy.get("#edit-submit")
     }
 
-    //Verify the content page
+    // Verify the content page.
     verify() {
-        //click on the content tab from sub-admin toolbar
+        // Click on the content tab from sub-admin toolbar.
         this.contentPage.click()
-        //content name should be visible by default
+        // Content name should be visible by default.
         this.pageTitle.should('have.text', 'Content')
-        //Content, Files and Media Tabs are visble with expected name and working
+        // Content, Files and Media Tabs are visble with expected name and working.
         this.fileTab.click({
             force: true
         })
@@ -132,9 +132,9 @@ class Content {
             force: true
         })
         this.tabName.should('have.text', 'Content(active tab)')
-        //add content button should be visible
+        // Add content button should be visible.
         this.addContentButton.should("be.visible")
-        //search for content using filter
+        // Search for content using filter.
         this.searchFilter.type("Article one", {
             force: true
         })
@@ -144,7 +144,7 @@ class Content {
         this.contentTab.click({
             force: true
         })
-        //Action dropdown should be present with defined values
+        // Action dropdown should be present with defined values.
         this.actionDropdown.select('Delete content', {
             force: true
         }).should('have.value', 'node_delete_action')
@@ -172,24 +172,24 @@ class Content {
         this.actionDropdown.select('Update URL alias', {
             force: true
         }).should('have.value', 'pathauto_update_alias_node')
-        //Apply to selected item button should be present
+        // Apply to selected item button should be present.
         this.applyButton.should("be.visible")
-        //Title bar should be present
+        // Title bar should be present.
         this.titleBar.should('have.text', 'Title')
-        //Check for navigation button at the bottom
+        // Check for navigation button at the bottom.
         this.nextNavButton.should("be.visible")
         this.lastNavButton.should("be.visible")
     }
 
-    //Click and verify
+    // Click and verify.
     clickAndVerify() {
-        //Verifying mouse hover on Content Tab
+        // Verifying mouse hover on Content Tab.
         this.contentPage.invoke('show').click()
-        //On mouse hover clicking on Add Content and navigating to Add Content page
+        // On mouse hover clicking on Add Content and navigating to Add Content page.
         this.addContentButton.click({
             force: true
         })
-        //Verifying the Add Content page
+        // Verifying the Add Content page.
         this.pageTitle.should('have.text', 'Add content')
         this.article.should('contain', 'Article')
         this.event.should('contain', 'Event')
@@ -198,30 +198,30 @@ class Content {
         this.place.should('contain', 'Place')
     }
 
-    //delete content
+    // Delete content.
     deleteContent() {
-        //go to all content
+        // Go to all content.
         this.contentPage.click()
-        //search for newly created content
+        // Search for newly created content.
         this.searchFilter.type(testData.$content_title, {
             force: true
         })
-        //filter with the newly created content name
+        // Filter with the newly created content name.
         this.filterButton.click({
             force: true
         })
-        //click the checkbox to delete
+        // Click the checkbox to delete.
         cy.scrollTo(0, 500)
         this.articleToDelete.check()
-        //select actions from action dropdown as delete
+        // Select actions from action dropdown as delete.
         this.actionDropdown.select('Delete content', {
             force: true
         }).should('have.value', 'node_delete_action')
-        //click apply button to delete
+        // Click apply button to delete.
         this.applyButton.click({
             force: true
         })
-        //confirm delete
+        // Confirm delete.
         this.delete.click({
             force: true
         })

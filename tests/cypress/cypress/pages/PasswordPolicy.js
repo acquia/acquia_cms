@@ -1,16 +1,16 @@
 import testData from './TestData'
 class PasswordPolicy {
 
-    //Get people tab link
+    // Get people tab link.
     get people(){
         return cy.get("#toolbar-item-administration-tray > nav > div.toolbar-menu-administration > ul > li:nth-child(8) > a")
     }
-    //Get the link to add user
+    // Get the link to add user.
     get addUser() {
         return cy.get("#toolbar-item-administration-tray > nav > div.toolbar-menu-administration > ul > li:nth-child(8) > ul > li:nth-child(1) > a")
     }
 
-    //Get CheckBoxes
+    // Get CheckBoxes.
     get adminCheckBox() {
         return cy.get("#edit-roles-administrator")
     }
@@ -33,7 +33,7 @@ class PasswordPolicy {
         return cy.get("#edit-roles-user-administrator")
     }
 
-    //Get the text boxes
+    // Get the text boxes.
     get emailTextBox() {
         return cy.get("#edit-mail")
     }
@@ -47,12 +47,12 @@ class PasswordPolicy {
         return cy.get("#edit-path-0-alias")
     }
 
-    //Get the create new account button
+    // Get the create new account button.
     get createNewAccButton() {
         return cy.get("#edit-submit")
     }
 
-    //Get the status and password policy
+    // Get the status and password policy.
     get passPolycy1(){
         return cy.get("#password-policy-status > table > tbody > tr:nth-child(1) > td:nth-child(3)")
     }
@@ -65,73 +65,70 @@ class PasswordPolicy {
         return cy.get("#password-policy-status > table > tbody > tr:nth-child(3) > td:nth-child(3)")
     }
 
-    //Get password text box
+    // Get password text box.
     get password(){
         return cy.get("#edit-pass-pass1")
     }
 
-    //Get Confirm password
+    // Get Confirm password.
     get confirmPassword(){
         return cy.get("#edit-pass-pass2")
     }
 
-    //Create new user account
+    // Create new user account.
     get saveButtonCreateAccount(){
         return cy.get("#edit-submit")
     }
 
-    //Search the created user
+    // Search the created user.
     get searchUser(){
         return cy.get("#edit-user")
     }
 
-    //Hit the filter user button
+    // Hit the filter user button.
     get filterUser(){
         return cy.get("#edit-submit-user-admin-people")
     }
 
-    //Check all the searched user
+    // Check all the searched user.
     get checkSearchedUser(){
         return cy.get("#views-form-user-admin-people-page-1 > table > thead > tr > th.select-all.views-field.views-field-user-bulk-form > input")
     }
 
-    //Select the option of deleting the user from the dropdown
+    // Select the option of deleting the user from the dropdown.
     get selectAction(){
         return cy.get("#edit-action")
     }
 
-    //Apply the action selector
+    // Apply the action selector.
     get applyAction(){
         return cy.get("#edit-submit--2")
     }
 
-    //Delete the user radio option
+    // Delete the user radio option.
     get deleteUser(){
         return cy.get('[type="radio"].edit-user-cancel-method-user-cancel-delete')
     }
 
-    //Cancle user button
+    // Cancle user button.
     get cancleUserButton(){
         return cy.get("#edit-submit")
     }
 
-    //Get the validation texts
+    // Get the validation texts.
     get userCreatedVal(){
         return cy.contains("Created a new user account for QA_User. No email has been sent")
     }
     get userDeletedVal(){
-        //TODO - Conditional if statement for the versions
         return cy.contains(testData.$Deletion_msg_1_4_version)
-        //Before 1.4.0 version
-        //return cy.contains("QA_User has been deleted")
     }
 
-    //Verify the contents of password policy page
+    // Verify the contents of password policy page.
     verifyCheckBoxes() {
-        //Navigating to the add user page
+        // Navigating to the add user page.
         this.addUser.click({force:true})
         cy.wait(2000)
-        // Validating all the checkboxes are visible
+        // Validating all the checkboxes are visible.
         this.adminCheckBox.should("be.visible")
         this.devCheckBox.should("be.visible")
         this.siteBuilderCheckBox.should("be.visible")
@@ -142,26 +139,26 @@ class PasswordPolicy {
     }
 
     verifyTextBoxes() {
-        //Navigating to the add user page
+        // Navigating to the add user page.
         this.addUser.click({force:true})
         cy.wait(2000)
-        //Validating all text boxes are visible
+        // Validating all text boxes are visible.
         this.emailTextBox.should("be.visible")
         this.usernameTextBox.should("be.visible")
         this.passwordTextBox.should("be.visible")
         this.urlAliasTextBox.should("be.visible")
     }
 
-    //Verify the create new account button is present
+    // Verify the create new account button is present.
     verifyButtons(){
-        //Navigating to the add user page
+        // Navigating to the add user page.
         this.addUser.click({force:true})
         cy.wait(2000)
-        //Validate the button present
+        // Validate the button present.
         this.createNewAccButton.should("be.visible")
     }
 
-    //Verify the password policy
+    // Verify the password policy.
     verifyPasswordPolicy() {
         this.addUser.click({force:true})
         cy.wait(2000)
@@ -170,7 +167,7 @@ class PasswordPolicy {
         this.passPolycy3.should('have.text',testData.$policy3)
     }
 
-    //Put the expected password and verify
+    // Put the expected password and verify.
     verifyPassword(){
         this.addUser.click({force:true})
         this.userAdminCheckBox.check()
@@ -187,7 +184,7 @@ class PasswordPolicy {
         this.userCreatedVal.should('have.text','\n                          Created a new user account for QA_User. No email has been sent.\n                      ')
         }
 
-    //Cancel and delete the created user
+    // Cancel and delete the created user.
     deleteUser(){
         this.people.click()
         this.searchUser.type(testData.$policy_username)

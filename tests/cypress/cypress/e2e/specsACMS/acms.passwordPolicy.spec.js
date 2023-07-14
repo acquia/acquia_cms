@@ -1,4 +1,4 @@
-/// <reference types="cypress" />
+// TC-## are the qTest test case id's <reference types="cypress" />.
 
 const passwordPolicy = require("../../pages/PasswordPolicy")
 

@@ -109,9 +109,9 @@ class Extend {
         return cy.get('#edit-submit')
     }
 
-    //Extend Acquia CMS starter module
+    // Extend Acquia CMS starter module.
     extendStarterModule() {
-        //Extend Acquia CMS starter module
+        // Extend Acquia CMS starter module.
         this.extendTabLink.click({
             force: true
         })
@@ -122,9 +122,9 @@ class Extend {
         cy.wait(2000)
     }
 
-    //Extend VPB module
+    // Extend VPB module.
     extendVPBModule() {
-        //Extend Acquia CMS starter module
+        // Extend Acquia CMS starter module.
         this.extendTabLink.click({
             force: true
         })
@@ -135,9 +135,9 @@ class Extend {
         cy.wait(2000)
     }
 
-    //Verify Acquia Purge module
+    // Verify Acquia Purge module.
     extendPurgeModule() {
-        //Extend Acquia purge module
+        // Extend Acquia purge module.
         this.extendTabLink.click({
             force: true
         })
@@ -146,9 +146,9 @@ class Extend {
         this.acquiaPurgeModule.should('have.text', 'Acquia Purge')
     }
 
-    //Verify Acquia Search module
+    // Verify Acquia Search module.
     extendSearchModule() {
-        //Extend Acquia search module
+        // Extend Acquia search module.
         this.extendTabLink.click({
             force: true
         })
@@ -157,9 +157,9 @@ class Extend {
         this.acquiaSearchModule.should('have.text', 'Acquia Search')
     }
 
-    //Verify Acquia Search API Solr module
+    // Verify Acquia Search API Solr module.
     extendSASolrModule() {
-        //Extend Acquia search api solr module
+        // Extend Acquia search api solr module.
         this.extendTabLink.click({
             force: true
         })
@@ -168,9 +168,9 @@ class Extend {
         this.acquiaSASolrModule.should('have.text', 'Search API Solr')
     }
 
-    //Verify Acquia Connector module
+    // Verify Acquia Connector module.
     extendConnectorModule() {
-        //Extend Acquia connector module
+        // Extend Acquia connector module.
         this.extendTabLink.click({
             force: true
         })
@@ -179,9 +179,9 @@ class Extend {
         this.acquiaConnectorModule.should('have.text', 'Acquia Connector')
     }
 
-    //Verify Acquia Connector module
+    // Verify Acquia Connector module.
     extendArticleModule() {
-        //Extend Acquia connector module
+        // Extend Acquia connector module.
         this.extendTabLink.click({
             force: true
         })
@@ -190,9 +190,9 @@ class Extend {
         this.acquiaArticleModule.should('have.text', 'Acquia CMS Article')
     }
 
-    //Verify Acquia Connector module
+    // Verify Acquia Connector module.
     extendAudioModule() {
-        //Extend Acquia connector module
+        // Extend Acquia connector module.
         this.extendTabLink.click({
             force: true
         })
@@ -201,9 +201,9 @@ class Extend {
         this.acquiaAudioModule.should('have.text', 'Acquia CMS Audio')
     }
 
-    //Verify Acquia Connector module
+    // Verify Acquia Connector module.
     extendComponentModule() {
-        //Extend Acquia connector module
+        // Extend Acquia connector module.
         this.extendTabLink.click({
             force: true
         })
@@ -212,9 +212,9 @@ class Extend {
         this.acquiaComponentModule.should('have.text', 'Acquia CMS Component')
     }
 
-    //Verify Acquia CMS DAM module
+    // Verify Acquia CMS DAM module.
     extendDamModule() {
-        //Extend Acquia CMS DAM module
+        // Extend Acquia CMS DAM module.
         this.extendTabLink.click({
             force: true
         })
@@ -223,9 +223,9 @@ class Extend {
         this.acquiaDamModule.should('have.text', 'Acquia CMS DAM')
     }
 
-    //Verify Acquia CMS Document module
+    // Verify Acquia CMS Document module.
     extendDocumentModule() {
-        //Extend Acquia CMS Document module
+        // Extend Acquia CMS Document module.
         this.extendTabLink.click({
             force: true
         })
@@ -234,9 +234,9 @@ class Extend {
         this.acquiaDocumentModule.should('have.text', 'Acquia CMS Document')
     }
 
-    //Verify Acquia CMS Event module
+    // Verify Acquia CMS Event module.
     extendEventModule() {
-        //Extend Acquia CMS Event module
+        // Extend Acquia CMS Event module.
         this.extendTabLink.click({
             force: true
         })
@@ -245,9 +245,9 @@ class Extend {
         this.acquiaEventModule.should('have.text', 'Acquia CMS Event')
     }
 
-    //Verify Acquia CMS Headless module
+    // Verify Acquia CMS Headless module.
     extendHeadlessModule() {
-        //Extend Acquia CMS Headless module
+        // Extend Acquia CMS Headless module.
         this.extendTabLink.click({
             force: true
         })
@@ -256,9 +256,9 @@ class Extend {
         this.acquiaHeadlessModule.should('have.text', 'Acquia CMS Headless')
     }
 
-    //Verify Acquia CMS Image module
+    // Verify Acquia CMS Image module.
     extendImageModule() {
-        //Extend Acquia CMS Image module
+        // Extend Acquia CMS Image module.
         this.extendTabLink.click({
             force: true
         })
@@ -267,9 +267,9 @@ class Extend {
         this.acquiaImageModule.should('have.text', 'Acquia CMS Image')
     }
 
-    //Verify Acquia CMS Page module
+    // Verify Acquia CMS Page module.
     extendPageModule() {
-        //Extend Acquia CMS Page module
+        // Extend Acquia CMS Page module.
         this.extendTabLink.click({
             force: true
         })
@@ -278,9 +278,9 @@ class Extend {
         this.acquiaPageModule.should('have.text', 'Acquia CMS Page')
     }
 
-    //Verify Acquia CMS Person module
+    // Verify Acquia CMS Person module.
     extendPersonModule() {
-        //Extend Acquia CMS Person module
+        // Extend Acquia CMS Person module.
         this.extendTabLink.click({
             force: true
         })
@@ -289,9 +289,9 @@ class Extend {
         this.acquiaPersonModule.should('have.text', 'Acquia CMS Person')
     }
 
-    //Verify Acquia CMS Place module
+    // Verify Acquia CMS Place module.
     extendPlaceModule() {
-        //Extend Acquia CMS Place module
+        // Extend Acquia CMS Place module.
         this.extendTabLink.click({
             force: true
         })
@@ -300,9 +300,9 @@ class Extend {
         this.acquiaPlaceModule.should('have.text', 'Acquia CMS Place')
     }
 
-    //Verify Acquia CMS Search module
+    // Verify Acquia CMS Search module.
     extendSearchModule() {
-        //Extend Acquia CMS Search module
+        // Extend Acquia CMS Search module.
         this.extendTabLink.click({
             force: true
         })
@@ -311,9 +311,9 @@ class Extend {
         this.acquiaSearchModule.should('have.text', 'Acquia CMS Search')
     }
 
-    //Verify Acquia CMS Site Studio module
+    // Verify Acquia CMS Site Studio module.
     extendSiteStudioModule() {
-        //Extend Acquia CMS Site Studio module
+        // Extend Acquia CMS Site Studio module.
         this.extendTabLink.click({
             force: true
         })
@@ -322,9 +322,9 @@ class Extend {
         this.acquiaSiteStudioModule.should('have.text', 'Acquia CMS Site Studio')
     }
 
-    //Verify Acquia CMS Toolbar module
+    // Verify Acquia CMS Toolbar module.
     extendToolbarModule() {
-       //Extend Acquia CMS Toolbar module
+       // Extend Acquia CMS Toolbar module.
        this.extendTabLink.click({
            force: true
        })
@@ -333,9 +333,9 @@ class Extend {
        this.acquiaToolbarModule.should('have.text', 'Acquia CMS Toolbar')
    }
 
-   //Verify Acquia CMS Tour module
+   // Verify Acquia CMS Tour module.
    extendTourModule() {
-      //Extend Acquia CMS Tour module
+      // Extend Acquia CMS Tour module.
       this.extendTabLink.click({
           force: true
       })
@@ -344,9 +344,9 @@ class Extend {
       this.acquiaTourModule.should('have.text', 'Acquia CMS Tour')
   }
 
-     //Verify Acquia CMS Video module
+     // Verify Acquia CMS Video module.
      extendCMSVideoModule() {
-        //Extend Acquia CMS Video module
+        // Extend Acquia CMS Video module.
         this.extendTabLink.click({
             force: true
         })
@@ -355,9 +355,9 @@ class Extend {
         this.acquiaCMSVideoModule.should('have.text', 'Acquia CMS Video')
     }
 
-    //Verify CheckList API module
+    // Verify CheckList API module.
     extendCheckListAPIModule() {
-        //Extend CheckList API module
+        // Extend CheckList API module.
         this.extendTabLink.click({
             force: true
         })
@@ -366,9 +366,9 @@ class Extend {
         this.checkListApiModule.should('have.text', 'Checklist API')
     }
 
-    //Verify Site Studio Core module
+    // Verify Site Studio Core module.
     extendSiteStudioCoreModule() {
-        //Extend Site Studio Core module
+        // Extend Site Studio Core module.
         this.extendTabLink.click({
             force: true
         })

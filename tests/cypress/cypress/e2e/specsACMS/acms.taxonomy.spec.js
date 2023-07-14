@@ -1,6 +1,6 @@
-/// <reference types="cypress" />
+// TC-## are the qTest test case id's <reference types="cypress" />.
 const taxonomy = require("../../pages/Taxonomy")
-//TC-94
+// TC-94.
 describe("Taxonomy adding new Vocabulary and new Term to it",()=>{
   context("Taxonomy - Add new Vocabulary",()=>{
       it("Add vocabulary, save it in Taxonomy and validate",()=>{
@@ -10,7 +10,7 @@ describe("Taxonomy adding new Vocabulary and new Term to it",()=>{
       })
   })
 
-  //TC-95
+  // TC-95.
   context("Taxonomy - Add term to newly added Vocabulary",()=>{
       it("Adding and validating term to newly added Vocabulary",()=>{
           taxonomy.termToVocab()

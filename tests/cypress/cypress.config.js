@@ -2,15 +2,6 @@ const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({
   projectId: 'ACMSQA_1.0.0',
-  urlUATAdmin: 'http://orionacmsstage.prod.acquia-sites.com/user/login',
-  urlQAAdmin: 'http://orionacmsode1.prod.acquia-sites.com/user/login',
-  urlPRODAdmin: 'https://orionacms.prod.acquia-sites.com/user/login',
-  urlODE5Admin: 'http://orionacmsode5.prod.acquia-sites.com/user/login',
-  urlODE7Admin: 'http://orionacmsode7.prod.acquia-sites.com/user/login',
-  urlODE8Admin: 'http://orionacmsode8.prod.acquia-sites.com/user/login',
-  urlDEVAdmin: 'http://orionacmsdev.prod.acquia-sites.com/user/login',
-  siteUrl: 'http://127.0.0.1:8083',
-  loginUrl: 'http://127.0.0.1:8083/user/login',
   browserUname: 'acms',
   browserPassword: 'DmpU05sN13o1@bQ!',
   adminUser: 'admin',
@@ -21,7 +12,7 @@ module.exports = defineConfig({
     cypressMochawesomeReporterReporterOptions: {
       reportDir: 'cypress/reports',
       charts: true,
-      reportPageTitle: 'My Test Suite',
+      reportPageTitle: 'Acquia CMS Cypress tests report.',
       embeddedScreenshots: true,
       inlineAssets: true,
     },

@@ -1,34 +1,8 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-
-//login to ACMS as admin with environmental login
+// Login to ACMS as admin.
 beforeEach("Login", () => {
-        //Clears browser cache
+        // Clears browser cache.
         cy.exec('npm cache clear --force')
-        //Login Url
+        // Login Url.
         cy.visit(Cypress.env('loginUrl'), {
             auth: {
                 username: Cypress.config().browserUname,

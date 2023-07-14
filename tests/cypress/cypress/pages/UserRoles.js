@@ -3,41 +3,42 @@ const passPolicy = require("./PasswordPolicy")
 
 class UserRoles {
 
-    //Get Add user link
+    // Get Add user link.
     get addUser() {
         return cy.get("#toolbar-item-administration-tray > nav > div.toolbar-menu-administration > ul > li:nth-child(8) > ul > li:nth-child(1) > a")
     }
 
-    //Get Admin Checkbox
+    // Get Admin Checkbox.
     get adminCheckBox() {
         return cy.get("#edit-roles-administrator")
     }
 
-    //Get email Address textbox
+    // Get email Address textbox.
     get emailAdd() {
         return cy.get("#edit-mail")
     }
-    //Get userName textbox
+    // Get userName textbox.
     get userNameTextBox() {
         return cy.get("#edit-name")
     }
-    //Get passWord textbox
+    // Get passWord textbox.
     get passwordTexBox() {
         return cy.get("#edit-pass-pass1")
     }
-    //Get confirm password textbox
+    // Get confirm password textbox.
     get confirmPassword() {
         return cy.get("#edit-pass-pass2")
     }
-    //Get create new account button
+    // Get create new account button.
     get createNewAccButton() {
         return cy.get("#edit-submit")
     }
-    //Get the validation texts
+    // Get the validation texts.
     get userCreatedVal() {
         return cy.contains("Created a new user account for QA_User. No email has been sent")
     }
 
+    // Create admin user.
     createAdminUser() {
         this.addUser.click({
             force: true
@@ -53,8 +54,9 @@ class UserRoles {
         this.userCreatedVal.should('have.text', '\n                          Created a new user account for QA_User. No email has been sent.\n                      ')
     }
 
+    // Delete the created admin user
     deleteCreatedUser() {
-        //Deleting created user
+        // Deleting created user.
         passPolicy.deleteUser()
     }
 

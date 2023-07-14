@@ -1,32 +1,32 @@
 const testData = require("./TestData")
 
 class AdminToolBar {
-    //Get admin tool bar items
+    // Get admin tool bar items.
     get editOption() {
         return cy.get("#toolbar-bar > div.contextual-toolbar-tab.toolbar-tab > button")
     }
 
-    //Get manage button
+    // Get manage button.
     get manageButton() {
         return cy.get("#toolbar-item-administration")
     }
 
-    //Get the environment
+    // Get the environment.
     get environment() {
         return cy.get("#toolbar-bar > div:nth-child(9) > a")
     }
 
-    //Get admin icon on the toolbar
+    // Get admin icon on the toolbar.
     get adminIcon() {
         return cy.get("#toolbar-item-user")
     }
 
-    //Get responsive icon
+    // Get responsive icon.
     get responsiveIcon() {
         return cy.get("#responsive-preview-toolbar-tab > button")
     }
 
-    //Inspect and verify the admin toolbar items
+    // Inspect and verify the admin toolbar items.
     inspectAndVerify() {
         this.editOption.should('have.text', 'Edit')
         this.manageButton.should('have.text', 'Manage')
@@ -34,7 +34,7 @@ class AdminToolBar {
         this.responsiveIcon.should('have.text', 'Layout preview')
     }
 
-    //Verify the edit/manage button on admin tool bar
+    // Verify the edit/manage button on admin tool bar.
     verifyEditButton() {
         this.editOption.click().invoke('attr', 'aria-pressed').should('equal', 'true')
 

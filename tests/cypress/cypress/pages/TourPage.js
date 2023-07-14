@@ -1,18 +1,18 @@
 const testData = require("./TestData")
 class TourPage {
 
-    //Get Tour Page Link
+    // Get Tour Page Link.
     get tourPageLink() {
         return cy.get("#toolbar-item-administration-tray > nav > div.toolbar-menu-administration > ul > li:nth-child(10) > a")
     }
-    //Get heading of the tour page
+    // Get heading of the tour page.
     get headingTourPage() {
         return cy.get("#block-acquia-claro-page-title > h1")
     }
 
-    //Get Started page contents
+    // Get Started page contents.
 
-    //First Timer PopUp
+    // First Timer PopUp.
     get titlePopup() {
         return cy.get('[id*="edit-tour-dashboard--"]')
     }
@@ -20,7 +20,7 @@ class TourPage {
         return cy.get("body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.acms-welcome-modal.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div > button.button.button--primary.button.js-form-submit.form-submit.ui-button.ui-corner-all.ui-widget")
     }
 
-    //Close the popup
+    // Close the popup.
     get closePopUp() {
       cy.get("body").then($body => {
         if ($body.find("div.ui-dialog.acms-welcome-modal > div.ui-dialog-titlebar > button > span.ui-icon-closethick").length > 0) {
@@ -33,7 +33,7 @@ class TourPage {
       })
     }
 
-    //Close wizard popup
+    // Close wizard popup.
     get wizardClose() {
       cy.get("body").then($body => {
         if ($body.find("div.ui-dialog.acms-installation-wizard > div.ui-dialog-titlebar > button > span.ui-icon-closethick").length > 0) {
@@ -46,20 +46,20 @@ class TourPage {
       })
     }
 
-    //Get Heading of the page
+    // Get Heading of the page.
     get headingGetStarted() {
         return cy.get("#block-acquia-claro-page-title > h1")
     }
-    //Wizard setup button
+    // Wizard setup button.
     get wizardSetupButton() {
         return cy.get("#block-acquia-claro-content > div.section-top > div.wizard > a")
     }
-    //get Progress bar
+    // Get Progress bar.
     get progressBar() {
         return cy.get("#block-acquia-claro-content > div.tour-checklist > div.progress__track > div")
     }
 
-    //Get site studio core summary
+    // Get site studio core summary.
     get siteStudioCore() {
         return cy.get("#edit-cohesion > summary")
     }
@@ -82,7 +82,7 @@ class TourPage {
         return cy.get("#edit-cohesion > div > div.dashboard-buttons-wrapper > div > b")
     }
 
-    //Get Acquia Connector
+    // Get Acquia Connector.
     get acquiaConnectorSummary() {
         return cy.get("#edit-acquia-connector > summary")
     }
@@ -99,7 +99,7 @@ class TourPage {
         return cy.get("#edit-acquia-connector > div > div.dashboard-buttons-wrapper > div > b")
     }
 
-    //Acquia search
+    // Acquia search.
     get acquiaSearchSummary() {
         return cy.get("#edit-acquia-search > summary")
     }
@@ -128,27 +128,7 @@ class TourPage {
         return cy.get("#edit-uuid")
     }
 
-    //Google Analytics
-    get googleAnalyticsSummary() {
-        return cy.get("#edit-google-analytics > summary")
-    }
-    get webPropID() {
-        return cy.get("#edit-web-property-id")
-    }
-    get saveButtonGA() {
-        return cy.get("#edit-submit--4")
-    }
-    get ignoreButtonGA() {
-        return cy.get("#edit-ignore--4")
-    }
-    get advancedDescriptionGA() {
-        return cy.get("#edit-google-analytics > div > div.dashboard-buttons-wrapper > div > a")
-    }
-    get advancedDescriptionIconGA() {
-        return cy.get("#edit-google-analytics > div > div.dashboard-buttons-wrapper > div > b")
-    }
-
-    //Geocoder
+    // Geocoder.
     get geocoderSummary() {
         return cy.get("#edit-geocoder > summary")
     }
@@ -168,7 +148,7 @@ class TourPage {
         return cy.get("#edit-geocoder > div > div.dashboard-buttons-wrapper > div > b")
     }
 
-    //reCAPTCHA
+    // reCAPTCHA.
     get reCapchaSummary() {
         return cy.get("#edit-recaptcha > summary")
     }
@@ -191,7 +171,7 @@ class TourPage {
         return cy.get("#edit-recaptcha > div > div.dashboard-buttons-wrapper > div > b")
     }
 
-    //Google Tag Manager
+    // Google Tag Manager.
     get googleTagManagerSummary() {
         return cy.get("#edit-google-tag > summary")
     }
@@ -211,7 +191,7 @@ class TourPage {
         return cy.get("#edit-google-tag > div > div.dashboard-buttons-wrapper > div > b")
     }
 
-    //Acquia Telemetry
+    // Acquia Telemetry.
     get acquiaTelemetrySummary() {
         return cy.get("#edit-acquia-telemetry > summary")
     }
@@ -225,10 +205,10 @@ class TourPage {
         return cy.get("#edit-ignore")
     }
 
-    //Wizard Setup
+    // Wizard Setup.
     get wizardHeading() {
         return cy.get("#ui-id-2")
-        //return cy.xpath("//*[@id=\"ui-id-2\"]")
+        // return cy.xpath("//*[@id=\"ui-id-2\"]").
     }
     get wizardSaveButton() {
         return cy.get("body > div.ui-dialog.acms-installation-wizard > .ui-dialog-buttonpane > .ui-dialog-buttonset > button:nth-child(2)")
@@ -243,7 +223,7 @@ class TourPage {
         return cy.get("body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.acms-welcome-modal.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div > button.setup-manually.button.js-form-submit.form-submit.ui-button.ui-corner-all.ui-widget")
     }
 
-    //Click on setup wizard manually
+    // Click on setup wizard manually.
     setupWizardManually() {
         this.tourPageLink.click()
         this.closePopUp
@@ -251,23 +231,22 @@ class TourPage {
         this.wizardSetupButton.click()
     }
 
-    //Validate Contents of the tour page
+    // Validate Contents of the tour page.
     validateTourPageContents() {
         this.tourPageLink.click()
         this.headingTourPage.should('have.text', testData.$heading_tour_page)
     }
 
-    //Validate contents of the get started page
+    // Validate contents of the get started page.
     validateGetStartedPage() {
         this.tourPageLink.click()
         cy.wait(1000)
-        //TODO - Check the alternative - the popup will show only once
         this.wizardClose.click()
         this.headingGetStarted.should('have.text', testData.$heading_get_started)
         this.wizardSetupButton.should('be.visible').and('have.text', 'Wizard set-up')
         this.progressBar.should('be.visible')
 
-        //Site Studio Core
+        // Site Studio Core.
         this.siteStudioCore.click({
             force: true
         }).should('have.text', 'Site Studio core')
@@ -279,8 +258,7 @@ class TourPage {
         this.advancedDescriptionIconSSC.should('be.visible')
         this.siteStudioCore.click()
 
-        //TODO - enable the module
-        //Acquia Connector
+        // Acquia Connector.
         this.acquiaConnectorSummary.click({
             force: true
         }).should('have.text', 'Acquia Connector')
@@ -292,7 +270,7 @@ class TourPage {
             force: true
         })
 
-        //Acquia Search
+        // Acquia Search.
         this.acquiaSearchSummary.click({
             force: true
         }).should('have.text', 'Acquia Search')
@@ -308,20 +286,7 @@ class TourPage {
             force: true
         })
 
-        //Google Analytics
-        this.googleAnalyticsSummary.click({
-            force: true
-        }).should('have.text', 'Google Analytics')
-        this.webPropID.should('be.visible')
-        this.saveButtonGA.should('be.visible')
-        this.ignoreButtonGA.should('be.visible')
-        this.advancedDescriptionGA.should('be.visible')
-        this.advancedDescriptionIconGA.should('be.visible')
-        this.googleAnalyticsSummary.click({
-            force: true
-        })
-
-        //Geocoder
+        // Geocoder.
         this.geocoderSummary.click({
             force: true
         }).should('have.text', 'Geocoder')
@@ -334,7 +299,7 @@ class TourPage {
             force: true
         })
 
-        //reCaptcha
+        // reCaptcha.
         this.reCapchaSummary.click({
             force: true
         }).should('have.text', 'reCAPTCHA')
@@ -348,7 +313,7 @@ class TourPage {
             force: true
         })
 
-        //Google Tag Manager
+        // Google Tag Manager.
         this.googleTagManagerSummary.click({
             force: true
         }).should('have.text', 'Google Tag Manager')
@@ -361,7 +326,7 @@ class TourPage {
             force: true
         })
 
-        //Acquia Telemetry
+        // Acquia Telemetry.
         this.acquiaTelemetrySummary.click({
             force: true
         }).should('have.text', 'Acquia Telemetry')
@@ -373,7 +338,7 @@ class TourPage {
         })
     }
 
-    //Wizard validations
+    // Wizard validations.
     wizardValidations() {
         this.tourPageLink.click()
         cy.wait(1000)

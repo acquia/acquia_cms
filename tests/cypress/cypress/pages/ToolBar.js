@@ -1,89 +1,107 @@
 const testData = require("./TestData")
 class ToolBar {
-    //Get extend link
+    // Get extend link.
     get extendLink() {
         return cy.get("#toolbar-item-administration-tray > nav > div.toolbar-menu-administration > ul > li:nth-child(6) > a")
     }
-    //Get extend filter
+
+    // Get extend filter.
     get extendFilter() {
         return cy.get("#edit-text")
     }
-    //Get the check button for starter module
+
+    // Get the check button for starter module.
     get checkButton() {
         return cy.get("#edit-modules-acquia-cms-starter-enable")
     }
-    //Get install module button
+
+    // Get install module button.
     get installModuleButton() {
         return cy.get("#edit-submit")
     }
 
-    //Get List of modules
-    //article
+    // Get List of modules.
+    // Article.
     get article_module() {
         return cy.get("#module-acquia-cms-article")
     }
-    //audio
+
+    // Audio.
     get audio_module() {
         return cy.get("#module-acquia-cms-audio")
     }
-    //common
+
+    // Common.
     get common_module() {
         return cy.get("#module-acquia-cms-common")
     }
-    //development
+
+    // Development.
     get development_module() {
         return cy.get("#module-acquia-cms-development")
     }
-    //document
+
+    // Document.
     get document_module() {
         return cy.get("#module-acquia-cms-document")
     }
-    //event
+
+    // Event.
     get event_module() {
         return cy.get("#module-acquia-cms-event")
     }
-    //image
+
+    // Image.
     get image_module() {
         return cy.get("#module-acquia-cms-image")
     }
-    //page
+
+    // Page.
     get page_module() {
         return cy.get("#module-acquia-cms-page")
     }
-    //person
+
+    // Person.
     get person_module() {
         return cy.get("#module-acquia-cms-person")
     }
-    //place
+
+    // Place.
     get place_module() {
         return cy.get("#module-acquia-cms-place")
     }
-    //search
+
+    // Search.
     get search_module() {
         return cy.get("#module-acquia-cms-search")
     }
-    //starter
+
+    // Starter.
     get starter_module() {
         return cy.get("#module-acquia-cms-starter")
     }
-    //support
+
+    // Support.
     get support_module() {
         return cy.get("#module-acquia-cms-support")
     }
-    //toolbar
+
+    // Toolbar.
     get toolbar_module() {
         return cy.get("#module-acquia-cms-toolbar")
     }
-    //tour
+
+    // Tour.
     get tour_module() {
         return cy.get("#module-acquia-cms-tour")
     }
-    //video
+
+    // Video.
     get video_module() {
         return cy.get("#module-acquia-cms-video")
     }
 
-    //Get content Tab
+    // Get content Tab.
     get contentTab() {
         return cy.get("#toolbar-item-administration-tray > nav > div.toolbar-menu-administration > ul > li:nth-child(2) > a")
     }
@@ -113,7 +131,7 @@ class ToolBar {
     }
 
 
-    //Validate the Acquia CMS prefixed modules
+    // Validate the Acquia CMS prefixed modules.
     prefixModules() {
         this.extendLink.click()
         this.extendFilter.type("Acquia CMS")
@@ -136,7 +154,7 @@ class ToolBar {
 
     }
 
-    //Validate the text of the tabs
+    // Validate the text of the tabs.
     validateContent() {
         this.contentTab.should('have.text', testData.$content_tab)
     }
