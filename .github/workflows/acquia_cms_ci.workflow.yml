@@ -302,6 +302,8 @@ jobs:
           if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
             NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
             composer config extra.patches.drupal/core "${NEW_JSON}" --json
+            sed -i 's/2598.patch",/2599.patch"/' modules/acquia_cms_common/composer.json
+            sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
           fi
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
