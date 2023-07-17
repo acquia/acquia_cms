@@ -400,3 +400,49 @@ function acquia_cms_site_studio_update_8008() {
     }
   }
 }
+
+/**
+ * Deletes the Site Studio configurations containing invalid data.
+ *
+ * Implements hook_update_N().
+ */
+function acquia_cms_site_studio_update_8009() {
+  $module_path = \Drupal::service('extension.list.module')->getPath('acquia_cms_site_studio');
+  $directory = $module_path . '/config/pack_acquia_cms_core';
+  if (is_dir($directory)) {
+    $files = \Drupal::service('file_system')->scanDirectory($directory, '/.*\.yml$/');
+    $base_templates = [
+      'cohesion_base_styles.cohesion_base_styles.blockquote',
+      'cohesion_base_styles.cohesion_base_styles.body',
+      'cohesion_base_styles.cohesion_base_styles.button',
+      'cohesion_base_styles.cohesion_base_styles.description',
+      'cohesion_base_styles.cohesion_base_styles.heading_1',
+      'cohesion_base_styles.cohesion_base_styles.heading_2',
+      'cohesion_base_styles.cohesion_base_styles.heading_3',
+      'cohesion_base_styles.cohesion_base_styles.heading_4',
+      'cohesion_base_styles.cohesion_base_styles.heading_5',
+      'cohesion_base_styles.cohesion_base_styles.heading_6',
+      'cohesion_base_styles.cohesion_base_styles.html',
+      'cohesion_base_styles.cohesion_base_styles.link',
+      'cohesion_base_styles.cohesion_base_styles.ordered_list',
+      'cohesion_base_styles.cohesion_base_styles.paragraph',
+      'cohesion_base_styles.cohesion_base_styles.unordered_list',
+      'cohesion_website_settings.cohesion_font_stack.arial',
+      'cohesion_templates.cohesion_master_templates.master_template',
+      'cohesion_website_settings.cohesion_website_settings.base_unit_settings',
+      'cohesion_website_settings.cohesion_website_settings.default_font_settings',
+      'cohesion_website_settings.cohesion_website_settings.responsive_grid_settings',
+    ];
+    foreach ($files as $file) {
+      if (!in_array($file->name, $base_templates)) {
+        $sitestudio_template = \Drupal::configFactory()->getEditable($file->name);
+        if ($sitestudio_template && !$sitestudio_template->isNew() && !$sitestudio_template->get("uuid") && !$sitestudio_template->get("id")) {
+          $sitestudio_template->delete();
+          \Drupal::logger("acquia_cms_site_studio")->notice(
+            sprintf("The configuration `%s` deleted containing invalid data.", $file->name)
+          );
+        }
+      }
+    }
+  }
+}
