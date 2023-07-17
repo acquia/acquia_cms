@@ -1,0 +1,27 @@
+{
+  "scripts": {
+    "test": "cypress run",
+    "removeOldReports": "rm -R -f cypress/reports",
+    "removeOldMergedReport": "rm -R -f output.html",
+    "removeOldScreenshots": "rm -R -f cypress/screenshots",
+    "cypressWithElectron": "npm run removeOldReports && npm run removeOldMergedReport && npm run removeOldScreenshots && ./node_modules/.bin/cypress run || npm run final_report",
+    "cypressChromeHeadless": "./node_modules/.bin/cypress run --headless --browser chrome && npm run merge-reports",
+    "cypressChromeWithHead": "npm run removeOldReports && npm run removeOldMergedReport && npm run removeOldScreenshots && ./node_modules/.bin/cypress run --browser chrome || npm run final_report",
+    "merge": "mochawesome-merge cypress/reports/*.json > cypress/reports/output.json",
+    "generate_mochawesome_report": "marge cypress/reports/output.json --reportDir ./ --inline",
+    "final_report": "npm run merge && npm run generate_mochawesome_report",
+    "merge-reports": "jrm cypress/reports/combined.xml \"cypress/reports/junit/*.xml\""
+  },
+  "devDependencies": {
+    "cypress": "^12.9.0",
+    "cypress-iframe": "^1.0.1",
+    "cypress-multi-reporters": "^1.5.0",
+    "cypress-xpath": "^1.6.2",
+    "junit-report-merger": "^3.0.4"
+  },
+  "dependencies": {
+    "cypress-mochawesome-reporter": "^2.3.0",
+    "mocha": "^9.1.3",
+    "mocha-junit-reporter": "^2.0.2"
+  }
+}

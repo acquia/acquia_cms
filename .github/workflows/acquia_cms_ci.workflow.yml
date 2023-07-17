@@ -114,7 +114,7 @@ jobs:
       ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
       COMPOSER_PROCESS_TIMEOUT: 1800
       ORCA_JOB: ${{ matrix.orca-job }}
-      #AWS_S3_BUCKET_PATH: s3://acquia-cms-artifacts/backstop
+      # AWS_S3_BUCKET_PATH: s3://acquia-cms-artifacts/backstop
       # Set Required API Keys.
       CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
       GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
@@ -200,7 +200,7 @@ jobs:
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
   backstop_tests:
-    name: backstop ${{ matrix.orca-job }} on PHP ${{ matrix.php-version }}
+    name: backstop with ${{ matrix.orca-job }} on PHP ${{ matrix.php-version }}
     runs-on: ubuntu-latest
     env:
       # Site test artifacts.

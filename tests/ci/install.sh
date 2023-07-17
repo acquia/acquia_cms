@@ -54,6 +54,7 @@ curl "https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js" -o ${OR
 # Install acquia_cms only for the Integrated & ExistingSite PHPUnit tests.
 if [ -n "${ACMS_JOB}" ]; then
   ./vendor/bin/acms site:install --yes --uri=http://127.0.0.1:8080
+  drush upwd admin admin --yes --uri=http://127.0.0.1:8080
   # Enable Acquia CMS DAM module.
   # @todo We should probably move this in acms site:install command.
   drush en acquia_cms_audio acquia_cms_dam sitestudio_config_management --yes --uri=http://127.0.0.1:8080
@@ -65,7 +66,7 @@ fi
 composer config --json extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms"]' --merge && composer update --lock
 
 # Enable Starter on full installs if Appropriate.
-if [[ "${ACMS_JOB}" == "backstop_tests" ]]; then
+if [[ "${ACMS_JOB}" == "backstop_tests" ]] || [ "${ACMS_JOB}" == "cypress_tests" ]; then
 
     echo "Installing Starter Kit"
     drush en acquia_cms_development -y
