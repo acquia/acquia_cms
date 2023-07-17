@@ -157,3 +157,33 @@ function acquia_cms_person_update_8004() {
     }
   }
 }
+
+/**
+ * Deletes the Site Studio configurations containing invalid data.
+ *
+ * Implements hook_update_N().
+ */
+function acquia_cms_person_update_8005() {
+  $moduleHandler = \Drupal::service('module_handler');
+  if ($moduleHandler->moduleExists('acquia_cms_site_studio')) {
+    $module_path = \Drupal::service('extension.list.module')->getPath('acquia_cms_person');
+    $directories = [
+      $module_path . '/config/pack_acquia_cms_person',
+      $module_path . '/config/pack_acquia_cms_person_search',
+    ];
+    foreach ($directories as $directory) {
+      if (is_dir($directory)) {
+        $files = \Drupal::service('file_system')->scanDirectory($directory, '/.*\.yml$/');
+        foreach ($files as $file) {
+          $sitestudio_template = \Drupal::configFactory()->getEditable($file->name);
+          if ($sitestudio_template && !$sitestudio_template->isNew() && !$sitestudio_template->get("uuid") && !$sitestudio_template->get("id")) {
+            $sitestudio_template->delete();
+            \Drupal::logger("acquia_cms_person")->notice(
+              sprintf("The configuration `%s` deleted containing invalid data.", $file->name)
+            );
+          }
+        }
+      }
+    }
+  }
+}
