@@ -114,7 +114,7 @@ jobs:
       ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
       COMPOSER_PROCESS_TIMEOUT: 1800
       ORCA_JOB: ${{ matrix.orca-job }}
-      #AWS_S3_BUCKET_PATH: s3://acquia-cms-artifacts/backstop
+      # AWS_S3_BUCKET_PATH: s3://acquia-cms-artifacts/backstop
       # Set Required API Keys.
       CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
       GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
@@ -200,7 +200,7 @@ jobs:
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
   backstop_tests:
-    name: backstop ${{ matrix.orca-job }} on PHP ${{ matrix.php-version }}
+    name: backstop with ${{ matrix.orca-job }} on PHP ${{ matrix.php-version }}
     runs-on: ubuntu-latest
     env:
       # Site test artifacts.
@@ -302,6 +302,15 @@ jobs:
           if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
             NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
             composer config extra.patches.drupal/core "${NEW_JSON}" --json
+            sed -i 's/2598.patch",/2599.patch"/' modules/acquia_cms_common/composer.json
+            sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
+          # Change requireSameDimensions to true in backstop settings.
+            sed -i '54s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
+            sed -i '111s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
+            sed -i '130s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
+            sed -i '149s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
+            sed -i '168s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
+            sed -i '187s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
           fi
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &

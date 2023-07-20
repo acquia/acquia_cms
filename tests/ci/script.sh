@@ -14,7 +14,7 @@ cd "$(dirname "$0")"
 # Reuse ORCA's own includes.
 source ../../../orca/bin/travis/_includes.sh
 
-if [ "${ACMS_JOB}" != "backstop_tests" ] && [ "${ACMS_JOB}" != "upgrade_modules" ]; then
+if [ "${ACMS_JOB}" != "backstop_tests" ] && [ "${ACMS_JOB}" != "upgrade_modules" ] && [ "${ACMS_JOB}" != "cypress_tests" ]; then
   # Run ORCA's standard script.
   ../../../orca/bin/travis/script.sh
 fi
@@ -33,4 +33,14 @@ if [ "${ACMS_JOB}" == "backstop_tests" ] || [ "${ACMS_JOB}" == "upgrade_modules"
   npm run backstop-starter
   # Runs Pa11y.js
   # npm run pa11y-starter
+fi
+
+if [ "${ACMS_JOB}" == "cypress_tests" ]; then
+  # Install npm dependencies and run JS test suites.
+  cd ${ORCA_SUT_DIR}/tests/cypress
+  npm install
+  orca fixture:run-server &
+
+  # Runs Cypress tests
+  npx cypress run
 fi

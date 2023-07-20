@@ -28,12 +28,41 @@ function acquia_cms_video_update_8001() {
       $files = \Drupal::service('file_system')->scanDirectory($directory, '/.*\.yml$/');
       foreach ($files as $file) {
         $sitestudio_template = \Drupal::configFactory()->getEditable($file->name);
-        if ($sitestudio_template && is_null($sitestudio_template->get('dependencies.enforced.module'))) {
+        if ($sitestudio_template && is_null($sitestudio_template->get('dependencies.enforced.module')) && $sitestudio_template->get('status')) {
           $sitestudio_template->set('dependencies.enforced.module', [
             'acquia_cms_video',
             'acquia_cms_site_studio',
           ]);
           $sitestudio_template->save(TRUE);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Deletes the Site Studio configurations containing invalid data.
+ *
+ * Implements hook_update_N().
+ */
+function acquia_cms_video_update_8002() {
+  $moduleHandler = \Drupal::service('module_handler');
+  if ($moduleHandler->moduleExists('acquia_cms_site_studio')) {
+    $module_path = \Drupal::service('extension.list.module')->getPath('acquia_cms_video');
+    $directories = [
+      $module_path . '/config/pack_acquia_cms_video',
+    ];
+    foreach ($directories as $directory) {
+      if (is_dir($directory)) {
+        $files = \Drupal::service('file_system')->scanDirectory($directory, '/.*\.yml$/');
+        foreach ($files as $file) {
+          $sitestudio_template = \Drupal::configFactory()->getEditable($file->name);
+          if ($sitestudio_template && !$sitestudio_template->isNew() && !$sitestudio_template->get("uuid") && !$sitestudio_template->get("id")) {
+            $sitestudio_template->delete();
+            \Drupal::logger("acquia_cms_video")->notice(
+              sprintf("The configuration `%s` deleted containing invalid data.", $file->name)
+            );
+          }
         }
       }
     }
