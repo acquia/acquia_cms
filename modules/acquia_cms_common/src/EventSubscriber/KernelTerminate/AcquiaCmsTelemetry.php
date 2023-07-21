@@ -214,7 +214,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
     $appUuid = AcquiaDrupalEnvironmentDetector::getAhApplicationUuid();
     $siteGroup = AcquiaDrupalEnvironmentDetector::getAhGroup();
     $env = AcquiaDrupalEnvironmentDetector::getAhEnv();
-    $starterKitName = $this->state->get('acquia_cms.starter_kit', "existing_site_acquia_cms");
+    $starterKitName = $this->configFactory->get('acquia_cms_common.settings')->get('starter_kit_name') ?? $this->state->get('acquia_cms.starter_kit', "acquia_cms_existing_site");
     $starterKitUi = $this->state->get('starter_kit_wizard_completed', FALSE);
     $installed_modules = $this->moduleList->getAllInstalledInfo();
 

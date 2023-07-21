@@ -10,7 +10,7 @@
   Drupal.behaviors.acquiaCmsDashboardDialog = {
     attach: function (context, settings) {
       $(once('acquiaCmsDashboardDialog','.acms-dashboard-form-wrapper',context)).each(function () {
-        if (!settings.existing_site_acquia_cms && !settings.hide_starter_kit_wizard_modal && !settings.selected_starter_kit && settings.show_starter_kit_modal) {
+        if (!settings.acquia_cms_existing_site && !settings.hide_starter_kit_wizard_modal && !settings.selected_starter_kit && settings.show_starter_kit_modal) {
           $('.acms-starterkit-modal-form').click();
         }
         if (settings.show_wizard_modal && !settings.wizard_completed){

@@ -289,3 +289,17 @@ function acquia_cms_common_update_8008() {
     }
   }
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set starterkit name for site installed using Acquia CMS profile or module.
+ */
+function acquia_cms_common_update_8009() {
+  $config = \Drupal::configFactory()->getEditable('acquia_cms_common.settings');
+  if ($config) {
+    if (!$config->get('starter_kit_name')) {
+      $config->set('starter_kit_name', \Drupal::state()->get('acquia_cms.starter_kit', "acquia_cms_existing_site"))->save(TRUE);
+    }
+  }
+}
