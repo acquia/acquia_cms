@@ -138,6 +138,7 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
         "starter_kit_name" => "acquia_cms_existing_site",
         "starter_kit_ui" => FALSE,
         "site_studio_status" => TRUE,
+        "profile" => '',
       ],
     ];
     $actual_telemetryData = $method->invoke($this->acquiaCmsTelemetry);
@@ -175,6 +176,7 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
         "starter_kit_name" => "acquia_cms_existing_site",
         "starter_kit_ui" => FALSE,
         "site_studio_status" => FALSE,
+        'profile' => '',
         "version" => "1.5.2",
       ],
     ];
@@ -195,6 +197,7 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
             "starter_kit_name" => "acquia_cms_existing_site",
             "starter_kit_ui" => FALSE,
             "site_studio_status" => FALSE,
+            "profile" => '',
           ],
         ],
       ],
@@ -207,6 +210,7 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
             "starter_kit_name" => "acquia_cms_existing_site",
             "starter_kit_ui" => FALSE,
             "site_studio_status" => FALSE,
+            "profile" => '',
           ],
         ],
         [
