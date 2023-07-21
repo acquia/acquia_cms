@@ -224,6 +224,15 @@ function acquia_cms_modules_uninstalled(array $modules) {
 function install_acms_finished() {
   $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
   $telemetry->setTime('install_end_time');
+  // Add user selected starter-kit to config as acquia_cms_direct_installations.
+  $acms_common = \Drupal::configFactory()->getEditable('acquia_cms_common.settings');
+  if ($acms_common) {
+    if ($acms_common->get('starter_kit_name') == "no_starter_kit") {
+      $acms_common->set('starter_kit_name', 'acquia_cms_direct_installations')->save(TRUE);
+    }
+  }
+  // Add user selected starter-kit to state as acquia_cms_direct_installations.
+  \Drupal::state()->set('acquia_cms.starter_kit', $acms_common->get('starter_kit_name'));
 }
 
 /**
@@ -371,4 +380,17 @@ function acquia_cms_update_8003() {
   \Drupal::configFactory()->getEditable('acquia_cms.settings')->delete();
   // Clear caches.
   drupal_flush_all_caches();
+}
+
+/**
+ * Set starter-kit name as acquia_cms_existing_site to already installed sites.
+ */
+function acquia_cms_update_8004() {
+  // Add user selected starter-kit to config as acquia_cms_existing_site.
+  $acms_common = \Drupal::configFactory()->getEditable('acquia_cms_common.settings');
+  if ($acms_common) {
+    $acms_common->set('starter_kit_name', 'acquia_cms_existing_site')->save(TRUE);
+  }
+  // Add user selected starter-kit to state as acquia_cms_existing_site.
+  \Drupal::state()->set('acquia_cms.starter_kit', 'acquia_cms_existing_site');
 }
