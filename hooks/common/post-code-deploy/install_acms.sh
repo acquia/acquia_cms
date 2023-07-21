@@ -16,16 +16,23 @@ target_env="$2"
 if [ "$SITE_REINSTALL" = "false" ]; then
     /var/www/html/$site.$target_env/vendor/bin/drush updatedb --no-interaction
 else
-    # Install Acquia CMS.
-    /var/www/html/$site.$target_env/vendor/bin/acms site-install --account-pass=admin --yes --account-mail=no-reply@example.com --site-mail=no-reply@example.com
+    # Install site with given starter kit.
+    if [ "$STARTER_KIT" ]; then
+      /var/www/html/$site.$target_env/vendor/bin/acms site-install --uri $STARTER_KIT -n --account-pass=admin --yes --account-mail=no-reply@example.com --site-mail=no-reply@example.com
 
-    # Acquia CMS development.
-    echo "Enabling Acquia CMS development module in $target_env"
-    /var/www/html/$site.$target_env/vendor/bin/drush pm-enable acquia_cms_development --yes
+    # Install site with default starter kit i.e low code.
+    else
+      # Install Acquia CMS.
+      /var/www/html/$site.$target_env/vendor/bin/acms site-install --uri default --account-pass=admin --yes --account-mail=no-reply@example.com --site-mail=no-reply@example.com
 
-    # Acquia CMS starter.
-    if [ "$ENABLE_STARTER" = "true" ]; then
-      echo "Enabling Acquia CMS starter module in $target_env"
-      /var/www/html/$site.$target_env/vendor/bin/drush pm-enable acquia_cms_starter --yes
+      # Acquia CMS development.
+      echo "Enabling Acquia CMS development module in $target_env"
+      /var/www/html/$site.$target_env/vendor/bin/drush pm-enable acquia_cms_development --yes
+
+      # Acquia CMS starter.
+      if [ "$ENABLE_STARTER" = "true" ]; then
+        echo "Enabling Acquia CMS starter module in $target_env"
+        /var/www/html/$site.$target_env/vendor/bin/drush pm-enable acquia_cms_starter --yes
+      fi
     fi
 fi
