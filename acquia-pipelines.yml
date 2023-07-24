@@ -16,6 +16,11 @@ events:
             - composer validate --no-check-all --ansi --no-interaction
             - composer install
             - mkdir -p docroot/modules/acquia_cms
+            # Create symlink directory for multisite headless and community.
+            - cd docroot/sites
+            - ln -s default headless
+            - ln -s default community
+            - cd -
             - composer archive --format zip --file acquia_cms
             - unzip acquia_cms.zip -d docroot/modules/acquia_cms
       # Commenting as it's no longer needed and this is failing deployment.
