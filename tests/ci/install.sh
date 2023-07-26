@@ -57,8 +57,11 @@ if [ -n "${ACMS_JOB}" ]; then
     composer config --unset repositories.acquia_cms_common
     composer require drupal/acquia_cms_common:2.x-dev -W
   fi
-  # Install site with default case.
   ./vendor/bin/acms site:install --yes --account-pass admin --uri=http://127.0.0.1:8080
+
+  # Enable Acquia CMS DAM module.
+  # @todo We should probably move this in acms site:install command.
+  drush en acquia_cms_audio acquia_cms_dam sitestudio_config_management --yes --uri=http://127.0.0.1:8080
 fi
 
 # Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.

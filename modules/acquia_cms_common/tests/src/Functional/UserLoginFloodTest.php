@@ -38,7 +38,7 @@ class UserLoginFloodTest extends BrowserTestBase {
 
     $user = $this->drupalCreateUser([]);
     $incorrectUser = clone $user;
-    $incorrectUser->passRaw .= 'incorrect';
+    $incorrectUser->setPassword('incorrect');
 
     // Try 4 failed logins.
     for ($i = 0; $i < 4; $i++) {
