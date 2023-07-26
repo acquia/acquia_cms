@@ -231,8 +231,6 @@ function install_acms_finished() {
       $acms_common->set('starter_kit_name', 'acquia_cms_direct_installations')->save(TRUE);
     }
   }
-  // Add user selected starter-kit to state as acquia_cms_direct_installations.
-  \Drupal::state()->set('acquia_cms.starter_kit', $acms_common->get('starter_kit_name'));
 }
 
 /**
@@ -391,6 +389,4 @@ function acquia_cms_update_8004() {
   if ($acms_common) {
     $acms_common->set('starter_kit_name', 'acquia_cms_existing_site')->save(TRUE);
   }
-  // Add user selected starter-kit to state as acquia_cms_existing_site.
-  \Drupal::state()->set('acquia_cms.starter_kit', 'acquia_cms_existing_site');
 }
