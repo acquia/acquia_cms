@@ -1,15 +1,19 @@
 sites:
   default:
+  'http://127.0.0.1:8080':
     modules:
-      - acquia_cms_site_studio
       - acquia_cms_article
+      - acquia_cms_audio
+      - acquia_cms_dam
       - acquia_cms_document
       - acquia_cms_event
       - acquia_cms_page
       - acquia_cms_search
+      - acquia_cms_site_studio
       - acquia_cms_toolbar
       - acquia_cms_tour
       - acquia_cms_video
+      - sitestudio_config_management
     starter_kit: acquia_cms_existing_site
     themes:
       admin: acquia_claro

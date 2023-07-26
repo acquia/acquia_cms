@@ -53,15 +53,12 @@ curl "https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js" -o ${OR
 
 # Install acquia_cms only for the Integrated & ExistingSite PHPUnit tests.
 if [ -n "${ACMS_JOB}" ]; then
-  if [ "${ACMS_JOB}" == "backstop_tests" ] && [ "${CORE_VERSION}" != "LATEST_LTS" ]; then
+  if [ "${ACMS_JOB}" == "backstop_tests" ] && [ "${CORE_VERSION}" == "LATEST_LTS" ]; then
     composer config --unset repositories.acquia_cms_common
     composer require drupal/acquia_cms_common:2.x-dev -W
   fi
-  ./vendor/bin/acms site:install --yes --uri=http://127.0.0.1:8080
-  drush upwd admin admin --yes --uri=http://127.0.0.1:8080
-  # Enable Acquia CMS DAM module.
-  # @todo We should probably move this in acms site:install command.
-  drush en acquia_cms_audio acquia_cms_dam sitestudio_config_management --yes --uri=http://127.0.0.1:8080
+  # Install site with default case.
+  ./vendor/bin/acms site:install --yes --account-pass admin --uri=http://127.0.0.1:8080
 fi
 
 # Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.
