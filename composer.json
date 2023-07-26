@@ -129,6 +129,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "acquia/cohesion": {
+                "Fix Call to a member function access() on null": "https://gist.githubusercontent.com/chandan-singh7929/a06c7bf9d7d76179fcd04ed0ea03b665/raw/d6b3bf44809af1ee823a7adc653dcbb79bb6283c/site-studio-access.patch"
+            },
             "drupal/core": {
                 "3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112": "https://git.drupalcode.org/project/drupal/-/merge_requests/3142.patch"
             },
