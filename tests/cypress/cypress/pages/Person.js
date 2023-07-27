@@ -1,16 +1,13 @@
 import 'cypress-iframe'
 import content from './Content'
+import utility from './Utility'
 const testData = require("./TestData")
 
 class Person {
 
     // Get person's link through content dropdown.
     get personLink() {
-        return cy.get("#toolbar-item-administration-tray > nav > div.toolbar-menu-administration > ul > li:nth-child(2) > ul > li:nth-child(2) > ul > li:nth-child(4) > a")
-    }
-    // Get person's name.
-    get personName() {
-        return cy.get("#edit-title-0-value")
+        return cy.get(utility.$addContentMenu + "li:nth-child(4) > a")
     }
     // Get person's job title.
     get jobTitle() {
@@ -18,28 +15,14 @@ class Person {
     }
     // Get Bio.
     get personBio() {
-        return cy.get("#edit-body-wrapper > div > div.js-form-type-textarea.js-form-item.form-item.form-type--textarea.js-form-item-body-0-value.form-item--body-0-value > label")
+        return cy.get("#edit-body-wrapper .form-item--body-0-value > label")
     }
-    // Get Language dropdown.
-    get languageDropdown() {
-        return cy.get("#edit-langcode-0-value")
-    }
+
     // Get Add media button.
     get addMedia() {
         return cy.get("#edit-field-person-image-open-button")
     }
-    // Select media source.
-    get selectedMediaType() {
-        return cy.get(".ui-dialog.media-library-widget-modal #drupal-modal #media-library-wrapper #acquia-dam-source-menu-wrapper select").select('core')
-    }
-    // Select the profile picture.
-    get profilePicture() {
-        return cy.get('[id*="edit-media-library-select-form-2--"]')
-    }
-    // Insert the profile picture.
-    get insertSelectedButton() {
-        return cy.get("body > div.ui-dialog.media-library-widget-modal > div.ui-dialog-buttonpane > div.ui-dialog-buttonset > button")
-    }
+
     // Add place of the person.
     get personPlace() {
         return cy.get("#edit-field-place")
@@ -56,14 +39,6 @@ class Person {
     get personTelephone() {
         return cy.get("#edit-field-person-telephone-0-value")
     }
-    // Save As dropdown.
-    get saveAsDropdown() {
-        return cy.get("#edit-moderation-state-0-state")
-    }
-    // Save person.
-    get savePerson() {
-        return cy.get("#edit-submit")
-    }
 
     // Click and verify.
     clickAndVerify() {
@@ -74,13 +49,13 @@ class Person {
         // Title of the person page.
         content.pageTitle.should('have.text', 'Create Person')
         // Edit name box should be visible.
-        this.personName.should("be.visible")
+        utility.editTitle.should("be.visible")
         // Job title box should be visible.
         this.jobTitle.should("be.visible")
         // Bio body should be visible.
         this.personBio.should("be.visible")
         // Language dropdown should be visible.
-        this.languageDropdown.should("be.visible")
+        utility.contentLanguageSelect.should("be.visible")
         // Media Image box and add media button should be visible.
         this.addMedia.should("be.visible")
         // Place dropdown should be visible.
@@ -91,8 +66,8 @@ class Person {
         this.personEmail.should("be.visible")
         this.personTelephone.should("be.visible")
         // Save as dropdown and save button should be visible.
-        this.saveAsDropdown.should("be.visible")
-        this.savePerson.should("be.visible")
+        utility.saveAsDropdown.should("be.visible")
+        utility.save.should("be.visible")
     }
 
 
@@ -103,7 +78,7 @@ class Person {
             force: true
         })
         //Input person name.
-        this.personName.type(testData.$content_title, {
+        utility.editTitle.type(testData.$content_title, {
             force: true
         })
         // Input person's Job title.
@@ -120,18 +95,18 @@ class Person {
             })
         });
         // Input preffered languafe for the person.
-        this.languageDropdown.select(testData.$language)
+        utility.contentLanguageSelect.select(testData.$language)
         // Add profile photo for the person through media.
         // Click on add media button.
         this.addMedia.click()
         cy.wait(2000)
         cy.scrollTo(0, 1000)
         // Select media source.
-        this.selectedMediaType
+        utility.selectedMediaType
         // Select the profile picture.
-        this.profilePicture.check()
+        utility.selectMedia.check()
         // Insert the profile picture.
-        this.insertSelectedButton.click()
+        utility.insertSelectedMedia.click()
         cy.wait(2000)
         // Select place for the person.
         this.personPlace.select(testData.$event_place)
@@ -142,27 +117,28 @@ class Person {
         this.personTelephone.type(testData.$telephone_number)
 
         // Save dropdown - select as published.
-        this.saveAsDropdown.select(testData.$publish_save_type)
-        this.savePerson.click()
+        utility.saveAsDropdown.select(testData.$publish_save_type)
+        utility.save.click()
     }
 
     // Get created person's name.
+    $personSelector = 'body article .coh-style-padding-top-bottom-medium .coh-row .coh-column >';
     get createdPersonsName() {
-        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-column > h1")
+        return cy.get(this.$personSelector + " h1")
     }
     // Get Created person's job title.
     get createdPJobTitle() {
-        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-column > ul > li:nth-child(1)")
+        return cy.get(this.$personSelector + " ul > li:nth-child(1)")
     }
     // Get Created persons offce address, email address and telephone number.
     get createdPOffice() {
-        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-column > ul > li:nth-child(2) > a")
+        return cy.get(this.$personSelector + " ul > li:nth-child(2) > a")
     }
     get createdPEmail() {
-        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-column > ul > li:nth-child(3) > a")
+        return cy.get(this.$personSelector + " ul > li:nth-child(3) > a")
     }
     get createdPTelephone() {
-        return cy.get("body article .coh-style-padding-top-bottom-medium .coh-row .coh-column > ul > li:nth-child(4) > span")
+        return cy.get(this.$personSelector + " ul > li:nth-child(4) > span")
     }
 
     // Validation of the cases of created person.
