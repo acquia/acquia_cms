@@ -3,7 +3,7 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 /**
- * Tests 'Logo card' cohesion component.
+ * Tests 'Audio' cohesion component.
  *
  * @group acquia_cms
  * @group site_studio
@@ -15,6 +15,8 @@ class AudioComponentTest extends CohesionComponentTestBase {
 
   /**
    * Tests that the component can be added to a layout canvas.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testComponent(): void {
     $account = $this->createUser();
@@ -27,7 +29,7 @@ class AudioComponentTest extends CohesionComponentTestBase {
     // Add the component to the layout canvas.
     $edit_form = $this->getLayoutCanvas()->add('Audio')->edit();
     /** @var \Behat\Mink\Element\TraversableElement $edit_form */
-    $edit_form->pressButton('Select file');
+    $edit_form->pressButton('Browse');
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
     $this->assertNotEmpty($assertSession->waitForText('Entity Browser'));
@@ -49,6 +51,8 @@ class AudioComponentTest extends CohesionComponentTestBase {
    *   The ID of the user role to test with.
    *
    * @dataProvider providerEditAccess
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testEditAccess(string $role): void {
     $account = $this->createUser();

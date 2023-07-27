@@ -38,7 +38,7 @@ class UserLoginFloodTest extends BrowserTestBase {
 
     $user = $this->drupalCreateUser([]);
     $incorrectUser = clone $user;
-    $incorrectUser->passRaw .= 'incorrect';
+    $incorrectUser->setPassword('incorrect');
 
     // Try 4 failed logins.
     for ($i = 0; $i < 4; $i++) {
@@ -62,14 +62,17 @@ class UserLoginFloodTest extends BrowserTestBase {
    *
    * @param \Drupal\user\Entity\User $account
    *   A user object with name and passRaw attributes for the login attempt.
-   * @param string $flood_trigger
+   * @param string|null $flood_trigger
    *   (optional) Whether or not to expect that the flood control mechanism.
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException
+   * @throws \Behat\Mink\Exception\ResponseTextException
    */
   public function assertFailedLogin(User $account, string $flood_trigger = NULL): void {
     $assert = $this->assertSession();
     $userLogin = [
       'name' => $account->getAccountName(),
-      'pass' => $account->passRaw,
+      'pass' => $account->getPassword(),
     ];
     $this->drupalGet('user/login');
     $this->submitForm($userLogin, 'Log in');
