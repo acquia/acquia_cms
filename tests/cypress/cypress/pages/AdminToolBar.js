@@ -34,11 +34,12 @@ class AdminToolBar {
         this.responsiveIcon.should('have.text', 'Layout preview')
     }
 
-    // Verify the edit/manage button on admin tool bar.
+    // Verify the edit/manage button on admin toolbar.
     verifyEditButton() {
         this.editOption.click().invoke('attr', 'aria-pressed').should('equal', 'true')
-
     }
+
+    // Verify Manage menu in admin toolbar.
     verifyManageButton() {
         this.manageButton.click().invoke('attr', 'class').should('equal', 'toolbar-icon toolbar-icon-menu trigger toolbar-item')
     }

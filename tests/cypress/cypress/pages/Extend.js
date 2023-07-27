@@ -1,4 +1,6 @@
 import testData from './TestData'
+import utility from './Utility'
+
 class Extend {
 
     get extendTabLink() {
@@ -105,10 +107,6 @@ class Extend {
         return cy.get('#module-cohesion')
     }
 
-    get installModule() {
-        return cy.get('#edit-submit')
-    }
-
     // Extend Acquia CMS starter module.
     extendStarterModule() {
         // Extend Acquia CMS starter module.
@@ -118,7 +116,7 @@ class Extend {
         this.filterModule.type("starter")
         cy.wait(500)
         this.acmsStarterCB.check()
-        this.installModule.click()
+        utility.save.click()
         cy.wait(2000)
     }
 
@@ -131,7 +129,7 @@ class Extend {
         this.filterModule.type("page Builder")
         cy.wait(500)
         this.vpbCheckBox.check()
-        this.installModule.click()
+        utility.save.click()
         cy.wait(2000)
     }
 

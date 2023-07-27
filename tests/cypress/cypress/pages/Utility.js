@@ -1,12 +1,11 @@
 class Utility {
 
-    // Save As dropdown.
-    get saveAsDropdown() {
-        return cy.get("#edit-moderation-state-0-state")
-    }
-
-    // Save content.
+    // The save, submit button.
     get save() {
         return cy.get("#edit-submit")
     }
+
 }
+
+const utility = new Utility();
+module.exports = utility;

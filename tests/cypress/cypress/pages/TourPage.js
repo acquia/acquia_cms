@@ -1,4 +1,6 @@
+import utility from './Utility'
 const testData = require("./TestData")
+
 class TourPage {
 
     // Get Tour Page Link.
@@ -198,9 +200,7 @@ class TourPage {
     get anonymousDataOptIn() {
         return cy.get("#edit-opt-in")
     }
-    get saveButtonAT() {
-        return cy.get("#edit-submit")
-    }
+
     get ignoreButtonAT() {
         return cy.get("#edit-ignore")
     }
@@ -331,7 +331,7 @@ class TourPage {
             force: true
         }).should('have.text', 'Acquia Telemetry')
         this.anonymousDataOptIn.should('be.visible')
-        this.saveButtonAT.should('be.visible')
+        utility.save.should('be.visible')
         this.ignoreButtonAT.should('be.visible')
         this.acquiaTelemetrySummary.click({
             force: true

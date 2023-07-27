@@ -15,11 +15,6 @@ class ToolBar {
         return cy.get("#edit-modules-acquia-cms-starter-enable")
     }
 
-    // Get install module button.
-    get installModuleButton() {
-        return cy.get("#edit-submit")
-    }
-
     // Get List of modules.
     // Article.
     get article_module() {
