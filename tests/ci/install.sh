@@ -48,6 +48,11 @@ curl "https://codeload.github.com/swagger-api/swagger-ui/zip/refs/tags/v3.0.17" 
 unzip ${ORCA_FIXTURE_DIR}/docroot/libraries/v3.0.17.zip
 mv swagger-ui-3.0.17 ${ORCA_FIXTURE_DIR}/docroot/libraries/swagger-ui
 
+# Add slide-element library locally
+mkdir -p ${ORCA_FIXTURE_DIR}/docroot/libraries/slide-element
+curl "https://unpkg.com/slide-element@2.3.1/dist/index.umd.js" -o ${ORCA_FIXTURE_DIR}/docroot/libraries/slide-element/index.umd.js
+
+# Add chartjs library locally
 mkdir -p ${ORCA_FIXTURE_DIR}/docroot/libraries/chartjs/dist/
 curl "https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js" -o ${ORCA_FIXTURE_DIR}/docroot/libraries/chartjs/dist/chart.min.js
 
