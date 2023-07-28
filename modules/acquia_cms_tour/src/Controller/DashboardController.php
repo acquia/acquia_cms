@@ -139,7 +139,7 @@ final class DashboardController extends ControllerBase {
     ];
     $total = 0;
     $completed = 0;
-    $existing_site_acquia_cms = $this->state->get('existing_site_acquia_cms', FALSE);
+    $acquia_cms_existing_site = $this->state->get('acquia_cms_existing_site', FALSE);
     $show_starter_kit_modal = $this->requestStack->getCurrentRequest()->get('show_starter_kit_modal') ?? FALSE;
     $show_welcome_dialog = $this->state->get('show_welcome_modal', TRUE);
     $show_wizard_modal = $this->state->get('show_wizard_modal', TRUE);
@@ -171,7 +171,7 @@ final class DashboardController extends ControllerBase {
         ]),
       ],
     ]);
-    if (!$existing_site_acquia_cms && !$starter_kit_wizard_completed) {
+    if (!$acquia_cms_existing_site && !$starter_kit_wizard_completed) {
       $starter_link_url->setOptions([
         'attributes' => [
           'class' => [
@@ -244,7 +244,7 @@ final class DashboardController extends ControllerBase {
         'wizard_completed' => $wizard_completed,
         'selected_starter_kit' => $selected_starter_kit,
         'show_starter_kit_modal' => $show_starter_kit_modal,
-        'existing_site_acquia_cms' => $existing_site_acquia_cms,
+        'acquia_cms_existing_site' => $acquia_cms_existing_site,
         'acquia_cms_enterprise_low_code' => $acquia_cms_enterprise_low_code,
         'acquia_cms_community' => $acquia_cms_community,
         'acquia_cms_headless' => $acquia_cms_headless,

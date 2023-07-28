@@ -192,12 +192,8 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    */
   private function createEvent(string $type, array $properties): array {
     $default_properties = [
-      'php' => [
-        'version' => phpversion(),
-      ],
-      'drupal' => [
-        'version' => \Drupal::VERSION,
-      ],
+      'php' => phpversion(),
+      'drupal' => \Drupal::VERSION,
     ];
 
     return [
@@ -214,9 +210,10 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
     $appUuid = AcquiaDrupalEnvironmentDetector::getAhApplicationUuid();
     $siteGroup = AcquiaDrupalEnvironmentDetector::getAhGroup();
     $env = AcquiaDrupalEnvironmentDetector::getAhEnv();
-    $starterKitName = $this->state->get('acquia_cms.starter_kit', "existing_site_acquia_cms");
+    $starterKitName = $this->configFactory->get('acquia_cms_common.settings')->get('starter_kit_name') ?? $this->state->get('acquia_cms.starter_kit', "acquia_cms_existing_site");
     $starterKitUi = $this->state->get('starter_kit_wizard_completed', FALSE);
     $installed_modules = $this->moduleList->getAllInstalledInfo();
+    $profile = $this->configFactory->get('core.extension')->get('profile');
 
     $telemetryData = [
       'acquia_cms' => [
@@ -226,6 +223,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
         'starter_kit_name' => $starterKitName,
         'starter_kit_ui' => $starterKitUi,
         'site_studio_status' => $this->siteStudioStatus(),
+        'profile' => $profile,
       ],
     ];
     if (isset($installed_modules['acquia_cms'])) {
