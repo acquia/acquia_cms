@@ -114,7 +114,7 @@ class PureHeadlessModeInstallHandler {
       '/admin/structure/taxonomy' => '/admin/content-models/categories',
       '/admin/config/people/accounts' => '/admin/content-models/users',
       '/admin/structure/block/block-content' => '/admin/content/blocks',
-      '/admin/structure/block/block-content/types' => '/admin/content-models/blocks',
+      '/admin/structure/block-content' => '/admin/content-models/blocks',
     ];
   }
 
