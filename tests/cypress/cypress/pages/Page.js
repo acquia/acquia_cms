@@ -183,8 +183,15 @@ class Page {
     get exitVPB() {
         return cy.get(this.$vpbSelector + " button")
     }
+
+    // Visit page.
+    get visitPage() {
+        return cy.get('#views-form-content-page-1 > table > tbody > tr > td.views-field.views-field-title > a')
+    }
     // Edit page with VPB - visual page builder.
     editCreatedPageVPB() {
+        // Edit page.
+        this.visitPage.click()
         // Click on VPB.
         this.vpb.click({
             force: true
@@ -203,6 +210,7 @@ class Page {
         })
         cy.wait(5000)
         cy.reload()
+        cy.wait(2000)
         // Exit VPB.
         this.exitVPB.click({
             force: true

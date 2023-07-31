@@ -103,7 +103,7 @@ class Content {
 
     // Delete checkbox.
     get articleToDelete() {
-        return cy.get("#views-form-content-page-1 > table.views-table.views-view-table.cols-7.responsive-enabled.sticky-enabled.sticky-table > thead > tr > th.select-all.views-field.views-field-node-bulk-form > input")
+        return cy.get("#views-form-content-page-1 > table.views-table > thead > tr > th.select-all.views-field.views-field-node-bulk-form > input")
     }
 
     // Verify the content page.
@@ -204,7 +204,6 @@ class Content {
             force: true
         })
         // Click the checkbox to delete.
-        cy.scrollTo(0, 500)
         this.articleToDelete.check()
         // Select actions from action dropdown as delete.
         this.actionDropdown.select('Delete content', {
