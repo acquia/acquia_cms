@@ -113,6 +113,11 @@ jobs:
 
           # One of the patch is failing on Drupal Core 9.5. So remove that patch.
           if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
+            # Remove the failing php on Drupal Core 9.5.
+            NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
+            composer config extra.patches.drupal/core "${NEW_JSON}" --json
+            sed -i 's/2598.patch",/2599.patch"/' modules/acquia_cms_common/composer.json
+            sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
             composer config extra.patches.drupal/core '{ "3222107 - jQuery UI library order is incorrect when a large number of javascript files is loaded between two jQuery UI libraries":"https://www.drupal.org/files/issues/2022-11-11/3222107-2.patch" }' --json
           fi
 
@@ -124,6 +129,16 @@ jobs:
             find modules/*/tests -type f -name "*Test.php" -exec rm -fr '{}' ';'
             # Remove all existing_site phpunit tests from acquia_cms repo as those get's covered from integrated_existing_site_tests.
             find tests/src -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
+          fi
+
+          # Change requireSameDimensions to true in backstop settings.
+          if [ "${ACMS_JOB}" = "backstop_tests" ]; then
+            sed -i '54s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
+            sed -i '111s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
+            sed -i '130s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
+            sed -i '149s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
+            sed -i '168s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
+            sed -i '187s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
           fi
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &

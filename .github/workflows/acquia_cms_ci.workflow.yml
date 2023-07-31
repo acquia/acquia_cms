@@ -201,7 +201,7 @@ jobs:
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
   backstop_tests:
-    name: backstop with ${{ matrix.orca-job }} on PHP ${{ matrix.php-version }}
+    name: ${{ matrix.acms-job }} with ${{ matrix.orca-job }} on PHP ${{ matrix.php-version }}
     runs-on: ubuntu-latest
     env:
       # Site test artifacts.
@@ -228,7 +228,7 @@ jobs:
       GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
       SITESTUDIO_API_KEY: ${{ secrets.SITESTUDIO_API_KEY }}
       SITESTUDIO_ORG_KEY: ${{ secrets.SITESTUDIO_ORG_KEY }}
-      ACMS_JOB: "backstop_tests"
+      ACMS_JOB: ${{ matrix.acms-job }}
       JOB_TYPE: "integrated-tests"
       CI: true
     strategy:
@@ -237,6 +237,9 @@ jobs:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
           - INTEGRATED_TEST_ON_LATEST_LTS
+        acms-job:
+          - backstop_tests
+          - cypress_tests
         php-version:
           - 7.4
           - 8.1
