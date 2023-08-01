@@ -92,16 +92,16 @@ class AcquiaSearchIntegrationFromTourPageTest extends BrowserTestBase {
     $assert->fieldExists('Acquia Application UUID');
     $assert->buttonExists('Save');
 
-    // Acquia Subscription identifier can be obtained this from the
+    // Acquia Subscription identifier can be obtained from the
     // "Product Keys" section of the Acquia Cloud UI.
     // ex: ABCD-12345.
     $connectorId = getenv('CONNECTOR_ID');
 
-    // Acquia Connector key obtain this from the "Product Keys"
-    // section of the Acquia Cloud UI.
+    // Acquia Connector key can be obtained from the
+    // "Product Keys" section of the Acquia Cloud UI.
     $connectorKey = getenv('CONNECTOR_KEY');
 
-    // Acquia Application UUID  can be obtained this from the
+    // Acquia Application UUID can be obtained from the
     // "Product Keys" section of the Acquia Cloud UI.
     $applicationUuid = getenv('SEARCH_UUID');
 
