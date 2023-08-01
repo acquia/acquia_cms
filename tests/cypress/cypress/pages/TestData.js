@@ -38,7 +38,6 @@ class TestData {
     $policy3 = 'Password must not contain the user\'s username.'
     $policy_password = 'A1234567890b!'
     $policy_username = 'QA_User'
-    $Deletion_msg_1_4_version = 'Account QA_User has been deleted.'
 
     // Taxonomy.
     $vocab_name = 'QA_Test_Vocab'

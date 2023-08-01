@@ -102,14 +102,6 @@ class PasswordPolicy {
         return cy.get('[type="radio"].edit-user-cancel-method-user-cancel-delete')
     }
 
-    // Get the validation texts.
-    get userCreatedVal(){
-        return cy.contains("Created a new user account for QA_User. No email has been sent")
-    }
-    get userDeletedVal(){
-        return cy.contains(testData.$Deletion_msg_1_4_version)
-    }
-
     // Verify the contents of password policy page.
     verifyCheckBoxes() {
         // Navigating to the add user page.
@@ -168,7 +160,7 @@ class PasswordPolicy {
         this.confirmPassword.type(testData.$policy_password)
         cy.wait(200)
         utility.save.click()
-        this.userCreatedVal.should('have.text','\n                          Created a new user account for QA_User. No email has been sent.\n                      ')
+        cy.get('.messages-list .messages--status .messages__content').contains("Created a new user account for QA_User. No email has been sent")
         }
 
     // Cancel and delete the created user.
@@ -182,7 +174,7 @@ class PasswordPolicy {
         cy.get("#edit-user-cancel-method-user-cancel-delete").check().click()
         utility.save.click()
         cy.wait(1000)
-        this.userDeletedVal.should('have.text','\n                          Account QA_User has been deleted.\n                      ')
+        cy.get('.messages-list .messages--status .messages__content').contains("Account QA_User has been deleted.")
     }
 }
 

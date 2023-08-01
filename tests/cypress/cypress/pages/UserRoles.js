@@ -31,11 +31,6 @@ class UserRoles {
         return cy.get("#edit-pass-pass2")
     }
 
-    // Get the validation texts.
-    get userCreatedVal() {
-        return cy.contains("Created a new user account for QA_User. No email has been sent")
-    }
-
     // Create admin user.
     createAdminUser() {
         this.addUser.click({
@@ -49,7 +44,7 @@ class UserRoles {
         this.confirmPassword.type(testData.$policy_password)
         cy.wait(2000)
         utility.save.click()
-        this.userCreatedVal.should('have.text', '\n                          Created a new user account for QA_User. No email has been sent.\n                      ')
+        cy.get('.messages-list .messages--status .messages__content').contains("Created a new user account for QA_User. No email has been sent")
     }
 
     // Delete the created admin user

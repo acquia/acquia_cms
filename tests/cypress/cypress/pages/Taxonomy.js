@@ -102,14 +102,14 @@ class Taxonomy{
     deleteTerm(){
         this.deleteTermLink.click({force:true})
         this.deleteButtonTerm.click()
-        cy.get(".messages-list .messages--status .messages__content").should('have.text','\n                          Deleted term QA_term.\n                      ')
+        cy.get(".messages-list .messages--status .messages__content").contains('Deleted term QA_term.')
     }
 
     // Delete vocabulary.
     deleteVocab(){
         this.deleteAddedVocab.click({force:true})
         utility.save.click()
-        cy.get(".messages-list .messages--status .messages__content").should('have.text','\n                          \n                                  Your styles have been updated.\n                                  Deleted vocabulary QA_Test_Vocab.\n                              \n                      ')
+        cy.get('.messages-list .messages--status .messages__content').contains("Your styles have been updated. Deleted vocabulary QA_Test_Vocab.")
     }
 
 }
