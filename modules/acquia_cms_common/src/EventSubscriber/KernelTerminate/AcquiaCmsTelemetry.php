@@ -214,7 +214,10 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
     $starterKitUi = $this->state->get('starter_kit_wizard_completed', FALSE);
     $installed_modules = $this->moduleList->getAllInstalledInfo();
     $profile = $this->configFactory->get('core.extension')->get('profile');
+    // Total time to set-up the site.
+    $installTime = $this->state->get('acquia_cms.site_install_time');
 
+    // Prepare telemetry data.
     $telemetryData = [
       'acquia_cms' => [
         'application_uuid' => $appUuid,
@@ -229,6 +232,10 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
     if (isset($installed_modules['acquia_cms'])) {
       $telemetryData['acquia_cms']['version'] = $installed_modules['acquia_cms']['version'];
     }
+    if ($installTime) {
+      $telemetryData['acquia_cms']['site_install_time'] = $installTime;
+    }
+
     return $telemetryData;
   }
 
