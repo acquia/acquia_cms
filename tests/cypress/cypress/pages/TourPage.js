@@ -1,4 +1,6 @@
+import utility from './Utility'
 const testData = require("./TestData")
+
 class TourPage {
 
     // Get Tour Page Link.
@@ -198,9 +200,7 @@ class TourPage {
     get anonymousDataOptIn() {
         return cy.get("#edit-opt-in")
     }
-    get saveButtonAT() {
-        return cy.get("#edit-submit")
-    }
+
     get ignoreButtonAT() {
         return cy.get("#edit-ignore")
     }
@@ -208,7 +208,6 @@ class TourPage {
     // Wizard Setup.
     get wizardHeading() {
         return cy.get("#ui-id-2")
-        // return cy.xpath("//*[@id=\"ui-id-2\"]").
     }
     get wizardSaveButton() {
         return cy.get("body > div.ui-dialog.acms-installation-wizard > .ui-dialog-buttonpane > .ui-dialog-buttonset > button:nth-child(2)")
@@ -217,10 +216,15 @@ class TourPage {
         return cy.get("body > div.ui-dialog.acms-installation-wizard > .ui-dialog-buttonpane > .ui-dialog-buttonset > button:nth-child(1)")
     }
     get getStartedWithWizard(){
-        cy.get("body > div.ui-dialog.acms-welcome-modal > div.ui-dialog-buttonpane > div > button.button--primary.form-submit").click()
-    }
-    get setupManually(){
-        return cy.get("body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.acms-welcome-modal.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div > button.setup-manually.button.js-form-submit.form-submit.ui-button.ui-corner-all.ui-widget")
+        cy.get("body").then($body => {
+          if ($body.find("div.ui-dialog.acms-welcome-modal  div.ui-dialog-buttonpane button.button--primary").length > 0) {
+            cy.get("div.ui-dialog.acms-welcome-modal > div.ui-dialog-buttonpane > div > button.button--primary").then($popup => {
+              if ($popup.is(':visible')){
+                cy.get("body div.ui-dialog.acms-welcome-modal > div.ui-dialog-buttonpane > div > button.button--primary").click()
+              }
+            })
+          }
+        })
     }
 
     // Click on setup wizard manually.
@@ -331,7 +335,7 @@ class TourPage {
             force: true
         }).should('have.text', 'Acquia Telemetry')
         this.anonymousDataOptIn.should('be.visible')
-        this.saveButtonAT.should('be.visible')
+        utility.save.should('be.visible')
         this.ignoreButtonAT.should('be.visible')
         this.acquiaTelemetrySummary.click({
             force: true
@@ -346,9 +350,8 @@ class TourPage {
         this.wizardClose
         this.wizardSetupButton.should('have.text', 'Wizard set-up')
         this.wizardSetupButton.click()
-        cy.wait(4000)
-        this.getStartedWithWizard
         cy.wait(2000)
+        this.getStartedWithWizard
         this.wizardSaveButton.should('be.visible')
         this.wizardSkipStepButton.should('be.visible').and('have.text', 'Skip this step')
         this.wizardClose

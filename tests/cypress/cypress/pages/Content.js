@@ -1,4 +1,6 @@
 const testData = require("./TestData")
+const utility = require("./Utility")
+//import utility from "./Utility"
 
 class Content {
     get contentPage() {
@@ -65,11 +67,6 @@ class Content {
         return cy.get("#edit-action")
     }
 
-    // Get apply to selected items button.
-    get applyButton() {
-        return cy.get("#edit-submit")
-    }
-
     // Get title bar.
     get titleBar() {
         return cy.get("table.views-view-table thead th#view-title-table-column > a")
@@ -106,11 +103,7 @@ class Content {
 
     // Delete checkbox.
     get articleToDelete() {
-        return cy.get("#views-form-content-page-1 > table.views-table.views-view-table.cols-7.responsive-enabled.sticky-enabled.sticky-table > thead > tr > th.select-all.views-field.views-field-node-bulk-form > input")
-    }
-    // Confirm Delete.
-    get delete() {
-        return cy.get("#edit-submit")
+        return cy.get("#views-form-content-page-1 > table.views-table > thead > tr > th.select-all.views-field.views-field-node-bulk-form > input")
     }
 
     // Verify the content page.
@@ -173,7 +166,7 @@ class Content {
             force: true
         }).should('have.value', 'pathauto_update_alias_node')
         // Apply to selected item button should be present.
-        this.applyButton.should("be.visible")
+        utility.save.should("be.visible")
         // Title bar should be present.
         this.titleBar.should('have.text', 'Title')
         // Check for navigation button at the bottom.
@@ -211,18 +204,17 @@ class Content {
             force: true
         })
         // Click the checkbox to delete.
-        cy.scrollTo(0, 500)
         this.articleToDelete.check()
         // Select actions from action dropdown as delete.
         this.actionDropdown.select('Delete content', {
             force: true
         }).should('have.value', 'node_delete_action')
         // Click apply button to delete.
-        this.applyButton.click({
+        utility.save.click({
             force: true
         })
         // Confirm delete.
-        this.delete.click({
+        utility.save.click({
             force: true
         })
     }

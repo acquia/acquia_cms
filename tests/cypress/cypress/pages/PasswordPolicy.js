@@ -1,4 +1,6 @@
 import testData from './TestData'
+import utility from './Utility'
+
 class PasswordPolicy {
 
     // Get people tab link.
@@ -47,11 +49,6 @@ class PasswordPolicy {
         return cy.get("#edit-path-0-alias")
     }
 
-    // Get the create new account button.
-    get createNewAccButton() {
-        return cy.get("#edit-submit")
-    }
-
     // Get the status and password policy.
     get passPolycy1(){
         return cy.get("#password-policy-status > table > tbody > tr:nth-child(1) > td:nth-child(3)")
@@ -73,11 +70,6 @@ class PasswordPolicy {
     // Get Confirm password.
     get confirmPassword(){
         return cy.get("#edit-pass-pass2")
-    }
-
-    // Create new user account.
-    get saveButtonCreateAccount(){
-        return cy.get("#edit-submit")
     }
 
     // Search the created user.
@@ -108,19 +100,6 @@ class PasswordPolicy {
     // Delete the user radio option.
     get deleteUser(){
         return cy.get('[type="radio"].edit-user-cancel-method-user-cancel-delete')
-    }
-
-    // Cancle user button.
-    get cancleUserButton(){
-        return cy.get("#edit-submit")
-    }
-
-    // Get the validation texts.
-    get userCreatedVal(){
-        return cy.contains("Created a new user account for QA_User. No email has been sent")
-    }
-    get userDeletedVal(){
-        return cy.contains(testData.$Deletion_msg_1_4_version)
     }
 
     // Verify the contents of password policy page.
@@ -155,7 +134,7 @@ class PasswordPolicy {
         this.addUser.click({force:true})
         cy.wait(2000)
         // Validate the button present.
-        this.createNewAccButton.should("be.visible")
+        utility.save.should("be.visible")
     }
 
     // Verify the password policy.
@@ -180,8 +159,8 @@ class PasswordPolicy {
         cy.wait(2000)
         this.confirmPassword.type(testData.$policy_password)
         cy.wait(200)
-        this.saveButtonCreateAccount.click()
-        this.userCreatedVal.should('have.text','\n                          Created a new user account for QA_User. No email has been sent.\n                      ')
+        utility.save.click()
+        cy.get('.messages-list .messages--status .messages__content').contains("Created a new user account for QA_User. No email has been sent")
         }
 
     // Cancel and delete the created user.
@@ -191,11 +170,11 @@ class PasswordPolicy {
         this.filterUser.click()
         this.checkSearchedUser.check()
         this.selectAction.select("Cancel the selected user account(s)")
-        cy.get("#edit-submit").click()
+        utility.save.click()
         cy.get("#edit-user-cancel-method-user-cancel-delete").check().click()
-        this.cancleUserButton.click()
+        utility.save.click()
         cy.wait(1000)
-        this.userDeletedVal.should('have.text','\n                          Account QA_User has been deleted.\n                      ')
+        cy.get('.messages-list .messages--status .messages__content').contains("Account QA_User has been deleted.")
     }
 }
 

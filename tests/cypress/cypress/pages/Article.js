@@ -1,30 +1,13 @@
 import 'cypress-iframe'
 import testData from './TestData'
 import content from './Content'
+import utility from './Utility'
 
 class Article {
 
     // Article page through mouse hover on admin tool bar.
     get articleLink() {
-        return cy.get("#toolbar-item-administration-tray > nav > div.toolbar-menu-administration > ul > li:nth-child(2) > ul > li:nth-child(2) > ul > li:nth-child(1) > a")
-    }
-
-    // Article Edit title bar.
-    get articleEditTitle() {
-        return cy.get("#edit-title-0-value")
-    }
-
-    // Article body - edit summary.
-    get articleBodyEdit() {
-        return cy.get("#edit-body-wrapper > div > div.js-form-type-textarea.js-form-item.form-item.form-type--textarea.js-form-item-body-0-value.form-item--body-0-value > div")
-    }
-
-    // Article format text.
-    get articleTextFormat() {
-        return cy.get("#edit-body-0-format > div.form-item--editor-format.js-form-item.form-item.js-form-type-select.form-type--select.js-form-item-body-0-format.form-item--body-0-format > label")
-    }
-    get articleTextFormatDropdown() {
-        return cy.get("#edit-body-0-format--2")
+        return cy.get(utility.$addContentMenu + "li:nth-child(1) > a")
     }
 
     // Article author.
@@ -36,33 +19,27 @@ class Article {
     get articleSaveAs() {
         return cy.get("#edit-moderation-state-0 > div")
     }
-    get articleSaveAsDropdown() {
-        return cy.get("#edit-moderation-state-0-state")
-    }
-
-    // Article Save button.
-    get articleSave() {
-        return cy.get("#edit-submit")
-    }
 
     // Get created article title.
+    $articleSelector = 'body article .coh-style-padding-top-medium > div > div ';
+    $articleFieldSelector = '.coh-style-padding-bottom-small ';
     get createdArticleTitle() {
-        return cy.get("body > div.dialog-off-canvas-main-canvas > div.coh-container.coh-style-focusable-content.coh-ce-6f78460f > div > article > div.coh-container.coh-style-padding-top-medium.coh-style-padding-bottom-large.coh-container-boxed > div > div > div.coh-column.coh-style-padding-bottom-small.coh-visible-ps.coh-col-ps-12.coh-visible-sm.coh-col-sm-10.coh-visible-xl.coh-col-xl-8 > h1")
+        return cy.get(this.$articleSelector + this.$articleFieldSelector + " h1")
     }
 
     // Get created article type.
     get createdArticleType() {
-        return cy.get("body > div.dialog-off-canvas-main-canvas > div.coh-container.coh-style-focusable-content.coh-ce-6f78460f > div > article > div.coh-container.coh-style-padding-top-medium.coh-style-padding-bottom-large.coh-container-boxed > div > div > div.coh-column.coh-style-padding-bottom-small.coh-visible-ps.coh-col-ps-12.coh-visible-sm.coh-col-sm-10.coh-visible-xl.coh-col-xl-8 > ul > li:nth-child(1) > a")
+        return cy.get(this.$articleSelector + this.$articleFieldSelector + " ul > li:nth-child(1) > a")
     }
 
     // Get created article author.
     get createdArticleAuthor() {
-        return cy.get("body > div.dialog-off-canvas-main-canvas > div.coh-container.coh-style-focusable-content.coh-ce-6f78460f > div > article > div.coh-container.coh-style-padding-top-medium.coh-style-padding-bottom-large.coh-container-boxed > div > div > div.coh-column.coh-style-padding-bottom-small.coh-visible-ps.coh-col-ps-12.coh-visible-sm.coh-col-sm-10.coh-visible-xl.coh-col-xl-8 > ul > li:nth-child(3) > a")
+        return cy.get(this.$articleSelector + this.$articleFieldSelector + " ul > li:nth-child(3) > a")
     }
 
     // Get content of created article.
     get createdArticleContent() {
-        return cy.get("body > div.dialog-off-canvas-main-canvas > div.coh-container.coh-style-focusable-content.coh-ce-6f78460f > div > article > div.coh-container.coh-style-padding-top-medium.coh-style-padding-bottom-large.coh-container-boxed > div > div > div.coh-column.coh-visible-ps.coh-col-ps-12.coh-visible-sm.coh-col-sm-10.coh-visible-md.coh-col-md-8.coh-visible-xl.coh-col-xl-6 > div:nth-child(1) > p")
+        return cy.get(this.$articleSelector + " .coh-column.coh-visible-ps p")
     }
 
     // Click and Verify.
@@ -74,36 +51,37 @@ class Article {
         // Title of the article page.
         content.pageTitle.should('have.text', 'Create Article')
         // Edit title input box should be visible.
-        this.articleEditTitle.should("be.visible")
+        utility.editTitle.should("be.visible")
         // Body edit summary text box should be visible.
-        this.articleBodyEdit.should("be.visible")
+        utility.contentBodyEdit.should("be.visible")
         // Text format should be present with dropdown.
-        this.articleTextFormat.should('have.text', 'Text format')
-        this.articleTextFormatDropdown.select('Filtered HTML', {
+        utility.contentTextFormat.should('have.text', 'Text format')
+        utility.textFormatDropdown.select('Filtered HTML', {
             force: true
         }).should('have.value', 'filtered_html')
-        this.articleTextFormatDropdown.select('Site Studio', {
+        utility.textFormatDropdown.select('Site Studio', {
             force: true
         }).should('have.value', 'cohesion')
         // Display author text box should be visible.
         this.articleAuthor.should("be.visible")
         // Save as option and its dropdown should be present.
         this.articleSaveAs.should("be.visible")
-        this.articleSaveAsDropdown.select('Draft', {
+        utility.saveAsDropdown.select('Draft', {
             force: true
         }).should('have.value', 'draft')
-        this.articleSaveAsDropdown.select('In review', {
+        utility.saveAsDropdown.select('In review', {
             force: true
         }).should('have.value', 'review')
-        this.articleSaveAsDropdown.select('Published', {
+        utility.saveAsDropdown.select('Published', {
             force: true
         }).should('have.value', 'published')
         // Save article button should be present at the bottom.
-        this.articleSave.should("be.visible")
+        utility.save.should("be.visible")
     }
+
     // Article - Create.
     createArticle() {
-        cy.get("#edit-title-0-value").type(testData.$content_title, {
+        utility.editTitle.type(testData.$content_title, {
             force: true
         })
         cy.wait(4000)
@@ -124,11 +102,13 @@ class Article {
         cy.get("#edit-field-article-type").select(testData.$content_type, {
             force: true
         })
-        article.articleSaveAsDropdown.select(testData.$publish_save_type, {
+        cy.log(utility.saveAsDropdown)
+        utility.saveAsDropdown.select(testData.$publish_save_type, {
             force: true
         })
-        article.articleSave.click()
+        utility.save.click()
     }
+
     // Article - Validate.
     validateArticle() {
         // Validate the title of the article.

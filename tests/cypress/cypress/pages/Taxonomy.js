@@ -1,4 +1,5 @@
 import 'cypress-iframe'
+import utility from './Utility'
 const testData = require("./TestData")
 
 class Taxonomy{
@@ -20,11 +21,6 @@ class Taxonomy{
     // Get the description field.
     get vocabDescription(){
         return cy.get("#edit-description")
-    }
-
-    // Save the vocabulary.
-    get saveVocabButton(){
-        return cy.get("#edit-submit")
     }
 
     // Get Newly added vocabulary.
@@ -57,11 +53,6 @@ class Taxonomy{
         return cy.get('[id*="edit-terms-"]')
     }
 
-    // Delete button to delete vocab.
-    get deleteButtonVocab(){
-        return cy.get("#edit-submit")
-    }
-
     // Delete button to delete term.
     get deleteButtonTerm(){
         return cy.get(".ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset .button--primary")
@@ -77,7 +68,7 @@ class Taxonomy{
         // Description of the vocabulary.
         this.vocabDescription.type(testData.$vocab_description)
         // Save the Vocabulary.
-        this.saveVocabButton.click()
+        utility.save.click()
     }
 
     // Validate added vocabulary.
@@ -98,7 +89,7 @@ class Taxonomy{
                 editor.setData(testData.$term_description)
             })
         });
-        this.saveVocabButton.click()
+        utility.save.click()
     }
 
     // Validate term added to vocabulary.
@@ -111,14 +102,14 @@ class Taxonomy{
     deleteTerm(){
         this.deleteTermLink.click({force:true})
         this.deleteButtonTerm.click()
-        cy.get(".messages-list .messages--status .messages__content").should('have.text','\n                          Deleted term QA_term.\n                      ')
+        cy.get(".messages-list .messages--status .messages__content").contains('Deleted term QA_term.')
     }
 
     // Delete vocabulary.
     deleteVocab(){
         this.deleteAddedVocab.click({force:true})
-        this.deleteButtonVocab.click()
-        cy.get(".messages-list .messages--status .messages__content").should('have.text','\n                          \n                                  Your styles have been updated.\n                                  Deleted vocabulary QA_Test_Vocab.\n                              \n                      ')
+        utility.save.click()
+        cy.get('.messages-list .messages--status .messages__content').contains("Your styles have been updated. Deleted vocabulary QA_Test_Vocab.")
     }
 
 }
