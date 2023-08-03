@@ -248,6 +248,14 @@ function acquia_cms_headless_ui_local_tasks_alter(array &$local_tasks) {
   // content under content.
   if ($moduleHandler->moduleExists('block_content')) {
     $local_tasks['entity.block_content_type.collection']['title'] = t('Block types');
+
+    // Due to the changes introduced in version:10.1.0
+    // Block management pages have new paths and menu items.
+    // @see https://www.drupal.org/node/3320855
+    if (version_compare(\Drupal::VERSION, '10.1', '<')) {
+      $local_tasks['entity.block_content_type.collection']['base_route'] = 'admin.content_models';
+    }
+
     $local_tasks['entity.block_content_type.collection']['parent_id'] = NULL;
     $local_tasks['entity.block_content_type.collection']['weight'] = 2;
 
