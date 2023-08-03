@@ -153,12 +153,12 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
-#      - name: Configure AWS Credentials
-#        uses: aws-actions/configure-aws-credentials@v1
-#        with:
-#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+      # - name: Configure AWS Credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Before Install
         run: |
           # Update the CI by adding patches without pinning the following modules.
@@ -372,24 +372,24 @@ jobs:
           - acquia_cms_page, acquia_cms_site_studio, sitestudio_config_management
           - acquia_cms_image, acquia_cms_document, acquia_cms_video, acquia_cms_audio
           - acquia_cms_search, acquia_cms_common, acquia_cms_tour
-          - acquia_cms_headless
-#          - acquia_cms_article
-#          - acquia_cms_audio
-#          - acquia_cms_common
-#          - acquia_cms_document
-#          - acquia_cms_event
-#          - acquia_cms_image
-#          - acquia_cms_page
-#          - acquia_cms_person
-#          - acquia_cms_place
-#          - acquia_cms_search
-#          - acquia_cms_site_studio
-#          - acquia_cms_tour
-#          - acquia_cms_video
-          #- acquia_cms_audio
-          #- acquia_cms_headless
-          #- acquia_cms_starter
-          #- acquia_cms_toolbar
+          # - acquia_cms_headless
+          # - acquia_cms_article
+          # - acquia_cms_audio
+          # - acquia_cms_common
+          # - acquia_cms_document
+          # - acquia_cms_event
+          # - acquia_cms_image
+          # - acquia_cms_page
+          # - acquia_cms_person
+          # - acquia_cms_place
+          # - acquia_cms_search
+          # - acquia_cms_site_studio
+          # - acquia_cms_tour
+          # - acquia_cms_video
+          # - acquia_cms_audio
+          # - acquia_cms_headless
+          # - acquia_cms_starter
+          # - acquia_cms_toolbar
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
