@@ -118,7 +118,6 @@ jobs:
             composer config extra.patches.drupal/core "${NEW_JSON}" --json
             sed -i 's/2598.patch",/2599.patch"/' modules/acquia_cms_common/composer.json
             sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
-            composer config extra.patches.drupal/core '{ "3222107 - jQuery UI library order is incorrect when a large number of javascript files is loaded between two jQuery UI libraries":"https://www.drupal.org/files/issues/2022-11-11/3222107-2.patch" }' --json
           fi
 
           # Remove all PHPUnit tests from individual modules, except the integrated & ExistingSite tests.
