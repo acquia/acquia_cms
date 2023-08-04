@@ -374,10 +374,12 @@ jobs:
           - acquia_cms_page, acquia_cms_site_studio, sitestudio_config_management
           - acquia_cms_image, acquia_cms_document, acquia_cms_video, acquia_cms_audio
           - acquia_cms_search, acquia_cms_common, acquia_cms_tour
-          # - acquia_cms_headless
+          - acquia_cms_headless
           # - acquia_cms_article
           # - acquia_cms_audio
           # - acquia_cms_common
+          # - acquia_cms_component
+          # - acquia_cms_dam
           # - acquia_cms_document
           # - acquia_cms_event
           # - acquia_cms_image
@@ -386,12 +388,10 @@ jobs:
           # - acquia_cms_place
           # - acquia_cms_search
           # - acquia_cms_site_studio
-          # - acquia_cms_tour
-          # - acquia_cms_video
-          # - acquia_cms_audio
-          # - acquia_cms_headless
           # - acquia_cms_starter
+          # - acquia_cms_tour
           # - acquia_cms_toolbar
+          # - acquia_cms_video
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1

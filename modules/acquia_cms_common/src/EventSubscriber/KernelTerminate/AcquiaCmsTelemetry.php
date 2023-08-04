@@ -222,13 +222,14 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
     $siteGroup = AcquiaDrupalEnvironmentDetector::getAhGroup();
     $env = AcquiaDrupalEnvironmentDetector::getAhEnv();
     $acsfStatus = AcquiaDrupalEnvironmentDetector::isAcsfEnv();
-    $siteUri = end(explode('/', $this->sitePath));
+    $siteUri = explode('/', $this->sitePath);
+    $siteUri = end($siteUri);
     $siteName = $this->configFactory->get('system.site')->get('name');
     $starterKitName = $this->configFactory->get('acquia_cms_common.settings')->get('starter_kit_name') ?? $this->state->get('acquia_cms.starter_kit', "acquia_cms_existing_site");
     $starterKitUi = $this->state->get('starter_kit_wizard_completed', FALSE);
     $installed_modules = $this->moduleList->getAllInstalledInfo();
     $profile = $this->configFactory->get('core.extension')->get('profile');
-
+    // Telemetry Event Properties.
     $telemetryData = [
       'acquia_cms' => [
         'application_uuid' => $appUuid,

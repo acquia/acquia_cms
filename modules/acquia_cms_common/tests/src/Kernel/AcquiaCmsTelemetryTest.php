@@ -21,6 +21,27 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
   protected $acquiaCmsTelemetry;
 
   /**
+   * The config.factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * The site uri.
+   *
+   * @var string
+   */
+  protected $siteUri;
+
+  /**
+   * The site name.
+   *
+   * @var string
+   */
+  protected $siteName;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
@@ -30,8 +51,12 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
       $this->container->get("http_client"),
       $this->container->get("config.factory"),
       $this->container->get("state"),
-      $this->container->getParameter('site.path'),
+      $this->container->getParameter("site.path"),
     );
+    $this->configFactory = $this->container->get("config.factory");
+    $path = explode('/', $this->container->getParameter('site.path'));
+    $this->siteUri = end($path);
+    $this->siteName = $this->configFactory->get('system.site')->get('name');
   }
 
   /**
@@ -111,6 +136,8 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
     foreach ($env_variables as $env_variable => $value) {
       putenv("$env_variable=$value");
     }
+    $expected_telemetryData['acquia_cms']['site_uri'] = $this->siteUri;
+    $expected_telemetryData['acquia_cms']['site_name'] = $this->siteName;
     $actual_telemetryData = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertSame($actual_telemetryData, $expected_telemetryData);
   }
@@ -130,15 +157,14 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
       ->set("use_dx8", "enable")
       ->set("api_key", "some-random-key")
       ->save(TRUE);
-
     $expected_telemetry_data = [
       "acquia_cms" => [
         "application_uuid" => "",
         "application_name" => "",
         "environment_name" => "",
         'acsf_status' => FALSE,
-        'site_uri' => "default",
-        'site_name' => "Existing Site",
+        'site_uri' => $this->siteUri,
+        'site_name' => $this->siteName,
         "starter_kit_name" => "acquia_cms_existing_site",
         "starter_kit_ui" => FALSE,
         "site_studio_status" => TRUE,
@@ -179,13 +205,13 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
         "application_name" => "",
         "environment_name" => "",
         'acsf_status' => FALSE,
-        'site_uri' => "default",
-        'site_name' => "Existing Site",
+        'site_uri' => $this->siteUri,
+        'site_name' => $this->siteName,
         "starter_kit_name" => "acquia_cms_existing_site",
         "starter_kit_ui" => FALSE,
         "site_studio_status" => FALSE,
-        'profile' => '',
-        "version" => "1.5.2",
+        'profile' => "",
+        'version' => "1.5.2",
       ],
     ];
     $this->assertSame($actual_telemetryData, $expected_telemetry_data);
@@ -203,8 +229,8 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
             "application_name" => "",
             "environment_name" => "",
             'acsf_status' => FALSE,
-            'site_uri' => "default",
-            'site_name' => "Existing Site",
+            'site_uri' => '',
+            'site_name' => "Drupal",
             "starter_kit_name" => "acquia_cms_existing_site",
             "starter_kit_ui" => FALSE,
             "site_studio_status" => FALSE,
@@ -219,8 +245,8 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
             "application_name" => "some-application-name",
             "environment_name" => "some-environment-name",
             'acsf_status' => FALSE,
-            'site_uri' => "default",
-            'site_name' => "Existing Site",
+            'site_uri' => '',
+            'site_name' => "Drupal",
             "starter_kit_name" => "acquia_cms_existing_site",
             "starter_kit_ui" => FALSE,
             "site_studio_status" => FALSE,
