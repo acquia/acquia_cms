@@ -80,7 +80,8 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
    * @dataProvider providerMenu
    */
   public function testChildMenu(string $selector, string $parentMenuName, array $children): void {
-    if ($this->installModule('acquia_cms_toolbar')) {
+    if ($this->installModule('acquia_cms_toolbar') && $this->installModule('block_content')) {
+
       $this->drupalGet('/admin/headless/dashboard');
       $page = $this->getSession()->getPage();
       $menu = $page->find("css", $selector);
@@ -99,6 +100,12 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
         $this->assertEquals($children[$key], $child->find("css", "a:first-child")->getText());
       }
     }
+  }
+
+  public function testContentModelLinks() {
+    // Make sure alias works fine.
+    $this->drupalGet('/admin/content-models');
+    $this->assertSession()->pageTextContains('Content Models');
   }
 
   /**
@@ -142,6 +149,7 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
           'Files',
           'Media',
           'Scheduled Media',
+          'Block Content',
         ],
       ],
       [
@@ -160,6 +168,7 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
         '.toolbar-icon-admin-content-models',
         'Data model',
         [
+          'Block types',
           'Content types',
           'Media types',
           'Menus',
