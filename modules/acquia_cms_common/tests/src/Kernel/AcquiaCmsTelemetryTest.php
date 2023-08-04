@@ -29,7 +29,8 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
       $this->container->get("extension.list.module"),
       $this->container->get("http_client"),
       $this->container->get("config.factory"),
-      $this->container->get("state")
+      $this->container->get("state"),
+      $this->container->getParameter('site.path'),
     );
   }
 
@@ -135,6 +136,9 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
         "application_uuid" => "",
         "application_name" => "",
         "environment_name" => "",
+        'acsf_status' => FALSE,
+        'site_uri' => "default",
+        'site_name' => "Existing Site",
         "starter_kit_name" => "acquia_cms_existing_site",
         "starter_kit_ui" => FALSE,
         "site_studio_status" => TRUE,
@@ -163,6 +167,7 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
       $this->container->get("http_client"),
       $this->container->get("config.factory"),
       $this->container->get("state"),
+      $this->container->getParameter('site.path'),
     );
     $class = new \ReflectionClass($acquia_cms_telemetry);
     $method = $class->getMethod("getAcquiaCmsTelemetryData");
@@ -173,6 +178,9 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
         "application_uuid" => "",
         "application_name" => "",
         "environment_name" => "",
+        'acsf_status' => FALSE,
+        'site_uri' => "default",
+        'site_name' => "Existing Site",
         "starter_kit_name" => "acquia_cms_existing_site",
         "starter_kit_ui" => FALSE,
         "site_studio_status" => FALSE,
@@ -194,6 +202,9 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
             "application_uuid" => "",
             "application_name" => "",
             "environment_name" => "",
+            'acsf_status' => FALSE,
+            'site_uri' => "default",
+            'site_name' => "Existing Site",
             "starter_kit_name" => "acquia_cms_existing_site",
             "starter_kit_ui" => FALSE,
             "site_studio_status" => FALSE,
@@ -207,6 +218,9 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
             "application_uuid" => "some-application-uuid",
             "application_name" => "some-application-name",
             "environment_name" => "some-environment-name",
+            'acsf_status' => FALSE,
+            'site_uri' => "default",
+            'site_name' => "Existing Site",
             "starter_kit_name" => "acquia_cms_existing_site",
             "starter_kit_ui" => FALSE,
             "site_studio_status" => FALSE,

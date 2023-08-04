@@ -63,6 +63,13 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
   protected $state;
 
   /**
+   * The statePath service.
+   *
+   * @var string
+   */
+  protected $sitePath;
+
+  /**
    * Constructs an Acquia CMS telemetry object.
    *
    * @param \Drupal\Core\Extension\ModuleExtensionList $module_list
@@ -73,16 +80,20 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    *   The config.factory service.
    * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
+   * @param string $site_path
+   *   Drupal Site Path.
    */
   public function __construct(
     ModuleExtensionList $module_list,
     ClientInterface $http_client,
     ConfigFactoryInterface $config_factory,
-    StateInterface $state) {
+    StateInterface $state,
+    string $site_path) {
     $this->moduleList = $module_list;
     $this->httpClient = $http_client;
     $this->configFactory = $config_factory;
     $this->state = $state;
+    $this->sitePath = $site_path;
   }
 
   /**
@@ -210,6 +221,9 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
     $appUuid = AcquiaDrupalEnvironmentDetector::getAhApplicationUuid();
     $siteGroup = AcquiaDrupalEnvironmentDetector::getAhGroup();
     $env = AcquiaDrupalEnvironmentDetector::getAhEnv();
+    $acsfStatus = AcquiaDrupalEnvironmentDetector::isAcsfEnv();
+    $siteUri = end(explode('/', $this->sitePath));
+    $siteName = $this->configFactory->get('system.site')->get('name');
     $starterKitName = $this->configFactory->get('acquia_cms_common.settings')->get('starter_kit_name') ?? $this->state->get('acquia_cms.starter_kit', "acquia_cms_existing_site");
     $starterKitUi = $this->state->get('starter_kit_wizard_completed', FALSE);
     $installed_modules = $this->moduleList->getAllInstalledInfo();
@@ -220,6 +234,9 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
         'application_uuid' => $appUuid,
         'application_name' => $siteGroup,
         'environment_name' => $env,
+        'acsf_status' => $acsfStatus,
+        'site_uri' => $siteUri,
+        'site_name' => $siteName,
         'starter_kit_name' => $starterKitName,
         'starter_kit_ui' => $starterKitUi,
         'site_studio_status' => $this->siteStudioStatus(),
@@ -229,6 +246,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
     if (isset($installed_modules['acquia_cms'])) {
       $telemetryData['acquia_cms']['version'] = $installed_modules['acquia_cms']['version'];
     }
+
     return $telemetryData;
   }
 
@@ -240,6 +258,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
       \Drupal::service('cohesion.utils')->usedx8Status()) {
       return TRUE;
     }
+
     return FALSE;
   }
 
@@ -258,6 +277,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
         return TRUE;
       }
     }
+
     return FALSE;
   }
 
