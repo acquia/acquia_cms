@@ -123,34 +123,7 @@ function acquia_cms_install_tasks(): array {
  */
 function install_acms_send_heartbeat_event() {
   $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
-  $telemetry_service = \Drupal::service('acquia_cms_common.telemetry');
-  $config = \Drupal::config('cohesion.settings');
-  $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
-  $appUuid = Environment::getAhApplicationUuid();
-  $siteGroup = Environment::getAhGroup();
-  $env = Environment::getAhEnv();
-  $acsfStatus = Environment::isAcsfEnv();
-  $siteUri = end(explode('/', \Drupal::getContainer()->getParameter('site.path')));
-  $siteName = \Drupal::config('system.site')->get('name');
-  $version = \Drupal::service('extension.list.module')->getExtensionInfo('acquia_cms')['version'];
-  $telemetryData = [
-    'acquia_cms' => [
-      'application_uuid' => $appUuid,
-      'application_name' => $siteGroup,
-      'environment_name' => $env,
-      'acsf_status' => $acsfStatus,
-      'site_uri' => $siteUri,
-      'site_name' => $siteName,
-      'starter_kit_name' => 'acquia_cms_existing_site',
-      'starter_kit_ui' => FALSE,
-      'site_studio_status' => $cohesion_configured ? TRUE : FALSE,
-      'profile' => 'acquia_cms',
-      'install_time' => $telemetry->calculateTime('install_start_time', 'install_end_time'),
-      'rebuild_time' => $telemetry->calculateTime('rebuild_start_time', 'rebuild_end_time'),
-      'version' => $version,
-    ],
-  ];
-  $telemetry_service->sendTelemetry('ACMS Telemetry data', $telemetryData);
+  \Drupal::state()->set('acquia_cms.telemetry.install_time', $telemetry->calculateTime('install_start_time', 'install_end_time'));
 }
 
 /**
