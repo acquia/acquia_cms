@@ -218,34 +218,26 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    * Get Acquia CMS telemetry data.
    */
   private function getAcquiaCmsTelemetryData(): array {
-    $appUuid = AcquiaDrupalEnvironmentDetector::getAhApplicationUuid();
-    $siteGroup = AcquiaDrupalEnvironmentDetector::getAhGroup();
-    $env = AcquiaDrupalEnvironmentDetector::getAhEnv();
-    $acsfStatus = AcquiaDrupalEnvironmentDetector::isAcsfEnv();
     $siteUri = explode('/', $this->sitePath);
-    $siteUri = end($siteUri);
-    $siteName = $this->configFactory->get('system.site')->get('name');
-    $starterKitName = $this->configFactory->get('acquia_cms_common.settings')->get('starter_kit_name') ?? $this->state->get('acquia_cms.starter_kit', "acquia_cms_existing_site");
-    $starterKitUi = $this->state->get('starter_kit_wizard_completed', FALSE);
-    $installed_modules = $this->moduleList->getAllInstalledInfo();
-    $profile = $this->configFactory->get('core.extension')->get('profile');
+
     // Telemetry Event Properties.
     $telemetryData = [
       'acquia_cms' => [
-        'application_uuid' => $appUuid,
-        'application_name' => $siteGroup,
-        'environment_name' => $env,
-        'acsf_status' => $acsfStatus,
-        'site_uri' => $siteUri,
-        'site_name' => $siteName,
-        'starter_kit_name' => $starterKitName,
-        'starter_kit_ui' => $starterKitUi,
+        'application_uuid' => AcquiaDrupalEnvironmentDetector::getAhApplicationUuid(),
+        'application_name' => AcquiaDrupalEnvironmentDetector::getAhGroup(),
+        'environment_name' => AcquiaDrupalEnvironmentDetector::getAhEnv(),
+        'acsf_status' => AcquiaDrupalEnvironmentDetector::isAcsfEnv(),
+        'site_uri' => end($siteUri),
+        'site_name' => $this->configFactory->get('system.site')->get('name'),
+        'starter_kit_name' => $this->configFactory->get('acquia_cms_common.settings')->get('starter_kit_name'),
+        'starter_kit_ui' => $this->state->get('starter_kit_wizard_completed', FALSE),
         'site_studio_status' => $this->siteStudioStatus(),
-        'profile' => $profile,
+        'profile' => $this->configFactory->get('core.extension')->get('profile'),
       ],
     ];
-    if (isset($installed_modules['acquia_cms'])) {
-      $telemetryData['acquia_cms']['version'] = $installed_modules['acquia_cms']['version'];
+    $installedModules = $this->moduleList->getAllInstalledInfo();
+    if (isset($installedModules['acquia_cms'])) {
+      $telemetryData['acquia_cms']['version'] = $installedModules['acquia_cms']['version'];
     }
 
     return $telemetryData;
