@@ -3,6 +3,7 @@
 namespace Drupal\acquia_cms_common\EventSubscriber\KernelTerminate;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\NestedArray;
@@ -70,6 +71,13 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
   protected $sitePath;
 
   /**
+   * Drupal Time Service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $time;
+
+  /**
    * Constructs an Acquia CMS telemetry object.
    *
    * @param \Drupal\Core\Extension\ModuleExtensionList $module_list
@@ -82,18 +90,22 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    *   The state service.
    * @param string $site_path
    *   Drupal Site Path.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time service.
    */
   public function __construct(
     ModuleExtensionList $module_list,
     ClientInterface $http_client,
     ConfigFactoryInterface $config_factory,
     StateInterface $state,
-    string $site_path) {
+    string $site_path,
+    TimeInterface $time) {
     $this->moduleList = $module_list;
     $this->httpClient = $http_client;
     $this->configFactory = $config_factory;
     $this->state = $state;
     $this->sitePath = $site_path;
+    $this->time = $time;
   }
 
   /**
@@ -113,9 +125,12 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    * @throws \Exception
    */
   public function onTerminateResponse(KernelEvent $event): void {
-    if ($this->shouldSendTelemetryData()) {
+    $send_timestamp = $this->state->get('acquia_connector.telemetry.timestamp');
+    if ($this->shouldSendTelemetryData() &&
+    $this->time->getCurrentTime() - $send_timestamp > 86400) {
       $event_properties = $this->getAcquiaCmsTelemetryData();
       $this->sendTelemetry("ACMS Telemetry data", $event_properties);
+      $this->state->set('acquia_connector.telemetry.timestamp', $this->time->getCurrentTime());
       $this->state->set('acquia_cms_telemetry.status', TRUE);
     }
   }
@@ -180,6 +195,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
     // interrupt a process. Telemetry failure should be graceful and quiet.
     try {
       $this->sendEvent($event);
+      $this->state->set('acquia_cms_common.telemetry_data', json_encode($event_properties));
       return TRUE;
     }
     catch (\Exception $e) {
@@ -203,8 +219,12 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    */
   private function createEvent(string $type, array $properties): array {
     $default_properties = [
-      'php' => phpversion(),
-      'drupal' => \Drupal::VERSION,
+      'php' => [
+        'version' => phpversion(),
+      ],
+      'drupal' => [
+        'version' => \Drupal::VERSION,
+      ],
     ];
 
     return [
@@ -234,12 +254,8 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
         'site_studio_status' => $this->siteStudioStatus(),
         'profile' => $this->configFactory->get('core.extension')->get('profile'),
       ],
+      'extensions' => $this->getExtensionInfo(),
     ];
-    $installedModules = $this->moduleList->getAllInstalledInfo();
-    if (isset($installedModules['acquia_cms'])) {
-      $telemetryData['acquia_cms']['version'] = $installedModules['acquia_cms']['version'];
-    }
-
     return $telemetryData;
   }
 
@@ -266,12 +282,81 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
     if (AcquiaDrupalEnvironmentDetector::isAhEnv()) {
       $telemetryOpted = $this->state->get('acquia_connector.telemetry.opted', TRUE);
       $isAcquiaTelemetryDataSent = $this->state->get('acquia_cms_telemetry.status', FALSE);
-      if ($telemetryOpted && !$isAcquiaTelemetryDataSent) {
+      if ($telemetryOpted && !$isAcquiaTelemetryDataSent && $this->shouldResendData()) {
         return TRUE;
       }
     }
 
     return FALSE;
+  }
+
+  /**
+   * Decides if telemetry data should resend or not.
+   */
+  private function shouldResendData(): bool {
+    $telemetryDataOld = $this->state->get('acquia_cms_common.telemetry_data', []);
+    if (!empty($telemetryDataOld)) {
+      $telemetryDataOld = json_decode($telemetryDataOld, TRUE);
+    }
+    $telemetryDataCurrent = $this->getAcquiaCmsTelemetryData();
+    if (empty($telemetryDataOld) || (is_array($telemetryDataOld) &&
+    array_key_exists('acquia_cms', $telemetryDataOld) &&
+    array_diff_assoc($telemetryDataOld['acquia_cms'], $telemetryDataCurrent['acquia_cms']))) {
+      $this->state->set('acquia_cms_telemetry.status', FALSE);
+      return TRUE;
+    }
+    return FALSE;
+  }
+
+  /**
+   * Get an array of information about Lightning extensions.
+   *
+   * @return array
+   *   An array of extension info keyed by the extensions machine name. E.g.,
+   *   ['lightning_layout' => ['version' => '8.2.0', 'status' => 'enabled']].
+   */
+  private function getExtensionInfo() {
+    $all_modules = $this->moduleList->getAllAvailableInfo();
+    $installed_modules = $this->moduleList->getAllInstalledInfo();
+    $extension_info = [];
+    $acms_modules = [
+      'acquia_cms_article',
+      'acquia_cms_audio',
+      'acquia_cms_common',
+      'acquia_cms_component',
+      'acquia_cms_dam',
+      'acquia_cms_document',
+      'acquia_cms_event',
+      'acquia_cms_headless',
+      'acquia_cms_image',
+      'acquia_cms_page',
+      'acquia_cms_person',
+      'acquia_cms_place',
+      'acquia_cms_search',
+      'acquia_cms_site_studio',
+      'acquia_cms_starter',
+      'acquia_cms_tour',
+      'acquia_cms_toolbar',
+      'acquia_cms_video',
+      'sitestudio_config_management',
+    ];
+
+    foreach ($all_modules as $name => $extension) {
+      // Remove all custom modules from reporting.
+      if (strpos($this->moduleList->getPath($name), '/custom/') !== FALSE) {
+        continue;
+      }
+      if (in_array($name, $acms_modules)) {
+        // Version is unset for dev versions. In order to generate reports, we
+        // need some value for version, even if it is just the major version.
+        $extension_info[$name]['version'] = $extension['version'] ?? 'dev';
+
+        // Check if module is installed.
+        $extension_info[$name]['status'] = array_key_exists($name, $installed_modules) ? 'enabled' : 'disabled';
+      }
+    }
+
+    return $extension_info;
   }
 
   /**
