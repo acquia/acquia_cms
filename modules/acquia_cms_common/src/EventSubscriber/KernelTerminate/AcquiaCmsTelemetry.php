@@ -252,6 +252,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
         'starter_kit_name' => $this->configFactory->get('acquia_cms_common.settings')->get('starter_kit_name'),
         'starter_kit_ui' => $this->state->get('starter_kit_wizard_completed', FALSE),
         'site_studio_status' => $this->siteStudioStatus(),
+        'install_time' => $this->state->get('acquia_cms.install_time', ''),
         'profile' => $this->configFactory->get('core.extension')->get('profile'),
       ],
       'extensions' => $this->getExtensionInfo(),
