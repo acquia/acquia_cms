@@ -125,13 +125,8 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    * @throws \Exception
    */
   public function onTerminateResponse(KernelEvent $event): void {
-    $sendTimestamp = $this->state->get('acquia_connector.telemetry.timestamp');
-    if ($this->shouldSendTelemetryData() &&
-    $this->time->getCurrentTime() - $sendTimestamp > 86400) {
-      $eventProperties = $this->getAcquiaCmsTelemetryData();
-      $this->sendTelemetry("ACMS Telemetry data", $eventProperties);
-      $this->state->set('acquia_connector.telemetry.timestamp', $this->time->getCurrentTime());
-      $this->state->set('acquia_cms_telemetry.status', TRUE);
+    if ($this->shouldSendTelemetryData()) {
+      $this->sendTelemetry("ACMS Telemetry data", $this->getAcquiaCmsTelemetryData());
     }
   }
 
@@ -195,7 +190,8 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
     // interrupt a process. Telemetry failure should be graceful and quiet.
     try {
       $this->sendEvent($event);
-      $this->state->set('acquia_cms_common.telemetry_data', json_encode($event_properties));
+      $this->state->set('acquia_cms_common.telemetry.data', json_encode($event_properties));
+      $this->state->set('acquia_cms_common.telemetry.timestamp', $this->time->getCurrentTime());
       return TRUE;
     }
     catch (\Exception $e) {
@@ -252,7 +248,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
         'starter_kit_name' => $this->configFactory->get('acquia_cms_common.settings')->get('starter_kit_name'),
         'starter_kit_ui' => $this->state->get('starter_kit_wizard_completed', FALSE),
         'site_studio_status' => $this->siteStudioStatus(),
-        'install_time' => $this->state->get('acquia_cms.install_time', ''),
+        'install_time' => $this->state->get('acquia_cms.telemetry.install_time', ''),
         'profile' => $this->configFactory->get('core.extension')->get('profile'),
       ],
       'extensions' => $this->getExtensionInfo(),
@@ -281,13 +277,13 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
     if ($isCI) {
       return FALSE;
     }
+    $sendTimestamp = $this->state->get('acquia_cms_common.telemetry.timestamp');
     if (AcquiaDrupalEnvironmentDetector::isAhEnv() &&
     $this->state->get('acquia_connector.telemetry.opted', TRUE) &&
-    !$this->state->get('acquia_cms_telemetry.status', FALSE) &&
-    $this->shouldResendData()) {
+    (($this->time->getCurrentTime() - $sendTimestamp) > 86400 ||
+    $this->shouldResendData())) {
       return TRUE;
     }
-
     return FALSE;
   }
 
@@ -295,69 +291,57 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    * Decides if telemetry data should resend or not.
    */
   private function shouldResendData(): bool {
-    $telemetryDataOld = $this->state->get('acquia_cms_common.telemetry_data', []);
+    $telemetryDataOld = $this->state->get('acquia_cms_common.telemetry.data', []);
     if (!empty($telemetryDataOld)) {
       $telemetryDataOld = json_decode($telemetryDataOld, TRUE);
     }
     $telemetryDataCurrent = $this->getAcquiaCmsTelemetryData();
-    if (empty($telemetryDataOld) || (is_array($telemetryDataOld) &&
-    array_key_exists('acquia_cms', $telemetryDataOld) &&
-    array_diff_assoc($telemetryDataOld['acquia_cms'], $telemetryDataCurrent['acquia_cms']))) {
-      $this->state->set('acquia_cms_telemetry.status', FALSE);
-      return TRUE;
-    }
-    return FALSE;
+    return $this->sortTelemetryData($telemetryDataOld) !== $this->sortTelemetryData($telemetryDataCurrent);
   }
 
   /**
-   * Get an array of information about Lightning extensions.
+   * Sort telemetry data.
+   */
+  public function sortTelemetryData(&$array) {
+    ksort($array);
+    foreach ($array as $key => &$value) {
+      if (is_array($value)) {
+        $array[$key] = $this->sortTelemetryData($value);
+      }
+    }
+    return $array;
+  }
+
+  /**
+   * Get an array of information about Acquia extensions.
    *
    * @return array
    *   An array of extension info keyed by the extensions machine name. E.g.,
-   *   ['lightning_layout' => ['version' => '8.2.0', 'status' => 'enabled']].
+   *   ['acquia_cms_common' => ['version' => '3.1.0', 'status' => 'enabled']].
    */
   private function getExtensionInfo() {
     $allModules = $this->moduleList->getAllAvailableInfo();
+    $acquiaModules = $extensions = [];
+    foreach ($allModules as $name => $value) {
+      if (strpos($name, 'cohesion') !== FALSE || strpos($name, 'acquia') !== FALSE || strpos($name, 'sitestudio') !== FALSE) {
+        $acquiaModules[$name] = $value;
+      }
+    }
     $installedModules = $this->moduleList->getAllInstalledInfo();
-    $extensionInfo = [];
-    $acmsModules = [
-      'acquia_cms_article',
-      'acquia_cms_audio',
-      'acquia_cms_common',
-      'acquia_cms_component',
-      'acquia_cms_dam',
-      'acquia_cms_document',
-      'acquia_cms_event',
-      'acquia_cms_headless',
-      'acquia_cms_image',
-      'acquia_cms_page',
-      'acquia_cms_person',
-      'acquia_cms_place',
-      'acquia_cms_search',
-      'acquia_cms_site_studio',
-      'acquia_cms_starter',
-      'acquia_cms_tour',
-      'acquia_cms_toolbar',
-      'acquia_cms_video',
-      'sitestudio_config_management',
-    ];
-
-    foreach ($allModules as $name => $extension) {
+    foreach ($acquiaModules as $name => $extension) {
       // Remove all custom modules from reporting.
       if (strpos($this->moduleList->getPath($name), '/custom/') !== FALSE) {
         continue;
       }
-      if (in_array($name, $acmsModules)) {
-        // Version is unset for dev versions. In order to generate reports, we
-        // need some value for version, even if it is just the major version.
-        $extensionInfo[$name]['version'] = $extension['version'] ?? 'dev';
+      // Version is unset for dev versions. In order to generate reports, we
+      // need some value for version, even if it is just the major version.
+      $extensions[$name]['version'] = $extension['version'] ?? 'dev';
 
-        // Check if module is installed.
-        $extensionInfo[$name]['status'] = array_key_exists($name, $installedModules) ? 'enabled' : 'disabled';
-      }
+      // Check if module is installed.
+      $extensions[$name]['status'] = array_key_exists($name, $installedModules) ? 'enabled' : 'disabled';
     }
 
-    return $extensionInfo;
+    return $extensions;
   }
 
   /**

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\Tests\acquia_cms_common\Kernel;
 
 use Drupal\acquia_cms_common\EventSubscriber\KernelTerminate\AcquiaCmsTelemetry;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\KernelTests\KernelTestBase;
 
 /**
@@ -87,24 +88,28 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
     $state_service->set("acquia_connector.telemetry.opted", FALSE);
     $should_send_data = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertFalse($should_send_data, "Should not send telemetry data if user has not opted.");
+  }
+
+  /**
+   * Tests the shouldSendTelemetryData() method of AcquiaCmsTelemetry class.
+   *
+   * @throws \ReflectionException
+   */
+  public function testIfTelemetryDataShouldResend(): void {
+    $method = $this->getAcqauiaCmsTelemetryMethod("shouldResendData");
+    $state_service = $this->container->get("state");
+    // Remove `CI` environment variable, or we can set it to false.
+    putenv("CI=");
+    $state_service->set("acquia_connector.telemetry.opted", TRUE);
+    $should_resend_data = $method->invoke($this->acquiaCmsTelemetry);
+    $this->assertTrue($should_resend_data, "Should resend telemetry data.");
 
     $state_service->set("acquia_connector.telemetry.opted", TRUE);
-    $state_service->set("acquia_cms_telemetry.status", TRUE);
-    $should_send_data = $method->invoke($this->acquiaCmsTelemetry);
-    $this->assertFalse($should_send_data, "Should send telemetry data if user has opted & data already sent but sent data and current data is different.");
-
-    $state_service->set("acquia_connector.telemetry.opted", TRUE);
-    $state_service->set("acquia_cms_telemetry.status", FALSE);
-    $should_send_data = $method->invoke($this->acquiaCmsTelemetry);
-    $this->assertTrue($should_send_data, "Should send telemetry data if user has opted & data not already sent.");
-
-    $state_service->set("acquia_connector.telemetry.opted", TRUE);
-    $state_service->set("acquia_cms_telemetry.status", TRUE);
-    $should_send_data = $method->invoke($this->acquiaCmsTelemetry);
-    $get_data_method = $this->getAcqauiaCmsTelemetryMethod("getAcquiaCmsTelemetryData");
-    $telemetry_data = $get_data_method->invoke($this->acquiaCmsTelemetry);
-    $state_service->set('acquia_cms_common.telemetry_data', json_encode($telemetry_data));
-    $this->assertFalse($should_send_data, "Should not send telemetry data if user has opted & data already sent and no change in data.");
+    $method_get_data = $this->getAcqauiaCmsTelemetryMethod("getAcquiaCmsTelemetryData");
+    $telemetry_data = $method_get_data->invoke($this->acquiaCmsTelemetry);
+    $state_service->set('acquia_cms_common.telemetry.data', json_encode($telemetry_data));
+    $should_resend_data = $method->invoke($this->acquiaCmsTelemetry);
+    $this->assertFalse($should_resend_data, "Should not send telemetry data as data already sent and no change in data.");
   }
 
   /**
@@ -128,6 +133,84 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
       ->save(TRUE);
     $siteStudioStatus = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertTrue($siteStudioStatus, "Should be TRUE as Site Studio is now configured.");
+  }
+
+  /**
+   * Tests the filtered module names for Acquia extensions.
+   */
+  public function testGetExtensionInfo() {
+    $all_modules = [
+      "acquia_cms_article" => [
+        "name" => "Acquia CMS Article",
+        "type" => "module",
+        "version" => NULL,
+      ],
+      "acquia_cms_common" => [
+        "name" => "Acquia CMS Common",
+        "type" => "module",
+        "version" => NULL,
+      ],
+      "cohesion" => [
+        "name" => "Site Studio core",
+        "type" => "module",
+        "version" => "8.x-7.2.1",
+      ],
+      "metatag_mobile" => [
+        "name" => "Metatag: Mobile & UI Adjustments",
+        "type" => "module",
+        "version" => "2.0.0",
+      ],
+      "metatag_hreflang" => [
+        "name" => "Metatag: Hreflang",
+        "type" => "module",
+        "version" => "2.0.0",
+      ],
+    ];
+    $installed_modules = [
+      "acquia_cms_common" => [
+        "name" => "Acquia CMS Common",
+        "type" => "module",
+        "version" => NULL,
+      ],
+      "cohesion" => [
+        "name" => "Site Studio core",
+        "type" => "module",
+        "version" => "8.x-7.2.1",
+      ],
+      "metatag_mobile" => [
+        "name" => "Metatag: Mobile & UI Adjustments",
+        "type" => "module",
+        "version" => "2.0.0",
+      ],
+    ];
+    $module_list = $this->createMock(ModuleExtensionList::class);
+    $module_list->method('getAllAvailableInfo')->willReturn($all_modules);
+    $module_list->method('getAllInstalledInfo')->willReturn($installed_modules);
+    $telemetry = new AcquiaCmsTelemetry(
+      $module_list,
+      $this->container->get("http_client"),
+      $this->container->get('config.factory'),
+      $this->container->get("state"),
+      $this->container->getParameter("site.path"),
+      $this->container->get("datetime.time"),
+    );
+    $method = $this->getAcqauiaCmsTelemetryMethod("getExtensionInfo");
+    $actual_data = $method->invoke($telemetry);
+    $expected_data = [
+      "acquia_cms_article" => [
+        "version" => "dev",
+        "status" => "disabled",
+      ],
+      "acquia_cms_common" => [
+        "version" => "dev",
+        "status" => "enabled",
+      ],
+      "cohesion" => [
+        "version" => "8.x-7.2.1",
+        "status" => "enabled",
+      ],
+    ];
+    $this->assertSame($actual_data, $expected_data);
   }
 
   /**
