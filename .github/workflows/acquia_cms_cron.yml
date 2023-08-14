@@ -114,8 +114,10 @@ jobs:
           # One of the patch is failing on Drupal Core 9.5. So remove that patch.
           if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
             # Remove the failing php on Drupal Core 9.5.
-            NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
-            composer config extra.patches.drupal/core "${NEW_JSON}" --json
+            # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
+
+            # Remove drupal/core patch as it's needed for latest Drupal Core only.
+            composer config extra.patches.drupal/core {} --json
             sed -i 's/2598.patch",/2599.patch"/' modules/acquia_cms_common/composer.json
             sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
           fi
@@ -197,8 +199,10 @@ jobs:
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
 
           if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
-            NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
-            composer config extra.patches.drupal/core "${NEW_JSON}" --json
+            # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
+
+            # Remove drupal/core patch as it's needed for latest Drupal Core only.
+            composer config extra.patches.drupal/core {} --json
           fi
           # Do not run any existing site tests. We run them seperately.
           find tests/src modules -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
@@ -372,8 +376,10 @@ jobs:
 
           # Remove the failing php on Drupal Core 9.5.
           if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
-            NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
-            composer config extra.patches.drupal/core "${NEW_JSON}" --json
+            # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
+
+            # Remove drupal/core patch as it's needed for latest Drupal Core only.
+            composer config extra.patches.drupal/core {} --json
             sed -i 's/2598.patch",/2599.patch"/' modules/acquia_cms_common/composer.json
             sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
           # Change requireSameDimensions to true in backstop settings.
