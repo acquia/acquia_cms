@@ -26,6 +26,10 @@ jobs:
       GITHUB_EVENT: $ {{ github.event_name }}
       JOB_TYPE: "static-code-analysis"
       #ACMS_JOB: ${{ matrix.acms-job}}
+      # Google env variables.
+      ORCA_GOOGLE_API_CLIENT_ID: ${{ secrets.ORCA_GOOGLE_API_CLIENT_ID }}
+      ORCA_GOOGLE_API_CLIENT_SECRET: ${{ secrets.ORCA_GOOGLE_API_CLIENT_SECRET }}
+      ORCA_GOOGLE_API_REFRESH_TOKEN: ${{ secrets.ORCA_GOOGLE_API_REFRESH_TOKEN }}
     strategy:
       matrix:
         orca-job:
