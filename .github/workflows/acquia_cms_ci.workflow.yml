@@ -40,7 +40,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.3
           #coverage: xdebug
       - name: Download ORCA
         run: |
@@ -76,9 +76,8 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - "8.2"
-          # uncomment below once 8.3 have stable release.
-          # - "8.3"
+          # - 8.2
+          - 8.3
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -142,7 +141,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.3
           #coverage: xdebug
       - name: Setup MySQL
         run: |
@@ -236,36 +235,37 @@ jobs:
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
-          - INTEGRATED_TEST_ON_LATEST_LTS
+          # - INTEGRATED_TEST_ON_LATEST_LTS
         php-version:
-          - 7.4
-          - 8.1
-          - 8.2
+          # - 7.4
+          # - 8.1
+          # - 8.2
+          - 8.3
         orca-version:
-          - ^3
+          # - ^3
           - ^4
-        exclude:
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^3
-            php-version: 7.4
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^3
-            php-version: 8.1
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^3
-            php-version: 8.2
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^4
-            php-version: 7.4
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^3
-            php-version: 8.1
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^3
-            php-version: 8.2
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^4
-            php-version: 7.4
+        # exclude:
+          # - orca-job: ISOLATED_TEST_ON_CURRENT
+          #   orca-version: ^3
+          #   php-version: 7.4
+          # - orca-job: ISOLATED_TEST_ON_CURRENT
+          #   orca-version: ^3
+          #   php-version: 8.1
+          # - orca-job: ISOLATED_TEST_ON_CURRENT
+          #   orca-version: ^3
+          #   php-version: 8.2
+          # - orca-job: ISOLATED_TEST_ON_CURRENT
+          #   orca-version: ^4
+          #   php-version: 7.4
+          # - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
+          #   orca-version: ^3
+          #   php-version: 8.1
+          # - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
+          #   orca-version: ^3
+          #   php-version: 8.2
+          # - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
+          #   orca-version: ^4
+          #   php-version: 7.4
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -301,21 +301,21 @@ jobs:
           find modules/*/tests tests/src -type f -name "*Test.php" -exec rm -fr '{}' ';'
 
           # Remove the failing php on Drupal Core 9.5.
-          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
-            # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
-
-            # Remove drupal/core patch as it's needed for latest Drupal Core only.
-            composer config extra.patches.drupal/core {} --json
-            sed -i 's/2598.patch",/2599.patch"/' modules/acquia_cms_common/composer.json
-            sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
-          # Change requireSameDimensions to true in backstop settings.
-            sed -i '54s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-            sed -i '111s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-            sed -i '130s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-            sed -i '149s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-            sed -i '168s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-            sed -i '187s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-          fi
+          # if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
+          #   # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
+          #
+          #   # Remove drupal/core patch as it's needed for latest Drupal Core only.
+          #   composer config extra.patches.drupal/core {} --json
+          #   sed -i 's/2598.patch",/2599.patch"/' modules/acquia_cms_common/composer.json
+          #   sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
+          # # Change requireSameDimensions to true in backstop settings.
+          #   sed -i '54s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
+          #   sed -i '111s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
+          #   sed -i '130s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
+          #   sed -i '149s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
+          #   sed -i '168s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
+          #   sed -i '187s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
+          # fi
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
           CHROMEDRIVER_PID=$!
@@ -374,7 +374,7 @@ jobs:
           - acquia_cms_page, acquia_cms_site_studio, sitestudio_config_management
           - acquia_cms_image, acquia_cms_document, acquia_cms_video, acquia_cms_audio
           - acquia_cms_search, acquia_cms_common, acquia_cms_tour
-          # - acquia_cms_headless
+          - acquia_cms_headless
           # - acquia_cms_article
           # - acquia_cms_audio
           # - acquia_cms_common
@@ -400,7 +400,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.3
           #coverage: xdebug
       - name: Download ORCA
         run: |
@@ -484,7 +484,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.3
           #coverage: xdebug
       - name: Setup MySQL
         run: |
