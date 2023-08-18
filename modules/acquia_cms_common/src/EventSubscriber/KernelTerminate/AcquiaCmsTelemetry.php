@@ -3,6 +3,7 @@
 namespace Drupal\acquia_cms_common\EventSubscriber\KernelTerminate;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
+use Drupal\acquia_cms_common\Utility\ArrayHelper;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Crypt;
@@ -234,26 +235,28 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    * Get Acquia CMS telemetry data.
    */
   private function getAcquiaCmsTelemetryData(): array {
-    $siteUri = explode('/', $this->sitePath);
+    $telemetryData = &drupal_static(__FUNCTION__, []);
 
-    // Telemetry Event Properties.
-    $telemetryData = [
-      'acquia_cms' => [
-        'application_uuid' => AcquiaDrupalEnvironmentDetector::getAhApplicationUuid(),
-        'application_name' => AcquiaDrupalEnvironmentDetector::getAhGroup(),
-        'environment_name' => AcquiaDrupalEnvironmentDetector::getAhEnv(),
-        'acsf_status' => AcquiaDrupalEnvironmentDetector::isAcsfEnv(),
-        'site_uri' => end($siteUri),
-        'site_name' => $this->configFactory->get('system.site')->get('name'),
-        'starter_kit_name' => $this->configFactory->get('acquia_cms_common.settings')->get('starter_kit_name'),
-        'starter_kit_ui' => $this->state->get('starter_kit_wizard_completed', FALSE),
-        'site_studio_status' => $this->siteStudioStatus(),
-        'install_time' => $this->state->get('acquia_cms.telemetry.install_time', ''),
-        'profile' => $this->configFactory->get('core.extension')->get('profile'),
-      ],
-      'extensions' => $this->getExtensionInfo(),
-    ];
-
+    if (empty($telemetryData)) {
+      $siteUri = explode('/', $this->sitePath);
+      // Telemetry Event Properties.
+      $telemetryData = [
+        'acquia_cms' => [
+          'application_uuid' => AcquiaDrupalEnvironmentDetector::getAhApplicationUuid(),
+          'application_name' => AcquiaDrupalEnvironmentDetector::getAhGroup(),
+          'environment_name' => AcquiaDrupalEnvironmentDetector::getAhEnv(),
+          'acsf_status' => AcquiaDrupalEnvironmentDetector::isAcsfEnv(),
+          'site_uri' => end($siteUri),
+          'site_name' => $this->configFactory->get('system.site')->get('name'),
+          'starter_kit_name' => $this->configFactory->get('acquia_cms_common.settings')->get('starter_kit_name'),
+          'starter_kit_ui' => $this->state->get('starter_kit_wizard_completed', FALSE),
+          'site_studio_status' => $this->siteStudioStatus(),
+          'install_time' => $this->state->get('acquia_cms.telemetry.install_time', ''),
+          'profile' => $this->configFactory->get('core.extension')->get('profile'),
+        ],
+        'extensions' => $this->getExtensionInfo(),
+      ];
+    }
     return $telemetryData;
   }
 
@@ -277,39 +280,24 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
     if ($isCI) {
       return FALSE;
     }
-    $sendTimestamp = $this->state->get('acquia_cms_common.telemetry.timestamp');
-    if (AcquiaDrupalEnvironmentDetector::isAhEnv() &&
-    $this->state->get('acquia_connector.telemetry.opted', TRUE) &&
-    (($this->time->getCurrentTime() - $sendTimestamp) > 86400 ||
-    $this->shouldResendData())) {
-      return TRUE;
-    }
-    return FALSE;
-  }
 
-  /**
-   * Decides if telemetry data should resend or not.
-   */
-  private function shouldResendData(): bool {
+    $sendTimestamp = $this->state->get('acquia_cms_common.telemetry.timestamp', 0);
+    $isOpted = $this->state->get('acquia_connector.telemetry.opted', TRUE);
     $telemetryDataOld = $this->state->get('acquia_cms_common.telemetry.data', []);
     if (!empty($telemetryDataOld)) {
       $telemetryDataOld = json_decode($telemetryDataOld, TRUE);
     }
-    $telemetryDataCurrent = $this->getAcquiaCmsTelemetryData();
-    return $this->sortTelemetryData($telemetryDataOld) !== $this->sortTelemetryData($telemetryDataCurrent);
-  }
 
-  /**
-   * Sort telemetry data.
-   */
-  public function sortTelemetryData(&$array) {
-    ksort($array);
-    foreach ($array as $key => &$value) {
-      if (is_array($value)) {
-        $array[$key] = $this->sortTelemetryData($value);
-      }
+    // We send telemetry data if all below conditions are met:
+    // If current environment is Acquia environment.
+    // If user has opted to send telemetry data.
+    // If data is not sent from the last 24 hours.
+    // If there is change in telemetry data to send & previous telemetry data.
+    $isSame = ArrayHelper::isSame($telemetryDataOld, $this->getAcquiaCmsTelemetryData());
+    if (AcquiaDrupalEnvironmentDetector::isAhEnv() && $isOpted && ($this->time->getCurrentTime() - $sendTimestamp) > 86400 && !$isSame) {
+      return TRUE;
     }
-    return $array;
+    return FALSE;
   }
 
   /**
@@ -319,28 +307,21 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    *   An array of extension info keyed by the extensions machine name. E.g.,
    *   ['acquia_cms_common' => ['version' => '3.1.0', 'status' => 'enabled']].
    */
-  private function getExtensionInfo() {
+  public function getExtensionInfo() {
     $allModules = $this->moduleList->getAllAvailableInfo();
-    $acquiaModules = $extensions = [];
+    $extensions = [];
+    $installedModules = array_keys($this->moduleList->getAllInstalledInfo());
     foreach ($allModules as $name => $value) {
       if (strpos($name, 'cohesion') !== FALSE || strpos($name, 'acquia') !== FALSE || strpos($name, 'sitestudio') !== FALSE) {
-        $acquiaModules[$name] = $value;
+        $extensions[$name] = [
+          // Version is unset for dev versions. In order to generate reports, we
+          // need some value for version, even if it is just the major version.
+          'version' => $value['version'] ?? 'dev',
+          // Check if module is installed.
+          'status' => in_array($name, $installedModules) ? "enabled" : "disabled",
+        ];
       }
     }
-    $installedModules = $this->moduleList->getAllInstalledInfo();
-    foreach ($acquiaModules as $name => $extension) {
-      // Remove all custom modules from reporting.
-      if (strpos($this->moduleList->getPath($name), '/custom/') !== FALSE) {
-        continue;
-      }
-      // Version is unset for dev versions. In order to generate reports, we
-      // need some value for version, even if it is just the major version.
-      $extensions[$name]['version'] = $extension['version'] ?? 'dev';
-
-      // Check if module is installed.
-      $extensions[$name]['status'] = array_key_exists($name, $installedModules) ? 'enabled' : 'disabled';
-    }
-
     return $extensions;
   }
 
