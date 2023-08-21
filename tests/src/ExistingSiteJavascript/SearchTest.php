@@ -259,10 +259,8 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
       $this->assertFalse($titleElement->isVisible());
     }
 
-    foreach (['Article Type', 'Event Type', 'Person Type', 'Place Type'] as $facet) {
-      /** @var \Behat\Mink\Element\NodeElement $linkElement */
-      $linkElement = $this->assertLinkExists($facet, $facets);
-      $this->assertFalse($linkElement->isVisible());
+    foreach (['article-type', 'event-type', 'person-type', 'place-type'] as $facet) {
+      $this->assertFalse($this->assertSession()->elementExists('css', '#block-search-' . $facet, $facets)->isVisible());
     }
     $this->assertLinksExistInOrder();
   }
