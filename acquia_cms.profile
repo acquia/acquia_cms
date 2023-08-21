@@ -110,17 +110,9 @@ function acquia_cms_install_tasks(): array {
   }
 
   $tasks['install_acms_finished'] = [];
-
-  // Don't include the rebuild task & don't send heartbeat event to telemetry.
-  // if installing site via Drush.
-  // @see src/Commands/SiteInstallCommands.php.
-  // Also send hearbeat event only for UI here.
-  // For cli we are sending it from file mentioned above.
-  if (PHP_SAPI !== 'cli') {
-    $tasks['install_acms_send_heartbeat_event'] = [
-      'run' => Drupal::service('module_handler')->moduleExists('acquia_connector') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
-    ];
-  }
+  $tasks['install_acms_send_heartbeat_event'] = [
+    'run' => Drupal::service('module_handler')->moduleExists('acquia_connector') && Environment::isAhEnv() ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+  ];
   return $tasks;
 }
 
@@ -131,20 +123,7 @@ function acquia_cms_install_tasks(): array {
  */
 function install_acms_send_heartbeat_event() {
   $telemetry = Drupal::classResolver(AcquiaTelemetry::class);
-  $telemetry_service = \Drupal::service('acquia_connector.telemetry');
-  $config = \Drupal::config('cohesion.settings');
-  $cohesion_configured = $config->get('api_key') && $config->get('organization_key');
-  \Drupal::configFactory()
-    ->getEditable('acquia_connector.settings')
-    ->set('spi.amplitude_api_key', 'e896d8a97a24013cee91e37a35bf7b0b')
-    ->save();
-  $telemetry_service->sendTelemetry('acquia_cms_installed', [
-    'Application UUID' => Environment::getAhApplicationUuid(),
-    'Site Environment' => Environment::getAhEnv(),
-    'Install Time' => $telemetry->calculateTime('install_start_time', 'install_end_time'),
-    'Rebuild Time' => $telemetry->calculateTime('rebuild_start_time', 'rebuild_end_time'),
-    'Site Studio Install Status' => $cohesion_configured ? 1 : 0,
-  ]);
+  \Drupal::state()->set('acquia_cms.telemetry.install_time', $telemetry->calculateTime('install_start_time', 'install_end_time'));
 }
 
 /**
