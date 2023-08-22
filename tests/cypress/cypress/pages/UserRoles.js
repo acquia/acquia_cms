@@ -1,3 +1,4 @@
+import utility from './Utility'
 const testData = require("./TestData")
 const passPolicy = require("./PasswordPolicy")
 
@@ -29,14 +30,6 @@ class UserRoles {
     get confirmPassword() {
         return cy.get("#edit-pass-pass2")
     }
-    // Get create new account button.
-    get createNewAccButton() {
-        return cy.get("#edit-submit")
-    }
-    // Get the validation texts.
-    get userCreatedVal() {
-        return cy.contains("Created a new user account for QA_User. No email has been sent")
-    }
 
     // Create admin user.
     createAdminUser() {
@@ -50,8 +43,8 @@ class UserRoles {
         this.passwordTexBox.type(testData.$policy_password)
         this.confirmPassword.type(testData.$policy_password)
         cy.wait(2000)
-        this.createNewAccButton.click()
-        this.userCreatedVal.should('have.text', '\n                          Created a new user account for QA_User. No email has been sent.\n                      ')
+        utility.save.click()
+        cy.get('.messages-list .messages--status .messages__content').contains("Created a new user account for QA_User. No email has been sent")
     }
 
     // Delete the created admin user

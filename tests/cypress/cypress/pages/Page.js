@@ -1,15 +1,12 @@
 import 'cypress-iframe'
 import content from './Content'
+import utility from './Utility'
 const testData = require("./TestData")
 
 class Page {
     // Get the link of page from the content.
     get pageLink() {
-        return cy.get("#toolbar-item-administration-tray > nav > div.toolbar-menu-administration > ul > li:nth-child(2) > ul > li:nth-child(2) > ul > li:nth-child(3) > a")
-    }
-    // Get edit title.
-    get editTitle() {
-        return cy.get("#edit-title-0-value")
+        return cy.get(utility.$addContentMenu + "li:nth-child(3) > a")
     }
     // Layout canvas block should be present with the plus key.
     get layoutCanvas() {
@@ -18,19 +15,6 @@ class Page {
     get addLayoutButton() {
         return cy.get("#react-collapsed-panel-1 div.sc-lirkk2-0.ssa-layout-canvas div.sc-lirkk2-1:nth-child(1) button.ssa-btn.ssa-btn-primary")
     }
-    // Get Language dropdown.
-    get languageDropdown() {
-        return cy.get("#edit-langcode-0-value")
-    }
-    // Save as dropdown.
-    get saveAsDropdown() {
-        return cy.get("#edit-moderation-state-0-state")
-    }
-    // Get Save as button.
-    get pageSave() {
-        return cy.get("#edit-submit")
-    }
-
 
     // Click and verify if the components are present.
     clickAndVerify() {
@@ -41,17 +25,17 @@ class Page {
         // Validate title of the page.
         content.pageTitle.should('have.text', 'Create Page')
         // Validate the title is present on the page.
-        page.editTitle.should("be.visible")
+        utility.editTitle.should("be.visible")
         // Validate layout canvas should be visible.
         page.layoutCanvas.should("be.visible")
         // Add layout button should be visible.
         page.addLayoutButton.should("be.visible")
         // Language dropdown should be visible.
-        page.languageDropdown.should("be.visible")
+        utility.contentLanguageSelect.should("be.visible")
         // Save as dropdown should be visible.
-        page.saveAsDropdown.should("be.visible")
+        utility.saveAsDropdown.should("be.visible")
         // Save button should be visible.
-        page.pageSave.should("be.visible")
+        utility.save.should("be.visible")
     }
 
     // Create page with layout canvas.
@@ -61,7 +45,7 @@ class Page {
             force: true
         })
         // Enter the title for the page.
-        page.editTitle.type(testData.$content_title)
+        utility.editTitle.type(testData.$content_title)
         cy.wait(4000)
         // Input the description.
         cy.get('.ck-editor__main[role="presentation"]').then(($element) => {
@@ -74,8 +58,8 @@ class Page {
         // Create the page.
         this.createPage()
         // Publish and save the page.
-        page.saveAsDropdown.select('Published')
-        page.pageSave.click({
+        utility.saveAsDropdown.select('Published')
+        utility.save.click({
             force: true
         })
 
@@ -86,7 +70,7 @@ class Page {
         page.filterModule.type("visual page")
         cy.wait(500)
         page.vpbCheckBox.check()
-        page.installModule.click()
+        utility.save.click()
         cy.wait(2000)
 
         // Search for created Page.
@@ -107,24 +91,25 @@ class Page {
 
     }
     // Get Page creation components.
+    $pageSelector = '#ssa-sidebar-browser > div.sc-alxsbm-9.ssa-sidebar-browser--list > ';
     get readMore() {
-        return cy.get("#ssa-sidebar-browser > div.sc-alxsbm-9.ssa-sidebar-browser--list > div:nth-child(9) > ul > li > button")
+        return cy.get(this.$pageSelector + " div:nth-child(9) > ul > li > button")
         }
     // Get Blockquoate.
     get blockquote() {
-        return cy.get("#ssa-sidebar-browser > div.sc-alxsbm-9.ssa-sidebar-browser--list > div:nth-child(3) > ul > li:nth-child(7) > button")
+        return cy.get(this.$pageSelector + " div:nth-child(3) > ul > li:nth-child(7) > button")
     }
     // Get Event slider.
     get eventSlider() {
-        return cy.get("#ssa-sidebar-browser > div.sc-alxsbm-9.ssa-sidebar-browser--list > div:nth-child(4) > ul > li > button")
+        return cy.get(this.$pageSelector + " div:nth-child(4) > ul > li > button")
     }
     // Get Article slider.
     get articleSlider() {
-        return cy.get("#ssa-sidebar-browser > div.sc-alxsbm-9.ssa-sidebar-browser--list > div:nth-child(4) > ul > li:nth-child(3) > button")
+        return cy.get(this.$pageSelector + " div:nth-child(4) > ul > li:nth-child(3) > button")
     }
     // Get Hero.
     get hero() {
-        return cy.get("#ssa-sidebar-browser > div.sc-alxsbm-9.ssa-sidebar-browser--list > div:nth-child(1) > ul > li > button")
+        return cy.get(this.$pageSelector + " div:nth-child(1) > ul > li > button")
     }
     // Get extend module tab.
     get extendTab() {
@@ -138,10 +123,7 @@ class Page {
     get vpbCheckBox() {
         return cy.get("#edit-modules-sitestudio-page-builder-enable")
     }
-    // Get Install button.
-    get installModule() {
-        return cy.get("#edit-submit")
-    }
+
     // Get content tab.
     get createdContent() {
         return cy.get("tbody > :nth-child(1) > .views-field-title")
@@ -190,19 +172,26 @@ class Page {
     }
     // Get Hero add button from VPB.
     get addHeroVPB() {
-        // return cy.xpath("//*[@id=\"coh-sidebar-browser\"]/div[3]/div[1]/ul/li/button").
-        return cy.get("#ssa-sidebar-browser > div.sc-alxsbm-9.ssa-sidebar-browser--list > div:nth-child(1) > ul > li > button")
+        return cy.get(this.$pageSelector + "div:nth-child(1) > ul > li > button")
     }
     // Get Save button VPB.
+    $vpbSelector = '#ssaApp > div.sc-wvs7do-0.ssa-edit-button-container > ';
     get saveVPB() {
-        return cy.get("#ssaApp > div.sc-wvs7do-0.ssa-edit-button-container > div > div.sc-1j6p5lt-0.save-button-wrapper > button")
+        return cy.get(this.$vpbSelector + " div > div.sc-1j6p5lt-0.save-button-wrapper > button")
     }
     // Get Exit VPB.
     get exitVPB() {
-        return cy.get("#ssaApp > div.sc-wvs7do-0.ssa-edit-button-container > button")
+        return cy.get(this.$vpbSelector + " button")
+    }
+
+    // Visit page.
+    get visitPage() {
+        return cy.get('#views-form-content-page-1 > table > tbody > tr > td.views-field.views-field-title > a')
     }
     // Edit page with VPB - visual page builder.
     editCreatedPageVPB() {
+        // Edit page.
+        this.visitPage.click()
         // Click on VPB.
         this.vpb.click({
             force: true
@@ -221,6 +210,7 @@ class Page {
         })
         cy.wait(5000)
         cy.reload()
+        cy.wait(2000)
         // Exit VPB.
         this.exitVPB.click({
             force: true

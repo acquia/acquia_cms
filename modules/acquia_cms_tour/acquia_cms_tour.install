@@ -11,7 +11,7 @@ use Drupal\user\Entity\Role;
  * Add state key for existing sites with Acquia CMS profile.
  */
 function acquia_cms_tour_update_8001() {
-  \Drupal::state()->set('existing_site_acquia_cms', TRUE);
+  \Drupal::state()->set('acquia_cms_existing_site', TRUE);
 }
 
 /**
@@ -25,4 +25,12 @@ function acquia_cms_tour_update_8002() {
       }
     }
   }
+}
+
+/**
+ * Update state key for existing sites with Acquia CMS profile, module.
+ */
+function acquia_cms_tour_update_8003() {
+  \Drupal::state()->set('acquia_cms_existing_site', TRUE);
+  \Drupal::state()->delete('existing_site_acquia_cms');
 }

@@ -103,7 +103,7 @@ class PureHeadlessModeInstallHandler {
    *   Returns an array of path aliases.
    */
   public function headlessAliases(): array {
-    return [
+    $aliases = [
       '/admin/config/people/simple_oauth' => '/admin/access/settings',
       '/admin/config/people/simple_oauth/oauth2_client' => '/admin/access/clients',
       '/admin/people/roles' => '/admin/access/roles',
@@ -116,6 +116,15 @@ class PureHeadlessModeInstallHandler {
       '/admin/structure/block/block-content' => '/admin/content/blocks',
       '/admin/structure/block/block-content/types' => '/admin/content-models/blocks',
     ];
+
+    // Due to the changes introduced in version:10.1.0
+    // Block management pages have new paths and menu items.
+    // @see https://www.drupal.org/node/3320855
+    if (version_compare(\Drupal::VERSION, '10.1', '>=')) {
+      unset($aliases['/admin/structure/block/block-content/types']);
+      $aliases['/admin/structure/block-content'] = '/admin/content-models/blocks';
+    }
+    return $aliases;
   }
 
   /**

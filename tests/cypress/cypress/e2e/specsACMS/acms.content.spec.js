@@ -27,14 +27,6 @@ describe("Verify the contents of content page", () => {
         })
     })
 
-    // TC-80.
-    // Article.
-    context("Article - Click and verify", () => {
-        it("Mouse hover on Content tab and navigate to Article link from sub-admin tool bar", () => {
-            article.clickAndVerify()
-        })
-    })
-
     // Verify and extend Acquia CMS Starter Module.
     context("Verify and Extend Acquia CMS Starter module", () => {
         it("Extend the Acquia CMS Starter module", () => {
@@ -56,7 +48,15 @@ describe("Verify the contents of content page", () => {
         })
     })
 
-    // TC-81.
+    // TC-80.
+    // Verify Article.
+    context("Article - Click and verify", () => {
+        it("Mouse hover on Content tab and navigate to Article link from sub-admin tool bar", () => {
+            article.clickAndVerify()
+        })
+    })
+
+    // Create Article.
     context("Article - Create Article", () => {
         it("Create, Save and publish the article", () => {
             // Click on article link from mouse hover.
@@ -74,33 +74,8 @@ describe("Verify the contents of content page", () => {
         })
     })
 
-    // Place.
-    // TC-82.
-    context("Place - Click and verify", () => {
-        it("Mouse hover on Content tab and navigate to Place link from sub-admin tool bar", () => {
-            place.clickAndVerify()
-        })
-    })
-    // TC-83.
-    context("Place - Create Place", () => {
-        it("Create, Save and publish the place", () => {
-            // Click on article link from mouse hover
-            place.placeLink.click({
-                force: true
-            })
-            // Title of the article page
-            content.pageTitle.should('have.text', 'Create Place')
-            // Create the article, save the article and Publish the artilce.
-            place.createPlace()
-            // Validate the created article.
-            place.validatePlace()
-            // Delete the article- generalised method.
-            content.deleteContent()
-        })
-    })
-
-    // Event.
-    // TC-84.
+    // TC-81.
+    // Verify Event.
     context("Event - Click and verify", () => {
         it("Mouse hover on Content tab and navigate to Event link from sub-admin tool bar", () => {
             event.clickAndVerify()
@@ -125,14 +100,15 @@ describe("Verify the contents of content page", () => {
         })
     })
 
-    // Page.
+    // TC-82.
+    // Verify Page.
     context("Page - Click and verify", () => {
         it("Mouse hover on Content tab and navigate to Page link from sub-admin tool bar", () => {
             // Verify all the elements/components are present on create person page.
             page.clickAndVerify()
         })
     })
-
+    // Create Page.
     context("Page - Create Page", () => {
         it("Create, Save and publish the Page", () => {
             // Create the page with layout canvas edit it with Visual page builder.
@@ -144,14 +120,41 @@ describe("Verify the contents of content page", () => {
         })
     })
 
-    // Person.
+    // TC-83.
+    // Verify Place.
+    context("Place - Click and verify", () => {
+        it("Mouse hover on Content tab and navigate to Place link from sub-admin tool bar", () => {
+            place.clickAndVerify()
+        })
+    })
+
+    // Create Place.
+    context("Place - Create Place", () => {
+        it("Create, Save and publish the place", () => {
+            // Click on article link from mouse hover
+            place.placeLink.click({
+                force: true
+            })
+            // Title of the article page
+            content.pageTitle.should('have.text', 'Create Place')
+            // Create the article, save the article and Publish the artilce.
+            place.createPlace()
+            // Validate the created article.
+            place.validatePlace()
+            // Delete the article- generalised method.
+            content.deleteContent()
+        })
+    })
+
+    // TC-84.
+    // Verify Person.
     context("Person - Click and verify", () => {
         it("Mouse hover on Content tab and navigate to Person link from sub-admin tool bar", () => {
             // Verify all the elements are present on create person page.
             person.clickAndVerify()
         })
     })
-
+    // Create Person.
     context("Person - Create Person", () => {
         it("Create, Save and publish the Person", () => {
             // Creating the person.

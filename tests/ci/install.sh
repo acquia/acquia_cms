@@ -48,17 +48,22 @@ curl "https://codeload.github.com/swagger-api/swagger-ui/zip/refs/tags/v3.0.17" 
 unzip ${ORCA_FIXTURE_DIR}/docroot/libraries/v3.0.17.zip
 mv swagger-ui-3.0.17 ${ORCA_FIXTURE_DIR}/docroot/libraries/swagger-ui
 
+# Add slide-element library locally
+mkdir -p ${ORCA_FIXTURE_DIR}/docroot/libraries/slide-element
+curl "https://unpkg.com/slide-element@2.3.1/dist/index.umd.js" -o ${ORCA_FIXTURE_DIR}/docroot/libraries/slide-element/index.umd.js
+
+# Add chartjs library locally
 mkdir -p ${ORCA_FIXTURE_DIR}/docroot/libraries/chartjs/dist/
 curl "https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js" -o ${ORCA_FIXTURE_DIR}/docroot/libraries/chartjs/dist/chart.min.js
 
 # Install acquia_cms only for the Integrated & ExistingSite PHPUnit tests.
 if [ -n "${ACMS_JOB}" ]; then
-  if [ "${ACMS_JOB}" == "backstop_tests" ] && [ "${CORE_VERSION}" != "LATEST_LTS" ]; then
+  if [ "${ACMS_JOB}" == "backstop_tests" ] && [ "${CORE_VERSION}" == "LATEST_LTS" ]; then
     composer config --unset repositories.acquia_cms_common
     composer require drupal/acquia_cms_common:2.x-dev -W
   fi
-  ./vendor/bin/acms site:install --yes --uri=http://127.0.0.1:8080
-  drush upwd admin admin --yes --uri=http://127.0.0.1:8080
+  ./vendor/bin/acms site:install --yes --account-pass admin --uri=http://127.0.0.1:8080
+
   # Enable Acquia CMS DAM module.
   # @todo We should probably move this in acms site:install command.
   drush en acquia_cms_audio acquia_cms_dam sitestudio_config_management --yes --uri=http://127.0.0.1:8080

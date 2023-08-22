@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\acquia_cms_search\Functional;
 
-use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\search_api\Entity\Index;
 use Drupal\Tests\BrowserTestBase;
 
@@ -51,10 +50,6 @@ class AcquiaSearchIntegrationFromTourPageTest extends BrowserTestBase {
    * {@inheritdoc}
    */
   protected function setUp(): void {
-    // Check active subscription of acquia environment.
-    if (!AcquiaDrupalEnvironmentDetector::getAhApplicationUuid()) {
-      $this->markTestSkipped('This test can only run when acquia application uuid is set.');
-    }
     parent::setUp();
     $account = $this->drupalCreateUser([
       'administer site configuration',
@@ -69,7 +64,7 @@ class AcquiaSearchIntegrationFromTourPageTest extends BrowserTestBase {
    */
   public function testAcquiaSearchIntegration() {
     $assert = $this->assertSession();
-    // By default Search server index id is database.
+    // By default, Search server index id is database.
     $this->drupalGet('admin/config/search/search-api');
     $assert->statusCodeEquals(200);
     $assert->linkExists('Database Search Server');
@@ -77,14 +72,17 @@ class AcquiaSearchIntegrationFromTourPageTest extends BrowserTestBase {
     $index = Index::load('content');
     $this->assertTrue($index->status());
     $this->assertSame('database', $index->getServerId());
+
     // Acquia search server is disabled.
     $this->drupalGet('admin/config/search/search-api/server/acquia_search_server/edit');
     $assert->fieldValueEquals('name', 'Acquia Search API Solr server');
     $assert->checkboxNotChecked('status');
+
     // Visit the tour page.
     $this->drupalGet('/admin/tour/dashboard');
     $assert->statusCodeEquals(200);
 
+    // Check the acquia search form and its fields.
     $formElement = $assert->elementExists('css', '.acquia-cms-search-form');
     $assert->pageTextContains("Provides integration between your Drupal site and Acquia's hosted search service.");
     // Assert that the expected fields show up.
@@ -92,21 +90,29 @@ class AcquiaSearchIntegrationFromTourPageTest extends BrowserTestBase {
     $assert->fieldExists('Acquia Connector key');
     $assert->fieldExists('Acquia Search API hostname');
     $assert->fieldExists('Acquia Application UUID');
-    // Assert that save button is present on form.
     $assert->buttonExists('Save');
-    // Acquia subscription identifier.
-    $connectorId = getenv('CONNECTOR_ID') ?: 'ABCD-12345';
-    // Acquia connector key.
-    $connectorKey = getenv('CONNECTOR_KEY') ?: $this->randomString();
-    // Acquia application uuid.
-    $applicationUuid = getenv('AH_APPLICATION_UUID') ?: $this->container->get('uuid')->generate();
-    // Save acquia search form.
+
+    // Acquia Subscription identifier can be obtained from the
+    // "Product Keys" section of the Acquia Cloud UI.
+    // ex: ABCD-12345.
+    $connectorId = getenv('CONNECTOR_ID');
+
+    // Acquia Connector key can be obtained from the
+    // "Product Keys" section of the Acquia Cloud UI.
+    $connectorKey = getenv('CONNECTOR_KEY');
+
+    // Acquia Application UUID can be obtained from the
+    // "Product Keys" section of the Acquia Cloud UI.
+    $applicationUuid = getenv('SEARCH_UUID');
+
+    // Save the acquia search form to attach correct core.
     $formElement->fillField('Acquia Subscription identifier', $connectorId);
     $formElement->fillField('Acquia Connector key', $connectorKey);
     $formElement->fillField('Acquia Application UUID', $applicationUuid);
     $formElement->pressButton('Save');
-    $assert->pageTextContains('The configuration options have been saved.');
 
+    // Assert expected text appear after saving the search form.
+    $assert->pageTextContains('The configuration options have been saved.');
     $assert->pageTextContains('The Content search index is now using the Acquia Search API Solr server server. All content will be reindexed.');
 
     // Validate Acquia search solr.

@@ -27,6 +27,7 @@
         "drupal/acquia_cms_starter": "dev-develop",
         "drupal/acquia_cms_toolbar": "dev-develop",
         "drupal/acquia_cms_tour": "dev-develop",
+        "drupal/consumer_image_styles": "^4.0",
         "drupal/google_analytics": "^4.0",
         "drupal/google_tag": "^1.6",
         "drupal/honeypot": "^2.1",
@@ -129,7 +130,8 @@
         },
         "patches": {
             "drupal/core": {
-                "3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112": "https://git.drupalcode.org/project/drupal/-/merge_requests/3142.patch"
+                "3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112": "https://git.drupalcode.org/project/drupal/-/merge_requests/3142.patch",
+                "Fix failing test for site studio due to missing file": "https://gist.githubusercontent.com/chandan-singh7929/978c8c3c8b6f1e2de23492e7e562c0c3/raw/f0e7770d94be862e5495ca25662a0a0d5672b785/bypass-library-version-core.patch"
             },
             "drupal/decoupled_router": {
                 "3111456 - Unable to resolve path on node in other language than default": "https://www.drupal.org/files/issues/2022-11-30/decouple_router-3111456-resolve-language-issue-58.patch",

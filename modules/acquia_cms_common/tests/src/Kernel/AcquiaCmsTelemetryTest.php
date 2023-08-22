@@ -14,11 +14,37 @@ use Drupal\KernelTests\KernelTestBase;
 final class AcquiaCmsTelemetryTest extends KernelTestBase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected static $modules = ["system", "acquia_cms_common"];
+
+  /**
    * The AcquiaCmsTelemetry event_service object.
    *
    * @var \Drupal\acquia_cms_common\EventSubscriber\KernelTerminate\AcquiaCmsTelemetry
    */
   protected $acquiaCmsTelemetry;
+
+  /**
+   * The config.factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * The site uri.
+   *
+   * @var string
+   */
+  protected $siteUri;
+
+  /**
+   * The module list object.
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  protected $moduleList;
 
   /**
    * {@inheritdoc}
@@ -28,9 +54,21 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
     $this->acquiaCmsTelemetry = new AcquiaCmsTelemetry(
       $this->container->get("extension.list.module"),
       $this->container->get("http_client"),
-      $this->container->get("config.factory"),
-      $this->container->get("state")
+      $this->container->get('config.factory'),
+      $this->container->get("state"),
+      $this->container->getParameter("site.path"),
+      $this->container->get("datetime.time"),
     );
+    $path = explode('/', $this->container->getParameter('site.path'));
+    $this->siteUri = end($path);
+    $this->config('system.site')
+      ->set('name', 'Acquia CMS')
+      ->set('langcode', 'en')
+      ->save();
+    $this->config('acquia_cms_common.settings')
+      ->set('starter_kit_name', 'no_starter_kit')->save();
+    $this->config('core.extension')
+      ->set('profile', 'minimal')->save();
   }
 
   /**
@@ -39,6 +77,9 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
    * @throws \ReflectionException
    */
   public function testIfTelemetryDataShouldSend(): void {
+    $getTelemetryMethod = $this->getAcqauiaCmsTelemetryMethod("getAcquiaCmsTelemetryData");
+    $actual_telemetry_data = $getTelemetryMethod->invoke($this->acquiaCmsTelemetry);
+
     $method = $this->getAcqauiaCmsTelemetryMethod("shouldSendTelemetryData");
     $state_service = $this->container->get("state");
 
@@ -53,6 +94,29 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
     $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertTrue($shouldSendData, "Should send telemetry data on Acquia environment.");
 
+    $this->container->get("state")->set(
+      "acquia_cms_common.telemetry.timestamp",
+      $this->container->get('datetime.time')->getCurrentTime()
+    );
+    $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
+    $this->assertFalse($shouldSendData, "Should not send telemetry data, if data send recently.");
+
+    $this->container->get("state")->set(
+      "acquia_cms_common.telemetry.timestamp",
+      $this->container->get('datetime.time')->getCurrentTime() - 86401,
+    );
+    $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
+    $this->assertTrue($shouldSendData, "Should send telemetry data, if data sent before a day.");
+
+    $state_service->set("acquia_cms_common.telemetry.data", json_encode($actual_telemetry_data));
+    $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
+    $this->assertFalse($shouldSendData, "Should not send telemetry data, if current telemetry data is same as data already sent.");
+
+    $actual_telemetry_data['acquia_cms']['application_uuid'] = "some-application-uuid";
+    $state_service->set("acquia_cms_common.telemetry.data", json_encode($actual_telemetry_data));
+    $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
+    $this->assertTrue($shouldSendData, "Should send telemetry data, if current telemetry data has changed from data already sent.");
+
     putenv("CI=true");
     $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertFalse($shouldSendData, "Should not send telemetry data on CI environment.");
@@ -63,16 +127,6 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
     $state_service->set("acquia_connector.telemetry.opted", FALSE);
     $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertFalse($shouldSendData, "Should not send telemetry data if user has not opted.");
-
-    $state_service->set("acquia_connector.telemetry.opted", TRUE);
-    $state_service->set("acquia_cms_telemetry.status", TRUE);
-    $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
-    $this->assertFalse($shouldSendData, "Should not send telemetry data if user has opted & data already sent.");
-
-    $state_service->set("acquia_connector.telemetry.opted", TRUE);
-    $state_service->set("acquia_cms_telemetry.status", FALSE);
-    $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
-    $this->assertTrue($shouldSendData, "Should send telemetry data if user has opted & data not already sent.");
   }
 
   /**
@@ -99,19 +153,100 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
   }
 
   /**
+   * Tests the filtered module names for Acquia extensions.
+   */
+  public function testGetExtensionInfo() {
+    $all_modules = [
+      "acquia_cms_article" => [
+        "name" => "Acquia CMS Article",
+        "type" => "module",
+        "version" => NULL,
+      ],
+      "acquia_cms_common" => [
+        "name" => "Acquia CMS Common",
+        "type" => "module",
+        "version" => NULL,
+      ],
+      "cohesion" => [
+        "name" => "Site Studio core",
+        "type" => "module",
+        "version" => "8.x-7.2.1",
+      ],
+      "metatag_mobile" => [
+        "name" => "Metatag: Mobile & UI Adjustments",
+        "type" => "module",
+        "version" => "2.0.0",
+      ],
+      "metatag_hreflang" => [
+        "name" => "Metatag: Hreflang",
+        "type" => "module",
+        "version" => "2.0.0",
+      ],
+    ];
+    $installed_modules = [
+      "acquia_cms_common" => [
+        "name" => "Acquia CMS Common",
+        "type" => "module",
+        "version" => NULL,
+      ],
+      "cohesion" => [
+        "name" => "Site Studio core",
+        "type" => "module",
+        "version" => "8.x-7.2.1",
+      ],
+      "metatag_mobile" => [
+        "name" => "Metatag: Mobile & UI Adjustments",
+        "type" => "module",
+        "version" => "2.0.0",
+      ],
+    ];
+    $module_list = $this->createMock(ModuleExtensionList::class);
+    $module_list->method('getAllAvailableInfo')->willReturn($all_modules);
+    $module_list->method('getAllInstalledInfo')->willReturn($installed_modules);
+    $telemetry = new AcquiaCmsTelemetry(
+      $module_list,
+      $this->container->get("http_client"),
+      $this->container->get('config.factory'),
+      $this->container->get("state"),
+      $this->container->getParameter("site.path"),
+      $this->container->get("datetime.time"),
+    );
+    $method = $this->getAcqauiaCmsTelemetryMethod("getExtensionInfo");
+    $actual_data = $method->invoke($telemetry);
+    $expected_data = [
+      "acquia_cms_article" => [
+        "version" => "dev",
+        "status" => "disabled",
+      ],
+      "acquia_cms_common" => [
+        "version" => "dev",
+        "status" => "enabled",
+      ],
+      "cohesion" => [
+        "version" => "8.x-7.2.1",
+        "status" => "enabled",
+      ],
+    ];
+    $this->assertSame($actual_data, $expected_data);
+  }
+
+  /**
    * Tests the getAcquiaCmsTelemetryData() method of AcquiaCmsTelemetry class.
    *
    * @throws \ReflectionException
    *
    * @dataProvider telemetryDataProvider
    */
-  public function testAcquiaCmsTelemetryData(array $expected_telemetryData, array $env_variables = []): void {
-    $method = $this->getAcqauiaCmsTelemetryMethod("getAcquiaCmsTelemetryData");
+  public function testAcquiaCmsTelemetryData(array $expected_telemetry_data, array $env_variables = []): void {
     foreach ($env_variables as $env_variable => $value) {
       putenv("$env_variable=$value");
     }
-    $actual_telemetryData = $method->invoke($this->acquiaCmsTelemetry);
-    $this->assertSame($actual_telemetryData, $expected_telemetryData);
+    $expected_telemetry_data['acquia_cms']['site_uri'] = $this->siteUri;
+    $method = $this->getAcqauiaCmsTelemetryMethod("getExtensionInfo");
+    $expected_telemetry_data['extensions'] = $method->invoke($this->acquiaCmsTelemetry);
+    $method = $this->getAcqauiaCmsTelemetryMethod("getAcquiaCmsTelemetryData");
+    $actual_telemetry_data = $method->invoke($this->acquiaCmsTelemetry);
+    $this->assertSame($actual_telemetry_data, $expected_telemetry_data);
   }
 
   /**
@@ -120,8 +255,8 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
    * @throws \ReflectionException
    */
   public function testAcquiaCmsTelemetryDataWithSiteStudio(): void {
-    $method = $this->getAcqauiaCmsTelemetryMethod("getAcquiaCmsTelemetryData");
-
+    $this->config('acquia_cms_common.settings')
+      ->set('starter_kit_name', 'acquia_cms_existing_site')->save();
     /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
     $moduleInstaller = $this->container->get("module_installer");
     $moduleInstaller->install(['cohesion']);
@@ -129,56 +264,26 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
       ->set("use_dx8", "enable")
       ->set("api_key", "some-random-key")
       ->save(TRUE);
-
     $expected_telemetry_data = [
       "acquia_cms" => [
         "application_uuid" => "",
         "application_name" => "",
         "environment_name" => "",
-        "starter_kit_name" => "existing_site_acquia_cms",
+        "acsf_status" => FALSE,
+        "site_uri" => $this->siteUri,
+        "site_name" => "Acquia CMS",
+        "starter_kit_name" => "acquia_cms_existing_site",
         "starter_kit_ui" => FALSE,
         "site_studio_status" => TRUE,
+        "install_time" => "",
+        "profile" => "minimal",
       ],
     ];
-    $actual_telemetryData = $method->invoke($this->acquiaCmsTelemetry);
-    $this->assertSame($actual_telemetryData, $expected_telemetry_data);
-  }
-
-  /**
-   * Tests the getAcquiaCmsTelemetryData() method including Acquia CMS version.
-   *
-   * @throws \ReflectionException
-   */
-  public function testAcquiaCmsTelemetryDataWithAcquiaCmsVersion(): void {
-    $module_list = $this->createMock(ModuleExtensionList::class);
-    $module_list->method('getAllInstalledInfo')->willReturn([
-      "acquia_cms" => [
-        "version" => "1.5.2",
-      ],
-    ]);
-
-    $acquia_cms_telemetry = new AcquiaCmsTelemetry(
-      $module_list,
-      $this->container->get("http_client"),
-      $this->container->get("config.factory"),
-      $this->container->get("state"),
-    );
-    $class = new \ReflectionClass($acquia_cms_telemetry);
-    $method = $class->getMethod("getAcquiaCmsTelemetryData");
-    $method->setAccessible(TRUE);
-    $actual_telemetryData = $method->invoke($acquia_cms_telemetry);
-    $expected_telemetry_data = [
-      "acquia_cms" => [
-        "application_uuid" => "",
-        "application_name" => "",
-        "environment_name" => "",
-        "starter_kit_name" => "existing_site_acquia_cms",
-        "starter_kit_ui" => FALSE,
-        "site_studio_status" => FALSE,
-        "version" => "1.5.2",
-      ],
-    ];
-    $this->assertSame($actual_telemetryData, $expected_telemetry_data);
+    $method = $this->getAcqauiaCmsTelemetryMethod("getExtensionInfo");
+    $expected_telemetry_data['extensions'] = $method->invoke($this->acquiaCmsTelemetry);
+    $method = $this->getAcqauiaCmsTelemetryMethod("getAcquiaCmsTelemetryData");
+    $actual_telemetry_data = $method->invoke($this->acquiaCmsTelemetry);
+    $this->assertSame($actual_telemetry_data, $expected_telemetry_data);
   }
 
   /**
@@ -192,9 +297,14 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
             "application_uuid" => "",
             "application_name" => "",
             "environment_name" => "",
-            "starter_kit_name" => "existing_site_acquia_cms",
+            "acsf_status" => FALSE,
+            "site_uri" => "",
+            "site_name" => "Acquia CMS",
+            "starter_kit_name" => "no_starter_kit",
             "starter_kit_ui" => FALSE,
             "site_studio_status" => FALSE,
+            "install_time" => "",
+            "profile" => "minimal",
           ],
         ],
       ],
@@ -204,9 +314,14 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
             "application_uuid" => "some-application-uuid",
             "application_name" => "some-application-name",
             "environment_name" => "some-environment-name",
-            "starter_kit_name" => "existing_site_acquia_cms",
+            "acsf_status" => FALSE,
+            "site_uri" => "",
+            "site_name" => "Acquia CMS",
+            "starter_kit_name" => "no_starter_kit",
             "starter_kit_ui" => FALSE,
             "site_studio_status" => FALSE,
+            "install_time" => "",
+            "profile" => "minimal",
           ],
         ],
         [
