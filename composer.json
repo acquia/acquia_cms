@@ -38,18 +38,6 @@
         "drush/drush": "^10 || ^11 || ^12",
         "mnsami/composer-custom-directory-installer": "^2.0"
     },
-    "require-dev": {
-        "acquia/coding-standards": "^1.0",
-        "axelerant/drupal-quality-checker": "^1.1",
-        "drupal/core-composer-scaffold": "^9.0.0 || ^10",
-        "drupal/core-dev": "^9 || ^10",
-        "ergebnis/composer-normalize": "~2.15.0",
-        "mglaman/drupal-check": "^1.4",
-        "oomphinc/composer-installers-extender": "^1.1 || ^2",
-        "phpspec/prophecy-phpunit": "^2.0",
-        "phpunit/phpunit": "~9.4.0 || ~9.5.0",
-        "weitzman/drupal-test-traits": "^2"
-    },
     "config": {
         "allow-plugins": {
             "composer/installers": true,
@@ -376,5 +364,8 @@
             "cd docroot/themes/contrib/acquia_claro && npm install"
         ],
         "nuke": "rm -r -f docroot vendor"
+    },
+    "require-dev": {
+        "mglaman/drupal-check": "^1.4"
     }
 }
