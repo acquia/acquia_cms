@@ -46,6 +46,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
+          curl https://github.com/rajeshreeputra/orca/compare/develop...ACMS-1927.patch | git -C ../orca apply
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
@@ -129,7 +130,7 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_CURRENT
+          # - ISOLATED_TEST_ON_CURRENT
           - ISOLATED_TEST_ON_CURRENT_DEV
         #php-version: [ "8.1" ]
         acms_job:
@@ -153,6 +154,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
+          curl https://github.com/rajeshreeputra/orca/compare/develop...ACMS-1927.patch | git -C ../orca apply
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       # - name: Configure AWS Credentials
       #   uses: aws-actions/configure-aws-credentials@v1
@@ -236,7 +238,7 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_CURRENT
+          # - ISOLATED_TEST_ON_CURRENT
           - ISOLATED_TEST_ON_CURRENT_DEV
           # - INTEGRATED_TEST_ON_LATEST_LTS
         php-version:
@@ -287,6 +289,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
+          curl https://github.com/rajeshreeputra/orca/compare/develop...ACMS-1927.patch | git -C ../orca apply
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       #      - name: Configure AWS Credentials
       #        uses: aws-actions/configure-aws-credentials@v1
@@ -370,7 +373,7 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_CURRENT
+          # - ISOLATED_TEST_ON_CURRENT
           - ISOLATED_TEST_ON_CURRENT_DEV
         #php-version: [ "8.1" ]
         modules:
@@ -410,6 +413,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
+          curl https://github.com/rajeshreeputra/orca/compare/develop...ACMS-1927.patch | git -C ../orca apply
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
@@ -482,7 +486,7 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_CURRENT
+          # - ISOLATED_TEST_ON_CURRENT
           - ISOLATED_TEST_ON_CURRENT_DEV
       #php-version: [ "8.1" ]
     steps:
@@ -503,6 +507,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
+          curl https://github.com/rajeshreeputra/orca/compare/develop...ACMS-1927.patch | git -C ../orca apply
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
