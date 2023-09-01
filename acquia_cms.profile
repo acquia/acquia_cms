@@ -184,7 +184,16 @@ function acquia_cms_modules_installed(array $modules) : void {
   }
 
   if ($module_handler->moduleExists('cohesion_sync')) {
-    $module_handler->invoke('cohesion_sync', 'modules_installed', [$modules]);
+    $sitestudio_version = \Drupal::service('extension.list.module')->getExtensionInfo('cohesion')['version'];
+    if (version_compare($sitestudio_version, '8.x-7.1.2') >= 0) {
+      $module_handler->invoke('cohesion_sync', 'modules_installed', [
+        $modules,
+        FALSE,
+      ]);
+    }
+    else {
+      $module_handler->invoke('cohesion_sync', 'modules_installed', [$modules]);
+    }
   }
 }
 
