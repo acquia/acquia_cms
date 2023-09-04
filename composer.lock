@@ -2435,7 +2435,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "5198ca86413e964625da276911da465b79845e1b"
+                "reference": "864e8bb75cebc2ddd294994bcd637817077153c5"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2504,9 +2504,6 @@
                     },
                     "drupal/pathauto": {
                         "3328670 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/pathauto/-/merge_requests/40.patch"
-                    },
-                    "drupal/redirect": {
-                        "3357833 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/redirect/-/merge_requests/47.patch"
                     }
                 }
             },
@@ -2888,7 +2885,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_site_studio",
-                "reference": "08b095654e5ad98a41a959f2d86e9d78093c86d7"
+                "reference": "95ff688d66d9b70b7f99f8c32e0aa4b0d3d65191"
             },
             "require": {
                 "acquia/cohesion": "^6.9.2 || ^7.0",
@@ -2896,7 +2893,8 @@
                 "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
                 "drupal/collapsiblock": "^4.0",
                 "drupal/node_revision_delete": "^1.0",
-                "drupal/responsive_preview": "^2.1"
+                "drupal/responsive_preview": "^2.1",
+                "drupal/sitestudio_config_management": "^1.0"
             },
             "conflict": {
                 "drupal/acquia_cms_article": "<1.5.6",
@@ -6182,7 +6180,7 @@
             "extra": {
                 "drupal": {
                     "version": "2.0.0",
-                    "datestamp": "1691239950",
+                    "datestamp": "1692368265",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8150,7 +8148,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/sitestudio_config_management",
-                "reference": "7c9611f3520b1437e09bb860fe622b71fc1cf394"
+                "reference": "46dc95154a3cb6ad78fc8433269c98f0b6b4382c"
             },
             "require": {
                 "acquia/cohesion": "^6.9.2 || ^7.0",
@@ -8158,9 +8156,6 @@
                 "drupal/config_ignore": "^3.0@beta",
                 "drupal/config_split": "^2.0",
                 "php": ">=7.4"
-            },
-            "conflict": {
-                "acquia/blt-site-studio": "*"
             },
             "require-dev": {
                 "drush/drush": "^10 || ^11 || ^12"
