@@ -7,9 +7,7 @@
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
 use Acquia\Utility\AcquiaTelemetry;
-use Drupal\acquia_cms\Facade\TelemetryFacade;
 use Drupal\acquia_cms\Form\SiteConfigureForm;
-use Drupal\Core\Installer\InstallerKernel;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
@@ -164,42 +162,6 @@ function install_acms_site_studio_packages() {
     return $batchArray ?? [];
   }
   drush_backend_batch_process();
-}
-
-/**
- * Implements hook_modules_installed().
- */
-function acquia_cms_modules_installed(array $modules) : void {
-  // Don't do anything during site installation, since that can break things in
-  // a big way if modules are being installed due to changes made on the site
-  // configuration form.
-  if (InstallerKernel::installationAttempted()) {
-    return;
-  }
-
-  $module_handler = Drupal::moduleHandler();
-
-  if ($module_handler->moduleExists('acquia_telemetry')) {
-    Drupal::classResolver(TelemetryFacade::class)->modulesInstalled($modules);
-  }
-
-  if ($module_handler->moduleExists('cohesion_sync')) {
-    $sitestudio_version = \Drupal::service('extension.list.module')->getExtensionInfo('cohesion')['version'];
-    $arguments = (version_compare($sitestudio_version, '8.x-7.1.2') >= 0) ? [
-      $modules,
-      FALSE,
-    ] : [$modules];
-    $module_handler->invoke('cohesion_sync', 'modules_installed', $arguments);
-  }
-}
-
-/**
- * Implements hook_modules_uninstalled().
- */
-function acquia_cms_modules_uninstalled(array $modules) {
-  if (\Drupal::service('module_handler')->moduleExists('acquia_telemetry')) {
-    Drupal::classResolver(TelemetryFacade::class)->modulesUninstalled($modules);
-  }
 }
 
 /**
