@@ -11,6 +11,8 @@ use Drupal\acquia_cms_search\Facade\SearchFacade;
 use Drupal\acquia_cms_search\Plugin\views\query\SearchApiQuery;
 use Drupal\acquia_search\Helper\Runtime;
 use Drupal\Core\DestructableInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\field\FieldConfigInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\search_api\Entity\Index;
@@ -188,5 +190,67 @@ function _acquia_cms_search_add_category_facet(array $modules) {
       'url_alias' => 'category',
       'field_identifier' => 'field_categories',
     ]);
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function acquia_cms_search_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  // List of fields type which needs to be indexed.
+  $allowed_fields_type = [
+    'datetime',
+    'string',
+    'email',
+    'telephone',
+    'address',
+    'text_with_summary',
+  ];
+
+  if ($form_id == 'field_config_edit_form') {
+    $field_storage = $form_state->getFormObject()->getEntity()->getFieldStorageDefinition();
+    $field_type = $field_storage->getType();
+    if (in_array($field_type, $allowed_fields_type) || ($field_storage->getType() === 'entity_reference' && $field_storage->getSetting('target_type') === 'taxonomy_term')) {
+      $form['add_to_index'] = [
+        '#type' => 'checkbox',
+        '#title' => 'Add to Index',
+        '#default_value' => $field_storage->getThirdPartySetting('acquia_cms_common', 'search_label') !== NULL ?: '',
+      ];
+      $form['#entity_builders'][] = '_acquia_cms_search_add_to_index_form_builder';
+    }
+  }
+}
+
+/**
+ * Entity builder to add to index config entity.
+ *
+ * @param string $entity_type
+ *   The entity types.
+ * @param \Drupal\field\Entity\FieldConfig $fieldConfig
+ *   The field configuration object.
+ * @param array $form
+ *   The form objects.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function _acquia_cms_search_add_to_index_form_builder(string $entity_type, FieldConfig $fieldConfig, array &$form, FormStateInterface $form_state): void {
+  if ($form_state->getValue('add_to_index')) {
+    $field_storage = $form_state->getFormObject()->getEntity()->getFieldStorageDefinition();
+    $field_storage
+      ->setThirdPartySetting('acquia_cms_common', 'search_index', 'content')
+      ->setThirdPartySetting('acquia_cms_common', 'search_label', $fieldConfig->getLabel())
+      ->save();
+
+    // Index entity_reference field.
+    if ($field_storage->getType() === 'entity_reference' && $field_storage->getSetting('target_type') === 'taxonomy_term') {
+      Drupal::classResolver(SearchFacade::class)->addTaxonomyField($field_storage);
+    }
+    else {
+      // Index allowed fields type.
+      Drupal::classResolver(SearchFacade::class)->addFields($field_storage);
+    }
   }
 }
