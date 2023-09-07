@@ -65,23 +65,16 @@ function acquia_cms_search_field_config_insert(FieldConfigInterface $field_confi
       ->save();
   }
 
-  if ($field_storage->getType() === 'entity_reference' && $field_storage->getSetting('target_type') === 'taxonomy_term') {
-    Drupal::classResolver(SearchFacade::class)->addTaxonomyField($field_storage);
+  /** @var \Drupal\acquia_cms_search\Facade\SearchFacade $search_facade */
+  $search_facade = Drupal::classResolver(SearchFacade::class);
+
+  if ($search_facade->isAllowedTypeReferenceField($field_storage)) {
+    $search_facade->addTaxonomyField($field_storage);
   }
 
-  // List of fields type which needs to be indexed.
-  $allowed_fields_type = [
-    'datetime',
-    'string',
-    'email',
-    'telephone',
-    'address',
-    'text_with_summary',
-  ];
-
   // Index allowed fields type.
-  if (in_array($field_storage->getType(), $allowed_fields_type)) {
-    Drupal::classResolver(SearchFacade::class)->addFields($field_storage);
+  if (in_array($field_storage->getType(), SearchFacade::DEFAULT_FIELD_TYPES)) {
+    $search_facade->addFields($field_storage);
   }
 }
 
@@ -179,31 +172,31 @@ function _acquia_cms_search_add_category_facet(array $modules) {
 }
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_form_FORM_ID_alter().
  */
-function acquia_cms_search_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+function acquia_cms_search_form_field_config_edit_form_alter(&$form, FormStateInterface $form_state) {
 
-  // List of fields type which needs to be indexed.
-  $allowed_fields_type = [
-    'datetime',
-    'string',
-    'email',
-    'telephone',
-    'address',
-    'text_with_summary',
-  ];
+  /** @var \Drupal\field_ui\Form\FieldConfigEditForm $field_config_form */
+  $field_config_form = $form_state->getFormObject();
 
-  if ($form_id == 'field_config_edit_form') {
-    $field_storage = $form_state->getFormObject()->getEntity()->getFieldStorageDefinition();
-    $field_type = $field_storage->getType();
-    if (in_array($field_type, $allowed_fields_type) || ($field_storage->getType() === 'entity_reference' && $field_storage->getSetting('target_type') === 'taxonomy_term')) {
-      $form['add_to_index'] = [
-        '#type' => 'checkbox',
-        '#title' => 'Add to Index',
-        '#default_value' => $field_storage->getThirdPartySetting('acquia_cms_common', 'search_label') !== NULL ?: '',
-      ];
-      $form['#entity_builders'][] = '_acquia_cms_search_add_to_index_form_builder';
+  /** @var \Drupal\field\Entity\FieldConfig $field_config */
+  $field_config = $field_config_form->getEntity();
+
+  /** @var \Drupal\field\Entity\FieldStorageConfig $field_storage */
+  $field_storage = $field_config->getFieldStorageDefinition();
+
+  if (in_array($field_storage->getType(), SearchFacade::DEFAULT_FIELD_TYPES) ||  Drupal::classResolver(SearchFacade::class)->isAllowedTypeReferenceField($field_storage)) {
+    $index = $field_storage->getThirdPartySetting('acquia_cms_common', 'search_index') ?? NULL;
+    $form['add_to_search_index'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Add this field to Search Index'),
+      '#description' => t('If checked, the Field will be added to the search index automatically.'),
+      '#default_value' => $index !== NULL ?: 0,
+    ];
+    if ($index) {
+      $form['add_to_search_index']['#description'] = t('If unchecked, the Field will be removed from the search index automatically.');
     }
+    $form['#entity_builders'][] = '_acquia_cms_search_add_field_to_index_form_builder';
   }
 }
 
@@ -220,22 +213,36 @@ function acquia_cms_search_form_alter(&$form, FormStateInterface $form_state, $f
  *   The form state.
  *
  * @throws \Drupal\Core\Entity\EntityStorageException
+ * @throws \Drupal\search_api\SearchApiException
  */
-function _acquia_cms_search_add_to_index_form_builder(string $entity_type, FieldConfig $fieldConfig, array &$form, FormStateInterface $form_state): void {
-  if ($form_state->getValue('add_to_index')) {
-    $field_storage = $form_state->getFormObject()->getEntity()->getFieldStorageDefinition();
-    $field_storage
-      ->setThirdPartySetting('acquia_cms_common', 'search_index', 'content')
+function _acquia_cms_search_add_field_to_index_form_builder(string $entity_type, FieldConfig $fieldConfig, array &$form, FormStateInterface $form_state): void {
+  /** @var \Drupal\acquia_cms_search\Facade\SearchFacade $search_facade */
+  $search_facade = Drupal::classResolver(SearchFacade::class);
+
+  /** @var \Drupal\field\Entity\FieldStorageConfig $field_storage */
+  $field_storage = $fieldConfig->getFieldStorageDefinition();
+
+  if ($form_state->getValue('add_to_search_index')) {
+    $field_storage->setThirdPartySetting('acquia_cms_common', 'search_index', 'content')
       ->setThirdPartySetting('acquia_cms_common', 'search_label', $fieldConfig->getLabel())
       ->save();
 
     // Index entity_reference field.
-    if ($field_storage->getType() === 'entity_reference' && $field_storage->getSetting('target_type') === 'taxonomy_term') {
-      Drupal::classResolver(SearchFacade::class)->addTaxonomyField($field_storage);
+    if ($search_facade->isAllowedTypeReferenceField($field_storage)) {
+      $search_facade->addTaxonomyField($field_storage);
     }
     else {
       // Index allowed fields type.
-      Drupal::classResolver(SearchFacade::class)->addFields($field_storage);
+      $search_facade->addFields($field_storage);
     }
+  }
+  else {
+    // Remove field from index.
+    $search_facade->removeFieldFromIndex($field_storage);
+    // Remove third party setting from fields.storage.config.
+    $field_storage
+      ->unsetThirdPartySetting('acquia_cms_common', 'search_index')
+      ->unsetThirdPartySetting('acquia_cms_common', 'search_label')
+      ->save();
   }
 }
