@@ -70,33 +70,27 @@ class AcquiaCmsConfigSyncService {
    * @param \Drupal\Core\Config\StorageInterface $syncStorage
    *   The storage to use as sync storage for compairing changes.
    *
-   * @return float
-   *   parity between configuration.
+   * @return int
+   *   Parity value between configuration.
    */
-  public function getParity($configFile, StorageInterface $syncStorage) {
+  public function getParity($configFile, StorageInterface $syncStorage): int {
     // Database configuration.
-    $active_configuration = explode("\n", Yaml::encode($this->targetStorage->read($configFile)));
+    $activeConfiguration = explode("\n", Yaml::encode($this->targetStorage->read($configFile)));
     // Configuration in files.
-    $original_configuration = explode("\n", Yaml::encode($syncStorage->read($configFile)));
-    $active_configuration = $this->removeNonRequiredKeys($active_configuration);
-    $diff = new Diff($original_configuration, $active_configuration);
-    $totalLines = count($active_configuration);
+    $originalConfiguration = explode("\n", Yaml::encode($syncStorage->read($configFile)));
+    $activeConfiguration = $this->removeNonRequiredKeys($activeConfiguration);
+    $diff = new Diff($originalConfiguration, $activeConfiguration);
+    $totalLines = count($activeConfiguration);
     $editedLines = 0;
-    // @todo remove phpstan-ignore-next-line once we have the replcement
-    // for the deprecations in Drupal\Component\Diff\Diff, update accordingly
-    // in ACMS-1868.
-    // @phpstan-ignore-next-line
-    if (!$diff->isEmpty()) {
-      foreach ($diff->getEdits() as $diffOp) {
+    $editDiffConfig = $diff->getEdits();
+    if (!empty($editDiffConfig)) {
+      foreach ($editDiffConfig as $diffOp) {
         if ($diffOp->type !== 'copy') {
-          // @todo remove phpstan-ignore-next-line once we have the replcement
-          // for the deprecations in Drupal\Component\Diff\Diff, update
-          // accordingly in ACMS-1868.
-          // @phpstan-ignore-next-line
-          $editedLines += $diffOp->nclosing();
+          $editedLines += is_array($diffOp->closing) ? count($diffOp->closing) : 0;
         }
       }
     }
+
     return 100 - (int) round($editedLines / $totalLines * 100, 0);
   }
 
