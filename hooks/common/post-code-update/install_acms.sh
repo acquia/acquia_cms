@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Cloud Hook: Acquia CMS install, update and modules toggle.
 
-
 site="$1"
 target_env="$2"
 
@@ -18,12 +17,12 @@ if [ "$SITE_REINSTALL" = "false" ]; then
 else
     # Install site with given starter kit.
     if [ "$STARTER_KIT" ]; then
-      /var/www/html/$site.$target_env/vendor/bin/acms site-install --uri $STARTER_KIT -n --account-pass=admin --yes --account-mail=no-reply@example.com --site-mail=no-reply@example.com
+      /var/www/html/$site.$target_env/vendor/bin/acms site-install --uri $STARTER_KIT -n --account-pass=admin --yes --account-mail=no-reply@example.com --site-mail=no-reply@example.com -v
 
     # Install site with default starter kit i.e low code.
     else
       # Install Acquia CMS.
-      /var/www/html/$site.$target_env/vendor/bin/acms site-install --uri default --account-pass=admin --yes --account-mail=no-reply@example.com --site-mail=no-reply@example.com
+      /var/www/html/$site.$target_env/vendor/bin/acms site-install --uri default --account-pass=admin --yes --account-mail=no-reply@example.com --site-mail=no-reply@example.com -v
 
       # Acquia CMS development.
       echo "Enabling Acquia CMS development module in $target_env"
