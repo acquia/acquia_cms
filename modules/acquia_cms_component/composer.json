@@ -6,7 +6,7 @@
     "require": {
         "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
         "drupal/component": "^1.0",
-        "drupal/jsonapi_extras": "3.23"
+        "drupal/jsonapi_extras": "^3.24"
     },
     "config": {
         "allow-plugins": {
@@ -25,11 +25,7 @@
             "dev-develop": "1.x-dev"
         },
         "enable-patching": true,
-        "patches": {
-            "drupal/jsonapi_extras": {
-                "3357832 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/jsonapi_extras/-/merge_requests/30.patch"
-            }
-        }
+        "patches": {}
     },
     "repositories": {
         "assets": {
