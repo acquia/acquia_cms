@@ -58,6 +58,29 @@ final class SearchFacade implements ContainerInjectionInterface {
   private $fieldConfigStorage;
 
   /**
+   * The default allowed field types for index.
+   *
+   * @const array.
+   */
+  const DEFAULT_FIELD_TYPES = [
+    'datetime',
+    'string',
+    'email',
+    'telephone',
+    'address',
+    'text_with_summary',
+  ];
+
+  /**
+   * The default allowed target reference type for index.
+   *
+   * @const array.
+   */
+  const TARGET_REFERENCE_TYPES = [
+    'taxonomy_term',
+  ];
+
+  /**
    * SearchFacade constructor.
    *
    * @param \Drupal\Core\Config\ConfigInstallerInterface $config_installer
@@ -102,6 +125,9 @@ final class SearchFacade implements ContainerInjectionInterface {
    *
    * @param \Drupal\node\NodeTypeInterface $node_type
    *   The new node type.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Drupal\search_api\SearchApiException
    */
   public function addNodeType(NodeTypeInterface $node_type) {
     $index = $this->loadIndexFromSettings($node_type);
@@ -288,6 +314,48 @@ final class SearchFacade implements ContainerInjectionInterface {
     }
     $index = $object->getThirdPartySetting('acquia_cms_common', 'search_index');
     return $index ? $this->indexStorage->load($index) : NULL;
+  }
+
+  /**
+   * Check if reference field is of allowed type.
+   *
+   * @param \Drupal\field\FieldStorageConfigInterface $field_storage
+   *   The field configuration object.
+   *
+   * @return bool
+   *   The boolean value based on condition.
+   */
+  public function isAllowedTypeReferenceField(FieldStorageConfigInterface $field_storage): bool {
+    return ($field_storage->getType() === 'entity_reference' && in_array($field_storage->getSetting('target_type'), self::TARGET_REFERENCE_TYPES));
+  }
+
+  /**
+   * Remove field from index.
+   *
+   * @param \Drupal\field\FieldStorageConfigInterface $field_storage
+   *   The field configuration object.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Drupal\search_api\SearchApiException
+   * @throws \Exception
+   */
+  public function removeFieldFromIndex(FieldStorageConfigInterface $field_storage): void {
+    /** @var \Drupal\search_api\IndexInterface $index */
+    $index = $this->loadIndexFromSettings($field_storage);
+    $fieldName = $field_storage->getName();
+
+    if ($index) {
+      if (!$index->getField($fieldName)) {
+        throw new \Exception();
+      }
+      $index->removeField($fieldName);
+
+      // In case of reference field we need to remove the name instance as well.
+      if ($field_storage->getType() === 'entity_reference') {
+        $index->removeField($fieldName . '_name');
+      }
+      $index->save();
+    }
   }
 
 }
