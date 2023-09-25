@@ -22,7 +22,7 @@
         "drupal/moderation_sidebar": "^1.7",
         "drupal/password_policy": "^4.0",
         "drupal/pathauto": "1.11",
-        "drupal/redirect": "1.8",
+        "drupal/redirect": "^1.9",
         "drupal/scheduler_content_moderation_integration": "^2.0",
         "drupal/schema_metatag": "^2.4 || ^3.0",
         "drupal/seckit": "^2.0",
@@ -76,14 +76,12 @@
         "enable-patching": true,
         "patches": {
             "drupal/core": {
-                "3301692: Passing null to parameter to mb_strtolower() is deprecated with PHP 8.1": "https://git.drupalcode.org/project/drupal/-/merge_requests/2598.patch",
-                "3356894 - Make field selection less overwhelming by introducing groups": "https://www.drupal.org/files/issues/2023-06-20/3356894-mr_3896.patch"
+                "3301692: - Passing null to parameter to mb_strtolower() is deprecated with PHP 8.1": "https://git.drupalcode.org/project/drupal/-/merge_requests/2598.patch",
+                "3356894: - Make field selection less overwhelming by introducing groups": "https://www.drupal.org/files/issues/2023-06-20/3356894-mr_3896.patch",
+                "296693: - Restrict access to empty top level administration pages": "https://www.drupal.org/files/issues/2023-08-31/296693-10.1.x_0.patch"
             },
             "drupal/pathauto": {
                 "3328670 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/pathauto/-/merge_requests/40.patch"
-            },
-            "drupal/redirect": {
-                "3357833 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/redirect/-/merge_requests/47.patch"
             }
         }
     },

@@ -80,7 +80,7 @@ class AudioTest extends MediaTypeTestBase {
 
     // Fill in the required fields and assert that things went as expected.
     $page->fillField('Name', 'Decoupled Drupal Podcast with Third & Grove and Acquia');
-    $page->fillField('Soundcloud audio URL', 'https://soundcloud.com/user-64782202/decoupled-drupal-podcast-with-third-grove-and-acquia?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing');
+    $page->fillField('Soundcloud audio URL', 'https://soundcloud.com/ndigithq/is-drupal-an-established-cms');
     // For convenience, the parent class creates a few categories during set-up.
     // @see \Drupal\Tests\acquia_cms_common\Functional\ContentModelTestBase::setUp()
     $page->selectFieldOption('Categories', 'Music');

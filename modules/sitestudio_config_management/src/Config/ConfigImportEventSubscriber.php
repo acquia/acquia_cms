@@ -5,6 +5,7 @@ namespace Drupal\sitestudio_config_management\Config;
 use Drupal\cohesion_sync\Config\CohesionStorageComparer;
 use Drupal\Core\Config\ConfigEvents;
 use Drupal\Core\Config\ConfigImporterEvent;
+use Drupal\Core\Installer\InstallerKernel;
 use Drupal\sitestudio_config_management\SiteStudioConfigManagement;
 use Drupal\sitestudio_config_management\Traits\DrushCommandTrait;
 use Psr\Log\LoggerInterface;
@@ -19,17 +20,13 @@ class ConfigImportEventSubscriber implements EventSubscriberInterface {
 
   /**
    * The site_studio.config_management service object.
-   *
-   * @var \Drupal\sitestudio_config_management\SiteStudioConfigManagement
    */
-  protected $siteStudioConfigService;
+  protected SiteStudioConfigManagement $siteStudioConfigService;
 
   /**
    * The logger service object.
-   *
-   * @var \Psr\Log\LoggerInterface
    */
-  protected $logger;
+  protected LoggerInterface $logger;
 
   /**
    * Constructs config_import event object.
@@ -60,7 +57,7 @@ class ConfigImportEventSubscriber implements EventSubscriberInterface {
    * @throws \Drupal\Core\Entity\EntityStorageException
    * @throws \Drush\Exceptions\UserAbortException
    */
-  public function onConfigImport(ConfigImporterEvent $event) {
+  public function onConfigImport(ConfigImporterEvent $event): void {
     if ($event->getConfigImporter()->getStorageComparer() instanceof CohesionStorageComparer) {
       return;
     }
@@ -77,9 +74,9 @@ class ConfigImportEventSubscriber implements EventSubscriberInterface {
     // @see \Drupal\sitestudio_config_management\Commands\PostConfigImportHook
     // Because in scenarios, where there are NO Drupal Configuration changes,
     // the event ConfigEvents::IMPORT is not triggered.
-    if (in_array('sitestudio_config_management', $enabled_extensions)) {
-      $this->addCommand("sitestudio:package:import");
+    if (!InstallerKernel::installationAttempted() && in_array('sitestudio_config_management', $enabled_extensions)) {
       $this->addCommand("cohesion:import");
+      $this->addCommand("sitestudio:package:import");
       $this->execute();
     }
   }

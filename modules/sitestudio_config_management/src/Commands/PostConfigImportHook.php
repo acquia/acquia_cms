@@ -41,10 +41,10 @@ class PostConfigImportHook extends DrushCommands {
       $this->logger->warning("Skipping Site studio package import as Site Studio is not configured.");
       return;
     }
+    $this->addCommand("cohesion:import");
     $this->addCommand("sitestudio:package:import");
     $isSiteStudioUpgraded = $this->siteStudioConfigService->isSiteStudioUpgraded();
     if ($isSiteStudioUpgraded) {
-      $this->addCommand("cohesion:import");
       $this->addCommand("cohesion:rebuild");
     }
     if ($this->execute() && $isSiteStudioUpgraded) {
