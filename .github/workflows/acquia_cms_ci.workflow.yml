@@ -303,13 +303,10 @@ jobs:
 
             # Remove drupal/core patch as it's needed for latest Drupal Core only.
             composer config extra.patches.drupal/core {} --json
-            sed -i 's/2598.patch"/2599.patch"/' modules/acquia_cms_common/composer.json
+            sed -i 's/2598.patch",/2599.patch"/' modules/acquia_cms_common/composer.json
             sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
-<<<<<<< HEAD
-=======
             sed -i '/296693-10.1.x_0.patch/d' modules/acquia_cms_common/composer.json
 
->>>>>>> ecee5cca (ACMS-1950: Update patch removal script 1.)
           # Change requireSameDimensions to true in backstop settings.
             sed -i '54s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
             sed -i '111s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
