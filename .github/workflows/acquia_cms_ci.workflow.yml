@@ -306,6 +306,9 @@ jobs:
             sed -i 's/2598.patch",/2599.patch"/' modules/acquia_cms_common/composer.json
             sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
             sed -i '/296693-10.1.x_0.patch/d' modules/acquia_cms_common/composer.json
+            sed -i '/3165269bb01a5a8e5f53c1f369135b967c9d5924.patch/d' modules/acquia_cms_common/composer.json
+            sed -i '/3370946-page-title-backport-10-1-x.patch/d' modules/acquia_cms_common/composer.json
+            sed -i '/10.1-3347291-combine-mega-e.patch/d' modules/acquia_cms_common/composer.json
 
           # Change requireSameDimensions to true in backstop settings.
             sed -i '54s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
