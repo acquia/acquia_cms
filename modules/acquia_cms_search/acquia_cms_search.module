@@ -10,6 +10,7 @@ use Drupal\acquia_cms_search\Facade\FacetFacade;
 use Drupal\acquia_cms_search\Facade\SearchFacade;
 use Drupal\acquia_cms_search\Plugin\views\query\SearchApiQuery;
 use Drupal\acquia_search\Helper\Runtime;
+use Drupal\Core\DestructableInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\FieldConfigInterface;
@@ -75,6 +76,20 @@ function acquia_cms_search_field_config_insert(FieldConfigInterface $field_confi
   // Index allowed fields type.
   if (in_array($field_storage->getType(), SearchFacade::DEFAULT_FIELD_TYPES)) {
     $search_facade->addFields($field_storage);
+  }
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function acquia_cms_search_entity_insert() {
+  // Normally, content is indexed immediately after it is created or modified,
+  // at the end of the current request. But that means content created
+  // programmatically (i.e., in the PHPUnit tests) are not being indexed. So,
+  // explicitly invoke the indexer whenever an entity is created.
+  $indexer = Drupal::service('search_api.post_request_indexing');
+  if ($indexer instanceof DestructableInterface) {
+    $indexer->destruct();
   }
 }
 
@@ -175,7 +190,6 @@ function _acquia_cms_search_add_category_facet(array $modules) {
  * Implements hook_form_FORM_ID_alter().
  */
 function acquia_cms_search_form_field_config_edit_form_alter(&$form, FormStateInterface $form_state) {
-
   /** @var \Drupal\field_ui\Form\FieldConfigEditForm $field_config_form */
   $field_config_form = $form_state->getFormObject();
 
@@ -224,8 +238,7 @@ function _acquia_cms_search_add_field_to_index_form_builder(string $entity_type,
 
   if ($form_state->getValue('add_to_search_index')) {
     $field_storage->setThirdPartySetting('acquia_cms_common', 'search_index', 'content')
-      ->setThirdPartySetting('acquia_cms_common', 'search_label', $fieldConfig->getLabel())
-      ->save();
+      ->setThirdPartySetting('acquia_cms_common', 'search_label', $fieldConfig->getLabel());
 
     // Index entity_reference field.
     if ($search_facade->isAllowedTypeReferenceField($field_storage)) {
@@ -242,7 +255,6 @@ function _acquia_cms_search_add_field_to_index_form_builder(string $entity_type,
     // Remove third party setting from fields.storage.config.
     $field_storage
       ->unsetThirdPartySetting('acquia_cms_common', 'search_index')
-      ->unsetThirdPartySetting('acquia_cms_common', 'search_label')
-      ->save();
+      ->unsetThirdPartySetting('acquia_cms_common', 'search_label');
   }
 }
