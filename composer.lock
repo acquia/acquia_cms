@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "483454b9e27db3dfdc17ecd86543cd1b",
+    "content-hash": "8029e300dd4f3926a66e28d6c784cfa3",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -83,16 +83,16 @@
         },
         {
             "name": "acquia/cohesion",
-            "version": "7.2.1",
+            "version": "7.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/cohesion.git",
-                "reference": "9278697b9dcbeb78316c1342af0d21c732d70c57"
+                "reference": "6e4f7d5e75d709f08c5b388ade1b22347f0e70af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/cohesion/zipball/9278697b9dcbeb78316c1342af0d21c732d70c57",
-                "reference": "9278697b9dcbeb78316c1342af0d21c732d70c57",
+                "url": "https://api.github.com/repos/acquia/cohesion/zipball/6e4f7d5e75d709f08c5b388ade1b22347f0e70af",
+                "reference": "6e4f7d5e75d709f08c5b388ade1b22347f0e70af",
                 "shasum": ""
             },
             "require": {
@@ -145,9 +145,9 @@
             ],
             "description": "Site Studio",
             "support": {
-                "source": "https://github.com/acquia/cohesion/tree/7.2.1"
+                "source": "https://github.com/acquia/cohesion/tree/7.3.0"
             },
-            "time": "2023-07-24T12:55:45+00:00"
+            "time": "2023-09-01T15:41:35+00:00"
         },
         {
             "name": "acquia/cohesion-theme",
@@ -2435,7 +2435,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "b26fadf09c5d03f2731ae427febff50ba3bca9db"
+                "reference": "fcaa985418bc586c3b4fdb81ccb11f28a55647b4"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2499,9 +2499,11 @@
                 "enable-patching": true,
                 "patches": {
                     "drupal/core": {
-                        "3301692: - Passing null to parameter to mb_strtolower() is deprecated with PHP 8.1": "https://git.drupalcode.org/project/drupal/-/merge_requests/2598.patch",
-                        "3356894: - Make field selection less overwhelming by introducing groups": "https://www.drupal.org/files/issues/2023-06-20/3356894-mr_3896.patch",
-                        "296693: - Restrict access to empty top level administration pages": "https://www.drupal.org/files/issues/2023-08-31/296693-10.1.x_0.patch"
+                        "3301692 - Passing null to parameter to mb_strtolower() is deprecated with PHP 8.1": "https://git.drupalcode.org/project/drupal/-/merge_requests/2598.patch",
+                        "296693 - Restrict access to empty top level administration pages": "https://www.drupal.org/files/issues/2023-08-31/296693-10.1.x_0.patch",
+                        "3371005 - Toolbar does not indicate active menu trail for pages not included in Toolbar": "https://git.drupalcode.org/project/drupal/-/commit/3165269bb01a5a8e5f53c1f369135b967c9d5924.patch",
+                        "3370946 - Page title should contextualize the local navigation": "https://www.drupal.org/files/issues/2023-09-11/3370946-page-title-backport-10-1-x.patch",
+                        "3347291: - Combine field storage and field instance forms": "https://www.drupal.org/files/issues/2023-09-13/10.1-3347291-combine-mega-e.patch"
                     },
                     "drupal/pathauto": {
                         "3328670 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/pathauto/-/merge_requests/40.patch"
@@ -2522,12 +2524,12 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_component",
-                "reference": "4fa29348b3b4820084852908cefc24d65598fb5b"
+                "reference": "0953301c97148102dde5605639008b2b0bc76701"
             },
             "require": {
                 "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
                 "drupal/component": "^1.0",
-                "drupal/jsonapi_extras": "3.23"
+                "drupal/jsonapi_extras": "^3.24"
             },
             "type": "drupal-module",
             "extra": {
@@ -2535,11 +2537,7 @@
                     "dev-develop": "1.x-dev"
                 },
                 "enable-patching": true,
-                "patches": {
-                    "drupal/jsonapi_extras": {
-                        "3357832 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/jsonapi_extras/-/merge_requests/30.patch"
-                    }
-                }
+                "patches": []
             },
             "license": [
                 "GPL-2.0-or-later"
@@ -2642,11 +2640,11 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_headless",
-                "reference": "e7ccbe4cdf3cb0e675fbf14cb4f141c5b98359bb"
+                "reference": "94c2e662c3f8af05dfe79ea0f003685312ad75ca"
             },
             "require": {
                 "drupal/acquia_cms_tour": "2.x-dev",
-                "drupal/jsonapi_extras": "3.23",
+                "drupal/jsonapi_extras": "^3.24",
                 "drupal/jsonapi_menu_items": "^1.2",
                 "drupal/next": "^1.6",
                 "drupal/openapi_jsonapi": "^3.0",
@@ -2699,9 +2697,6 @@
                 "patches": {
                     "drupal/decoupled_router": {
                         "3111456 - Unable to resolve path on node in other language than default": "https://www.drupal.org/files/issues/2022-11-30/decouple_router-3111456-resolve-language-issue-58.patch"
-                    },
-                    "drupal/jsonapi_extras": {
-                        "3357832 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/jsonapi_extras/-/merge_requests/30.patch"
                     },
                     "drupal/subrequests": {
                         "3049395 - Page Cache causes different subrequests to return the same responses": "https://www.drupal.org/files/issues/2019-07-18/change_request_type-63049395-09.patch"
@@ -5000,6 +4995,10 @@
                     "homepage": "https://www.drupal.org/node/2625160/committers"
                 },
                 {
+                    "name": "phenaproxima",
+                    "homepage": "https://www.drupal.org/user/205645"
+                },
+                {
                     "name": "StryKaizer",
                     "homepage": "https://www.drupal.org/user/462700"
                 },
@@ -5828,30 +5827,27 @@
         },
         {
             "name": "drupal/jsonapi_extras",
-            "version": "3.23.0",
+            "version": "3.24.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/jsonapi_extras.git",
-                "reference": "8.x-3.23"
+                "reference": "8.x-3.24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/jsonapi_extras-8.x-3.23.zip",
-                "reference": "8.x-3.23",
-                "shasum": "2f3518bc1372f01a1ccebcffaa4e7e08478103e0"
+                "url": "https://ftp.drupal.org/files/projects/jsonapi_extras-8.x-3.24.zip",
+                "reference": "8.x-3.24",
+                "shasum": "5031650d17b62f5da5586d3a2c551ac071dbd294"
             },
             "require": {
                 "drupal/core": "^9.2 || ^10",
                 "e0ipso/shaper": "^1"
             },
-            "require-dev": {
-                "drupal/jsonapi": "*"
-            },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.23",
-                    "datestamp": "1669374477",
+                    "version": "8.x-3.24",
+                    "datestamp": "1694442796",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"

@@ -26,7 +26,7 @@ class ContentReferenceCardComponentTest extends CohesionComponentTestBase {
 
     // Add the component to the layout canvas.
     $edit_form = $this->getLayoutCanvas()->add('Content reference card')->edit();
-    $this->assertSession()->fieldExists("Entity browser", $edit_form);
+    $this->assertSession()->fieldExists("Content reference", $edit_form);
   }
 
   /**

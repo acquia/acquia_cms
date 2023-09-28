@@ -26,6 +26,10 @@ jobs:
       GITHUB_EVENT: $ {{ github.event_name }}
       JOB_TYPE: "static-code-analysis"
       #ACMS_JOB: ${{ matrix.acms-job}}
+      # Google env variables.
+      ORCA_GOOGLE_API_CLIENT_ID: ${{ secrets.ORCA_GOOGLE_API_CLIENT_ID }}
+      ORCA_GOOGLE_API_CLIENT_SECRET: ${{ secrets.ORCA_GOOGLE_API_CLIENT_SECRET }}
+      ORCA_GOOGLE_API_REFRESH_TOKEN: ${{ secrets.ORCA_GOOGLE_API_REFRESH_TOKEN }}
     strategy:
       matrix:
         orca-job:
@@ -164,8 +168,6 @@ jobs:
           # Update the CI by adding patches without pinning the following modules.
           composer require "drupal/facets:^2.0.6" --no-update --no-install -d modules/acquia_cms_search
           composer require "drupal/pathauto:^1.11" --no-update --no-install -d modules/acquia_cms_common
-          composer require "drupal/jsonapi_extras:^3.23" --no-update --no-install -d modules/acquia_cms_headless
-          composer require "drupal/jsonapi_extras:^3.23" --no-update --no-install -d modules/acquia_cms_component
 
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
@@ -307,6 +309,11 @@ jobs:
             composer config extra.patches.drupal/core {} --json
             sed -i 's/2598.patch",/2599.patch"/' modules/acquia_cms_common/composer.json
             sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
+            sed -i '/296693-10.1.x_0.patch/d' modules/acquia_cms_common/composer.json
+            sed -i '/3165269bb01a5a8e5f53c1f369135b967c9d5924.patch/d' modules/acquia_cms_common/composer.json
+            sed -i '/3370946-page-title-backport-10-1-x.patch/d' modules/acquia_cms_common/composer.json
+            sed -i '/10.1-3347291-combine-mega-e.patch/d' modules/acquia_cms_common/composer.json
+
           # Change requireSameDimensions to true in backstop settings.
             sed -i '54s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
             sed -i '111s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
