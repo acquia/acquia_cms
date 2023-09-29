@@ -25,6 +25,7 @@ env:
   CI: true
 jobs:
   static_code_analysis:
+    if: ${{ github.event_name == 'schedule'}}
     runs-on: ubuntu-latest
     env:
       ORCA_JOB: ${{ matrix.orca-job }}
@@ -72,6 +73,7 @@ jobs:
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
   integrated_tests:
+    if: ${{ github.event_name == 'schedule'}}
     name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
     runs-on: ubuntu-latest
     env:
@@ -161,6 +163,7 @@ jobs:
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
   isolated_tests:
+    if: ${{ github.event_name == 'schedule'}}
     name: acquia_cms (${{ matrix.orca-job }})
     runs-on: ubuntu-latest
     env:
@@ -226,6 +229,7 @@ jobs:
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
   blt_test:
+    if: ${{ github.event_name == 'schedule'}}
     name: "BLT site install"
     runs-on: ubuntu-latest
     env:
@@ -290,6 +294,7 @@ jobs:
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
   cypress_tests:
+    if: ${{ github.event_name == 'schedule'}}
     name: Cypress Tests with ${{ matrix.orca-job }} on PHP ${{ matrix.php-version }}
     runs-on: ubuntu-latest
     env:
