@@ -27,16 +27,16 @@ function acquia_cms_common_install($is_syncing) {
       'view media',
     ]);
 
-    // Enable acquia_claro theme.
+    // Enable acquia_cms_gin theme.
     $themesList = \Drupal::service('extension.list.theme')->getList();
     $themesInstall = ["olivero"];
-    if (isset($themesList['acquia_claro'])) {
-      $themesInstall[] = "acquia_claro";
+    if (isset($themesList['acquia_cms_gin'])) {
+      $themesInstall[] = "acquia_cms_gin";
     }
     \Drupal::service('theme_installer')->install($themesInstall);
     \Drupal::configFactory()->getEditable('system.theme')->set('default', 'olivero')->save();
-    if (in_array("acquia_claro", $themesInstall)) {
-      \Drupal::configFactory()->getEditable('system.theme')->set('admin', "acquia_claro")->save();
+    if (in_array("acquia_cms_gin", $themesInstall)) {
+      \Drupal::configFactory()->getEditable('system.theme')->set('admin', "acquia_cms_gin")->save();
     }
 
     // Re-write the content and media view on module install,

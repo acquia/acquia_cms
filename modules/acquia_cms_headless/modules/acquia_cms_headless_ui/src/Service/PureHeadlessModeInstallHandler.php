@@ -194,11 +194,11 @@ class PureHeadlessModeInstallHandler {
    */
   public function updateHeadlessUiConfig(bool $isEnabled = TRUE) {
     if ($isEnabled) {
-      // Reset default theme to acquia_claro.
-      if ($this->themeHandler->themeExists('acquia_claro')) {
+      // Reset default theme to acquia_cms_gin.
+      if ($this->themeHandler->themeExists('acquia_cms_gin')) {
         $this->configFactory
           ->getEditable('system.theme')
-          ->set('default', 'acquia_claro')
+          ->set('default', 'acquia_cms_gin')
           ->save();
       }
 

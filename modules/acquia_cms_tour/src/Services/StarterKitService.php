@@ -155,7 +155,7 @@ class StarterKitService {
           'acquia_cms_tour',
         ];
         $enableThemes = [
-          'admin'   => 'acquia_claro',
+          'admin'   => 'acquia_cms_gin',
           'default' => 'cohesion_theme',
         ];
         break;
@@ -167,7 +167,7 @@ class StarterKitService {
           'acquia_cms_tour',
         ];
         $enableThemes = [
-          'admin'   => 'acquia_claro',
+          'admin'   => 'acquia_cms_gin',
           'default' => 'olivero',
         ];
         break;
@@ -180,14 +180,14 @@ class StarterKitService {
           'acquia_cms_tour',
         ];
         $enableThemes = [
-          'admin'   => 'acquia_claro',
+          'admin'   => 'acquia_cms_gin',
           'default' => 'olivero',
         ];
         break;
 
       default:
         $enableThemes = [
-          'admin'   => 'acquia_claro',
+          'admin'   => 'acquia_cms_gin',
           'default' => 'olivero',
         ];
         $enableModules = [
