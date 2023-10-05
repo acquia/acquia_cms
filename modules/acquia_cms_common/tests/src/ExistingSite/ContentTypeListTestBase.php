@@ -22,8 +22,7 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  */
 abstract class ContentTypeListTestBase extends ExistingSiteBase {
 
-  use AssertLinksTrait;
-  use SetBackendAvailabilityTrait;
+  use AssertLinksTrait, SetBackendAvailabilityTrait;
 
   /**
    * The machine name of the content type under test.
@@ -143,7 +142,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
       'field_' . $this->nodeType . '_type' => $types[2],
       'created' => $time++,
     ]);
-
+    \Drupal::getContainer()->get('search_api.post_request_indexing')->destruct();
     // Update additional field value.
     $this->updateNodeFieldValues();
   }
@@ -162,12 +161,12 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
    * @param string $langcode
    *   Langcode to visit tranlated page.
    */
-  abstract protected function visitListPage($langcode = NULL) : void;
+  abstract protected function visitListPage($langcode = NULL): void;
 
   /**
    * Update specific field value for nodes.
    */
-  protected function updateNodeFieldValues() : void {}
+  protected function updateNodeFieldValues(): void {}
 
   /**
    * Data provider for testing the listing page with different permissions.
@@ -175,7 +174,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
    * @return array[]
    *   Sets of arguments to pass to the test method.
    */
-  public function permissionProvider() : array {
+  public function permissionProvider(): array {
     return [
       'anonymous user' => [NULL],
       // Search API is really stupid about node access, and does not properly
@@ -214,7 +213,6 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
     $module_handler = $this->container->get('module_handler');
     if ($module_handler->moduleExists('acquia_cms_search') && $module_handler->moduleExists('acquia_cms_site_studio')) {
       $assert_session = $this->assertSession();
-
       // Assert that all categories facets are available.
       $assert_session->linkExists('Music (2)');
       $assert_session->linkExists('Art (2)');
@@ -336,7 +334,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  protected function getLinks() : array {
+  protected function getLinks(): array {
     $links = $this->getSession()
       ->getPage()
       ->findAll('css', 'article a.card-link');
@@ -350,7 +348,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  protected function getExpectedLinks() : array {
+  protected function getExpectedLinks(): array {
     $ids = $this->getQuery()->accessCheck(FALSE)->execute();
 
     /** @var \Drupal\node\NodeInterface[] $content */
@@ -371,7 +369,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
    *   An entity query object to find all published content of the type under
    *   test.
    */
-  protected function getQuery() : QueryInterface {
+  protected function getQuery(): QueryInterface {
     return $this->container->get('entity_type.manager')
       ->getStorage('node')
       ->getQuery()

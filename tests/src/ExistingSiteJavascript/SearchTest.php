@@ -62,6 +62,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
         'title' => 'Test unpublished ' . $node_type_label,
         'moderation_state' => 'draft',
       ]);
+      \Drupal::getContainer()->get('search_api.post_request_indexing')->destruct();
       $this->assertFalse($unpublished_node->isPublished());
     }
   }

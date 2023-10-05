@@ -175,7 +175,6 @@ function _acquia_cms_search_add_category_facet(array $modules) {
  * Implements hook_form_FORM_ID_alter().
  */
 function acquia_cms_search_form_field_config_edit_form_alter(&$form, FormStateInterface $form_state) {
-
   /** @var \Drupal\field_ui\Form\FieldConfigEditForm $field_config_form */
   $field_config_form = $form_state->getFormObject();
 
@@ -224,8 +223,7 @@ function _acquia_cms_search_add_field_to_index_form_builder(string $entity_type,
 
   if ($form_state->getValue('add_to_search_index')) {
     $field_storage->setThirdPartySetting('acquia_cms_common', 'search_index', 'content')
-      ->setThirdPartySetting('acquia_cms_common', 'search_label', $fieldConfig->getLabel())
-      ->save();
+      ->setThirdPartySetting('acquia_cms_common', 'search_label', $fieldConfig->getLabel());
 
     // Index entity_reference field.
     if ($search_facade->isAllowedTypeReferenceField($field_storage)) {
@@ -242,7 +240,6 @@ function _acquia_cms_search_add_field_to_index_form_builder(string $entity_type,
     // Remove third party setting from fields.storage.config.
     $field_storage
       ->unsetThirdPartySetting('acquia_cms_common', 'search_index')
-      ->unsetThirdPartySetting('acquia_cms_common', 'search_label')
-      ->save();
+      ->unsetThirdPartySetting('acquia_cms_common', 'search_label');
   }
 }

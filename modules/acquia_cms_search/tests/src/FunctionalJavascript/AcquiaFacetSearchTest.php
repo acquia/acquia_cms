@@ -145,6 +145,7 @@ class AcquiaFacetSearchTest extends BrowserTestBase {
       ]);
     }
     $this->drupalPlaceBlock('facet_block:search_category', ['region' => 'content']);
+    \Drupal::getContainer()->get('search_api.post_request_indexing')->destruct();
   }
 
   /**
