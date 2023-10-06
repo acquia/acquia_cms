@@ -1,128 +1,153 @@
-.tour-page {
-  color: #222330;
-}
-.tour-page .section-hero .row {
-  display: flex;
-}
-.tour-page .section-hero {
-  color: white;
-  background-image: url('../assets/images/hero-background.png');
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: scroll;
-  padding: 30px 18px 50px 50px;
-}
-a:-webkit-any-link {
-  cursor: pointer;
-}
-.tour-page .section-hero .button--primary {
-  background-color: #26a3dd;
-}
-.tour-page .section-hero .text-section {
-  width: 75%;
-  margin-right: 5%;
-}
-.tour-page .section-content {
-  display: flex;
-  margin-top: 60px;
-  opacity: 0.7;
-}
-.tour-page .section-content .sidenav {
-  width: 44%;
-  margin-right: 6%;
-}
-.tour-page .sidenav ul {
-  margin-left: 0;
-}
-.tour-page .sidenav p {
-  font-weight: 500;
-  font-size: 16px;
-}
-.tour-page .sidenav ul li {
-  padding-bottom: 10px;
-  padding-top: 10px;
-  border-top: 1px solid #aba8a8;
-}
-.tour-page .sidenav ul li a {
-  text-decoration: none;
-  color: #222330;
-  font-weight: 500;
-  font-size: 16px;
-}
-.tour-page .section-content .content-start h2 {
-  margin-top: 0;
-}
-.tour-page .section-content .content-leaf {
-  margin-top: 60px;
-  position: relative;
-}
-.tour-page .section-content .content-start {
-  position: relative;
-}
-.tour-page .anchor-link {
-  top: -100px;
-  position: absolute;
-  visibility: hidden;
-}
-.tour-page .content-main h2 > a {
-  color: #222330;
-}
-.tour-page .section-hero .button-section {
+.tour-dashboard {
   text-align: center;
 }
-.tour-content-header {
-  overflow: hidden;
-  padding: 1.5rem 0 0;
-  background: #f5f3f3;
+.tour-dashboard p {
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
-.tour-content-header .block-page-title-block,
-.tour-content-header .page-title,
-.tour-content-header .breadcrumb__link,
-.tour-content-header .breadcrumb__item + .breadcrumb__item::before {
-  color: #222330;
-  opacity: 0.9;
+.tour-dashboard-table th {
+  text-align: center;
 }
-
-/* Small Devices, Tablets */
-@media only screen and (max-width : 768px) {
-  .tour-page .section-hero .row,
-  .tour-page .section-content {
-    display: block;
-  }
-  .tour-page .section-hero {
-    padding: 20px;
-  }
-  .tour-page .section-content .sidenav {
-    width: auto;
-    margin-right: auto;
-    margin-bottom: 40px;
-  }
-  .tour-page .section-hero .text-section {
-    width: auto;
-    margin-right: auto;
-  }
+.tour-dashboard-table td {
+  text-align: center;
 }
-
-@media screen and (max-width: 1024px) and (min-width: 769px) {
-  .tour-page .section-content .sidenav {
-    width: 100%;
-  }
+.acms-welcome-modal.ui-dialog .ui-widget-content.ui-dialog-buttonpane {
+  background: #fff;
+  border: none;
+  padding: 0;
 }
-
-.tour-checklist,
-form > .fieldset {
-  margin-bottom: 28px;
+.acms-welcome-modal.ui-dialog .ui-dialog-titlebar button {
+  padding: 0;
+  border-radius: 50%;
+  background: #fff;
+}
+.acms-welcome-modal .ui-dialog-buttonset {
+  justify-content: center !important;
+  margin: 0 !important;
+  background: #fff;
+}
+.acms-welcome-modal .button--primary {
+  background: #003cc5;
+}
+.setup-manually.button {
+  display: block;
+  margin: 1rem 0.75rem 1rem 0;
+  background-color: #fff;
+}
+.setup-manually.button:not(:focus) {
   box-shadow: none;
 }
-.tour-checklist .progress__track {
-  border: 1px #bbbec5 solid;
-  height: .5em;
-  margin-bottom: 20px;
+.setup-manually.button:hover {
+  background: #fff;
 }
-.tour-checklist .progress__bar {
-  background: #28a9e0;
-  border: 1px #28a9e0 solid;
-  height: .5em;
-  min-width: 8px;
+.acms-welcome-modal .form-actions {
+  flex-direction: column;
+  align-items: center;
+}
+.acms-welcome-modal.ui-dialog .ui-widget-content.ui-dialog-buttonpane .form-actions .button {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.acms-dashboard-form-wrapper {
+  margin-top: 50px;
+}
+.acms-dashboard-form-wrapper .claro-details__summary::before {
+  right: 0.75rem;
+  left: unset;
+}
+.acms-dashboard-form-wrapper  .dashboard-check-icon {
+  height: 23px;
+  width: 22px;
+  background-image: url(../assets/images/check.svg);
+  display: inline-block;
+  float: right;
+  right: 100px;
+  position: absolute;
+  margin-top: 14px;
+  z-index: 1;
+}
+.acms-dashboard-form-wrapper .details-wrapper {
+  display: flex;
+}
+.dashboard-fields-wrapper {
+  width: 90%;
+  margin-right: 10px;
+}
+.dashboard-buttons-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.dashboard-buttons-wrapper a {
+  margin-left: 2px;
+}
+.dashboard-buttons-wrapper .tooltip {
+  position: absolute;
+  visibility: hidden;
+  width: 200px;
+  background-color: black;
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  z-index: 1;
+}
+.tool-tip__icon:hover + .tooltip {
+  visibility: visible;
+  right: 4%;
+  margin-top: 25px;
+}
+.dashboard-buttons-wrapper .tool-tip__icon {
+  background: #27b1f0;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-block;
+  height: 20px;
+  line-height: 1.3em;
+  text-align: center;
+  width: 20px;
+  margin-left: 5px;
+  color: white;
+}
+.acms-dashboard-form-wrapper .claro-details__summary[aria-expanded='true'] {
+  border-bottom: 1px solid #808080;
+}
+.acms-dashboard-form-wrapper  .js-form-wrapper {
+  border: 1px solid #808080;
+}
+.acms-dashboard-form-wrapper .button,
+.button--primary {
+  background-color: white;
+  border: 1px solid #808080!important;
+  margin-top: 0;
+  color: #222330;
+}
+.acms-dashboard-form-wrapper .button--primary:hover {
+  background-color: #c2c3ca;
+  color: #222330;
+}
+.section-top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.section-top .help-text {
+  width: 80%;
+}
+.section-top .starter-wizard,
+.section-top .wizard {
+  right: 2.5rem;
+  position: absolute;
+}
+.section-top .starter-wizard + .wizard {
+  right: 11.5rem;
+}
+
+@media screen and (max-width: 767px) {
+  .section-top {
+    flex-direction: column;
+  }
+  .section-top .wizard,
+  .section-top .starter-wizard {
+    position: inherit;
+  }
 }

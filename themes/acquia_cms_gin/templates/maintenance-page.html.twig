@@ -1,12 +1,16 @@
 {#
 /**
  * @file
- * Claro's theme implementation to display a single Drupal page while offline.
+ * Acquia CMS Gin theme implementation for maintenance page.
+ *
+ * This template is used for rendering non-frontpage maintenance pages. An
+ * example of this is /update.php.
  *
  * All available variables are mirrored in page.html.twig.
  * Some may be blank but they are provided for consistency.
  *
  * @see template_preprocess_maintenance_page()
+ * @see maintenance-page--front.html.twig
  */
 #}
 <div class="layout-container">
@@ -14,7 +18,7 @@
   <header role="banner">
     {% if site_name %}
     <div class="banner-title-img">
-      {% if install_page_logo_path %}
+      {% if install_page_logo_path %} {{ 'from gin subtheme'|t }}
         <img src="{{ install_page_logo_path }}" class="site-logo" alt="{{ site_name }}" />
       {% endif %}
       <h1 class="page-title">

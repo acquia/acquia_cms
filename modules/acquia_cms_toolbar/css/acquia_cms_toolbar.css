@@ -1,0 +1,65 @@
+/* Primary Toolbar */
+.toolbar-tray-horizontal ul li.menu-item--expanded:hover:before {
+  -webkit-transform: translate(6px, 0px);
+  transform: translate(6px, 0px);
+}
+.toolbar #toolbar-bar .toolbar-tray .menu-item--active-trail > .toolbar-box a,
+.toolbar #toolbar-bar .toolbar-tray .menu-item > .toolbar-icon.is-active,
+.toolbar #toolbar-bar .toolbar-tray .menu-item > .toolbar-box > .toolbar-icon.is-active,
+.toolbar #toolbar-bar .toolbar-tray a.is-active,
+.toolbar #toolbar-bar .toolbar-tray a:hover,
+.toolbar #toolbar-bar .toolbar-tray span:hover,
+.toolbar #toolbar-bar .toolbar .toolbar-menu .toolbar-menu a:hover,
+.toolbar #toolbar-bar .toolbar .toolbar-menu .toolbar-menu span:hover {
+  color: #168ec4;
+}
+
+.toolbar .toolbar-tray-horizontal ul li.menu-item .menu-item {
+  border-bottom: none;
+}
+/* Secondary Toolbar */
+.gin-secondary-toolbar {
+  padding: 10px 0 0 0;
+}
+/* Secondary Toolbar - Environment Styles */
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment {
+  color: #fff;
+}
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment:before {
+  background-image: url(../images/acacac/env-ffffff.svg);
+  max-width: 55px;
+}
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment:hover {
+  text-decoration: none;
+}
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment.environment-local,
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment.environment-ide {
+  background-color: #1078c2;
+}
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment.environment-local:focus,
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment.environment-local:hover,
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment.environment-ide:focus,
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment.environment-ide:hover {
+  background: #1078c2;
+}
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment.environment-dev {
+  background-color: #498414;
+}
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment.environment-dev:focus,
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment.environment-dev:hover {
+  background: #498414;
+}
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment.environment-stage {
+  background-color: #feb32b;
+}
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment.environment-stage:focus,
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment.environment-stage:hover {
+  background: #feb32b;
+}
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment.environment-prod {
+  background-color: #cd3a3d;
+}
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment.environment-prod:focus,
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment.environment-prod:hover {
+  background: #cd3a3d;
+}
