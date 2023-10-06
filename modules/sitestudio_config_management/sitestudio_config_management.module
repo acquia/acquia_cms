@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for config management.
+ */
+
+use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Helper function to import configurations.
+ *
+ * @param string $config
+ *   The name of configuration.
+ * @param string $module
+ *   The name of module.
+ */
+
+/**
+ * This method is duplicate of _acquia_cms_common_rewrite_configuration.
+ *
+ * This module can be used outside Acquia CMS ecosystem.
+ */
+function _sitestudio_config_management_import_configuration(string $config, string $module) {
+  $module_path = \Drupal::service('extension.list.module')->getPath($module);
+  $module_path .= '/config/optional/' . $config . '.yml';
+  $content = file_get_contents($module_path);
+  $parsed_yml = Yaml::parse($content);
+
+  $active_storage = \Drupal::service('config.storage');
+  $active_storage->write($config, $parsed_yml);
+}

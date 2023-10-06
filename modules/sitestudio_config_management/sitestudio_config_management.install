@@ -19,6 +19,9 @@ function sitestudio_config_management_install($is_syncing) {
     $updated_ignore_config = array_unique(array_merge($existing_ignore_config, $new_ignore_config));
     $config->set('ignored_config_entities', $updated_ignore_config);
     $config->save(TRUE);
+    if (!\Drupal::config('cohesion.sync.settings')->get('enabled_entity_types')) {
+      _sitestudio_config_management_import_configuration('cohesion.sync.settings', 'sitestudio_config_management');
+    }
   }
   /** @var \Drupal\sitestudio_config_management\SiteStudioConfigManagement $configManagementService */
   $configManagementService = \Drupal::service("site_studio.config_management");
