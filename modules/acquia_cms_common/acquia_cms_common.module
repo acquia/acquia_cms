@@ -234,11 +234,14 @@ function acquia_cms_common_system_breadcrumb_alter(Breadcrumb &$breadcrumb, Rout
 /**
  * Implements hook_preprocess_template().
  */
-function acquia_cms_common_preprocess_status_report_general_info(&$variables) {
+function acquia_cms_common_preprocess_status_report_general_info(&$variables, $hook, $info) {
   // Check for the starter kit selection.
   if ($starter_kit = \Drupal::service('acquia_cms_common.utility')->getStarterKit()) {
     // Store selected starter kit into the variable.
     $variables['acquia_cms']['starter_kit'] = $starter_kit;
+    $variables['drupal']['description'] = [
+      '#markup' => $variables['drupal']['description'] . '<h3 class="system-status-general-info__item-title">Starter Kit:</h3> ' . $starter_kit,
+    ];
   }
 }
 
