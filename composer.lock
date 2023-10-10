@@ -2435,7 +2435,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "fcaa985418bc586c3b4fdb81ccb11f28a55647b4"
+                "reference": "f15b4997b2c364944e1c3486445d8063a294e8af"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2455,7 +2455,7 @@
                 "drupal/moderation_dashboard": "^2.1",
                 "drupal/moderation_sidebar": "^1.7",
                 "drupal/password_policy": "^4.0",
-                "drupal/pathauto": "1.11",
+                "drupal/pathauto": "^1.12",
                 "drupal/redirect": "^1.9",
                 "drupal/scheduler_content_moderation_integration": "^2.0",
                 "drupal/schema_metatag": "^2.4 || ^3.0",
@@ -2504,9 +2504,6 @@
                         "3371005 - Toolbar does not indicate active menu trail for pages not included in Toolbar": "https://git.drupalcode.org/project/drupal/-/commit/3165269bb01a5a8e5f53c1f369135b967c9d5924.patch",
                         "3370946 - Page title should contextualize the local navigation": "https://www.drupal.org/files/issues/2023-09-11/3370946-page-title-backport-10-1-x.patch",
                         "3347291: - Combine field storage and field instance forms": "https://www.drupal.org/files/issues/2023-09-13/10.1-3347291-combine-mega-e.patch"
-                    },
-                    "drupal/pathauto": {
-                        "3328670 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/pathauto/-/merge_requests/40.patch"
                     }
                 }
             },
@@ -6814,17 +6811,17 @@
         },
         {
             "name": "drupal/pathauto",
-            "version": "1.11.0",
+            "version": "1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/pathauto.git",
-                "reference": "8.x-1.11"
+                "reference": "8.x-1.12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/pathauto-8.x-1.11.zip",
-                "reference": "8.x-1.11",
-                "shasum": "a006fe9e6046a9833711a1ae56aa4752e65bcdc8"
+                "url": "https://ftp.drupal.org/files/projects/pathauto-8.x-1.12.zip",
+                "reference": "8.x-1.12",
+                "shasum": "b7b6432e315e38e59a7c6cc117134326c580de4c"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10",
@@ -6837,8 +6834,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.11",
-                    "datestamp": "1660129564",
+                    "version": "8.x-1.12",
+                    "datestamp": "1696776683",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
