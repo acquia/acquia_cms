@@ -19,9 +19,18 @@ function sitestudio_config_management_install($is_syncing) {
     $updated_ignore_config = array_unique(array_merge($existing_ignore_config, $new_ignore_config));
     $config->set('ignored_config_entities', $updated_ignore_config);
     $config->save(TRUE);
-    if (!\Drupal::config('cohesion.sync.settings')->get('enabled_entity_types')) {
-      _sitestudio_config_management_import_configuration('cohesion.sync.settings', 'sitestudio_config_management');
+
+    // Merge active configuration with new config.
+    $new_cohesion_sync_config = _sitestudio_config_management_import_configuration('cohesion.sync.settings', 'sitestudio_config_management');
+    $active_cohesion_sync = \Drupal::configFactory()->getEditable('cohesion.sync.settings');
+    $active_cohesion_sync->set('enabled_entity_types', $new_cohesion_sync_config['enabled_entity_types']);
+    if (!$active_cohesion_sync->get('package_export_limit')) {
+      $active_cohesion_sync->set('package_export_limit', $new_cohesion_sync_config['package_export_limit']);
     }
+    if (!$active_cohesion_sync->get('full_export_limit')) {
+      $active_cohesion_sync->set('full_export_limit', $new_cohesion_sync_config['full_export_limit']);
+    }
+    $active_cohesion_sync->save(TRUE);
   }
   /** @var \Drupal\sitestudio_config_management\SiteStudioConfigManagement $config_management_service */
   $config_management_service = \Drupal::service("site_studio.config_management");
