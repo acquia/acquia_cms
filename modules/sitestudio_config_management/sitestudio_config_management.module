@@ -8,17 +8,16 @@
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Helper function to import configurations.
+ * Helper function to get configurations.
  *
  * @param string $config
  *   The name of configuration.
  * @param string $module
  *   The name of module.
  */
-function _sitestudio_config_management_import_configuration(string $config, string $module) {
+function _sitestudio_config_management_get_configuration(string $config, string $module): array {
   $module_path = \Drupal::service('extension.list.module')->getPath($module);
   $module_path .= '/config/optional/' . $config . '.yml';
   $content = file_get_contents($module_path);
-  $parsed_yml = Yaml::parse($content);
-  return $parsed_yml;
+  return Yaml::parse($content);
 }
