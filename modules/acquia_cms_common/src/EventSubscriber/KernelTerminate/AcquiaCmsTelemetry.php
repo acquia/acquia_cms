@@ -178,7 +178,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
   }
 
   /**
-   * Creates and sends an event to Amplitude.
+   * Creates and sends an event to Amplitude, Also collects data into sumologic.
    *
    * @param string $event_type
    *   The event type. This accepts any string that is not reserved. Reserved
@@ -205,7 +205,10 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
       $this->sendEvent($event);
       $this->state->set('acquia_cms_common.telemetry.data', json_encode($event_properties));
       $this->state->set('acquia_cms_common.telemetry.timestamp', $this->time->getCurrentTime());
-      $this->logger->get($event_type)->info(json_encode($event, JSON_PRETTY_PRINT));
+      // Logging the database and collecting data into sumologic.
+      $this->logger->get($event_type)->info('@message', [
+        '@message' => json_encode($event['event_properties'], JSON_UNESCAPED_SLASHES),
+      ]);
 
       return TRUE;
     }
