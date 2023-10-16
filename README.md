@@ -8,7 +8,7 @@ If you're contributing to Acquia CMS as a developer, see our install instruction
 
 If you're installing Acquia CMS to build a new Drupal project on the Acquia platform,
 we invite you to use our Acquia CMS Composer template:
-[Acquia CMS Project](https://github.com/acquia/acquia-cms-project). This repository
+[Acquia CMS Project](https://github.com/acquia/drupal-recommended-project). This repository
 is for developers contributing to the Acquia CMS distribution.
 
 ## Documentation
