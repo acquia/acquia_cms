@@ -35,7 +35,7 @@ class EntityCloneIntegrationTest extends CohesionComponentTestBase {
 
     // Add Hero component to the layout canvas.
     $this->getLayoutCanvas()->add('Hero');
-    $this->pressSaveButton();
+    $page->pressButton('Save');
 
     // Clone the node in the UI.
     $this->drupalGet($edit_form);
