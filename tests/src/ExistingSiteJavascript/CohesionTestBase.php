@@ -143,7 +143,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    */
   protected function pressSaveButton(): void {
     $this->assertSession()
-      ->elementExists('css', '#edit-actions')
+      ->elementExists('css', '#edit-submit')
       ->pressButton('Save');
   }
 
