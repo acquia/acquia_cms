@@ -92,13 +92,14 @@ class HeadlessContentTest extends WebDriverTestBase {
     // Node edit page.
     $path = "node/$nid/edit";
     $this->drupalGet($path);
-    $this->assertSession()->pageTextContains('Edit Test Headless Test Page');
-    $this->assertSession()->linkNotExists('View');
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    $assertSession->pageTextContains('Edit Test Headless Test Page');
+    $assertSession->linkNotExists('View');
     $nodePageMenus = [
       'API' => '/jsonapi/node/test/' . $node->uuid(),
       'Edit' => '/node/' . $nid . '/edit',
       'Preview' => '/node/' . $nid . '/site-preview',
-      'Delete' => '/node/' . $nid . '/delete',
       'Revisions' => '/node/' . $nid . '/revisions',
       'Clone' => '/entity_clone/node/' . $nid,
     ];
@@ -107,12 +108,19 @@ class HeadlessContentTest extends WebDriverTestBase {
     $this->assertCount(6, $menuList);
     $menuOrder = [];
     foreach ($menuList as $menu) {
-      $menuOrder[] = str_replace(' (active tab)', '', $menu->getText());
+      $tabTitle = str_replace(' (active tab)', '', $menu->getText());
+      if ($tabTitle) {
+        $menuOrder[] = $tabTitle;
+      }
     }
     // Assertion for menu order.
     $this->assertEquals($menuOrder, array_keys($nodePageMenus));
     // Assertion test for tabs of node page.
     $this->assertTabMenus($nodePageMenus, $path);
+    // Assert delete buton.
+    $deleteButton = $assertSession->waitForElementVisible("css", "#edit-advanced #edit-gin-sidebar .form-actions a");
+    $this->assertEquals('Delete', $deleteButton->getText());
+    $this->assertEquals('/node/' . $nid . '/delete', $deleteButton->getAttribute('href'));
   }
 
   /**
