@@ -92,9 +92,9 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
       /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
       $assertSession = $this->assertSession();
       // Wait for menu items to visible.
-      $menuItem = $assertSession->waitForElementVisible('css', '.hover-intent.menu-item');
+      $menuItem = $assertSession->waitForElementVisible('css', '.menu-item.hover-intent');
       $this->assertInstanceOf(NodeElement::class, $menuItem);
-      $childrenMenuItems = $page->findAll("css", ".claro-toolbar-menu > .hover-intent.menu-item >  ul.toolbar-menu:first-of-type > li");
+      $childrenMenuItems = $page->findAll("css", ".toolbar-menu-administration > .toolbar-menu > .menu-item.hover-intent >  ul.toolbar-menu:first-of-type > li.menu-item");
       $this->assertCount(count($children), $childrenMenuItems);
       foreach ($childrenMenuItems as $key => $child) {
         $this->assertEquals($children[$key], $child->find("css", "a:first-child")->getText());
@@ -144,6 +144,7 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
         '.toolbar-icon-system-admin-content',
         'Content',
         [
+          'Overview',
           'Scheduled Content',
           'Add content',
           'Files',
@@ -156,6 +157,7 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
         '.toolbar-icon-admin-access-control',
         'API',
         [
+          'Overview',
           'Dashboard',
           'OAuth clients',
           'OAuth settings',
@@ -168,6 +170,7 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
         '.toolbar-icon-admin-content-models',
         'Data model',
         [
+          'Overview',
           'Block types',
           'Content types',
           'Media types',
@@ -179,6 +182,7 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
         '.toolbar-icon-admin-cms',
         'System administration',
         [
+          'Overview',
           'Structure',
           'Extend',
           'Configuration',
