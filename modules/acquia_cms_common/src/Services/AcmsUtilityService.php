@@ -228,6 +228,7 @@ class AcmsUtilityService {
       'acquia_cms_enterprise_low_code' => 'Acquia CMS Enterprise Low Code',
       'acquia_cms_headless' => 'Acquia CMS Headless' ,
       'acquia_cms_community' => 'Acquia CMS Community',
+      'acquia_cms_existing_site' => 'Acquia CMS Existing Site',
     ];
 
     // Check for the starter kit selection.
