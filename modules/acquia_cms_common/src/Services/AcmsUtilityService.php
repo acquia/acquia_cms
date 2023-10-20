@@ -232,7 +232,8 @@ class AcmsUtilityService {
     ];
 
     // Check for the starter kit selection.
-    if ($starter_kit = $this->state->get('acquia_cms.starter_kit')) {
+    $starter_kit = $this->configFactory->get('acquia_cms_common.settings')->get('starter_kit_name');
+    if ($starter_kit) {
       // Return starter-kit value.
       return $starter_kits[$starter_kit];
     }
