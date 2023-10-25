@@ -58,6 +58,7 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
       $this->container->get("state"),
       $this->container->getParameter("site.path"),
       $this->container->get("datetime.time"),
+      $this->container->get("logger.factory"),
     );
     $path = explode('/', $this->container->getParameter('site.path'));
     $this->siteUri = end($path);
@@ -210,6 +211,7 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
       $this->container->get("state"),
       $this->container->getParameter("site.path"),
       $this->container->get("datetime.time"),
+      $this->container->get("logger.factory"),
     );
     $method = $this->getAcqauiaCmsTelemetryMethod("getExtensionInfo");
     $actual_data = $method->invoke($telemetry);
