@@ -1,0 +1,69 @@
+include:
+  # This include centralizes our CI "golden path" https://docs.gitlab.com/ee/ci/yaml/#includefile
+  - project: $_GITLAB_TEMPLATES_REPO
+    ref: $_GITLAB_TEMPLATES_REF
+    file:
+      - '/includes/include.drupalci.main.yml'
+      - '/includes/include.drupalci.variables.yml'
+      - '/includes/include.drupalci.workflows.yml'
+
+#
+# Start custom overrides.
+#
+
+variables:
+  #  Disable default phpunit job in favor of the d9/10 variants below.
+  SKIP_PHPUNIT: 1
+  _PHPUNIT_EXTRA: --verbose
+
+# Run two variations of composer job.
+composer:
+  parallel:
+    matrix:
+      - _TARGET_PHP: [ "8.2" ]
+        _TARGET_CORE: [ "$CORE_STABLE" ]
+
+#
+# The 4 validation jobs below are explicit about their artifact. This is not strictly needed
+# (last wins) but done for demonstration. https://docs.gitlab.com/ee/ci/jobs/job_control.html#fetch-artifacts-from-a-parallelmatrix-job
+#
+
+phpcs:
+  # Set allow_failure to false so that the test fails for coding standards faults.
+  allow_failure: false
+  dependencies:
+    - "composer: [8.2, $CORE_STABLE]"
+
+composer-lint:
+  dependencies:
+    - "composer: [8.2, $CORE_STABLE]"
+
+eslint:
+  dependencies:
+    - "composer: [8.2, $CORE_STABLE]"
+
+stylelint:
+  dependencies:
+    - "composer: [8.2, $CORE_STABLE]"
+
+.phpunit-local:
+  variables:
+    SKIP_PHPUNIT: 0
+# An example of further matrix splitting of jobs.
+#  parallel:
+#    matrix:
+#      # Run test groups in parallel for better dev velocity.
+#      - _PHPUNIT_EXTRA: [ "--group devel", "--group devel_generate" ]
+
+phpunit-d10:
+  needs:
+    - job: composer
+      parallel:
+        matrix:
+          - _TARGET_PHP: "8.2"
+            _TARGET_CORE: $CORE_STABLE
+  variables:
+    _TARGET_PHP: "8.2"
+  extends:
+    - .phpunit-base
+    - .phpunit-local
