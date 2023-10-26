@@ -543,7 +543,7 @@ jobs:
       GIT_COMMITTER_NAME: "Vishal Khode"
       GIT_COMMITTER_EMAIL: "vishal.khode@acquia.com"
       GIT_AUTHOR_EMAIL: "vishal.khode@acquia.com"
-    needs: [ static_code_analysis, integrated_tests, isolated_tests ]
+      AWS_S3_BUCKET_PATH: s3://acquia-cms-artifacts
     runs-on: ubuntu-latest
     environment: code_deployment
     concurrency: production
@@ -563,10 +563,16 @@ jobs:
         env:
           DRUPAL_SSH_PRIVATE_KEY: ${{ secrets.DRUPAL_SSH_PRIVATE_KEY }}
           DRUPAL_SSH_KNOWN_HOSTS: git.drupal.org
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Download Splitsh-lite
         run: |
           cd ${GITHUB_WORKSPACE}/scripts/
-          curl -L https://github.com/splitsh/lite/releases/latest/download/lite_linux_amd64.tar.gz  | tar zx
+          aws s3 cp ${AWS_S3_BUCKET_PATH}/splitsh-lite/lite_linux_amd64.tar.gz . && tar xvzf lite_linux_amd64.tar.gz
           chmod +x splitsh-lite
           cd -
       - name: deploy_code
