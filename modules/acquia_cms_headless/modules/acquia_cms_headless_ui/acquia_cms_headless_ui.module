@@ -218,9 +218,7 @@ function acquia_cms_headless_ui_local_tasks_alter(array &$local_tasks) {
     // Edit and View tasks with a deriver (which is why it's prefixed).
     elseif (preg_match('/^(media\.tasks:)?entity\.(\S*)\.canonical$/', $id, $matches)) {
       $local_tasks[$id]['title'] = t('API');
-      if ($matches[2] != 'user') {
-        $local_tasks[$id]['class'] = ViewJsonTask::class;
-      }
+      $local_tasks[$id]['class'] = ViewJsonTask::class;
       $local_tasks[$id]['entity_type_id'] = $matches[2];
     }
   }

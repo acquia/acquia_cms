@@ -3,6 +3,8 @@
 namespace Drupal\acquia_cms_headless_ui\Menu;
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Menu\LocalTaskDefault;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -34,6 +36,13 @@ final class ViewJsonTask extends LocalTaskDefault implements ContainerFactoryPlu
   private $routeMatch;
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * ViewJsonTask constructor.
    *
    * @param array $configuration
@@ -46,11 +55,20 @@ final class ViewJsonTask extends LocalTaskDefault implements ContainerFactoryPlu
    *   The JSON:API resource type repository.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The current route match.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity storage class.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ResourceTypeRepositoryInterface $resource_type_repository, RouteMatchInterface $route_match) {
+  public function __construct(array $configuration,
+  $plugin_id,
+  $plugin_definition,
+  ResourceTypeRepositoryInterface $resource_type_repository,
+  RouteMatchInterface $route_match,
+  EntityTypeManagerInterface $entity_type_manager
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->resourceTypeRepository = $resource_type_repository;
     $this->routeMatch = $route_match;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -62,48 +80,48 @@ final class ViewJsonTask extends LocalTaskDefault implements ContainerFactoryPlu
       $plugin_id,
       $plugin_definition,
       $container->get('jsonapi.resource_type.repository'),
-      $container->get('current_route_match')
+      $container->get('current_route_match'),
+      $container->get('entity_type.manager')
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getCacheMaxAge() {
+  public function getCacheMaxAge(): int {
     return Cache::mergeMaxAges($this->getEntity()->getCacheMaxAge(), parent::getCacheMaxAge());
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getCacheTags() {
+  public function getCacheTags(): array {
     return Cache::mergeTags($this->getEntity()->getCacheTags(), parent::getCacheTags());
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getCacheContexts() {
+  public function getCacheContexts(): array {
     return Cache::mergeContexts($this->getEntity()->getCacheContexts(), parent::getCacheContexts());
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getRouteName() {
+  public function getRouteName(): string {
     $entity = $this->getEntity();
-
-    $resource_type = $this->resourceTypeRepository
+    $resourceType = $this->resourceTypeRepository
       ->get($entity->getEntityTypeId(), $entity->bundle())
       ->getTypeName();
 
-    return "jsonapi.$resource_type.individual";
+    return "jsonapi.$resourceType.individual";
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getRouteParameters(RouteMatchInterface $route_match) {
+  public function getRouteParameters(RouteMatchInterface $route_match): array {
     return [
       'entity' => $this->getEntity()->uuid(),
     ];
@@ -115,11 +133,17 @@ final class ViewJsonTask extends LocalTaskDefault implements ContainerFactoryPlu
    * @return \Drupal\Core\Entity\EntityInterface
    *   The entity being targeted by the local task, based on the current route.
    */
-  private function getEntity() {
-    $plugin_definition = $this->getPluginDefinition();
+  private function getEntity(): EntityInterface {
     // The entity_type_id option is set by
     // acquia_cms_headless_ui_local_tasks_alter().
-    return $this->routeMatch->getParameter($plugin_definition['entity_type_id']);
+    $entityTypeId = $this->getPluginDefinition()['entity_type_id'];
+
+    $entity = $this->routeMatch->getParameter($entityTypeId);
+    if (!$entity instanceof EntityInterface) {
+      $entity = $this->entityTypeManager->getStorage($entityTypeId)->load($entity);
+    }
+
+    return $entity;
   }
 
 }
