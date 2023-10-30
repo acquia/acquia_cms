@@ -2638,7 +2638,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_headless",
-                "reference": "94c2e662c3f8af05dfe79ea0f003685312ad75ca"
+                "reference": "7297fc9bfffb56cd7c720204a6f50fcd31cf3262"
             },
             "require": {
                 "drupal/acquia_cms_tour": "2.x-dev",
@@ -2647,7 +2647,7 @@
                 "drupal/next": "^1.6",
                 "drupal/openapi_jsonapi": "^3.0",
                 "drupal/openapi_ui_redoc": "^1.0",
-                "drupal/openapi_ui_swagger": "1.x-dev#e2db6e53",
+                "drupal/openapi_ui_swagger": "^1.0",
                 "drupal/restui": "^1.21"
             },
             "conflict": {
@@ -6693,11 +6693,17 @@
         },
         {
             "name": "drupal/openapi_ui_swagger",
-            "version": "dev-1.x",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/openapi_ui_swagger.git",
-                "reference": "e2db6e53527b354a77973790a9effa4d75a59911"
+                "reference": "8.x-1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/openapi_ui_swagger-8.x-1.0.zip",
+                "reference": "8.x-1.0",
+                "shasum": "32478822e27fc02193f2179c752fbbfd092cf366"
             },
             "require": {
                 "drupal/core": "^8 || ^9 || ^10",
@@ -6706,15 +6712,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-1.0-rc4+1-dev",
-                    "datestamp": "1669695202",
+                    "version": "8.x-1.0",
+                    "datestamp": "1696427728",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
