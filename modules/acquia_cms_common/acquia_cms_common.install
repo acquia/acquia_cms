@@ -27,16 +27,12 @@ function acquia_cms_common_install($is_syncing) {
       'view media',
     ]);
 
-    // Enable gin theme.
-    $themes_list = \Drupal::service('extension.list.theme')->getList();
+    // Enable olivero, gin theme.
     $theme_installer = \Drupal::service('theme_installer');
-    $theme_installer->install(["olivero"]);
+    $theme_installer->install(["olivero", "gin"]);
     $system_theme_config = \Drupal::configFactory()->getEditable('system.theme');
     $system_theme_config->set('default', 'olivero')->save();
-    if (isset($themes_list['gin'])) {
-      $theme_installer->install(["gin"]);
-      $system_theme_config->set('admin', "gin")->save();
-    }
+    $system_theme_config->set('admin', "gin")->save();
 
     // Re-write the content and media view on module install,
     // since we have moved this config in optional directory.
@@ -316,6 +312,25 @@ function acquia_cms_common_update_8009() {
     if (!$config->get('starter_kit_name')) {
       $config->set('starter_kit_name', \Drupal::state()->get('acquia_cms.starter_kit', "acquia_cms_existing_site"))->save(TRUE);
       \Drupal::state()->delete('acquia_cms.starter_kit');
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable Gin and set as admin theme is current admin theme is Acquia Claro.
+ */
+function acquia_cms_common_update_8301() {
+  $config = \Drupal::configFactory()->getEditable('system.theme');
+  if ($config) {
+    if ($config->get('admin') == 'acquia_claro') {
+      $themes_list = \Drupal::service('extension.list.theme')->getList();
+      $theme_installer = \Drupal::service('theme_installer');
+      if (isset($themes_list['gin'])) {
+        $theme_installer->install(["gin"]);
+        $config->set('admin', "gin")->save();
+      }
     }
   }
 }
