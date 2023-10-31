@@ -8,28 +8,28 @@
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
-  justify-content: center;
   -webkit-align-content: stretch;
-  -ms-flex-line-pack: stretch;
   align-content: stretch;
   -webkit-align-items: flex-start;
-  -ms-flex-align: start;
   align-items: flex-start;
+  -webkit-justify-content: center;
+  justify-content: center;
   width: 100%;
+  -ms-flex-line-pack: stretch;
+  -ms-flex-align: start;
 }
 
 .acms-headless-dashboard-wrapper .fieldset__label {
+  color: #fff;
   background-color: #0e68a7;
-  color: #ffffff;
 }
 
 .acms-headless-dashboard-wrapper .status--active,
 .acms-headless-dashboard-wrapper .status--inactive {
   display: block;
-  height: 16px;
   width: 16px;
+  height: 16px;
 }
 
 .acms-headless-dashboard-wrapper .status--active {
@@ -42,15 +42,15 @@
 
 .acms-headless-dashboard-wrapper .layout-column--half {
   float: none !important;
-  -webkit-order: 0;
-  -ms-flex-order: 0;
-  order: 0;
   -webkit-flex: 1 1 50%;
   -ms-flex: 1 1 50%;
   flex: 1 1 50%;
+  -ms-flex-order: 0;
   -webkit-align-self: stretch;
-  -ms-flex-item-align: stretch;
   align-self: stretch;
+  -webkit-order: 0;
+  order: 0;
+  -ms-flex-item-align: stretch;
 }
 
 @media all and (max-width: 48em) {
@@ -68,8 +68,8 @@
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
-  height: 100%;
   width: 100%;
+  height: 100%;
 }
 
 .acms-headless-dashboard-wrapper .layout-column--half form fieldset {
@@ -94,26 +94,26 @@
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
-  justify-content: center;
   -webkit-align-content: center;
-  -ms-flex-line-pack: center;
   align-content: center;
   -webkit-align-items: center;
-  -ms-flex-align: center;
   align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -ms-flex-line-pack: center;
+  -ms-flex-align: center;
 }
 
 .headless-dashboard-api-update {
-  border-top: 1px solid #dedfe4;
   margin-top: 1rem;
+  border-top: 1px solid #dedfe4;
 }
 
 .headless-dashboard-openapi-logo {
-  border-bottom: 1px solid #dedfe4;
   margin-bottom: 1rem;
   padding: 1rem 0;
+  border-bottom: 1px solid #dedfe4;
 }
 
 .headless-dashboard-openapi-logo a {
@@ -122,19 +122,19 @@
 }
 
 .headless-dashboard-openapi-resources {
-  border-top: 1px solid #dedfe4;
   display: block;
   margin-top: 1rem;
   padding-top: 1rem;
   text-align: center;
+  border-top: 1px solid #dedfe4;
 }
 
 .headless-dashboard-admin-links {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
-  -webkit-justify-content: flex-end;
   -ms-flex-pack: end;
+  -webkit-justify-content: flex-end;
   justify-content: flex-end;
   padding-top: 1.5rem;
 }
@@ -147,8 +147,8 @@
 
 .headless-dashboard-admin-links .dropbutton__item:first-of-type > *,
 .headless-dashboard-admin-links .dropbutton__toggle {
+  color: #fff;
   background: #168ec4;
-  color: #ffffff;
 }
 
 .headless-dashboard-admin-links .dropbutton__toggle::before {
@@ -171,8 +171,8 @@
 
 .headless-dashboard-admin-heading > .headless-dashboard-user-info {
   flex: 1 1 60%;
-  padding: 1rem 0 0;
   width: 60%;
+  padding: 1rem 0 0;
 }
 
 .headless-dashboard-admin-heading > .headless-dashboard-admin-links {

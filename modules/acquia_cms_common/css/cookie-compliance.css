@@ -3,11 +3,11 @@
 }
 .sliding-popup-bottom,
 .sliding-popup-top {
-  margin: 0;
-  padding: 0;
-  width: 100%;
   z-index: 99999;
   left: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
   text-align: center;
 }
 .sliding-popup-bottom {
@@ -17,21 +17,21 @@
   position: relative;
 }
 .eu-cookie-compliance-content {
-  margin: 0 auto;
-  max-width: 80%;
   display: inline-block;
-  text-align: left;
   width: 100%;
+  max-width: 80%;
+  margin: 0 auto;
+  text-align: left;
 }
 .eu-cookie-compliance-buttons {
   float: right; /* LTR */
-  margin: 0 0 1em 0;
   max-width: 40%;
+  margin: 0 0 1em 0;
 }
 .eu-cookie-compliance-categories-buttons {
-  margin: 0 0 1em 0;
-  max-width: 60%;
   float: left;
+  max-width: 60%;
+  margin: 0 0 1em 0;
 }
 [dir="rtl"] .eu-cookie-compliance-buttons {
   float: left;
@@ -40,21 +40,21 @@
   float: right;
 }
 .eu-cookie-compliance-more-button {
-  cursor: pointer;
   display: inline;
   height: auto;
   margin: 0;
   padding: 0;
-  border: none;
+  cursor: pointer;
   text-decoration: underline;
+  border: none;
   background: none;
 }
 .eu-cookie-compliance-secondary-button {
+  margin-top: 1em;
+  padding: 0 8px;
   cursor: pointer;
   border: none;
   background: none;
-  margin-top: 1em;
-  padding: 0 8px;
 }
 .disagree-button.eu-cookie-compliance-more-button,
 .eu-cookie-compliance-agree-button,
@@ -62,15 +62,19 @@
 .eu-cookie-compliance-more-button-thank-you,
 .eu-cookie-withdraw-button,
 .eu-cookie-compliance-save-preferences-button {
-  cursor: pointer;
-  margin-right: 5px;
-  margin-top: 1em;
-  vertical-align: middle;
   overflow: visible;
   width: auto;
-  -moz-box-shadow: inset 0 1px 0 0 #ffffff; /* LTR */
-  -webkit-box-shadow: inset 0 1px 0 0 #ffffff; /* LTR */
-  box-shadow: inset 0 1px 0 0 #ffffff; /* LTR */
+  margin-top: 1em;
+  margin-right: 5px;
+  padding: 4px 8px;
+  cursor: pointer;
+  vertical-align: middle;
+  text-decoration: none;
+  color: #000;
+  border: 1px solid #dcdcdc;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
   background-color: #ededed;
   background-image: -moz-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ededed), color-stop(100%, #dfdfdf));
@@ -78,21 +82,17 @@
   background-image: -o-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
   background-image: -ms-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
   background-image: linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
-  border: 1px solid #dcdcdc;
-  color: #000;
+  -moz-box-shadow: inset 0 1px 0 0 #fff; /* LTR */
+  -webkit-box-shadow: inset 0 1px 0 0 #fff; /* LTR */
+  box-shadow: inset 0 1px 0 0 #fff; /* LTR */
+  text-shadow: 1px 1px 0 #fff;
   font-family: Arial, sans-serif;
   font-weight: bold;
-  padding: 4px 8px;
-  text-decoration: none;
-  text-shadow: 1px 1px 0 #ffffff;
 }
 [dir="rtl"] .eu-cookie-compliance-buttons button {
-  -moz-box-shadow: inset 0 0 0 1px #ffffff;
-  -webkit-box-shadow: inset 0 0 0 1px #ffffff;
-  box-shadow: inset 0 0 0 1px #ffffff;
+  -moz-box-shadow: inset 0 0 0 1px #fff;
+  -webkit-box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: inset 0 0 0 1px #fff;
 }
 .disagree-button.eu-cookie-compliance-more-button:hover,
 .eu-cookie-compliance-agree-button:hover,
@@ -118,8 +118,8 @@
 }
 .eu-cookie-compliance-message {
   float: left; /* LTR */
-  margin: 5px 0 0;
   max-width: 60%;
+  margin: 5px 0 0;
 }
 .eu-cookie-compliance-banner--categories .eu-cookie-compliance-message {
   max-width: 100%;
@@ -139,10 +139,10 @@
 .eu-cookie-compliance-message h2,
 .eu-cookie-compliance-message h3,
 .eu-cookie-compliance-message p {
+  margin: 0 0 5px 0;
   color: #fff;
   font-weight: bold;
   line-height: 1.4;
-  margin: 0 0 5px 0;
 }
 .eu-cookie-compliance-message h1 {
   font-size: 24px;
@@ -154,8 +154,8 @@
   font-size: 12px;
 }
 .eu-cookie-compliance-message p {
-  font-size: 12px;
   display: inline;
+  font-size: 12px;
 }
 .eu-cookie-withdraw-tab {
   padding: 4px 7px;
@@ -176,28 +176,28 @@
 .eu-cookie-withdraw-tab {
   position: absolute;
   top: 0;
-  transform: translate(-50%, -100%);
   left: 50%;
+  transform: translate(-50%, -100%);
 }
 .eu-cookie-withdraw-wrapper.sliding-popup-top .eu-cookie-withdraw-tab {
   transform: translate(-50%, -100%) scaleY(-1);
 }
 .eu-cookie-compliance-default-button {
-  appearance: none;
-  color: #26a3dd;
-  font-weight: bold;
-  line-height: 1.25;
-  font-size: 0.875rem;
-  background-color: #f2f2f2;
+  margin-top: 1em;
+  margin-right: 5px;
   padding: 1rem;
-  border-style: none;
-  border-radius: 0;
-  transition: background-color 300ms ease;
   -webkit-transition: background-color 300ms ease;
   -o-transition: background-color 300ms ease;
+  transition: background-color 300ms ease;
+  color: #26a3dd;
+  border-style: none;
+  border-radius: 0;
+  background-color: #f2f2f2;
+  font-size: 0.875rem;
+  font-weight: bold;
+  line-height: 1.25;
   -webkit-appearance: none;
-  margin-right: 5px;
-  margin-top: 1em;
+  appearance: none;
 }
 .eu-cookie-compliance-default-button:hover {
   background-color: #dbdbdc;
@@ -213,8 +213,8 @@
   }
 
   .eu-cookie-compliance-buttons {
-    clear: both;
     float: none;
+    clear: both;
     max-width: 100%;
     margin: 5px 0 1em;
   }
@@ -226,7 +226,7 @@
 
   .eu-cookie-compliance-banner--categories .eu-cookie-compliance-buttons {
     position: initial;
-    bottom: unset;
     right: unset;
+    bottom: unset;
   }
 }

@@ -51,15 +51,15 @@
   left: unset;
 }
 .acms-dashboard-form-wrapper  .dashboard-check-icon {
-  height: 23px;
-  width: 22px;
-  background-image: url(../assets/images/check.svg);
+  position: absolute;
+  z-index: 1;
+  right: 100px;
   display: inline-block;
   float: right;
-  right: 100px;
-  position: absolute;
+  width: 22px;
+  height: 23px;
   margin-top: 14px;
-  z-index: 1;
+  background-image: url(../assets/images/check.svg);
 }
 .acms-dashboard-form-wrapper .details-wrapper {
   display: flex;
@@ -77,31 +77,31 @@
 }
 .dashboard-buttons-wrapper .tooltip {
   position: absolute;
+  z-index: 1;
   visibility: hidden;
   width: 200px;
-  background-color: black;
-  color: white;
-  text-align: center;
-  border-radius: 6px;
   padding: 5px 0;
-  z-index: 1;
+  text-align: center;
+  color: white;
+  border-radius: 6px;
+  background-color: black;
 }
 .tool-tip__icon:hover + .tooltip {
-  visibility: visible;
   right: 4%;
+  visibility: visible;
   margin-top: 25px;
 }
 .dashboard-buttons-wrapper .tool-tip__icon {
-  background: #27b1f0;
-  border-radius: 10px;
-  cursor: pointer;
   display: inline-block;
-  height: 20px;
-  line-height: 1.3em;
-  text-align: center;
   width: 20px;
+  height: 20px;
   margin-left: 5px;
+  cursor: pointer;
+  text-align: center;
   color: white;
+  border-radius: 10px;
+  background: #27b1f0;
+  line-height: 1.3em;
 }
 .acms-dashboard-form-wrapper .claro-details__summary[aria-expanded='true'] {
   border-bottom: 1px solid #808080;
@@ -111,14 +111,14 @@
 }
 .acms-dashboard-form-wrapper .button,
 .button--primary {
-  background-color: white;
-  border: 1px solid #808080!important;
   margin-top: 0;
   color: #222330;
+  border: 1px solid #808080!important;
+  background-color: white;
 }
 .acms-dashboard-form-wrapper .button--primary:hover {
-  background-color: #c2c3ca;
   color: #222330;
+  background-color: #c2c3ca;
 }
 .section-top {
   display: flex;
@@ -130,8 +130,8 @@
 }
 .section-top .starter-wizard,
 .section-top .wizard {
-  right: 2.5rem;
   position: absolute;
+  right: 2.5rem;
 }
 .section-top .starter-wizard + .wizard {
   right: 11.5rem;

@@ -8,28 +8,28 @@
 }
 
 .acquia-cms-toolbar .toolbar a {
-  font-family: "Proxima Nova", "Open Sans", "Helvetica Neue", sans-serif;
-  font-style: normal;
-  font-weight: bold;
   -webkit-transition: all, 0.2s;
   transition: all, 0.2s;
+  font-family: "Proxima Nova", "Open Sans", "Helvetica Neue", sans-serif;
   font-size: 14px;
+  font-weight: bold;
+  font-style: normal;
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-bar {
+  top: 10px;
+  background-color: #222330 !important;
   -webkit-box-shadow: none;
   box-shadow: none;
-  background-color: #222330 !important;
-  top: 10px;
 }
 
-.acquia-cms-toolbar .toolbar .toolbar-bar:before {
-  content: '';
-  width: 100%;
-  top: -10px;
+.acquia-cms-toolbar .toolbar .toolbar-bar::before {
   position: absolute;
-  height: 10px;
+  top: -10px;
   left: 0;
+  width: 100%;
+  height: 10px;
+  content: '';
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-bar .toolbar-tab > .toolbar-icon.toolbar-icon-edit.toolbar-item {
@@ -37,21 +37,21 @@
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-bar .toolbar-tab > .toolbar-item.is-active {
+  text-decoration: none;
   background-color: rgba(255, 255, 255, 0.03);
   background-image: none;
-  text-decoration: none;
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-bar .toolbar-tab > .toolbar-item:focus {
+  text-decoration: none;
   background-color: rgba(255, 255, 255, 0.03);
   background-image: none;
-  text-decoration: none;
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment {
-  color: #ffffff;
   width: auto;
   padding-right: 12px;
+  color: #fff;
 }
 
 @media only screen and (max-width: 767px) {
@@ -60,9 +60,9 @@
   }
 }
 
-.acquia-cms-toolbar .toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment:before {
-  background-image: url(../images/acacac/env-ffffff.svg);
+.acquia-cms-toolbar .toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment::before {
   max-width: 55px;
+  background-image: url(../images/acacac/env-ffffff.svg);
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment:hover {
@@ -88,8 +88,8 @@
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment.environment-stage {
+  color: #000;
   background-color: #feb32b;
-  color: #000000;
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment.environment-stage:focus {
@@ -105,19 +105,19 @@
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-menu {
-  background: #ffffff;
+  background: #fff;
 }
 
-.acquia-cms-toolbar .toolbar .toolbar-menu .toolbar-menu .toolbar-icon.toolbar-handle:before {
+.acquia-cms-toolbar .toolbar .toolbar-menu .toolbar-menu .toolbar-icon.toolbar-handle::before {
   background-image: url(../images/acacac/chevron-outline-disc-down.svg);
   background-size: 100%;
 }
 
-.acquia-cms-toolbar .toolbar .toolbar-menu .toolbar-menu .toolbar-icon.toolbar-handle:hover:before {
+.acquia-cms-toolbar .toolbar .toolbar-menu .toolbar-menu .toolbar-icon.toolbar-handle:hover::before {
   background-image: url(../images/168ec4/chevron-outline-disc-down.svg);
 }
 
-.acquia-cms-toolbar .toolbar .toolbar-menu .toolbar-menu .toolbar-icon.toolbar-handle.open:before {
+.acquia-cms-toolbar .toolbar .toolbar-menu .toolbar-menu .toolbar-icon.toolbar-handle.open::before {
   background-image: url(../images/168ec4/chevron-outline-disc-close.svg);
   background-size: 100%;
 }
@@ -130,19 +130,19 @@
   color: #168ec4;
 }
 
-.acquia-cms-toolbar .toolbar .toolbar-menu .toolbar-box:hover .toolbar-icon.toolbar-handle:before {
+.acquia-cms-toolbar .toolbar .toolbar-menu .toolbar-box:hover .toolbar-icon.toolbar-handle::before {
   background-image: url(../images/168ec4/chevron-outline-disc-down.svg);
 }
 
-.acquia-cms-toolbar .toolbar .toolbar-menu .toolbar-box:hover .toolbar-icon.toolbar-handle.open:before {
+.acquia-cms-toolbar .toolbar .toolbar-menu .toolbar-box:hover .toolbar-icon.toolbar-handle.open::before {
   background-image: url(../images/168ec4/chevron-outline-disc-close.svg);
   background-size: 100%;
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-tray-horizontal {
+  border-bottom: 1px solid #fff;
   -webkit-box-shadow: -2px 1px 3px 1px rgba(0, 0, 0, 0.3333);
   box-shadow: -2px 1px 3px 1px rgba(0, 0, 0, 0.3333);
-  border-bottom: 1px solid #ffffff;
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-tray-horizontal ul ul li.menu-item:first-child {
@@ -165,9 +165,9 @@
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-tray-vertical {
+  border: none;
   -webkit-box-shadow: -2px 2px 12px rgba(0, 0, 0, 0.85);
   box-shadow: -2px 2px 12px rgba(0, 0, 0, 0.85);
-  border: none;
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-tray-vertical .menu-item + .menu-item {
@@ -179,13 +179,13 @@
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-tray-vertical .toolbar-menu a:hover {
-  color: #168ec4;
   text-decoration: none;
+  color: #168ec4;
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-tray-vertical .toolbar-menu a:focus {
-  color: #168ec4;
   text-decoration: none;
+  color: #168ec4;
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-tray-vertical .toolbar-menu ul ul {
@@ -193,23 +193,23 @@
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-tray {
-  background-color: #ffffff;
+  background-color: #fff;
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-tray .menu-item--active-trail > .toolbar-box a {
-  color: #168ec4;
   text-decoration: none;
+  color: #168ec4;
   font-weight: bold;
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-tray a.is-active {
-  color: #168ec4;
   text-decoration: none;
+  color: #168ec4;
   font-weight: bold;
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-toggle-orientation {
-  background-color: #ffffff;
+  background-color: #fff;
 }
 
 .acquia-cms-toolbar .toolbar .toolbar-icon.toolbar-handle > span {
@@ -224,50 +224,50 @@
   background-color: transparent;
 }
 
-.acquia-cms-toolbar .toolbar .toolbar-icon.toolbar-handle:before {
-  background-image: url(../images/acacac/chevron-outline-disc-down.svg);
+.acquia-cms-toolbar .toolbar .toolbar-icon.toolbar-handle::before {
   -webkit-transition: .25s;
   transition: .25s;
+  background-image: url(../images/acacac/chevron-outline-disc-down.svg);
 }
 
-.acquia-cms-toolbar .toolbar .toolbar-icon.toolbar-handle:hover:before {
+.acquia-cms-toolbar .toolbar .toolbar-icon.toolbar-handle:hover::before {
   background-image: url(../images/168ec4/chevron-outline-disc-down.svg);
 }
 
-.acquia-cms-toolbar .toolbar .toolbar-icon.toolbar-handle.open:before {
-  background-image: url(../images/ffcfcf/chevron-outline-disc-close.svg) !important;
+.acquia-cms-toolbar .toolbar .toolbar-icon.toolbar-handle.open::before {
   -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
+  background-image: url(../images/ffcfcf/chevron-outline-disc-close.svg) !important;
 }
 
 .acquia-cms-toolbar .toolbar .level-3 a {
-  color: #cccccc !important;
+  color: #ccc !important;
 }
 
 .acquia-cms-toolbar .toolbar .level-4 a {
-  color: #cccccc !important;
+  color: #ccc !important;
 }
 
 .acquia-cms-toolbar .toolbar .menu-item:hover {
-  background-color: #ffffff;
+  background-color: #fff;
 }
 
 .acquia-cms-toolbar .toolbar .menu-item--expanded {
-  background-color: #ffffff;
+  background-color: #fff;
 }
 
 .acquia-cms-toolbar .toolbar-tray .toolbar-menu a {
-  background: transparent;
   color: #545560;
+  background: transparent;
 }
 
 .acquia-cms-toolbar .toolbar-tray .toolbar-menu span {
-  background: transparent;
   color: #545560;
+  background: transparent;
 }
 
 .acquia-cms-toolbar .toolbar-tray .toolbar-menu li {
-  background: #ffffff;
+  background: #fff;
 }
 
 .acquia-cms-toolbar .toolbar-tray ul li.menu-item {
@@ -289,19 +289,19 @@
 }
 
 .acquia-cms-toolbar .toolbar-tray-horizontal a:hover {
-  color: #168ec4;
   text-decoration: none;
+  color: #168ec4;
 }
 
 .acquia-cms-toolbar .toolbar-tray-horizontal a:active {
-  color: #168ec4;
   text-decoration: none;
+  color: #168ec4;
 }
 
 .acquia-cms-toolbar .toolbar-tray-horizontal a:focus {
-  background: #ffffff;
-  color: #168ec4;
   text-decoration: none;
+  color: #168ec4;
+  background: #fff;
 }
 
 .acquia-cms-toolbar .toolbar-tray-horizontal .menu-item--expanded:hover > a {
@@ -312,40 +312,40 @@
   color: #168ec4 !important;
 }
 
-.acquia-cms-toolbar .toolbar-tray-horizontal .menu-item--expanded:hover .toolbar-icon-admin-toolbar-tools-help:before {
+.acquia-cms-toolbar .toolbar-tray-horizontal .menu-item--expanded:hover .toolbar-icon-admin-toolbar-tools-help::before {
   background-image: url(../images/168ec4/drupal-9.svg);
 }
 
-.acquia-cms-toolbar .toolbar-tray-horizontal .menu-item--expanded:hover .toolbar-icon-system-admin-content:before {
+.acquia-cms-toolbar .toolbar-tray-horizontal .menu-item--expanded:hover .toolbar-icon-system-admin-content::before {
   background-image: url(../images/168ec4/file.svg);
 }
 
-.acquia-cms-toolbar .toolbar-tray-horizontal .menu-item--expanded:hover .toolbar-icon-system-admin-structure:before {
+.acquia-cms-toolbar .toolbar-tray-horizontal .menu-item--expanded:hover .toolbar-icon-system-admin-structure::before {
   background-image: url(../images/168ec4/orgchart.svg);
 }
 
-.acquia-cms-toolbar .toolbar-tray-horizontal .menu-item--expanded:hover .toolbar-icon-system-themes-page:before {
+.acquia-cms-toolbar .toolbar-tray-horizontal .menu-item--expanded:hover .toolbar-icon-system-themes-page::before {
   background-image: url(../images/168ec4/paintbrush.svg);
 }
 
-.acquia-cms-toolbar .toolbar-tray-horizontal .menu-item--expanded:hover .toolbar-icon-entity-user-collection:before {
+.acquia-cms-toolbar .toolbar-tray-horizontal .menu-item--expanded:hover .toolbar-icon-entity-user-collection::before {
   background-image: url(../images/168ec4/people.svg);
 }
 
-.acquia-cms-toolbar .toolbar-tray-horizontal .menu-item--expanded:hover .toolbar-icon-system-modules-list:before {
+.acquia-cms-toolbar .toolbar-tray-horizontal .menu-item--expanded:hover .toolbar-icon-system-modules-list::before {
   background-image: url(../images/168ec4/puzzlepiece.svg);
 }
 
-.acquia-cms-toolbar .toolbar-tray-horizontal .menu-item--expanded:hover .toolbar-icon-system-admin-config:before {
+.acquia-cms-toolbar .toolbar-tray-horizontal .menu-item--expanded:hover .toolbar-icon-system-admin-config::before {
   background-image: url(../images/168ec4/wrench.svg);
 }
 
-.acquia-cms-toolbar .toolbar-tray-horizontal .menu-item--expanded:hover .toolbar-icon-system-admin-reports:before {
+.acquia-cms-toolbar .toolbar-tray-horizontal .menu-item--expanded:hover .toolbar-icon-system-admin-reports::before {
   background-image: url(../images/168ec4/barchart.svg);
 }
 
 .acquia-cms-toolbar .toolbar-tray-horizontal .menu-item a:focus {
-  background: #ffffff;
+  background: #fff;
 }
 
 .acquia-cms-toolbar .toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded {
@@ -353,24 +353,24 @@
   background-image: none;
 }
 
-.acquia-cms-toolbar .toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded > a:after {
+.acquia-cms-toolbar .toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded > a::after {
   position: absolute;
   top: 50%;
   right: 5px;
-  color: #8eacc0;
-  font-size: 16px;
-  -webkit-transform: translateY(-8px);
-  transform: translateY(-8px);
+  content: url(../images/0084d7/chevron-right.svg);
   -webkit-transition: all .2s;
   transition: all .2s;
-  content: url(../images/0084d7/chevron-right.svg);
+  -webkit-transform: translateY(-8px);
+  transform: translateY(-8px);
   pointer-events: none;
+  color: #8eacc0;
+  font-size: 16px;
 }
 
-.acquia-cms-toolbar .toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded > a:hover:after {
+.acquia-cms-toolbar .toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded > a:hover::after {
+  content: url(../images/0084d7/chevron-right.svg);
   -webkit-transform: translate(6px, -8px);
   transform: translate(6px, -8px);
-  content: url(../images/0084d7/chevron-right.svg);
 }
 
 .acquia-cms-toolbar .toolbar-tray-horizontal ul li.menu-item--expanded .menu-item:hover ul {
@@ -417,12 +417,12 @@
 }
 
 .acquia-cms-toolbar .toolbar-tray-vertical .toolbar-icon-admin-toolbar-tools-help {
-  text-indent: 0;
   -webkit-transition: none;
   transition: none;
+  text-indent: 0;
 }
 
-.acquia-cms-toolbar .toolbar-tray-vertical .toolbar-icon-admin-toolbar-tools-help:before {
+.acquia-cms-toolbar .toolbar-tray-vertical .toolbar-icon-admin-toolbar-tools-help::before {
   margin-left: 0;
 }
 
@@ -443,163 +443,163 @@
 }
 
 .acquia-cms-toolbar .toolbar-box a:focus {
-  background: #ffffff;
   text-decoration: none;
+  background: #fff;
 }
 
-.acquia-cms-toolbar .toolbar-icon-admin-toolbar-tools-help:before {
-  padding: 0px;
+.acquia-cms-toolbar .toolbar-icon-admin-toolbar-tools-help::before {
   margin-left: 7px;
+  padding: 0;
   background-image: url(../images/acacac/drupal-9.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-admin-toolbar-tools-help:hover:before {
+.acquia-cms-toolbar .toolbar-icon-admin-toolbar-tools-help:hover::before {
   background-image: url(../images/168ec4/drupal-9.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-admin-toolbar-tools-help:active:before {
+.acquia-cms-toolbar .toolbar-icon-admin-toolbar-tools-help:active::before {
   background-image: url(../images/168ec4/drupal-9.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-admin-content:before {
+.acquia-cms-toolbar .toolbar-icon-system-admin-content::before {
   background-image: url(../images/acacac/file.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-admin-content:hover:before {
+.acquia-cms-toolbar .toolbar-icon-system-admin-content:hover::before {
   background-image: url(../images/168ec4/file.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-admin-content:active:before {
+.acquia-cms-toolbar .toolbar-icon-system-admin-content:active::before {
   background-image: url(../images/168ec4/file.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-admin-structure:before {
+.acquia-cms-toolbar .toolbar-icon-system-admin-structure::before {
   background-image: url(../images/acacac/orgchart.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-admin-structure:hover:before {
+.acquia-cms-toolbar .toolbar-icon-system-admin-structure:hover::before {
   background-image: url(../images/168ec4/orgchart.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-admin-structure:active:before {
+.acquia-cms-toolbar .toolbar-icon-system-admin-structure:active::before {
   background-image: url(../images/168ec4/orgchart.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-themes-page:before {
+.acquia-cms-toolbar .toolbar-icon-system-themes-page::before {
   background-image: url(../images/acacac/paintbrush.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-themes-page:hover:before {
+.acquia-cms-toolbar .toolbar-icon-system-themes-page:hover::before {
   background-image: url(../images/168ec4/paintbrush.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-themes-page:active:before {
+.acquia-cms-toolbar .toolbar-icon-system-themes-page:active::before {
   background-image: url(../images/168ec4/paintbrush.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-entity-user-collection:before {
+.acquia-cms-toolbar .toolbar-icon-entity-user-collection::before {
   background-image: url(../images/acacac/people.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-entity-user-collection:hover:before {
+.acquia-cms-toolbar .toolbar-icon-entity-user-collection:hover::before {
   background-image: url(../images/168ec4/people.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-entity-user-collection:active:before {
+.acquia-cms-toolbar .toolbar-icon-entity-user-collection:active::before {
   background-image: url(../images/168ec4/people.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-modules-list:before {
+.acquia-cms-toolbar .toolbar-icon-system-modules-list::before {
   background-image: url(../images/acacac/puzzlepiece.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-modules-list:hover:before {
+.acquia-cms-toolbar .toolbar-icon-system-modules-list:hover::before {
   background-image: url(../images/168ec4/puzzlepiece.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-modules-list:active:before {
+.acquia-cms-toolbar .toolbar-icon-system-modules-list:active::before {
   background-image: url(../images/168ec4/puzzlepiece.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-admin-config:before {
+.acquia-cms-toolbar .toolbar-icon-system-admin-config::before {
   background-image: url(../images/acacac/wrench.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-admin-config:hover:before {
+.acquia-cms-toolbar .toolbar-icon-system-admin-config:hover::before {
   background-image: url(../images/168ec4/wrench.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-admin-config:active:before {
+.acquia-cms-toolbar .toolbar-icon-system-admin-config:active::before {
   background-image: url(../images/168ec4/wrench.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-admin-reports:before {
+.acquia-cms-toolbar .toolbar-icon-system-admin-reports::before {
   background-image: url(../images/acacac/barchart.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-admin-reports:hover:before {
+.acquia-cms-toolbar .toolbar-icon-system-admin-reports:hover::before {
   background-image: url(../images/168ec4/barchart.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-admin-reports:active:before {
+.acquia-cms-toolbar .toolbar-icon-system-admin-reports:active::before {
   background-image: url(../images/168ec4/barchart.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-help-main:before {
+.acquia-cms-toolbar .toolbar-icon-help-main::before {
   background-image: url(../images/acacac/questionmark-disc.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-help-main:hover:before {
+.acquia-cms-toolbar .toolbar-icon-help-main:hover::before {
   background-image: url(../images/168ec4/questionmark-disc.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-help-main:active:before {
+.acquia-cms-toolbar .toolbar-icon-help-main:active::before {
   background-image: url(../images/168ec4/questionmark-disc.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-admin-toolbar-tools-help.is-active:before {
+.acquia-cms-toolbar .toolbar-icon-admin-toolbar-tools-help.is-active::before {
   background-image: url(../images/168ec4/drupal-9.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-admin-content.is-active:before {
+.acquia-cms-toolbar .toolbar-icon-system-admin-content.is-active::before {
   background-image: url(../images/168ec4/file.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-admin-structure.is-active:before {
+.acquia-cms-toolbar .toolbar-icon-system-admin-structure.is-active::before {
   background-image: url(../images/168ec4/orgchart.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-themes-page.is-active:before {
+.acquia-cms-toolbar .toolbar-icon-system-themes-page.is-active::before {
   background-image: url(../images/168ec4/paintbrush.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-entity-user-collection.is-active:before {
+.acquia-cms-toolbar .toolbar-icon-entity-user-collection.is-active::before {
   background-image: url(../images/168ec4/people.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-modules-list.is-active:before {
+.acquia-cms-toolbar .toolbar-icon-system-modules-list.is-active::before {
   background-image: url(../images/168ec4/puzzlepiece.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-admin-config.is-active:before {
+.acquia-cms-toolbar .toolbar-icon-system-admin-config.is-active::before {
   background-image: url(../images/168ec4/wrench.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-system-admin-reports.is-active:before {
+.acquia-cms-toolbar .toolbar-icon-system-admin-reports.is-active::before {
   background-image: url(../images/168ec4/barchart.svg);
 }
 
-.acquia-cms-toolbar .menu-item--expanded:hover .toolbar-icon-help-main:before {
+.acquia-cms-toolbar .menu-item--expanded:hover .toolbar-icon-help-main::before {
   background-image: url(../images/168ec4/questionmark-disc.svg);
 }
 
-.acquia-cms-toolbar .toolbar-icon-help-main.is-active:before {
+.acquia-cms-toolbar .toolbar-icon-help-main.is-active::before {
   background-image: url(../images/168ec4/questionmark-disc.svg);
 }
 
 #toolbar-item-administration-search-tray label {
-  background: transparent;
   color: #545560 !important;
+  background: transparent;
 }
 
 [dir="rtl"] .acquia-cms-toolbar .toolbar .toolbar-tray-horizontal .menu-item + .menu-item {
@@ -612,29 +612,29 @@
   background-image: none;
 }
 
-[dir="rtl"] .acquia-cms-toolbar .toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded:after {
+[dir="rtl"] .acquia-cms-toolbar .toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded::after {
   top: 30%;
   right: auto;
   left: 5px;
-  transform: scaleX(-1);
-  -webkit-filter: FlipH;
-  filter: FlipH;
   -moz-transform: scaleX(-1);
   -o-transform: scaleX(-1);
   -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  -webkit-filter: fliph;
   -ms-filter: "FlipH";
+  filter: fliph;
 }
 
-[dir="rtl"] .acquia-cms-toolbar .toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded:hover:after {
+[dir="rtl"] .acquia-cms-toolbar .toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded:hover::after {
+  -moz-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
   -webkit-transform-origin: 40% top;
   transform-origin: 40% top;
-  -webkit-filter: FlipH;
-  filter: FlipH;
-  -moz-transform: scaleX(-1);
-  -o-transform: scaleX(-1);
-  -webkit-transform: scaleX(-1);
+  -webkit-filter: fliph;
   -ms-filter: "FlipH";
+  filter: fliph;
 }
 
 [dir="rtl"] .acquia-cms-toolbar .toolbar-tray-horizontal ul li.menu-item--expanded .menu-item:hover ul {
@@ -642,27 +642,27 @@
 }
 
 .toolbar .toolbar-tray-vertical .level-2 a {
-  color: #cccccc !important;
+  color: #ccc !important;
 }
 
 .toolbar .toolbar-tray-vertical .level-3 ul {
   margin-left: 0 !important;
 }
 
-.acquia-cms-toolbar.acquia-cms-environment-local .toolbar .toolbar-bar:before,
-.acquia-cms-toolbar.acquia-cms-environment-ide .toolbar .toolbar-bar:before {
+.acquia-cms-toolbar.acquia-cms-environment-local .toolbar .toolbar-bar::before,
+.acquia-cms-toolbar.acquia-cms-environment-ide .toolbar .toolbar-bar::before {
   background-color: #1078c2;
 }
 
-.acquia-cms-toolbar.acquia-cms-environment-dev .toolbar .toolbar-bar:before {
+.acquia-cms-toolbar.acquia-cms-environment-dev .toolbar .toolbar-bar::before {
   background-color: #498414;
 }
 
-.acquia-cms-toolbar.acquia-cms-environment-stage .toolbar .toolbar-bar:before {
+.acquia-cms-toolbar.acquia-cms-environment-stage .toolbar .toolbar-bar::before {
   background-color: #feb32b;
 }
 
-.acquia-cms-toolbar.acquia-cms-environment-prod .toolbar .toolbar-bar:before {
+.acquia-cms-toolbar.acquia-cms-environment-prod .toolbar .toolbar-bar::before {
   background-color: #cd3a3d;
 }
 
