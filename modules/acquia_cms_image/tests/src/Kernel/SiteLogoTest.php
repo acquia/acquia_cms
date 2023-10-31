@@ -7,6 +7,15 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\media\MediaInterface;
 
+/**
+ * Tests Acquia CMS Image module's site logo.
+ *
+ * @group acquia_cms
+ * @group acquia_cms_image
+ * @group low_risk
+ * @group pr
+ * @group push
+ */
 class SiteLogoTest extends KernelTestBase {
 
   /**
@@ -131,7 +140,13 @@ class SiteLogoTest extends KernelTestBase {
     $entityArray = $entity->toArray();
     $this->assertSame($entityArray["name"][0]["value"], "Acquia CMS Logo");
     $this->assertSame($entityArray["image"], [
-      ["target_id" => "1", "alt" => "Acquia CMS logo", "title" => "Acquia CMS logo", 'width' => '287', 'height' => '112'],
+      [
+        "target_id" => "1",
+        "alt" => "Acquia CMS logo",
+        "title" => "Acquia CMS logo",
+        'width' => '287',
+        'height' => '112',
+      ],
     ]);
     $logo = $this->config("system.theme.global")->get("logo");
     $this->assertTrue($logo['use_default'], "Use default theme");

@@ -1,4 +1,3 @@
-
 /**
  * @file
  * Contains client-side support code for Acquia CMS's dashboard page.

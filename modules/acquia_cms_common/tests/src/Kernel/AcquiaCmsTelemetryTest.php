@@ -9,6 +9,8 @@ use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\KernelTests\KernelTestBase;
 
 /**
+ * Acquia CMS Telemetry data test.
+ *
  * @group acquia_cms_common
  */
 final class AcquiaCmsTelemetryTest extends KernelTestBase {

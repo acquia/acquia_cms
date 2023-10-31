@@ -47,6 +47,8 @@ trait PermissionsTrait {
   abstract public function getFixtureBasePath(): string;
 
   /**
+   * Helper to get the permissions by role.
+   *
    * @throws \Exception
    */
   protected function getPermissionsByRole(string $role): array {
@@ -131,8 +133,20 @@ trait PermissionsTrait {
     return $module_permissions;
   }
 
+  /**
+   * Helper to validate role exist or not.
+   *
+   * @return string
+   *   Returns basePath for fixtures.
+   */
   abstract public function providerRoleExistNotExist(): array;
 
+  /**
+   * Helper to get basic permissions.
+   *
+   * @return string
+   *   Returns basePath for fixtures.
+   */
   abstract public function providerBasicPermissions(): array;
 
 }

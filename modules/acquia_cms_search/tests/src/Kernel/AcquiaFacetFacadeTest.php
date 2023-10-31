@@ -34,6 +34,8 @@ class AcquiaFacetFacadeTest extends KernelTestBase {
   protected $facetEntity;
 
   /**
+   * The facets_facet facade object.
+   *
    * @var \Drupal\acquia_cms_search\Facade\FacetFacade
    */
   protected $facetFacade;

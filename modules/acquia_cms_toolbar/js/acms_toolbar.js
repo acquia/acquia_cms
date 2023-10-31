@@ -1,4 +1,3 @@
-
 /**
  * @file
  * Contains toolbar styles for Acquia CMS's site-wide pages.

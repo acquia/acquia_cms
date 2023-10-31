@@ -35,6 +35,9 @@ class EventTest extends ContentTypeTestBase {
     'schema_event',
   ];
 
+  /**
+   * {@inheritdoc}
+   */
   private $defaultTime;
 
   /**
