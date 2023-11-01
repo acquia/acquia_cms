@@ -15,6 +15,16 @@ cd "$(dirname "$0")"
 source ../../../orca/bin/travis/_includes.sh
 
 if [ "${ACMS_JOB}" != "backstop_tests" ] && [ "${ACMS_JOB}" != "upgrade_modules" ] && [ "${ACMS_JOB}" != "cypress_tests" ]; then
+  if [ "${ACMS_JOB}" == "acms_modules" ]; then
+    # Install npm dependencies and run JS test suites.
+    cd ${ORCA_SUT_DIR}
+    npm install
+    orca fixture:run-server &
+
+    # Runs Cypress tests
+    npx stylelint --formatter --config ./docroot/core/.stylelintrc.json modules/**/*.css
+    cd -
+  fi
   # Run ORCA's standard script.
   ../../../orca/bin/travis/script.sh
 fi
@@ -43,4 +53,14 @@ if [ "${ACMS_JOB}" == "cypress_tests" ]; then
 
   # Runs Cypress tests
   npx cypress run
+fi
+
+if [ "${ACMS_JOB}" == "stylelint" ]; then
+  # Install npm dependencies and run JS test suites.
+  cd ${ORCA_SUT_DIR}
+  npm install
+  orca fixture:run-server &
+
+  # Runs Cypress tests
+  npx stylelint --formatter --config ./docroot/core/.stylelintrc.json modules/**/*.css
 fi

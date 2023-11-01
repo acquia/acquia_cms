@@ -360,6 +360,7 @@ jobs:
       ORCA_PHPCS_STANDARD: AcquiaPHP
       ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
       ORCA_JOB: ${{ matrix.orca-job }}
+      ACMS_JOB: "acms_modules"
 
       # Set Required API Keys.
       CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
