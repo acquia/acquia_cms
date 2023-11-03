@@ -1,41 +1,39 @@
-'use strict';
-
-window.DrupalApi = function() {};
+window.DrupalApi = function () {};
 
 DrupalApi.prototype = {
-  baseUrl: "/jsonapi/",
-  setBaseUrl: function(baseUrl) {
+  baseUrl: '/jsonapi/',
+  setBaseUrl(baseUrl) {
     this.baseUrl = baseUrl;
   },
-  setEndpoint: function (endpoint) {
-    if (typeof(endpoint) == "string") {
+  setEndpoint(endpoint) {
+    if (typeof endpoint === 'string') {
       this.apiUrl = this.baseUrl + endpoint;
     }
   },
-  getApiUrl: function() {
+  getApiUrl() {
     return this.apiUrl;
   },
-  setParams: function (params) {
-    if (typeof(params) == "object") {
-      this.apiUrl += "?" + this.parseParams(params);
+  setParams(params) {
+    if (typeof params === 'object') {
+      this.apiUrl += `?${this.parseParams(params)}`;
     }
   },
-  parseParams: function(params) {
-    let parseParamsObject = function(object, prefix) {
-      let result = "";
-      Object.keys(object).forEach(key => {
+  parseParams(params) {
+    const parseParamsObject = function (object, prefix) {
+      let result = '';
+      Object.keys(object).forEach((key) => {
         const value = object[key];
-        if (typeof(value) == "object") {
-          if (prefix == "") {
+        if (typeof value === 'object') {
+          if (prefix === '') {
             result += parseParamsObject(value, key);
           } else {
-            result += parseParamsObject(value,prefix + '[' + key + ']');
+            result += parseParamsObject(value, `${prefix}[${key}]`);
           }
         } else {
-          if (prefix != "") {
-            result += prefix + '[' + key + ']=' + value;
+          if (prefix !== '') {
+            result += `${prefix}[${key}]=${value}`;
           } else {
-            result += key + '=' + value;
+            result += `${key}=${value}`;
           }
           result += '&';
         }
@@ -43,28 +41,31 @@ DrupalApi.prototype = {
       return result;
     };
     let result = parseParamsObject(params, '');
-    result = result.replace(/&$/,'');
+    result = result.replace(/&$/, '');
     return encodeURI(result);
   },
-  callApi: function(_callback, inputData, url) {
+  callApi(_callback, inputData, url) {
     let data = {
       method: 'GET',
-      cache: 'no-cache'
+      cache: 'no-cache',
     };
     inputData = inputData || {};
     url = url || this.getApiUrl();
     data = Object.assign(data, inputData);
-    fetch(url, data).then(response => {
-      if (response.status === 200) {
-        return response.json();
-      }
-      return {};
-    }).then(data => {
-      if (typeof(_callback) != "undefined") {
-        _callback(data);
-      }
-    }).catch(error => {
-      console.error('Error:', error);
-    });
-  }
+    fetch(url, data)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        }
+        return {};
+      })
+      .then((data) => {
+        if (typeof _callback !== 'undefined') {
+          _callback(data);
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  },
 };
