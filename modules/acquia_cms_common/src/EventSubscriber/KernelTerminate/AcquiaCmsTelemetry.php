@@ -191,7 +191,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    * @return bool
    *   TRUE if event was successfully sent, otherwise FALSE.
    *
-   * @throws \Exception
+   * @throws \Exception|\GuzzleHttp\Exception\GuzzleException
    *   Thrown if state key acquia_telemetry.loud is TRUE and request fails.
    *
    * @see https://amplitude.zendesk.com/hc/en-us/articles/204771828#keys-for-the-event-argument
@@ -205,9 +205,10 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
       $this->sendEvent($event);
       $this->state->set('acquia_cms_common.telemetry.data', json_encode($event_properties));
       $this->state->set('acquia_cms_common.telemetry.timestamp', $this->time->getCurrentTime());
-      // Logging the database and collecting data into sumologic.
+      // Logging the database and collecting data into Sumo Logic.
+      $sumologicEventProperties = ['user_id' => $event['user_id']] + $event['event_properties'];
       $this->logger->get($event_type)->info('@message', [
-        '@message' => json_encode($event['event_properties'], JSON_UNESCAPED_SLASHES),
+        '@message' => json_encode($sumologicEventProperties, JSON_UNESCAPED_SLASHES),
       ]);
 
       return TRUE;
