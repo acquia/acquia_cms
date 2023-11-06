@@ -7,7 +7,6 @@ use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\simple_sitemap\Manager\EntityManager;
-use Drupal\simple_sitemap\Manager\VariantSetterTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -19,8 +18,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   not use this class!
  */
 final class SitemapFacade implements ContainerInjectionInterface {
-
-  use VariantSetterTrait;
 
   /**
    * The config installer service.
@@ -93,7 +90,7 @@ final class SitemapFacade implements ContainerInjectionInterface {
       return;
     }
     // Check if the entity type is enabled and variant exists for the sitemap.
-    $all_default_variants = $this->getVariants();
+    $all_default_variants = array_keys($this->sitemapManager->getSitemaps());
     if ($this->sitemapManager->entityTypeIsEnabled('node') && in_array($sitemap_variant, $all_default_variants)) {
       $this->sitemapManager->setBundleSettings('node', $node_type->id());
     }
