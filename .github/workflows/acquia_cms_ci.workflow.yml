@@ -217,7 +217,7 @@ jobs:
       # Provide your package's name.
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ${{ matrix.orca-version }}
+      ORCA_VERSION: ^4
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -241,36 +241,9 @@ jobs:
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
-          - INTEGRATED_TEST_ON_LATEST_LTS
         php-version:
-          - 7.4
           - 8.1
           - 8.2
-        orca-version:
-          - ^3
-          - ^4
-        exclude:
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^3
-            php-version: 7.4
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^3
-            php-version: 8.1
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^3
-            php-version: 8.2
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^4
-            php-version: 7.4
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^3
-            php-version: 8.1
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^3
-            php-version: 8.2
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^4
-            php-version: 7.4
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -306,7 +279,7 @@ jobs:
           find modules/*/tests tests/src -type f -name "*Test.php" -exec rm -fr '{}' ';'
 
           # Remove the failing php on Drupal Core 9.5.
-          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
+          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_OLDEST_SUPPORTED" ]; then
             # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
 
             # Remove drupal/core patch as it's needed for latest Drupal Core only.

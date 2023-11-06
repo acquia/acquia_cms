@@ -82,7 +82,7 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - INTEGRATED_TEST_ON_LATEST_LTS
+          - ISOLATED_TEST_ON_CURRENT
         acms_job:
           - integrated_php_unit_tests
           - integrated_existing_site_tests
@@ -110,17 +110,6 @@ jobs:
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
-
-          # One of the patch is failing on Drupal Core 9.5. So remove that patch.
-          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
-            # Remove the failing php on Drupal Core 9.5.
-            # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
-
-            # Remove drupal/core patch as it's needed for latest Drupal Core only.
-            composer config extra.patches.drupal/core {} --json
-            sed -i 's/2598.patch",/2599.patch"/' modules/acquia_cms_common/composer.json
-            sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
-          fi
 
           # Remove all PHPUnit tests from individual modules, except the integrated & ExistingSite tests.
           if [ "${ACMS_JOB}" = "integrated_existing_site_tests" ]; then
@@ -175,7 +164,6 @@ jobs:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT_DEV
           - ISOLATED_TEST_ON_NEXT_MINOR_DEV
-          - INTEGRATED_TEST_ON_LATEST_LTS
         #php-version: [ "8.1" ]
     steps:
       - uses: actions/checkout@v3
@@ -198,12 +186,6 @@ jobs:
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
 
-          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
-            # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
-
-            # Remove drupal/core patch as it's needed for latest Drupal Core only.
-            composer config extra.patches.drupal/core {} --json
-          fi
           # Do not run any existing site tests. We run them seperately.
           find tests/src modules -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
           ../orca/bin/ci/before_install.sh
@@ -295,7 +277,7 @@ jobs:
     env:
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ${{ matrix.orca-version }}
+      ORCA_VERSION: ^4
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -316,36 +298,9 @@ jobs:
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
-          - INTEGRATED_TEST_ON_LATEST_LTS
         php-version:
-          - 7.4
           - 8.1
           - 8.2
-        orca-version:
-          - ^3
-          - ^4
-        exclude:
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^3
-            php-version: 7.4
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^3
-            php-version: 8.1
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^3
-            php-version: 8.2
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^4
-            php-version: 7.4
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^3
-            php-version: 8.1
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^3
-            php-version: 8.2
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^4
-            php-version: 7.4
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -374,22 +329,6 @@ jobs:
           # Remove all PHPunit tests from acquia_cms modules.
           find modules/*/tests tests/src -type f -name "*Test.php" -exec rm -fr '{}' ';'
 
-          # Remove the failing php on Drupal Core 9.5.
-          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
-            # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
-
-            # Remove drupal/core patch as it's needed for latest Drupal Core only.
-            composer config extra.patches.drupal/core {} --json
-            sed -i 's/2598.patch",/2599.patch"/' modules/acquia_cms_common/composer.json
-            sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
-          # Change requireSameDimensions to true in backstop settings.
-            sed -i '54s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-            sed -i '111s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-            sed -i '130s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-            sed -i '149s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-            sed -i '168s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-            sed -i '187s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-          fi
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
           CHROMEDRIVER_PID=$!
