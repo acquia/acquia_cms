@@ -3,6 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
+    - cohesion_custom_styles.cohesion_custom_style.2b79314d
+    - cohesion_custom_styles.cohesion_custom_style.668f9bd0
     - cohesion_custom_styles.cohesion_custom_style.e01b8004
     - views.view.search_fallback
   enforced:
@@ -39,7 +41,7 @@ json_values: |
                               "uid": "drupal-view-contents",
                               "title": "View content",
                               "status": {
-                                  "collapsed": true
+                                  "collapsed": false
                               },
                               "uuid": "3ef69905-1dc8-42f3-8600-23a13f49940a",
                               "parentUid": "drupal-view",
@@ -64,27 +66,34 @@ json_values: |
                                       "title": "Pattern repeater",
                                       "mimicParent": true,
                                       "status": {
-                                          "collapsed": true,
-                                          "collapsedParents": [
-                                              "3ef69905-1dc8-42f3-8600-23a13f49940a"
-                                          ]
+                                          "collapsed": false
                                       },
                                       "uuid": "b7960f74-ca61-4b06-85f6-92103ee967c6",
                                       "parentUid": "drupal-view-contents",
                                       "children": [
                                           {
-                                              "type": "item",
-                                              "uid": "drupal-view-item",
-                                              "title": "View item",
+                                              "type": "container",
+                                              "uid": "container",
+                                              "title": "Container",
                                               "status": {
-                                                  "collapsed": true,
-                                                  "collapsedParents": [
-                                                      "3ef69905-1dc8-42f3-8600-23a13f49940a"
-                                                  ]
+                                                  "collapsed": false
                                               },
-                                              "uuid": "231570b4-6d8a-4f35-96bb-b9997aa0b6e3",
+                                              "iconColor": "layout",
+                                              "uuid": "b0a14852-7ab9-45bb-870a-bd6168496816",
                                               "parentUid": "pattern-repeater",
-                                              "children": []
+                                              "children": [
+                                                  {
+                                                      "type": "item",
+                                                      "uid": "drupal-view-item",
+                                                      "title": "View item",
+                                                      "status": {
+                                                          "collapsed": true
+                                                      },
+                                                      "uuid": "231570b4-6d8a-4f35-96bb-b9997aa0b6e3",
+                                                      "parentUid": "container",
+                                                      "children": []
+                                                  }
+                                              ]
                                           }
                                       ]
                                   }
@@ -95,7 +104,7 @@ json_values: |
                               "uid": "container",
                               "title": "Container",
                               "status": {
-                                  "collapsed": true
+                                  "collapsed": false
                               },
                               "uuid": "95624278-cfa0-4229-8fe3-9f44e2c0caac",
                               "parentUid": "drupal-view",
@@ -506,7 +515,66 @@ json_values: |
                   "items": []
               }
           },
-          "38ad068b-b86f-4b61-9a3f-dd6c982cc6d9": {}
+          "38ad068b-b86f-4b61-9a3f-dd6c982cc6d9": {},
+          "b0a14852-7ab9-45bb-870a-bd6168496816": {
+              "settings": {
+                  "formDefinition": [
+                      {
+                          "formKey": "container-settings",
+                          "children": [
+                              {
+                                  "formKey": "container-width",
+                                  "breakpoints": [],
+                                  "activeFields": [
+                                      {
+                                          "name": "width",
+                                          "active": true
+                                      }
+                                  ]
+                              },
+                              {
+                                  "formKey": "common-link-animation",
+                                  "breakpoints": [
+                                      {
+                                          "name": "xl"
+                                      }
+                                  ],
+                                  "activeFields": [
+                                      {
+                                          "name": "animationType",
+                                          "active": true
+                                      }
+                                  ]
+                              },
+                              {
+                                  "formKey": "common-link-modifier",
+                                  "breakpoints": [],
+                                  "activeFields": [
+                                      {
+                                          "name": "modifierType",
+                                          "active": true
+                                      }
+                                  ]
+                              },
+                              {
+                                  "formKey": "container-style",
+                                  "breakpoints": [],
+                                  "activeFields": [
+                                      {
+                                          "name": "customStyle",
+                                          "active": true
+                                      }
+                                  ]
+                              }
+                          ]
+                      }
+                  ],
+                  "selectorType": "topLevel",
+                  "form": null,
+                  "items": [],
+                  "title": "Default"
+              }
+          }
       },
       "model": {
           "ecdd48ac-8316-44eb-b8ce-33d3382d4c0b": {
@@ -552,6 +620,17 @@ json_values: |
                   "settings": {
                       "element": "view-variable"
                   }
+              }
+          },
+          "b0a14852-7ab9-45bb-870a-bd6168496816": {
+              "settings": {
+                  "width": "fluid",
+                  "title": "Container",
+                  "customStyle": [
+                      {
+                          "customStyle": "coh-style-search-result-container"
+                      }
+                  ]
               }
           },
           "231570b4-6d8a-4f35-96bb-b9997aa0b6e3": {
@@ -646,7 +725,7 @@ json_values: |
                           "lastTextCustomStyle": ""
                       }
                   },
-                  "customStyle": "coh-style-pagination-list"
+                  "customStyle": "coh-style-view-pagination"
               },
               "context-visibility": {
                   "contextVisibility": {
@@ -665,14 +744,16 @@ json_values: |
           "a8a2cc46-af09-448c-80cc-427f03a7b25f": {},
           "38ad068b-b86f-4b61-9a3f-dd6c982cc6d9": {},
           "95624278-cfa0-4229-8fe3-9f44e2c0caac": {},
-          "ecdd48ac-8316-44eb-b8ce-33d3382d4c0b": {}
+          "ecdd48ac-8316-44eb-b8ce-33d3382d4c0b": {},
+          "b0a14852-7ab9-45bb-870a-bd6168496816": {}
       },
       "variableFields": {
           "231570b4-6d8a-4f35-96bb-b9997aa0b6e3": [],
           "a8a2cc46-af09-448c-80cc-427f03a7b25f": [],
           "38ad068b-b86f-4b61-9a3f-dd6c982cc6d9": [],
           "95624278-cfa0-4229-8fe3-9f44e2c0caac": [],
-          "ecdd48ac-8316-44eb-b8ce-33d3382d4c0b": []
+          "ecdd48ac-8316-44eb-b8ce-33d3382d4c0b": [],
+          "b0a14852-7ab9-45bb-870a-bd6168496816": []
       },
       "meta": {
           "fieldHistory": []
