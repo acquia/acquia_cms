@@ -206,7 +206,10 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
       $this->state->set('acquia_cms_common.telemetry.data', json_encode($event_properties));
       $this->state->set('acquia_cms_common.telemetry.timestamp', $this->time->getCurrentTime());
       // Logging the database and collecting data into Sumo Logic.
-      $sumologicEventProperties = ['user_id' => $event['user_id']] + $event['event_properties'];
+      $sumologicEventProperties = [
+        'request_id' => getenv('HTTP_X_REQUEST_ID'),
+        'user_id' => $event['user_id'],
+      ] + $event['event_properties'];
       $this->logger->get($event_type)->info('@message', [
         '@message' => json_encode($sumologicEventProperties, JSON_UNESCAPED_SLASHES),
       ]);
@@ -297,7 +300,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    */
   private function shouldSendTelemetryData(): bool {
     $isCI = (bool) getenv("CI");
-    if ($isCI) {
+    if ($isCI || PHP_SAPI !== 'cli') {
       return FALSE;
     }
 
