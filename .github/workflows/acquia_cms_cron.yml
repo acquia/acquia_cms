@@ -105,6 +105,7 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/vishalkhode1/342a0eee801e51f48b4d9701749c1c94/raw/orca-oldest-support.patch | git -C ../orca apply
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
