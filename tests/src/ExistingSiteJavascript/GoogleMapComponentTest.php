@@ -28,7 +28,7 @@ class GoogleMapComponentTest extends CohesionComponentTestBase {
     /** @var \Behat\Mink\Element\TraversableElement $edit_form */
     $edit_form = $this->getLayoutCanvas()->add('Google map')->edit();
     $this->assertSession()->elementExists('xpath', '//button[span[text()="Map marker"]]')->click();
-
+    /** @var \Behat\Mink\Element\TraversableElement $edit_form */
     $edit_form->fillField('Address', 'Test Address');
     $edit_form->fillField('Latitude', '22.52138');
     $edit_form->fillField('Longitude', '88.294324');
