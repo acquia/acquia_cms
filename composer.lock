@@ -83,16 +83,16 @@
         },
         {
             "name": "acquia/cohesion",
-            "version": "7.3.1",
+            "version": "7.4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/cohesion.git",
-                "reference": "9f2cde2373bb1dd115bcb7c9d74fdcad983d08f8"
+                "reference": "900c01cf5b98a28515f62328341a87beeaa82c98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/cohesion/zipball/9f2cde2373bb1dd115bcb7c9d74fdcad983d08f8",
-                "reference": "9f2cde2373bb1dd115bcb7c9d74fdcad983d08f8",
+                "url": "https://api.github.com/repos/acquia/cohesion/zipball/900c01cf5b98a28515f62328341a87beeaa82c98",
+                "reference": "900c01cf5b98a28515f62328341a87beeaa82c98",
                 "shasum": ""
             },
             "require": {
@@ -102,6 +102,7 @@
                 "drupal/jquery_ui": "^1.4",
                 "drupal/stable": "^2.0",
                 "drupal/token": "^1.11",
+                "drush/drush": "^11.6 || ^12",
                 "ext-json": "*"
             },
             "require-dev": {
@@ -125,11 +126,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "drush": {
-                    "services": {
-                        "drush.services.yml": "^9"
-                    }
-                },
                 "enable-patching": true
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -145,22 +141,22 @@
             ],
             "description": "Site Studio",
             "support": {
-                "source": "https://github.com/acquia/cohesion/tree/7.3.1"
+                "source": "https://github.com/acquia/cohesion/tree/7.4.x"
             },
-            "time": "2023-10-09T11:28:44+00:00"
+            "time": "2023-11-14T16:35:25+00:00"
         },
         {
             "name": "acquia/cohesion-theme",
-            "version": "7.3.1",
+            "version": "7.4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/cohesion-theme.git",
-                "reference": "73b97946c6778328807424116263d835b80ae5c7"
+                "reference": "98be83540a19ea16e0e9cf811402590c0759d379"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/cohesion-theme/zipball/73b97946c6778328807424116263d835b80ae5c7",
-                "reference": "73b97946c6778328807424116263d835b80ae5c7",
+                "url": "https://api.github.com/repos/acquia/cohesion-theme/zipball/98be83540a19ea16e0e9cf811402590c0759d379",
+                "reference": "98be83540a19ea16e0e9cf811402590c0759d379",
                 "shasum": ""
             },
             "type": "drupal-theme",
@@ -178,9 +174,9 @@
             "description": "Site Studio minimal theme",
             "support": {
                 "issues": "https://github.com/acquia/cohesion-theme/issues",
-                "source": "https://github.com/acquia/cohesion-theme/tree/7.3.1"
+                "source": "https://github.com/acquia/cohesion-theme/tree/7.4.x"
             },
-            "time": "2023-10-09T11:28:50+00:00"
+            "time": "2023-11-14T16:35:28+00:00"
         },
         {
             "name": "acquia/drupal-environment-detector",
@@ -2872,11 +2868,11 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_site_studio",
-                "reference": "95ff688d66d9b70b7f99f8c32e0aa4b0d3d65191"
+                "reference": "c2270dc4b80111ef1dd09f71eff89d592c5f60ef"
             },
             "require": {
-                "acquia/cohesion": "^6.9.2 || ^7.0",
-                "acquia/cohesion-theme": "^6.9 || ^7.0",
+                "acquia/cohesion": "7.4.x-dev",
+                "acquia/cohesion-theme": "7.4.x-dev",
                 "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
                 "drupal/collapsiblock": "^4.0",
                 "drupal/node_revision_delete": "^1.0",
@@ -2907,8 +2903,7 @@
                 "enable-patching": true,
                 "patches": {
                     "acquia/cohesion": {
-                        "3340269 - Site Studio: Allow optional packages to import": "https://www.drupal.org/files/issues/2023-03-16/3340269-site-studio-allow-optional-packages-6.patch",
-                        "3340269 - Supports Drush 12. If using Drush 10 or Drush 11 & this patch is failing, then ignore this patch": "https://www.drupal.org/files/issues/2023-06-13/3340269-support-drush-12-13.patch"
+                        "3340269 - Site Studio: Allow optional packages to import": "https://www.drupal.org/files/issues/2023-03-16/3340269-site-studio-allow-optional-packages-6.patch"
                     }
                 }
             },
@@ -20775,7 +20770,8 @@
         "drupal/acquia_cms_starter": 20,
         "drupal/acquia_cms_toolbar": 20,
         "drupal/acquia_cms_tour": 20,
-        "drupal/sitestudio_config_management": 20
+        "drupal/sitestudio_config_management": 20,
+        "acquia/cohesion": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

@@ -143,7 +143,7 @@ function acquia_cms_site_studio_install($is_syncing) {
     // Install cohesion_style_guide & sitestudio_config_management module.
     \Drupal::service('module_installer')->install([
       'cohesion_style_guide',
-      'sitestudio_config_management',
+      // 'sitestudio_config_management',
     ]);
   }
 }

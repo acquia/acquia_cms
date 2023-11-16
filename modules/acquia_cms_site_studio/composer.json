@@ -4,8 +4,8 @@
     "description": "Handles code for Site Studio Installation & Related Configurations.",
     "license": "GPL-2.0-or-later",
     "require": {
-        "acquia/cohesion": "^6.9.2 || ^7.0",
-        "acquia/cohesion-theme": "^6.9 || ^7.0",
+        "acquia/cohesion": "7.4.x-dev",
+        "acquia/cohesion-theme": "7.4.x-dev",
         "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
         "drupal/collapsiblock": "^4.0",
         "drupal/node_revision_delete": "^1.0",
@@ -47,8 +47,7 @@
         "enable-patching": true,
         "patches": {
             "acquia/cohesion": {
-                "3340269 - Site Studio: Allow optional packages to import": "https://www.drupal.org/files/issues/2023-03-16/3340269-site-studio-allow-optional-packages-6.patch",
-                "3340269 - Supports Drush 12. If using Drush 10 or Drush 11 & this patch is failing, then ignore this patch": "https://www.drupal.org/files/issues/2023-06-13/3340269-support-drush-12-13.patch"
+                "3340269 - Site Studio: Allow optional packages to import": "https://www.drupal.org/files/issues/2023-03-16/3340269-site-studio-allow-optional-packages-6.patch"
             }
         }
     },
