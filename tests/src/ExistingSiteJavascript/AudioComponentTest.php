@@ -32,15 +32,25 @@ class AudioComponentTest extends CohesionComponentTestBase {
     $edit_form->pressButton('Browse');
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
+    $mediaLibraryContent = $assertSession->waitForElementVisible("css", ".media-library-content");
+    if ($mediaLibraryContent) {
+      $assertSession->waitForElementVisible("css", "#acquia-dam-user-authorization-skip");
+      // The condition check added here, because once we click on Skip button.
+      // It no longer shows the skip button.
+      $mediaLibraryContent->find("css", "#acquia-dam-user-authorization-skip")->click();
+    }
     $this->assertNotEmpty($assertSession->waitForText('Entity Browser'));
     $assertSession->waitForElementVisible("css", ".media-library-content");
-    $this->getSession()->switchToIFrame("ssa-dialog-iframe");
-    $assertSession->waitForElementVisible('css', '#edit-soundcloud-url');
+    $assertSession->waitForElementVisible('css', '.form-item--soundcloud-url input');
+    $this->getSession()->wait(1000);
     $this->getSession()->getPage()->fillField('soundcloud_url', 'https://soundcloud.com/yungh-tej/na-na-na-official-song-osekhon-ft-tej-gill?utm_source=clipboard&utm_medium=text&utm_campaign=so');
-    $this->getSession()->getPage()->find("css", "#edit-submit")->click();
+    $this->getSession()->getPage()->find("css", "#media-library-content input.button--primary")->click();
     $assertSession->waitForElementVisible('css', '.field--name-name input[name="media[0][fields][name][0][value]"]');
-    $this->getSession()->getPage()->find("css", ".media-library-add-form .form-actions .form-submit")->click();
+    $this->getSession()->wait(1000);
+    $this->getSession()->getPage()->find("css", ".ui-dialog-buttonset button")->click();
+    $this->getSession()->wait(1000);
     $this->selectMedia(0);
+    $this->getSession()->wait(1000);
     $this->insertSelectedMedia();
   }
 

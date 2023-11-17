@@ -34,7 +34,7 @@ class ContactInformationCardComponentTest extends CohesionComponentTestBase {
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMediaSource("Media Types");
     $assertSession->waitForElementVisible('css', '.media-library-content');
-    $this->selectMedia(0);
+    $this->selectMedia(0, 'Image');
     $this->insertSelectedMedia();
     $assertSession->waitForElementVisible('css', '.ssa-modal-sidebar-editor');
     $assertSession->waitForElementVisible('css', '.ssa-modal-sidebar-editor .sc-45mvqj-0');
