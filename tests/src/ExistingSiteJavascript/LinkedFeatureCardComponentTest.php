@@ -37,7 +37,7 @@ class LinkedFeatureCardComponentTest extends CohesionComponentTestBase {
     $this->assertSession()->optionExists('Card heading element', 'Heading 3');
     $this->openMediaLibrary($edit_form, 'Select image');
     $this->selectMediaSource("Media Types");
-    $this->selectMedia(0);
+    $this->selectMedia(0, 'Image');
     $this->insertSelectedMedia();
   }
 
