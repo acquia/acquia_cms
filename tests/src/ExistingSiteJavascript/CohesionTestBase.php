@@ -3,6 +3,7 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 use Behat\Mink\Element\ElementInterface;
+use Behat\Mink\Element\NodeElement;
 use Drupal\Tests\acquia_cms\Traits\AwaitTrait;
 use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
 use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
@@ -61,28 +62,28 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
   }
 
   /**
-   * Opens the media library from a component edit form, and enters its iFrame.
-   *
-   * Normally the iFrame does not have a 'name' attribute, but we need it to
-   * have one in order for Mink to switch into it. So, if the frame has no name,
-   * we assign it one automatically.
+   * Opens the media library from a component edit form.
    *
    * @param \Behat\Mink\Element\ElementInterface $edit_form
    *   The component edit form.
    * @param string $button_text
    *   The text of the button which opens the media library.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
   protected function openMediaLibrary(ElementInterface $edit_form, string $button_text): void {
     /** @var \Behat\Mink\Element\TraversableElement $edit_form */
     $edit_form->pressButton($button_text);
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
-    $this->assertNotEmpty($assertSession->waitForText('Media Library'));
+    $this->assertTrue($assertSession->waitForText('Media Library'));
     $mediaLibraryContent = $assertSession->waitForElementVisible("css", ".media-library-content");
-    if ($mediaLibraryContent) {
-      // The condition check added here, because once we click on Skip button.
-      // It no longer shows the skip button.
-      $mediaLibraryContent->find("css", "#acquia-dam-user-authorization-skip")->click();
+    $assertSession->waitForElementVisible("css", "#acquia-dam-user-authorization-skip");
+    $damAuthorizeScreen = $mediaLibraryContent->find("css", "#acquia-dam-user-authorization-skip");
+    // First time DAM show confirmation screen to authorize access.
+    // We will press skip button only if it appears.
+    if ($damAuthorizeScreen instanceof NodeElement) {
+      $damAuthorizeScreen->click();
     }
     $assertSession->waitForElementVisible("css", ".media-library-content #acquia-dam-source-menu-wrapper");
   }
@@ -92,10 +93,17 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    *
    * @param int $position
    *   The zero-based index of the media item to select.
+   * @param string $mediaType
+   *   The media type.
    */
-  protected function selectMedia(int $position): void {
+  protected function selectMedia(int $position, string $mediaType = ''): void {
+    /** @var \Behat\Mink\Element\DocumentElement $page */
+    $page = $this->getSession()->getPage();
+    if ($mediaType) {
+      $page->find("css", '#media-library-wrapper .media-library-menu li a[data-title="' . $mediaType . '"]')->click();
+    }
     /** @var \Behat\Mink\Element\NodeElement $waitElement */
-    $waitElement = $this->waitForElementVisible('named', ['field', "media_library_select_form[$position]"], $this->getSession()->getPage());
+    $waitElement = $this->waitForElementVisible('named', ['field', "media_library_select_form[$position]"], $page);
     $waitElement->check();
   }
 
@@ -103,10 +111,8 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    * Inserts the selected media items and exits the media library's iFrame.
    */
   protected function insertSelectedMedia(): void {
-    $session = $this->getSession();
-    $session->getPage()->find("css", '.media-library-select')->click();
-    $this->assertTrue($session->wait(10000, 'typeof window.media_library_iframe === "undefined"'));
-    $this->getSession()->switchToIFrame();
+    $this->getSession()->wait(10000);
+    $this->getSession()->getPage()->find("css", '.ui-dialog-buttonset .media-library-select')->click();
   }
 
   /**
@@ -118,7 +124,6 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
   protected function selectMediaSource(string $source = "DAM"): void {
-    $this->getSession()->switchToIFrame("ssa-dialog-iframe");
     $field = $this->getSession()->getPage()->find('css', '.js-acquia-dam-source-field');
     $field->selectOption($source);
     // Wait while container is rendered based on selected Media Source.
