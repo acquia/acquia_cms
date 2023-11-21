@@ -291,11 +291,6 @@ The Acquia CMS profile contains both core and module-specific Site Studio Sync P
 
 To update Site Studio configuration, you can run the `drush acms:config-reset` command and follow the instructions. Note that this will overwrite *any* changes you've made to the default ACMS configuration for Site Studio, and may affect your site in unexpected ways. *You should test using this command in a non-production environment before running it in production.*
 
-### Updating Acquia Claro theming
-* Update SCSS as per requirement in Acquia Claro theme.
-* Use `composer install:frontend` and `composer build:frontend` to compile SCSS into CSS.
-* Commit both CSS and SCSS files.
-
 ### Contributing to Acquia CMS
 
 Refer to our [Contributor's guide](/CONTRIBUTING.md).
