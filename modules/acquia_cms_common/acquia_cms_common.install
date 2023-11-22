@@ -15,8 +15,9 @@ use Drupal\workbench_email\Entity\Template;
  * Implements hook_install().
  */
 function acquia_cms_common_install($is_syncing) {
-  $module_handler = \Drupal::moduleHandler();
   if (!$is_syncing) {
+    $module_handler = \Drupal::moduleHandler();
+    $module_installer = \Drupal::service('module_installer');
     _acquia_cms_common_import_configurations();
     user_role_grant_permissions('anonymous', [
       'access content',
@@ -28,25 +29,19 @@ function acquia_cms_common_install($is_syncing) {
     ]);
 
     // Get all available themes.
-    $themesList = \Drupal::service('extension.list.theme')->getList();
-    $themesInstall = ["olivero"];
-    if (isset($themesList['gin'])) {
-      $themesInstall[] = "gin";
+    $themes_list = \Drupal::service('extension.list.theme')->getList();
+    $themes_install = ["olivero"];
+    if (isset($themes_list['gin'])) {
+      $themes_install[] = "gin";
     }
-    // Enable olivero, gin theme.
-    \Drupal::service('theme_installer')install(["olivero", "gin"]);
+    // Enable themes.
+    \Drupal::service('theme_installer')->install($themes_install);
     $system_theme_config = \Drupal::configFactory()->getEditable('system.theme');
     $system_theme_config->set('default', 'olivero')->save();
-    if (in_array("gin", $themesInstall)) {
+    if (in_array("gin", $themes_install)) {
       $system_theme_config->set('admin', "gin")->save();
-      // Add colors to gin.
-      $gin_settings = \Drupal::configFactory()->getEditable('gin.settings');
-      $gin_settings->set('accent_color', '#096b92');
-      $gin_settings->set('focus_color', '#168ec4');
-      $gin_settings->set('classic_toolbar', 'classic');
-      $gin_settings->save(TRUE);
       // Enable gin_toolbar module.
-      \Drupal::service('module_installer')install(['gin_toolbar']);
+      $module_installer->install(['gin_toolbar']);
     }
 
     // Re-write the content and media view on module install,

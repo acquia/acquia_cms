@@ -1,25 +1,69 @@
-.acquia-cms-toolbar {
-  margin-top: 12px;
+.acquia-cms-toolbar #toolbar-administration .toolbar-bar {
+  margin-top: 10px !important;
 }
 
-.acquia-cms-toolbar .toolbar {
-  -webkit-box-shadow: -1px 0 3px 1px rgba(0, 0, 0, 0.3333);
-  box-shadow: -1px 0 3px 1px rgba(0, 0, 0, 0.3333);
+.acquia-cms-toolbar #toolbar-administration .toolbar-bar:before {
+  content: '';
+  width: 100%;
+  position: absolute;
+  height: 10px;
+  left: 0;
+  top: -10px;
+}
+.toolbar.toolbar-secondary .toolbar-bar .toolbar-tab .toolbar-icon-environment:before {
+  background-color: #fff !important;
 }
 
-.acquia-cms-toolbar.acquia-cms-environment-local .toolbar .toolbar-bar:before,
-.acquia-cms-toolbar.acquia-cms-environment-ide .toolbar .toolbar-bar:before {
-  background-color: #1078c2;
+.toolbar .toolbar-bar .toolbar-tab .toolbar-icon-environment:before {
+  background-image: url(../images/acacac/env-ffffff.svg) !important;
+  max-width: 55px;
 }
 
-.acquia-cms-toolbar.acquia-cms-environment-dev .toolbar .toolbar-bar:before {
-  background-color: #498414;
+.acquia-cms-toolbar .toolbar-icon-environment.environment-local:hover,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-local,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-ide:hover,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-ide,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-dev:hover,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-dev,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-stage:hover,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-stage,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-prod:hover,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-prod {
+  color: #fff !important;
+  margin-right: 5px !important;
 }
 
-.acquia-cms-toolbar.acquia-cms-environment-stage .toolbar .toolbar-bar:before {
-  background-color: #feb32b;
+.acquia-cms-toolbar.acquia-cms-environment-local #toolbar-administration .toolbar-bar:before,
+.acquia-cms-toolbar.acquia-cms-environment-ide #toolbar-administration .toolbar-bar:before,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-local:hover,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-local,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-ide:hover,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-ide {
+  background-color: #1078c2 !important;
+  border-radius: 0px !important;
 }
 
-.acquia-cms-toolbar.acquia-cms-environment-prod .toolbar .toolbar-bar:before {
-  background-color: #cd3a3d;
+.acquia-cms-toolbar.acquia-cms-environment-dev #toolbar-administration .toolbar-bar:before,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-dev:hover,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-dev {
+  background-color: #498414 !important;
+  border-radius: 0px !important;
+}
+
+.acquia-cms-toolbar.acquia-cms-environment-stage #toolbar-administration .toolbar-bar:before,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-stage:hover,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-stage {
+  background-color: #feb32b !important;
+  border-radius: 0px !important;
+}
+
+.acquia-cms-toolbar.acquia-cms-environment-prod #toolbar-administration .toolbar-bar:before,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-prod:hover,
+.acquia-cms-toolbar .toolbar-icon-environment.environment-prod {
+  background-color: #cd3a3d !important;
+  border-radius: 0px !important;
+}
+
+.toolbar-tray-horizontal .toolbar-menu:not(:first-child) li.menu-item--expanded > a:focus {
+  background-image: none !important;
 }
