@@ -220,7 +220,6 @@ function add_drupal_remote() {
     exit 0
   fi
   # Adding remote for drupal git branches.
-  remote drupal_acquia_claro git@git.drupal.org:project/acquia_claro.git
   remote drupal_acquia_cms_article git@git.drupal.org:project/acquia_cms_article.git
   remote drupal_acquia_cms_audio git@git.drupal.org:project/acquia_cms_audio.git
   remote drupal_acquia_cms_common git@git.drupal.org:project/acquia_cms_common.git
@@ -251,7 +250,6 @@ function split_drupal_repo() {
     exit 0
   fi
   # Calling split method for mapping drupal remote branches to splits.
-#  split 'themes/acquia_claro' drupal_acquia_claro
   split 'modules/acquia_cms_article' drupal_acquia_cms_article
   split 'modules/acquia_cms_audio' drupal_acquia_cms_audio
   split 'modules/acquia_cms_common' drupal_acquia_cms_common
