@@ -2,7 +2,7 @@
 
 namespace Drupal\sitestudio_config_management\Commands;
 
-use Drupal\cohesion_sync\Commands\CohesionSyncExportCommand;
+use Drupal\cohesion_sync\Drush\Commands\CohesionSyncExportCommand;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\sitestudio_config_management\SiteStudioConfigManagement;
@@ -16,7 +16,7 @@ class PostConfigExportHook extends DrushCommands {
   /**
    * The cohesion_sync.commands.export command service object.
    *
-   * @var \Drupal\cohesion_sync\Commands\CohesionSyncExportCommand
+   * @var \Drupal\cohesion_sync\Drush\Commands\CohesionSyncExportCommand
    */
   protected $cohesionSyncExportCommand;
 
@@ -30,7 +30,7 @@ class PostConfigExportHook extends DrushCommands {
   /**
    * CohesionSyncCommands constructor.
    *
-   * @param \Drupal\cohesion_sync\Commands\CohesionSyncExportCommand $cohesion_sync_export_command
+   * @param \Drupal\cohesion_sync\Drush\Commands\CohesionSyncExportCommand $cohesion_sync_export_command
    *   The cohesion_sync.commands.export service object.
    * @param \Drupal\sitestudio_config_management\SiteStudioConfigManagement $site_studio_config_service
    *   The site_studio.config_management service object.

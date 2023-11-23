@@ -69,7 +69,7 @@ class SiteStudioConfigServiceTest extends KernelTestBase {
    * @throws \Drupal\Core\Extension\ExtensionNameLengthException
    * @throws \Drupal\Core\Extension\MissingDependencyException
    */
-  public function testSiteStudioVersionFromState() {
+  public function testSiteStudioVersionFromState(): void {
     $extension = $this->moduleExtensionList->get("cohesion")->info;
     $this->assertSame($extension['version'], $this->state->get("sitestudio_config_management.site_studio_version"));
     $this->moduleInstaller->uninstall(['sitestudio_config_management']);
@@ -80,7 +80,7 @@ class SiteStudioConfigServiceTest extends KernelTestBase {
   /**
    * Tests the current/previous Site Studio version.
    */
-  public function testSiteStudioVersions() {
+  public function testSiteStudioVersions(): void {
     $this->assertNotEmpty($this->siteStudioConfigService->getCurrentVersion());
     $this->assertNotEmpty($this->siteStudioConfigService->getPreviousVersion());
     $this->assertSame($this->siteStudioConfigService->getCurrentVersion(), $this->siteStudioConfigService->getPreviousVersion());
@@ -92,7 +92,7 @@ class SiteStudioConfigServiceTest extends KernelTestBase {
    * @throws \Drupal\Core\Extension\ExtensionNameLengthException
    * @throws \Drupal\Core\Extension\MissingDependencyException
    */
-  public function testSiteStudioUpgraded() {
+  public function testSiteStudioUpgraded(): void {
     $this->assertFalse($this->siteStudioConfigService->isSiteStudioUpgraded());
     $this->state->set("sitestudio_config_management.site_studio_version", "8.x-6.8.2");
     $this->assertTrue($this->siteStudioConfigService->isSiteStudioUpgraded());
@@ -101,7 +101,7 @@ class SiteStudioConfigServiceTest extends KernelTestBase {
   /**
    * Tests to validate if Site Studio is configured.
    */
-  public function testSiteStudioConfigured() {
+  public function testSiteStudioConfigured(): void {
     $this->assertFalse($this->siteStudioConfigService->isSiteStudioConfigured());
     $this->config("cohesion.settings")
       ->set("api_key", "some-api-url")
