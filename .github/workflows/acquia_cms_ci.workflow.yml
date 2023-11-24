@@ -73,7 +73,6 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
-
   drupal_check:
     if: ${{ github.event_name == 'pull_request' }}
     name: Execute Drupal-check
@@ -137,6 +136,7 @@ jobs:
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
+          - ISOLATED_TEST_ON_NEXT_MINOR
         #php-version: [ "8.1" ]
         acms_job:
           - integrated_php_unit_tests
@@ -242,6 +242,7 @@ jobs:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
           - INTEGRATED_TEST_ON_LATEST_LTS
+          - ISOLATED_TEST_ON_NEXT_MINOR
         php-version:
           - 7.4
           - 8.1
@@ -270,6 +271,8 @@ jobs:
             php-version: 8.2
           - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
             orca-version: ^4
+            php-version: 7.4
+          - orca-job: ISOLATED_TEST_ON_NEXT_MINOR
             php-version: 7.4
     steps:
       - uses: actions/checkout@v3
@@ -380,6 +383,7 @@ jobs:
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
+          - ISOLATED_TEST_ON_NEXT_MINOR
         #php-version: [ "8.1" ]
         modules:
           - acquia_cms_article, acquia_cms_person, acquia_cms_place, acquia_cms_event
@@ -535,7 +539,6 @@ jobs:
           ./vendor/bin/drush cr
           cd ${ORCA_SUT_DIR}
           ./tests/ci/script.sh
-
   deploy_code:
     if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
     name: "Continuous Deployment (CD)"
