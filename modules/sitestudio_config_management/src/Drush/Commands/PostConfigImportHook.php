@@ -1,10 +1,11 @@
 <?php
 
-namespace Drupal\sitestudio_config_management\Commands;
+namespace Drupal\sitestudio_config_management\Drush\Commands;
 
 use Drupal\sitestudio_config_management\SiteStudioConfigManagement;
 use Drupal\sitestudio_config_management\Traits\DrushCommandTrait;
 use Drush\Commands\DrushCommands;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Imports Site Studio packages, POST config:import command.
@@ -29,6 +30,15 @@ class PostConfigImportHook extends DrushCommands {
   public function __construct(SiteStudioConfigManagement $site_studio_config_service) {
     $this->siteStudioConfigService = $site_studio_config_service;
     parent::__construct();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): self {
+    return new static(
+      $container->get('site_studio.config_management')
+    );
   }
 
   /**
