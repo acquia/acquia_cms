@@ -3,7 +3,6 @@
 namespace Drupal\sitestudio_config_management\Traits;
 
 use Drush\Drush;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
@@ -65,11 +64,11 @@ trait DrushCommandTrait {
     $isSuccess = TRUE;
     $process = $this->processManager->drush($this->siteAliasManager->getSelf(), $command);
     try {
-      $this->logger()->notice("Running command: " . sprintf('> %s', $process->getCommandLine()));
+      $this->logger->notice("Running command: " . sprintf('> %s', $process->getCommandLine()));
       $process->mustRun($process->showRealtime());
     }
     catch (ProcessFailedException $e) {
-      $this->logger()->error($e->getMessage());
+      $this->logger->error($e->getMessage());
       $isSuccess = FALSE;
     }
     return $isSuccess;
@@ -94,10 +93,5 @@ trait DrushCommandTrait {
     }
     return $commandRanSuccessfully;
   }
-
-  /**
-   * Returns the Drupal or Drush logger object.
-   */
-  abstract protected function logger(): ?LoggerInterface;
 
 }
