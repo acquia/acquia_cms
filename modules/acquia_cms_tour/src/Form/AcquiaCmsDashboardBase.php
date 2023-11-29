@@ -2,6 +2,8 @@
 
 namespace Drupal\acquia_cms_tour\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Extension\InfoParserInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
@@ -61,12 +63,17 @@ abstract class AcquiaCmsDashboardBase extends ConfigFormBase implements AcquiaDa
    *   The link generator.
    * @param \Drupal\Core\Extension\InfoParserInterface $info_parser
    *   The info file parser.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface|null $typedConfigManager
+   *   The typed config manager.
    */
-  public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser) {
+  public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser, ConfigFactoryInterface $config_factory, ?TypedConfigManagerInterface $typedConfigManager = NULL) {
     $this->state = $state;
     $this->moduleHandler = $module_handler;
     $this->linkGenerator = $link_generator;
     $this->infoParser = $info_parser;
+    parent::__construct($config_factory, $typedConfigManager);
   }
 
   /**
@@ -77,7 +84,11 @@ abstract class AcquiaCmsDashboardBase extends ConfigFormBase implements AcquiaDa
       $container->get('state'),
       $container->get('module_handler'),
       $container->get('link_generator'),
-      $container->get('info_parser')
+      $container->get('info_parser'),
+      $container->get("config.factory"),
+      // The service `config.typed` has been introduced in Drupal Core 10.2.x.
+      // @todo Remove below condition,once we drop support for Drupal < 10.2.x.
+      $container->has('config.typed') ? $container->get('config.typed') : NULL
     );
   }
 

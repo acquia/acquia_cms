@@ -5,6 +5,8 @@ namespace Drupal\acquia_cms_headless\Plugin\AcquiaCmsHeadless;
 use Drupal\acquia_cms_headless\Service\StarterkitNextjsService;
 use Drupal\acquia_cms_tour\Form\AcquiaCmsDashboardBase;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\InfoParserInterface;
@@ -86,8 +88,8 @@ class HeadlessNextSites extends AcquiaCmsDashboardBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser, Connection $connection, EntityTypeManagerInterface $entity_type_manager, StarterkitNextjsService $starterKitNextjsService) {
-    parent::__construct($state, $module_handler, $link_generator, $info_parser);
+  public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser, Connection $connection, EntityTypeManagerInterface $entity_type_manager, StarterkitNextjsService $starterKitNextjsService, ConfigFactoryInterface $config_factory, ?TypedConfigManagerInterface $typedConfigManager) {
+    parent::__construct($state, $module_handler, $link_generator, $info_parser, $config_factory, $typedConfigManager);
     $this->connection = $connection;
     $this->entityTypeManager = $entity_type_manager;
     $this->starterKitNextjsService = $starterKitNextjsService;
@@ -104,7 +106,9 @@ class HeadlessNextSites extends AcquiaCmsDashboardBase {
       $container->get('info_parser'),
       $container->get('database'),
       $container->get('entity_type.manager'),
-      $container->get('acquia_cms_headless.starterkit_nextjs')
+      $container->get('acquia_cms_headless.starterkit_nextjs'),
+      $container->get("config.factory"),
+      $container->has('config.typed') ? $container->get('config.typed') : NULL,
     );
   }
 
