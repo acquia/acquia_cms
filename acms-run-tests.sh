@@ -18,7 +18,7 @@ installchromedriver() {
   if [ -f "$CHROMEDRIVER" ]; then
     VERSION=$("${CHROMEDRIVER}" --version | awk '{ print $2 } ')
   fi
-  CHROMEDRIVER_VERSION=$(curl -q -s http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+  CHROMEDRIVER_VERSION=$(curl -q -s https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE)
 
   if [[ ${VERSION} == ${CHROMEDRIVER_VERSION} ]]; then
     echo -e "${GREEN}ChromeDriver ${VERSION} available.${NOCOLOR}"
@@ -27,19 +27,21 @@ installchromedriver() {
     case $OSTYPE in
       "linux-gnu"*)
         # Installs chromedriver for Linux 64 bit systems.
-        curl https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip -o chromedriver_linux64.zip -s
-        unzip chromedriver_linux64.zip
-        chmod +x chromedriver
-        mv -f chromedriver ./vendor/bin
-        rm chromedriver_linux64.zip
+        curl https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROMEDRIVER_VERSION/linux64/chromedriver-linux64.zip chromedriver-linux64.zip -s
+        unzip chromedriver-linux64.zip
+        chmod +x chromedriver-linux64/chromedriver
+        mv -f chromedriver-linux64/chromedriver ./vendor/bin
+        rm chromedriver-linux64
+        rm chromedriver-linux64.zip
         ;;
       "darwin"*)
         # Installs chromedriver for MacOS 64 bit systems.
-        curl https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_mac64.zip -o chromedriver_mac64.zip -s
-        unzip chromedriver_mac64.zip
-        chmod +x chromedriver
-        mv -f chromedriver ./vendor/bin
-        rm chromedriver_mac64.zip
+        curl https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROMEDRIVER_VERSION/mac-x64/chromedriver-mac-x64.zip  -o chromedriver-mac-x64.zip -s
+        unzip chromedriver-mac-x64.zip
+        chmod +x chromedriver-mac-x64/chromedriver
+        mv -f chromedriver-mac-x64/chromedriver ./vendor/bin
+        rm chromedriver-mac-x64
+        rm chromedriver-mac-x64.zip
         ;;
     esac
   fi
