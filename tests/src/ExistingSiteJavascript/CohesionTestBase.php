@@ -31,6 +31,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
   protected function setUp(): void {
     parent::setUp();
     $this->moduleInstaller = $this->container->get('module_installer');
+    // Explicitly enabling the sitestudio module.
     $this->moduleInstaller->install(['sitestudio_claro']);
     // Set a standard window size so that all javascript tests start with the
     // same viewport.
