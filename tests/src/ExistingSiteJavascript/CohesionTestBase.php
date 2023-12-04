@@ -25,7 +25,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
     parent::setUp();
     // Set a standard window size so that all javascript tests start with the
     // same viewport.
-    $this->getDriverInstance()->resizeWindow(1920, 1200);
+    $this->getDriverInstance()->maximizeWindow();
   }
 
   /**
@@ -77,9 +77,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
     $this->assertTrue($assertSession->waitForText('Media Library'));
-    $mediaLibraryContent = $assertSession->waitForElementVisible("css", ".media-library-content");
-    $assertSession->waitForElementVisible("css", "#acquia-dam-user-authorization-skip");
-    $damAuthorizeScreen = $mediaLibraryContent->find("css", "#acquia-dam-user-authorization-skip");
+    $damAuthorizeScreen = $assertSession->waitForElementVisible("css", "#acquia-dam-user-authorization-skip");
     // First time DAM show confirmation screen to authorize access.
     // We will press skip button only if it appears.
     if ($damAuthorizeScreen instanceof NodeElement) {
