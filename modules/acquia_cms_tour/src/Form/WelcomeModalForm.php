@@ -4,7 +4,7 @@ namespace Drupal\acquia_cms_tour\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\Exception\UnknownExtensionException;
-use Drupal\Core\Extension\ProfileExtensionList;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\State\StateInterface;
@@ -30,11 +30,11 @@ class WelcomeModalForm extends FormBase {
   protected $state;
 
   /**
-   * The profile extension list object.
+   * The module extension list object.
    *
    * @var \Drupal\Core\Extension\ProfileExtensionList
    */
-  protected $profileExtensionList;
+  protected $moduleExtensionList;
 
   /**
    * The config factory service object.
@@ -48,14 +48,14 @@ class WelcomeModalForm extends FormBase {
    *
    * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
-   * @param \Drupal\Core\Extension\ProfileExtensionList $profile_extension_list
+   * @param \Drupal\Core\Extension\ModuleExtensionList $module_extension_list
    *   The profile extension list object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config.factory service object.
    */
-  public function __construct(StateInterface $state, ProfileExtensionList $profile_extension_list, ConfigFactoryInterface $config_factory) {
+  public function __construct(StateInterface $state, ModuleExtensionList $module_extension_list, ConfigFactoryInterface $config_factory) {
     $this->state = $state;
-    $this->profileExtensionList = $profile_extension_list;
+    $this->moduleExtensionList = $module_extension_list;
     $this->configFactory = $config_factory;
   }
 
@@ -70,7 +70,7 @@ class WelcomeModalForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('state'),
-      $container->get('extension.list.profile'),
+      $container->get('extension.list.module'),
       $container->get('config.factory'),
     );
   }
@@ -147,9 +147,9 @@ class WelcomeModalForm extends FormBase {
    * @return string
    *   Returns the logo path.
    */
-  protected function getLogoPath() :string {
+  protected function getLogoPath(): string {
     try {
-      $logo = "/" . $this->profileExtensionList->getPath('acquia_cms') . '/acquia_cms.png';
+      $logo = "/" . $this->moduleExtensionList->getPath('acquia_cms_common') . '/acquia_cms.png';
     }
     catch (UnknownExtensionException $e) {
     }
