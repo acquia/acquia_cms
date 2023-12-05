@@ -107,7 +107,10 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
     /** @var \Behat\Mink\Element\DocumentElement $page */
     $page = $this->getSession()->getPage();
     if ($mediaType) {
-      $page->find("css", '#media-library-wrapper .media-library-menu li a[data-title="' . $mediaType . '"]')->click();
+      $element = $page->find("css", '#media-library-wrapper .media-library-menu li a[data-title="' . $mediaType . '"]');
+      if ($element instanceof NodeElement) {
+        $element->click();
+      }
     }
     /** @var \Behat\Mink\Element\NodeElement $waitElement */
     $waitElement = $this->waitForElementVisible('named', ['field', "media_library_select_form[$position]"], $page);
