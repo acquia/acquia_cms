@@ -3,6 +3,7 @@
     "description": "Provides a tour page for Acquia CMS.",
     "license": "GPL-2.0-or-later",
     "type": "drupal-module",
+    "version": "dev-develop",
     "require": {
         "drupal/acquia_cms_common": "^1.9 || ^2.1 || ^3.1",
         "drupal/checklistapi": "^2.1"
@@ -28,5 +29,16 @@
         "branch-alias": {
             "dev-develop": "2.x-dev"
         }
-    }
+    },
+    "repositories": {
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "minimum-stability": "dev"
 }

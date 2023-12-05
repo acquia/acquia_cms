@@ -3,6 +3,7 @@
     "description": "Acquia CMS styling brought to admin toolbar.",
     "license": "GPL-2.0-or-later",
     "type": "drupal-module",
+    "version": "dev-develop",
     "require": {
         "drupal/acquia_cms_common": "^1.9 || ^2.1 || ^3.1",
         "drupal/admin_toolbar": "^3.3"
@@ -36,5 +37,16 @@
         "branch-alias": {
             "dev-develop": "1.x-dev"
         }
-    }
+    },
+    "repositories": {
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "minimum-stability": "dev"
 }
