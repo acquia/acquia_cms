@@ -8,6 +8,9 @@
         "drupal/acquia_cms_common": "^1.9 || ^2.1 || ^3.1",
         "drupal/admin_toolbar": "^3.3"
     },
+    "conflict": {
+        "drupal/acquia_claro": "<1.4"
+    },
     "repositories": {
         "assets": {
             "type": "composer",
@@ -18,9 +21,7 @@
             "url": "https://packages.drupal.org/8"
         }
     },
-    "conflict": {
-        "drupal/acquia_claro": "<1.4"
-    },
+    "minimum-stability": "dev",
     "config": {
         "allow-plugins": {
             "composer/installers": true,
@@ -37,16 +38,5 @@
         "branch-alias": {
             "dev-develop": "1.x-dev"
         }
-    },
-    "repositories": {
-        "assets": {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        },
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        }
-    },
-    "minimum-stability": "dev"
+    }
 }

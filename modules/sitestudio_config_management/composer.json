@@ -14,11 +14,6 @@
     "require-dev": {
         "drush/drush": "^11.6 || ^12"
     },
-    "extra": {
-        "branch-alias": {
-            "dev-develop": "1.x-dev"
-        }
-    },
     "repositories": {
         "assets": {
             "type": "composer",
@@ -29,5 +24,10 @@
             "url": "https://packages.drupal.org/8"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "1.x-dev"
+        }
+    }
 }

@@ -13,6 +13,17 @@
         "drupal/google_analytics": "^4",
         "drupal/recaptcha": "^3"
     },
+    "repositories": {
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "minimum-stability": "dev",
     "config": {
         "allow-plugins": {
             "composer/installers": true,
@@ -29,16 +40,5 @@
         "branch-alias": {
             "dev-develop": "2.x-dev"
         }
-    },
-    "repositories": {
-        "assets": {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        },
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        }
-    },
-    "minimum-stability": "dev"
+    }
 }
