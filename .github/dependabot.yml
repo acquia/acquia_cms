@@ -10,6 +10,7 @@ updates:
     allow:
       # Allow both direct and indirect updates for all packages
       - dependency-type: "all"
+    versioning-strategy: auto
     ignore:
       # We don't want check for acquia_cms modules.
       - dependency-name: "drupal/acquia_cms*"
@@ -26,7 +27,8 @@ updates:
       time: "09:00"
     ignore:
       # We don't want check for acquia_cms modules.
-      - dependency-name: "drupal/acquia_cms_common"
+      - dependency-name: "drupal/acquia_cms*"
+    versioning-strategy: auto
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -41,6 +43,7 @@ updates:
     allow:
       # Allow both direct and indirect updates for all packages
       - dependency-type: "all"
+    versioning-strategy: auto
     ignore:
       # We don't want check for acquia_cms modules.
       - dependency-name: "drupal/acquia_cms*"
@@ -58,6 +61,7 @@ updates:
     ignore:
       # We don't want check for acquia_cms modules.
       - dependency-name: "drupal/acquia_cms*"
+    versioning-strategy: auto
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -72,6 +76,7 @@ updates:
     ignore:
       # We don't want check for acquia_cms modules.
       - dependency-name: "drupal/acquia_cms*"
+    versioning-strategy: auto
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -86,6 +91,7 @@ updates:
     ignore:
       # We don't want check for acquia_cms modules.
       - dependency-name: "drupal/acquia_cms*"
+    versioning-strategy: auto
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -100,6 +106,7 @@ updates:
     ignore:
       # We don't want check for acquia_cms modules.
       - dependency-name: "drupal/acquia_cms*"
+    versioning-strategy: auto
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -114,6 +121,7 @@ updates:
     ignore:
       # We don't want check for acquia_cms modules.
       - dependency-name: "drupal/acquia_cms*"
+    versioning-strategy: auto
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -128,6 +136,7 @@ updates:
     ignore:
       # We don't want check for acquia_cms modules.
       - dependency-name: "drupal/acquia_cms*"
+    versioning-strategy: auto
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -142,6 +151,7 @@ updates:
     ignore:
       # We don't want check for acquia_cms modules.
       - dependency-name: "drupal/acquia_cms*"
+    versioning-strategy: auto
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -156,6 +166,7 @@ updates:
     ignore:
       # We don't want check for acquia_cms modules.
       - dependency-name: "drupal/acquia_cms*"
+    versioning-strategy: auto
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -170,6 +181,7 @@ updates:
     ignore:
       # We don't want check for acquia_cms modules.
       - dependency-name: "drupal/acquia_cms*"
+    versioning-strategy: auto
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -184,6 +196,37 @@ updates:
     ignore:
       # We don't want check for acquia_cms modules.
       - dependency-name: "drupal/acquia_cms*"
+    versioning-strategy: auto
+    # Raise pull requests for version updates
+    # to pip against the `develop` branch
+    target-branch: "develop"
+
+  - package-ecosystem: "composer"
+    directory: "/modules/acquia_cms_tour"
+    schedule:
+      interval: "daily"
+      # Use Indian Standard Time (UTC +05:30)
+      timezone: "Asia/Kolkata"
+      time: "09:00"
+    ignore:
+      # We don't want check for acquia_cms modules.
+      - dependency-name: "drupal/acquia_cms*"
+    versioning-strategy: auto
+    # Raise pull requests for version updates
+    # to pip against the `develop` branch
+    target-branch: "develop"
+
+  - package-ecosystem: "composer"
+    directory: "/modules/sitestudio_config_management"
+    schedule:
+      interval: "daily"
+      # Use Indian Standard Time (UTC +05:30)
+      timezone: "Asia/Kolkata"
+      time: "09:00"
+    ignore:
+      # We don't want check for acquia_cms modules.
+      - dependency-name: "drupal/acquia_cms*"
+    versioning-strategy: auto
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "develop"
@@ -198,7 +241,7 @@ updates:
     allow:
       # Allow both direct and indirect updates for all packages
       - dependency-type: "all"
-    versioning-strategy: widen
+    versioning-strategy: auto
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "1.5.x"
@@ -213,7 +256,7 @@ updates:
     allow:
       # Allow both direct and indirect updates for all packages
       - dependency-type: "all"
-    versioning-strategy: widen
+    versioning-strategy: auto
     # Raise pull requests for version updates
     # to pip against the `develop` branch
     target-branch: "2.0.x"

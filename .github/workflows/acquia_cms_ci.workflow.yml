@@ -54,6 +54,9 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
+          # Remove version from composer.json file.
+          find modules/* -type f -name "composer.json" -exec sed -i '/"version": "dev-develop",/d' '{}' ';'
+          sed -i '/"version": "dev-develop",/d' composer.json
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
@@ -97,9 +100,13 @@ jobs:
           #coverage: xdebug
       - name: Execute Drupal-check
         run: |
+          # Remove version from composer.json file.
+          find modules/* -type f -name "composer.json" -exec sed -i '/"version": "dev-develop",/d' '{}' ';'
+          sed -i '/"version": "dev-develop",/d' composer.json
           composer install
           php vendor/bin/drupal-check modules
           php vendor/bin/drupal-check tests/src
+
   integrated_tests:
     if: ${{ github.event_name == 'pull_request' }}
     name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
@@ -168,6 +175,9 @@ jobs:
       #     aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Before Install
         run: |
+          # Remove version from composer.json file.
+          find modules/* -type f -name "composer.json" -exec sed -i '/"version": "dev-develop",/d' '{}' ';'
+          sed -i '/"version": "dev-develop",/d' composer.json
           # Update the CI by adding patches without pinning the following modules.
           composer require "drupal/facets:^2.0.6" --no-update --no-install -d modules/acquia_cms_search
           composer require "drupal/pathauto:^1.11" --no-update --no-install -d modules/acquia_cms_common
@@ -204,6 +214,7 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
+
   backstop_tests:
     if: ${{ github.event_name == 'pull_request' }}
     name: backstop with ${{ matrix.orca-job }} on PHP ${{ matrix.php-version }}
@@ -299,6 +310,9 @@ jobs:
       #          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Before Install
         run: |
+          # Remove version from composer.json file.
+          find modules/* -type f -name "composer.json" -exec sed -i '/"version": "dev-develop",/d' '{}' ';'
+          sed -i '/"version": "dev-develop",/d' composer.json
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
@@ -308,6 +322,8 @@ jobs:
 
           # Remove the failing php on Drupal Core 9.5.
           if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
+            # Update common to 2.x for Drupal 9.5
+            sed -i 's/"dev-develop": "3.x-dev"/"dev-develop": "2.x-dev"/' modules/acquia_cms_common/composer.json
             # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
 
             # Remove drupal/core patch as it's needed for latest Drupal Core only.
@@ -346,6 +362,7 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
+
   isolated_tests:
     if: ${{ github.event_name == 'pull_request' }}
     name: acquia_cms (${{ matrix.orca-job }}, ${{ matrix.modules }})
@@ -421,6 +438,9 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
+          # Remove version from composer.json file.
+          find modules/* -type f -name "composer.json" -exec sed -i '/"version": "dev-develop",/d' '{}' ';'
+          sed -i '/"version": "dev-develop",/d' composer.json
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
@@ -454,6 +474,7 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
+
   run_update_hooks:
     if: ${{ github.event_name == 'pull_request' }}
     name: "Module Upgrades"
@@ -510,6 +531,9 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
+          # Remove version from composer.json file.
+          find modules/* -type f -name "composer.json" -exec sed -i '/"version": "dev-develop",/d' '{}' ';'
+          sed -i '/"version": "dev-develop",/d' composer.json
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
@@ -519,7 +543,10 @@ jobs:
         run: ./tests/ci/install.sh
       - name: Run Update hooks
         shell: 'script -q -e -c "bash {0}"'
-        run: ./tests/ci/run_update_hooks.sh
+        run: |
+          # Remove version form composer.json file.
+          find modules/*/ -type f -name "composer.json" -exec sed -i '' -e '/"version": "dev-develop",/d' '{}' ';'
+          ./tests/ci/run_update_hooks.sh
         env:
           # @see ./tests/ci/before_install.blt.sh
           DRUPAL_ORG_CHANGES: ${{ env.DRUPAL_ORG_CHANGES }}
