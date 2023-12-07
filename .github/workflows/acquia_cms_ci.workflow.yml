@@ -193,6 +193,8 @@ jobs:
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
           CHROMEDRIVER_PID=$!
           echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
+          git clone --branch=v1.18.0-alpha https://github.com/rajeshreeputra/prophecy.git prophecy
+          composer config --global repositories.prophecy path ${PWD}/prophecy
       - name: Install
         shell: 'script -q -e -c "bash {0}"'
         run: ./tests/ci/install.sh
@@ -245,36 +247,14 @@ jobs:
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_NEXT_MINOR
-          - INTEGRATED_TEST_ON_LATEST_LTS
         php-version:
           # - 7.4
           # - 8.1
           # - 8.2
           - 8.3
         orca-version:
+          #- ^3
           - ^4
-        exclude:
-          # - orca-job: ISOLATED_TEST_ON_NEXT_MINOR
-          #   orca-version: ^3
-          #   php-version: 7.4
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^3
-            php-version: 8.1
-          - orca-job: ISOLATED_TEST_ON_NEXT_MINOR
-            orca-version: ^3
-            php-version: 8.3
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^4
-            php-version: 7.4
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^3
-            php-version: 8.1
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^3
-            php-version: 8.3
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^4
-            php-version: 7.4
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -319,6 +299,8 @@ jobs:
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
           CHROMEDRIVER_PID=$!
           echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
+          git clone --branch=v1.18.0-alpha https://github.com/rajeshreeputra/prophecy.git prophecy
+          composer config --global repositories.prophecy path ${PWD}/prophecy
       - name: Install
         shell: 'script -q -e -c "bash {0}"'
         run: ./tests/ci/install.sh
@@ -432,6 +414,8 @@ jobs:
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
           CHROMEDRIVER_PID=$!
           echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
+          git clone --branch=v1.18.0-alpha https://github.com/rajeshreeputra/prophecy.git prophecy
+          composer config --global repositories.prophecy path ${PWD}/prophecy
       - name: Install
         shell: 'script -q -e -c "bash {0}"'
         run: ./tests/ci/install.sh
@@ -506,12 +490,8 @@ jobs:
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
-
-          if [ "${ORCA_JOB}" = "ISOLATED_TEST_ON_CURRENT" ]; then
-            # Update drupal/core patch as per Drupal Core version.
-            sed -i 's/2023-11-30\/3370946-pagetitle-backport-10-2-x.patch/2023-09-11\/3370946-page-title-backport-10-1-x.patch/g' modules/acquia_cms_common/composer.json
-          fi
-
+          git clone --branch=v1.18.0-alpha https://github.com/rajeshreeputra/prophecy.git prophecy
+          composer config --global repositories.prophecy path ${PWD}/prophecy
           ./tests/ci/before_install.blt.sh
       - name: Install
         shell: 'script -q -e -c "bash {0}"'
