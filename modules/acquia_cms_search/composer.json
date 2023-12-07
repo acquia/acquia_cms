@@ -1,8 +1,8 @@
 {
     "name": "drupal/acquia_cms_search",
-    "type": "drupal-module",
     "description": "Provides powerful search capabilities to the site.",
     "license": "GPL-2.0-or-later",
+    "type": "drupal-module",
     "require": {
         "cweagans/composer-patches": "^1.7",
         "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
@@ -10,8 +10,18 @@
         "drupal/collapsiblock": "^4.0",
         "drupal/facets": "2.0.6",
         "drupal/facets_pretty_paths": "^1.4",
-        "drupal/search_api": "1.30",
+        "drupal/search_api": "^1.30",
         "drupal/search_api_autocomplete": "^1.7"
+    },
+    "repositories": {
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
     },
     "config": {
         "allow-plugins": {
@@ -38,16 +48,6 @@
             "drupal/search_api": {
                 "3151796 - Problems when executing Search API tasks during install, updates": "https://www.drupal.org/files/issues/2022-11-04/search_api-3151796-division-by-zero-error-7.patch"
             }
-        }
-    },
-    "repositories": {
-        "assets": {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        },
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
         }
     }
 }

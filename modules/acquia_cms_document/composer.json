@@ -1,10 +1,16 @@
 {
     "name": "drupal/acquia_cms_document",
-    "type": "drupal-module",
     "description": "Provides a Document media type and related configuration.",
     "license": "GPL-2.0-or-later",
+    "type": "drupal-module",
     "require": {
         "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev"
+    },
+    "repositories": {
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
     },
     "config": {
         "allow-plugins": {
@@ -21,12 +27,6 @@
     "extra": {
         "branch-alias": {
             "dev-develop": "1.x-dev"
-        }
-    },
-    "repositories": {
-        "assets": {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
         }
     }
 }

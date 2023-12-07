@@ -1,8 +1,8 @@
 {
     "name": "drupal/acquia_cms_site_studio",
-    "type": "drupal-module",
     "description": "Handles code for Site Studio Installation & Related Configurations.",
     "license": "GPL-2.0-or-later",
+    "type": "drupal-module",
     "require": {
         "acquia/cohesion": "^6.9.2 || ~7.3.2",
         "acquia/cohesion-theme": "^6.9.2 || ~7.3.2",
@@ -23,6 +23,17 @@
         "drupal/acquia_cms_search": "<1.4.11",
         "drupal/acquia_cms_video": "<1.5.6"
     },
+    "repositories": {
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "minimum-stability": "RC",
     "config": {
         "allow-plugins": {
             "composer/installers": true,
@@ -51,16 +62,5 @@
                 "3340269 - Supports Drush 12. If using Drush 10 or Drush 11 & this patch is failing, then ignore this patch": "https://www.drupal.org/files/issues/2023-06-13/3340269-support-drush-12-13.patch"
             }
         }
-    },
-    "repositories": {
-        "assets": {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        },
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        }
-    },
-    "minimum-stability": "RC"
+    }
 }

@@ -1,13 +1,23 @@
 {
     "name": "drupal/acquia_cms_image",
-    "type": "drupal-module",
     "description": "Provides an Image media type and related configuration.",
     "license": "GPL-2.0-or-later",
+    "type": "drupal-module",
     "require": {
         "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
         "drupal/focal_point": "^2.0@alpha",
         "drupal/imagemagick": "^3.4",
         "drupal/imce": "^2.2 || ^3.0"
+    },
+    "repositories": {
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
     },
     "config": {
         "allow-plugins": {
@@ -30,16 +40,6 @@
             "drupal/focal_point": {
                 "3162210 - Preview link accidentally closes the media library": "https://www.drupal.org/files/issues/2020-10-06/3162210-17.patch"
             }
-        }
-    },
-    "repositories": {
-        "assets": {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        },
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
         }
     }
 }

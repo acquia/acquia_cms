@@ -1,12 +1,22 @@
 {
     "name": "drupal/acquia_cms_component",
-    "type": "drupal-module",
     "description": "Provides component and related configuration for Acquia CMS.",
     "license": "GPL-2.0-or-later",
+    "type": "drupal-module",
     "require": {
         "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
         "drupal/component": "^1.0",
         "drupal/jsonapi_extras": "^3.24"
+    },
+    "repositories": {
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
     },
     "config": {
         "allow-plugins": {
@@ -26,15 +36,5 @@
         },
         "enable-patching": true,
         "patches": {}
-    },
-    "repositories": {
-        "assets": {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        },
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        }
     }
 }
