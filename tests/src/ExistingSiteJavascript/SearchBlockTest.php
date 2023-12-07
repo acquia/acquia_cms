@@ -48,6 +48,7 @@ class SearchBlockTest extends CohesionComponentTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    * @throws \Behat\Mink\Exception\ExpectationException
+   * @throws \Drupal\Core\Entity\EntityStorageException
    *
    * @dataProvider providerSearchBlock
    */
