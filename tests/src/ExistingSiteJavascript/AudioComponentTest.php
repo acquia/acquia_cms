@@ -26,32 +26,35 @@ class AudioComponentTest extends CohesionComponentTestBase {
     $account->save();
     $this->drupalLogin($account);
 
+    // Add page content.
     $this->drupalGet('/node/add/page');
 
     // Add the component to the layout canvas.
     $edit_form = $this->getLayoutCanvas()->add('Audio')->edit();
+
     /** @var \Behat\Mink\Element\TraversableElement $edit_form */
     $edit_form->pressButton('Browse');
+
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
-    $damAuthorizeScreen = $assertSession->waitForElementVisible("css", "#acquia-dam-user-authorization-skip");
+
     // First time DAM show confirmation screen to authorize access.
     // We will press skip button only if it appears.
+    $damAuthorizeScreen = $assertSession->waitForElementVisible("css", "#acquia-dam-user-authorization-skip");
     if ($damAuthorizeScreen instanceof NodeElement) {
       $damAuthorizeScreen->click();
     }
     $this->assertTrue($assertSession->waitForText('Entity Browser'));
     $assertSession->waitForElementVisible("css", ".media-library-content");
-    $assertSession->waitForElementVisible('css', '.form-item--soundcloud-url input');
-    $this->getSession()->wait(1000);
+
+    // Add audio media.
     $this->getSession()->getPage()->fillField('soundcloud_url', 'https://soundcloud.com/yungh-tej/na-na-na-official-song-osekhon-ft-tej-gill?utm_source=clipboard&utm_medium=text&utm_campaign=so');
-    $this->getSession()->getPage()->find("css", "#media-library-content input.button--primary")->click();
+    $this->getSession()->getPage()->pressButton('Add');
     $assertSession->waitForElementVisible('css', '.field--name-name input[name="media[0][fields][name][0][value]"]');
-    $this->getSession()->wait(1000);
     $this->getSession()->getPage()->find("css", ".ui-dialog-buttonset button")->click();
-    $this->getSession()->wait(1000);
+
+    // Select and insert selected media.
     $this->selectMedia(0);
-    $this->getSession()->wait(1000);
     $this->insertSelectedMedia();
   }
 

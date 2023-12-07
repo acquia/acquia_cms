@@ -31,7 +31,7 @@ installchromedriver() {
         unzip chromedriver-linux64.zip
         chmod +x chromedriver-linux64/chromedriver
         mv -f chromedriver-linux64/chromedriver ./vendor/bin
-        rm chromedriver-linux64
+        rm -rf chromedriver-linux64
         rm chromedriver-linux64.zip
         ;;
       "darwin"*)
@@ -40,7 +40,7 @@ installchromedriver() {
         unzip chromedriver-mac-x64.zip
         chmod +x chromedriver-mac-x64/chromedriver
         mv -f chromedriver-mac-x64/chromedriver ./vendor/bin
-        rm chromedriver-mac-x64
+        rm -rf chromedriver-mac-x64
         rm chromedriver-mac-x64.zip
         ;;
     esac
