@@ -62,8 +62,6 @@ if [ -n "${ACMS_JOB}" ]; then
     composer config --unset repositories.acquia_cms_common
     composer require drupal/acquia_cms_common:2.x-dev -W
   fi
-  echo '$settings["dx8_editable_api_url"] = TRUE;' >> ${ORCA_FIXTURE_DIR}/docroot/sites/default/settings.php
-  echo '$config["cohesion.settings"]["api_url"] = "https://eu-development-api.sitestudio.acquia.com";' >> ${ORCA_FIXTURE_DIR}/docroot/sites/default/settings.php
   ./vendor/bin/acms site:install --yes --account-pass admin --uri=http://127.0.0.1:8080
 
   # Enable Acquia CMS DAM module.
