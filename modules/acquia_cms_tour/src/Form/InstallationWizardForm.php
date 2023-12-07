@@ -229,6 +229,11 @@ class InstallationWizardForm extends FormBase {
       $actions['next'] = [
         '#type' => 'submit',
         '#value' => $this->t('Next >'),
+        '#attributes' => [
+          'class' => [
+            'button button--primary',
+          ],
+        ],
         '#submit' => ['::nextStepSubmit'],
       ];
     }
