@@ -49,7 +49,6 @@ services:
     class: Drupal\acquia_cms_common\EventSubscriber\KernelTerminate\AcquiaCmsTelemetry
     arguments:
       - '@extension.list.module'
-      - '@http_client'
       - '@config.factory'
       - '@state'
       - '%site.path%'
