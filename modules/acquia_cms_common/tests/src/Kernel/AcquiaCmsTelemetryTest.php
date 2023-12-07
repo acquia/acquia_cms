@@ -53,7 +53,6 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
     parent::setUp();
     $this->acquiaCmsTelemetry = new AcquiaCmsTelemetry(
       $this->container->get("extension.list.module"),
-      $this->container->get("http_client"),
       $this->container->get('config.factory'),
       $this->container->get("state"),
       $this->container->getParameter("site.path"),
@@ -207,7 +206,6 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
     $module_list->method('getAllInstalledInfo')->willReturn($installed_modules);
     $telemetry = new AcquiaCmsTelemetry(
       $module_list,
-      $this->container->get("http_client"),
       $this->container->get('config.factory'),
       $this->container->get("state"),
       $this->container->getParameter("site.path"),
