@@ -39,6 +39,7 @@ cd ${ORCA_FIXTURE_DIR}
 # which by default loads libraries in vendor folder but we are expecting
 # them to be in libraries folder hence running below command.
 composer config --json extra.installer-paths.'docroot/libraries/{$name}' '["swagger-api/swagger-ui","nnnick/chartjs"]' --merge
+composer config --json extra.composer-exit-on-patch-failure false --merge
 
 # Below added to add swagger/chart.js libraries in CI.
 # Without this CI is failing.
