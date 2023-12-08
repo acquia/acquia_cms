@@ -71,6 +71,19 @@
   font-size: 14px;
   font-weight: normal;
 }
+.acms-starter-kit-wizard .ui-dialog-buttonset,
+.acms-installation-wizard .ui-dialog-buttonset {
+  width: 60%;
+  float: right;
+  display: block;
+  text-align: right;
+}
+.acms-installation-wizard .ui-dialog-buttonset button:first-child:not(.skip-button) {
+  float: left;
+}
+.acms-installation-wizard .ui-dialog-buttonset button.skip-button {
+  float: none;
+}
 
 @media screen and (max-width: 767px) {
   .acms-installation-wizard .acquia-cms-tour-installation-wizard {

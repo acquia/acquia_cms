@@ -69,7 +69,7 @@ class WelcomeModalController extends ControllerBase {
         'width' => 1000,
       ];
       // Add AJAX command to open a modal dialog with the form as the content.
-      $response->addCommand(new OpenModalDialogCommand('', $modal_form, $modal_options));
+      $response->addCommand(new OpenModalDialogCommand($this->t('Acquia CMS Starter Kit Setup Wizard'), $modal_form, $modal_options));
     }
     return $response;
 
@@ -88,7 +88,7 @@ class WelcomeModalController extends ControllerBase {
       'width' => 500,
     ];
     // Add an AJAX command to open a modal dialog with the form as the content.
-    $response->addCommand(new OpenModalDialogCommand('', $modal_form, $modal_options));
+    $response->addCommand(new OpenModalDialogCommand($this->t('Welcome to Acquia CMS'), $modal_form, $modal_options));
 
     return $response;
   }
