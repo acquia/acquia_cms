@@ -135,7 +135,6 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_CURRENT
           - ISOLATED_TEST_ON_NEXT_MINOR
         #php-version: [ "8.1" ]
         acms_job:
@@ -245,7 +244,6 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_CURRENT
           - ISOLATED_TEST_ON_NEXT_MINOR
         php-version:
           - 8.1
@@ -344,7 +342,6 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_CURRENT
           - ISOLATED_TEST_ON_NEXT_MINOR
         #php-version: [ "8.1" ]
         modules:
@@ -455,7 +452,7 @@ jobs:
 
       GIT_COMMITTER_NAME: "Github Actions"
       GIT_COMMITTER_EMAIL: "github-actions@exmaple.com"
-      ORCA_JOB: ISOLATED_TEST_ON_CURRENT
+      ORCA_JOB: ISOLATED_TEST_ON_NEXT_MINOR
       ACMS_JOB: "upgrade_modules"
     strategy:
       fail-fast: false
