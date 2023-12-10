@@ -54,5 +54,6 @@ services:
       - '@state'
       - '%site.path%'
       - '@datetime.time'
+      - '@logger.factory'
     tags:
       - { name: event_subscriber }
