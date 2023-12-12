@@ -2826,7 +2826,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_search",
-                "reference": "a6c390f1e9d30bbf658cb9d3be8c276f8b81eb87"
+                "reference": "aec7d53ba3c56a069b62fd791b04263e1f102cf8"
             },
             "require": {
                 "cweagans/composer-patches": "^1.7",
@@ -2834,7 +2834,7 @@
                 "drupal/acquia_search": "^3.1",
                 "drupal/collapsiblock": "^4.0",
                 "drupal/facets": "2.0.6",
-                "drupal/facets_pretty_paths": "^1.4",
+                "drupal/facets_pretty_paths": "1.5.0",
                 "drupal/search_api": "1.30",
                 "drupal/search_api_autocomplete": "^1.7"
             },
@@ -2848,6 +2848,9 @@
                     "drupal/facets": {
                         "3259123 - ViewsDisplayBase::isRenderedInCurrentRequest() doesn't let the facet link to reset to original URL": "https://www.drupal.org/files/issues/2022-01-18/3259123-search-facet-reset-link.patch",
                         "3358295 - PHP 8.2 compatibility": "https://git.drupalcode.org/project/facets/-/merge_requests/141.patch"
+                    },
+                    "drupal/facets_pretty_paths": {
+                        "3402421 - Form actions break for global search fields (v1.5)": "https://www.drupal.org/files/issues/2023-11-17/form_actions_break_for_global_search_fields_1_5-3402421-4.patch"
                     },
                     "drupal/search_api": {
                         "3151796 - Problems when executing Search API tasks during install, updates": "https://www.drupal.org/files/issues/2022-11-04/search_api-3151796-division-by-zero-error-7.patch"
