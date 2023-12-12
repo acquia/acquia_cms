@@ -58,6 +58,7 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
       $this->container->get("state"),
       $this->container->getParameter("site.path"),
       $this->container->get("datetime.time"),
+      $this->container->get("logger.factory"),
     );
     $path = explode('/', $this->container->getParameter('site.path'));
     $this->siteUri = end($path);
@@ -82,6 +83,7 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
 
     $method = $this->getAcqauiaCmsTelemetryMethod("shouldSendTelemetryData");
     $state_service = $this->container->get("state");
+    $datetime_service = $this->container->get('datetime.time');
 
     $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertFalse($shouldSendData, "Should not send telemetry data on Non Acquia environment.");
@@ -94,16 +96,16 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
     $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertTrue($shouldSendData, "Should send telemetry data on Acquia environment.");
 
-    $this->container->get("state")->set(
+    $state_service->set(
       "acquia_cms_common.telemetry.timestamp",
-      $this->container->get('datetime.time')->getCurrentTime()
+      $datetime_service->getCurrentTime()
     );
     $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertFalse($shouldSendData, "Should not send telemetry data, if data send recently.");
 
-    $this->container->get("state")->set(
+    $state_service->set(
       "acquia_cms_common.telemetry.timestamp",
-      $this->container->get('datetime.time')->getCurrentTime() - 86401,
+      $datetime_service->getCurrentTime() - 86401,
     );
     $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertTrue($shouldSendData, "Should send telemetry data, if data sent before a day.");
@@ -210,6 +212,7 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
       $this->container->get("state"),
       $this->container->getParameter("site.path"),
       $this->container->get("datetime.time"),
+      $this->container->get("logger.factory"),
     );
     $method = $this->getAcqauiaCmsTelemetryMethod("getExtensionInfo");
     $actual_data = $method->invoke($telemetry);

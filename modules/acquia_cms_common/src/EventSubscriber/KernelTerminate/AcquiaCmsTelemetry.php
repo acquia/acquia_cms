@@ -10,6 +10,7 @@ use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
 use GuzzleHttp\ClientInterface;
@@ -79,6 +80,13 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
   protected $time;
 
   /**
+   * Logger factory.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
+   */
+  protected $logger;
+
+  /**
    * Constructs an Acquia CMS telemetry object.
    *
    * @param \Drupal\Core\Extension\ModuleExtensionList $module_list
@@ -93,6 +101,8 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    *   Drupal Site Path.
    * @param \Drupal\Component\Datetime\TimeInterface $time
    *   The time service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
+   *   The logger factory.
    */
   public function __construct(
     ModuleExtensionList $module_list,
@@ -100,13 +110,15 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
     ConfigFactoryInterface $config_factory,
     StateInterface $state,
     string $site_path,
-    TimeInterface $time) {
+    TimeInterface $time,
+    LoggerChannelFactoryInterface $logger) {
     $this->moduleList = $module_list;
     $this->httpClient = $http_client;
     $this->configFactory = $config_factory;
     $this->state = $state;
     $this->sitePath = $site_path;
     $this->time = $time;
+    $this->logger = $logger;
   }
 
   /**
@@ -126,7 +138,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    * @throws \Exception
    */
   public function onTerminateResponse(KernelEvent $event): void {
-    if ($this->shouldSendTelemetryData()) {
+    if ($this->shouldSendTelemetryData() && PHP_SAPI !== 'cli') {
       $this->sendTelemetry("ACMS Telemetry data", $this->getAcquiaCmsTelemetryData());
     }
   }
@@ -166,7 +178,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
   }
 
   /**
-   * Creates and sends an event to Amplitude.
+   * Creates and sends an event to Amplitude, Also collects data into sumologic.
    *
    * @param string $event_type
    *   The event type. This accepts any string that is not reserved. Reserved
@@ -179,7 +191,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    * @return bool
    *   TRUE if event was successfully sent, otherwise FALSE.
    *
-   * @throws \Exception
+   * @throws \Exception|\GuzzleHttp\Exception\GuzzleException
    *   Thrown if state key acquia_telemetry.loud is TRUE and request fails.
    *
    * @see https://amplitude.zendesk.com/hc/en-us/articles/204771828#keys-for-the-event-argument
@@ -193,12 +205,19 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
       $this->sendEvent($event);
       $this->state->set('acquia_cms_common.telemetry.data', json_encode($event_properties));
       $this->state->set('acquia_cms_common.telemetry.timestamp', $this->time->getCurrentTime());
+      // Logging the database and collecting data into Sumo Logic.
+      $sumologicEventProperties = ['user_id' => $event['user_id']] + $event['event_properties'];
+      $this->logger->get($event_type)->info('@message', [
+        '@message' => json_encode($sumologicEventProperties, JSON_UNESCAPED_SLASHES),
+      ]);
+
       return TRUE;
     }
     catch (\Exception $e) {
       if ($this->state->get('acquia_connector.telemetry.loud')) {
         throw new \Exception($e->getMessage(), $e->getCode(), $e);
       }
+
       return FALSE;
     }
   }
@@ -257,6 +276,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
         'extensions' => $this->getExtensionInfo(),
       ];
     }
+
     return $telemetryData;
   }
 
