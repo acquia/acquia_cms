@@ -47,7 +47,7 @@
         "mglaman/drupal-check": "^1.4",
         "oomphinc/composer-installers-extender": "^1.1 || ^2",
         "phpspec/prophecy-phpunit": "^2",
-        "phpunit/phpunit": "~9.4.0 || ~9.5.0 || ~9.6.0 || ^10",
+        "phpunit/phpunit": "^9.4 || ^10",
         "weitzman/drupal-test-traits": "^2"
     },
     "repositories": {
@@ -328,9 +328,6 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "acquia/cohesion": {
-                "ACO-2515 - Fix schema type mismatch error for global js settings": "https://gist.githubusercontent.com/rajeshreeputra/5648d31dafbf66d8a1895bb6964ed99a/raw/f5860cbfb7e5886bc7c0652c102cab337cb59e5a/sitestudio-7.3.1-schema-errors-for-cohesion.frontend.globaljs_setting.patch"
-            },
             "drupal/core": {
                 "3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112": "https://git.drupalcode.org/project/drupal/-/merge_requests/3142.patch",
                 "Fix failing test for site studio due to missing file": "https://gist.githubusercontent.com/chandan-singh7929/978c8c3c8b6f1e2de23492e7e562c0c3/raw/f0e7770d94be862e5495ca25662a0a0d5672b785/bypass-library-version-core.patch"
