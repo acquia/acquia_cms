@@ -33,13 +33,20 @@ class StarterKitConfigForm extends AcquiaCmsStarterKitBase {
   protected $starterKitService;
 
   /**
+   * Starterkit service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     /** @var static $instance */
     $instance = parent::create($container);
     $instance->starterKitService = $container->get('acquia_cms_tour.starter_kit');
-
+    $instance->configFactory = $container->get('config.factory');
     return $instance;
   }
 
@@ -214,6 +221,7 @@ class StarterKitConfigForm extends AcquiaCmsStarterKitBase {
     $missing_modules = $this->starterKitService->getMissingModules($starter_kit, $starter_kit_demo, $starter_kit_content_model);
     if (!$missing_modules) {
       $this->state->set('show_starter_kit_modal', FALSE);
+      $this->configFactory->getEditable('acquia_cms_common.settings')->set('starter_kit_name', $starter_kit)->save();
       $this->state->set('starter_kit_wizard_completed', TRUE);
       $this->starterKitService->enableModules($starter_kit, $starter_kit_demo, $starter_kit_content_model);
       $this->messenger()->addStatus($this->t('The %starter_kit starter kit has been installed. Also, the related modules & themes have been enabled.', [

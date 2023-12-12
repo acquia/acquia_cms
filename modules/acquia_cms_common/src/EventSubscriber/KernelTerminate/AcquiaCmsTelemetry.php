@@ -138,7 +138,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    * @throws \Exception
    */
   public function onTerminateResponse(KernelEvent $event): void {
-    if ($this->shouldSendTelemetryData()) {
+    if ($this->shouldSendTelemetryData() && PHP_SAPI !== 'cli') {
       $this->sendTelemetry("ACMS Telemetry data", $this->getAcquiaCmsTelemetryData());
     }
   }
