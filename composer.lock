@@ -2435,7 +2435,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "975f2dc0a0b9e9f5770e6dc19172ef335172cc75"
+                "reference": "b01e318c1e345c9e6d3d0a440a2925099ce2a4df"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2464,7 +2464,7 @@
                 "drupal/smart_trim": "^2.0",
                 "drupal/social_media_links": "^2.9",
                 "drupal/username_enumeration_prevention": "^1.3",
-                "drupal/workbench_email": "^3.0",
+                "drupal/workbench_email": "3.0.2",
                 "nnnick/chartjs": "^3.9"
             },
             "conflict": {
@@ -2501,6 +2501,9 @@
                     "drupal/core": {
                         "3301692 - Passing null to parameter to mb_strtolower() is deprecated with PHP 8.1": "https://git.drupalcode.org/project/drupal/-/merge_requests/2598.patch",
                         "3370946 - Page title should contextualize the local navigation": "https://www.drupal.org/files/issues/2023-11-30/3370946-pagetitle-backport-10-2-x.patch"
+                    },
+                    "drupal/workbench_email": {
+                        "3408131 - Route 'entity.workbench_email_template.canonical' does not exist.": "https://git.drupalcode.org/project/workbench_email/-/merge_requests/17.patch"
                     }
                 }
             },
