@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "531ca52b41783a0d52ed72d463e42c00",
+    "content-hash": "f6054dd4abe7edc5b8a4d9c203a14693",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -83,16 +83,16 @@
         },
         {
             "name": "acquia/cohesion",
-            "version": "7.3.2",
+            "version": "7.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/cohesion.git",
-                "reference": "49e64b0035e7e7bdb0f2c63d4372248e7906f251"
+                "reference": "6a80b2c0d7c47bd999476ea6b64f136ed4b1f1af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/cohesion/zipball/49e64b0035e7e7bdb0f2c63d4372248e7906f251",
-                "reference": "49e64b0035e7e7bdb0f2c63d4372248e7906f251",
+                "url": "https://api.github.com/repos/acquia/cohesion/zipball/6a80b2c0d7c47bd999476ea6b64f136ed4b1f1af",
+                "reference": "6a80b2c0d7c47bd999476ea6b64f136ed4b1f1af",
                 "shasum": ""
             },
             "require": {
@@ -102,12 +102,14 @@
                 "drupal/jquery_ui": "^1.4",
                 "drupal/stable": "^2.0",
                 "drupal/token": "^1.11",
+                "drush/drush": "^11.6 || ^12",
                 "ext-json": "*"
             },
             "require-dev": {
                 "acquia/coding-standards": "^0.4.1",
                 "behat/mink": "^1.7",
                 "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+                "e0ipso/shaper": "^1",
                 "phpunit/phpunit": "^6.5",
                 "symfony/phpunit-bridge": "^4.3"
             },
@@ -125,11 +127,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "drush": {
-                    "services": {
-                        "drush.services.yml": "^9"
-                    }
-                },
                 "enable-patching": true
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -145,22 +142,22 @@
             ],
             "description": "Site Studio",
             "support": {
-                "source": "https://github.com/acquia/cohesion/tree/7.3.2"
+                "source": "https://github.com/acquia/cohesion/tree/7.4.0"
             },
-            "time": "2023-10-24T19:52:55+00:00"
+            "time": "2023-12-06T14:20:59+00:00"
         },
         {
             "name": "acquia/cohesion-theme",
-            "version": "7.3.2",
+            "version": "7.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/cohesion-theme.git",
-                "reference": "194102cb6751a3a1cf212ec19be2223d4c788002"
+                "reference": "20678746655ff3f837b09c9ceb916bcdad88fee8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/cohesion-theme/zipball/194102cb6751a3a1cf212ec19be2223d4c788002",
-                "reference": "194102cb6751a3a1cf212ec19be2223d4c788002",
+                "url": "https://api.github.com/repos/acquia/cohesion-theme/zipball/20678746655ff3f837b09c9ceb916bcdad88fee8",
+                "reference": "20678746655ff3f837b09c9ceb916bcdad88fee8",
                 "shasum": ""
             },
             "type": "drupal-theme",
@@ -178,9 +175,9 @@
             "description": "Site Studio minimal theme",
             "support": {
                 "issues": "https://github.com/acquia/cohesion-theme/issues",
-                "source": "https://github.com/acquia/cohesion-theme/tree/7.3.2"
+                "source": "https://github.com/acquia/cohesion-theme/tree/7.4.0"
             },
-            "time": "2023-10-24T19:53:00+00:00"
+            "time": "2023-12-06T14:21:05+00:00"
         },
         {
             "name": "acquia/drupal-environment-detector",
@@ -2874,11 +2871,11 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_site_studio",
-                "reference": "292070b51ef7a44436cf894b6836c637c080e7f5"
+                "reference": "b2193120d57850ab13bf86bf9f9997b279134674"
             },
             "require": {
-                "acquia/cohesion": "^6.9.2 || ~7.3.2",
-                "acquia/cohesion-theme": "^6.9.2 || ~7.3.2",
+                "acquia/cohesion": "~7.4.0",
+                "acquia/cohesion-theme": "~7.4.0",
                 "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
                 "drupal/collapsiblock": "^4.0",
                 "drupal/node_revision_delete": "^1.0",
@@ -2886,15 +2883,16 @@
                 "drupal/sitestudio_config_management": "^1.0"
             },
             "conflict": {
-                "drupal/acquia_cms_article": "<1.5.6",
-                "drupal/acquia_cms_audio": "<1.4.6",
-                "drupal/acquia_cms_event": "<1.5.6",
-                "drupal/acquia_cms_image": "<1.5.8",
-                "drupal/acquia_cms_page": "<1.5.6",
-                "drupal/acquia_cms_person": "<1.5.6",
-                "drupal/acquia_cms_place": "<1.5.6",
-                "drupal/acquia_cms_search": "<1.4.11",
-                "drupal/acquia_cms_video": "<1.5.6"
+                "drupal/acquia_cms_article": "<1.6",
+                "drupal/acquia_cms_audio": "<1.5",
+                "drupal/acquia_cms_dam": "<1.1",
+                "drupal/acquia_cms_event": "<1.6",
+                "drupal/acquia_cms_image": "<1.6",
+                "drupal/acquia_cms_page": "<1.6",
+                "drupal/acquia_cms_person": "<1.6",
+                "drupal/acquia_cms_place": "<1.6",
+                "drupal/acquia_cms_search": "<1.5",
+                "drupal/acquia_cms_video": "<1.6"
             },
             "type": "drupal-module",
             "extra": {
@@ -2909,8 +2907,7 @@
                 "enable-patching": true,
                 "patches": {
                     "acquia/cohesion": {
-                        "3340269 - Site Studio: Allow optional packages to import": "https://www.drupal.org/files/issues/2023-03-16/3340269-site-studio-allow-optional-packages-6.patch",
-                        "3340269 - Supports Drush 12. If using Drush 10 or Drush 11 & this patch is failing, then ignore this patch": "https://www.drupal.org/files/issues/2023-06-13/3340269-support-drush-12-13.patch"
+                        "3340269 - Site Studio: Allow optional packages to import": "https://www.drupal.org/files/issues/2023-03-16/3340269-site-studio-allow-optional-packages-6.patch"
                     }
                 }
             },
@@ -8174,17 +8171,17 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/sitestudio_config_management",
-                "reference": "873425802a3c036de205f5ef3f064394f6082b90"
+                "reference": "7e3c72a2a58ab0893f8c4c6ead4a8af3a1d78849"
             },
             "require": {
-                "acquia/cohesion": "^6.9.2 || ~7.3.2",
+                "acquia/cohesion": "~7.4.0",
                 "drupal/config_filter": "^2.4",
                 "drupal/config_ignore": "^3.0@beta",
                 "drupal/config_split": "^2.0",
                 "php": ">=7.4"
             },
             "require-dev": {
-                "drush/drush": "^10 || ^11 || ^12"
+                "drush/drush": "^11.6 || ^12"
             },
             "type": "drupal-module",
             "extra": {

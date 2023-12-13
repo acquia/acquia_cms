@@ -31,7 +31,7 @@ class VerticalCardComponent extends CohesionComponentTestBase {
     // Add the component to the layout canvas.
     $edit_form = $this->getLayoutCanvas()->add('Card - Vertical')->edit();
     $this->openMediaLibrary($edit_form, 'Select image');
-    $this->selectMedia(0);
+    $this->selectMedia(0, 'Image');
     $this->insertSelectedMedia();
     /** @var \Behat\Mink\Element\TraversableElement $edit_form */
     $edit_form->fillField('Heading', 'Test Heading');
