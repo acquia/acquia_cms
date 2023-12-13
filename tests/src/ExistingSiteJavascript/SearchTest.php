@@ -206,14 +206,10 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    * @param string $title
    *   The title, text, or rel of the link.
    *
-   * @return \Behat\Mink\Element\ElementInterface|null
-   *   The link element.
-   *
    * @throws \Behat\Mink\Exception\ExpectationException
    */
-  private function assertLinkNotExists(string $title): ?ElementInterface {
-    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert */
-    return $this->assertSession()->elementNotExists('named', ['link', $title]);
+  private function assertLinkNotExists(string $title): void {
+    $this->assertSession()->elementNotExists('named', ['link', $title]);
   }
 
   /**
