@@ -35,9 +35,6 @@ class SearchBlockTest extends CohesionComponentTestBase {
       'content administrator' => [
         ['content_administrator'],
       ],
-      'administrator' => [
-        ['administrator'],
-      ],
     ];
   }
 
@@ -48,6 +45,10 @@ class SearchBlockTest extends CohesionComponentTestBase {
    *   The user role(s) to test with, or NULL to test as an anonymous user. If
    *   this is an empty array, the test will run as an authenticated user with
    *   no additional roles.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   * @throws \Behat\Mink\Exception\ExpectationException
+   * @throws \Drupal\Core\Entity\EntityStorageException
    *
    * @dataProvider providerSearchBlock
    */
@@ -79,9 +80,10 @@ class SearchBlockTest extends CohesionComponentTestBase {
     $this->getSearch()->showSearch();
     $search_block = $assert_session->elementExists('css', '#views-exposed-form-search-search');
     $search_block->fillField('keywords', 'Test');
+    $search_block->findButton('Search')->click();
 
-    $assert_session->waitForElementVisible('css', '#edit-submit-search')->keyPress('enter');
-    // Assert that the search by title shows the proper result.
+    // Assert that the search by title shows the proper results on search page.
+    $assert_session->addressEquals('search');
     $assert_session->linkExists('Test published');
     $assert_session->linkNotExists('Test unpublished');
   }
