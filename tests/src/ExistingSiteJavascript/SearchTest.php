@@ -32,37 +32,37 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
   protected function setUp(): void {
     parent::setUp();
     $this->getDriverInstance()->resizeWindow(1920, 800);
-    $node_types = NodeType::loadMultiple();
+    $nodeTypes = NodeType::loadMultiple();
     // Create some published and unpublished nodes to assert that the search
     // respects the published status of content.
-    foreach ($node_types as $type) {
-      $node_type_id = $type->id();
-      $node_type_label = $type->label();
+    foreach ($nodeTypes as $type) {
+      $nodeTypeId = $type->id();
+      $nodeTypeLabel = $type->label();
 
-      /** @var \Drupal\taxonomy\VocabularyInterface $term_vocab */
-      $term_vocab = Vocabulary::load($node_type_id . '_type');
-      if ($term_vocab) {
+      /** @var \Drupal\taxonomy\VocabularyInterface $termVocab */
+      $termVocab = Vocabulary::load($nodeTypeId . '_type');
+      if ($termVocab) {
         // Creating couple of terms from each vocab type for published and
         // unpublished nodes.
-        $music = $this->createTerm($term_vocab, ['name' => $node_type_label . ' Music']);
-        $rock = $this->createTerm($term_vocab, ['name' => $node_type_label . ' Rocks']);
+        $music = $this->createTerm($termVocab, ['name' => $nodeTypeLabel . ' Music']);
+        $rock = $this->createTerm($termVocab, ['name' => $nodeTypeLabel . ' Rocks']);
 
-        $published_node_values['field_' . $node_type_id . '_type'] = $music->id();
-        $unpublished_node_values['field_' . $node_type_id . '_type'] = $rock->id();
+        $publishedNodeValues['field_' . $nodeTypeId . '_type'] = $music->id();
+        $unpublishedNodeValues['field_' . $nodeTypeId . '_type'] = $rock->id();
       }
 
-      $published_node = $this->createNode($published_node_values + [
-        'type' => $node_type_id,
-        'title' => 'Test published ' . $node_type_label,
+      $publishedNode = $this->createNode($publishedNodeValues + [
+        'type' => $nodeTypeId,
+        'title' => 'Test published ' . $nodeTypeLabel,
         'moderation_state' => 'published',
       ]);
-      $this->assertTrue($published_node->isPublished());
-      $unpublished_node = $this->createNode($unpublished_node_values + [
-        'type' => $node_type_id,
-        'title' => 'Test unpublished ' . $node_type_label,
+      $this->assertTrue($publishedNode->isPublished());
+      $unpublishedNode = $this->createNode($unpublishedNodeValues + [
+        'type' => $nodeTypeId,
+        'title' => 'Test unpublished ' . $nodeTypeLabel,
         'moderation_state' => 'draft',
       ]);
-      $this->assertFalse($unpublished_node->isPublished());
+      $this->assertFalse($unpublishedNode->isPublished());
     }
   }
 
@@ -78,53 +78,54 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
     $account->addRole('content_administrator');
     $account->save();
     $this->drupalLogin($account);
-    $node_types = NodeType::loadMultiple();
+    $nodeTypes = NodeType::loadMultiple();
 
     $this->drupalGet('/search');
-    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assert_session */
-    $assert_session = $this->assertSession();
-    $assert_session->elementExists('css', '.views-element-container .coh-style-search-block')->fillField('keywords', 'Test');
-    $assert_session->elementExists('css', '.views-element-container input.button')->keyPress('enter');
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    $assertSession->elementExists('css', '.views-element-container .coh-style-search-block')->fillField('keywords', 'Test');
+    $assertSession->elementExists('css', '.views-element-container input.button')->keyPress('enter');
 
-    $assert_session->waitForElementVisible('css', '.coh-style-facet-accordion');
-    $facets = $assert_session->elementExists('css', '.coh-style-facet-accordion');
+    $assertSession->waitForElementVisible('css', '.coh-style-facet-accordion');
+    $facets = $assertSession->elementExists('css', '.coh-style-facet-accordion');
 
     // Get the container which holds the facets, and assert that, initially,
     // the content type facet is visible but none of the dependent facets are.
     $this->assertFacetLinkExists($facets, TRUE);
-    foreach ($node_types as $node_type_id => $type) {
+    foreach ($nodeTypes as $nodeTypeId => $type) {
       // Clear all selected facets.
       $this->drupalGet('/search');
-      $node_type_label = $type->label();
-      $assert_session->elementExists('css', '.views-element-container .coh-style-search-block')->fillField('keywords', 'Test');
-      $assert_session->elementExists('css', '.views-element-container input.button')->keyPress('enter');
+      $nodeTypeLabel = $type->label();
+      $assertSession->elementExists('css', '.views-element-container .coh-style-search-block')->fillField('keywords', 'Test');
+      $assertSession->elementExists('css', '.views-element-container input.button')->keyPress('enter');
       // Assert that the search by title shows the proper result.
-      $this->assertLinkExists('Test published ' . $node_type_label);
-      $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
+      $this->assertLinkExists('Test published ' . $nodeTypeLabel);
+      $unpublishedTitle = 'Test unpublished ' . $nodeTypeLabel;
+      $assertSession->elementNotExists('named', ['link', $unpublishedTitle]);
 
       // Activate the facet for this content type.
       /** @var \Behat\Mink\Element\NodeElement $linkElement */
-      $linkElement = $this->assertLinkExists($node_type_label . ' (1)', $facets);
+      $linkElement = $this->assertLinkExists($nodeTypeLabel . ' (1)', $facets);
       $linkElement->click();
 
-      $this->assertLinkExists('Test published ' . $node_type_label);
-      $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
+      $this->assertLinkExists('Test published ' . $nodeTypeLabel);
+      $assertSession->elementNotExists('named', ['link', $unpublishedTitle]);
 
       // Pages have no facets.
-      if ($node_type_id !== 'page') {
+      if ($nodeTypeId !== 'page') {
         // Open the accordion item for the "type" taxonomy of this content type.
         // @todo This is commented out because, at the moment, the facets are
         // expanded by default. If we change them to be collapsed by default, we
         // can uncomment this line.
-        // $this->assertLinkExists("$node_type_label Type", $facets)->click();
+        // $this->assertLinkExists("$nodeTypeLabel Type", $facets)->click();
         // Check if term facet is working properly.
-        $assert_session->elementExists('css', '.coh-style-facet-accordion')->clickLink($node_type_label . ' Music (1)');
+        $assertSession->elementExists('css', '.coh-style-facet-accordion')->clickLink($nodeTypeLabel . ' Music (1)');
         // Assert that the clear filter is present.
-        $assert_session->linkExists('Clear filter(s)');
+        $assertSession->linkExists('Clear filter(s)');
         // Check if node of the selected term is shown.
-        $this->assertLinkExists('Test published ' . $node_type_label);
-        $this->assertLinkNotExists('Test unpublished ' . $node_type_label);
-        $assert_session->linkNotExists($node_type_label . ' Rocks (1)');
+        $this->assertLinkExists('Test published ' . $nodeTypeLabel);
+        $assertSession->elementNotExists('named', ['link', $unpublishedTitle]);
+        $assertSession->linkNotExists($nodeTypeLabel . ' Rocks (1)');
       }
     }
   }
@@ -201,18 +202,6 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
   }
 
   /**
-   * Asserts that a link does not exist.
-   *
-   * @param string $title
-   *   The title, text, or rel of the link.
-   *
-   * @throws \Behat\Mink\Exception\ExpectationException
-   */
-  private function assertLinkNotExists(string $title): void {
-    $this->assertSession()->elementNotExists('named', ['link', $title]);
-  }
-
-  /**
    * Tests that the listing page displays a fallback view if needed.
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
@@ -243,7 +232,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
-  private function assertFacetLinkExists(ElementInterface $facets = NULL, bool $title = FALSE) {
+  private function assertFacetLinkExists(ElementInterface $facets = NULL, bool $title = FALSE): void {
     // Get the container which holds the facets, and assert that, initially, the
     // Test that none of the dependent facets are visible for fallback.
     /** @var \Behat\Mink\Element\NodeElement $titleElement */
