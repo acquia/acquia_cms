@@ -1,6 +1,9 @@
+.acms-welcome-modal #drupal-modal,
+.acms-installation-wizard #drupal-modal {
+  padding-top: 10px;
+}
 .acms-installation-wizard #drupal-modal {
   padding-left: 0;
-  padding-top: 10px;
 }
 .acms-installation-wizard .acquia-cms-tour-installation-wizard {
   display: flex;
@@ -72,7 +75,7 @@
   font-weight: normal;
 }
 .acms-starter-kit-wizard .ui-dialog-buttonset,
-.acms-installation-wizard .ui-dialog-buttonset {
+.acms-installation-wizard .ui-dialog-buttonpane .ui-dialog-buttonset {
   width: 60%;
   float: right;
   display: block;
@@ -83,6 +86,7 @@
 }
 .acms-installation-wizard .ui-dialog-buttonset button.skip-button {
   float: none;
+  margin-right: 5px;
 }
 
 @media screen and (max-width: 767px) {
