@@ -135,7 +135,7 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_NEXT_MINOR
+          - ISOLATED_TEST_ON_CURRENT
         #php-version: [ "8.1" ]
         acms_job:
           - integrated_php_unit_tests
@@ -170,11 +170,6 @@ jobs:
           # Update the CI by adding patches without pinning the following modules.
           composer require "drupal/facets:^2.0.6" --no-update --no-install -d modules/acquia_cms_search
           composer require "drupal/pathauto:^1.11" --no-update --no-install -d modules/acquia_cms_common
-
-          if [ "${ORCA_JOB}" = "ISOLATED_TEST_ON_CURRENT" ]; then
-            # Update drupal/core patch as per Drupal Core version.
-            sed -i 's/2023-11-30\/3370946-pagetitle-backport-10-2-x.patch/2023-09-11\/3370946-page-title-backport-10-1-x.patch/g' modules/acquia_cms_common/composer.json
-          fi
 
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
@@ -244,7 +239,7 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_NEXT_MINOR
+          - ISOLATED_TEST_ON_CURRENT
         php-version:
           - 8.1
           - 8.2
@@ -284,11 +279,6 @@ jobs:
 
           # Remove all PHPunit tests from acquia_cms modules.
           find modules/*/tests tests/src -type f -name "*Test.php" -exec rm -fr '{}' ';'
-
-          if [ "${ORCA_JOB}" = "ISOLATED_TEST_ON_CURRENT" ]; then
-            # Update drupal/core patch as per Drupal Core version.
-            sed -i 's/2023-11-30\/3370946-pagetitle-backport-10-2-x.patch/2023-09-11\/3370946-page-title-backport-10-1-x.patch/g' modules/acquia_cms_common/composer.json
-          fi
 
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
@@ -342,7 +332,7 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_NEXT_MINOR
+          - ISOLATED_TEST_ON_CURRENT
         #php-version: [ "8.1" ]
         modules:
           - acquia_cms_article, acquia_cms_person, acquia_cms_place, acquia_cms_event
@@ -387,11 +377,6 @@ jobs:
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
-
-          if [ "${ORCA_JOB}" = "ISOLATED_TEST_ON_CURRENT" ]; then
-            # Update drupal/core patch as per Drupal Core version.
-            sed -i 's/2023-11-30\/3370946-pagetitle-backport-10-2-x.patch/2023-09-11\/3370946-page-title-backport-10-1-x.patch/g' modules/acquia_cms_common/composer.json
-          fi
 
           modules_list=$(echo ${MODULES} | tr "," "\n")
           declare -a commands
@@ -452,7 +437,7 @@ jobs:
 
       GIT_COMMITTER_NAME: "Github Actions"
       GIT_COMMITTER_EMAIL: "github-actions@exmaple.com"
-      ORCA_JOB: ISOLATED_TEST_ON_NEXT_MINOR
+      ORCA_JOB: ISOLATED_TEST_ON_CURRENT
       ACMS_JOB: "upgrade_modules"
     strategy:
       fail-fast: false
@@ -481,11 +466,6 @@ jobs:
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
-
-          if [ "${ORCA_JOB}" = "ISOLATED_TEST_ON_CURRENT" ]; then
-            # Update drupal/core patch as per Drupal Core version.
-            sed -i 's/2023-11-30\/3370946-pagetitle-backport-10-2-x.patch/2023-09-11\/3370946-page-title-backport-10-1-x.patch/g' modules/acquia_cms_common/composer.json
-          fi
 
           ./tests/ci/before_install.blt.sh
       - name: Install
