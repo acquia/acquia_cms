@@ -1,4 +1,4 @@
-name: Drush Security & Composer Outdated Check
+name: Check for security & outdated packages
 on:
   schedule:
     - cron: '0 0 * * *'
@@ -28,4 +28,4 @@ jobs:
 
       - name: composer outdated
         run: |
-          composer show -o
+          ./scripts/outdated.sh
