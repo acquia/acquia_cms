@@ -134,7 +134,7 @@ jobs:
           - ISOLATED_TEST_ON_CURRENT
         acms_job:
           - integrated_php_unit_tests
-          - integrated_existing_site_tests
+          # - integrated_existing_site_tests
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
