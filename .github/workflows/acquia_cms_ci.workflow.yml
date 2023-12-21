@@ -219,7 +219,7 @@ jobs:
       ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
       COMPOSER_PROCESS_TIMEOUT: 1800
       ORCA_JOB: ${{ matrix.orca-job }}
-      #AWS_S3_BUCKET_PATH: s3://acquia-cms-artifacts/backstop
+      AWS_S3_BUCKET_PATH: s3://acquia-cms-artifacts/backstop
       # Set Required API Keys.
       CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
       SEARCH_UUID: ${{ secrets.SEARCH_UUID }}
@@ -261,12 +261,12 @@ jobs:
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
           curl https://gist.githubusercontent.com/vishalkhode1/342a0eee801e51f48b4d9701749c1c94/raw/orca-oldest-support.patch | git -C ../orca apply
-      #      - name: Configure AWS Credentials
-      #        uses: aws-actions/configure-aws-credentials@v1
-      #        with:
-      #          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
