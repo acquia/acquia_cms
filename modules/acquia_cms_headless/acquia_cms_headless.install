@@ -14,12 +14,6 @@ use Drupal\user\RoleInterface;
  */
 function acquia_cms_headless_install($is_syncing) {
   if (!$is_syncing) {
-
-    // Install entity clone module during headless installation.
-    if (\Drupal::moduleHandler()->moduleExists('entity_clone')) {
-      \Drupal::service('module_installer')->install(['entity_clone']);
-    }
-
     // Call the headless service.
     $headless_user = \Drupal::service('acquia_cms_headless.starterkit_nextjs');
 
