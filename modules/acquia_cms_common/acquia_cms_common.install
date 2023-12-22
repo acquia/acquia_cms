@@ -70,6 +70,7 @@ function acquia_cms_common_install($is_syncing) {
     // Install entity clone module during common installation.
     if (!$module_handler->moduleExists('entity_clone')) {
       $module_installer->install(['entity_clone']);
+      $config_storage->write('entity_clone.settings', $source_optional_dir->read('entity_clone.settings'));
     }
 
     /*
