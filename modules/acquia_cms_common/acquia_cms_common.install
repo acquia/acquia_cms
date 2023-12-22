@@ -67,6 +67,11 @@ function acquia_cms_common_install($is_syncing) {
       $module_installer->uninstall(['page_cache']);
     }
 
+    // Install entity clone module during common installation.
+    if ($module_handler->moduleExists('entity_clone')) {
+      $module_installer->install(['entity_clone']);
+    }
+
     /*
      * We've to explicitly set purge plugin as acquia_purge, If Acquia Purge
      * module is enabled, else this would give below error:
@@ -119,14 +124,16 @@ function acquia_cms_common_config_schema_info_alter(&$definitions) {
       'hidden' => ['type' => 'boolean'],
     ],
   ];
-  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['cohesion_layout'] = $schemaMapping;
-  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['component_content'] = $schemaMapping;
-  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['content_moderation_state'] = $schemaMapping;
-  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['crop'] = $schemaMapping;
-  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['media'] = $schemaMapping;
-  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['path_alias'] = $schemaMapping;
-  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['redirect'] = $schemaMapping;
-  $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['search_api_task'] = $schemaMapping;
+  if (\Drupal::service('module_handler')->moduleExists('entity_clone')) {
+    $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['cohesion_layout'] = $schemaMapping;
+    $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['component_content'] = $schemaMapping;
+    $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['content_moderation_state'] = $schemaMapping;
+    $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['crop'] = $schemaMapping;
+    $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['media'] = $schemaMapping;
+    $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['path_alias'] = $schemaMapping;
+    $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['redirect'] = $schemaMapping;
+    $definitions['entity_clone.settings']['mapping']['form_settings']['mapping']['search_api_task'] = $schemaMapping;
+  }
   $definitions['config_ignore.settings']['mapping']['enable_export_filtering'] = [
     'type' => 'boolean',
     'label' => 'Enable export filtering',
