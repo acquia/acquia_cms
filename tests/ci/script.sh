@@ -30,7 +30,7 @@ if [ "${ACMS_JOB}" == "backstop_tests" ] || [ "${ACMS_JOB}" == "upgrade_modules"
   orca fixture:run-server &
 
   # Runs Backstop.js
-  # npm run backstop-starter
+  npm run backstop-starter
 
   # Generate backstop test images.
   # npm run backstop-starter && error=false || error=true
@@ -41,11 +41,11 @@ if [ "${ACMS_JOB}" == "backstop_tests" ] || [ "${ACMS_JOB}" == "upgrade_modules"
   # fi
 
   # Store failed backstop test images.
-  npm run backstop-starter && error=false || error=true
-  if [ "${error}" = "true" ]; then
-     tar -cvzf test_reports.tar.gz ./tests/backstop/bitmaps_test/;
-     aws s3 cp --recursive "./tests/backstop/bitmaps_test/" "${AWS_S3_BUCKET_PATH}/backstop/logs/${GITHUB_RUN_ID}"
-  fi
+  # npm run backstop-starter && error=false || error=true
+  # if [ "${error}" = "true" ]; then
+  #    tar -cvzf test_reports.tar.gz ./tests/backstop/bitmaps_test/;
+  #    aws s3 cp --recursive "./tests/backstop/bitmaps_test/" "${AWS_S3_BUCKET_PATH}/backstop/logs/${GITHUB_RUN_ID}"
+  # fi
   # Runs Pa11y.js
   # npm run pa11y-starter
 fi
