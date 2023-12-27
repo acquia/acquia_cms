@@ -194,12 +194,21 @@ function acquia_cms_common_content_model_role_presave_alter(RoleInterface &$role
     'captcha' => 'administer CAPTCHA settings',
     'recaptcha' => 'administer recaptcha',
   ];
+  $module_handler = \Drupal::moduleHandler();
   switch ($role->id()) {
     case 'user_administrator':
       foreach ($modules_permission as $module => $permission) {
-        if (\Drupal::moduleHandler()->moduleExists($module)) {
+        if ($module_handler->moduleExists($module)) {
           $role->grantPermission($permission);
         }
+      }
+      break;
+
+    case 'content_administrator':
+    case 'content_author':
+    case 'content_editor':
+      if ($module_handler->moduleExists('entity_clone')) {
+        $role->grantPermission('clone node entity');
       }
       break;
   }

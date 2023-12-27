@@ -381,19 +381,6 @@ function acquia_cms_common_modules_installed($modules, $is_syncing) {
       // Set telemetry to be TRUE on install of acquia_connector.
       \Drupal::state()->set('acquia_connector.telemetry.opted', TRUE);
     }
-
-    // Add entity_clone permission after module install.
-    if (in_array('entity_clone', $modules)) {
-      $roles = [
-        'content_administrator',
-        'content_author',
-        'content_editor',
-      ];
-      $permissionFacade = Drupal::classResolver(PermissionFacade::class);
-      foreach ($roles as $role) {
-        $permissionFacade->updateRole($role, ['clone node entity']);
-      }
-    }
   }
 }
 

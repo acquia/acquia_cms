@@ -81,21 +81,14 @@ class PermissionFacade implements ContainerInjectionInterface {
    *
    * @param string $role
    *   A role string where permissions need to be added/updated.
-   * @param array $newPermissions
-   *   A list of permission to add to the role.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function updateRole(string $role, array $newPermissions = []) :int {
+  public function updateRole(string $role) :int {
     if (($roleObject = $this->roleEntity->load($role)) instanceof RoleInterface) {
       $previousPermissions = $roleObject->getPermissions();
-      if (empty($newPermissions)) {
-        $this->moduleHandler->alter('content_model_role_presave', $roleObject);
-        $updatedPermissions = $roleObject->getPermissions();
-      }
-      else {
-        $updatedPermissions = $newPermissions;
-      }
+      $this->moduleHandler->alter('content_model_role_presave', $roleObject);
+      $updatedPermissions = $roleObject->getPermissions();
       if ($previousPermissions !== $updatedPermissions) {
         $permissions = array_diff($updatedPermissions, $previousPermissions);
         foreach ($permissions as $permission) {
