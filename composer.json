@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "acquia/acquia-cms-starterkit": "1.1.5",
+        "acquia/acquia-cms-starterkit": "^1",
         "drupal/acquia_cms_audio": "dev-develop",
         "drupal/acquia_cms_component": "dev-develop",
         "drupal/acquia_cms_dam": "dev-develop",
@@ -130,7 +130,8 @@
         },
         "patches": {
             "acquia/acquia-cms-starterkit": {
-                "ACMS-1988 - Update admin theme in starterkit to Gin": "https://github.com/acquia/acquia-cms-starterkit/compare/develop...feature/admin-gin-theme.patch"
+                "ACMS-1988 - Update admin theme in starterkit to Gin": "https://github.com/acquia/acquia-cms-starterkit/compare/develop...feature/admin-gin-theme.patch",
+                "ACMS-3456: Update logic to enable theme.": "https://patch-diff.githubusercontent.com/raw/acquia/acquia-cms-starterkit/pull/132.patch"
             },
             "drupal/core": {
                 "3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112": "https://git.drupalcode.org/project/drupal/-/merge_requests/3142.patch",
