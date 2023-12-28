@@ -19,6 +19,8 @@ events:
             - cd docroot/sites
             - ln -s default headless
             - ln -s default community
+            - mkdir drstest
+            - mkdir multisite
             - cd -
       # Commenting as it's no longer needed and this is failing deployment.
       # - front-end:
@@ -33,7 +35,11 @@ events:
           script:
             # Prepare settings.php with the minimum required for Cloud.
             - chmod -R +w docroot/sites/default
+            - chmod -R +w docroot/sites/drstest
+            - chmod -R +w docroot/sites/multisite
             - cp docroot/sites/default/default.settings.php docroot/sites/default/settings.php
+            - cp docroot/sites/default/default.settings.php docroot/sites/drstest/settings.php
+            - cp docroot/sites/default/default.settings.php docroot/sites/multisite/settings.php
             # Clear any config directories that Cloud tries to set in the include file.
             - echo "\$config_directories = [];" >> docroot/sites/default/settings.php
             # Use the existing `config` directory we already have. Cloud gets confused

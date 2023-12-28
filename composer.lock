@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7bc2296efd11b8ea8dcbc00acac1016a",
+    "content-hash": "6c4450b2b90426c9374851fcc007e361",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -80,6 +80,51 @@
                 "source": "https://github.com/acquia/acquia-cms-starterkit/tree/1.1.5"
             },
             "time": "2023-08-28T12:38:54+00:00"
+        },
+        {
+            "name": "acquia/acquia_global_commands",
+            "version": "dev-develop",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vishalkhode1/acquia_global_commands.git",
+                "reference": "2b3001bc66039a32a0af82f30e57c9b10ee45eb1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vishalkhode1/acquia_global_commands/zipball/2b3001bc66039a32a0af82f30e57c9b10ee45eb1",
+                "reference": "2b3001bc66039a32a0af82f30e57c9b10ee45eb1",
+                "shasum": ""
+            },
+            "require-dev": {
+                "acquia/coding-standards": "^1.0",
+                "acquia/drupal-recommended-settings": "*"
+            },
+            "type": "drupal-drush",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Acquia  Engineering",
+                    "homepage": "https://www.acquia.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Vishal  Khode",
+                    "email": "vishal.khode@acquia.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Acquia recommended global drush commands.",
+            "keywords": [
+                "drupal",
+                "drush"
+            ],
+            "support": {
+                "source": "https://github.com/vishalkhode1/acquia_global_commands/tree/develop",
+                "issues": "https://github.com/vishalkhode1/acquia_global_commands/issues"
+            },
+            "time": "2023-11-22T11:58:37+00:00"
         },
         {
             "name": "acquia/cohesion",
@@ -231,6 +276,70 @@
                 "source": "https://github.com/acquia/drupal-environment-detector/tree/1.6.0"
             },
             "time": "2023-02-28T18:45:28+00:00"
+        },
+        {
+            "name": "acquia/drupal-recommended-settings",
+            "version": "dev-develop",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/drupal-recommended-settings.git",
+                "reference": "9ab95625714c9182eb43b97054a22465af90e149"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/drupal-recommended-settings/zipball/9ab95625714c9182eb43b97054a22465af90e149",
+                "reference": "9ab95625714c9182eb43b97054a22465af90e149",
+                "shasum": ""
+            },
+            "require": {
+                "acquia/acquia_global_commands": "dev-develop",
+                "acquia/drupal-environment-detector": "^1.5.3",
+                "composer-plugin-api": "^2",
+                "consolidation/config": "^2.0.0",
+                "grasmash/yaml-expander": "^3.0",
+                "loophp/phposinfo": "^1.7.1",
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "acquia/coding-standards": "^2.0",
+                "composer/composer": "^2.2",
+                "dealerdirect/phpcodesniffer-composer-installer": "^1.0.0",
+                "ergebnis/composer-normalize": "^2.30.2",
+                "phpro/grumphp-shim": "^2.2",
+                "phpunit/phpunit": "^9 || ^10"
+            },
+            "default-branch": true,
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Acquia\\Drupal\\RecommendedSettings\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Acquia\\Drupal\\RecommendedSettings\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-only"
+            ],
+            "authors": [
+                {
+                    "name": "Vishal Khode",
+                    "email": "vishal.khode@acquia.com"
+                }
+            ],
+            "description": "The composer plugin for adding drupal-recommended-settings for Acquia Cloud.",
+            "keywords": [
+                "acquia",
+                "drupal",
+                "drupal-recommended-settings"
+            ],
+            "support": {
+                "docs": "https://docs.acquia.com/drupal-recommended-settings/",
+                "issues": "https://github.com/acquia/drupal-recommended-settings/issues",
+                "source": "https://github.com/acquia/drupal-recommended-settings/tree/develop"
+            },
+            "time": "2023-11-29T07:12:12+00:00"
         },
         {
             "name": "acquia/http-hmac-php",
@@ -3368,10 +3477,6 @@
                 {
                     "name": "dww",
                     "homepage": "https://www.drupal.org/user/46549"
-                },
-                {
-                    "name": "googletorp",
-                    "homepage": "https://www.drupal.org/user/386230"
                 },
                 {
                     "name": "jsacksick",
@@ -9470,6 +9575,51 @@
             "time": "2022-05-09T20:22:34+00:00"
         },
         {
+            "name": "grasmash/yaml-expander",
+            "version": "3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/grasmash/yaml-expander.git",
+                "reference": "f6dd6be2a899316528e201c91fc317b16794b1c0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/grasmash/yaml-expander/zipball/f6dd6be2a899316528e201c91fc317b16794b1c0",
+                "reference": "f6dd6be2a899316528e201c91fc317b16794b1c0",
+                "shasum": ""
+            },
+            "require": {
+                "grasmash/expander": "^1 || ^2 || ^3",
+                "symfony/yaml": "^4 || ^5 || ^6"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2.1",
+                "phpunit/phpunit": "^8.0 || ^9",
+                "squizlabs/php_codesniffer": "^2.7 || ^3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Grasmash\\YamlExpander\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matthew Grasmick"
+                }
+            ],
+            "description": "Expands internal property references in a yaml file.",
+            "support": {
+                "issues": "https://github.com/grasmash/yaml-expander/issues",
+                "source": "https://github.com/grasmash/yaml-expander/tree/3.0.2"
+            },
+            "time": "2022-05-10T13:29:17+00:00"
+        },
+        {
             "name": "guzzlehttp/guzzle",
             "version": "7.8.1",
             "source": {
@@ -10621,6 +10771,63 @@
                 }
             ],
             "time": "2023-11-24T15:40:42+00:00"
+        },
+        {
+            "name": "loophp/phposinfo",
+            "version": "1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/loophp/phposinfo.git",
+                "reference": "9faccbfbf5364fd34fbc230961fa6fc51cc66b8f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/loophp/phposinfo/zipball/9faccbfbf5364fd34fbc230961fa6fc51cc66b8f",
+                "reference": "9faccbfbf5364fd34fbc230961fa6fc51cc66b8f",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8"
+            },
+            "require-dev": {
+                "drupol/php-conventions": "^5.0.0",
+                "ext-pcov": "*",
+                "friends-of-phpspec/phpspec-code-coverage": "^6",
+                "infection/infection": "^0.26",
+                "infection/phpspec-adapter": "^0.2.0",
+                "phpspec/phpspec": "^7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "loophp\\phposinfo\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pol Dellaiera",
+                    "email": "pol.dellaiera@protonmail.com"
+                }
+            ],
+            "description": "Try to guess the host operating system.",
+            "keywords": [
+                "operating system detection"
+            ],
+            "support": {
+                "issues": "https://github.com/loophp/phposinfo/issues",
+                "source": "https://github.com/loophp/phposinfo"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/drupol",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-12-20T20:21:10+00:00"
         },
         {
             "name": "maennchen/zipstream-php",
@@ -20896,6 +21103,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "acquia/drupal-recommended-settings": 20,
         "drupal/acquia_cms_audio": 20,
         "drupal/acquia_cms_component": 20,
         "drupal/acquia_cms_dam": 20,
