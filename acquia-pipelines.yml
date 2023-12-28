@@ -5,7 +5,7 @@ services:
   - composer:
       version: 2
   - php:
-      version: 8.1
+      version: 8.2
 
 events:
   build:
@@ -15,14 +15,11 @@ events:
           script:
             - composer validate --no-check-all --ansi --no-interaction
             - composer install
-            - mkdir -p docroot/modules/acquia_cms
             # Create symlink directory for multisite headless and community.
             - cd docroot/sites
             - ln -s default headless
             - ln -s default community
             - cd -
-            - composer archive --format zip --file acquia_cms
-            - unzip acquia_cms.zip -d docroot/modules/acquia_cms
       # Commenting as it's no longer needed and this is failing deployment.
       # - front-end:
       #    type: script
@@ -34,7 +31,6 @@ events:
       - cleanup:
           type: script
           script:
-            - rm acquia_cms.zip
             # Prepare settings.php with the minimum required for Cloud.
             - chmod -R +w docroot/sites/default
             - cp docroot/sites/default/default.settings.php docroot/sites/default/settings.php
