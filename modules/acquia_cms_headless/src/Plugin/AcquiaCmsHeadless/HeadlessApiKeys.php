@@ -205,7 +205,6 @@ class HeadlessApiKeys extends AcquiaCmsDashboardBase {
         'route' => 'clone-form',
       ],
     ];
-
     foreach ($entities as $entity) {
       $operation = [];
       foreach ($operationLinks as $key => $operationLink) {
@@ -227,11 +226,14 @@ class HeadlessApiKeys extends AcquiaCmsDashboardBase {
           ];
         }
         else {
-          $route_name = $entity->toUrl($operationLink['route'])->getRouteName();
-          $operation[$key] = [
-            'url' => Url::fromRoute($route_name, ['consumer' => $entity->id()], $destination),
-            'title' => $operationLink['title'],
-          ];
+          // Check link templete.
+          if ($entity->hasLinkTemplate($operationLink['route'])) {
+            $route_name = $entity->toUrl($operationLink['route'])->getRouteName();
+            $operation[$key] = [
+              'url' => Url::fromRoute($route_name, ['consumer' => $entity->id()], $destination),
+              'title' => $operationLink['title'],
+            ];
+          }
         }
       }
 
