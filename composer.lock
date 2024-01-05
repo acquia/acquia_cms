@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b6abfe5043a60505a2a8847ec7ce1908",
+    "content-hash": "d1c11785f71fb8da336ad3d6a4b222e6",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2819,7 +2819,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_site_studio",
-                "reference": "b2193120d57850ab13bf86bf9f9997b279134674"
+                "reference": "356b624a2ead0bc11427f05ce7a2158f2cb7f514"
             },
             "require": {
                 "acquia/cohesion": "~7.4.0",
@@ -2828,7 +2828,8 @@
                 "drupal/collapsiblock": "^4.0",
                 "drupal/node_revision_delete": "^1.0",
                 "drupal/responsive_preview": "^2.1",
-                "drupal/sitestudio_config_management": "^1.0"
+                "drupal/sitestudio_config_management": "^1.0",
+                "drupal/sitestudio_gin": "^1"
             },
             "conflict": {
                 "drupal/acquia_cms_article": "<1.6",
@@ -8262,6 +8263,58 @@
             }
         },
         {
+            "name": "drupal/sitestudio_gin",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/sitestudio_gin.git",
+                "reference": "1.0.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/sitestudio_gin-1.0.1.zip",
+                "reference": "1.0.1",
+                "shasum": "a2308ed26e451e7d9f64b3f4ebd277fc3db22006"
+            },
+            "require": {
+                "acquia/cohesion": "^6.7.0 || ^7",
+                "drupal/core": "^8 || ^9 || ^10",
+                "drupal/gin": "^3.0@rc"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.1",
+                    "datestamp": "1691508782",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Acquia Engineering",
+                    "homepage": "https://www.acquia.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "pavlosdan",
+                    "homepage": "https://www.drupal.org/user/751960"
+                }
+            ],
+            "description": "Integrates Acquia Site Studio with the Gin admin theme.",
+            "homepage": "https://www.drupal.org/project/sitestudio_gin",
+            "support": {
+                "source": "https://git.drupalcode.org/project/sitestudio_gin",
+                "error": "Invalid dependency: \"cohesion\" is an unknown drupal 8 package name"
+            }
+        },
+        {
             "name": "drupal/smart_trim",
             "version": "2.1.0",
             "source": {
@@ -9268,12 +9321,9 @@
             },
             "require": {
                 "php": "^8.0",
-                "php-http/client-implementation": "^1.0",
-                "php-http/discovery": "^1.6",
-                "php-http/httplug": "^1.0 || ^2.0",
-                "php-http/message-factory": "^1.0.2",
-                "psr/http-message": "^1.0 || ^2.0",
-                "psr/http-message-implementation": "^1.0",
+                "php-http/discovery": "^1.17",
+                "psr/http-client-implementation": "^1.0",
+                "psr/http-factory-implementation": "^1.0",
                 "willdurand/geocoder": "^4.0"
             },
             "require-dev": {
@@ -9314,7 +9364,7 @@
                 "http geocoder"
             ],
             "support": {
-                "source": "https://github.com/geocoder-php/php-common-http/tree/master"
+                "source": "https://github.com/geocoder-php/php-common-http/tree/4.6.0"
             },
             "time": "2023-07-31T20:07:24+00:00"
         },
