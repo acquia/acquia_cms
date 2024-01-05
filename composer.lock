@@ -2900,7 +2900,8 @@
                 "drupal/collapsiblock": "^4.0",
                 "drupal/node_revision_delete": "^1.0",
                 "drupal/responsive_preview": "^2.1",
-                "drupal/sitestudio_config_management": "^1.0"
+                "drupal/sitestudio_config_management": "^1.0",
+                "drupal/sitestudio_gin": "^1"
             },
             "conflict": {
                 "drupal/acquia_cms_article": "<1.6",
@@ -8348,6 +8349,58 @@
             "description": "Contains configuration for config filter, config ignore & config split.",
             "transport-options": {
                 "relative": true
+            }
+        },
+        {
+            "name": "drupal/sitestudio_gin",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/sitestudio_gin.git",
+                "reference": "1.0.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/sitestudio_gin-1.0.1.zip",
+                "reference": "1.0.1",
+                "shasum": "a2308ed26e451e7d9f64b3f4ebd277fc3db22006"
+            },
+            "require": {
+                "acquia/cohesion": "^6.7.0 || ^7",
+                "drupal/core": "^8 || ^9 || ^10",
+                "drupal/gin": "^3.0@rc"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.1",
+                    "datestamp": "1691508782",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Acquia Engineering",
+                    "homepage": "https://www.acquia.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "pavlosdan",
+                    "homepage": "https://www.drupal.org/user/751960"
+                }
+            ],
+            "description": "Integrates Acquia Site Studio with the Gin admin theme.",
+            "homepage": "https://www.drupal.org/project/sitestudio_gin",
+            "support": {
+                "source": "https://git.drupalcode.org/project/sitestudio_gin",
+                "error": "Invalid dependency: \"cohesion\" is an unknown drupal 8 package name"
             }
         },
         {
