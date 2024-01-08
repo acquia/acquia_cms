@@ -134,7 +134,7 @@ class PlaceTest extends ContentTypeTestBase {
     $assert_session->fieldExists('Country', $group);
     $assert_session->fieldExists('First name', $group);
     $assert_session->fieldExists('Last name', $group);
-    $assert_session->fieldExists('Company', $group);
+    $assert_session->fieldExists('Organization', $group);
     $assert_session->fieldExists('Street address', $group);
     $assert_session->fieldExists('City', $group);
     $assert_session->fieldExists('State', $group);
