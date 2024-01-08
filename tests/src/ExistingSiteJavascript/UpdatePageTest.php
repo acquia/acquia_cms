@@ -14,6 +14,11 @@ use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
  */
 class UpdatePageTest extends ExistingSiteSelenium2DriverTestBase {
 
+  protected function setUp(): void {
+    parent::setUp();
+    $this->container->get('module_installer')->install(['sitestudio_claro']);
+  }
+
   /**
    * Tests update page design.
    *
@@ -34,6 +39,11 @@ class UpdatePageTest extends ExistingSiteSelenium2DriverTestBase {
     $site_name_element = $assert_session->elementExists('css', 'header .site-name');
     $this->assertSame($site_name, $site_name_element->getText());
     $assert_session->pageTextContains("Drupal database update");
+  }
+
+  public function tearDown(): void {
+    $this->container->get('module_installer')->uninstall(['sitestudio_claro']);
+    parent::tearDown();
   }
 
 }
