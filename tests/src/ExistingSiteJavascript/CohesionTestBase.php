@@ -30,8 +30,6 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    */
   protected function setUp(): void {
     parent::setUp();
-    $this->moduleInstaller = $this->container->get('module_installer');
-    // $this->moduleInstaller->install(['sitestudio_gin']);
     // Set a standard window size so that all javascript tests start with the
     // same viewport.
     $this->getDriverInstance()->maximizeWindow();
