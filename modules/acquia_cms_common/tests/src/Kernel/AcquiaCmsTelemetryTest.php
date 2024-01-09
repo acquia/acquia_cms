@@ -77,9 +77,6 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
    * @throws \ReflectionException
    */
   public function testIfTelemetryDataShouldSend(): void {
-    $getTelemetryMethod = $this->getAcquiaCmsTelemetryMethod("getAcquiaCmsTelemetryData");
-    $actual_telemetry_data = $getTelemetryMethod->invoke($this->acquiaCmsTelemetry);
-
     $method = $this->getAcquiaCmsTelemetryMethod("shouldSendTelemetryData");
     $state_service = $this->container->get("state");
     $datetime_service = $this->container->get('datetime.time');
@@ -109,12 +106,15 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
     $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertTrue($shouldSendData, "Should send telemetry data, if data sent before a day.");
 
-    $state_service->set("acquia_cms_common.telemetry.data", json_encode($actual_telemetry_data));
+    $methodHash = $this->getAcquiaCmsTelemetryMethod("getHash");
+    $state_service->set(
+      "acquia_cms_common.telemetry.hash",
+      $methodHash->invoke($this->acquiaCmsTelemetry),
+    );
     $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertFalse($shouldSendData, "Should not send telemetry data, if current telemetry data is same as data already sent.");
 
-    $actual_telemetry_data['acquia_cms']['application_uuid'] = "some-application-uuid";
-    $state_service->set("acquia_cms_common.telemetry.data", json_encode($actual_telemetry_data));
+    $state_service->set("acquia_cms_common.telemetry.hash", 'O2X4mf9Csg8KLOIqNlUqc9dqXdsL_JE5hjKh4dRPemQ');
     $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertTrue($shouldSendData, "Should send telemetry data, if current telemetry data has changed from data already sent.");
 
