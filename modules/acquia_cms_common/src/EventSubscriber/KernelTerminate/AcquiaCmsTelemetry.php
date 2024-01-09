@@ -3,7 +3,6 @@
 namespace Drupal\acquia_cms_common\EventSubscriber\KernelTerminate;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
-use Drupal\acquia_cms_common\Utility\ArrayHelper;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\NestedArray;
@@ -149,7 +148,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
       $this->logger->get($event_type)->info('@message', [
         '@message' => json_encode($sumologicEventProperties, JSON_UNESCAPED_SLASHES),
       ]);
-      $this->state->set('acquia_cms_common.telemetry.data', json_encode($event_properties));
+      $this->state->set('acquia_cms_common.telemetry.hash', $this->getHash());
       $this->state->set('acquia_cms_common.telemetry.timestamp', $this->time->getCurrentTime());
 
       return TRUE;
@@ -244,18 +243,15 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
 
     $sendTimestamp = $this->state->get('acquia_cms_common.telemetry.timestamp', 0);
     $isOpted = $this->state->get('acquia_connector.telemetry.opted', TRUE);
-    $telemetryDataOld = $this->state->get('acquia_cms_common.telemetry.data', []);
-    if (!empty($telemetryDataOld)) {
-      $telemetryDataOld = json_decode($telemetryDataOld, TRUE);
-    }
 
     // We send telemetry data if all below conditions are met:
     // If current environment is Acquia environment.
     // If user has opted to send telemetry data.
     // If data is not sent from the last 24 hours.
     // If there is change in telemetry data to send & previous telemetry data.
-    $isSame = ArrayHelper::isSame($telemetryDataOld, $this->getAcquiaCmsTelemetryData());
-    if (AcquiaDrupalEnvironmentDetector::isAhEnv() && $isOpted && ($this->time->getCurrentTime() - $sendTimestamp) > 86400 && !$isSame) {
+    if (AcquiaDrupalEnvironmentDetector::isAhEnv() && $isOpted &&
+    ($this->time->getCurrentTime() - $sendTimestamp) > 86400 &&
+    !($this->state->get('acquia_cms_common.telemetry.hash') == $this->getHash())) {
       return TRUE;
     }
     return FALSE;
@@ -294,6 +290,16 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
    */
   private function getUserId(): string {
     return Crypt::hashBase64($this->configFactory->get('system.site')->get('uuid'));
+  }
+
+  /**
+   * Gets a unique hash for telemetry data.
+   *
+   * @return string
+   *   Returns a hashed telemetry data.
+   */
+  private function getHash(): string {
+    return Crypt::hashBase64(serialize($this->getAcquiaCmsTelemetryData()));
   }
 
 }
