@@ -142,7 +142,6 @@ class PermissionFacade implements ContainerInjectionInterface {
     return [
       'access content overview',
       'access media overview',
-      'clone node entity',
       'use editorial transition create_new_draft',
       'use editorial transition review',
       'use moderation dashboard',

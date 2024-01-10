@@ -238,11 +238,13 @@ class HeadlessNextSites extends AcquiaCmsDashboardBase {
           ];
         }
         else {
-          $route_name = $entity->toUrl($operationLink['route'])->getRouteName();
-          $operation[$key] = [
-            'url' => Url::fromRoute($route_name, [$entityType => $entity->id()], $destination),
-            'title' => $operationLink['title'],
-          ];
+          if ($entity->hasLinkTemplate($operationLink['route'])) {
+            $route_name = $entity->toUrl($operationLink['route'])->getRouteName();
+            $operation[$key] = [
+              'url' => Url::fromRoute($route_name, [$entityType => $entity->id()], $destination),
+              'title' => $operationLink['title'],
+            ];
+          }
         }
       }
 
