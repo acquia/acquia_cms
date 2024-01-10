@@ -386,25 +386,6 @@ function acquia_cms_common_modules_installed($modules, $is_syncing) {
     if (in_array('entity_clone', $modules)) {
       _acquia_cms_common_rewrite_configuration('entity_clone.settings', 'acquia_cms_common');
     }
-    if (in_array('smart_trim', $modules)) {
-      // List of entity view display configuration to specific modules.
-      $modules_suffix = [
-        'article',
-        'event',
-        'page',
-        'person',
-        'place',
-      ];
-      // Iterate optional configs to be included for entity view display.
-      foreach ($modules_suffix as $suffix) {
-        $acms_module = "acquia_cms_$suffix";
-        // Check if module exists.
-        if ($module_handler->moduleExists($acms_module)) {
-          _acquia_cms_common_rewrite_configuration("core.entity_view_display.node.$suffix.teaser", $acms_module);
-          _acquia_cms_common_rewrite_configuration("core.entity_view_display.node.$suffix.search_results", $acms_module);
-        }
-      }
-    }
   }
 }
 
