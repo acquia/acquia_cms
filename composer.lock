@@ -5363,17 +5363,11 @@
         },
         {
             "name": "drupal/gin",
-            "version": "3.0.0-rc8",
+            "version": "dev-3.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/gin.git",
-                "reference": "8.x-3.0-rc8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/gin-8.x-3.0-rc8.zip",
-                "reference": "8.x-3.0-rc8",
-                "shasum": "656520834445c7b34986f2340b5261637cfee3ca"
+                "reference": "f031725fe869ffb63996683e4144e61f259ba005"
             },
             "require": {
                 "drupal/core": "^9 || ^10",
@@ -5381,12 +5375,15 @@
             },
             "type": "drupal-theme",
             "extra": {
+                "branch-alias": {
+                    "dev-3.x": "3.x-dev"
+                },
                 "drupal": {
-                    "version": "8.x-3.0-rc8",
-                    "datestamp": "1702729136",
+                    "version": "8.x-3.0-rc8+7-dev",
+                    "datestamp": "1704875799",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "RC releases are not covered by Drupal security advisories."
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -21820,6 +21817,7 @@
         "drupal/acquia_cms_starter": 20,
         "drupal/acquia_cms_toolbar": 20,
         "drupal/acquia_cms_tour": 20,
+        "drupal/gin": 20,
         "drupal/sitestudio_config_management": 20
     },
     "prefer-stable": true,
