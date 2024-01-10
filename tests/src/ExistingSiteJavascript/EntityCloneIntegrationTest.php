@@ -2,6 +2,8 @@
 
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
+use Drupal\node\Entity\Node;
+
 /**
  * Tests Cohesion's integration with Entity Clone.
  *
@@ -29,14 +31,10 @@ class EntityCloneIntegrationTest extends CohesionComponentTestBase {
 
     $this->drupalGet($edit_form);
     $page = $this->getSession()->getPage();
-    // $assert_session = $this->assertSession();
     // Add Hero component to the layout canvas.
     $this->getLayoutCanvas()->add('Hero');
     $page->pressButton('Save');
 
-    // @todo The action buttons disappeared on the node edit page, isue raised
-    // Issue - https://www.drupal.org/project/gin/issues/3410516
-    /*
     // Clone the node in the UI.
     $this->drupalGet($edit_form);
     $page->clickLink('Clone');
@@ -44,6 +42,7 @@ class EntityCloneIntegrationTest extends CohesionComponentTestBase {
 
     $expected_message = sprintf('The entity %s (%d) of type node was cloned.',
     $node->getTitle(), $node->id());
+    $assert_session = $this->assertSession();
     $assert_session->pageTextContains($expected_message);
 
     // Ensure that the clone is cleaned up automatically at the end of the test.
@@ -56,7 +55,6 @@ class EntityCloneIntegrationTest extends CohesionComponentTestBase {
     // Assert that the Cohesion components in the source node were cloned
     // as well.
     $this->getLayoutCanvas()->assertComponent('Hero');
-     */
   }
 
 }
