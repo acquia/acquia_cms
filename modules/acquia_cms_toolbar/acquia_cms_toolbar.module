@@ -23,11 +23,9 @@ function acquia_cms_toolbar_preprocess_html(array &$variables) {
  */
 function acquia_cms_toolbar_preprocess_page(&$variables) {
   $toolbar_access = \Drupal::currentUser()->hasPermission('access toolbar') ?? FALSE;
-  $route = \Drupal::routeMatch()->getRouteObject();
-  $is_admin_route = \Drupal::service('router.admin_context')->isAdminRoute($route);
 
   // Check if user has access to admin toolbar and its not admin route.
-  if ($toolbar_access && !$is_admin_route) {
+  if ($toolbar_access) {
     // Attach toolbar styles library on all pages.
     $variables['#attached']['library'][] = 'acquia_cms_toolbar/toolbar_styles';
   }
