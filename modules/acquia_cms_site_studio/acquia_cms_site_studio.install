@@ -146,11 +146,7 @@ function acquia_cms_site_studio_install($is_syncing) {
       'cohesion_style_guide',
       'sitestudio_config_management',
     ];
-    // Install sitestudio_gin module.
-    $system_theme_config = \Drupal::configFactory()->getEditable('system.theme');
-    if ($system_theme_config->get('admin') == 'gin') {
-      $modules_to_install[] = 'sitestudio_gin';
-    }
+
     // Install modules.
     \Drupal::service('module_installer')->install($modules_to_install);
   }
