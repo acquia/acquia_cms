@@ -397,7 +397,7 @@ class InstallStateTest extends ExistingSiteBase {
     $assert_session->pageTextContains('The password does not satisfy the password policies.');
 
     // Password must not contain the username.
-    // @todo Validation does not work for this constraint, isue has been raised
+    // @todo Validation does not work for this constraint, issue has been raised
     // Issue - https://www.drupal.org/project/password_policy/issues/3161012
     $page->fillField('Password', 'Acb#45nbcs');
     $page->fillField('Confirm password', 'Acb#45nbcs');
