@@ -1,0 +1,111 @@
+diff --git a/composer.json b/composer.json
+index fce04bff..ba58d89b 100644
+--- a/composer.json
++++ b/composer.json
+@@ -27,14 +27,64 @@
+         "drupal/acquia_cms_starter": "dev-develop",
+         "drupal/acquia_cms_toolbar": "dev-develop",
+         "drupal/acquia_cms_tour": "dev-develop",
++        "drupal/acquia_connector": "4.x-dev@dev",
++        "drupal/acquia_dam": "1.0.x-dev@dev",
++        "drupal/acquia_purge": "1.x-dev@dev",
++        "drupal/acquia_search": "3.1.x-dev@dev",
++        "drupal/address": "1.x-dev@dev",
++        "drupal/admin_toolbar": "3.x-dev@dev",
++        "drupal/autologout": "1.x-dev@dev",
++        "drupal/checklistapi": "2.1.x-dev@dev",
++        "drupal/collapsiblock": "4.x-dev@dev",
++        "drupal/component": "1.0.x-dev@dev",
++        "drupal/config_filter": "2.x-dev@dev",
++        "drupal/config_ignore": "3.x-dev@dev",
++        "drupal/config_rewrite": "1.x-dev@dev",
++        "drupal/config_split": "2.0.x-dev@dev",
+         "drupal/consumer_image_styles": "^4.0",
+-        "drupal/google_analytics": "^4.0",
+-        "drupal/google_tag": "^2.0",
+-        "drupal/honeypot": "^2.1",
+-        "drupal/recaptcha": "^3.2",
+-        "drupal/reroute_email": "^2.2",
+-        "drupal/shield": "^1.7",
++        "drupal/default_content": "2.0.x-dev@dev",
++        "drupal/diff": "1.x-dev@dev",
++        "drupal/entity_clone": "2.x-dev@dev",
++        "drupal/facets": "2.0.x-dev@dev",
++        "drupal/facets_pretty_paths": "1.x-dev@dev",
++        "drupal/field_group": "3.x-dev@dev",
++        "drupal/focal_point": "2.x-dev@dev",
++        "drupal/geocoder": "4.x-dev@dev",
++        "drupal/geofield": "1.x-dev@dev",
++        "drupal/google_analytics": "4.x-dev@dev",
++        "drupal/google_tag": "2.0.x-dev@dev",
++        "drupal/honeypot": "2.1.x-dev@dev",
++        "drupal/imagemagick": "3.x-dev@dev",
++        "drupal/imce": "3.x-dev@dev",
++        "drupal/jsonapi_extras": "3.x-dev@dev",
++        "drupal/jsonapi_menu_items": "1.2.x-dev@dev",
++        "drupal/media_entity_soundcloud": "3.x-dev@dev",
++        "drupal/memcache": "2.x-dev@dev",
++        "drupal/moderation_dashboard": "2.0.x-dev@dev",
++        "drupal/moderation_sidebar": "1.x-dev@dev",
++        "drupal/node_revision_delete": "1.x-dev@dev",
++        "drupal/openapi_jsonapi": "3.x-dev@dev",
++        "drupal/openapi_ui_redoc": "1.x-dev@dev",
++        "drupal/openapi_ui_swagger": "1.x-dev@dev",
++        "drupal/pathauto": "1.x-dev@dev",
++        "drupal/recaptcha": "3.x-dev@dev",
++        "drupal/redirect": "1.x-dev@dev",
++        "drupal/reroute_email": "2.3.x-dev@dev",
++        "drupal/responsive_preview": "2.x-dev@dev",
++        "drupal/restui": "1.x-dev@dev",
++        "drupal/scheduler": "2.x-dev@dev",
++        "drupal/scheduler_content_moderation_integration": "2.x-dev@dev",
++        "drupal/schema_metatag": "3.0.x-dev@dev",
++        "drupal/search_api": "1.x-dev@dev",
++        "drupal/search_api_autocomplete": "1.x-dev@dev",
++        "drupal/seckit": "2.x-dev@dev",
++        "drupal/shield": "8.x-1.x-dev@dev",
++        "drupal/simple_sitemap": "4.x-dev@dev",
+         "drupal/sitestudio_config_management": "dev-develop",
++        "drupal/smart_trim": "2.1.x-dev@dev",
++        "drupal/social_media_links": "8.x-2.x-dev@dev",
++        "drupal/username_enumeration_prevention": "1.x-dev@dev",
++        "drupal/workbench_email": "3.x-dev@dev",
+         "drush/drush": "^10 || ^11 || ^12",
+         "mnsami/composer-custom-directory-installer": "^2.0"
+     },
+diff --git a/modules/acquia_cms_headless/composer.json b/modules/acquia_cms_headless/composer.json
+index 5aec27bd..63adf4fa 100644
+--- a/modules/acquia_cms_headless/composer.json
++++ b/modules/acquia_cms_headless/composer.json
+@@ -84,5 +84,6 @@
+             "type": "composer",
+             "url": "https://packages.drupal.org/8"
+         }
+-    }
++    },
++    "minimum-stability": "alpha"
+ }
+diff --git a/modules/acquia_cms_search/composer.json b/modules/acquia_cms_search/composer.json
+index 584cf90f..be66bd67 100644
+--- a/modules/acquia_cms_search/composer.json
++++ b/modules/acquia_cms_search/composer.json
+@@ -8,9 +8,9 @@
+         "drupal/acquia_cms_common": "1.x-dev || 2.x-dev || 3.x-dev",
+         "drupal/acquia_search": "^3.1",
+         "drupal/collapsiblock": "^4.0",
+-        "drupal/facets": "2.0.6",
++        "drupal/facets": "^2.0.6",
+         "drupal/facets_pretty_paths": "1.5.0",
+-        "drupal/search_api": "1.30 || 1.31",
++        "drupal/search_api": "^1.30 || ^1.31",
+         "drupal/search_api_autocomplete": "^1.7"
+     },
+     "config": {
+@@ -43,6 +43,7 @@
+             }
+         }
+     },
++    "minimum-stability": "dev",
+     "repositories": {
+         "assets": {
+             "type": "composer",

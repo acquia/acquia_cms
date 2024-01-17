@@ -8,6 +8,7 @@ on:
 #    branches: [ develop ]
     paths-ignore:
       - README.md
+
 jobs:
   static_code_analysis:
     if: ${{ github.event_name == 'pull_request' }}
@@ -537,7 +538,7 @@ jobs:
       - name: deploy_code
         run: |
           ${GITHUB_WORKSPACE}/scripts/deploy_code.sh
-  nightly_dev_tests:
+  dev_version_test:
     if: ${{ github.event_name == 'pull_request' }}
     name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
     runs-on: ubuntu-latest
@@ -586,7 +587,7 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
-          curl https://gist.githubusercontent.com/rajeshreeputra/1c7d0d358f17b353a974eff16c5bd776/raw/17a0ed32722f32fc84b14ed9fbafc60fbec8b67c/dev-version-check.patch | git apply -
+          git apply ./patches/dev-version-tests.patch
       - name: Before Install
         run: |
           if [ "${ORCA_JOB}" = "ISOLATED_TEST_ON_NEXT_MINOR" ]; then
