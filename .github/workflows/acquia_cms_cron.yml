@@ -121,7 +121,7 @@ jobs:
             composer config extra.patches.drupal/core {} --json
             sed -i 's/2598.patch",/2598.patch"/' modules/acquia_cms_common/composer.json
             sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
-            sed -i '/3370946-pagetitle-backport-10-2-x.patch/d' modules/acquia_cms_common/composer.json
+            sed -i '/3370946-page-title-backport-10-2-2_0.patch/d' modules/acquia_cms_common/composer.json
           fi
 
           # Remove all PHPUnit tests from individual modules, except the integrated & ExistingSite tests.
