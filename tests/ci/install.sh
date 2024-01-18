@@ -20,7 +20,13 @@ create_fixture() {
   CORE_VERSION=$(echo ${ORCA_JOB} | sed -E -e 's/(INTEGRATED_TEST_ON_|INTEGRATED_UPGRADE_TEST_FROM_|ISOLATED_TEST_ON_|INTEGRATED_UPGRADE_TEST_TO_|ISOLATED_UPGRADE_TEST_TO_)//')
   echo "The CORE_VERSION is: ${CORE_VERSION}"
   orca debug:packages ${CORE_VERSION}
-  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=${CORE_VERSION} --profile=minimal --no-sqlite --no-site-install
+  if [ -n "${ACMS_JOB}" ]; then
+    if [ "${ACMS_JOB}" == "dev_version_test" ]; then
+      orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=${CORE_VERSION} --profile=minimal --no-sqlite --no-site-install --ignore-patch-failure
+    else
+      orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=${CORE_VERSION} --profile=minimal --no-sqlite --no-site-install
+    fi
+  fi
 }
 
 if [ "${JOB_TYPE}" == "static-code-analysis" ]; then
@@ -61,6 +67,12 @@ if [ -n "${ACMS_JOB}" ]; then
   if [ "${ACMS_JOB}" == "backstop_tests" ] && [ "${CORE_VERSION}" == "LATEST_LTS" ]; then
     composer config --unset repositories.acquia_cms_common
     composer require drupal/acquia_cms_common:2.x-dev -W
+  fi
+  if [ "${ACMS_JOB}" == "dev_version_test" ]; then
+    composer config minimum-stability dev
+    composer config prefer-stable false
+    composer update "drupal/*" --prefer-dist
+    composer show drupal/core | grep version
   fi
   ./vendor/bin/acms site:install --yes --account-pass admin --uri=http://127.0.0.1:8080
 

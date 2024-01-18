@@ -568,7 +568,7 @@ jobs:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
         acms_job:
-          - nightly_dev_tests
+          - dev_version_test
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -587,15 +587,11 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
-          git apply ./patches/dev-version-tests.patch
       - name: Before Install
         run: |
           if [ "${ORCA_JOB}" = "ISOLATED_TEST_ON_NEXT_MINOR" ]; then
             sed -i 's/"drupal\/core": "~10.1.6",/"drupal\/core": "~10.2.0",/' modules/acquia_cms_common/composer.json
           fi
-          cd ../orca
-          composer config extra.composer-exit-on-patch-failure false
-          cd -
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
           CHROMEDRIVER_PID=$!
