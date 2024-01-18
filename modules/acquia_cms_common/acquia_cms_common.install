@@ -67,12 +67,6 @@ function acquia_cms_common_install($is_syncing) {
       $module_installer->uninstall(['page_cache']);
     }
 
-    // Install entity clone module during common installation.
-    if (!$module_handler->moduleExists('entity_clone')) {
-      $module_installer->install(['entity_clone']);
-      $config_storage->write('entity_clone.settings', $source_optional_dir->read('entity_clone.settings'));
-    }
-
     /*
      * We've to explicitly set purge plugin as acquia_purge, If Acquia Purge
      * module is enabled, else this would give below error:
@@ -86,12 +80,17 @@ function acquia_cms_common_install($is_syncing) {
       $config->setPluginsEnabled(['cee22bc3fe' => 'acquia_purge']);
     }
 
-    // Install the syslog module and purge sub-modules.
-    $module_installer->install([
+    // Contributed modules shipped by Acquia CMS.
+    $contributed_modules = [
+      'entity_clone',
+      'moderation_sidebar',
       'syslog',
       'purge_processor_cron',
       'purge_ui',
-    ]);
+    ];
+    // Install the syslog module and purge sub-modules.
+    // And other contributed modules provided by Acquia CMS.
+    $module_installer->install($contributed_modules);
 
   }
 
