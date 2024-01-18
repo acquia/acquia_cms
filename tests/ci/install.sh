@@ -72,7 +72,6 @@ if [ -n "${ACMS_JOB}" ]; then
     composer config minimum-stability dev
     composer config prefer-stable false
     composer update "drupal/*" --prefer-dist
-    composer show drupal/core | grep version
   fi
   ./vendor/bin/acms site:install --yes --account-pass admin --uri=http://127.0.0.1:8080
 
