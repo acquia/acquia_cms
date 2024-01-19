@@ -283,7 +283,7 @@ jobs:
 
           if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_PREVIOUS_MINOR" ]; then
             # Update drupal/core patch as per Drupal Core version.
-            sed -i 's/2024-01-18\/3370946-page-title-backport-10-2-2_0.patch/2023-09-11\/3370946-page-title-backport-10-1-x.patch/g' modules/acquia_cms_common/composer.json
+            sed -i 's/2024-01-18\/3370946-page-title-backport-10-2-2_0.patch/2024-01-18\/3370946-page-title-backport-10-1-8.patch/g' modules/acquia_cms_common/composer.json
           fi
 
           ../orca/bin/ci/before_install.sh
