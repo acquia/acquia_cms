@@ -300,7 +300,7 @@ jobs:
     env:
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ${{ matrix.orca-version }}
+      ORCA_VERSION: ^4
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -321,36 +321,10 @@ jobs:
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
-          - INTEGRATED_TEST_ON_LATEST_LTS
+          - INTEGRATED_TEST_ON_PREVIOUS_MINOR
         php-version:
-          - 7.4
           - 8.1
           - 8.2
-        orca-version:
-          - ^3
-          - ^4
-        exclude:
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^3
-            php-version: 7.4
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^3
-            php-version: 8.1
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^3
-            php-version: 8.2
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^4
-            php-version: 7.4
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^3
-            php-version: 8.1
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^3
-            php-version: 8.2
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^4
-            php-version: 7.4
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -397,6 +371,12 @@ jobs:
             sed -i '168s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
             sed -i '187s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
           fi
+
+          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_PREVIOUS_MINOR" ]; then
+            # Update drupal/core patch as per Drupal Core version.
+            sed -i 's/2024-01-18\/3370946-page-title-backport-10-2-2_0.patch/2024-01-18\/3370946-page-title-backport-10-1-8.patch/g' modules/acquia_cms_common/composer.json
+          fi
+
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
           CHROMEDRIVER_PID=$!

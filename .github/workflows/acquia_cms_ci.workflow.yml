@@ -564,36 +564,10 @@ jobs:
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
-          - INTEGRATED_TEST_ON_LATEST_LTS
+          - INTEGRATED_TEST_ON_PREVIOUS_MINOR
         php-version:
-          - 7.4
           - 8.1
           - 8.2
-        orca-version:
-          - ^3
-          - ^4
-        exclude:
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^3
-            php-version: 7.4
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^3
-            php-version: 8.1
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^3
-            php-version: 8.2
-          - orca-job: ISOLATED_TEST_ON_CURRENT
-            orca-version: ^4
-            php-version: 7.4
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^3
-            php-version: 8.1
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^3
-            php-version: 8.2
-          - orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-            orca-version: ^4
-            php-version: 7.4
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -640,6 +614,12 @@ jobs:
             sed -i '168s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
             sed -i '187s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
           fi
+
+          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_PREVIOUS_MINOR" ]; then
+            # Update drupal/core patch as per Drupal Core version.
+            sed -i 's/2024-01-18\/3370946-page-title-backport-10-2-2_0.patch/2024-01-18\/3370946-page-title-backport-10-1-8.patch/g' modules/acquia_cms_common/composer.json
+          fi
+
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
           CHROMEDRIVER_PID=$!
