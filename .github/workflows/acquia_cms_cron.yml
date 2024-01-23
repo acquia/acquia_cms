@@ -448,9 +448,6 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
-          if [ "${ORCA_JOB}" = "ISOLATED_TEST_ON_NEXT_MINOR" ]; then
-            sed -i 's/"drupal\/core": "~10.1.6",/"drupal\/core": "~10.2.0",/' modules/acquia_cms_common/composer.json
-          fi
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
           CHROMEDRIVER_PID=$!

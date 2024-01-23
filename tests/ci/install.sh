@@ -20,13 +20,7 @@ create_fixture() {
   CORE_VERSION=$(echo ${ORCA_JOB} | sed -E -e 's/(INTEGRATED_TEST_ON_|INTEGRATED_UPGRADE_TEST_FROM_|ISOLATED_TEST_ON_|INTEGRATED_UPGRADE_TEST_TO_|ISOLATED_UPGRADE_TEST_TO_)//')
   echo "The CORE_VERSION is: ${CORE_VERSION}"
   orca debug:packages ${CORE_VERSION}
-  if [ -n "${ACMS_JOB}" ]; then
-    if [ "${ACMS_JOB}" == "dev_version_test" ]; then
-      orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=${CORE_VERSION} --profile=minimal --no-sqlite --no-site-install --ignore-patch-failure
-    else
-      orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=${CORE_VERSION} --profile=minimal --no-sqlite --no-site-install
-    fi
-  fi
+  orca fixture:init --force --sut=acquia/acquia_cms --sut-only --core=${CORE_VERSION} --profile=minimal --no-sqlite --no-site-install
 }
 
 if [ "${JOB_TYPE}" == "static-code-analysis" ]; then
@@ -69,6 +63,7 @@ if [ -n "${ACMS_JOB}" ]; then
     composer require drupal/acquia_cms_common:2.x-dev -W
   fi
   if [ "${ACMS_JOB}" == "dev_version_test" ]; then
+    composer config extra.composer-exit-on-patch-failure true
     composer config minimum-stability dev
     composer config prefer-stable false
     composer update "drupal/*" --prefer-dist
