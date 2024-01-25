@@ -66,7 +66,7 @@ if [ -n "${ACMS_JOB}" ]; then
     composer config extra.composer-exit-on-patch-failure true
     composer config minimum-stability dev
     composer config prefer-stable false
-    composer update "drupal/*" --prefer-dist
+    composer update "drupal/*" -n
   fi
   ./vendor/bin/acms site:install --yes --account-pass admin --uri=http://127.0.0.1:8080
 
