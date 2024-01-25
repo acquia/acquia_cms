@@ -2436,7 +2436,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "e915b4744bf450a32095ed971a65d90bbb47567b"
+                "reference": "a7032e8dbb0f27c93225829c7c3426cef18186e2"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2465,7 +2465,7 @@
                 "drupal/smart_trim": "^2.0",
                 "drupal/social_media_links": "^2.9",
                 "drupal/username_enumeration_prevention": "^1.3",
-                "drupal/workbench_email": "3.0.2",
+                "drupal/workbench_email": "^3.0.3",
                 "nnnick/chartjs": "^3.9"
             },
             "conflict": {
@@ -2502,9 +2502,6 @@
                     "drupal/core": {
                         "3301692 - Passing null to parameter to mb_strtolower() is deprecated with PHP 8.1": "https://git.drupalcode.org/project/drupal/-/merge_requests/2598.patch",
                         "3370946 - Page title should contextualize the local navigation": "https://www.drupal.org/files/issues/2024-01-18/3370946-page-title-backport-10-2-2_0.patch"
-                    },
-                    "drupal/workbench_email": {
-                        "3408131 - Route 'entity.workbench_email_template.canonical' does not exist.": "https://git.drupalcode.org/project/workbench_email/-/merge_requests/17.patch"
                     }
                 }
             },
@@ -8623,17 +8620,17 @@
         },
         {
             "name": "drupal/workbench_email",
-            "version": "3.0.2",
+            "version": "3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/workbench_email.git",
-                "reference": "3.0.2"
+                "reference": "3.0.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/workbench_email-3.0.2.zip",
-                "reference": "3.0.2",
-                "shasum": "dcd55fd3d4ebfd373f45062bd040634401822d1a"
+                "url": "https://ftp.drupal.org/files/projects/workbench_email-3.0.3.zip",
+                "reference": "3.0.3",
+                "shasum": "b88c7787835ff0c4b08a0cdb8bbd2f17b4a0a7e9"
             },
             "require": {
                 "drupal/core": "^9.1 || ^10",
@@ -8642,8 +8639,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.2",
-                    "datestamp": "1679441209",
+                    "version": "3.0.3",
+                    "datestamp": "1703203878",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
