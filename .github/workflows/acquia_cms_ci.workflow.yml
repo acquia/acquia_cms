@@ -590,10 +590,13 @@ jobs:
       - name: Before Install
         run: |
           # Update the CI by adding patches without pinning the following modules.
-          sed -i 's/"drupal\/facets": "2.0.6"/"drupal\/facets": "^2.0"/' modules/acquia_cms_search/composer.json
-          sed -i 's/"drupal\/facets_pretty_paths": "1.5.0"/"drupal\/facets_pretty_paths": "^1.5"/' modules/acquia_cms_search/composer.json
-          sed -i 's/"drupal\/search_api": "1.30 || 1.31"/"drupal\/search": "^1.30"/' modules/acquia_cms_common/composer.json
+          sed -i 's/"drupal\/moderation_dashboard": "^2.1"/"drupal\/moderation_dashboard": "^2.0"/' modules/acquia_cms_common/composer.json
           sed -i 's/"drupal\/workbench_email": "3.0.2"/"drupal\/workbench_email": "^3.0.2"/' modules/acquia_cms_common/composer.json
+          sed -i 's/"drupal\/next": "^1.6"/"drupal\/next": "^1.0"/' modules/acquia_cms_headless/composer.json
+          sed -i 's/"drupal\/facets": "2.0.6"/"drupal\/moderation_dashboard": "^2.0.6"/' modules/acquia_cms_search/composer.json
+          sed -i 's/"drupal\/facets_pretty_paths": "1.5.0"/"drupal\/facets_pretty_paths": "^1.5.0"/' modules/acquia_cms_search/composer.json
+          sed -i 's/"drupal\/search_api": "1.30 || 1.31"/"drupal\/search_api": "^1.30"/' modules/acquia_cms_search/composer.json
+          sed -i '/"drupal\/facets_pretty_paths": {/,/},/d' modules/acquia_cms_search/composer.json
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
           CHROMEDRIVER_PID=$!

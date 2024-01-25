@@ -63,10 +63,13 @@ if [ -n "${ACMS_JOB}" ]; then
     composer require drupal/acquia_cms_common:2.x-dev -W
   fi
   if [ "${ACMS_JOB}" == "dev_version_test" ]; then
-    composer config extra.composer-exit-on-patch-failure true
+    composer config extra.composer-exit-on-patch-failure false
     composer config minimum-stability dev
     composer config prefer-stable false
-    composer update "drupal/*" -n
+    composer update "drupal/*"
+    composer update "drupal/moderation_dashboard:2.0.x-dev" "drupal/next:1.0.x-dev"
+    composer update "acquia/cohesion*" "drupal/core-*" "drupal/core" --prefer-stable
+    composer show
   fi
   ./vendor/bin/acms site:install --yes --account-pass admin --uri=http://127.0.0.1:8080
 
