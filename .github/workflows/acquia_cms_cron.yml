@@ -425,7 +425,7 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_CURRENT_DEV
+          - ISOLATED_TEST_ON_CURRENT
         acms_job:
           - dev_version_test
     steps:
@@ -448,6 +448,13 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
+          # Update the CI by adding patches without pinning the following modules.
+          sed -i 's/"drupal\/moderation_dashboard": "^2.1"/"drupal\/moderation_dashboard": "^2.0"/' modules/acquia_cms_common/composer.json
+          sed -i 's/"drupal\/next": "^1.6"/"drupal\/next": "^1.0"/' modules/acquia_cms_headless/composer.json
+          sed -i 's/"drupal\/facets": "2.0.6"/"drupal\/moderation_dashboard": "^2.0.6"/' modules/acquia_cms_search/composer.json
+          sed -i 's/"drupal\/facets_pretty_paths": "1.5.0"/"drupal\/facets_pretty_paths": "^1.5.0"/' modules/acquia_cms_search/composer.json
+          sed -i 's/"drupal\/search_api": "1.30 || 1.31"/"drupal\/search_api": "^1.30"/' modules/acquia_cms_search/composer.json
+          sed -i '/"drupal\/facets_pretty_paths": {/,/},/d' modules/acquia_cms_search/composer.json
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
           CHROMEDRIVER_PID=$!
