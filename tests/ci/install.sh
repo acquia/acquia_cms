@@ -63,7 +63,7 @@ if [ -n "${ACMS_JOB}" ]; then
     composer require drupal/acquia_cms_common:2.x-dev -W
   fi
   if [ "${ACMS_JOB}" == "dev_version_test" ]; then
-    composer config extra.composer-exit-on-patch-failure false
+    composer config extra.composer-exit-on-patch-failure "false" --json 
     composer config minimum-stability dev
     composer config prefer-stable false
     composer update "drupal/*"
