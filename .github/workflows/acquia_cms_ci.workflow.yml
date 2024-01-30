@@ -8,6 +8,7 @@ on:
 #    branches: [ develop ]
     paths-ignore:
       - README.md
+
 jobs:
   static_code_analysis:
     if: ${{ github.event_name == 'pull_request' }}
