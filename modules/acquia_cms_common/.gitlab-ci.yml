@@ -60,7 +60,6 @@ variables:
         docker-php-ext-enable xdebug
         echo xdebug.mode=coverage > /usr/local/etc/php/conf.d/xdebug.ini
       fi
-      curl https://gist.githubusercontent.com/rajeshreeputra/1e8ca0798a409c7eb8844681732b7745/raw/8dffc0ad60d08f20762348f60be8483e2252656d/orca-gitlab-changes.patch | git -C ../orca apply
     - ../orca/bin/ci/self-test/before_install.sh
     - |
       # We need to have dev-dependencies like phan/phan in STATIC_CODE_ANALYSIS job.
