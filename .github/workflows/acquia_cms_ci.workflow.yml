@@ -46,7 +46,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.3
           #coverage: xdebug
       - name: Download ORCA
         run: |
@@ -80,11 +80,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        php-version:
-          - "8.2"
-          # uncomment below once 8.3 have stable release.
-          # - "8.3"
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -93,10 +88,11 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-version }}
+          php-version: 8.3
           #coverage: xdebug
       - name: Execute Drupal-check
         run: |
+          rm composer.lock
           composer install
           php vendor/bin/drupal-check modules
           php vendor/bin/drupal-check tests/src
@@ -137,7 +133,6 @@ jobs:
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
-        #php-version: [ "8.1" ]
         acms_job:
           - integrated_php_unit_tests
           - integrated_existing_site_tests
@@ -149,7 +144,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.3
           #coverage: xdebug
       - name: Setup MySQL
         run: |
@@ -245,6 +240,7 @@ jobs:
         php-version:
           - 8.1
           - 8.2
+          - 8.3
         orca-version:
           - ^4
     steps:
@@ -372,7 +368,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.3
           #coverage: xdebug
       - name: Download ORCA
         run: |
@@ -457,7 +453,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.3
           #coverage: xdebug
       - name: Setup MySQL
         run: |
