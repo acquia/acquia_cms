@@ -45,12 +45,12 @@ class Taxonomy{
 
     // Get delete link for the term.
     get deleteTermLink(){
-        return cy.get("#taxonomy > tbody > tr > td:nth-child(2) > div > div > ul > li.delete.dropbutton__item.dropbutton-action.secondary-action > a")
+        return cy.get("#taxonomy-overview-terms #taxonomy li.delete > a")
     }
 
     // Get newly added term to vocab.
     get newlyAddedTerm(){
-        return cy.get('[id*="edit-terms-"]')
+        return cy.get('[id*="edit-terms-"]').first()
     }
 
     // Delete button to delete term.
@@ -95,7 +95,7 @@ class Taxonomy{
     // Validate term added to vocabulary.
     validateAddedTerm(){
         this.newlyAddedVocab.click({force:true})
-        this.newlyAddedTerm.should('have.text',testData.$term_name+"-101")
+        this.newlyAddedTerm.should('have.text',testData.$term_name)
     }
 
     // Delete tem from vocabulary.

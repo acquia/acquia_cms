@@ -8,6 +8,7 @@ on:
 #    branches: [ develop ]
     paths-ignore:
       - README.md
+
 jobs:
   static_code_analysis:
     if: ${{ github.event_name == 'pull_request' }}
@@ -16,7 +17,7 @@ jobs:
       # Provide your package's name.
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^3
+      ORCA_VERSION: ^4
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -45,7 +46,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.3
           #coverage: xdebug
       - name: Download ORCA
         run: |
@@ -79,11 +80,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        php-version:
-          - "8.2"
-          # uncomment below once 8.3 have stable release.
-          # - "8.3"
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -92,10 +88,11 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-version }}
+          php-version: 8.3
           #coverage: xdebug
       - name: Execute Drupal-check
         run: |
+          rm composer.lock
           composer install
           php vendor/bin/drupal-check modules
           php vendor/bin/drupal-check tests/src
@@ -112,7 +109,6 @@ jobs:
       # Provide your package's name.
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^3
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -136,7 +132,6 @@ jobs:
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
-        #php-version: [ "8.1" ]
         acms_job:
           - integrated_php_unit_tests
           - integrated_existing_site_tests
@@ -148,7 +143,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.3
           #coverage: xdebug
       - name: Setup MySQL
         run: |
@@ -216,7 +211,6 @@ jobs:
       # Provide your package's name.
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ${{ matrix.orca-version }}
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -243,9 +237,7 @@ jobs:
           - ISOLATED_TEST_ON_CURRENT
         php-version:
           - 8.1
-          - 8.2
-        orca-version:
-          - ^4
+          - 8.3
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -283,7 +275,7 @@ jobs:
 
           if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_PREVIOUS_MINOR" ]; then
             # Update drupal/core patch as per Drupal Core version.
-            sed -i 's/2024-01-18\/3370946-page-title-backport-10-2-2_0.patch/2023-09-11\/3370946-page-title-backport-10-1-x.patch/g' modules/acquia_cms_common/composer.json
+            sed -i 's/2024-01-18\/3370946-page-title-backport-10-2-2_0.patch/2024-01-18\/3370946-page-title-backport-10-1-8.patch/g' modules/acquia_cms_common/composer.json
           fi
 
           ../orca/bin/ci/before_install.sh
@@ -313,7 +305,6 @@ jobs:
       # Set ORCA related environment variables.
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^3
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -371,7 +362,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.3
           #coverage: xdebug
       - name: Download ORCA
         run: |
@@ -421,7 +412,6 @@ jobs:
       # Set ORCA related environment variables.
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^3
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -456,7 +446,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.3
           #coverage: xdebug
       - name: Setup MySQL
         run: |
