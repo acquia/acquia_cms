@@ -8,7 +8,7 @@ env:
   # Provide your package's name.
   ORCA_SUT_NAME: acquia/acquia_cms
   ORCA_SUT_BRANCH: develop
-  ORCA_VERSION: ^3
+  ORCA_VERSION: ^4
   ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
   ORCA_ENABLE_NIGHTWATCH: "FALSE"
   ORCA_PHPCS_STANDARD: AcquiaPHP
@@ -95,7 +95,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.3
+          php-version: 8.2
       - name: Setup MySQL
         run: |
           sudo /etc/init.d/mysql start
@@ -178,7 +178,14 @@ jobs:
           - ISOLATED_TEST_ON_CURRENT_DEV
           - ISOLATED_TEST_ON_NEXT_MINOR_DEV
           - INTEGRATED_TEST_ON_LATEST_LTS
-        #php-version: [ "8.1" ]
+        php-version:
+          - 8.2
+          - 8.3
+        exclude:
+          - php-version: 8.3
+            orca-job: INTEGRATED_TEST_ON_LATEST_LTS
+          - php-version: 8.2
+            orca-job: [ ISOLATED_TEST_ON_CURRENT_DEV, ISOLATED_TEST_ON_NEXT_MINOR_DEV]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -187,7 +194,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.3
+          php-version: ${{ matrix.php-version }}
           #coverage: xdebug
       - name: Download ORCA
         run: |
@@ -209,6 +216,14 @@ jobs:
             sed -i 's/2598.patch",/2598.patch"/' modules/acquia_cms_common/composer.json
             sed -i '/3370946-page-title-backport-10-2-2_0.patch/d' modules/acquia_cms_common/composer.json
           fi
+
+          # For Drupal 10.2.x i.e ISOLATED_TEST_ON_CURRENT_DEV, we are removing the patch.
+          # @todo: Update it accordingly in ticket ACMS-3598.
+          if [ "${ORCA_JOB}" = "ISOLATED_TEST_ON_CURRENT_DEV" ]; then
+            sed -i 's/2598.patch",/2598.patch"/' modules/acquia_cms_common/composer.json
+            sed -i '/3370946-page-title-backport-10-2-2_0.patch/d' modules/acquia_cms_common/composer.json
+          fi
+
           # Do not run any existing site tests. We run them seperately.
           find tests/src modules -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
           ../orca/bin/ci/before_install.sh
@@ -238,7 +253,6 @@ jobs:
       ACMS_JOB: "blt"
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^3
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -300,7 +314,6 @@ jobs:
     env:
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^4
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -324,8 +337,10 @@ jobs:
           - INTEGRATED_TEST_ON_PREVIOUS_MINOR
         php-version:
           - 8.1
-          - 8.2
           - 8.3
+        exclude:
+          - php-version: 8.3
+            orca-job: INTEGRATED_TEST_ON_PREVIOUS_MINOR
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -404,7 +419,6 @@ jobs:
     env:
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^4
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
