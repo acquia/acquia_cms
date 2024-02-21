@@ -52,6 +52,8 @@ variables:
     - composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca $ORCA_VERSION
     - |
       php_version="$(php -r 'echo PHP_VERSION;' | cut -d '.' -f 1,2)"
+      apt-get update && apt-get install -y libsodium-dev
+      docker-php-ext-install sodium
       if [ "$ORCA_COVERAGE_ENABLE" = "TRUE" ]  &&  [ ${php_version} = 8.1 ]; then
         pecl install xdebug
         docker-php-ext-enable xdebug
