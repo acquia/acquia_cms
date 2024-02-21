@@ -8,7 +8,7 @@ env:
   # Provide your package's name.
   ORCA_SUT_NAME: acquia/acquia_cms
   ORCA_SUT_BRANCH: develop
-  ORCA_VERSION: ^3
+  ORCA_VERSION: ^4
   ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
   ORCA_ENABLE_NIGHTWATCH: "FALSE"
   ORCA_PHPCS_STANDARD: AcquiaPHP
@@ -245,7 +245,6 @@ jobs:
       ACMS_JOB: "blt"
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^3
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -307,7 +306,6 @@ jobs:
     env:
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^4
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -413,7 +411,6 @@ jobs:
     env:
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^4
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"

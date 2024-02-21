@@ -17,7 +17,7 @@ jobs:
       # Provide your package's name.
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^3
+      ORCA_VERSION: ^4
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -109,7 +109,6 @@ jobs:
       # Provide your package's name.
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^3
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -212,7 +211,6 @@ jobs:
       # Provide your package's name.
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ${{ matrix.orca-version }}
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -239,10 +237,7 @@ jobs:
           - ISOLATED_TEST_ON_CURRENT
         php-version:
           - 8.1
-          - 8.2
           - 8.3
-        orca-version:
-          - ^4
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -310,7 +305,6 @@ jobs:
       # Set ORCA related environment variables.
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^3
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -418,7 +412,6 @@ jobs:
       # Set ORCA related environment variables.
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^3
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
