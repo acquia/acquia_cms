@@ -216,6 +216,14 @@ jobs:
             sed -i 's/2598.patch",/2598.patch"/' modules/acquia_cms_common/composer.json
             sed -i '/3370946-page-title-backport-10-2-2_0.patch/d' modules/acquia_cms_common/composer.json
           fi
+
+          # For Drupal 10.2.x i.e ISOLATED_TEST_ON_CURRENT_DEV, we are removing the patch.
+          # @todo: Update it accordingly in ticket ACMS-3598.
+          if [ "${ORCA_JOB}" = "ISOLATED_TEST_ON_CURRENT_DEV" ]; then
+            sed -i 's/2598.patch",/2598.patch"/' modules/acquia_cms_common/composer.json
+            sed -i '/3370946-page-title-backport-10-2-2_0.patch/d' modules/acquia_cms_common/composer.json
+          fi
+
           # Do not run any existing site tests. We run them seperately.
           find tests/src modules -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
           ../orca/bin/ci/before_install.sh
