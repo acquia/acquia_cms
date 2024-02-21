@@ -95,7 +95,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.3
+          php-version: 8.2
       - name: Setup MySQL
         run: |
           sudo /etc/init.d/mysql start
@@ -178,7 +178,14 @@ jobs:
           - ISOLATED_TEST_ON_CURRENT_DEV
           - ISOLATED_TEST_ON_NEXT_MINOR_DEV
           - INTEGRATED_TEST_ON_LATEST_LTS
-        #php-version: [ "8.1" ]
+        php-version:
+          - 8.2
+          - 8.3
+        exclude:
+          - php-version: 8.3
+            orca-job: INTEGRATED_TEST_ON_LATEST_LTS
+          - php-version: 8.2
+            orca-job: [ ISOLATED_TEST_ON_CURRENT_DEV, ISOLATED_TEST_ON_NEXT_MINOR_DEV]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -187,7 +194,7 @@ jobs:
           node-version: 12.13.1
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.3
+          php-version: ${{ matrix.php-version }}
           #coverage: xdebug
       - name: Download ORCA
         run: |
@@ -324,8 +331,10 @@ jobs:
           - INTEGRATED_TEST_ON_PREVIOUS_MINOR
         php-version:
           - 8.1
-          - 8.2
           - 8.3
+        exclude:
+          - php-version: 8.3
+            orca-job: INTEGRATED_TEST_ON_PREVIOUS_MINOR
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
