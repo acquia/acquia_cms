@@ -1,8 +1,8 @@
 {
     "name": "drupal/acquia_cms_starter",
-    "type": "drupal-module",
     "description": "Contains the example content for demonstration.",
     "license": "GPL-2.0-or-later",
+    "type": "drupal-module",
     "require": {
         "drupal/acquia_cms_article": "^1.5.7",
         "drupal/acquia_cms_document": "^1.4.6",
@@ -12,6 +12,17 @@
         "drupal/acquia_cms_video": "^1.5.8",
         "drupal/default_content": "^2.0"
     },
+    "repositories": {
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "minimum-stability": "alpha",
     "config": {
         "allow-plugins": {
             "composer/installers": true,
@@ -34,16 +45,5 @@
                 "2698425 - Duplicate content issues in default content": "https://git.drupalcode.org/project/default_content/-/merge_requests/5.patch"
             }
         }
-    },
-    "repositories": {
-        "assets": {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        },
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        }
-    },
-    "minimum-stability": "alpha"
+    }
 }
