@@ -125,13 +125,13 @@ variables:
     - ../orca/bin/ci/after_success.sh
     - ../orca/bin/ci/after_failure.sh
     - ../orca/bin/ci/after_script.sh
-  artifacts:
-    expire_in: 6 mos
-    when: always
-    reports:
-      junit: $CI_PROJECT_DIR/var/logs/junit.xml
-    paths:
-      - $CI_PROJECT_DIR/var/logs/junit.xml
+  # artifacts:
+  #   expire_in: 6 mos
+  #   when: always
+  #   reports:
+  #     junit: $CI_PROJECT_DIR/var/logs/junit.xml
+  #   paths:
+  #     - $CI_PROJECT_DIR/var/logs/junit.xml
 
 # PHP 8.0 tests.
 INTEGRATED_TEST_ON_LATEST_EOL_MAJOR_PHP8:
