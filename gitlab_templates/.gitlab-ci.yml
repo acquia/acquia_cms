@@ -77,6 +77,9 @@ variables:
     # Installing sodiun extension required by ACMS.
     - docker-php-ext-install sodium
     - composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca $ORCA_VERSION
+    # We are overriding the allowed failures features, So as to expose all failing jobs.
+    # This is essential for the ORCA Testing repo.
+    - echo 'export ORCA_IS_ALLOWED_FAILURE="FALSE"' >> ../orca/bin/ci/_includes.sh
     - |
       # We need to have dev-dependencies like phan/phan in STATIC_CODE_ANALYSIS job.
       if [[ "$ORCA_JOB" == "STATIC_CODE_ANALYSIS" ]]; then
