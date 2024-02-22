@@ -1,257 +1,80 @@
-# This file is a template, and might need editing before it works on your project.
-# This is a sample GitLab CI/CD configuration file that should run without any modifications.
-# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
-# it uses echo commands to simulate the pipeline execution.
+################
+# Includes
 #
-# A pipeline is composed of independent jobs that run scripts, grouped into stages.
-# Stages run in sequential order, but jobs within stages run in parallel.
+# Additional configuration can be provided through includes.
+# One advantage of include files is that if they are updated upstream, the changes affect all pipelines using that include.
 #
-# For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
-#
-# You can copy and paste this template into a new `.gitlab-ci.yml` file.
-# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
-#
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
+# Includes can be overridden by re-declaring anything provided in an include, here in gitlab-ci.yml
+# https://docs.gitlab.com/ee/ci/yaml/includes.html#override-included-configuration-values
+################
 
-default:
-  image: drupalci/php-8.1-apache:production
+# include:
+################
+# DrupalCI includes:
+# As long as you include this, any future includes added by the Drupal Association will be accessible to your pipelines automatically.
+# View these include files at https://git.drupalcode.org/project/gitlab_templates/
+################
+# - project: $_GITLAB_TEMPLATES_REPO
+#   ref: $_GITLAB_TEMPLATES_REF
+#   file:
+#     - 'https://github.com/acquia/acquia_cms/blob/53813359c707d8f390f6a70cd2b58e55c76938ba/gitlab-templates/.gitlab-ci.yml'
+include:
+  - remote: 'https://raw.githubusercontent.com/acquia/acquia_cms/feature/gitlab-ci/gitlab_templates/.gitlab-ci.yml'
+################
+# Pipeline configuration variables
+#
+# These are the variables provided to the Run Pipeline form that a user may want to override.
+#
+# Docs at https://git.drupalcode.org/project/gitlab_templates/-/blob/1.0.x/includes/include.drupalci.variables.yml
+################
 variables:
   ORCA_SUT_NAME: drupal/acquia_cms_article
   ORCA_SUT_BRANCH: 1.x
-  # ORCA_PACKAGES_CONFIG: tests/packages.yml
-  ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms_article/tests/packages_alter.yml
-  ORCA_SUT_DIR: $CI_PROJECT_DIR
-  ORCA_COVERAGE_ENABLE: "FALSE"
-  # ORCA_JUNIT_LOG: $CI_PROJECT_DIR/var/logs/junit.xml
-  # CPU allocation for containers.
-  # Projects with complex tests are welcome to increase this.
-  # Keeping this low helps jobs find an available runner without waiting.
-  KUBERNETES_CPU_REQUEST: 2
-  # Adding extra CPU to run containers hosting chrome and chromedriver.
-  SERVICE_CPU_REQUEST: 2
-  # Google env variables.
-  # ORCA_GOOGLE_API_CLIENT_ID: ${{ secrets.ORCA_GOOGLE_API_CLIENT_ID }}
-  # ORCA_GOOGLE_API_CLIENT_SECRET: ${{ secrets.ORCA_GOOGLE_API_CLIENT_SECRET }}
-  # ORCA_GOOGLE_API_REFRESH_TOKEN: ${{ secrets.ORCA_GOOGLE_API_REFRESH_TOKEN }}
+  ORCA_PACKAGES_CONFIG_ALTER: $CI_PROJECT_DIR/tests/packages_alter.yml
+  ORCA_VERSION: ^4
 
-.with-chrome: &with-chrome
-  name: drupalci/chromedriver:production
-  alias: chrome
-  entrypoint:
-    - chromedriver
-    - "--no-sandbox"
-    - "--log-path=/tmp/chromedriver.log"
-    - "--verbose"
-    - "--whitelisted-ips="
-
-.orca_run_tests:
-  stage: test
-  services:
-    - <<: *with-chrome
-  script:
-    - composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca $ORCA_VERSION
-    - |
-      php_version="$(php -r 'echo PHP_VERSION;' | cut -d '.' -f 1,2)"
-      if [ "$ORCA_COVERAGE_ENABLE" = "TRUE" ]  &&  [ ${php_version} = 8.1 ]; then
-        pecl install xdebug
-        docker-php-ext-enable xdebug
-        echo xdebug.mode=coverage > /usr/local/etc/php/conf.d/xdebug.ini
-      fi
-    - ../orca/bin/ci/self-test/before_install.sh
-    - |
-      # We need to have dev-dependencies like phan/phan in STATIC_CODE_ANALYSIS job.
-      if [[ "$ORCA_JOB" == "STATIC_CODE_ANALYSIS" ]]; then
-        composer -d"../orca" install
-      fi
-    - |
-      source ../orca/bin/ci/_includes.sh
-      cd ${CI_PROJECT_DIR}
-      find tests tests -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
-      cd -
-      ../orca/bin/ci/before_install.sh
-    - ../orca/bin/ci/self-test/install.sh
-    - ../orca/bin/ci/install.sh
-    - |
-      source ../orca/bin/ci/_includes.sh
-      if [[ -d "${ORCA_FIXTURE_DIR}" ]]; then
-        cd ${ORCA_FIXTURE_DIR}
-        # We are using composer-plugin mnsami/composer-custom-directory-installer,
-        # which by default loads libraries in vendor folder but we are expecting
-        # them to be in libraries folder hence running below command.
-        composer config --json extra.installer-paths.'docroot/libraries/{$name}' '["swagger-api/swagger-ui","nnnick/chartjs"]' --merge
-        composer install && composer update -W
-
-        # Below added to add swagger/chart.js libraries in CI.
-        # Without this CI is failing.
-        # @todo remove below workaround to add proper fix.
-        mkdir ${ORCA_FIXTURE_DIR}/docroot/libraries
-        curl "https://codeload.github.com/swagger-api/swagger-ui/zip/refs/tags/v3.0.17" -o ${ORCA_FIXTURE_DIR}/docroot/libraries/v3.0.17.zip
-        unzip ${ORCA_FIXTURE_DIR}/docroot/libraries/v3.0.17.zip
-        mv swagger-ui-3.0.17 ${ORCA_FIXTURE_DIR}/docroot/libraries/swagger-ui
-
-        # Add slide-element library locally
-        mkdir -p ${ORCA_FIXTURE_DIR}/docroot/libraries/slide-element
-        curl "https://unpkg.com/slide-element@2.3.1/dist/index.umd.js" -o ${ORCA_FIXTURE_DIR}/docroot/libraries/slide-element/index.umd.js
-
-        # Add chartjs library locally
-        mkdir -p ${ORCA_FIXTURE_DIR}/docroot/libraries/chartjs/dist/
-        curl "https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js" -o ${ORCA_FIXTURE_DIR}/docroot/libraries/chartjs/dist/chart.min.js
-      fi
-    - ../orca/bin/ci/self-test/script.sh
-    - unset ORCA_ENABLE_NIGHTWATCH
-    - ../orca/bin/ci/script.sh
-  after_script:
-    - ../orca/bin/ci/self-test/after_success.sh
-    - unset ORCA_COVERAGE_ENABLE
-    - ../orca/bin/ci/after_success.sh
-    - ../orca/bin/ci/after_failure.sh
-    - ../orca/bin/ci/after_script.sh
-
-INTEGRATED_TEST_ON_CURRENT:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "INTEGRATED_TEST_ON_CURRENT"
-
-ISOLATED_TEST_ON_CURRENT_PHP82:
-  image: drupalci/php-8.2-apache:production
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "ISOLATED_TEST_ON_CURRENT"
-
-ISOLATED_TEST_ON_CURRENT:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "ISOLATED_TEST_ON_CURRENT"
-
-ISOLATED_TEST_ON_CURRENT_DEV:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "ISOLATED_TEST_ON_CURRENT_DEV"
-
-INTEGRATED_TEST_ON_CURRENT_DEV:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "INTEGRATED_TEST_ON_CURRENT_DEV"
-
-STRICT_DEPRECATED_CODE_SCAN:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "STRICT_DEPRECATED_CODE_SCAN"
-
-ISOLATED_TEST_ON_NEXT_MINOR:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "ISOLATED_TEST_ON_NEXT_MINOR"
-
-ISOLATED_TEST_ON_NEXT_MINOR_DEV:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "ISOLATED_TEST_ON_NEXT_MINOR_DEV"
-
-INTEGRATED_TEST_ON_NEXT_MINOR:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "INTEGRATED_TEST_ON_NEXT_MINOR"
-
-INTEGRATED_TEST_ON_NEXT_MINOR_DEV:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "INTEGRATED_TEST_ON_NEXT_MINOR_DEV"
-
-DEPRECATED_CODE_SCAN_W_CONTRIB:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "DEPRECATED_CODE_SCAN_W_CONTRIB"
-
-LOOSE_DEPRECATED_CODE_SCAN:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "LOOSE_DEPRECATED_CODE_SCAN"
-
-INTEGRATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_BETA_OR_LATER:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "INTEGRATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_BETA_OR_LATER"
-
-ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV"
-
-INTEGRATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "INTEGRATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV"
-
-STATIC_CODE_ANALYSIS:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "STATIC_CODE_ANALYSIS"
-
-INTEGRATED_TEST_ON_OLDEST_SUPPORTED:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "INTEGRATED_TEST_ON_OLDEST_SUPPORTED"
-
-INTEGRATED_TEST_ON_LATEST_LTS:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "INTEGRATED_TEST_ON_LATEST_LTS"
-
-INTEGRATED_TEST_ON_PREVIOUS_MINOR:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "INTEGRATED_TEST_ON_PREVIOUS_MINOR"
-
-ISOLATED_TEST_ON_CURRENT_COVERAGE:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "ISOLATED_TEST_ON_CURRENT"
-    ORCA_COVERAGE_ENABLE: "TRUE"
-    ORCA_COVERAGE_CLOVER: $CI_PROJECT_DIR/var/logs/clover.xml
-  artifacts:
-    paths:
-      - $CI_PROJECT_DIR/var/logs/clover.xml
-      - $CI_PROJECT_DIR/var/logs/junit.xml
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: $CI_PROJECT_DIR/var/logs/clover.xml
-
-ISOLATED_TEST_ON_CURRENT_NIGHTWATCH:
-  extends:
-    - .orca_run_tests
-  variables:
-    ORCA_JOB: "ISOLATED_TEST_ON_CURRENT"
-    ORCA_ENABLE_NIGHTWATCH: "TRUE"
-    DRUPAL_NIGHTWATCH_OUTPUT: $CI_PROJECT_DIR/reports/nightwatch
-  artifacts:
-    expire_in: 6 mos
-    when: always
-    reports:
-      junit: $CI_PROJECT_DIR/reports/nightwatch/*/*.xml
-    paths:
-      - $CI_PROJECT_DIR/reports/nightwatch
+###################################################################################
+#
+#                                        *
+#                                       /(
+#                                      ((((,
+#                                    /(((((((
+#                                   ((((((((((*
+#                                ,(((((((((((((((
+#                              ,(((((((((((((((((((
+#                            ((((((((((((((((((((((((*
+#                         *(((((((((((((((((((((((((((((
+#                       ((((((((((((((((((((((((((((((((((*
+#                    *((((((((((((((((((  .((((((((((((((((((
+#                  ((((((((((((((((((.       /(((((((((((((((((*
+#                /(((((((((((((((((            .(((((((((((((((((,
+#             ,((((((((((((((((((                 ((((((((((((((((((
+#           .((((((((((((((((((((                   .(((((((((((((((((
+#          (((((((((((((((((((((((                     ((((((((((((((((/
+#        (((((((((((((((((((((((((((/                    ,(((((((((((((((*
+#      .((((((((((((((/  /(((((((((((((.                   ,(((((((((((((((
+#     *((((((((((((((      ,(((((((((((((/                   *((((((((((((((.
+#    ((((((((((((((,          /(((((((((((((.                  ((((((((((((((,
+#   (((((((((((((/              ,(((((((((((((*                 ,(((((((((((((,
+#  *(((((((((((((                .(((((((((((((((                ,(((((((((((((
+#  ((((((((((((/                /((((((((((((((((((.              ,((((((((((((/
+# (((((((((((((              *(((((((((((((((((((((((*             *((((((((((((
+# (((((((((((((            ,(((((((((((((..(((((((((((((           *((((((((((((
+# ((((((((((((,          /((((((((((((*      /((((((((((((/         ((((((((((((
+# (((((((((((((        /((((((((((((/          (((((((((((((*       ((((((((((((
+# (((((((((((((/     /((((((((((((               ,((((((((((((,    *((((((((((((
+#  ((((((((((((((  *(((((((((((/                   *((((((((((((.  ((((((((((((/
+#  *((((((((((((((((((((((((((,                      /(((((((((((((((((((((((((
+#   (((((((((((((((((((((((((                         ((((((((((((((((((((((((,
+#   .(((((((((((((((((((((((/                         ,(((((((((((((((((((((((
+#     ((((((((((((((((((((((/                         ,(((((((((((((((((((((/
+#      *(((((((((((((((((((((                         (((((((((((((((((((((,
+#       ,(((((((((((((((((((((,                      ((((((((((((((((((((/
+#         ,(((((((((((((((((((((*                  /((((((((((((((((((((
+#            ((((((((((((((((((((((,           ,/((((((((((((((((((((,
+#              ,(((((((((((((((((((((((((((((((((((((((((((((((((((
+#                 .(((((((((((((((((((((((((((((((((((((((((((((
+#                     .((((((((((((((((((((((((((((((((((((,.
+#                          .,(((((((((((((((((((((((((.
+#
+###################################################################################
