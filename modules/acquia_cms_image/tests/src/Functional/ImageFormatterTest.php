@@ -19,7 +19,7 @@ class ImageFormatterTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'stable';
+  protected $defaultTheme = 'stark';
 
   /**
    * The entity display object repository object.
