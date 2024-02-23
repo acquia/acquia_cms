@@ -2436,7 +2436,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "6e6656b846e4f6fbc8f0664c3ad99f978978593a"
+                "reference": "e7d3bfe1b5324d4a538fcd4a4733f9bb055d95da"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2490,7 +2490,7 @@
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-develop": "2.x-dev"
+                    "dev-develop": "3.x-dev"
                 },
                 "drush": {
                     "services": {
@@ -2500,8 +2500,7 @@
                 "enable-patching": true,
                 "patches": {
                     "drupal/core": {
-                        "3301692 - Passing null to parameter to mb_strtolower() is deprecated with PHP 8.1": "https://git.drupalcode.org/project/drupal/-/merge_requests/2598.patch",
-                        "3370946 - Page title should contextualize the local navigation": "https://www.drupal.org/files/issues/2024-01-18/3370946-page-title-backport-10-2-2_0.patch"
+                        "3301692 - Passing null to parameter to mb_strtolower() is deprecated with PHP 8.1": "https://git.drupalcode.org/project/drupal/-/merge_requests/2598.patch"
                     }
                 }
             },
@@ -6367,6 +6366,10 @@
                 {
                     "name": "shadcn",
                     "homepage": "https://shadcn.com"
+                },
+                {
+                    "name": "minnur",
+                    "homepage": "https://www.drupal.org/user/702026"
                 },
                 {
                     "name": "roaguicr",
@@ -21421,5 +21424,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
