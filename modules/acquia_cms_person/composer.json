@@ -1,11 +1,21 @@
 {
     "name": "drupal/acquia_cms_person",
-    "type": "drupal-module",
     "description": "Provides a Person content type, a structured data representation of people associated with a website or organization.",
     "license": "GPL-2.0-or-later",
+    "type": "drupal-module",
     "require": {
         "drupal/acquia_cms_place": "^1.5.7",
         "drupal/scheduler": "^2.0"
+    },
+    "repositories": {
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
     },
     "config": {
         "allow-plugins": {
@@ -22,16 +32,6 @@
     "extra": {
         "branch-alias": {
             "dev-develop": "1.x-dev"
-        }
-    },
-    "repositories": {
-        "assets": {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        },
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
         }
     }
 }
