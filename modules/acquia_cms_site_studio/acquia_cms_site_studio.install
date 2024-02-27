@@ -92,27 +92,6 @@ function acquia_cms_site_studio_install($is_syncing) {
       }
     }
 
-    // Set default configurations for node revision delete module.
-    $config = $config_factory->getEditable('node_revision_delete.settings');
-    if ($config) {
-      $config->set('node_revision_delete_cron', '50')
-        ->set('node_revision_delete_time', '604800')
-        ->save();
-    }
-
-    // Set default node revision delete configuration for Page content type.
-    if ($module_handler->moduleExists('acquia_cms_page')) {
-      $type = NodeType::load('page');
-      // @todo It's failing on acquia_cms profile, need to revisit.
-      $third_party_settings = $type ? $type->get('third_party_settings') : NULL;
-      if ($type && !isset($third_party_settings['node_revision_delete'])) {
-        $type->setThirdPartySetting('node_revision_delete', 'minimum_revisions_to_keep', '30');
-        $type->setThirdPartySetting('node_revision_delete', 'minimum_age_to_delete', '0');
-        $type->setThirdPartySetting('node_revision_delete', 'when_to_delete', '0');
-        $type->save();
-      }
-    }
-
     // Re-write the editor and filter format config from
     // optional directory since we have done some update to it.
     $module_path = $module_handler->getModule('acquia_cms_site_studio')->getPath();
@@ -141,14 +120,36 @@ function acquia_cms_site_studio_install($is_syncing) {
       }
     }
 
+    $module_installer = \Drupal::service('module_installer');
     // Install cohesion_style_guide & sitestudio_config_management module.
     $modules_to_install = [
+      'node_revision_delete',
+      'responsive_preview',
       'cohesion_style_guide',
       'sitestudio_config_management',
     ];
+    $module_installer->install($modules_to_install);
 
-    // Install modules.
-    \Drupal::service('module_installer')->install($modules_to_install);
+    // Set default configurations for node revision delete module.
+    $config = $config_factory->getEditable('node_revision_delete.settings');
+    if ($config) {
+      $config->set('node_revision_delete_cron', '50')
+        ->set('node_revision_delete_time', '604800')
+        ->save();
+    }
+
+    // Set default node revision delete configuration for Page content type.
+    if ($module_handler->moduleExists('acquia_cms_page')) {
+      $type = NodeType::load('page');
+      // @todo It's failing on acquia_cms profile, need to revisit.
+      $third_party_settings = $type ? $type->get('third_party_settings') : NULL;
+      if ($type && !isset($third_party_settings['node_revision_delete'])) {
+        $type->setThirdPartySetting('node_revision_delete', 'minimum_revisions_to_keep', '30');
+        $type->setThirdPartySetting('node_revision_delete', 'minimum_age_to_delete', '0');
+        $type->setThirdPartySetting('node_revision_delete', 'when_to_delete', '0');
+        $type->save();
+      }
+    }
   }
 }
 
