@@ -1,80 +1,16 @@
-################
-# Includes
-#
-# Additional configuration can be provided through includes.
-# One advantage of include files is that if they are updated upstream, the changes affect all pipelines using that include.
-#
-# Includes can be overridden by re-declaring anything provided in an include, here in gitlab-ci.yml
-# https://docs.gitlab.com/ee/ci/yaml/includes.html#override-included-configuration-values
-################
-
-# include:
-################
-# DrupalCI includes:
-# As long as you include this, any future includes added by the Drupal Association will be accessible to your pipelines automatically.
-# View these include files at https://git.drupalcode.org/project/gitlab_templates/
-################
-# - project: $_GITLAB_TEMPLATES_REPO
-#   ref: $_GITLAB_TEMPLATES_REF
-#   file:
-#     - 'https://github.com/acquia/acquia_cms/blob/53813359c707d8f390f6a70cd2b58e55c76938ba/gitlab-templates/.gitlab-ci.yml'
 include:
-  - remote: 'https://raw.githubusercontent.com/acquia/acquia_cms/feature/gitlab-ci/gitlab_templates/.gitlab-ci.yml'
-################
-# Pipeline configuration variables
-#
-# These are the variables provided to the Run Pipeline form that a user may want to override.
-#
-# Docs at https://git.drupalcode.org/project/gitlab_templates/-/blob/1.0.x/includes/include.drupalci.variables.yml
-################
+  ################
+  # DrupalCI includes:
+  # As long as you include this, any future includes added by the Acquia CMS will be accessible to your pipelines automatically.
+  # View these include files at https://git.drupalcode.org/project/gitlab_orca/-/tree/acquia_cms/
+  ################
+  - project: "project/gitlab_orca"
+    ref: "acquia_cms"
+    file:
+      - '/includes/include.orcaci.main.yml'
+      - '/includes/include.orcaci.variables.yml'
+
 variables:
   ORCA_SUT_NAME: drupal/acquia_cms_place
   ORCA_SUT_BRANCH: 1.x
   ORCA_PACKAGES_CONFIG_ALTER: $CI_PROJECT_DIR/tests/packages_alter.yml
-  ORCA_VERSION: ^4
-
-###################################################################################
-#
-#                                        *
-#                                       /(
-#                                      ((((,
-#                                    /(((((((
-#                                   ((((((((((*
-#                                ,(((((((((((((((
-#                              ,(((((((((((((((((((
-#                            ((((((((((((((((((((((((*
-#                         *(((((((((((((((((((((((((((((
-#                       ((((((((((((((((((((((((((((((((((*
-#                    *((((((((((((((((((  .((((((((((((((((((
-#                  ((((((((((((((((((.       /(((((((((((((((((*
-#                /(((((((((((((((((            .(((((((((((((((((,
-#             ,((((((((((((((((((                 ((((((((((((((((((
-#           .((((((((((((((((((((                   .(((((((((((((((((
-#          (((((((((((((((((((((((                     ((((((((((((((((/
-#        (((((((((((((((((((((((((((/                    ,(((((((((((((((*
-#      .((((((((((((((/  /(((((((((((((.                   ,(((((((((((((((
-#     *((((((((((((((      ,(((((((((((((/                   *((((((((((((((.
-#    ((((((((((((((,          /(((((((((((((.                  ((((((((((((((,
-#   (((((((((((((/              ,(((((((((((((*                 ,(((((((((((((,
-#  *(((((((((((((                .(((((((((((((((                ,(((((((((((((
-#  ((((((((((((/                /((((((((((((((((((.              ,((((((((((((/
-# (((((((((((((              *(((((((((((((((((((((((*             *((((((((((((
-# (((((((((((((            ,(((((((((((((..(((((((((((((           *((((((((((((
-# ((((((((((((,          /((((((((((((*      /((((((((((((/         ((((((((((((
-# (((((((((((((        /((((((((((((/          (((((((((((((*       ((((((((((((
-# (((((((((((((/     /((((((((((((               ,((((((((((((,    *((((((((((((
-#  ((((((((((((((  *(((((((((((/                   *((((((((((((.  ((((((((((((/
-#  *((((((((((((((((((((((((((,                      /(((((((((((((((((((((((((
-#   (((((((((((((((((((((((((                         ((((((((((((((((((((((((,
-#   .(((((((((((((((((((((((/                         ,(((((((((((((((((((((((
-#     ((((((((((((((((((((((/                         ,(((((((((((((((((((((/
-#      *(((((((((((((((((((((                         (((((((((((((((((((((,
-#       ,(((((((((((((((((((((,                      ((((((((((((((((((((/
-#         ,(((((((((((((((((((((*                  /((((((((((((((((((((
-#            ((((((((((((((((((((((,           ,/((((((((((((((((((((,
-#              ,(((((((((((((((((((((((((((((((((((((((((((((((((((
-#                 .(((((((((((((((((((((((((((((((((((((((((((((
-#                     .((((((((((((((((((((((((((((((((((((,.
-#                          .,(((((((((((((((((((((((((.
-#
-###################################################################################
