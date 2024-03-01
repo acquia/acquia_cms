@@ -27,7 +27,7 @@ installchromedriver() {
     case $OSTYPE in
       "linux-gnu"*)
         # Installs chromedriver for Linux 64 bit systems.
-        curl https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROMEDRIVER_VERSION/linux64/chromedriver-linux64.zip chromedriver-linux64.zip -s
+        curl https://storage.googleapis.com/chrome-for-testing-public/$CHROMEDRIVER_VERSION/linux64/chromedriver-linux64.zip chromedriver-linux64.zip -s
         unzip chromedriver-linux64.zip
         chmod +x chromedriver-linux64/chromedriver
         mv -f chromedriver-linux64/chromedriver ./vendor/bin
@@ -36,7 +36,7 @@ installchromedriver() {
         ;;
       "darwin"*)
         # Installs chromedriver for MacOS 64 bit systems.
-        curl https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROMEDRIVER_VERSION/mac-x64/chromedriver-mac-x64.zip  -o chromedriver-mac-x64.zip -s
+        curl https://storage.googleapis.com/chrome-for-testing-public/$CHROMEDRIVER_VERSION/mac-x64/chromedriver-mac-x64.zip  -o chromedriver-mac-x64.zip -s
         unzip chromedriver-mac-x64.zip
         chmod +x chromedriver-mac-x64/chromedriver
         mv -f chromedriver-mac-x64/chromedriver ./vendor/bin
