@@ -15,21 +15,6 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
 class NodeRevisionDeleteConfigTest extends ExistingSiteBase {
 
   /**
-   * {@inheritdoc}
-   */
-  protected $defaultTheme = 'stark';
-
-  /**
-   * {@inheritdoc}
-   */
-  protected static $modules = [
-    'acquia_cms_page',
-    'acquia_cms_site_studio',
-    'node',
-    'node_revision_delete',
-  ];
-
-  /**
    * Returns a config object by name.
    *
    * @param string $name
