@@ -45,14 +45,18 @@ services:
       - '@theme_handler'
       - '@string_translation'
       - '@extension.list.module'
-  acquia_cms_common.telemetry:
-    class: Drupal\acquia_cms_common\EventSubscriber\KernelTerminate\AcquiaCmsTelemetry
+  acquia_cms_common.telemetry_service:
+    class:  Drupal\acquia_cms_common\Services\AcmsTelemetryService
     arguments:
       - '@extension.list.module'
       - '@config.factory'
       - '@state'
+      - '@logger.factory'
       - '%site.path%'
       - '@datetime.time'
-      - '@logger.factory'
+  acquia_cms_common.telemetry:
+    class: Drupal\acquia_cms_common\EventSubscriber\KernelTerminate\AcquiaCmsTelemetry
+    arguments:
+      - '@acquia_cms_common.telemetry_service'
     tags:
       - { name: event_subscriber }
