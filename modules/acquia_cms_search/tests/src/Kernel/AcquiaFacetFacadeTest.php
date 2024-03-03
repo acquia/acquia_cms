@@ -24,6 +24,8 @@ class AcquiaFacetFacadeTest extends KernelTestBase {
     'search_api',
     'acquia_cms_search',
     'acquia_cms_common',
+    'acquia_connector',
+    'system',
   ];
 
   /**

@@ -45,14 +45,13 @@ services:
       - '@theme_handler'
       - '@string_translation'
       - '@extension.list.module'
+
   acquia_cms_common.telemetry:
     class: Drupal\acquia_cms_common\EventSubscriber\KernelTerminate\AcquiaCmsTelemetry
     arguments:
-      - '@extension.list.module'
+      - '@acquia_connector.telemetry_service'
       - '@config.factory'
       - '@state'
       - '%site.path%'
-      - '@datetime.time'
-      - '@logger.factory'
     tags:
       - { name: event_subscriber }

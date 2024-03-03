@@ -25,7 +25,7 @@ class AcquiaConnectorTelemetryOverride extends AcquiaTelemetry {
   public function onTerminateResponse(KernelEvent $event) {
     // Check if telemetry opted,
     // then only trigger AcquiaTelemetry::onTerminateResponse($event).
-    if ($this->state->get('acquia_connector.telemetry.opted', TRUE)) {
+    if (\Drupal::state()->get('acquia_connector.telemetry.opted', TRUE) && PHP_SAPI !== 'cli') {
       parent::onTerminateResponse($event);
     }
   }
