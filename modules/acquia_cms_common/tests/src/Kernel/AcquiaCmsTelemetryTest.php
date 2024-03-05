@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\acquia_cms_common\Kernel;
 
-use Drupal\acquia_cms_common\EventSubscriber\KernelTerminate\AcquiaCmsTelemetry;
+use Drupal\acquia_cms_common\EventSubscriber\KernelTerminate\AcquiaConnectorTelemetryOverride;
 use Drupal\KernelTests\KernelTestBase;
 
 /**
@@ -24,7 +24,7 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
   /**
    * The AcquiaCmsTelemetry event_service object.
    *
-   * @var \Drupal\acquia_cms_common\EventSubscriber\KernelTerminate\AcquiaCmsTelemetry
+   * @var \Drupal\acquia_cms_common\EventSubscriber\KernelTerminate\AcquiaConnectorTelemetryOverride
    */
   protected $acquiaCmsTelemetry;
 
@@ -47,11 +47,8 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
    */
   protected function setUp(): void {
     parent::setUp();
-    $this->acquiaCmsTelemetry = new AcquiaCmsTelemetry(
+    $this->acquiaCmsTelemetry = new AcquiaConnectorTelemetryOverride(
       $this->container->get("acquia_connector.telemetry_service"),
-      $this->container->get('config.factory'),
-      $this->container->get("state"),
-      $this->container->getParameter("site.path"),
     );
     $path = explode('/', $this->container->getParameter('site.path'));
     $this->siteUri = end($path);

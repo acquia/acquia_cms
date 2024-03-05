@@ -35,7 +35,6 @@ class SiteLogoTest extends KernelTestBase {
    */
   protected static $modules = [
     'acquia_cms_common',
-    'acquia_connector',
     'acquia_cms_image',
     'file',
     'media',
