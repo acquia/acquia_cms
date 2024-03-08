@@ -122,6 +122,10 @@ jobs:
             sed -i 's/2598.patch",/2598.patch"/' modules/acquia_cms_common/composer.json
             sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
             sed -i '/3370946-page-title-backport-10-2-2_0.patch/d' modules/acquia_cms_common/composer.json
+
+            # Update development branch to 2.x
+            sed -i 's/^"dev-develop": "3.x-dev"/"dev-develop": "2.x-dev"/' modules/acquia_cms_common/composer.json
+            sed -i 's/^"url": ".\/modules\/acquia_cms_common",/"url": ".\/modules\/acquia_cms_common",\n"canonical": false,/' composer.json
           fi
 
           # Remove all PHPUnit tests from individual modules, except the integrated & ExistingSite tests.

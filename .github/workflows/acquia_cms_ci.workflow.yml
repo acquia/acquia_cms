@@ -235,6 +235,7 @@ jobs:
         orca-job:
           - INTEGRATED_TEST_ON_PREVIOUS_MINOR
           - ISOLATED_TEST_ON_CURRENT
+          - INTEGRATED_TEST_ON_LATEST_LTS
         php-version:
           - 8.1
           - 8.3
@@ -276,6 +277,22 @@ jobs:
           if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_PREVIOUS_MINOR" ]; then
             # Update drupal/core patch as per Drupal Core version.
             sed -i 's/2024-01-18\/3370946-page-title-backport-10-2-2_0.patch/2024-01-18\/3370946-page-title-backport-10-1-8.patch/g' modules/acquia_cms_common/composer.json
+          fi
+
+          # One of the patch is failing on Drupal Core 9.5. So remove that patch.
+          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
+            # Remove the failing php on Drupal Core 9.5.
+            # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
+
+            # Remove drupal/core patch as it's needed for latest Drupal Core only.
+            composer config extra.patches.drupal/core {} --json
+            sed -i 's/2598.patch",/2598.patch"/' modules/acquia_cms_common/composer.json
+            sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
+            sed -i '/3370946-page-title-backport-10-2-2_0.patch/d' modules/acquia_cms_common/composer.json
+
+            # Update development branch to 2.x
+            sed -i 's/^"dev-develop": "3.x-dev"/"dev-develop": "2.x-dev"/' modules/acquia_cms_common/composer.json
+            sed -i 's/^"url": ".\/modules\/acquia_cms_common",/"url": ".\/modules\/acquia_cms_common",\n"canonical": false,/' composer.json
           fi
 
           ../orca/bin/ci/before_install.sh
