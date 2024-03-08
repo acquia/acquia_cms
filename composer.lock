@@ -2436,7 +2436,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "d981733c3e8ea7fa7d6a31a69f7f2c1300ec541b"
+                "reference": "ff9f3f3debaaacfc41fc4b700b7f129c5650695a"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2501,6 +2501,9 @@
                 "patches": {
                     "drupal/core": {
                         "3301692 - Passing null to parameter to mb_strtolower() is deprecated with PHP 8.1": "https://git.drupalcode.org/project/drupal/-/merge_requests/2598.patch"
+                    },
+                    "drupal/acquia_connector": {
+                        "ACMS-3417 - Remove amplitude and add sumologic for logging.": "https://gist.githubusercontent.com/rajeshreeputra/417e7f9cd9ba21c4a11292e0389f25a8/raw/6fc8e0e528ae5d97ecc9768cd42b872c879ba9f9/acquia_connector-sumologic.patch"
                     }
                 }
             },
@@ -6411,7 +6414,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.0-rc7",
-                    "datestamp": "1698848506",
+                    "datestamp": "1709793226",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
