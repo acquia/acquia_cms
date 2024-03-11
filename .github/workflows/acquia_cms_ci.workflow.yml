@@ -484,7 +484,9 @@ jobs:
           ./vendor/bin/drush cr
           cd ${ORCA_SUT_DIR}
           ./tests/ci/script.sh
+  # Deploy code to drupal.org.
   deploy_code:
+    if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
     name: "Continuous Deployment (CD)"
     env:
       GIT_AUTHOR_NAME: "Vishal Khode"
