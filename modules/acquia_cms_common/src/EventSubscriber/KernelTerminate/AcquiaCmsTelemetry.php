@@ -242,7 +242,7 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
     }
 
     $sendTimestamp = $this->state->get('acquia_cms_common.telemetry.timestamp', 0);
-    $isOpted = $this->state->get('acquia_connector.telemetry.opted', TRUE);
+    $isOpted = $this->state->get('acquia_connector.telemetry.opted');
 
     // We send telemetry data if all below conditions are met:
     // If current environment is Acquia environment.
