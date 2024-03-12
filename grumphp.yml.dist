@@ -1,0 +1,51 @@
+parameters:
+  git_dir: .
+  bin_dir: vendor/bin
+grumphp:
+  ascii:
+    failed: vendor/axelerant/drupal-quality-checker/resources/grumpy.txt
+    succeeded: vendor/axelerant/drupal-quality-checker/resources/happy.txt
+  tasks:
+    phplint: ~
+    yamllint: ~
+    composer: ~
+    jsonlint: ~
+    twigcs:
+      path: 'web'
+      ruleset: 'FriendsOfTwig\Twigcs\Ruleset\Official'
+      exclude:
+        - core
+        - modules/contrib
+        - themes/contrib
+        - profiles/contrib
+    phpcpd:
+      directory: ['./web/modules/custom']
+    phpcs:
+      standard:
+        - phpcs.xml.dist
+      ignore_patterns:
+        - .github
+        - .gitlab
+        - /config/
+        - /drush/
+        - /web/robots.txt
+        - /web/sites/default/
+        - bower_components
+        - node_modules
+        - /vendor
+      triggered_by:
+        - php
+        - module
+        - inc
+        - install
+        - test
+        - profile
+        - theme
+        - css
+        - info
+        - txt
+    phpmd:
+      whitelist_patterns:
+        - /^web\/modules\/custom\/(.*)/
+      ruleset: ['phpmd.xml.dist']
+      triggered_by: ['php']

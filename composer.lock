@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6728293353fbe2f377fef0bdf0f9340e",
+    "content-hash": "0d18e12b32e899d9866d19d75c049f57",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2436,7 +2436,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "d981733c3e8ea7fa7d6a31a69f7f2c1300ec541b"
+                "reference": "5335510514290d8e41b46ee10549ab78368313ed"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -16095,68 +16095,6 @@
             "time": "2023-03-03T22:51:37+00:00"
         },
         {
-            "name": "axelerant/drupal-quality-checker",
-            "version": "v1.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/axelerant/drupal-quality-checker.git",
-                "reference": "d354e3c1eda986c8a1b718af1f86fe0280d17486"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/axelerant/drupal-quality-checker/zipball/d354e3c1eda986c8a1b718af1f86fe0280d17486",
-                "reference": "d354e3c1eda986c8a1b718af1f86fe0280d17486",
-                "shasum": ""
-            },
-            "require": {
-                "dealerdirect/phpcodesniffer-composer-installer": "*",
-                "drupal/coder": "^8.3.7",
-                "friendsoftwig/twigcs": "^4.0 || ^5.0 || ^6.0",
-                "php-parallel-lint/php-parallel-lint": "^1.2",
-                "phpcompatibility/php-compatibility": "^9.0",
-                "phpmd/phpmd": "^2.8",
-                "phpro/grumphp-shim": "^1.0.0",
-                "sebastian/phpcpd": "^3.0 || ^4.0 || ^5.0 || ^6.0"
-            },
-            "suggest": {
-                "drupal/core-composer-scaffold": "Scaffold relevant files in project root. Add axelerant/drupal-quality-checker to extra.drupal-scaffold.allowed-packages."
-            },
-            "type": "project",
-            "extra": {
-                "drupal-scaffold": {
-                    "file-mapping": {
-                        "[project-root]/grumphp.yml.dist": {
-                            "mode": "replace",
-                            "path": "grumphp.yml.dist",
-                            "overwrite": false
-                        },
-                        "[project-root]/phpcs.xml.dist": "phpcs.xml.dist",
-                        "[project-root]/phpmd.xml.dist": "phpmd.xml.dist"
-                    }
-                },
-                "branch-alias": {
-                    "dev-main": "1.0.x-dev"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "proprietary"
-            ],
-            "authors": [
-                {
-                    "name": "Hussain Abbas",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "Code quality checking tools for Drupal project.",
-            "homepage": "https://github.com/axelerant/drupal-quality-checker",
-            "support": {
-                "issues": "https://github.com/axelerant/drupal-quality-checker/issues",
-                "source": "https://github.com/axelerant/drupal-quality-checker"
-            },
-            "time": "2022-12-16T23:18:27+00:00"
-        },
-        {
             "name": "behat/mink",
             "version": "v1.11.0",
             "source": {
@@ -20509,68 +20447,6 @@
                 }
             ],
             "time": "2020-10-26T13:14:26+00:00"
-        },
-        {
-            "name": "sebastian/phpcpd",
-            "version": "6.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sebastianbergmann/phpcpd.git",
-                "reference": "f3683aa0db2e8e09287c2bb33a595b2873ea9176"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpcpd/zipball/f3683aa0db2e8e09287c2bb33a595b2873ea9176",
-                "reference": "f3683aa0db2e8e09287c2bb33a595b2873ea9176",
-                "shasum": ""
-            },
-            "require": {
-                "ext-dom": "*",
-                "php": ">=7.3",
-                "phpunit/php-file-iterator": "^3.0",
-                "phpunit/php-timer": "^5.0",
-                "sebastian/cli-parser": "^1.0",
-                "sebastian/version": "^3.0"
-            },
-            "bin": [
-                "phpcpd"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "6.0-dev"
-                }
-            },
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Sebastian Bergmann",
-                    "email": "sebastian@phpunit.de",
-                    "role": "lead"
-                }
-            ],
-            "description": "Copy/Paste Detector (CPD) for PHP code.",
-            "homepage": "https://github.com/sebastianbergmann/phpcpd",
-            "support": {
-                "issues": "https://github.com/sebastianbergmann/phpcpd/issues",
-                "source": "https://github.com/sebastianbergmann/phpcpd/tree/6.0.3"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/sebastianbergmann",
-                    "type": "github"
-                }
-            ],
-            "abandoned": true,
-            "time": "2020-12-07T05:39:23+00:00"
         },
         {
             "name": "sebastian/recursion-context",
