@@ -2427,7 +2427,8 @@
                 "drupal/acquia_cms_starter": "<1.3.3",
                 "drupal/acquia_cms_toolbar": "<1.4",
                 "drupal/acquia_cms_tour": "<1.3.2 || ~2.0.0",
-                "drupal/acquia_cms_video": "<1.4"
+                "drupal/acquia_cms_video": "<1.4",
+                "drupal/acquia_connector": "<4.0.6"
             },
             "require-dev": {
                 "acquia/cohesion": "^7.4",
@@ -3033,6 +3034,14 @@
                 },
                 "branch-alias": {
                     "dev-4.x": "4.x-dev"
+                },
+                "drupal": {
+                    "version": "4.0.5+1-dev",
+                    "datestamp": "1691011930",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
+                    }
                 },
                 "drush": {
                     "services": {
