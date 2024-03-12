@@ -24,7 +24,7 @@ class NodeRevisionDeleteConfigTest extends ExistingSiteBase {
    *   The config object, read-only to discourage this test from making any
    *   changes.
    */
-  private function config(string $name) : ImmutableConfig {
+  private function config(string $name): ImmutableConfig {
     return $this->container->get('config.factory')->get($name);
   }
 
@@ -35,21 +35,7 @@ class NodeRevisionDeleteConfigTest extends ExistingSiteBase {
     // Check that node revision delete default configs are in place.
     $config = $this->config('node_revision_delete.settings');
     if ($config) {
-      $this->assertEquals(50, $config->get('node_revision_delete_cron'));
-      $this->assertEquals(604800, $config->get('node_revision_delete_time'));
-    }
-  }
-
-  /**
-   * Assert that node revision delete configs available for Page content type.
-   */
-  public function testContentTypeConfig() {
-    // Check node revision delete configs for Page content type are in palce.
-    $config = $this->config('node.type.page');
-    if ($config) {
-      $this->assertSame(30, $config->get('third_party_settings.node_revision_delete.minimum_revisions_to_keep'));
-      $this->assertSame(0, $config->get('third_party_settings.node_revision_delete.minimum_age_to_delete'));
-      $this->assertSame(0, $config->get('third_party_settings.node_revision_delete.when_to_delete'));
+      $this->assertFalse($config->get('disable_automatic_queueing'));
     }
   }
 

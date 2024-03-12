@@ -236,25 +236,7 @@ function acquia_cms_site_studio_update_8002() {
  * Install module with default configuration.
  */
 function acquia_cms_site_studio_update_8003() {
-  // Install node revision delete module and set default configurations.
-  \Drupal::service('module_installer')->install(['node_revision_delete']);
-  $config = \Drupal::service('config.factory')->getEditable('node_revision_delete.settings');
-  if ($config) {
-    $config->set('node_revision_delete_cron', '50')
-      ->set('node_revision_delete_time', '604800')
-      ->save();
-  }
-  // Set default node revision delete configuration for Place content type.
-  $module_handler = \Drupal::service('module_handler');
-  if ($module_handler->moduleExists('acquia_cms_page')) {
-    $type = NodeType::load('page');
-    if ($type) {
-      $type->setThirdPartySetting('node_revision_delete', 'minimum_revisions_to_keep', '30');
-      $type->setThirdPartySetting('node_revision_delete', 'minimum_age_to_delete', '0');
-      $type->setThirdPartySetting('node_revision_delete', 'when_to_delete', '0');
-      $type->save();
-    }
-  }
+  // Stale.
 }
 
 /**
