@@ -317,7 +317,7 @@ function acquia_cms_common_update_8009() {
  *
  * Set the telemetry opted state variable to TRUE if it is currently unset.
  */
-function acquia_cms_common_update_8301() {
+function acquia_cms_common_update_8331() {
   if (empty(\Drupal::state()->get('acquia_connector.telemetry.opted'))) {
     \Drupal::state()->set('acquia_connector.telemetry.opted', TRUE);
   }

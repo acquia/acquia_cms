@@ -16,7 +16,10 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ["system", "acquia_cms_common"];
+  protected static $modules = [
+    "system",
+    "acquia_cms_common",
+  ];
 
   /**
    * The AcquiaCmsTelemetry event_service object.
@@ -24,13 +27,6 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
    * @var \Drupal\acquia_cms_common\EventSubscriber\KernelTerminate\AcquiaCmsTelemetry
    */
   protected $acquiaCmsTelemetry;
-
-  /**
-   * The config.factory service.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
 
   /**
    * The site uri.
@@ -69,6 +65,10 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
       ->set('starter_kit_name', 'no_starter_kit')->save();
     $this->config('core.extension')
       ->set('profile', 'minimal')->save();
+    // Because Kernel tests don't perform a full installation of modules,
+    // we need to manually set the telemetry opted state variable.
+    $this->container->get("state")
+      ->set("acquia_connector.telemetry.opted", TRUE);
   }
 
   /**
