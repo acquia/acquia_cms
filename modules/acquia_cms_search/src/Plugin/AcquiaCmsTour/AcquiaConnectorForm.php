@@ -94,6 +94,13 @@ class AcquiaConnectorForm extends AcquiaCmsDashboardBase {
       // Start with an empty subscription.
       $subscription = $this->subscription->getSubscription(TRUE);
       $site_name = isset($subscription['uuid']) ? $this->siteProfile->getSiteName($subscription['uuid']) : "";
+      $form[$module]['opt_in'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Send anonymous data about Acquia product usage'),
+        '#default_value' => $this->state->get('acquia_connector.telemetry.opted'),
+        '#description' => $this->t('In order to improve our services Acquia collects anonymous information about product usage and performance. The data will never be used for marketing or sold to third parties. Please uncheck this box if you do not wish for this data to be collected.'),
+        '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
+      ];
       $form[$module]['site_name'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Name'),
@@ -101,7 +108,6 @@ class AcquiaConnectorForm extends AcquiaCmsDashboardBase {
         '#disabled' => TRUE,
         '#required' => TRUE,
         '#default_value' => $this->state->get('spi.site_name') ?? $site_name,
-        '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
         '#suffix' => '</div class= "dashboard-fields-wrapper">',
       ];
 
