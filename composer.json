@@ -50,113 +50,6 @@
         "phpunit/phpunit": "^9.4.0",
         "weitzman/drupal-test-traits": "^2"
     },
-<<<<<<< HEAD
-=======
-    "config": {
-        "allow-plugins": {
-            "composer/installers": true,
-            "cweagans/composer-patches": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "drupal/core-composer-scaffold": true,
-            "ergebnis/composer-normalize": true,
-            "mnsami/composer-custom-directory-installer": true,
-            "oomphinc/composer-installers-extender": true,
-            "php-http/discovery": true,
-            "phpro/grumphp-shim": true,
-            "phpstan/extension-installer": true,
-            "webdriver-binary/binary-chromedriver": true,
-            "wikimedia/composer-merge-plugin": true
-        },
-        "preferred-install": {
-            "drupal/core": "dist"
-        },
-        "process-timeout": 0,
-        "sort-packages": true
-    },
-    "extra": {
-        "drupal-scaffold": {
-            "allowed-packages": [
-                "drupal/core"
-            ],
-            "file-mapping": {
-                "[project-root]/.editorconfig": false,
-                "[project-root]/.gitattributes": false,
-                "[web-root]/.csslintrc": false,
-                "[web-root]/INSTALL.txt": false,
-                "[web-root]/drush/drush.yml": "drush/drush.yml",
-                "[web-root]/example.gitignore": false,
-                "[web-root]/modules/README.txt": false,
-                "[web-root]/profiles/README.txt": false,
-                "[web-root]/robots.txt": false,
-                "[web-root]/sites/README.txt": false,
-                "[web-root]/sites/default/default.settings.php": {
-                    "append": "./patches/d9-acms-settings.patch"
-                },
-                "[web-root]/themes/README.txt": false,
-                "[web-root]/themes/contrib/cohesion-theme/templates/maintenance-page.html.twig": "./patches/maintenance-page.patch",
-                "[web-root]/web.config": false
-            },
-            "locations": {
-                "project-root": ".",
-                "web-root": "./docroot"
-            }
-        },
-        "enable-patching": true,
-        "installer-paths": {
-            "docroot/core": [
-                "type:drupal-core"
-            ],
-            "docroot/libraries/{$name}": [
-                "type:drupal-library",
-                "type:bower-asset",
-                "type:npm-asset",
-                "swagger-api/swagger-ui",
-                "nnnick/chartjs"
-            ],
-            "docroot/modules/contrib/{$name}": [
-                "type:drupal-module"
-            ],
-            "docroot/profiles/contrib/{$name}": [
-                "type:drupal-profile"
-            ],
-            "docroot/themes/contrib/{$name}": [
-                "type:drupal-theme"
-            ]
-        },
-        "installer-types": [
-            "bower-asset",
-            "npm-asset"
-        ],
-        "patchLevel": {
-            "drupal/core": "-p2"
-        },
-        "patches": {
-            "acquia/acquia-cms-starterkit": {
-                "ACMS-1988 - Update admin theme in starterkit to Gin": "https://github.com/acquia/acquia-cms-starterkit/compare/develop...feature/admin-gin-theme.patch",
-                "ACMS-3456: Update logic to enable theme.": "https://patch-diff.githubusercontent.com/raw/acquia/acquia-cms-starterkit/pull/132.patch"
-            },
-            "drupal/core": {
-                "3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112": "https://git.drupalcode.org/project/drupal/-/merge_requests/3142.patch",
-                "Fix failing test for site studio due to missing file": "https://gist.githubusercontent.com/chandan-singh7929/978c8c3c8b6f1e2de23492e7e562c0c3/raw/f0e7770d94be862e5495ca25662a0a0d5672b785/bypass-library-version-core.patch"
-            },
-            "drupal/decoupled_router": {
-                "3111456 - Unable to resolve path on node in other language than default": "https://www.drupal.org/files/issues/2022-11-30/decouple_router-3111456-resolve-language-issue-58.patch",
-                "3176615 - RouteNotFoundException when a jsonapi individual route is not available": "https://www.drupal.org/files/issues/2023-04-26/route-not-found-exception.patch"
-            },
-            "mglaman/drupal-check": {
-                "Add custom rules to bypass check for buildForm": "https://github.com/mglaman/drupal-check/pull/286.patch"
-            }
-        }
-    },
-    "autoload": {
-        "psr-4": {
-            "Acquia\\Utility\\": "src/Utility"
-        },
-        "classmap": [
-            "src/Composer/ConfigureProject.php"
-        ]
-    },
->>>>>>> cd15ee20 (ACMS-3284: Remove gin_toolbar from build.yml.)
     "repositories": {
         "chart.js": {
             "type": "package",
@@ -435,6 +328,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "acquia/acquia-cms-starterkit": {
+                "ACMS-1988 - Update admin theme in starterkit to Gin": "https://github.com/acquia/acquia-cms-starterkit/compare/develop...feature/admin-gin-theme.patch"
+            },
             "drupal/core": {
                 "3328187 - PHP Deprecated: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in docroot/core/lib/Drupal/Core/Mail/Plugin/Mail/PhpMail.php on line 112": "https://git.drupalcode.org/project/drupal/-/merge_requests/3142.patch",
                 "Fix failing test for site studio due to missing file": "https://gist.githubusercontent.com/chandan-singh7929/978c8c3c8b6f1e2de23492e7e562c0c3/raw/f0e7770d94be862e5495ca25662a0a0d5672b785/bypass-library-version-core.patch"
