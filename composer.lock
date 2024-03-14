@@ -8,39 +8,40 @@
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
-            "version": "1.1.6",
+            "version": "1.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/acquia-cms-starterkit.git",
-                "reference": "5d93e1564a9d1e184273bd31c8623165a67fc7b5"
+                "reference": "d15b934d24c4617b598a0e6def2ff3c8b059be28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/acquia-cms-starterkit/zipball/5d93e1564a9d1e184273bd31c8623165a67fc7b5",
-                "reference": "5d93e1564a9d1e184273bd31c8623165a67fc7b5",
+                "url": "https://api.github.com/repos/acquia/acquia-cms-starterkit/zipball/d15b934d24c4617b598a0e6def2ff3c8b059be28",
+                "reference": "d15b934d24c4617b598a0e6def2ff3c8b059be28",
                 "shasum": ""
             },
             "require": {
-                "acquia/drupal-environment-detector": "^1.4",
-                "composer/composer": "^2.2",
+                "acquia/drupal-environment-detector": "^1.6",
+                "composer/composer": "^2.5.8",
+                "justinrainbow/json-schema": "^5.2",
                 "stecman/symfony-console-completion": "^0.11.0 || ^0.12.1",
-                "symfony/config": "^4.4 || ^5 || ^6",
-                "symfony/console": "^4.4 || ^5 || ^6",
-                "symfony/dependency-injection": "^4.4 || ^5 || ^6",
-                "symfony/filesystem": "^4.4 || ^5.4 || ^6",
-                "symfony/http-client": "^5 || ^6",
-                "symfony/http-kernel": "^4.4 || ^5 || ^6",
-                "symfony/process": "^4.4 || ^5 || ^6",
-                "symfony/yaml": "^4.4 || ^5 || ^6"
+                "symfony/config": "^6.2 || ^7.0",
+                "symfony/console": "^6.2 || ^7.0",
+                "symfony/dependency-injection": "^6.2 || ^7.0",
+                "symfony/filesystem": "^6.2 || ^7.0",
+                "symfony/http-client": "^6.2 || ^7.0",
+                "symfony/http-kernel": "^6.2 || ^7.0",
+                "symfony/process": "^6.2 || ^7.0",
+                "symfony/yaml": "^6.2 || ^7.0"
             },
             "require-dev": {
-                "acquia/coding-standards": "^1.0",
+                "acquia/coding-standards": "^1.0 || ^2.0",
                 "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
                 "ergebnis/composer-normalize": "~2.15.0",
                 "phpro/grumphp-shim": "^1.5",
                 "phpspec/prophecy-phpunit": "^2.0",
-                "phpstan/phpstan": "^1.5",
-                "phpunit/phpunit": "^9"
+                "phpstan/phpstan": "^1.9",
+                "phpunit/phpunit": "^9.4 || ^10"
             },
             "bin": [
                 "bin/acms"
@@ -77,9 +78,9 @@
             ],
             "support": {
                 "issues": "https://github.com/acquia/acquia-cms-starterkit/issues",
-                "source": "https://github.com/acquia/acquia-cms-starterkit/tree/1.1.6"
+                "source": "https://github.com/acquia/acquia-cms-starterkit/tree/1.1.7"
             },
-            "time": "2023-12-16T15:16:20+00:00"
+            "time": "2024-03-04T18:19:08+00:00"
         },
         {
             "name": "acquia/cohesion",
