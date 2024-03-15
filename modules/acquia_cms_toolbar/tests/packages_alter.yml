@@ -1,0 +1,48 @@
+# Add the Example module.
+drupal/acquia_cms_toolbar:
+  version_dev: "1.x-dev"
+acquia/acquia_cms: ~
+drupal/acquia_cms_common:
+  core_matrix:
+    '>=10.2.2':
+      version: 3.3.x
+      version_dev: 3.x-dev
+    10.1.x:
+      version: 3.2.x
+      version_dev: 3.2.x-dev
+    '>=10.0.9 <10.1':
+      version: 3.1.x
+      version_dev: 3.1.x-dev
+    '>=9.5.10 <10.0.9':
+      version: 2.x
+      version_dev: 2.x-dev
+drupal/acquia_cms_development:
+  core_matrix:
+    '>=10.2.2':
+      version: 3.3.x
+      version_dev: 3.x-dev
+    10.1.x:
+      version: 3.2.x
+      version_dev: 3.2.x-dev
+    '>=10.0.9 <10.1':
+      version: 3.1.x
+      version_dev: 3.1.x-dev
+    '>=9.5.10 <10.0.9':
+      version: 2.x
+      version_dev: 2.x-dev
+  enable: false
+drupal/acquia_cms_support:
+  core_matrix:
+    '>=10.2.2':
+      version: 3.3.x
+      version_dev: 3.x-dev
+    10.1.x:
+      version: 3.2.x
+      version_dev: 3.2.x-dev
+    '>=10.0.9 <10.1':
+      version: 3.1.x
+      version_dev: 3.1.x-dev
+    '>=9.5.10 <10.0.9':
+      version: 2.x
+      version_dev: 2.x-dev
+  enable: false

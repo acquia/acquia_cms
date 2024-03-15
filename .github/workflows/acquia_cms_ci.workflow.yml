@@ -163,8 +163,7 @@ jobs:
       - name: Before Install
         run: |
           # Update the CI by adding patches without pinning the following modules.
-          composer require "drupal/facets:^2.0.6" --no-update --no-install -d modules/acquia_cms_search
-          composer require "drupal/pathauto:^1.11" --no-update --no-install -d modules/acquia_cms_common
+          #composer require "drupal/facets:^2.0.6" --no-update --no-install -d modules/acquia_cms_search
 
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
@@ -278,113 +277,6 @@ jobs:
             sed -i 's/2024-01-18\/3370946-page-title-backport-10-2-2_0.patch/2024-01-18\/3370946-page-title-backport-10-1-8.patch/g' modules/acquia_cms_common/composer.json
           fi
 
-          ../orca/bin/ci/before_install.sh
-          chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
-          CHROMEDRIVER_PID=$!
-          echo "CHROMEDRIVER_PID=${CHROMEDRIVER_PID}" >> ${GITHUB_ENV}
-      - name: Install
-        shell: 'script -q -e -c "bash {0}"'
-        run: ./tests/ci/install.sh
-      - name: Before script
-        run: ../orca/bin/ci/before_script.sh
-      - name: Script
-        run: ./tests/ci/script.sh
-      - name: Before Cache
-        run: ../orca/bin/ci/before_cache.sh
-      - name: After script
-        run: |
-          kill -0 ${{ env.CHROMEDRIVER_PID }}
-          ../orca/bin/ci/after_success.sh
-          ../orca/bin/ci/after_failure.sh
-          ../orca/bin/ci/after_script.sh
-  isolated_tests:
-    if: ${{ github.event_name == 'pull_request' }}
-    name: acquia_cms (${{ matrix.orca-job }}, ${{ matrix.modules }})
-    runs-on: ubuntu-latest
-    env:
-      # Set ORCA related environment variables.
-      ORCA_SUT_NAME: acquia/acquia_cms
-      ORCA_SUT_BRANCH: develop
-      ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
-      ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
-      ORCA_ENABLE_NIGHTWATCH: "FALSE"
-      ORCA_PHPCS_STANDARD: AcquiaPHP
-      ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
-      ORCA_JOB: ${{ matrix.orca-job }}
-
-      # Set Required API Keys.
-      CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
-      SEARCH_UUID: ${{ secrets.SEARCH_UUID }}
-      CONNECTOR_KEY: ${{ secrets.CONNECTOR_KEY }}
-      GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
-      SITESTUDIO_API_KEY: ${{ secrets.SITESTUDIO_API_KEY }}
-      SITESTUDIO_ORG_KEY: ${{ secrets.SITESTUDIO_ORG_KEY }}
-
-      #Add other required environment variables.
-      COMPOSER_PROCESS_TIMEOUT: 1800
-      MODULES: ${{ matrix.modules }}
-      JOB_TYPE: "isolated-tests"
-      CI: true
-    strategy:
-      fail-fast: false
-      matrix:
-        orca-job:
-          - ISOLATED_TEST_ON_CURRENT
-        #php-version: [ "8.1" ]
-        modules:
-          - acquia_cms_article, acquia_cms_person, acquia_cms_place, acquia_cms_event
-          - acquia_cms_page, acquia_cms_site_studio, sitestudio_config_management
-          - acquia_cms_image, acquia_cms_document, acquia_cms_video, acquia_cms_audio
-          - acquia_cms_search, acquia_cms_common, acquia_cms_tour
-          - acquia_cms_headless
-          # - acquia_cms_article
-          # - acquia_cms_audio
-          # - acquia_cms_common
-          # - acquia_cms_component
-          # - acquia_cms_dam
-          # - acquia_cms_document
-          # - acquia_cms_event
-          # - acquia_cms_image
-          # - acquia_cms_page
-          # - acquia_cms_person
-          # - acquia_cms_place
-          # - acquia_cms_search
-          # - acquia_cms_site_studio
-          # - acquia_cms_starter
-          # - acquia_cms_tour
-          # - acquia_cms_toolbar
-          # - acquia_cms_video
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 12.13.1
-        uses: actions/setup-node@v3
-        with:
-          node-version: 12.13.1
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.3
-          #coverage: xdebug
-      - name: Download ORCA
-        run: |
-          composer self-update
-          composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
-      - name: Before Install
-        run: |
-          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
-          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
-
-          modules_list=$(echo ${MODULES} | tr "," "\n")
-          declare -a commands
-          for module in ${modules_list}
-          do
-            command=$(echo ${module} | xargs)
-            commands=("${commands[@]}" ! -path "*/${command}/*")
-          done
-          find modules -type f -name "*Test.php" "${commands[@]}" -exec rm -fr '{}' ';'
-          # Do not run any existing site tests. We run them seperately.
-          find modules -type d -name ExistingSite | xargs rm -rf && rm -rf tests/src/
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
           CHROMEDRIVER_PID=$!

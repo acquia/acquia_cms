@@ -23,7 +23,7 @@ class NodeBreadcrumbTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'claro';
+  protected $defaultTheme = 'stark';
 
   /**
    * {@inheritdoc}
