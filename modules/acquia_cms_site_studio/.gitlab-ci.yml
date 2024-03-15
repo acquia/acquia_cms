@@ -1,0 +1,25 @@
+include:
+  ################
+  # DrupalCI includes:
+  # As long as you include this, any future includes added by the Acquia CMS will be accessible to your pipelines automatically.
+  # View these include files at https://git.drupalcode.org/project/gitlab_orca/-/tree/acquia_cms/
+  ################
+  - project: "project/gitlab_orca"
+    ref: "acquia_cms"
+    file:
+      - '/includes/include.orcaci.main.yml'
+      - '/includes/include.orcaci.variables.yml'
+
+variables:
+  ORCA_SUT_NAME: drupal/acquia_cms_site_studio
+  ORCA_SUT_BRANCH: 1.x
+  ORCA_PACKAGES_CONFIG_ALTER: $CI_PROJECT_DIR/tests/packages_alter.yml
+  COMPOSER_PATCHES_FILE: $CI_PROJECT_DIR/.gitlab-ci/patches/patches.json
+
+# Do not add patch for latest EOL Major i.e 9.5.x as it's working as expected.
+INTEGRATED_TEST_ON_LATEST_EOL_MAJOR:
+  variables:
+    COMPOSER_PATCHES_FILE: ""
+INTEGRATED_TEST_ON_LATEST_EOL_MAJOR_PHP8:
+  variables:
+    COMPOSER_PATCHES_FILE: ""
