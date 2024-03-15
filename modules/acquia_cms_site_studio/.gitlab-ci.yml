@@ -15,3 +15,11 @@ variables:
   ORCA_SUT_BRANCH: 1.x
   ORCA_PACKAGES_CONFIG_ALTER: $CI_PROJECT_DIR/tests/packages_alter.yml
   COMPOSER_PATCHES_FILE: $CI_PROJECT_DIR/.gitlab-ci/patches/patches.json
+
+# Do not add patch for latest EOL Major i.e 9.5.x as it's working as expected.
+INTEGRATED_TEST_ON_LATEST_EOL_MAJOR:
+  variables:
+    COMPOSER_PATCHES_FILE: ""
+INTEGRATED_TEST_ON_LATEST_EOL_MAJOR_PHP8:
+  variables:
+    COMPOSER_PATCHES_FILE: ""
