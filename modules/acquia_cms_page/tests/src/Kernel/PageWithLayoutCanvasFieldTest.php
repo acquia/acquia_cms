@@ -21,8 +21,8 @@ class PageWithLayoutCanvasFieldTest extends FieldKernelTestBase {
     'node',
     'media',
     'acquia_cms_page',
-    'cohesion_elements',
     'acquia_cms_site_studio',
+    'cohesion_elements',
     'entity_reference_revisions',
   ];
 
@@ -52,7 +52,7 @@ class PageWithLayoutCanvasFieldTest extends FieldKernelTestBase {
   /**
    * Tests facet facade to verify facet entity.
    */
-  public function testPageContentTypeWithFields() {
+  public function testPageContentTypeWithFields(): void {
     $expected_fields = [
       'title',
       'body',
