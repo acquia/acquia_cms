@@ -28,22 +28,6 @@ function acquia_cms_common_install($is_syncing) {
       'view media',
     ]);
 
-    // Get all available themes.
-    $themes_list = \Drupal::service('extension.list.theme')->getList();
-    $themes_install = ["olivero"];
-    if (isset($themes_list['gin'])) {
-      $themes_install[] = "gin";
-    }
-    // Enable themes.
-    \Drupal::service('theme_installer')->install($themes_install);
-    $system_theme_config = \Drupal::configFactory()->getEditable('system.theme');
-    $system_theme_config->set('default', 'olivero')->save();
-    if (in_array("gin", $themes_install)) {
-      $system_theme_config->set('admin', "gin")->save();
-      // Enable gin_toolbar module.
-      $module_installer->install(['gin_toolbar']);
-    }
-
     // Re-write the content and media view on module install,
     // since we have moved this config in optional directory.
     $module_path = $module_handler->getModule('acquia_cms_common')->getPath();
