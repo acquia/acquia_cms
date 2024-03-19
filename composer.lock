@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b8324b40b5218b94250ce0c000ddae78",
+    "content-hash": "dc5236e8af5e1a38f38ad4af53af88ca",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -174,7 +174,7 @@
             "description": "Site Studio minimal theme",
             "support": {
                 "issues": "https://github.com/acquia/cohesion-theme/issues",
-                "source": "https://github.com/acquia/cohesion-theme/tree/7.5.0-beta2"
+                "source": "https://github.com/acquia/cohesion-theme/tree/7.5.x"
             },
             "time": "2024-03-11T17:46:07+00:00"
         },
@@ -2379,7 +2379,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "5335510514290d8e41b46ee10549ab78368313ed"
+                "reference": "739e86201d6e6f2e4167a25169b05cce290b73f6"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2834,7 +2834,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_site_studio",
-                "reference": "094ca6e6a8cf6f7fb57a2ecc1a9d9044e8e6aeb3"
+                "reference": "32b1ab53a4fd545ccc41bdf845688d8b588f2481"
             },
             "require": {
                 "acquia/cohesion": "~7.5.0",
@@ -2843,8 +2843,7 @@
                 "drupal/collapsiblock": "^4.0",
                 "drupal/node_revision_delete": "^1.0",
                 "drupal/responsive_preview": "^2.1",
-                "drupal/sitestudio_config_management": "^1.0",
-                "drupal/sitestudio_gin": "^1.0"
+                "drupal/sitestudio_config_management": "^1.0"
             },
             "conflict": {
                 "drupal/acquia_cms_article": "<1.6",
@@ -11336,9 +11335,9 @@
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "": "src/"
-                }
+                "classmap": [
+                    "src/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "include-path": [
@@ -20808,7 +20807,6 @@
                     "type": "github"
                 }
             ],
-            "abandoned": true,
             "time": "2020-09-28T06:45:17+00:00"
         },
         {
@@ -21739,5 +21737,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
