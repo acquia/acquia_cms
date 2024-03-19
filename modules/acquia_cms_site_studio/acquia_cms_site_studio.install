@@ -11,7 +11,6 @@ use Drupal\cohesion_sync\EventSubscriber\Import\SiteStudioSyncFilesSubscriber;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\editor\Entity\Editor;
-use Drupal\node\Entity\NodeType;
 use Drupal\user\Entity\Role;
 
 /**
@@ -60,8 +59,8 @@ function acquia_cms_site_studio_install($is_syncing) {
           ->save();
       }
     }
-    $config_factory = \Drupal::service('config.factory');
 
+    $config_factory = \Drupal::service('config.factory');
     // If module getting install stand alone.
     if (!InstallerKernel::installationAttempted()) {
       // Trigger save on page body field to update it.
@@ -236,7 +235,7 @@ function acquia_cms_site_studio_update_8002() {
  * Install module with default configuration.
  */
 function acquia_cms_site_studio_update_8003() {
-  // Stale.
+  // Stale hook_update_n because of node_revision_delete 2.x release.
 }
 
 /**
