@@ -212,33 +212,30 @@ function acquia_cms_site_studio_modules_installed($modules, $is_syncing) {
       $config = \Drupal::configFactory()->getEditable('node_revision_delete.settings');
       if ($config) {
         $config->set('defaults.amount.status', TRUE)
-          ->set('defaults.amount.settings.amount', '50')
+          ->set('defaults.amount.settings.amount', 50)
           ->set('defaults.created.status', TRUE)
-          // Earlier we are setting duration is 604800 i.e 1 week
-          // but with 2.x version of node_revision_delete,
-          // user can set duration in months only.
-          // Now it should 1 month only.
-          ->set('defaults.created.settings.age', '1')
+          ->set('defaults.created.settings.age', 12)
+          ->set('defaults.drafts.status', TRUE)
+          ->set('defaults.drafts.settings.age', 12)
           ->save();
       }
 
       // Set default node revision delete configuration for Page content type.
       if (\Drupal::service('module_handler')->moduleExists('acquia_cms_page')) {
         $type = NodeType::load('page');
-        // @todo It's failing on acquia_cms profile, need to revisit.
         $third_party_settings = $type ? $type->get('third_party_settings') : NULL;
         if ($type && !isset($third_party_settings['node_revision_delete'])) {
           $type->setThirdPartySetting('node_revision_delete', 'amount', [
             'status' => TRUE,
             'settings' => [
-              'amount' => '30',
+              'amount' => 30,
             ],
           ]);
           foreach (['created', 'drafts', 'drafts_only'] as $value) {
             $type->setThirdPartySetting('node_revision_delete', $value, [
               'status' => FALSE,
               'settings' => [
-                'age' => '0',
+                'age' => 0,
               ],
             ]);
           }

@@ -18,9 +18,21 @@ function acquia_cms_page_install($is_syncing) {
     if ($moduleHandler->moduleExists('node_revision_delete')) {
       $type = NodeType::load('page');
       if ($type) {
-        $type->setThirdPartySetting('node_revision_delete', 'minimum_revisions_to_keep', '30');
-        $type->setThirdPartySetting('node_revision_delete', 'minimum_age_to_delete', '0');
-        $type->setThirdPartySetting('node_revision_delete', 'when_to_delete', '0');
+        $type->setThirdPartySetting('node_revision_delete', 'amount', [
+          'status' => TRUE,
+          'settings' => [
+            'amount' => 30,
+          ],
+        ]);
+        foreach (['created', 'drafts', 'drafts_only'] as $value) {
+          $type->setThirdPartySetting('node_revision_delete', $value, [
+            'status' => FALSE,
+            'settings' => [
+              'age' => 0,
+            ],
+          ]);
+        }
+
         $type->save();
       }
     }
@@ -84,21 +96,8 @@ function acquia_cms_page_update_8001() {
  * Remove Page:Node Revision Delete settings if site studio is not installed.
  */
 function acquia_cms_page_update_8002() {
-  $moduleHandler = \Drupal::service('module_handler');
-  if (!$moduleHandler->moduleExists('node_revision_delete')) {
-    $node = NodeType::load('page');
-    if ($node) {
-      // Getting the config file.
-      $third_party_settings = $node->get('third_party_settings');
-      // Checking if the config exists.
-      if (isset($third_party_settings['node_revision_delete'])) {
-        // Deleting the value from the array.
-        unset($third_party_settings['node_revision_delete']);
-        // Saving the values in the config.
-        $node->set('third_party_settings', $third_party_settings)->save();
-      }
-    }
-  }
+  // Stale hook_update_n() cause of changes of schema in
+  // 2.x version of node_revision_delete.
 }
 
 /**
