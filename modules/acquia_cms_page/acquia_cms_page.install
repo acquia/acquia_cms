@@ -5,7 +5,7 @@
  * Install, update and uninstall functions for the acquia_cms_page module.
  */
 
-use Drupal\node\Entity\NodeType;
+use Drupal\acquia_cms_common\Facade\ConfigHandlerFacade;
 use Drupal\user\RoleInterface;
 
 /**
@@ -14,27 +14,43 @@ use Drupal\user\RoleInterface;
 function acquia_cms_page_install($is_syncing) {
   if (!$is_syncing) {
     // Set default node revision delete configuration for Page content type.
-    $moduleHandler = \Drupal::service('module_handler');
-    if ($moduleHandler->moduleExists('node_revision_delete')) {
-      $type = NodeType::load('page');
-      if ($type) {
-        $type->setThirdPartySetting('node_revision_delete', 'amount', [
+    $module_handler = \Drupal::service('module_handler');
+    if ($module_handler->moduleExists('node_revision_delete')) {
+      $config_handler = \Drupal::classResolver(ConfigHandlerFacade::class);
+      $config_handler->setModuleName('node_revision_delete');
+      // Node revision third party settings for page content type.
+      $third_party_settings = [
+        'amount' => [
           'status' => TRUE,
           'settings' => [
             'amount' => 30,
           ],
-        ]);
-        foreach (['created', 'drafts', 'drafts_only'] as $value) {
-          $type->setThirdPartySetting('node_revision_delete', $value, [
-            'status' => FALSE,
-            'settings' => [
-              'age' => 0,
-            ],
-          ]);
-        }
-
-        $type->save();
-      }
+        ],
+        'created' => [
+          'status' => FALSE,
+          'settings' => [
+            'age' => 0,
+          ],
+        ],
+        'drafts' => [
+          'status' => FALSE,
+          'settings' => [
+            'age' => 0,
+          ],
+        ],
+        'drafts_only' => [
+          'status' => FALSE,
+          'settings' => [
+            'age' => 0,
+          ],
+        ],
+      ];
+      // Set default node revision delete configuration for Page content type
+      // and entity node_type.
+      $config_handler->processThirdPartySettings([
+        'entity_type' => 'node_type',
+        'bundle' => 'page',
+      ], $third_party_settings);
     }
   }
 }
