@@ -5,6 +5,7 @@
  * Contains install-time code for the Acquia CMS profile.
  */
 
+use Drupal\acquia_cms_common\Facade\ConfigHandlerFacade;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\cohesion_sync\Event\SiteStudioSyncFilesEvent;
 use Drupal\cohesion_sync\EventSubscriber\Import\SiteStudioSyncFilesSubscriber;
@@ -424,4 +425,16 @@ function acquia_cms_site_studio_update_8009() {
       }
     }
   }
+}
+
+/**
+ * Install Node Revision Delete module with default configuration.
+ *
+ * Implements hook_update_n()
+ */
+function acquia_cms_site_studio_update_9000() {
+  $config_handler = \Drupal::classResolver(ConfigHandlerFacade::class);
+  $config_handler->setModuleName('node_revision_delete');
+  // Set default node revision delete settings shipped by Acquia CMS.
+  $config_handler->processConfigSettings();
 }
