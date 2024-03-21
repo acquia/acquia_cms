@@ -229,7 +229,7 @@ class AcmsUtilityService {
       'acquia_cms_headless' => 'Acquia CMS Headless' ,
       'acquia_cms_community' => 'Acquia CMS Community',
       'acquia_cms_existing_site' => 'Acquia CMS Existing Site',
-      'no_starter_kit' => 'Acquia CMS',
+      'no_starter_kit' => 'Custom Installation',
     ];
 
     // Check for the starter kit selection.
