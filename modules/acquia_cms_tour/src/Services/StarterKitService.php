@@ -47,7 +47,7 @@ class StarterKitService {
    * Constructs a new AcmsService object.
    *
    * @param \Drupal\Core\Extension\ModuleInstallerInterface $module_installer
-   *   The ModuleHandlerInterface.
+   *   The ModuleInstallerInterface.
    * @param \Drupal\Core\Extension\ThemeInstallerInterface $theme_installer
    *   The ThemeInstallerInterface.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -97,7 +97,6 @@ class StarterKitService {
         }
       }
       $modulesAndThemes['enableModules'][] = 'acquia_cms_site_studio';
-      $batch['finished'] = 'cohesion_website_settings_batch_import_finished';
     }
     if (!empty($modulesAndThemes['enableModules'])) {
       foreach ($modulesAndThemes['enableModules'] as $module) {
