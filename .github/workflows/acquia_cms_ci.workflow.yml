@@ -1,7 +1,7 @@
 name: "Acquia CMS CI"
 on:
   push:
-    branches: [ develop, qa, stage, main, release/*, feature/* ]
+    branches: [ develop, qa, stage, main, release/*, feature/*, ACMS* ]
     paths-ignore:
       - README.md
   pull_request:
@@ -11,7 +11,6 @@ on:
 
 jobs:
   static_code_analysis:
-    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     env:
       # Provide your package's name.
@@ -75,7 +74,6 @@ jobs:
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
   drupal_check:
-    if: ${{ github.event_name == 'pull_request' }}
     name: Execute Drupal-check
     runs-on: ubuntu-latest
     strategy:
@@ -97,7 +95,6 @@ jobs:
           php vendor/bin/drupal-check modules
           php vendor/bin/drupal-check tests/src
   integrated_tests:
-    if: ${{ github.event_name == 'pull_request' }}
     name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
     runs-on: ubuntu-latest
     env:
@@ -198,7 +195,6 @@ jobs:
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
   backstop_tests:
-    if: ${{ github.event_name == 'pull_request' }}
     name: backstop with ${{ matrix.orca-job }} on PHP ${{ matrix.php-version }}
     runs-on: ubuntu-latest
     env:
@@ -297,7 +293,6 @@ jobs:
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
   run_update_hooks:
-    if: ${{ github.event_name == 'pull_request' }}
     name: "Module Upgrades"
     runs-on: ubuntu-latest
     env:
