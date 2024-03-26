@@ -32,9 +32,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
     parent::setUp();
     $this->moduleInstaller = $this->container->get('module_installer');
     $this->moduleInstaller->install(['sitestudio_claro']);
-    // Set a standard window size so that all javascript tests start with the
-    // same viewport.
-    $this->getDriverInstance()->maximizeWindow();
+    $this->getDriverInstance()->resizeWindow(1920, 800);
   }
 
   /**
@@ -158,7 +156,7 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
    */
   protected function pressSaveButton(): void {
     $this->assertSession()
-      ->elementExists('css', '#edit-actions')
+      ->elementExists('css', '#edit-submit')
       ->pressButton('Save');
   }
 

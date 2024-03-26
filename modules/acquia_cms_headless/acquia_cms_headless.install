@@ -22,6 +22,9 @@ function acquia_cms_headless_install($is_syncing) {
 
     // Adds the necessary permissions to roles.
     add_next_site_permissions();
+
+    // Install the restui module.
+    \Drupal::service('module_installer')->install(['restui']);
   }
 }
 

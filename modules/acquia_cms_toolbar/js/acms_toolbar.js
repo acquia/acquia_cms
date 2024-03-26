@@ -13,12 +13,9 @@
     attach(context) {
       function adjustTopPadding() {
         // Since toolbar-icon-menu was adding its own js,
-        // we have adjusted margin when user clicks on manage button.
-        var body_padding_top = $('body').css('padding-top');
-        var new_height = body_padding_top.replace('px', '') - 5;
-        // Js should not be applied for desktop.
-        if ($(window).width() < 768) {
-          $('body').css('margin-top', $('#toolbar-bar').height() - new_height);
+        // we have adjusted margin when user clicks on manage button
+        if($('body #toolbar-administration-secondary').is(':visible') == false) {
+          $('body').css('margin-top', 10);
         }
       }
       window.onload = adjustTopPadding;

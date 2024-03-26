@@ -85,6 +85,13 @@ function acquia_cms_common_views_data() {
  */
 function acquia_cms_common_theme($existing, $type, $theme, $path) {
   return [
+    'status_report_general_info_starter_kit' => [
+      'template' => 'status-report-general-info-starter-kit',
+      'path' => $path . '/templates',
+      'variables' => [
+        'acquia_cms' => NULL,
+      ],
+    ],
     'page__system__403' => [
       'template' => 'page--system--403',
       'path' => $path . '/templates',
@@ -235,10 +242,20 @@ function acquia_cms_common_system_breadcrumb_alter(Breadcrumb &$breadcrumb, Rout
  * Implements hook_preprocess_template().
  */
 function acquia_cms_common_preprocess_status_report_general_info(&$variables) {
-  // Check for the starter kit selection.
+
   if ($starter_kit = \Drupal::service('acquia_cms_common.utility')->getStarterKit()) {
     // Store selected starter kit into the variable.
-    $variables['acquia_cms']['starter_kit'] = $starter_kit;
+    $starter_kit_template = [
+      '#theme' => 'status_report_general_info_starter_kit',
+      '#acquia_cms' => [
+        'starter_kit' => $starter_kit,
+      ],
+    ];
+    $starter_kit_element = \Drupal::service('renderer')
+      ->renderPlain($starter_kit_template);
+    $variables['drupal']['description'] = [
+      '#markup' => isset($variables['drupal']['description']) ? $starter_kit_element . $variables['drupal']['description'] : $starter_kit_element,
+    ];
   }
 }
 
@@ -401,7 +418,6 @@ function acquia_cms_common_modules_installed($modules, $is_syncing) {
  * @see template_preprocess_maintenance_page()
  */
 function acquia_cms_common_preprocess_maintenance_page(array &$variables) {
-  $variables['#attached']['library'][] = 'acquia_claro/install-page';
   $acquia_cms_path = \Drupal::service('extension.list.module')->getPath('acquia_cms_common');
   $variables['install_page_logo_path'] = '/' . $acquia_cms_path . '/acquia_cms.png';
 }

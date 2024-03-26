@@ -92,10 +92,6 @@ class WelcomeModalForm extends FormBase {
       '#type' => 'markup',
       '#markup' => '<img src="' . $logo . '" width="80">',
     ];
-    $form['tour-dashboard']['title'] = [
-      '#type' => 'markup',
-      '#markup' => '<h3>' . $this->t('Welcome to Acquia CMS') . '</h3>',
-    ];
     $form['tour-dashboard']['message'] = [
       '#type' => 'markup',
       '#markup' => '<p>' . $this->t("We've created an easy step by step installation wizard to guide you through the necessary configurations") . '</p>',

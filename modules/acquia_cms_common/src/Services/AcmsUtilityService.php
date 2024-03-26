@@ -228,10 +228,13 @@ class AcmsUtilityService {
       'acquia_cms_enterprise_low_code' => 'Acquia CMS Enterprise Low Code',
       'acquia_cms_headless' => 'Acquia CMS Headless' ,
       'acquia_cms_community' => 'Acquia CMS Community',
+      'acquia_cms_existing_site' => 'Acquia CMS Existing Site',
+      'no_starter_kit' => 'Custom Installation',
     ];
 
     // Check for the starter kit selection.
-    if ($starter_kit = $this->state->get('acquia_cms.starter_kit')) {
+    $starter_kit = $this->configFactory->get('acquia_cms_common.settings')->get('starter_kit_name');
+    if ($starter_kit) {
       // Return starter-kit value.
       return $starter_kits[$starter_kit];
     }

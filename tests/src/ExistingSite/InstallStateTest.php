@@ -89,7 +89,7 @@ class InstallStateTest extends ExistingSiteBase {
     // Check that the default and admin themes are set as expected.
     $theme_config = $this->config('system.theme');
     $this->assertSame('cohesion_theme', $theme_config->get('default'));
-    $this->assertSame('acquia_claro', $theme_config->get('admin'));
+    $this->assertSame('gin', $theme_config->get('admin'));
 
     // Check that the node create form is using the admin theme.
     $this->assertTrue($this->config('node.settings')->get('use_admin_theme'));
@@ -397,7 +397,7 @@ class InstallStateTest extends ExistingSiteBase {
     $assert_session->pageTextContains('The password does not satisfy the password policies.');
 
     // Password must not contain the username.
-    // @todo Validation does not work for this constraint, isue has been raised
+    // @todo Validation does not work for this constraint, issue has been raised
     // Issue - https://www.drupal.org/project/password_policy/issues/3161012
     $page->fillField('Password', 'Acb#45nbcs');
     $page->fillField('Confirm password', 'Acb#45nbcs');
