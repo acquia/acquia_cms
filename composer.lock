@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "69ec972eddd83b655078ec3fcf1c6d44",
+    "content-hash": "f54a5627774dedc977d7f622180cd9b0",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -5307,11 +5307,17 @@
         },
         {
             "name": "drupal/gin",
-            "version": "dev-3.x",
+            "version": "3.0.0-rc9",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/gin.git",
-                "reference": "d54e6c2dbd7e70ab7d426544181e238918cee2a0"
+                "reference": "8.x-3.0-rc9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/gin-8.x-3.0-rc9.zip",
+                "reference": "8.x-3.0-rc9",
+                "shasum": "130dec0ea8152bc796d8bbca1bc97b2ae0c381f4"
             },
             "require": {
                 "drupal/core": "^9 || ^10",
@@ -5319,15 +5325,12 @@
             },
             "type": "drupal-theme",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-3.0-rc9+9-dev",
-                    "datestamp": "1710975804",
+                    "version": "8.x-3.0-rc9",
+                    "datestamp": "1706705034",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -21730,12 +21733,12 @@
         "drupal/acquia_cms_starter": 20,
         "drupal/acquia_cms_toolbar": 20,
         "drupal/acquia_cms_tour": 20,
-        "drupal/gin": 20,
+        "drupal/gin": 5,
         "drupal/sitestudio_config_management": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
