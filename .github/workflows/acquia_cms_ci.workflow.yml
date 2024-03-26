@@ -154,6 +154,10 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+
+          git clone https://github.com/acquia/acquia-cms-starterkit.git ../acquia-cms-starterkit --branch=develop --single-branch
+          cd ../acquia-cms-starterkit && git checkout develop && git tag 1.1.8 && cd -
+          composer config --global repositories.starter_kit path /home/runner/work/acquia_cms/acquia-cms-starterkit
       # - name: Configure AWS Credentials
       #   uses: aws-actions/configure-aws-credentials@v1
       #   with:
@@ -257,6 +261,10 @@ jobs:
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
           curl https://gist.githubusercontent.com/vishalkhode1/342a0eee801e51f48b4d9701749c1c94/raw/orca-oldest-support.patch | git -C ../orca apply
+
+          git clone https://github.com/acquia/acquia-cms-starterkit.git ../acquia-cms-starterkit --branch=develop --single-branch
+          cd ../acquia-cms-starterkit && git checkout develop && git tag 1.1.8 && cd -
+          composer config --global repositories.starter_kit path /home/runner/work/acquia_cms/acquia-cms-starterkit
       # - name: Configure AWS Credentials
       #   uses: aws-actions/configure-aws-credentials@v1
       #   with:
