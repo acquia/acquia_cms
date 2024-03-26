@@ -15,8 +15,9 @@ use Drupal\workbench_email\Entity\Template;
  * Implements hook_install().
  */
 function acquia_cms_common_install($is_syncing) {
-  $module_handler = \Drupal::moduleHandler();
   if (!$is_syncing) {
+    $module_handler = \Drupal::moduleHandler();
+    $module_installer = \Drupal::service('module_installer');
     _acquia_cms_common_import_configurations();
     user_role_grant_permissions('anonymous', [
       'access content',
@@ -26,18 +27,6 @@ function acquia_cms_common_install($is_syncing) {
       'access content',
       'view media',
     ]);
-
-    // Enable acquia_claro theme.
-    $themesList = \Drupal::service('extension.list.theme')->getList();
-    $themesInstall = ["olivero"];
-    if (isset($themesList['acquia_claro'])) {
-      $themesInstall[] = "acquia_claro";
-    }
-    \Drupal::service('theme_installer')->install($themesInstall);
-    \Drupal::configFactory()->getEditable('system.theme')->set('default', 'olivero')->save();
-    if (in_array("acquia_claro", $themesInstall)) {
-      \Drupal::configFactory()->getEditable('system.theme')->set('admin', "acquia_claro")->save();
-    }
 
     // Re-write the content and media view on module install,
     // since we have moved this config in optional directory.
@@ -61,7 +50,6 @@ function acquia_cms_common_install($is_syncing) {
     $config->set('enable_export_filtering', TRUE);
     $config->save(TRUE);
 
-    $module_installer = \Drupal::service('module_installer');
     if ($module_handler->moduleExists('page_cache')) {
       // Uninstall page_cache module in favour of memcache.
       $module_installer->uninstall(['page_cache']);
