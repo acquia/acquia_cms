@@ -8,6 +8,7 @@
 use Drupal\acquia_cms_site_studio\Facade\CohesionFacade;
 use Drupal\acquia_cms_site_studio\Form\AcquiaCmsSiteStudioSiteConfigureForm;
 use Drupal\acquia_cms_site_studio\Helper\SiteStudioPermissionHelper;
+use Drupal\block\Entity\Block;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -218,5 +219,24 @@ function acquia_cms_site_studio_css_alter(array &$css) {
     // It causes issue with site studio template.
     $path = \Drupal::service('extension.list.module')->getPath('collapsiblock') . '/theme/dist/css/collapsiblock.min.css';
     unset($css[$path]);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function acquia_cms_site_studio_preprocess_block(&$variables) {
+  // Check whether default theme is cohesion theme.
+  if (!empty($variables['elements']['#id']) && \Drupal::service('theme_handler')->getDefault() === 'cohesion_theme') {
+    // Load cohesion_theme_local_tasks tab.
+    $block = Block::load('cohesion_theme_local_tasks');
+    // Check the region of cohesion_theme_local_tasks block is not hidden.
+    if ($block->getRegion() !== 'dx8_hidden') {
+      // Set region as site studio hidden region.
+      $block->setRegion('dx8_hidden');
+      $block->save();
+      // Clear all caches.
+      drupal_flush_all_caches();
+    }
   }
 }
