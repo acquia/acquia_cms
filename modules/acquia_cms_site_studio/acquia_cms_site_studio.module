@@ -220,3 +220,22 @@ function acquia_cms_site_studio_css_alter(array &$css) {
     unset($css[$path]);
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function acquia_cms_site_studio_preprocess_block(&$variables) {
+  // Check whether default theme is cohesion theme.
+  if (!empty($variables['elements']['#id']) && \Drupal::service('theme_handler')->getDefault() === 'cohesion_theme') {
+    // Load cohesion_theme_local_tasks tab.
+    $block = Block::load('cohesion_theme_local_tasks');
+    // Check the region of cohesion_theme_local_tasks block is not hidden.
+    if ($block->getRegion() !== 'dx8_hidden') {
+      // Set region as site studio hidden region.
+      $block->setRegion('dx8_hidden');
+      $block->save();
+      // Clear all caches.
+      drupal_flush_all_caches();
+    }
+  }
+}
