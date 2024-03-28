@@ -30,22 +30,19 @@ if [ "${ACMS_JOB}" == "backstop_tests" ] || [ "${ACMS_JOB}" == "upgrade_modules"
   orca fixture:run-server &
 
   # Runs Backstop.js
-  npm run backstop-starter
+  npm run backstop-starter && error=false || error=true
+  if [ "${error}" = "true" ]; then
+    if [ "${COPY_BACKSTOP_IMAGES}" == "true" ]; then
+      tar -cvzf test_reports.tar.gz ./tests/backstop/bitmaps_test/;
+      aws s3 cp --recursive "./tests/backstop/bitmaps_test/" "${AWS_S3_BUCKET_PATH}/backstop/logs/${GITHUB_RUN_ID}"
 
-  # Generate backstop test images.
-  # npm run backstop-starter && error=false || error=true
-  # if [ "${error}" = "true" ]; then
-  #   ./node_modules/.bin/backstop reference --config=tests/backstop/backstop-settings.js
-  #   ./node_modules/.bin/backstop approve --config=tests/backstop/backstop-settings.js
-  #   aws s3 cp --recursive "./tests/backstop/bitmaps_reference/" "${AWS_S3_BUCKET_PATH}/backstop/reference/${GITHUB_RUN_ID}"
-  # fi
-
-  # Store failed backstop test images.
-  # npm run backstop-starter && error=false || error=true
-  # if [ "${error}" = "true" ]; then
-  #    tar -cvzf test_reports.tar.gz ./tests/backstop/bitmaps_test/;
-  #    aws s3 cp --recursive "./tests/backstop/bitmaps_test/" "${AWS_S3_BUCKET_PATH}/backstop/logs/${GITHUB_RUN_ID}"
-  # fi
+      # Uncomment below to Generate backstop test images & copy in AWS.
+      # ./node_modules/.bin/backstop reference --config=tests/backstop/backstop-settings.js
+      # ./node_modules/.bin/backstop approve --config=tests/backstop/backstop-settings.js
+      # aws s3 cp --recursive "./tests/backstop/bitmaps_reference/" "${AWS_S3_BUCKET_PATH}/backstop/reference/${GITHUB_RUN_ID}"
+    fi
+    exit 1
+  fi
   # Runs Pa11y.js
   # npm run pa11y-starter
 fi
