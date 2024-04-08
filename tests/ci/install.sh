@@ -67,8 +67,8 @@ if [ -n "${ACMS_JOB}" ]; then
     composer config minimum-stability dev
     composer config prefer-stable false
     composer update "drupal/*"
-    composer update "drupal/moderation_dashboard:2.0.x-dev" "drupal/next:1.0.x-dev"
-    composer update "acquia/cohesion*" "drupal/core-*" "drupal/core" --prefer-stable
+    composer update "drupal/next:1.0.x-dev"
+    composer update "drupal/core*" "acquia/cohesion*" --prefer-stable
   fi
   ./vendor/bin/acms site:install --yes --account-pass admin --uri=http://127.0.0.1:8080
 
