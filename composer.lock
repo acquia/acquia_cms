@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c58c4e6f54f0e40993e474cd08e87cd2",
+    "content-hash": "1ba6a6750134ed7357151468b42bbbec",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2378,7 +2378,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "ccc471f3e6b7981054f7d27181d22cae2bf95dcc"
+                "reference": "a9ff27c7e8d1f29ef3044531b9927458d0b80f21"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -3006,29 +3006,34 @@
         },
         {
             "name": "drupal/acquia_connector",
-            "version": "dev-4.x",
+            "version": "4.0.6",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/acquia_connector.git",
-                "reference": "d9e85fd925102e5cb2d29adb2656a6e00df5701b"
+                "reference": "4.0.6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/acquia_connector-4.0.6.zip",
+                "reference": "4.0.6",
+                "shasum": "68ecb1b51cf8be3d3a7b21c9ccc33c40431c376d"
             },
             "require": {
                 "drupal/core": ">=8.9 <11.0.0-stable",
-                "ext-json": "*",
-                "php": "^7.4 || ^8"
+                "ext-json": "*"
             },
             "type": "drupal-module",
             "extra": {
+                "drupal": {
+                    "version": "4.0.6",
+                    "datestamp": "1712677384",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
                 "branch-alias": {
                     "dev-4.x": "4.x-dev"
-                },
-                "drupal": {
-                    "version": "4.0.5+1-dev",
-                    "datestamp": "1691011930",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
-                    }
                 },
                 "drush": {
                     "services": {
@@ -6870,7 +6875,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.12",
-                    "datestamp": "1696776683",
+                    "datestamp": "1712319355",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
