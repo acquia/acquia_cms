@@ -68,13 +68,15 @@ if [ -n "${ACMS_JOB}" ]; then
     composer config prefer-stable false
     composer update "drupal/*"
     composer update "drupal/next:1.0.x-dev"
-    composer update "drupal/core*" "acquia/cohesion*" --prefer-stable
+    composer update "drupal/core*" "acquia/cohesion*" --prefer-stable -W
   fi
-  ./vendor/bin/acms site:install --yes --account-pass admin --uri=http://127.0.0.1:8080
+  if [ "${ACMS_JOB}" != "dev_version_test" ]; then
+    ./vendor/bin/acms site:install --yes --account-pass admin --uri=http://127.0.0.1:8080
 
-  # Enable Acquia CMS DAM module.
-  # @todo We should probably move this in acms site:install command.
-  drush en acquia_cms_audio acquia_cms_dam sitestudio_config_management --yes --uri=http://127.0.0.1:8080
+    # Enable Acquia CMS DAM module.
+    # @todo We should probably move this in acms site:install command.
+    drush en acquia_cms_audio acquia_cms_dam sitestudio_config_management --yes --uri=http://127.0.0.1:8080
+  fi
 fi
 
 # Allow acquia_cms as allowed package dependencies, so that composer scaffolds acquia_cms files.

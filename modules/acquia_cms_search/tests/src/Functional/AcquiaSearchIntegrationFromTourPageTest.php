@@ -123,7 +123,7 @@ class AcquiaSearchIntegrationFromTourPageTest extends BrowserTestBase {
     $assert->statusCodeEquals(200);
     $this->drupalGet('admin/config/search/search-api/index/content');
     $assert->statusCodeEquals(200);
-    $assert->pageTextContains('Connection managed by Acquia Search Solr module.');
+    $assert->pageTextContains('Connection managed by Acquia Search');
     $index = Index::load('content');
     $this->assertTrue($index->status());
     $this->assertSame('acquia_search_server', $index->getServerId());
