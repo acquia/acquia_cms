@@ -64,7 +64,7 @@ class HeadlessModeEnablementTest extends HeadlessTestBase {
 
       // Test Enable headless mode checkbox functionality.
       $headlessForm = $assertSession->waitForElementVisible('css', '#acquia-cms-headless-form');
-      $assertSession->elementExists('css', '.claro-details__summary', $headlessForm)->press();
+      $assertSession->elementExists('css', '.summary', $headlessForm)->press();
       $assertSession->waitForElementVisible('css', '#acquia-cms-headless-form #edit-headless-mode');
       $headlessForm->checkField('Enable Headless mode');
       $headlessForm->pressButton('Save');

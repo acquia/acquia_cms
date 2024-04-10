@@ -144,7 +144,6 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
         '.toolbar-icon-system-admin-content',
         'Content',
         [
-          'Overview',
           'Scheduled Content',
           'Add content',
           'Files',
@@ -157,7 +156,6 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
         '.toolbar-icon-admin-access-control',
         'API',
         [
-          'Overview',
           'Dashboard',
           'OAuth clients',
           'OAuth settings',
@@ -170,7 +168,6 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
         '.toolbar-icon-admin-content-models',
         'Data model',
         [
-          'Overview',
           'Block types',
           'Content types',
           'Media types',
@@ -182,7 +179,6 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
         '.toolbar-icon-admin-cms',
         'System administration',
         [
-          'Overview',
           'Structure',
           'Extend',
           'Configuration',
