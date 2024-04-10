@@ -242,14 +242,12 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
     }
 
     $sendTimestamp = $this->state->get('acquia_cms_common.telemetry.timestamp', 0);
-    $isOpted = $this->state->get('acquia_connector.telemetry.opted');
 
     // We send telemetry data if all below conditions are met:
     // If current environment is Acquia environment.
-    // If user has opted to send telemetry data.
     // If data is not sent from the last 24 hours.
     // If there is change in telemetry data to send & previous telemetry data.
-    if (AcquiaDrupalEnvironmentDetector::isAhEnv() && $isOpted &&
+    if (AcquiaDrupalEnvironmentDetector::isAhEnv() &&
     ($this->time->getCurrentTime() - $sendTimestamp) > 86400 &&
     !($this->state->get('acquia_cms_common.telemetry.hash') == $this->getHash())) {
       return TRUE;
