@@ -5,6 +5,7 @@
  * File for the Site Studio Installation Code.
  */
 
+use Drupal\acquia_cms_common\Facade\ConfigHandlerFacade;
 use Drupal\acquia_cms_site_studio\Facade\CohesionFacade;
 use Drupal\acquia_cms_site_studio\Form\AcquiaCmsSiteStudioSiteConfigureForm;
 use Drupal\acquia_cms_site_studio\Helper\SiteStudioPermissionHelper;
@@ -205,6 +206,71 @@ function acquia_cms_site_studio_modules_installed($modules, $is_syncing) {
       user_role_grant_permissions('site_builder', [
         'administer style_guide',
       ]);
+    }
+    if (in_array('node_revision_delete', $modules)) {
+      $config_handler = \Drupal::classResolver(ConfigHandlerFacade::class);
+      $config_handler->setModuleName('node_revision_delete');
+      // Node revision default config settings.
+      $default_settings = [
+        'defaults' => [
+          'amount' => [
+            'status' => TRUE,
+            'settings' => [
+              'amount' => 50,
+            ],
+          ],
+          'created' => [
+            'status' => TRUE,
+            'settings' => [
+              'age' => 12,
+            ],
+          ],
+          'drafts' => [
+            'status' => TRUE,
+            'settings' => [
+              'age' => 12,
+            ],
+          ],
+        ],
+      ];
+      // Set default node revision delete settings shipped by Acquia CMS.
+      $config_handler->processConfigSettings($default_settings);
+      if (\Drupal::service('module_handler')->moduleExists('acquia_cms_page')) {
+        // Node revision third party settings for page content type.
+        $third_party_settings = [
+          'amount' => [
+            'status' => TRUE,
+            'settings' => [
+              'amount' => 30,
+            ],
+          ],
+          'created' => [
+            'status' => FALSE,
+            'settings' => [
+              'age' => 0,
+            ],
+          ],
+          'drafts' => [
+            'status' => FALSE,
+            'settings' => [
+              'age' => 0,
+            ],
+          ],
+          'drafts_only' => [
+            'status' => FALSE,
+            'settings' => [
+              'age' => 0,
+            ],
+          ],
+        ];
+        // Set default node revision delete configuration for Page content type
+        // and entity node_type.
+        $config_handler->processThirdPartySettings([
+          'entity_type' => 'node_type',
+          'bundle' => 'page',
+        ], $third_party_settings);
+      }
+
     }
   }
 }
