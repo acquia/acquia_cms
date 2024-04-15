@@ -18,7 +18,7 @@ trait HeadlessNextJsTrait {
     $assert->waitForElementVisible('css', '.ui-dialog .acms-welcome-modal');
     $assert->waitForText('Welcome to Acquia CMS.');
     $assert->elementExists('css', '.ui-icon-closethick')->click();
-    $assert->elementExists('css', 'summary[role="button"] .summary')->click();
+    $assert->elementExists('css', '#edit-acquia-cms-headless summary[role="button"]')->click();
     $page->checkField('headless_mode');
     $assert->checkboxChecked('edit-headless-mode');
     $page->pressButton('Save');

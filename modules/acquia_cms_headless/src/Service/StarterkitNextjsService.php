@@ -179,15 +179,16 @@ class StarterkitNextjsService {
       if (!empty($user) && empty($consumers)) {
 
         $this->consumerSecret = $this->createHeadlessSecret();
-        $consumer = Consumer::create();
-        $consumer->set('label', $consumer_data['site-name']);
-        $consumer->set('client_id', $this->clientId);
-        $consumer->set('secret', $this->consumerSecret);
-        $consumer->set('description', 'This client is provided by the acquia_cms_headless module.');
-        $consumer->set('is_default', TRUE);
-        $consumer->set('redirect', $consumer_data['site-url']);
-        $consumer->set('roles', 'headless');
-        $consumer->set('user_id', $user->id());
+        $consumer = Consumer::create([
+          'label' => $consumer_data['site-name'],
+          'description' => 'This client is provided by the acquia_cms_headless module.',
+          'client_id' => $this->clientId,
+          'user_id' => $user->id(),
+          'is_default' => TRUE,
+          'redirect' => $consumer_data['site-url'],
+          'secret' => $this->consumerSecret,
+          'roles' => 'headless',
+        ]);
         $consumer->save();
       }
     }

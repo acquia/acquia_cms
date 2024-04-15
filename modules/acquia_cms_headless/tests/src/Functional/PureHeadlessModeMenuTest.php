@@ -62,6 +62,7 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
     $account->addRole('administrator');
     $account->save();
     $this->drupalLogin($account);
+    $this->drupalPlaceBlock('page_title_block', ['id' => 'page-title', 'region' => 'content', 'theme' => 'stark']);
   }
 
   /**
