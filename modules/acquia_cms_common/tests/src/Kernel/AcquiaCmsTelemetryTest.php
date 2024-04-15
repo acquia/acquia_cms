@@ -65,10 +65,6 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
       ->set('starter_kit_name', 'no_starter_kit')->save();
     $this->config('core.extension')
       ->set('profile', 'minimal')->save();
-    // Because Kernel tests don't perform a full installation of modules,
-    // we need to manually set the telemetry opted state variable.
-    $this->container->get("state")
-      ->set("acquia_connector.telemetry.opted", TRUE);
   }
 
   /**
@@ -125,9 +121,6 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
     // Remove `CI` environment variable, or we can set it to false.
     putenv("CI=");
 
-    $state_service->set("acquia_connector.telemetry.opted", FALSE);
-    $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
-    $this->assertFalse($shouldSendData, "Should not send telemetry data if user has not opted.");
   }
 
   /**

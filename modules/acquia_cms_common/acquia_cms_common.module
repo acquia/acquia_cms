@@ -421,15 +421,6 @@ function acquia_cms_common_preprocess_maintenance_page(array &$variables) {
  * Implements hook_module_implements_alter().
  */
 function acquia_cms_common_module_implements_alter(array &$implementations, string $hook): void {
-  if (\Drupal::moduleHandler()->moduleExists('acquia_connector') &&
-  ($hook === 'modules_installed' || $hook === 'modules_uninstalled')) {
-    // Check if telemetry not opted.
-    if (!\Drupal::state()->get('acquia_connector.telemetry.opted')) {
-      // Revoke the invoking of hook_modules_installed and
-      // hook_modules_uninstalled of Acquia connector.
-      unset($implementations['acquia_connector']);
-    }
-  }
   // Prevent installation of site studio package on module install
   // during site installation from other modules, this causes issue.
   if ($hook == 'modules_installed') {
