@@ -54,8 +54,9 @@ jobs:
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
+          sed -i 's/"drupal\/core": "^10.2.2"/"drupal\/core": ">=9.5"/' modules/acquia_cms_common/composer.json
+          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           ../orca/bin/ci/before_install.sh
       - name: Install
         shell: 'script -q -e -c "bash {0}"'
@@ -109,8 +110,9 @@ jobs:
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
+          sed -i 's/"drupal\/core": "^10.2.2"/"drupal\/core": ">=9.5"/' modules/acquia_cms_common/composer.json
+          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
 
           # One of the patch is failing on Drupal Core 9.5. So remove that patch.
           if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
@@ -205,8 +207,9 @@ jobs:
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
+          sed -i 's/"drupal\/core": "^10.2.2"/"drupal\/core": ">=9.5"/' modules/acquia_cms_common/composer.json
+          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
 
           if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
             # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
@@ -291,8 +294,9 @@ jobs:
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
+          sed -i 's/"drupal\/core": "^10.2.2"/"drupal\/core": ">=9.5"/' modules/acquia_cms_common/composer.json
+          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
 
           ../orca/bin/ci/before_install.sh
       - name: Install
@@ -364,8 +368,9 @@ jobs:
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
+          sed -i 's/"drupal\/core": "^10.2.2"/"drupal\/core": ">=9.5"/' modules/acquia_cms_common/composer.json
+          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
 
           # Remove all PHPunit tests from acquia_cms modules.
           find modules/*/tests tests/src -type f -name "*Test.php" -exec rm -fr '{}' ';'
