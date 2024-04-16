@@ -314,7 +314,7 @@ function acquia_cms_common_update_8009() {
  *
  * Delete telemetry opted state variable if present.
  */
-function acquia_cms_common_update_8331() {
+function acquia_cms_common_update_9331() {
   if (\Drupal::state()->get('acquia_connector.telemetry.opted')) {
     \Drupal::state()->delete('acquia_connector.telemetry.opted');
   }
