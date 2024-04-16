@@ -395,11 +395,6 @@ function acquia_cms_common_modules_installed($modules, $is_syncing) {
       }
     }
 
-    // Acquia connector check and set telemetry opt-in feature.
-    if (in_array('acquia_connector', $modules)) {
-      // Set telemetry to be TRUE on install of acquia_connector.
-      \Drupal::state()->set('acquia_connector.telemetry.opted', TRUE);
-    }
     if (in_array('entity_clone', $modules)) {
       _acquia_cms_common_rewrite_configuration('entity_clone.settings', 'acquia_cms_common');
     }
@@ -426,15 +421,6 @@ function acquia_cms_common_preprocess_maintenance_page(array &$variables) {
  * Implements hook_module_implements_alter().
  */
 function acquia_cms_common_module_implements_alter(array &$implementations, string $hook): void {
-  if (\Drupal::moduleHandler()->moduleExists('acquia_connector') &&
-  ($hook === 'modules_installed' || $hook === 'modules_uninstalled')) {
-    // Check if telemetry not opted.
-    if (!\Drupal::state()->get('acquia_connector.telemetry.opted', TRUE)) {
-      // Revoke the invoking of hook_modules_installed and
-      // hook_modules_uninstalled of Acquia connector.
-      unset($implementations['acquia_connector']);
-    }
-  }
   // Prevent installation of site studio package on module install
   // during site installation from other modules, this causes issue.
   if ($hook == 'modules_installed') {

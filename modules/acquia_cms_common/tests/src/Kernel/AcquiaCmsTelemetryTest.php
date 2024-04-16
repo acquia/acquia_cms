@@ -16,7 +16,10 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ["system", "acquia_cms_common"];
+  protected static $modules = [
+    "system",
+    "acquia_cms_common",
+  ];
 
   /**
    * The AcquiaCmsTelemetry event_service object.
@@ -24,13 +27,6 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
    * @var \Drupal\acquia_cms_common\EventSubscriber\KernelTerminate\AcquiaCmsTelemetry
    */
   protected $acquiaCmsTelemetry;
-
-  /**
-   * The config.factory service.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
 
   /**
    * The site uri.
@@ -53,7 +49,6 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
     parent::setUp();
     $this->acquiaCmsTelemetry = new AcquiaCmsTelemetry(
       $this->container->get("extension.list.module"),
-      $this->container->get("http_client"),
       $this->container->get('config.factory'),
       $this->container->get("state"),
       $this->container->getParameter("site.path"),
@@ -78,10 +73,7 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
    * @throws \ReflectionException
    */
   public function testIfTelemetryDataShouldSend(): void {
-    $getTelemetryMethod = $this->getAcqauiaCmsTelemetryMethod("getAcquiaCmsTelemetryData");
-    $actual_telemetry_data = $getTelemetryMethod->invoke($this->acquiaCmsTelemetry);
-
-    $method = $this->getAcqauiaCmsTelemetryMethod("shouldSendTelemetryData");
+    $method = $this->getAcquiaCmsTelemetryMethod("shouldSendTelemetryData");
     $state_service = $this->container->get("state");
     $datetime_service = $this->container->get('datetime.time');
 
@@ -110,12 +102,15 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
     $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertTrue($shouldSendData, "Should send telemetry data, if data sent before a day.");
 
-    $state_service->set("acquia_cms_common.telemetry.data", json_encode($actual_telemetry_data));
+    $methodHash = $this->getAcquiaCmsTelemetryMethod("getHash");
+    $state_service->set(
+      "acquia_cms_common.telemetry.hash",
+      $methodHash->invoke($this->acquiaCmsTelemetry),
+    );
     $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertFalse($shouldSendData, "Should not send telemetry data, if current telemetry data is same as data already sent.");
 
-    $actual_telemetry_data['acquia_cms']['application_uuid'] = "some-application-uuid";
-    $state_service->set("acquia_cms_common.telemetry.data", json_encode($actual_telemetry_data));
+    $state_service->set("acquia_cms_common.telemetry.hash", 'O2X4mf9Csg8KLOIqNlUqc9dqXdsL_JE5hjKh4dRPemQ');
     $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertTrue($shouldSendData, "Should send telemetry data, if current telemetry data has changed from data already sent.");
 
@@ -126,9 +121,6 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
     // Remove `CI` environment variable, or we can set it to false.
     putenv("CI=");
 
-    $state_service->set("acquia_connector.telemetry.opted", FALSE);
-    $shouldSendData = $method->invoke($this->acquiaCmsTelemetry);
-    $this->assertFalse($shouldSendData, "Should not send telemetry data if user has not opted.");
   }
 
   /**
@@ -139,7 +131,7 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
    * @throws \ReflectionException
    */
   public function testSiteStudioStatus(): void {
-    $method = $this->getAcqauiaCmsTelemetryMethod("siteStudioStatus");
+    $method = $this->getAcquiaCmsTelemetryMethod("siteStudioStatus");
     $siteStudioStatus = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertFalse($siteStudioStatus, "Should be FALSE as Site Studio is not configured.");
 
@@ -207,14 +199,13 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
     $module_list->method('getAllInstalledInfo')->willReturn($installed_modules);
     $telemetry = new AcquiaCmsTelemetry(
       $module_list,
-      $this->container->get("http_client"),
       $this->container->get('config.factory'),
       $this->container->get("state"),
       $this->container->getParameter("site.path"),
       $this->container->get("datetime.time"),
       $this->container->get("logger.factory"),
     );
-    $method = $this->getAcqauiaCmsTelemetryMethod("getExtensionInfo");
+    $method = $this->getAcquiaCmsTelemetryMethod("getExtensionInfo");
     $actual_data = $method->invoke($telemetry);
     $expected_data = [
       "acquia_cms_article" => [
@@ -245,9 +236,9 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
       putenv("$env_variable=$value");
     }
     $expected_telemetry_data['acquia_cms']['site_uri'] = $this->siteUri;
-    $method = $this->getAcqauiaCmsTelemetryMethod("getExtensionInfo");
+    $method = $this->getAcquiaCmsTelemetryMethod("getExtensionInfo");
     $expected_telemetry_data['extensions'] = $method->invoke($this->acquiaCmsTelemetry);
-    $method = $this->getAcqauiaCmsTelemetryMethod("getAcquiaCmsTelemetryData");
+    $method = $this->getAcquiaCmsTelemetryMethod("getAcquiaCmsTelemetryData");
     $actual_telemetry_data = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertSame($actual_telemetry_data, $expected_telemetry_data);
   }
@@ -282,9 +273,9 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
         "profile" => "minimal",
       ],
     ];
-    $method = $this->getAcqauiaCmsTelemetryMethod("getExtensionInfo");
+    $method = $this->getAcquiaCmsTelemetryMethod("getExtensionInfo");
     $expected_telemetry_data['extensions'] = $method->invoke($this->acquiaCmsTelemetry);
-    $method = $this->getAcqauiaCmsTelemetryMethod("getAcquiaCmsTelemetryData");
+    $method = $this->getAcquiaCmsTelemetryMethod("getAcquiaCmsTelemetryData");
     $actual_telemetry_data = $method->invoke($this->acquiaCmsTelemetry);
     $this->assertSame($actual_telemetry_data, $expected_telemetry_data);
   }
@@ -341,7 +332,7 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
    *
    * @throws \ReflectionException
    */
-  protected function getAcqauiaCmsTelemetryMethod(string $method_name): \ReflectionMethod {
+  protected function getAcquiaCmsTelemetryMethod(string $method_name): \ReflectionMethod {
     $class = new \ReflectionClass($this->acquiaCmsTelemetry);
     $method = $class->getMethod($method_name);
     $method->setAccessible(TRUE);

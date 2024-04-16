@@ -53,6 +53,7 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/chandan-singh7929/902a17bbf0f5c0e0ee536dd5983875f3/raw/4031ae76ca5e8f08b98545bfdcda327f6d38be58/remove-local-settings.patch | git -C ../orca apply
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
@@ -154,10 +155,7 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
-
-          git clone https://github.com/acquia/acquia-cms-starterkit.git ../acquia-cms-starterkit --branch=develop --single-branch
-          cd ../acquia-cms-starterkit && git checkout develop && git tag 1.1.8 && cd -
-          composer config --global repositories.starter_kit path /home/runner/work/acquia_cms/acquia-cms-starterkit
+          curl https://gist.githubusercontent.com/chandan-singh7929/902a17bbf0f5c0e0ee536dd5983875f3/raw/4031ae76ca5e8f08b98545bfdcda327f6d38be58/remove-local-settings.patch | git -C ../orca apply
       # - name: Configure AWS Credentials
       #   uses: aws-actions/configure-aws-credentials@v1
       #   with:
@@ -221,7 +219,7 @@ jobs:
       ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
       COMPOSER_PROCESS_TIMEOUT: 1800
       ORCA_JOB: ${{ matrix.orca-job }}
-      # AWS_S3_BUCKET_PATH: s3://acquia-cms-artifacts/backstop
+      AWS_S3_BUCKET_PATH: s3://acquia-cms-artifacts/backstop
       # Set Required API Keys.
       CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
       SEARCH_UUID: ${{ secrets.SEARCH_UUID }}
@@ -229,6 +227,7 @@ jobs:
       GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
       SITESTUDIO_API_KEY: ${{ secrets.SITESTUDIO_API_KEY }}
       SITESTUDIO_ORG_KEY: ${{ secrets.SITESTUDIO_ORG_KEY }}
+      COPY_BACKSTOP_IMAGES: false
       ACMS_JOB: "backstop_tests"
       JOB_TYPE: "integrated-tests"
       CI: true
@@ -261,16 +260,12 @@ jobs:
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
           curl https://gist.githubusercontent.com/vishalkhode1/342a0eee801e51f48b4d9701749c1c94/raw/orca-oldest-support.patch | git -C ../orca apply
-
-          git clone https://github.com/acquia/acquia-cms-starterkit.git ../acquia-cms-starterkit --branch=develop --single-branch
-          cd ../acquia-cms-starterkit && git checkout develop && git tag 1.1.8 && cd -
-          composer config --global repositories.starter_kit path /home/runner/work/acquia_cms/acquia-cms-starterkit
-      # - name: Configure AWS Credentials
-      #   uses: aws-actions/configure-aws-credentials@v1
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
@@ -357,6 +352,7 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/chandan-singh7929/902a17bbf0f5c0e0ee536dd5983875f3/raw/4031ae76ca5e8f08b98545bfdcda327f6d38be58/remove-local-settings.patch | git -C ../orca apply
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
