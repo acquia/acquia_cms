@@ -67,7 +67,7 @@ if [ -n "${ACMS_JOB}" ]; then
     composer config minimum-stability dev
     composer config prefer-stable false
     composer update "drupal/*"
-    composer update "drupal/next:1.0.x-dev"
+    composer update "drupal/next:1.0.x-dev" "drupal/acquia_search:3.1.x-dev"
     composer update "drupal/core*" "acquia/cohesion*" --prefer-stable -W
   fi
   if [ "${ACMS_JOB}" != "dev_version_test" ]; then
