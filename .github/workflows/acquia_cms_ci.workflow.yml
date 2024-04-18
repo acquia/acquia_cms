@@ -55,12 +55,7 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
           curl https://gist.githubusercontent.com/chandan-singh7929/902a17bbf0f5c0e0ee536dd5983875f3/raw/4031ae76ca5e8f08b98545bfdcda327f6d38be58/remove-local-settings.patch | git -C ../orca apply
       - name: Before Install
-        run: |
-          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
-          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
-
-          ../orca/bin/ci/before_install.sh
+        run: ../orca/bin/ci/before_install.sh
       - name: Install
         shell: 'script -q -e -c "bash {0}"'
         run: ./tests/ci/install.sh
@@ -167,10 +162,6 @@ jobs:
           # Update the CI by adding patches without pinning the following modules.
           #composer require "drupal/facets:^2.0.6" --no-update --no-install -d modules/acquia_cms_search
 
-          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
-          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
-
           # Remove all PHPUnit tests from individual modules, except the integrated & ExistingSite tests.
           if [ "${ACMS_JOB}" = "integrated_existing_site_tests" ]; then
             find modules/*/tests tests -type f -name "*Test.php" ! -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
@@ -269,8 +260,9 @@ jobs:
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
+          sed -i 's/"drupal\/core": "^10.2.2"/"drupal\/core": ">=9.5"/' modules/acquia_cms_common/composer.json
+          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
 
           # Remove all PHPunit tests from acquia_cms modules.
           find modules/*/tests tests/src -type f -name "*Test.php" -exec rm -fr '{}' ';'
@@ -355,9 +347,7 @@ jobs:
           curl https://gist.githubusercontent.com/chandan-singh7929/902a17bbf0f5c0e0ee536dd5983875f3/raw/4031ae76ca5e8f08b98545bfdcda327f6d38be58/remove-local-settings.patch | git -C ../orca apply
       - name: Before Install
         run: |
-          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
-          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
+          composer require "drupal/core" --no-update --no-install -d modules/acquia_cms_common
           ./tests/ci/before_install.blt.sh
       - name: Install
         shell: 'script -q -e -c "bash {0}"'
