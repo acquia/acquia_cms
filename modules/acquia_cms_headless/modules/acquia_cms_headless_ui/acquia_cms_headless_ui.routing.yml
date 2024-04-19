@@ -26,7 +26,7 @@ admin.content_models:
   path: '/admin/content-models'
   defaults:
     _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
-    _title: Content Models
+    _title: 'Content Models'
   requirements:
     _permission: 'access block library+administer block content'
 
@@ -34,7 +34,7 @@ admin.cms:
   path: '/admin/cms'
   defaults:
     _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
-    _title: System administration
+    _title: 'System administration'
   requirements:
     _permission: 'administer site configuration'
 

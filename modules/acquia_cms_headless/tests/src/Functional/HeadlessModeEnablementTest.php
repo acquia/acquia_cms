@@ -64,7 +64,7 @@ class HeadlessModeEnablementTest extends HeadlessTestBase {
 
       // Test Enable headless mode checkbox functionality.
       $headlessForm = $assertSession->waitForElementVisible('css', '#acquia-cms-headless-form');
-      $assertSession->elementExists('css', '.claro-details__summary', $headlessForm)->press();
+      $assertSession->elementExists('css', '.acquia-cms-headless-form summary', $headlessForm)->press();
       $assertSession->waitForElementVisible('css', '#acquia-cms-headless-form #edit-headless-mode');
       $headlessForm->checkField('Enable Headless mode');
       $headlessForm->pressButton('Save');
@@ -82,7 +82,7 @@ class HeadlessModeEnablementTest extends HeadlessTestBase {
       $assertSession->elementNotExists('named', ['link', 'Headless dashboard'], $toolbar);
 
       // Test if next js gets enabled or not.
-      $assertSession->elementExists('css', '.claro-details__summary', $headlessForm)->press();
+      $assertSession->elementExists('css', '.acquia-cms-headless-form summary', $headlessForm)->press();
 
       // Test if next js gets enabled or not.
       $headlessForm->checkField('Enable Next.js starter kit');
@@ -92,7 +92,7 @@ class HeadlessModeEnablementTest extends HeadlessTestBase {
       $assertSession->pageTextContains('Acquia CMS Next.js starter kit has been enabled.');
 
       // Test disabling headless works or not.
-      $assertSession->elementExists('css', '.claro-details__summary', $headlessForm)->press();
+      $assertSession->elementExists('css', '.acquia-cms-headless-form summary', $headlessForm)->press();
       $headlessForm->uncheckField('Enable Headless mode');
       $headlessForm->pressButton('Save');
 

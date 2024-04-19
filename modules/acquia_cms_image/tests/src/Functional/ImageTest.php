@@ -65,7 +65,7 @@ class ImageTest extends MediaTypeTestBase {
 
     // Assert that the expected fields show up.
     $assert_session->fieldExists('Name');
-    $assert_session->fieldExists('Add a new file');
+    $assert_session->fieldExists('Image');
     $assert_session->fieldExists('Categories');
     $assert_session->fieldExists('Tags');
     // The standard Categories and Tags fields should be present.
