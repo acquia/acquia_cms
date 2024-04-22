@@ -146,17 +146,6 @@ class AcquiaConnectorForm extends AcquiaCmsDashboardBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $acquia_connector_site_name = $form_state->getValue(['site_name']);
     $this->state->set('spi.site_name', $acquia_connector_site_name);
-    $acquia_telemetry_opt_in = $form_state->getValue('opt_in');
-    if ($acquia_telemetry_opt_in) {
-      $this->state->set('acquia_connector.telemetry.opted', TRUE);
-      $this->setConfigurationState();
-      $this->messenger()->addStatus('You have opted into collect anonymous data about Acquia product usage. Thank you for helping improve Acquia products.');
-    }
-    else {
-      $this->state->set('acquia_connector.telemetry.opted', FALSE);
-      $this->setConfigurationState(FALSE);
-      $this->messenger()->addStatus('You have successfully opted out to collect anonymous data about Acquia product usage. Anonymous usage information will no longer be collected.');
-    }
   }
 
   /**
