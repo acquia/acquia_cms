@@ -77,7 +77,7 @@ trait DashboardSectionTrait {
       "Ex: protected string \$sectionTitle = \"API URL\";",
     ];
     $this->assertNotEmpty($this->sectionTitle, implode(PHP_EOL, $message));
-    $title = $this->getSection()->find("css", ".fieldset__label")->getText();
+    $title = $this->getSection()->find("css", ".fieldset-legend")->getText();
     $this->assertSame($title, $this->sectionTitle);
   }
 

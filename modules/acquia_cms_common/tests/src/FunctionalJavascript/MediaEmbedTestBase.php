@@ -159,7 +159,9 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
   protected function assertMediaIsEmbedded() {
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
-    $result = $assertSession->waitForElementVisible('css', '.ck-content .ck-widget.drupal-media .media');
+    $result = $assertSession->waitForElementVisible('css', '.ck-content .ck-widget.drupal-media div[data-drupal-media-preview="ready"]');
+    $this->assertNotEmpty($result);
+    $result = $assertSession->waitForElementVisible('css', '.ck-content .ck-widget.drupal-media .ck-reset_all');
     $this->assertNotEmpty($result);
   }
 

@@ -42,6 +42,8 @@ class HeadlessContentTest extends WebDriverTestBase {
     $account->addRole('administrator');
     $account->save();
     $this->drupalLogin($account);
+    $this->drupalPlaceBlock('local_tasks_block', ['id' => 'local-tasks', 'region' => 'content', 'theme' => 'stark']);
+    $this->drupalPlaceBlock('page_title_block', ['id' => 'page-title', 'region' => 'content', 'theme' => 'stark']);
 
     // Visit content page.
     $this->drupalGet("admin/content");
@@ -70,6 +72,7 @@ class HeadlessContentTest extends WebDriverTestBase {
   public function testContentAdmin(): void {
     // Visit content page.
     $this->drupalGet("admin/content");
+
     // Validating the primary menu tabs on admin content page.
     $primaryTabs = [
       'Content' => '/admin/content',
@@ -122,7 +125,7 @@ class HeadlessContentTest extends WebDriverTestBase {
     $this->assertTabMenus($nodePageMenus, $path);
      */
     // Assert delete buton.
-    $deleteButton = $assertSession->waitForElementVisible("css", "#edit-advanced #edit-gin-sidebar .form-actions a");
+    $deleteButton = $this->getSession()->getPage()->findLink('Delete');
     $this->assertEquals('Delete', $deleteButton->getText());
     $this->assertEquals('/node/' . $nid . '/delete', $deleteButton->getAttribute('href'));
   }
@@ -145,7 +148,7 @@ class HeadlessContentTest extends WebDriverTestBase {
     $assert->selectExists('edit-site')->selectOption('headless_site_two');
     $assert->buttonExists('Submit')->press();
     $this->assertTrue($assert->optionExists('edit-site', 'headless_site_two')->isSelected());
-    $assert->elementExists('css', 'li.live-link a[target=_blank]');
+    $assert->elementExists('css', '.operations li a[target=_blank]');
     $assert->selectExists('edit-new-state')->selectOption('published');
     $assert->buttonExists('Apply')->press();
   }
@@ -157,8 +160,8 @@ class HeadlessContentTest extends WebDriverTestBase {
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
     $page = $this->getSession()->getPage();
-    $assertSession->waitForElementVisible('css', 'ul.tabs--primary ');
-    $assertSession->elementExists('css', 'ul.tabs--primary ');
+    $assertSession->waitForElementVisible('css', '#block-local-tasks > ul');
+    $assertSession->elementExists('css', '#block-local-tasks > ul');
     foreach ($data as $name => $url) {
       $originalUrl = $page->findLink($name)->getAttribute('href');
       $this->assertEquals($url, $originalUrl);

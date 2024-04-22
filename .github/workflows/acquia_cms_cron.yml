@@ -413,7 +413,7 @@ jobs:
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
   dev_version_test:
-    name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
+    name: ${{ matrix.acms_job }} (${{ matrix.modules }})
     runs-on: ubuntu-latest
     env:
       ORCA_SUT_NAME: acquia/acquia_cms
@@ -433,6 +433,7 @@ jobs:
       SITESTUDIO_ORG_KEY: ${{ secrets.SITESTUDIO_ORG_KEY }}
       ACMS_JOB: ${{ matrix.acms_job }}
       JOB_TYPE: "integrated-tests"
+      MODULE: ${{ matrix.modules }}
       CI: true
     strategy:
       fail-fast: false
@@ -441,6 +442,22 @@ jobs:
           - ISOLATED_TEST_ON_CURRENT
         acms_job:
           - dev_version_test
+        modules:
+         - acquia_cms_article
+         - acquia_cms_audio
+         - acquia_cms_common
+         - acquia_cms_document
+         - acquia_cms_event
+         - acquia_cms_headless
+         - acquia_cms_image
+         - acquia_cms_page
+         - acquia_cms_person
+         - acquia_cms_place
+         - acquia_cms_search
+         - acquia_cms_site_studio
+         - acquia_cms_tour
+         - acquia_cms_video
+         - sitestudio_config_management
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -461,13 +478,16 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
-          # Update the CI by adding patches without pinning the following modules.
-          sed -i 's/"drupal\/moderation_dashboard": "^2.1"/"drupal\/moderation_dashboard": "^2.0"/' modules/acquia_cms_common/composer.json
+          # Update the CI by altering modules requirement version.
           sed -i 's/"drupal\/next": "^1.6"/"drupal\/next": "^1.0"/' modules/acquia_cms_headless/composer.json
-          sed -i 's/"drupal\/facets": "2.0.6"/"drupal\/moderation_dashboard": "^2.0.6"/' modules/acquia_cms_search/composer.json
-          sed -i 's/"drupal\/facets_pretty_paths": "1.5.0"/"drupal\/facets_pretty_paths": "^1.5.0"/' modules/acquia_cms_search/composer.json
+          sed -i 's/"drupal\/facets": "2.0.7"/"drupal\/facets": "^2.0.7"/' modules/acquia_cms_search/composer.json
           sed -i 's/"drupal\/search_api": "1.30 || 1.31"/"drupal\/search_api": "^1.30"/' modules/acquia_cms_search/composer.json
-          sed -i '/"drupal\/facets_pretty_paths": {/,/},/d' modules/acquia_cms_search/composer.json
+          # Remove all ExistingSite test in CI.
+          find tests/src -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
+          # Remove all PHPUnit test files, excluding the current module's PHPUnit tests.
+          find modules -type f -name "*Test.php" ! -path "*/${MODULE}/*" -exec rm -fr '{}' ';'
+          # Do not run any existing site tests. We run them seperately.
+          find modules -type d -name ExistingSite | xargs rm -rf && rm -rf tests/src/
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
           CHROMEDRIVER_PID=$!
