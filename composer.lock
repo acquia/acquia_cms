@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2aee00a9de43dd696f9ddbf31005e85a",
+    "content-hash": "f5106ef3627bbc96104e05687d1739ef",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -7846,6 +7846,142 @@
                 "source": "http://git.drupal.org/project/search_api_autocomplete.git",
                 "issues": "https://www.drupal.org/project/issues/search_api_autocomplete",
                 "irc": "irc://irc.freenode.org/drupal-search-api"
+            }
+        },
+        {
+            "name": "drupal/search_api_federated_solr",
+            "version": "4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/search_api_federated_solr.git",
+                "reference": "4.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/search_api_federated_solr-4.0.0.zip",
+                "reference": "4.0.0",
+                "shasum": "8a18521443a3fffcb508b3cc10894c8e782c5020"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9 || ^10",
+                "drupal/search_api_field_map": "^4.0",
+                "drupal/search_api_solr": "^4.1",
+                "drupal/token": "^1.1"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "4.0.0",
+                    "datestamp": "1692729608",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "agentrickard",
+                    "homepage": "https://www.drupal.org/user/20975"
+                },
+                {
+                    "name": "becw",
+                    "homepage": "https://www.drupal.org/user/81067"
+                },
+                {
+                    "name": "byrond",
+                    "homepage": "https://www.drupal.org/user/1279040"
+                },
+                {
+                    "name": "jesconstantine",
+                    "homepage": "https://www.drupal.org/user/3455145"
+                },
+                {
+                    "name": "MalakDesai",
+                    "homepage": "https://www.drupal.org/user/3584087"
+                },
+                {
+                    "name": "mcarmichael21",
+                    "homepage": "https://www.drupal.org/user/3224074"
+                }
+            ],
+            "description": "Allows indexing multiple Drupal sites into a single Solr search index.",
+            "homepage": "https://www.drupal.org/project/search_api_federated_solr",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/search_api_federated_solr"
+            }
+        },
+        {
+            "name": "drupal/search_api_field_map",
+            "version": "dev-4.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/search_api_field_map.git",
+                "reference": "6341c33c35b66471ff410049f167ee559c81bb3a"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10",
+                "drupal/search_api": "^1.0",
+                "drupal/token": "^1.1"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-4.x": "4.x-dev"
+                },
+                "drupal": {
+                    "version": "4.x-dev",
+                    "datestamp": "1691079293",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "agentrickard",
+                    "homepage": "https://www.drupal.org/user/20975"
+                },
+                {
+                    "name": "becw",
+                    "homepage": "https://www.drupal.org/user/81067"
+                },
+                {
+                    "name": "byrond",
+                    "homepage": "https://www.drupal.org/user/1279040"
+                },
+                {
+                    "name": "jesconstantine",
+                    "homepage": "https://www.drupal.org/user/3455145"
+                },
+                {
+                    "name": "MalakDesai",
+                    "homepage": "https://www.drupal.org/user/3584087"
+                },
+                {
+                    "name": "mcarmichael21",
+                    "homepage": "https://www.drupal.org/user/3224074"
+                }
+            ],
+            "description": "Allows indexing multiple Drupal sites into a single search index by field.",
+            "homepage": "https://www.drupal.org/project/search_api_field_map",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/search_api_field_map"
             }
         },
         {
