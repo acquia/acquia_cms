@@ -39,11 +39,11 @@ jobs:
           - STRICT_DEPRECATED_CODE_SCAN
         #php-version: [ "8.1" ]
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 12.13.1
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
         with:
-          node-version: 12.13.1
+          node-version: 20.x
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 8.3
@@ -82,11 +82,11 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 12.13.1
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
         with:
-          node-version: 12.13.1
+          node-version: 20.x
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 8.3
@@ -137,11 +137,11 @@ jobs:
           - integrated_php_unit_tests
           - integrated_existing_site_tests
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 12.13.1
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
         with:
-          node-version: 12.13.1
+          node-version: 20.x
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 8.3
@@ -241,11 +241,11 @@ jobs:
           - 8.1
           - 8.3
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 12.13.1
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
         with:
-          node-version: 12.13.1
+          node-version: 20.x
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
@@ -334,11 +334,11 @@ jobs:
       fail-fast: false
       #php-version: [ "8.1" ]
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 12.13.1
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
         with:
-          node-version: 12.13.1
+          node-version: 20.x
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 8.3
@@ -394,7 +394,7 @@ jobs:
     environment: code_deployment
     concurrency: production
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Configure SSH keys

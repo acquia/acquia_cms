@@ -37,11 +37,11 @@ jobs:
           - STRICT_DEPRECATED_CODE_SCAN
         #php-version: [ "8.1" ]
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 12.13.1
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
         with:
-          node-version: 12.13.1
+          node-version: 20.x
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 8.3
@@ -88,11 +88,11 @@ jobs:
           - integrated_existing_site_tests
           - backstop_tests
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 12.13.1
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
         with:
-          node-version: 12.13.1
+          node-version: 20.x
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
@@ -187,11 +187,11 @@ jobs:
           - php-version: 8.2
             orca-job: [ ISOLATED_TEST_ON_CURRENT_DEV, ISOLATED_TEST_ON_NEXT_MINOR_DEV]
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 12.13.1
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
         with:
-          node-version: 12.13.1
+          node-version: 20.x
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
@@ -271,11 +271,11 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 12.13.1
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
         with:
-          node-version: 12.13.1
+          node-version: 20.x
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 8.3
@@ -342,11 +342,11 @@ jobs:
           - php-version: 8.3
             orca-job: INTEGRATED_TEST_ON_PREVIOUS_MINOR
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 12.13.1
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
         with:
-          node-version: 12.13.1
+          node-version: 20.x
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
@@ -459,11 +459,11 @@ jobs:
          - acquia_cms_video
          - sitestudio_config_management
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 12.13.1
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
         with:
-          node-version: 12.13.1
+          node-version: 20.x
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 8.3
