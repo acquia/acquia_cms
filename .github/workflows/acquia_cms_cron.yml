@@ -53,6 +53,9 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
+          # Remove version form composer.json file.
+          find modules/*/ -type f -name "composer.json" -exec sed -i '' -e '/"version": "dev-develop",/d' '{}' ';'
+          sed -i '/"version": "dev-develop",/d' composer.json
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
@@ -71,6 +74,7 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
+
   integrated_tests:
     name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
     runs-on: ubuntu-latest
@@ -108,12 +112,17 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/342a0eee801e51f48b4d9701749c1c94/raw/orca-oldest-support.patch | git -C ../orca apply
       - name: Before Install
         run: |
+          # Remove version form composer.json file.
+          find modules/*/ -type f -name "composer.json" -exec sed -i '' -e '/"version": "dev-develop",/d' '{}' ';'
+          sed -i '/"version": "dev-develop",/d' composer.json
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
 
           # One of the patch is failing on Drupal Core 9.5. So remove that patch.
           if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
+            # Update common to 2.x for Drupal 9.5
+            sed -i 's/"dev-develop": "3.x-dev"/"dev-develop": "2.x-dev"/' modules/acquia_cms_common/composer.json
             # Remove the failing php on Drupal Core 9.5.
             # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
 
@@ -162,6 +171,7 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
+
   isolated_tests:
     name: acquia_cms (${{ matrix.orca-job }})
     runs-on: ubuntu-latest
@@ -204,11 +214,16 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/342a0eee801e51f48b4d9701749c1c94/raw/orca-oldest-support.patch | git -C ../orca apply
       - name: Before Install
         run: |
+          # Remove version from composer.json file.
+          find modules/* -type f -name "composer.json" -exec sed -i '/"version": "dev-develop",/d' '{}' ';'
+          sed -i '/"version": "dev-develop",/d' composer.json
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
 
           if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
+            # Update common to 2.x for Drupal 9.5
+            sed -i 's/"dev-develop": "3.x-dev"/"dev-develop": "2.x-dev"/' modules/acquia_cms_common/composer.json
             # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
 
             # Remove drupal/core patch as it's needed for latest Drupal Core only.
@@ -245,6 +260,7 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
+
   blt_test:
     name: "BLT site install"
     runs-on: ubuntu-latest
@@ -290,6 +306,9 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
+          # Remove version from composer.json file.
+          find modules/* -type f -name "composer.json" -exec sed -i '/"version": "dev-develop",/d' '{}' ';'
+          sed -i '/"version": "dev-develop",/d' composer.json
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
@@ -308,6 +327,7 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
+
   cypress_tests:
     name: Cypress Tests with ${{ matrix.orca-job }} on PHP ${{ matrix.php-version }}
     runs-on: ubuntu-latest
@@ -363,6 +383,9 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/342a0eee801e51f48b4d9701749c1c94/raw/orca-oldest-support.patch | git -C ../orca apply
       - name: Before Install
         run: |
+          # Remove version from composer.json file.
+          find modules/* -type f -name "composer.json" -exec sed -i '/"version": "dev-develop",/d' '{}' ';'
+          sed -i '/"version": "dev-develop",/d' composer.json
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
@@ -372,6 +395,8 @@ jobs:
 
           # Remove the failing php on Drupal Core 9.5.
           if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
+            # Update common to 2.x for Drupal 9.5
+            sed -i 's/"dev-develop": "3.x-dev"/"dev-develop": "2.x-dev"/' modules/acquia_cms_common/composer.json
             # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
 
             # Remove drupal/core patch as it's needed for latest Drupal Core only.

@@ -3,6 +3,7 @@
     "description": "Contains configuration for config filter, config ignore & config split.",
     "license": "GPL-2.0-or-later",
     "type": "drupal-module",
+    "version": "dev-develop",
     "require": {
         "php": ">=7.4",
         "acquia/cohesion": "~7.4.0 || ~7.5.0",
@@ -13,6 +14,17 @@
     "require-dev": {
         "drush/drush": "^11.6 || ^12"
     },
+    "repositories": {
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
             "dev-develop": "1.x-dev"

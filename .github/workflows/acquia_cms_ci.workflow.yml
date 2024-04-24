@@ -56,6 +56,9 @@ jobs:
           curl https://gist.githubusercontent.com/chandan-singh7929/902a17bbf0f5c0e0ee536dd5983875f3/raw/4031ae76ca5e8f08b98545bfdcda327f6d38be58/remove-local-settings.patch | git -C ../orca apply
       - name: Before Install
         run: |
+          # Remove version from composer.json file.
+          find modules/* -type f -name "composer.json" -exec sed -i '/"version": "dev-develop",/d' '{}' ';'
+          sed -i '/"version": "dev-develop",/d' composer.json
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
@@ -97,6 +100,7 @@ jobs:
           composer install
           php vendor/bin/drupal-check modules
           php vendor/bin/drupal-check tests/src
+
   integrated_tests:
     if: ${{ github.event_name == 'pull_request' }}
     name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
@@ -164,6 +168,9 @@ jobs:
       #     aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Before Install
         run: |
+          # Remove version from composer.json file.
+          find modules/* -type f -name "composer.json" -exec sed -i '/"version": "dev-develop",/d' '{}' ';'
+          sed -i '/"version": "dev-develop",/d' composer.json
           # Update the CI by adding patches without pinning the following modules.
           #composer require "drupal/facets:^2.0.6" --no-update --no-install -d modules/acquia_cms_search
 
@@ -199,6 +206,7 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
+
   backstop_tests:
     if: ${{ github.event_name == 'pull_request' }}
     name: backstop with ${{ matrix.orca-job }} on PHP ${{ matrix.php-version }}
@@ -268,6 +276,9 @@ jobs:
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Before Install
         run: |
+          # Remove version from composer.json file.
+          find modules/* -type f -name "composer.json" -exec sed -i '/"version": "dev-develop",/d' '{}' ';'
+          sed -i '/"version": "dev-develop",/d' composer.json
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
@@ -299,6 +310,7 @@ jobs:
           ../orca/bin/ci/after_success.sh
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
+
   run_update_hooks:
     if: ${{ github.event_name == 'pull_request' }}
     name: "Module Upgrades"
@@ -355,6 +367,9 @@ jobs:
           curl https://gist.githubusercontent.com/chandan-singh7929/902a17bbf0f5c0e0ee536dd5983875f3/raw/4031ae76ca5e8f08b98545bfdcda327f6d38be58/remove-local-settings.patch | git -C ../orca apply
       - name: Before Install
         run: |
+          # Remove version from composer.json file.
+          find modules/* -type f -name "composer.json" -exec sed -i '/"version": "dev-develop",/d' '{}' ';'
+          sed -i '/"version": "dev-develop",/d' composer.json
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
@@ -364,7 +379,10 @@ jobs:
         run: ./tests/ci/install.sh
       - name: Run Update hooks
         shell: 'script -q -e -c "bash {0}"'
-        run: ./tests/ci/run_update_hooks.sh
+        run: |
+          # Remove version form composer.json file.
+          find modules/*/ -type f -name "composer.json" -exec sed -i '' -e '/"version": "dev-develop",/d' '{}' ';'
+          ./tests/ci/run_update_hooks.sh
         env:
           # @see ./tests/ci/before_install.blt.sh
           DRUPAL_ORG_CHANGES: ${{ env.DRUPAL_ORG_CHANGES }}
