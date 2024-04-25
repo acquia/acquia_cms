@@ -17,6 +17,7 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
+    "filter",
     "system",
     "acquia_cms_common",
   ];
