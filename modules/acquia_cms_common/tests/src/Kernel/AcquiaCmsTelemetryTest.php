@@ -22,6 +22,10 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
     "acquia_cms_common",
   ];
 
+  // @codingStandardsIgnoreStart
+  protected $strictConfigSchema = FALSE;
+  // @codingStandardsIgnoreEnd
+
   /**
    * The AcquiaCmsTelemetry event_service object.
    *
