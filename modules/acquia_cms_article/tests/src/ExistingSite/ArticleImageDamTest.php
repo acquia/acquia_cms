@@ -19,10 +19,6 @@ class ArticleImageDamTest extends ExistingSiteBase {
 
   use ConfigurationTraits;
 
-  // @codingStandardsIgnoreStart
-  protected $strictConfigSchema = FALSE;
-  // @codingStandardsIgnoreEnd
-
   /**
    * {@inheritdoc}
    */

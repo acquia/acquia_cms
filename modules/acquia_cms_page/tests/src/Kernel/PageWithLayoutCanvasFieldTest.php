@@ -29,9 +29,6 @@ class PageWithLayoutCanvasFieldTest extends FieldKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  // @codingStandardsIgnoreStart
-  protected $strictConfigSchema = FALSE;
-  // @codingStandardsIgnoreEnd
 
   /**
    * The field_config object.

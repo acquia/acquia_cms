@@ -35,9 +35,6 @@ class AcquiaFacetSearchTest extends BrowserTestBase {
    *
    * @todo Fix config schema for fallback_view & main_listing_pages_view plugin.
    */
-  // @codingStandardsIgnoreStart
-  protected $strictConfigSchema = FALSE;
-  // @codingStandardsIgnoreEnd
 
   /**
    * The module installer object.
