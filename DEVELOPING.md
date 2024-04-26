@@ -5,6 +5,8 @@ These instructions assume that you have an Acquia Cloud account, and that you ar
 
 You should also have:
 * PHP 7.3 or later installed. (`php --version`)
+* PHP memory limit should be 256M. (`php -i | grep "memory_limit"`)
+  If php memory_limit is less than 256 then locate php.ini file and update memory_limit to 256
 * Composer 2 or later. (`composer --version`)
 * An invitation to the Acquia CMS development subscription in Acquia Cloud.
 Contact Michael Sherron or Prafful Nagwani for an invitation.
