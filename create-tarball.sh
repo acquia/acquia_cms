@@ -8,6 +8,10 @@ else
   ARCHIVE=acms
 fi
 
+# Remove the acms directory.
+rm -rf $ARCHIVE
+
+# Create project in acms directory.
 composer create-project --no-install drupal/legacy-project $ARCHIVE
 composer dump-autoload
 composer configure-tarball $ARCHIVE
@@ -24,9 +28,13 @@ composer config --json --merge extra.drupal-scaffold.allowed-packages '["acquia/
 composer config prefer-stable true
 composer update
 
-# Wrap it all up in a nice compressed tarball.
+# Copy ACMS minimal profile.
 cd ..
+cp -R ./profiles $ARCHIVE
+
+# Wrap it all up in a nice compressed tarball.
 tar --exclude='.DS_Store' --exclude='._*' -c -z -f $ARCHIVE.tar.gz $ARCHIVE
 
 # Clean up.
+rm -r -f sf-acms
 rm -r -f $ARCHIVE
