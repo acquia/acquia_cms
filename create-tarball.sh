@@ -28,13 +28,12 @@ composer config --json --merge extra.drupal-scaffold.allowed-packages '["acquia/
 composer config prefer-stable true
 composer update
 
-# Copy ACMS minimal profile.
+# # Create ACMS minimal profile.
 cd ..
-cp -R ./profiles $ARCHIVE
+sh ./create-profile.sh
 
 # Wrap it all up in a nice compressed tarball.
 tar --exclude='.DS_Store' --exclude='._*' -c -z -f $ARCHIVE.tar.gz $ARCHIVE
 
 # Clean up.
-rm -r -f sf-acms
 rm -r -f $ARCHIVE
