@@ -17,9 +17,14 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
+    "filter",
     "system",
     "acquia_cms_common",
   ];
+
+  // @codingStandardsIgnoreStart
+  protected $strictConfigSchema = FALSE;
+  // @codingStandardsIgnoreEnd
 
   /**
    * The AcquiaCmsTelemetry event_service object.
