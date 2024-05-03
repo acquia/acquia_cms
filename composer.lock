@@ -2785,16 +2785,16 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_search",
-                "reference": "d04101af515eff5cbceaef2f24919ab1807262ee"
+                "reference": "faafd17dc48f421e1d12d1ec0c76d810f4b85bca"
             },
             "require": {
                 "cweagans/composer-patches": "^1.7",
                 "drupal/acquia_cms_common": "^1.9 || ^2.1 || ^3.1",
                 "drupal/acquia_search": "^3.1",
                 "drupal/collapsiblock": "^4.0",
-                "drupal/facets": "2.0.7",
+                "drupal/facets": "^2.0",
                 "drupal/facets_pretty_paths": "^2.0",
-                "drupal/search_api": "1.30 || 1.31",
+                "drupal/search_api": "^1.32",
                 "drupal/search_api_autocomplete": "^1.7"
             },
             "require-dev": {
@@ -2806,14 +2806,7 @@
                     "dev-develop": "1.x-dev"
                 },
                 "enable-patching": true,
-                "patches": {
-                    "drupal/facets": {
-                        "3259123 - ViewsDisplayBase::isRenderedInCurrentRequest() doesn't let the facet link to reset to original URL": "https://www.drupal.org/files/issues/2022-01-18/3259123-search-facet-reset-link.patch"
-                    },
-                    "drupal/search_api": {
-                        "3151796 - Problems when executing Search API tasks during install, updates": "https://www.drupal.org/files/issues/2022-11-04/search_api-3151796-division-by-zero-error-7.patch"
-                    }
-                }
+                "patches": []
             },
             "license": [
                 "GPL-2.0-or-later"
@@ -7724,20 +7717,20 @@
         },
         {
             "name": "drupal/search_api",
-            "version": "1.31.0",
+            "version": "1.34.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api.git",
-                "reference": "8.x-1.31"
+                "reference": "8.x-1.34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.31.zip",
-                "reference": "8.x-1.31",
-                "shasum": "ec8436744c34de2ede6370d4dd26875489e761bc"
+                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.34.zip",
+                "reference": "8.x-1.34",
+                "shasum": "dd08166888f90adaf01cc1a759266097709efe7c"
             },
             "require": {
-                "drupal/core": "^10.0"
+                "drupal/core": "^10.1 || ^11"
             },
             "conflict": {
                 "drupal/search_api_solr": "2.* || 3.0 || 3.1"
@@ -7755,8 +7748,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.31",
-                    "datestamp": "1700926323",
+                    "version": "8.x-1.34",
+                    "datestamp": "1712400445",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -21678,5 +21671,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }

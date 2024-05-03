@@ -1,6 +1,6 @@
 # Acquia CMS
 
-An opinionated implementation of Drupal 9 for running low code websites in the Acquia platform.
+An opinionated implementation of Drupal 9 and above for running low code websites in the Acquia platform.
 
 ## Installing Acquia CMS
 

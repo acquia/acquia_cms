@@ -102,21 +102,41 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
     $assert_session = $this->assertSession();
     $assert_session->statusCodeEquals(200);
 
-    // Asset that overridden configuration appears on overridden tab.
-    $assert_session->elementExists('xpath', "//table/tbody/tr/td[contains(text(),'taxonomy.vocabulary.tags')]");
-    $assert_session->elementExists('xpath', "//table/tbody/tr/td/span[contains(text(),'87  %')]");
+    // Assert that overridden configuration table exist.
+    $assert_session->elementExists('css', 'table.responsive-enabled');
 
-    // Asset that unchanged configuration does not appear on overridden tab.
-    $assert_session->elementNotExists('xpath', "//table/tbody/tr/td[contains(text(),'taxonomy.vocabulary.categories')]");
+    // Assert that overridden configuration table has header exist.
+    $assert_session->pageTextContains('Name');
+    $assert_session->pageTextContains('Module');
+    $assert_session->pageTextContains('Default Parity');
+    $assert_session->pageTextContains('Operations');
+
+    // Assert overridden configurations exists.
+    $assert_session->pageTextContains('editor.editor.filtered_html');
+    $assert_session->pageTextContains('editor.editor.full_html');
+    $assert_session->pageTextContains('taxonomy.vocabulary.tags');
+
+    // Assert that unchanged configuration does not appear on overridden tab.
+    $assert_session->pageTextNotContains('taxonomy.vocabulary.categories');
 
     $this->drupalGet('/admin/config/development/acquia-cms-support/unchanged-config');
     $assert_session->statusCodeEquals(200);
 
-    // Asset that unchanged configuration appears on unchanged tab.
-    $assert_session->elementExists('xpath', "//table/tbody/tr/td[contains(text(),'taxonomy.vocabulary.categories')]");
+    // Assert that unchanged configuration table exist.
+    $assert_session->elementExists('css', 'table.responsive-enabled');
 
-    // Asset that overridden configuration does not appear on unchanged tab.
-    $assert_session->elementNotExists('xpath', "//table/tbody/tr/td[contains(text(),'taxonomy.vocabulary.tags')]");
+    // Assert that unchanged configuration table has header exist.
+    $assert_session->pageTextContains('Name');
+    $assert_session->pageTextContains('Module');
+
+    // Assert unchanged configuration exist.
+    $assert_session->pageTextContains('taxonomy.vocabulary.categories');
+    $assert_session->pageTextContains('user.role.administrator');
+
+    // Assert that overridden configuration does not appear on unchanged tab.
+    $assert_session->pageTextNotContains('editor.editor.filtered_html');
+    $assert_session->pageTextNotContains('editor.editor.full_html');
+    $assert_session->pageTextNotContains('taxonomy.vocabulary.tags');
   }
 
   /**
