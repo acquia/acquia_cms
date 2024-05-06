@@ -27,6 +27,7 @@ composer config minimum-stability dev
 composer config --json --merge extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms"]'
 composer config prefer-stable true
 composer update
+composer require drupal/gin
 
 # Create ACMS minimal profile.
 cd ..
