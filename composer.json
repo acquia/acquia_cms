@@ -1,9 +1,8 @@
 {
     "name": "acquia/acquia_cms",
-    "type": "drupal-module",
     "description": "An implementation of Drupal 9 for running custom, low code websites on the Acquia platform.",
-    "homepage": "https://github.com/acquia/acquia_cms",
     "license": "GPL-2.0-or-later",
+    "type": "drupal-module",
     "authors": [
         {
             "name": "Michael Sherron",
@@ -16,8 +15,10 @@
             "role": "Maintainer"
         }
     ],
+    "homepage": "https://github.com/acquia/acquia_cms",
     "require": {
         "acquia/acquia-cms-starterkit": "^1.0",
+        "drupal/acquia_claro": "^1.3",
         "drupal/acquia_cms_audio": "^1.4",
         "drupal/acquia_cms_component": "^1.3",
         "drupal/acquia_cms_headless": "^1.3",
@@ -25,6 +26,7 @@
         "drupal/acquia_cms_starter": "^1.4",
         "drupal/acquia_cms_toolbar": "^1.4",
         "drupal/acquia_cms_tour": "^2.1",
+        "drupal/gin": "^3",
         "drupal/google_tag": "^2.0",
         "drupal/honeypot": "^2.1",
         "drupal/recaptcha": "^3.1",
@@ -43,6 +45,22 @@
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "~9.4.0 || ~9.5.0",
         "weitzman/drupal-test-traits": "^2"
+    },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Acquia\\Utility\\": "src/Utility"
+        },
+        "classmap": [
+            "src/Composer/ConfigureProject.php"
+        ]
     },
     "config": {
         "allow-plugins": {
@@ -121,22 +139,6 @@
         },
         "patches": {}
     },
-    "autoload": {
-        "psr-4": {
-            "Acquia\\Utility\\": "src/Utility"
-        },
-        "classmap": [
-            "src/Composer/ConfigureProject.php"
-        ]
-    },
-    "repositories": {
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "scripts": {
         "pre-update-cmd": [
             "@putenv COMPOSER_MEMORY_LIMIT=2G"
