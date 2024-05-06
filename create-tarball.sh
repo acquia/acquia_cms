@@ -2,12 +2,16 @@
 
 # Create tarball with acms version specific.
 if [ $1 ] ; then
-  ARCHIVE=acms-$1
+  ARCHIVE=acquia_cms-$1
 # Create tarball with latest version of acquia CMS
 else
-  ARCHIVE=acms
+  ARCHIVE=acquia_cms
 fi
 
+# Remove the existing tarball directory.
+rm -rf $ARCHIVE
+
+# Create project in tarball directory.
 composer create-project --no-install drupal/legacy-project $ARCHIVE
 composer dump-autoload
 composer configure-tarball $ARCHIVE
@@ -23,9 +27,13 @@ composer config minimum-stability dev
 composer config --json --merge extra.drupal-scaffold.allowed-packages '["acquia/acquia_cms"]'
 composer config prefer-stable true
 composer update
+composer require drupal/gin
+
+# Create ACMS minimal profile.
+cd ..
+sh ./create-profile.sh $ARCHIVE
 
 # Wrap it all up in a nice compressed tarball.
-cd ..
 tar --exclude='.DS_Store' --exclude='._*' -c -z -f $ARCHIVE.tar.gz $ARCHIVE
 
 # Clean up.
