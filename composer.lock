@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2aee00a9de43dd696f9ddbf31005e85a",
+    "content-hash": "146de4713fdc92538bfe81c9572aee79",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2378,7 +2378,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "8187e52d81abfe0484778a1607a975047633516f"
+                "reference": "b2d460cee6edeff17db3078aa544817e0cb265a0"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2432,6 +2432,8 @@
             "require-dev": {
                 "acquia/cohesion": "^7.4",
                 "drupal/acquia_claro": "^1.3",
+                "drupal/node_revision_delete": "^2",
+                "drupal/reroute_email": "^2.2",
                 "drupal/shield": "^1.7"
             },
             "type": "drupal-module",
@@ -5491,43 +5493,30 @@
         },
         {
             "name": "drupal/google_tag",
-            "version": "2.0.4",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/google_tag.git",
-                "reference": "2.0.4"
+                "reference": "8.x-1.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/google_tag-2.0.4.zip",
-                "reference": "2.0.4",
-                "shasum": "a56bcdb566bf1af54dc0c8871eb720ba54f1392e"
+                "url": "https://ftp.drupal.org/files/projects/google_tag-8.x-1.6.zip",
+                "reference": "8.x-1.6",
+                "shasum": "d084315e54c2e561b8b64eef86081c2634d054cd"
             },
             "require": {
-                "drupal/core": "^9.5 || ^10",
-                "php": "^7.4 || ^8"
-            },
-            "require-dev": {
-                "drupal/commerce": "^2.0",
-                "drupal/commerce_wishlist": "^3.0@beta",
-                "drupal/csp": "^1.0",
-                "drupal/google_analytics": "^4.0",
-                "drupal/search_api": "^1.28.0",
-                "drupal/token": "^1.11.0",
-                "drupal/webform": "^6.0"
+                "drupal/core": "^8.8 || ^9 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.4",
-                    "datestamp": "1709073204",
+                    "version": "8.x-1.6",
+                    "datestamp": "1671145853",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "branch-alias": {
-                    "dev-main": "2.x-dev"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5556,7 +5545,7 @@
                     "homepage": "https://www.drupal.org/user/240748"
                 }
             ],
-            "description": "Sets up Google Tag",
+            "description": "Allows your website analytics to be managed using Google Tag Manager.",
             "homepage": "https://www.drupal.org/project/google_tag",
             "support": {
                 "source": "https://git.drupalcode.org/project/google_tag"
@@ -21671,5 +21660,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
