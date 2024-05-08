@@ -117,7 +117,9 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
     $assert_session->pageTextContains('taxonomy.vocabulary.tags');
 
     // Assert that unchanged configuration does not appear on overridden tab.
-    $assert_session->pageTextNotContains('taxonomy.vocabulary.categories');
+    if (version_compare(\Drupal::VERSION, '10.3', '<')) {
+      $assert_session->pageTextNotContains('taxonomy.vocabulary.categories');
+    }
 
     $this->drupalGet('/admin/config/development/acquia-cms-support/unchanged-config');
     $assert_session->statusCodeEquals(200);
@@ -130,7 +132,9 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
     $assert_session->pageTextContains('Module');
 
     // Assert unchanged configuration exist.
-    $assert_session->pageTextContains('taxonomy.vocabulary.categories');
+    if (version_compare(\Drupal::VERSION, '10.3', '<')) {
+      $assert_session->pageTextContains('taxonomy.vocabulary.categories');
+    }
     $assert_session->pageTextContains('user.role.administrator');
 
     // Assert that overridden configuration does not appear on unchanged tab.
