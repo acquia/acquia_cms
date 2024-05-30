@@ -135,9 +135,8 @@ class AcquiaConnectorForm extends AcquiaCmsDashboardBase {
           '#suffix' => "</span></div>",
         ];
       }
-
-      return $form;
     }
+    return $form;
   }
 
   /**
