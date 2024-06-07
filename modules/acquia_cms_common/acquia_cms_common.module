@@ -252,13 +252,14 @@ function acquia_cms_common_preprocess_status_report_general_info(&$variables) {
         'starter_kit' => $starter_kit,
       ],
     ];
-    $starter_kit_element = class_exists(DeprecationHelper::class) ? DeprecationHelper::backwardsCompatibleCall(
-      Drupal::VERSION,
-      "10.3",
-      fn() => \Drupal::service('renderer')->renderInIsolation($starter_kit_template),
-      fn() => \Drupal::service('renderer')->renderPlain($starter_kit_template),
-      // @phpstan-ignore-next-line
-    ) : \Drupal::service('renderer')->renderPlain($starter_kit_template);
+    $renderer = \Drupal::service('renderer');
+    $starter_kit_element = DeprecationHelper::backwardsCompatibleCall(
+      \Drupal::VERSION,
+      '10.3.0',
+      fn () => $renderer->renderInIsolation($starter_kit_template),
+      fn () => $renderer->renderPlain($starter_kit_template),
+    );
+
     $variables['drupal']['description'] = [
       '#markup' => isset($variables['drupal']['description']) ? $starter_kit_element . $variables['drupal']['description'] : $starter_kit_element,
     ];
