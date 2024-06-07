@@ -3,13 +3,13 @@
 namespace Drupal\acquia_cms_support\Service;
 
 use Drupal\Component\Diff\Diff;
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\ImportStorageTransformer;
 use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Config\StorageComparer;
 use Drupal\Core\Config\StorageInterface;
-use Drupal\Core\Serialization\Yaml;
 
 /**
  * Defines a service which provides config sync for acquia cms.
