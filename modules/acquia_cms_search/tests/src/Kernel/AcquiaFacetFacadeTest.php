@@ -43,9 +43,6 @@ class AcquiaFacetFacadeTest extends KernelTestBase {
    *
    * @todo Fix config schema for fallback_view & main_listing_pages_view plugin.
    */
-  // @codingStandardsIgnoreStart
-  protected $strictConfigSchema = FALSE;
-  // @codingStandardsIgnoreEnd
 
   /**
    * {@inheritdoc}
