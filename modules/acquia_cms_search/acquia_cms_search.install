@@ -93,3 +93,19 @@ function acquia_cms_search_update_8002() {
     }
   }
 }
+
+/**
+ * Updates max-age for acquia_cms_search view.
+ *
+ * Implements hook_update_N().
+ */
+function acquia_cms_search_update_10001() {
+  $view = \Drupal::entityTypeManager()->getStorage('view')->load("search");
+  $display = &$view->getDisplay('search');
+  if ($display['display_options']['cache']['type'] == 'search_api_tag') {
+    if ($display['cache_metadata']['max-age'] == 0) {
+      $display['cache_metadata']['max-age'] == -1;
+      $view->save();
+    }
+  }
+}
