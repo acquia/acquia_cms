@@ -173,9 +173,8 @@ class AcquiaHeadlessForm extends AcquiaCmsDashboardBase {
         ],
         'code-css',
       ];
-
-      return $form;
     }
+    return $form;
   }
 
   /**

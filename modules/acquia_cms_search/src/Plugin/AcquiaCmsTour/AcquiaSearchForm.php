@@ -119,8 +119,8 @@ class AcquiaSearchForm extends AcquiaCmsDashboardBase {
         '#markup' => $this->t("Opens Advance Configuration in new tab"),
         '#suffix' => "</span></div>",
       ];
-      return $form;
     }
+    return $form;
   }
 
   /**
