@@ -2,7 +2,6 @@
 
 namespace Drupal\acquia_cms_common\Services;
 
-use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigException;
 use Drupal\Core\Config\ConfigImporter;
@@ -210,12 +209,7 @@ final class ConfigImporterService {
         // coordinating.
         $message = 'The import failed due to the following reasons:' . "\n";
         $message .= implode("\n", $config_importer->getErrors());
-        DeprecationHelper::backwardsCompatibleCall(
-          \Drupal::VERSION,
-          '10.1.0',
-          fn() => Error::logException(\Drupal::logger('config_import'), $e),
-          fn() => watchdog_exception('config_import', $e)
-        );
+        Error::logException(\Drupal::logger('config_import'), $e);
         throw new \Exception($message);
       }
     }
