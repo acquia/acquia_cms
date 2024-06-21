@@ -5,6 +5,7 @@ namespace Drupal\Tests\acquia_cms_common\FunctionalJavascript;
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Behat\Mink\Element\ElementInterface;
 use Drupal\acquia_cms_common\Facade\PermissionFacade;
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\media\Entity\MediaType;
 use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
@@ -94,7 +95,16 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
 
     $this->drupalGet("/node/add/$node_type");
     $this->openMediaLibrary();
-    $this->selectMedia(0);
+
+    // The media position number now starts from 1 (instead of 0) starting
+    // from Drupal Core 10.3.0.
+    class_exists(DeprecationHelper::class) ? DeprecationHelper::backwardsCompatibleCall(
+      \Drupal::VERSION,
+      "10.3",
+      fn() => $this->selectMedia(1),
+      fn() => $this->selectMedia(0),
+    ) : $this->selectMedia(0);
+
     $this->insertSelectedMedia();
     $this->assertMediaIsEmbedded();
   }
