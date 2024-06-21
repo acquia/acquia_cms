@@ -77,7 +77,7 @@ jobs:
           ../orca/bin/ci/after_script.sh
   drupal_check:
     if: ${{ github.event_name == 'pull_request' }}
-    name: Execute Drupal-check
+    name: PHPStan
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -91,12 +91,11 @@ jobs:
         with:
           php-version: 8.3
           #coverage: xdebug
-      - name: Execute Drupal-check
+      - name: Execute PHPStan
         run: |
           rm composer.lock
           composer install
-          php vendor/bin/drupal-check modules
-          php vendor/bin/drupal-check tests/src
+          ./vendor/bin/phpstan analyze
   integrated_tests:
     if: ${{ github.event_name == 'pull_request' }}
     name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
