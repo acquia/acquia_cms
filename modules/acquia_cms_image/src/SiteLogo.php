@@ -11,6 +11,7 @@ use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\Exception\DirectoryNotReadyException;
+use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -199,7 +200,9 @@ final class SiteLogo implements ContainerInjectionInterface {
       $this->ensureMediaExists();
       // Upload image to public file system.
       $image_data = file_get_contents($this->logoPath);
-      $image = $this->fileRepository->writeData($image_data, self::LOGO_PATH, FileSystemInterface::EXISTS_REPLACE);
+      // @phpstan-ignore-next-line
+      $file_exist = class_exists(FileExists::class) ? FileExists::Replace : FileSystemInterface::EXISTS_REPLACE;
+      $image = $this->fileRepository->writeData($image_data, self::LOGO_PATH, $file_exist);
       $image->setFileName('Acquia CMS logo');
       $image->setMimeType('image/png');
       $image->setPermanent();

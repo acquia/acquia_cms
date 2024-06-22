@@ -101,6 +101,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 10
           total_pages: null
           id: 0
@@ -321,6 +322,7 @@ display:
       tags:
         - 'config:field.storage.node.field_place_type'
         - 'config:search_api.index.content'
+        - 'search_api_list:content'
   page:
     id: page
     display_title: Page
@@ -328,7 +330,8 @@ display:
     position: 1
     display_options:
       cache:
-        type: none
+        type: search_api_none
+        options: {  }
       defaults:
         cache: false
       exposed_block: true
@@ -346,3 +349,4 @@ display:
       tags:
         - 'config:field.storage.node.field_place_type'
         - 'config:search_api.index.content'
+        - 'search_api_list:content'
