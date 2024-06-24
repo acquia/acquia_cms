@@ -35,7 +35,7 @@ class EntityPermissionsTestBase extends BrowserTestBase {
   /**
    * Defines an array of role which should & shouldn't exist.
    */
-  public function providerRoleExistNotExist(): array {
+  public static function providerRoleExistNotExist(): array {
     return [
       [
         [
@@ -59,13 +59,14 @@ class EntityPermissionsTestBase extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function providerBasicPermissions(): array {
-    $entityType = $this->getEntityType();
-    $bundle = $this->getBundle();
+  public static function providerBasicPermissions(): array {
+    $object = new self();
+    $entityType = $object->getEntityType();
+    $bundle = $object->getBundle();
     return [
       [
         'content_administrator',
-        $this->getPermissionsByRole('content_administrator'),
+        $object->getPermissionsByRole('content_administrator'),
       ],
       [
         'content_author',
@@ -73,7 +74,7 @@ class EntityPermissionsTestBase extends BrowserTestBase {
           "create $bundle $entityType",
           "delete own $bundle $entityType",
           "edit own $bundle $entityType",
-        ], $this->getPermissionsByRole('content_author'),
+        ], $object->getPermissionsByRole('content_author'),
         ),
       ],
       [
@@ -81,7 +82,7 @@ class EntityPermissionsTestBase extends BrowserTestBase {
         array_merge([
           "delete any $bundle $entityType",
           "edit any $bundle $entityType",
-        ], $this->getPermissionsByRole('content_editor')
+        ], $object->getPermissionsByRole('content_editor')
         ),
       ],
     ];
