@@ -131,8 +131,8 @@ trait PermissionsTrait {
     return $module_permissions;
   }
 
-  abstract public function providerRoleExistNotExist(): array;
+  abstract public static function providerRoleExistNotExist(): array;
 
-  abstract public function providerBasicPermissions(): array;
+  abstract public static function providerBasicPermissions(): array;
 
 }

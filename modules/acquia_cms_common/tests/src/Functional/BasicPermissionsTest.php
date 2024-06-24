@@ -74,7 +74,7 @@ class BasicPermissionsTest extends BrowserTestBase {
   /**
    * Defines an array of role which shouldn't exists.
    */
-  public function providerRoleExistNotExist(): array {
+  public static function providerRoleExistNotExist(): array {
     return [
       [
         [
@@ -96,16 +96,17 @@ class BasicPermissionsTest extends BrowserTestBase {
    *
    * @throws \Exception
    */
-  public function providerBasicPermissions(): array {
+  public static function providerBasicPermissions(): array {
+    $object = new self();
     return [
       [
         'site_builder',
-        $this->getPermissionsByRole('site_builder'),
+        $object->getPermissionsByRole('site_builder'),
         ['administer shield'],
       ],
       [
         'user_administrator',
-        $this->getPermissionsByRole('user_administrator'),
+        $object->getPermissionsByRole('user_administrator'),
         ['administer shield'],
       ],
     ];
@@ -114,7 +115,7 @@ class BasicPermissionsTest extends BrowserTestBase {
   /**
    * Defines an array of modules & permissions to roles.
    */
-  public function providerModulePermissions(): array {
+  public static function providerModulePermissions(): array {
     return [
         [
           'shield',
