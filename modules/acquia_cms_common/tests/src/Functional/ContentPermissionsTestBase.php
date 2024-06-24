@@ -14,7 +14,7 @@ abstract class ContentPermissionsTestBase extends EntityPermissionsTestBase {
   /**
    * Defines an array of role which should & shouldn't exist.
    */
-  public function providerRoleExistNotExist(): array {
+  public static function providerRoleExistNotExist(): array {
     return [
       [
         [

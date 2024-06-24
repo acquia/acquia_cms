@@ -14,7 +14,7 @@ abstract class MediaPermissionsTestBase extends EntityPermissionsTestBase {
   /**
    * Defines an array of role which should & shouldn't exist.
    */
-  public function providerRoleExistNotExist(): array {
+  public static function providerRoleExistNotExist(): array {
     return [
       [
         [
@@ -33,7 +33,7 @@ abstract class MediaPermissionsTestBase extends EntityPermissionsTestBase {
   /**
    * {@inheritdoc}
    */
-  public function providerBasicPermissions(): array {
+  public static function providerBasicPermissions(): array {
     return [
       [
         'site_builder',
