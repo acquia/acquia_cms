@@ -2,10 +2,14 @@
 
 namespace Drupal\Tests\acquia_cms_common\Functional;
 
+use Drupal\Tests\acquia_cms_common\Traits\EntityPermissionsTrait;
+
 /**
  * Base class for media entity permissions.
  */
 abstract class MediaPermissionsTestBase extends EntityPermissionsTestBase {
+
+  use EntityPermissionsTrait;
 
   /**
    * Defines an array of role which should & shouldn't exist.
