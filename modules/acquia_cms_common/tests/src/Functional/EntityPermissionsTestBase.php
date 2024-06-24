@@ -8,7 +8,7 @@ use Drupal\Tests\BrowserTestBase;
 /**
  * Base class for entity permissions.
  */
-abstract class EntityPermissionsTestBase extends BrowserTestBase {
+class EntityPermissionsTestBase extends BrowserTestBase {
 
   use PermissionsTrait;
 
@@ -86,21 +86,5 @@ abstract class EntityPermissionsTestBase extends BrowserTestBase {
       ],
     ];
   }
-
-  /**
-   * Function to get entity type.
-   *
-   * @return string
-   *   Returns entity_type. Ex: content, media etc.
-   */
-  abstract public function getEntityType(): string;
-
-  /**
-   * Function to get entity bundle.
-   *
-   * @return string
-   *   Returns bundle of entity. Ex: article, image etc.
-   */
-  abstract public function getBundle(): string;
 
 }
