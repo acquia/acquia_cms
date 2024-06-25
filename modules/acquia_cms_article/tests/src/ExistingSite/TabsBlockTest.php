@@ -78,7 +78,7 @@ class TabsBlockTest extends ExistingSiteBase {
    * @return array[]
    *   Sets of arguments to pass to the test method.
    */
-  public function providerTabsBlock() {
+  public static function providerTabsBlock() {
     return [
       ['administrator'],
       ['content_administrator'],
