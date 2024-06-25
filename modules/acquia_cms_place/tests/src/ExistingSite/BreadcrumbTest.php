@@ -37,7 +37,7 @@ class BreadcrumbTest extends ExistingSiteBase {
    * @return array[]
    *   Sets of arguments to pass to the test method.
    */
-  public function providerBreadcrumb() : array {
+  public static function providerBreadcrumb() : array {
     return [
       [
         'place',
@@ -88,12 +88,13 @@ class BreadcrumbTest extends ExistingSiteBase {
    * @return array[]
    *   Sets of arguments to pass to the test method.
    */
-  public function providerNoSubType() : array {
+  public static function providerNoSubType() : array {
+    $object = new self('test');
     $map = function (array $arguments) : array {
       unset($arguments[1], $arguments[2][1]);
       return $arguments;
     };
-    return array_map($map, $this->providerBreadcrumb());
+    return array_map($map, $object->providerBreadcrumb());
   }
 
   /**

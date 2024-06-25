@@ -175,7 +175,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
    * @return array[]
    *   Sets of arguments to pass to the test method.
    */
-  public function permissionProvider() : array {
+  public static function permissionProvider() : array {
     return [
       'anonymous user' => [NULL],
       // Search API is really stupid about node access, and does not properly
