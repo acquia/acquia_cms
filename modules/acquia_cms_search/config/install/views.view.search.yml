@@ -81,6 +81,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 10
           total_pages: null
           id: 0
@@ -327,6 +328,7 @@ display:
         - user.permissions
       tags:
         - 'config:search_api.index.content'
+        - 'search_api_list:content'
   search:
     id: search
     display_title: Page
@@ -351,4 +353,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
+        - 'config:facets.facet.search_content_type'
         - 'config:search_api.index.content'
+        - 'config:views.view.search'
+        - 'search_api_list:content'

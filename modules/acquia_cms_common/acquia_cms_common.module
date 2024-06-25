@@ -10,6 +10,7 @@ use Drupal\acquia_cms_common\Facade\MetatagFacade;
 use Drupal\acquia_cms_common\Facade\PermissionFacade;
 use Drupal\acquia_cms_common\Facade\SitemapFacade;
 use Drupal\acquia_cms_common\Facade\WorkflowFacade;
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Installer\InstallerKernel;
@@ -251,8 +252,13 @@ function acquia_cms_common_preprocess_status_report_general_info(&$variables) {
         'starter_kit' => $starter_kit,
       ],
     ];
-    $starter_kit_element = \Drupal::service('renderer')
-      ->renderPlain($starter_kit_template);
+    $starter_kit_element = class_exists(DeprecationHelper::class) ? DeprecationHelper::backwardsCompatibleCall(
+      Drupal::VERSION,
+      "10.3",
+      fn() => \Drupal::service('renderer')->renderInIsolation($starter_kit_template),
+      fn() => \Drupal::service('renderer')->renderPlain($starter_kit_template),
+      // @phpstan-ignore-next-line
+    ) : \Drupal::service('renderer')->renderPlain($starter_kit_template);
     $variables['drupal']['description'] = [
       '#markup' => isset($variables['drupal']['description']) ? $starter_kit_element . $variables['drupal']['description'] : $starter_kit_element,
     ];

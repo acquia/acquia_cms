@@ -112,6 +112,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 9
           total_pages: null
           id: 0
@@ -340,6 +341,7 @@ display:
       tags:
         - 'config:field.storage.node.field_person_type'
         - 'config:search_api.index.content'
+        - 'search_api_list:content'
   page:
     id: page
     display_title: Page
@@ -355,7 +357,7 @@ display:
       display_extenders: {  }
       path: people
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -364,5 +366,8 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
+        - 'config:facets.facet.people_category'
+        - 'config:facets.facet.people_person_type'
         - 'config:field.storage.node.field_person_type'
         - 'config:search_api.index.content'
+        - 'search_api_list:content'

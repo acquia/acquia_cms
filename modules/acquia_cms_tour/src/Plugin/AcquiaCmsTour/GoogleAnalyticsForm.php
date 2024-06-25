@@ -103,8 +103,8 @@ class GoogleAnalyticsForm extends AcquiaCmsDashboardBase {
           '#suffix' => "</span></div>",
         ];
       }
-      return $form;
     }
+    return $form;
   }
 
   /**
