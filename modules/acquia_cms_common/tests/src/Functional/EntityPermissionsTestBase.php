@@ -66,7 +66,7 @@ class EntityPermissionsTestBase extends BrowserTestBase {
    * {@inheritdoc}
    */
   public static function providerBasicPermissions(): array {
-    $object = new static();
+    $object = new static('test');
     // Let's throw exception if this trait is
     // extended by other class and does not provide entity Type.
     if (!method_exists($object, 'getEntityType')) {
