@@ -25,7 +25,7 @@ class IntegratedPermissionsTest extends ExistingSiteBase {
   /**
    * Defines an array of role which shouldn't exists.
    */
-  public function providerRoleExistNotExist(): array {
+  public static function providerRoleExistNotExist(): array {
     return [
       [
         [
@@ -45,35 +45,36 @@ class IntegratedPermissionsTest extends ExistingSiteBase {
    *
    * @throws \Exception
    */
-  public function providerBasicPermissions(): array {
+  public static function providerBasicPermissions(): array {
+    $instance = new static();
     return [
       [
         'developer',
-        $this->getPermissionsByRole('developer'),
+        $instance->getPermissionsByRole('developer'),
       ],
       [
         'user_administrator',
-        $this->getPermissionsByRole('user_administrator'),
+        $instance->getPermissionsByRole('user_administrator'),
       ],
       [
         'site_builder',
-        $this->getPermissionsByRole('site_builder'),
+        $instance->getPermissionsByRole('site_builder'),
       ],
       [
         'content_administrator',
-        $this->getPermissionsByRole('content_administrator'),
+        $instance->getPermissionsByRole('content_administrator'),
       ],
       [
         'content_author',
-        $this->getPermissionsByRole('content_author'),
+        $instance->getPermissionsByRole('content_author'),
       ],
       [
         'content_editor',
-        $this->getPermissionsByRole('content_editor'),
+        $instance->getPermissionsByRole('content_editor'),
       ],
       [
         'authenticated',
-        $this->getPermissionsByRole('authenticated'),
+        $instance->getPermissionsByRole('authenticated'),
       ],
     ];
   }

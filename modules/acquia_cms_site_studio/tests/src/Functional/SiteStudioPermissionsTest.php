@@ -53,7 +53,7 @@ class SiteStudioPermissionsTest extends BrowserTestBase {
   /**
    * Defines an array of role which shouldn't exists.
    */
-  public function providerRoleExistNotExist(): array {
+  public static function providerRoleExistNotExist(): array {
     return [
       [
         [
@@ -73,11 +73,12 @@ class SiteStudioPermissionsTest extends BrowserTestBase {
    *
    * @throws \Exception
    */
-  public function providerBasicPermissions(): array {
+  public static function providerBasicPermissions(): array {
+    $instance = new static();
     return [
       [
         'developer',
-        $this->getPermissionsByRole('developer'),
+        $instance->getPermissionsByRole('developer'),
       ],
     ];
   }
