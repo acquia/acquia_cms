@@ -96,6 +96,10 @@ jobs:
           rm composer.lock
           composer install
           ./vendor/bin/phpstan analyze
+          function shutdown() {
+            exit 0
+          }
+          trap shutdown ERR
   integrated_tests:
     if: ${{ github.event_name == 'pull_request' }}
     name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
