@@ -26,11 +26,19 @@ class StarterKitSelectionForm extends AcquiaCmsStarterKitBase {
   protected $formName = 'acquia_cms_starter_kit_selection';
 
   /**
+   * Starterkit service.
+   *
+   * @var \Drupal\acquia_cms_tour\Services\StarterKitService
+   */
+  protected $starterKitService;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     /** @var static $instance */
     $instance = parent::create($container);
+    $instance->starterKitService = $container->get('acquia_cms_tour.starter_kit');
     return $instance;
   }
 
@@ -46,7 +54,7 @@ class StarterKitSelectionForm extends AcquiaCmsStarterKitBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    $service = \Drupal::service('acquia_cms_tour.starter_kit');
+    $service = $this->starterKitService;
     $missingModules = [
       'acquia_cms_enterprise_low_code' => $service->getMissingModules('acquia_cms_enterprise_low_code'),
       'acquia_cms_community' => $service->getMissingModules('acquia_cms_community'),
