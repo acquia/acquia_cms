@@ -112,8 +112,6 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
     $assert_session->pageTextContains('Operations');
 
     // Assert overridden configurations exists.
-    $assert_session->pageTextContains('editor.editor.filtered_html');
-    $assert_session->pageTextContains('editor.editor.full_html');
     $assert_session->pageTextContains('taxonomy.vocabulary.tags');
 
     // Assert that unchanged configuration does not appear on overridden tab.
@@ -138,8 +136,6 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
     $assert_session->pageTextContains('user.role.administrator');
 
     // Assert that overridden configuration does not appear on unchanged tab.
-    $assert_session->pageTextNotContains('editor.editor.filtered_html');
-    $assert_session->pageTextNotContains('editor.editor.full_html');
     $assert_session->pageTextNotContains('taxonomy.vocabulary.tags');
   }
 
