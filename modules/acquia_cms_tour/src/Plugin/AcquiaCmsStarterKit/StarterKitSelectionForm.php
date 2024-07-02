@@ -53,10 +53,12 @@ class StarterKitSelectionForm extends AcquiaCmsStarterKitBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+
+    $service = $this->starterKitService;
     $missingModules = [
-      'acquia_cms_enterprise_low_code' => $this->starterKitService->getMissingModules('acquia_cms_enterprise_low_code'),
-      'acquia_cms_community' => $this->starterKitService->getMissingModules('acquia_cms_community'),
-      'acquia_cms_headless' => $this->starterKitService->getMissingModules('acquia_cms_headless'),
+      'acquia_cms_enterprise_low_code' => $service->getMissingModules('acquia_cms_enterprise_low_code'),
+      'acquia_cms_community' => $service->getMissingModules('acquia_cms_community'),
+      'acquia_cms_headless' => $service->getMissingModules('acquia_cms_headless'),
     ];
     $defaultStarterKit = 'acquia_cms_community';
     if (!$missingModules['acquia_cms_enterprise_low_code']) {
@@ -129,7 +131,7 @@ class StarterKitSelectionForm extends AcquiaCmsStarterKitBase {
         '@message @missingModules </i></b></p></div>',
         [
           '@message' => $formattedMessage,
-          '@missingModules' => $this->starterKitService->getMissingModulesCommand($missingModules['acquia_cms_enterprise_low_code']),
+          '@missingModules' => $service->getMissingModulesCommand($missingModules['acquia_cms_enterprise_low_code']),
         ]
       );
       $form[$formName]['requirement_message_low_code'] = [
@@ -147,7 +149,7 @@ class StarterKitSelectionForm extends AcquiaCmsStarterKitBase {
         '@message @missingModules </i></b></p></div>',
         [
           '@message' => $formattedMessage,
-          '@missingModules' => $this->starterKitService->getMissingModulesCommand($missingModules['acquia_cms_community']),
+          '@missingModules' => $service->getMissingModulesCommand($missingModules['acquia_cms_community']),
         ]
       );
       $form[$formName]['requirement_message_community'] = [
@@ -165,7 +167,7 @@ class StarterKitSelectionForm extends AcquiaCmsStarterKitBase {
         '@message @missingModules </i></b></p></div>',
         [
           '@message' => $formattedMessage,
-          '@missingModules' => $this->starterKitService->getMissingModulesCommand($missingModules['acquia_cms_community']),
+          '@missingModules' => $service->getMissingModulesCommand($missingModules['acquia_cms_community']),
         ]
       );
       $form[$formName]['requirement_message_hedless'] = [
