@@ -54,8 +54,9 @@ settings:
         - '<h5 id>'
         - '<h6 id>'
     ckeditor5_list:
-      reversed: false
-      startIndex: true
+      properties:
+        reversed: false
+        startIndex: true
     ckeditor5_alignment:
       enabled_alignments:
         - left
@@ -66,9 +67,3 @@ settings:
       allow_view_mode_override: false
 image_upload:
   status: false
-  scheme: public
-  directory: inline-images
-  max_size: ''
-  max_dimensions:
-    width: null
-    height: null
