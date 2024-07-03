@@ -215,10 +215,7 @@ class PlaceTest extends ContentTypeTestBase {
           'address' => [
             '@type' => 'PostalAddress',
             // With 3.x Schema_metatag release streetAddress is array.
-            'streetAddress' => [
-              '12',
-              'block b',
-            ],
+            'streetAddress' => '12, block b,',
             'addressLocality' => 'Santa Clara',
             'addressRegion' => 'CA',
             'postalCode' => '94050',
