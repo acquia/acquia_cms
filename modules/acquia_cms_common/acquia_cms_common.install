@@ -5,6 +5,7 @@
  * Install, update and uninstall functions for the acquia_cms_common module.
  */
 
+use Drupal\acquia_cms_common\Facade\ConfigHandlerFacade;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Config\StorageInterface;
@@ -317,5 +318,40 @@ function acquia_cms_common_update_8009() {
 function acquia_cms_common_update_9331() {
   if (\Drupal::state()->get('acquia_connector.telemetry.opted')) {
     \Drupal::state()->delete('acquia_connector.telemetry.opted');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ *  Update editor format filter.
+ */
+function acquia_cms_common_update_9332() {
+  $config_handler = \Drupal::classResolver(ConfigHandlerFacade::class);
+  $settings = [
+    'editor.editor.filtered_html',
+    'editor.editor.full_html',
+  ];
+
+  // Key and value of ckeditor5_list.
+  $key = 'settings.plugins.ckeditor5_list';
+  $value = [
+    'properties' => [
+      'reversed' => FALSE,
+      'startIndex' => TRUE,
+    ],
+  ];
+
+  // Key and value of image_upload.
+  $image_key = 'image_upload';
+  $image_value = [
+    'status' => FALSE,
+  ];
+  // Iterate the configurations to update the key.
+  foreach ($settings as $setting) {
+    // Updating ckeditor5_list key.
+    $config_handler->updateConfigByKey($setting, $key, $value);
+    // Updating image_upload key.
+    $config_handler->updateConfigByKey($setting, $image_key, $image_value);
   }
 }
