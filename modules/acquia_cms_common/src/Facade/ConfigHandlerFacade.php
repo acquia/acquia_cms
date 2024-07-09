@@ -137,8 +137,8 @@ final class ConfigHandlerFacade implements ContainerInjectionInterface {
     $config = $this->configFactory->getEditable($config);
     if ($config->get($key)) {
       $config->set($key, $value);
+      $config->save();
     }
-    $config->save();
   }
 
 }
