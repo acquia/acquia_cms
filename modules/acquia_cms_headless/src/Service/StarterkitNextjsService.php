@@ -132,7 +132,8 @@ class StarterkitNextjsService {
     MessengerInterface $messenger,
     string $site_path,
     FileSystemInterface $file_system,
-    RequestStack $request_stack) {
+    RequestStack $request_stack,
+  ) {
     $this->configFactory = $config_factory;
     $this->defaultPasswordGenerator = $defaultPasswordGenerator;
     $this->entityTypeManager = $entity_type_manager;

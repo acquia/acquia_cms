@@ -56,10 +56,11 @@ class StarterKitService {
    *   The module extension list.
    */
   public function __construct(
-  ModuleInstallerInterface $module_installer,
-  ThemeInstallerInterface $theme_installer,
-  ConfigFactoryInterface $config_factory,
-  ModuleExtensionList $extension_list_module) {
+    ModuleInstallerInterface $module_installer,
+    ThemeInstallerInterface $theme_installer,
+    ConfigFactoryInterface $config_factory,
+    ModuleExtensionList $extension_list_module,
+  ) {
     $this->moduleInstaller = $module_installer;
     $this->themeInstaller = $theme_installer;
     $this->configFactory = $config_factory;

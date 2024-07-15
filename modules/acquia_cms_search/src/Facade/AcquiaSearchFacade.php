@@ -100,7 +100,8 @@ final class AcquiaSearchFacade implements ContainerInjectionInterface {
     Subscription $subscription,
     EntityStorageInterface $index_storage,
     EntityStorageInterface $server_storage,
-    EntityStorageInterface $view_storage) {
+    EntityStorageInterface $view_storage,
+  ) {
     $this->configFactory = $config_factory;
     $this->state = $state;
     $this->logger = $logger;

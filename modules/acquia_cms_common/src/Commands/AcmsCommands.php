@@ -267,10 +267,13 @@ class AcmsCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
    * @usage acms:starter-kit
    *   Display starter kit value.
    */
-  public function starterKit($filter = '', $options = [
-    'project' => self::REQ,
-    'format' => 'table',
-  ]) {
+  public function starterKit(
+    $filter = '',
+    $options = [
+      'project' => self::REQ,
+      'format' => 'table',
+    ],
+  ) {
     if ($starter_kit = $this->acmsUtilityService->getStarterKit()) {
       $data['starter-kit'] = $starter_kit;
       $result = new PropertyList($data);

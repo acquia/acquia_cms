@@ -58,10 +58,12 @@ class SwitchAcquiaCms extends DrushCommands {
    * @param \Drupal\Core\State\StateInterface $state
    *   The state.
    */
-  public function __construct(ModuleHandlerInterface $module_handler,
-  ConfigFactoryInterface $config_factory,
-  KeyValueFactoryInterface $keyvalue,
-  StateInterface $state) {
+  public function __construct(
+    ModuleHandlerInterface $module_handler,
+    ConfigFactoryInterface $config_factory,
+    KeyValueFactoryInterface $keyvalue,
+    StateInterface $state,
+  ) {
     $this->moduleHandler = $module_handler;
     $this->configFactory = $config_factory;
     $this->keyvalue = $keyvalue;

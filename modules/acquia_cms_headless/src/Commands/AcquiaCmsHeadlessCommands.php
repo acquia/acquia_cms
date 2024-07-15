@@ -72,11 +72,13 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function acmsHeadlessNewNextjs(array $options = [
-    'site-url' => NULL,
-    'site-name' => NULL,
-    'env-file' => NULL,
-  ]): void {
+  public function acmsHeadlessNewNextjs(
+    array $options = [
+      'site-url' => NULL,
+      'site-name' => NULL,
+      'env-file' => NULL,
+    ],
+  ): void {
     $existing_sites = $this->entityTypeManager->getStorage('next_site')->loadMultiple();
     $site_id = $this->getSiteMachineName($options['site-name']);
     $data = [
@@ -187,10 +189,12 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function acmsHeadlessRegenerateEnv(array $options = [
-    'site-url' => NULL,
-    'env-file' => NULL,
-  ]) {
+  public function acmsHeadlessRegenerateEnv(
+    array $options = [
+      'site-url' => NULL,
+      'env-file' => NULL,
+    ],
+  ) {
     if ($options['site-url']) {
       $cid = $this->starterKit->getHeadlessConsumerDataByUri($options['site-url'])->id();
       /** @var \Drupal\consumers\Entity\Consumer $consumer */

@@ -49,7 +49,8 @@ class AcquiaCmsConfigSyncOverridden extends ControllerBase implements ContainerI
   public function __construct(
     AcquiaCmsConfigSyncService $acms_config_sync,
     AcmsUtilityService $acmsUtilityService,
-    ModuleHandlerInterface $moduleHandler) {
+    ModuleHandlerInterface $moduleHandler,
+  ) {
     $this->acmsConfigSync = $acms_config_sync;
     $this->acmsUtilityService = $acmsUtilityService;
     $this->moduleHandler = $moduleHandler;
