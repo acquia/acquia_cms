@@ -456,14 +456,14 @@ function acquia_cms_site_studio_update_9000() {
  *  Update site-studio editor format filter.
  */
 function acquia_cms_site_studio_update_9001() {
-  $config_handler = \Drupal::classResolver(ConfigHandlerFacade::class);
-  // Updating ckeditor5_list key.
-  $key = 'settings.plugins.ckeditor5_list';
-  $value = [
-    'properties' => [
-      'reversed' => TRUE,
-      'startIndex' => TRUE,
+  $config_data = [
+    'settings.plugins.ckeditor5_list' => [
+      'properties' => [
+        'reversed' => TRUE,
+        'startIndex' => TRUE,
+      ],
     ],
   ];
-  $config_handler->updateConfigByKey('editor.editor.cohesion', $key, $value);
+
+  _acquia_cms_common_update_page_configurations('editor.editor.cohesion', $config_data);
 }

@@ -120,25 +120,4 @@ final class ConfigHandlerFacade implements ContainerInjectionInterface {
     }
   }
 
-  /**
-   * Update config on the basis of key.
-   *
-   * @param string $config
-   *   Config settings data.
-   * @param string $key
-   *   Configuration key which needs to be updated.
-   * @param array $value
-   *   Configuration data needs to be updated.
-   *
-   * @return void
-   *   Saving the configuration.
-   */
-  public function updateConfigByKey(string $config, string $key, array $value): void {
-    $config = $this->configFactory->getEditable($config);
-    if ($config->get($key)) {
-      $config->set($key, $value);
-      $config->save();
-    }
-  }
-
 }
