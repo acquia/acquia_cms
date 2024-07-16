@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8abb32d3e33a4210e806668cca8995a2",
+    "content-hash": "b6512c5ad81748ae347891d4ae086ef6",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -83,16 +83,16 @@
         },
         {
             "name": "acquia/cohesion",
-            "version": "7.5.0",
+            "version": "7.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/cohesion.git",
-                "reference": "21a86bf103582c1544fa3a45c81dd158f3509074"
+                "reference": "8a585870fb0f6519087841d963ba4d3030ff7487"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/cohesion/zipball/21a86bf103582c1544fa3a45c81dd158f3509074",
-                "reference": "21a86bf103582c1544fa3a45c81dd158f3509074",
+                "url": "https://api.github.com/repos/acquia/cohesion/zipball/8a585870fb0f6519087841d963ba4d3030ff7487",
+                "reference": "8a585870fb0f6519087841d963ba4d3030ff7487",
                 "shasum": ""
             },
             "require": {
@@ -140,9 +140,9 @@
             ],
             "description": "Site Studio",
             "support": {
-                "source": "https://github.com/acquia/cohesion/tree/7.5.0"
+                "source": "https://github.com/acquia/cohesion/tree/7.5.2"
             },
-            "time": "2024-03-18T15:35:22+00:00"
+            "time": "2024-07-12T10:22:27+00:00"
         },
         {
             "name": "acquia/cohesion-theme",
@@ -2586,7 +2586,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_headless",
-                "reference": "e5688b12eab4b35aeb1f65bce491efce2a88efbc"
+                "reference": "79434a0bbe47031eefcdbd7520bc568ec7f67a9f"
             },
             "require": {
                 "drupal/acquia_cms_tour": "^2.1.8",
@@ -2644,9 +2644,6 @@
                     "drupal/core": "-p2"
                 },
                 "patches": {
-                    "drupal/decoupled_router": {
-                        "3111456 - Unable to resolve path on node in other language than default": "https://www.drupal.org/files/issues/2022-11-30/decouple_router-3111456-resolve-language-issue-58.patch"
-                    },
                     "drupal/subrequests": {
                         "3049395 - Page Cache causes different subrequests to return the same responses": "https://www.drupal.org/files/issues/2019-07-18/change_request_type-63049395-09.patch"
                     }
@@ -4463,29 +4460,30 @@
         },
         {
             "name": "drupal/decoupled_router",
-            "version": "2.0.4",
+            "version": "2.0.5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/decoupled_router.git",
-                "reference": "2.0.4"
+                "reference": "2.0.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/decoupled_router-2.0.4.zip",
-                "reference": "2.0.4",
-                "shasum": "8dacb4460c93a3fa9b034516a7e1caaf254be76b"
+                "url": "https://ftp.drupal.org/files/projects/decoupled_router-2.0.5.zip",
+                "reference": "2.0.5",
+                "shasum": "0899f6331358aac1476e72fc60a8f03d5654c654"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9 || ^10"
+                "drupal/core": "^9.5 || ^10 || ^11",
+                "php": ">=8.1"
             },
             "require-dev": {
-                "drupal/redirect": "^1.8"
+                "drupal/redirect": "dev-1.x"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.4",
-                    "datestamp": "1669803945",
+                    "version": "2.0.5",
+                    "datestamp": "1720638599",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -21703,5 +21701,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
