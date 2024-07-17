@@ -276,22 +276,12 @@ function acquia_cms_site_studio_modules_installed($modules, $is_syncing) {
 }
 
 /**
- * Implements hook_css_alter().
+ * Implements hook_library_info_alter().
  */
-function acquia_cms_site_studio_css_alter(array &$css) {
-  if (\Drupal::service('module_handler')->moduleExists('collapsiblock')) {
-    $module_path = \Drupal::service('extension.list.module')->getPath('collapsiblock');
-    // Remove the default css provided by module: `collapsiblock`.
-    // It causes issue with site studio template.
-    // The module uses different paths in different releases. Hence, removing
-    // all possible paths to support all releases of collapsiblock module.
-    $paths = [
-      $module_path . '/theme/dist/css/collapsiblock.min.css',
-      $module_path . '/theme/dist/collapsiblock.css',
-      $module_path . '/theme/dist/style.css',
-    ];
-    foreach ($paths as $path) {
-      unset($css[$path]);
-    }
+function acquia_cms_site_studio_library_info_alter(array &$libraries, string $module): void {
+  // Remove the default css provided by module: `collapsiblock` module.
+  // It causes issue with site studio template.
+  if ($module == "collapsiblock" && isset($libraries['core']['css'])) {
+    unset($libraries['core']['css']);
   }
 }
