@@ -61,10 +61,12 @@ final class CohesionFacade implements ContainerInjectionInterface {
    * @param \Drupal\cohesion_sync\Services\PackageImportHandler $package_import_handler
    *   The uuid service.
    */
-  public function __construct(PackagerManager $packager,
-   ModuleHandlerInterface $module_handler,
-   UuidInterface $uuid,
-   PackageImportHandler $package_import_handler) {
+  public function __construct(
+    PackagerManager $packager,
+    ModuleHandlerInterface $module_handler,
+    UuidInterface $uuid,
+    PackageImportHandler $package_import_handler,
+  ) {
     $this->packager = $packager;
     $this->moduleHandler = $module_handler;
     $this->uuidGenerator = $uuid;

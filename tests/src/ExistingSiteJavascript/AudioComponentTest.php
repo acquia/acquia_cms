@@ -52,9 +52,8 @@ class AudioComponentTest extends CohesionComponentTestBase {
     $this->getSession()->getPage()->pressButton('Add');
     $assertSession->waitForElementVisible('css', '.field--name-name input[name="media[0][fields][name][0][value]"]');
     $this->getSession()->getPage()->find("css", ".ui-dialog-buttonset button")->click();
-
-    // Select and insert selected media.
-    $this->selectMedia(0);
+    // Wait for Media Library form to appear showing list of media items.
+    $assertSession->waitForElementVisible('css', '.media-library-views-form');
     $this->insertSelectedMedia();
   }
 

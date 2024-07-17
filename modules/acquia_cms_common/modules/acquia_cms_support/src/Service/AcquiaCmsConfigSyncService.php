@@ -55,7 +55,7 @@ class AcquiaCmsConfigSyncService {
   public function __construct(
     ConfigFactoryInterface $config_factory,
     StorageInterface $target_storage,
-    ImportStorageTransformer $import_transformer
+    ImportStorageTransformer $import_transformer,
   ) {
     $this->configFactory = $config_factory;
     $this->targetStorage = $target_storage;

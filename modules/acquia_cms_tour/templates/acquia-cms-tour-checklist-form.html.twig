@@ -6,7 +6,7 @@
 {{ form.form_build_id }}
 {{ form.form_token }}
 {{ form.form_id }}
-{% set progress = (form.check_count['#value'] ? (form.check_count['#value'] * 100)/form.check_total['#value'] : 0)|round %}
+{% set progress = (form.check_count['#value'] ? (form.check_count['#value'] * 100) / form.check_total['#value'] : 0)|round %}
 
 
 
@@ -18,8 +18,7 @@
       Please note, not all modules in ACMS are required by default, and some optional modules
       are left disabled on install. A checklist is provided to help you keep track of the tasks
       needed to complete configuration. Also, you can install the Starter-kit by clicking on
-      Starter kit Set-up button (if not done already)."|t
-      }}
+      Starter kit Set-up button (if not done already)."|t }}
     {% else %}
       <h3>
         <i>
@@ -28,7 +27,7 @@
       </h3>
       <h3>
         <i>
-          {{ "If required, you can install additional modules later using the "}}<a href="{{ path('system.modules_list') }}">{{"Extend"|t}}</a>{{" page."|t }}
+          {{ "If required, you can install additional modules later using the " }}<a href="{{ path('system.modules_list') }}">{{ "Extend"|t }}</a>{{ " page."|t }}
         </i>
       </h3>
     {% endif %}
@@ -58,7 +57,7 @@
     </div>
 
     <div class='list-items'>
-      {% for key, item in form.items %}
+      {% for item in form.items %}
         {% if item.check %}
           <div class='checklist-item-wrapper'>
             <div class='checklist-checkbox'>{{ item.check }}</div>
