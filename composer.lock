@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cb5dada58e380e2d70acb5f3ebe84ea4",
+    "content-hash": "dcf08eaddf33deceff444a9f6986903d",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2378,7 +2378,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "b2d460cee6edeff17db3078aa544817e0cb265a0"
+                "reference": "9e9b566fe3138fdf808b4767362c09d2da649845"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2390,23 +2390,22 @@
                 "drupal/autologout": "^1.4",
                 "drupal/config_ignore": "^3.0@beta",
                 "drupal/config_rewrite": "^1.5",
-                "drupal/core": "^10.2.2",
+                "drupal/core": "^10.2.2 || ^11",
                 "drupal/diff": "^1.1",
                 "drupal/entity_clone": "^2.0@beta",
                 "drupal/field_group": "^3.4",
                 "drupal/memcache": "^2.5",
                 "drupal/moderation_dashboard": "^2.1 || ^3.0",
-                "drupal/moderation_sidebar": "^1.7",
-                "drupal/password_policy": "^4.0",
+                "drupal/password_policy": "dev-3433859-automated-drupal-11",
                 "drupal/pathauto": "^1.12",
                 "drupal/redirect": "^1.9",
-                "drupal/scheduler_content_moderation_integration": "^2.0",
+                "drupal/scheduler_content_moderation_integration": "3.0.x-dev",
                 "drupal/schema_metatag": "^2.4 || ^3.0",
-                "drupal/seckit": "^2.0",
+                "drupal/seckit": "dev-3434417-automated-drupal-11",
                 "drupal/simple_sitemap": "^4.1",
                 "drupal/smart_trim": "^2.0",
-                "drupal/social_media_links": "^2.9",
-                "drupal/username_enumeration_prevention": "^1.3",
+                "drupal/social_media_links": "dev-3449085-automated-drupal-11",
+                "drupal/username_enumeration_prevention": "dev-3435303-automated-drupal-11",
                 "drupal/workbench_email": "^3.0",
                 "nnnick/chartjs": "^3.9 || ^4.4"
             },
@@ -4837,28 +4836,22 @@
         },
         {
             "name": "drupal/facets",
-            "version": "2.0.7",
+            "version": "dev-2.0.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/facets.git",
-                "reference": "2.0.7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/facets-2.0.7.zip",
-                "reference": "2.0.7",
-                "shasum": "a58ad0c4c3fc2750bf095232a54218ae906852e3"
+                "reference": "cec2cd7e780a0a04ae77f40e85affd4c0504a7f2"
             },
             "require": {
-                "drupal/core": "^9.3 || ^10.0"
+                "drupal/core": "^10 || ^11"
             },
             "conflict": {
-                "drupal/search_api": "<1.14"
+                "drupal/search_api": "<1.30"
             },
             "require-dev": {
-                "drupal/jquery_ui_slider": "~2.0",
-                "drupal/jquery_ui_touch_punch": "~1.1",
-                "drupal/search_api": "^1.28||1.x-dev"
+                "drupal/jquery_ui_slider": "^2.1",
+                "drupal/jquery_ui_touch_punch": "^1.1",
+                "drupal/search_api": "1.x-dev"
             },
             "suggest": {
                 "drupal/jquery_ui_slider": "Required for the 'Facets Range Widget' module to work",
@@ -4866,12 +4859,15 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-2.0.x": "2.0.x-dev"
+                },
                 "drupal": {
-                    "version": "2.0.7",
-                    "datestamp": "1709900263",
+                    "version": "2.0.7+16-dev",
+                    "datestamp": "1721212335",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -6322,54 +6318,6 @@
             }
         },
         {
-            "name": "drupal/moderation_sidebar",
-            "version": "1.7.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/moderation_sidebar.git",
-                "reference": "8.x-1.7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/moderation_sidebar-8.x-1.7.zip",
-                "reference": "8.x-1.7",
-                "shasum": "a1887bd9dafdd67b63a1e143b719684a132936dd"
-            },
-            "require": {
-                "drupal/core": "^9.3 || ^10"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.7",
-                    "datestamp": "1670991665",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "joelpittet",
-                    "homepage": "https://www.drupal.org/user/160302"
-                },
-                {
-                    "name": "samuel.mortenson",
-                    "homepage": "https://www.drupal.org/user/2582268"
-                }
-            ],
-            "description": "Provides a frontend sidebar for Content Moderation",
-            "homepage": "https://www.drupal.org/project/moderation_sidebar",
-            "support": {
-                "source": "https://git.drupalcode.org/project/moderation_sidebar"
-            }
-        },
-        {
             "name": "drupal/next",
             "version": "1.6.3",
             "source": {
@@ -6798,72 +6746,23 @@
         },
         {
             "name": "drupal/password_policy",
-            "version": "4.0.1",
+            "version": "dev-3433859-automated-drupal-11",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/password_policy.git",
-                "reference": "4.0.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/password_policy-4.0.1.zip",
-                "reference": "4.0.1",
-                "shasum": "a132988f77d02c28d5c0f8f6c84a2d37eaa36c1f"
-            },
-            "require": {
-                "drupal/core": "^9.1 || ^10"
+                "url": "https://git.drupalcode.org/issue/password_policy-3433859.git",
+                "reference": "9a591f82c9c1f25fd7853fc329fd3694168b4c98"
             },
             "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "4.0.1",
-                    "datestamp": "1712532453",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "AohRveTPV",
-                    "homepage": "https://www.drupal.org/user/2760115"
-                },
-                {
-                    "name": "deekayen",
-                    "homepage": "https://www.drupal.org/user/972"
-                },
-                {
-                    "name": "Kristen Pol",
-                    "homepage": "https://www.drupal.org/user/8389"
-                },
-                {
-                    "name": "miglius",
-                    "homepage": "https://www.drupal.org/user/18741"
-                },
-                {
-                    "name": "nerdstein",
-                    "homepage": "https://www.drupal.org/user/1557710"
-                },
-                {
-                    "name": "paulocs",
-                    "homepage": "https://www.drupal.org/user/3640109"
-                },
-                {
-                    "name": "shrop",
-                    "homepage": "https://www.drupal.org/user/14767"
-                }
             ],
             "description": "Sets up constraints and expiration of passwords.",
             "homepage": "https://www.drupal.org/project/password_policy",
             "support": {
-                "source": "https://git.drupalcode.org/project/password_policy",
-                "issues": "https://www.drupal.org/project/issues/password_policy"
-            }
+                "issues": "https://www.drupal.org/project/issues/password_policy",
+                "source": "https://git.drupalcode.org/project/password_policy"
+            },
+            "time": "2024-06-26T11:42:17+00:00"
         },
         {
             "name": "drupal/pathauto",
@@ -7372,20 +7271,11 @@
         },
         {
             "name": "drupal/scheduler",
-            "version": "2.0.3",
+            "version": "dev-3434325-automated-drupal-11",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/scheduler.git",
-                "reference": "2.0.3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/scheduler-2.0.3.zip",
-                "reference": "2.0.3",
-                "shasum": "1ef7a92afcb8e138cf697dc35f15cbc2353801b4"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9 || ^10"
+                "url": "https://git.drupalcode.org/issue/scheduler-3434325.git",
+                "reference": "6aa638d0bf59bd9e02295173497482530331d78b"
             },
             "require-dev": {
                 "drupal/commerce": "^2.0",
@@ -7397,21 +7287,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "drupal": {
-                    "version": "2.0.3",
-                    "datestamp": "1714312557",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                },
                 "drush": {
                     "services": {
                         "drush.services.yml": "^9 || ^10"
                     }
                 }
             },
-            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -7440,71 +7321,29 @@
             "description": "Automatically publish and unpublish content at specified dates and times.",
             "homepage": "https://drupal.org/project/scheduler",
             "support": {
-                "source": "https://git.drupalcode.org/project/scheduler",
-                "issues": "https://www.drupal.org/project/issues/scheduler"
-            }
+                "issues": "https://www.drupal.org/project/issues/scheduler",
+                "source": "https://git.drupalcode.org/project/scheduler"
+            },
+            "time": "2024-07-01T15:30:14+00:00"
         },
         {
             "name": "drupal/scheduler_content_moderation_integration",
-            "version": "2.0.0-beta2",
+            "version": "3.0.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/scheduler_content_moderation_integration.git",
-                "reference": "2.0.0-beta2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/scheduler_content_moderation_integration-2.0.0-beta2.zip",
-                "reference": "2.0.0-beta2",
-                "shasum": "669c62fa4f82b84f38bcf416286c753abb8b1f3e"
+                "reference": "277330876c395e11be133fff3d83573145dd8cb1"
             },
             "require": {
-                "drupal/core": "^8.7.7 || ^9 || ^10",
+                "drupal/core": "^10 || ^11",
                 "drupal/scheduler": "^2"
             },
             "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "2.0.0-beta2",
-                    "datestamp": "1695918977",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0-or-later"
             ],
-            "authors": [
-                {
-                    "name": "chr.fritsch",
-                    "homepage": "https://www.drupal.org/user/2103716"
-                },
-                {
-                    "name": "daniel.bosen",
-                    "homepage": "https://www.drupal.org/user/404865"
-                },
-                {
-                    "name": "jonathan1055",
-                    "homepage": "https://www.drupal.org/user/92645"
-                },
-                {
-                    "name": "smustgrave",
-                    "homepage": "https://www.drupal.org/user/3252890"
-                },
-                {
-                    "name": "volkerk",
-                    "homepage": "https://www.drupal.org/user/57527"
-                }
-            ],
             "description": "Scheduler sub-module providing content moderation functionality for publishing/unpublishing",
-            "homepage": "https://www.drupal.org/project/scheduler_content_moderation_integration",
-            "support": {
-                "source": "https://git.drupalcode.org/project/scheduler_content_moderation_integration",
-                "error": "Invalid dependency: \"scheduler\", Could not parse version constraint ~: Invalid version string \"~\""
-            }
+            "time": "2024-05-15T16:43:44+00:00"
         },
         {
             "name": "drupal/schema_metatag",
@@ -7967,53 +7806,15 @@
         },
         {
             "name": "drupal/seckit",
-            "version": "2.0.1",
+            "version": "dev-3434417-automated-drupal-11",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/seckit.git",
-                "reference": "2.0.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/seckit-2.0.1.zip",
-                "reference": "2.0.1",
-                "shasum": "2eee3b9719bdd5951c2b78f419c86f4765010439"
-            },
-            "require": {
-                "drupal/core": "^9.3 || ^10"
+                "url": "https://git.drupalcode.org/issue/seckit-3434417.git",
+                "reference": "4b139477a7a2b0804ea7d74d9501b3326c05c187"
             },
             "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "2.0.1",
-                    "datestamp": "1671195208",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "badjava",
-                    "homepage": "https://www.drupal.org/user/83372"
-                },
-                {
-                    "name": "jweowu",
-                    "homepage": "https://www.drupal.org/user/152788"
-                },
-                {
-                    "name": "mcdruid",
-                    "homepage": "https://www.drupal.org/user/255969"
-                },
-                {
-                    "name": "p0deje",
-                    "homepage": "https://www.drupal.org/user/529960"
-                }
+                "GPL-2.0-or-later"
             ],
             "description": "SecKit provides Drupal with various security-hardening options.",
             "homepage": "https://www.drupal.org/project/seckit",
@@ -8022,9 +7823,10 @@
                 "security"
             ],
             "support": {
-                "source": "http://cgit.drupalcode.org/seckit",
-                "issues": "http://drupal.org/project/issues/seckit"
-            }
+                "issues": "http://drupal.org/project/issues/seckit",
+                "source": "https://git.drupalcode.org/project/seckit"
+            },
+            "time": "2024-07-18T09:11:19+00:00"
         },
         {
             "name": "drupal/shield",
@@ -8373,33 +8175,13 @@
         },
         {
             "name": "drupal/social_media_links",
-            "version": "2.9.0",
+            "version": "dev-3449085-automated-drupal-11",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/social_media_links.git",
-                "reference": "8.x-2.9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/social_media_links-8.x-2.9.zip",
-                "reference": "8.x-2.9",
-                "shasum": "d73ea6199b48e11e57fe8a2aeb2afbf3c295704a"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9 || ^10"
+                "url": "https://git.drupalcode.org/issue/social_media_links-3449085.git",
+                "reference": "9ab7a9c72115df3b0f7e0d282b68c6f7f4d2c49d"
             },
             "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-2.9",
-                    "datestamp": "1665768361",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -8418,9 +8200,10 @@
             "description": "The module provides a block that display links (icons) to your profiles on various social networking sites.",
             "homepage": "https://www.drupal.org/project/social_media_links",
             "support": {
-                "source": "https://git.drupalcode.org/project/social_media_links",
-                "issues": "https://www.drupal.org/project/issues/social_media_links"
-            }
+                "issues": "https://www.drupal.org/project/issues/social_media_links",
+                "source": "https://git.drupalcode.org/project/social_media_links"
+            },
+            "time": "2024-07-18T17:16:36+00:00"
         },
         {
             "name": "drupal/sophron",
@@ -8648,47 +8431,19 @@
         },
         {
             "name": "drupal/username_enumeration_prevention",
-            "version": "1.3.0",
+            "version": "dev-3435303-automated-drupal-11",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/username_enumeration_prevention.git",
-                "reference": "8.x-1.3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/username_enumeration_prevention-8.x-1.3.zip",
-                "reference": "8.x-1.3",
-                "shasum": "fa3f1f57a9d5ad77943c484ff7e1e40f5cd73df7"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9 || ^10"
+                "url": "https://git.drupalcode.org/issue/username_enumeration_prevention-3435303.git",
+                "reference": "4059dae77a8bacc3362089a117e9f02dfc83513c"
             },
             "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.3",
-                    "datestamp": "1670892402",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0-or-later"
             ],
-            "authors": [
-                {
-                    "name": "nicksanta",
-                    "homepage": "https://www.drupal.org/user/87915"
-                }
-            ],
             "description": "Prevents username enumeration on password reset and user pages.",
             "homepage": "https://www.drupal.org/project/username_enumeration_prevention",
-            "support": {
-                "source": "https://git.drupalcode.org/project/username_enumeration_prevention"
-            }
+            "time": "2024-05-10T16:11:49+00:00"
         },
         {
             "name": "drupal/views_remote_data",
@@ -21690,7 +21445,14 @@
             "time": "2023-10-13T22:55:15+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "drupal/scheduler",
+            "version": "dev-3434325-automated-drupal-11",
+            "alias": "2.0.2",
+            "alias_normalized": "2.0.2.0"
+        }
+    ],
     "minimum-stability": "dev",
     "stability-flags": {
         "drupal/acquia_cms_audio": 20,
@@ -21702,6 +21464,7 @@
         "drupal/acquia_cms_toolbar": 20,
         "drupal/acquia_cms_tour": 20,
         "drupal/gin": 5,
+        "drupal/scheduler": 20,
         "drupal/sitestudio_config_management": 20
     },
     "prefer-stable": true,
