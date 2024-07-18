@@ -143,8 +143,8 @@ final class AcmsConfigImportCommands extends DrushCommands {
     TranslationInterface $stringTranslation,
     ModuleHandlerInterface $moduleHandler,
     ClassResolver $classResolver,
-    AcmsUtilityService $acmsUtilityService
-    ) {
+    AcmsUtilityService $acmsUtilityService,
+  ) {
     parent::__construct();
     $this->configStorage = $configStorage;
     $this->stringTranslation = $stringTranslation;
@@ -188,10 +188,13 @@ final class AcmsConfigImportCommands extends DrushCommands {
    *
    * @throws \Drush\Exceptions\UserAbortException
    */
-  public function resetConfigurations(array $package, array $options = [
-    'scope' => NULL,
-    'delete-list' => NULL,
-  ]) {
+  public function resetConfigurations(
+    array $package,
+    array $options = [
+      'scope' => NULL,
+      'delete-list' => NULL,
+    ],
+  ) {
     $this->io()->text(["Welcome to the Acquia CMS config reset wizard.",
       "This should be used with extreme caution and can lead to unexpected behavior on your site if not well tested.",
       "Do not run this in production until you've tested it in a safe, non-public environment first.",

@@ -138,7 +138,7 @@ final class ConfigImporterService {
     ModuleInstallerInterface $moduleInstaller,
     ThemeHandlerInterface $themeHandler,
     TranslationInterface $stringTranslation,
-    ModuleExtensionList $moduleExtensionList
+    ModuleExtensionList $moduleExtensionList,
   ) {
     $this->configManager = $configManager;
     $this->configStorage = $configStorage;

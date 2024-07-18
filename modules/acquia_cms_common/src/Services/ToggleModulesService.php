@@ -36,7 +36,8 @@ class ToggleModulesService {
    */
   public function __construct(
     ModuleExtensionList $extention_list,
-    ModuleInstallerInterface $module_installer) {
+    ModuleInstallerInterface $module_installer,
+  ) {
     $this->extentionList = $extention_list;
     $this->moduleInstaller = $module_installer;
   }

@@ -52,9 +52,11 @@ class SitePreviewController extends ControllerBase {
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    */
-  public function __construct(NextEntityTypeManager $next_entity_type_manager,
-  SitePreviewerManagerInterface $site_preview_manager,
-  EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    NextEntityTypeManager $next_entity_type_manager,
+    SitePreviewerManagerInterface $site_preview_manager,
+    EntityTypeManagerInterface $entity_type_manager,
+  ) {
     $this->nextEntityTypeManager = $next_entity_type_manager;
     $this->sitePreviewerManager = $site_preview_manager;
     $this->entityTypeManager = $entity_type_manager;

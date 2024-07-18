@@ -58,12 +58,13 @@ final class ViewJsonTask extends LocalTaskDefault implements ContainerFactoryPlu
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity storage class.
    */
-  public function __construct(array $configuration,
-  $plugin_id,
-  $plugin_definition,
-  ResourceTypeRepositoryInterface $resource_type_repository,
-  RouteMatchInterface $route_match,
-  EntityTypeManagerInterface $entity_type_manager
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    ResourceTypeRepositoryInterface $resource_type_repository,
+    RouteMatchInterface $route_match,
+    EntityTypeManagerInterface $entity_type_manager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->resourceTypeRepository = $resource_type_repository;

@@ -449,3 +449,21 @@ function acquia_cms_site_studio_update_9000() {
   // Set default node revision delete settings shipped by Acquia CMS.
   $config_handler->processConfigSettings($default_settings);
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ *  Update site-studio editor format filter.
+ */
+function acquia_cms_site_studio_update_9001() {
+  $config_data = [
+    'settings.plugins.ckeditor5_list' => [
+      'properties' => [
+        'reversed' => TRUE,
+        'startIndex' => TRUE,
+      ],
+    ],
+  ];
+
+  _acquia_cms_common_update_page_configurations('editor.editor.cohesion', $config_data);
+}

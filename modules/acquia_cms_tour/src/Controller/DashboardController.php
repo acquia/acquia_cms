@@ -72,11 +72,11 @@ final class DashboardController extends ControllerBase {
    *   The class resolver.
    */
   public function __construct(
-  StateInterface $state,
-  ClassResolverInterface $class_resolver,
-  RequestStack $request_stack,
-  AcquiaCmsTourManager $acquia_cms_tour_manager,
-  StarterKitService $starter_kit_service
+    StateInterface $state,
+    ClassResolverInterface $class_resolver,
+    RequestStack $request_stack,
+    AcquiaCmsTourManager $acquia_cms_tour_manager,
+    StarterKitService $starter_kit_service,
   ) {
     $this->state = $state;
     $this->classResolver = $class_resolver;

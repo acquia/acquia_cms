@@ -4,6 +4,7 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 use Behat\Mink\Element\ElementInterface;
 use Behat\Mink\Element\NodeElement;
+use Drupal\media\Entity\Media;
 use Drupal\Tests\acquia_cms\Traits\AwaitTrait;
 use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
 use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
@@ -110,6 +111,14 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
         $element->click();
       }
     }
+    // Starting from Drupal Core 10.3 the media item now uses media id instead
+    // of index to display media items in media library form.
+    // @see https://www.drupal.org/i/3388913
+    if (version_compare(\Drupal::VERSION, "10.3", ">=")) {
+      $media_items = Media::loadMultiple();
+      $added_media = array_pop($media_items);
+      $position = $added_media->id();
+    }
     /** @var \Behat\Mink\Element\NodeElement $waitElement */
     $waitElement = $this->waitForElementVisible('named', ['field', "media_library_select_form[$position]"], $page);
     $waitElement->check();
@@ -121,6 +130,10 @@ abstract class CohesionTestBase extends ExistingSiteSelenium2DriverTestBase {
   protected function insertSelectedMedia(): void {
     $this->getSession()->wait(10000);
     $this->getSession()->getPage()->find("css", '.ui-dialog-buttonset .media-library-select')->click();
+
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    $assertSession->waitForElementRemoved("css", ".media-library-widget-modal");
   }
 
   /**

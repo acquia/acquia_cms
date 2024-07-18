@@ -52,9 +52,10 @@ abstract class AcquiaCmsStarterKitBase extends FormBase implements AcquiaStarter
    *   The info file parser.
    */
   public function __construct(
-  StateInterface $state,
-  LinkGeneratorInterface $link_generator,
-  InfoParserInterface $info_parser) {
+    StateInterface $state,
+    LinkGeneratorInterface $link_generator,
+    InfoParserInterface $info_parser,
+  ) {
     $this->state = $state;
     $this->linkGenerator = $link_generator;
     $this->infoParser = $info_parser;

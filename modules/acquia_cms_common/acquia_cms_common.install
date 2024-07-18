@@ -319,3 +319,32 @@ function acquia_cms_common_update_9331() {
     \Drupal::state()->delete('acquia_connector.telemetry.opted');
   }
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ *  Update editor format filter.
+ */
+function acquia_cms_common_update_9332() {
+  $configs = [
+    'editor.editor.filtered_html',
+    'editor.editor.full_html',
+  ];
+
+  $config_data = [
+    'settings.plugins.ckeditor5_list' => [
+      'properties' => [
+        'reversed' => FALSE,
+        'startIndex' => TRUE,
+      ],
+    ],
+    'image_upload' => [
+      'status' => FALSE,
+    ],
+  ];
+
+  // Iterate the configurations to update the key.
+  foreach ($configs as $config) {
+    _acquia_cms_common_update_page_configurations($config, $config_data);
+  }
+}

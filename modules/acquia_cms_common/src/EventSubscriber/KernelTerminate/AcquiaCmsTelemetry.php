@@ -89,7 +89,8 @@ class AcquiaCmsTelemetry implements EventSubscriberInterface {
     StateInterface $state,
     string $site_path,
     TimeInterface $time,
-    LoggerChannelFactoryInterface $logger) {
+    LoggerChannelFactoryInterface $logger,
+  ) {
     $this->moduleList = $module_list;
     $this->configFactory = $config_factory;
     $this->state = $state;

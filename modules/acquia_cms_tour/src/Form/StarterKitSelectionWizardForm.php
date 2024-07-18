@@ -92,10 +92,11 @@ class StarterKitSelectionWizardForm extends FormBase {
    *   The acquia cms tour manager class.
    */
   public function __construct(
-  ClassResolverInterface $class_resolver,
-  Renderer $renderer,
-  StateInterface $state,
-  AcquiaCmsStarterKitManager $acquia_cms_tour_manager) {
+    ClassResolverInterface $class_resolver,
+    Renderer $renderer,
+    StateInterface $state,
+    AcquiaCmsStarterKitManager $acquia_cms_tour_manager,
+  ) {
     $this->classResolver = $class_resolver;
     $this->renderer = $renderer;
     $this->state = $state;
