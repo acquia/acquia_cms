@@ -270,6 +270,18 @@ jobs:
           find modules -type f -name "*Test.php" ! -path "*/${MODULE}/*" -exec rm -fr '{}' ';'
           # Do not run any existing site tests. We run them seperately.
           find modules -type d -name ExistingSite | xargs rm -rf && rm -rf tests/src/
+
+          # Remove modules from root composer.json which are not yet Drupal 11 compatible.
+          # @todo: Add them back, once this are compatible.
+          composer remove "drupal/google_analytics" drupal/google_tag "drupal/honeypot" drupal/reroute_email "drupal/shield" drupal/sitestudio_config_management drupal/sitestudio_gin --no-install --no-update
+
+          # Remove all Acquia CMS modules.
+          # @todo: Remove module from below which you want to make Drupal 11 compatible.
+          composer remove "drupal/acquia_cms_audio" "drupal/acquia_cms_component" "drupal/acquia_cms_dam" "drupal/acquia_cms_headless" "drupal/acquia_cms_site_studio" "drupal/acquia_cms_starter" "drupal/acquia_cms_toolbar" "drupal/acquia_cms_tour" --no-install --no-update
+
+          # Add Acquia CMS Common module.
+          composer require drupal/acquia_cms_common:dev-develop --no-install --no-update
+
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
           CHROMEDRIVER_PID=$!
