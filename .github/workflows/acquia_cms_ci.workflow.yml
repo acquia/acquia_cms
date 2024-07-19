@@ -178,7 +178,6 @@ jobs:
   #         composer config repositories.google_analytics vcs https://git.drupalcode.org/issue/google_analytics-3430780.git
   #         composer config repositories.honeypot vcs https://git.drupalcode.org/issue/honeypot-3430920.git
   #         composer config repositories.reroute_email vcs https://git.drupalcode.org/issue/reroute_email-3434204.git
-  #         composer require drupal/google_analytics:"dev-3430780-automated-drupal-11 as dev-4.x" drupal/consumer_image_styles:"dev-3429496-automated-drupal-11 as dev-4.x" drupal/google_tag:"dev-3454903-drupal-11-compatibility as dev-2.0.x" drupal/honeypot:"dev-3430920-automated-drupal-11 as dev-2.1.x" drupal/reroute_email:"dev-3434204-automated-drupal-11 as dev-2.2.x" drupal/config_filter:"dev-3428542-automated-drupal-11 as 2.6" -W --no-install --no-update
   #
   #         # Remove all PHPUnit tests from individual modules, except the integrated & ExistingSite tests.
   #         if [ "${ACMS_JOB}" = "integrated_existing_site_tests" ]; then
@@ -210,7 +209,7 @@ jobs:
   #         ../orca/bin/ci/after_script.sh
   isolated_tests:
     if: ${{ github.event_name == 'pull_request' }}
-    name: acquia_cms (${{ matrix.modules }})
+    name: acquia_cms (${{ matrix.modules }}) on (${{ matrix.orca-job }})
     runs-on: ubuntu-latest
     env:
       # Set ORCA related environment variables.
@@ -241,7 +240,6 @@ jobs:
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
-          - ISOLATED_TEST_ON_NEXT_MAJOR
           - ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_BETA_OR_LATER
         #php-version: [ "8.1" ]
         modules:
@@ -250,16 +248,16 @@ jobs:
           - acquia_cms_common
           - acquia_cms_document
           - acquia_cms_event
-          # - acquia_cms_headless
+          - acquia_cms_headless
           - acquia_cms_image
           - acquia_cms_page
           - acquia_cms_person
           - acquia_cms_place
           - acquia_cms_search
-          # - acquia_cms_site_studio
+          - acquia_cms_site_studio
           - acquia_cms_tour
           - acquia_cms_video
-          # - sitestudio_config_management
+          - sitestudio_config_management
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -280,12 +278,31 @@ jobs:
           # Remove all ExistingSite test in CI.
           find tests/src -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
 
-          # Add vcs path in root composer.json file.
-          composer config repositories.consumer_image_styles vcs https://git.drupalcode.org/issue/consumer_image_styles-3429496.git
-          composer config repositories.google_tag vcs https://git.drupalcode.org/issue/google_tag-3454903.git
-          composer config repositories.google_analytics vcs https://git.drupalcode.org/issue/google_analytics-3430780.git
-          composer config repositories.honeypot vcs https://git.drupalcode.org/issue/honeypot-3430920.git
-          composer config repositories.reroute_email vcs https://git.drupalcode.org/issue/reroute_email-3434204.git
+          # Remove all Acquia CMS modules.
+          # @todo: Remove module from below which you want to make Drupal 11 compatible.
+          composer remove "drupal/acquia_cms_audio" "drupal/acquia_cms_component" "drupal/acquia_cms_dam" "drupal/acquia_cms_headless" "drupal/acquia_cms_site_studio" "drupal/acquia_cms_starter" "drupal/acquia_cms_toolbar" "drupal/acquia_cms_tour" --no-install --no-update
+          find modules -maxdepth 1  -type d ! -path "*/acquia_cms_common" ! -path "modules" -exec rm -fr '{}' ';'
+          composer config repositories.acquia_cms_article --unset
+          composer config repositories.acquia_cms_audio --unset
+          composer config repositories.acquia_cms_component --unset
+          composer config repositories.acquia_cms_dam --unset
+          composer config repositories.acquia_cms_document --unset
+          composer config repositories.acquia_cms_event --unset
+          composer config repositories.acquia_cms_headless --unset
+          composer config repositories.acquia_cms_image --unset
+          composer config repositories.acquia_cms_page --unset
+          composer config repositories.acquia_cms_person --unset
+          composer config repositories.acquia_cms_place --unset
+          composer config repositories.acquia_cms_search --unset
+          composer config repositories.acquia_cms_site_studio --unset
+          composer config repositories.acquia_cms_starter --unset
+          composer config repositories.acquia_cms_toolbar --unset
+          composer config repositories.acquia_cms_tour --unset
+          composer config repositories.acquia_cms_video --unset
+          composer config repositories.sitestudio_config_management --unset
+
+          # Add Acquia CMS Common module.
+          composer require drupal/acquia_cms_common:dev-develop --no-install --no-update
 
           # Remove all PHPUnit test files, excluding the current module's PHPUnit tests.
           find modules -type f -name "*Test.php" ! -path "*/${MODULE}/*" -exec rm -fr '{}' ';'
@@ -384,14 +401,6 @@ jobs:
   #         # Added below in CI to test acquia_cms on Drupal Core >=9.5.
   #         composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
   #         sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
-  #
-  #         # Add vcs path in root composer.json file.
-  #         composer config repositories.consumer_image_styles vcs https://git.drupalcode.org/issue/consumer_image_styles-3429496.git
-  #         composer config repositories.google_tag vcs https://git.drupalcode.org/issue/google_tag-3454903.git
-  #         composer config repositories.google_analytics vcs https://git.drupalcode.org/issue/google_analytics-3430780.git
-  #         composer config repositories.honeypot vcs https://git.drupalcode.org/issue/honeypot-3430920.git
-  #         composer config repositories.reroute_email vcs https://git.drupalcode.org/issue/reroute_email-3434204.git
-  #         composer require drupal/google_analytics:"dev-3430780-automated-drupal-11 as dev-4.x" drupal/consumer_image_styles:"dev-3429496-automated-drupal-11 as dev-4.x" drupal/google_tag:"dev-3454903-drupal-11-compatibility as dev-2.0.x" drupal/honeypot:"dev-3430920-automated-drupal-11 as dev-2.1.x" drupal/reroute_email:"dev-3434204-automated-drupal-11 as dev-2.2.x" drupal/config_filter:"dev-3428542-automated-drupal-11 as 2.6" -W --no-install --no-update
   #
   #         # Remove all PHPunit tests from acquia_cms modules.
   #         find modules/*/tests tests/src -type f -name "*Test.php" -exec rm -fr '{}' ';'
