@@ -132,6 +132,8 @@ jobs:
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
+          - ISOLATED_TEST_ON_NEXT_MAJOR
+          - ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_BETA_OR_LATER
         acms_job:
           - integrated_php_unit_tests
           - integrated_existing_site_tests
@@ -169,6 +171,13 @@ jobs:
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
+
+          # Add vcs path in root composer.json file.
+          composer config repositories.consumer_image_styles vcs https://git.drupalcode.org/issue/consumer_image_styles-3429496.git
+          composer config repositories.google_tag vcs https://git.drupalcode.org/issue/google_tag-3454903.git
+          composer config repositories.google_analytics vcs https://git.drupalcode.org/issue/google_analytics-3430780.git
+          composer config repositories.honeypot vcs https://git.drupalcode.org/issue/honeypot-3430920.git
+          composer config repositories.reroute_email vcs https://git.drupalcode.org/issue/reroute_email-3434204.git
 
           # Remove all PHPUnit tests from individual modules, except the integrated & ExistingSite tests.
           if [ "${ACMS_JOB}" = "integrated_existing_site_tests" ]; then
@@ -231,6 +240,8 @@ jobs:
       matrix:
         orca-job:
           - ISOLATED_TEST_ON_CURRENT
+          - ISOLATED_TEST_ON_NEXT_MAJOR
+          - ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_BETA_OR_LATER
         #php-version: [ "8.1" ]
         modules:
           - acquia_cms_article
@@ -267,6 +278,14 @@ jobs:
         run: |
           # Remove all ExistingSite test in CI.
           find tests/src -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
+
+          # Add vcs path in root composer.json file.
+          composer config repositories.consumer_image_styles vcs https://git.drupalcode.org/issue/consumer_image_styles-3429496.git
+          composer config repositories.google_tag vcs https://git.drupalcode.org/issue/google_tag-3454903.git
+          composer config repositories.google_analytics vcs https://git.drupalcode.org/issue/google_analytics-3430780.git
+          composer config repositories.honeypot vcs https://git.drupalcode.org/issue/honeypot-3430920.git
+          composer config repositories.reroute_email vcs https://git.drupalcode.org/issue/reroute_email-3434204.git
+
           # Remove all PHPUnit test files, excluding the current module's PHPUnit tests.
           find modules -type f -name "*Test.php" ! -path "*/${MODULE}/*" -exec rm -fr '{}' ';'
           # Do not run any existing site tests. We run them seperately.
@@ -328,6 +347,8 @@ jobs:
         orca-job:
           - INTEGRATED_TEST_ON_PREVIOUS_MINOR
           - ISOLATED_TEST_ON_CURRENT
+          - ISOLATED_TEST_ON_NEXT_MAJOR
+          - ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_BETA_OR_LATER
         php-version:
           - 8.1
           - 8.3
@@ -362,6 +383,13 @@ jobs:
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
           composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
           sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
+
+          # Add vcs path in root composer.json file.
+          composer config repositories.consumer_image_styles vcs https://git.drupalcode.org/issue/consumer_image_styles-3429496.git
+          composer config repositories.google_tag vcs https://git.drupalcode.org/issue/google_tag-3454903.git
+          composer config repositories.google_analytics vcs https://git.drupalcode.org/issue/google_analytics-3430780.git
+          composer config repositories.honeypot vcs https://git.drupalcode.org/issue/honeypot-3430920.git
+          composer config repositories.reroute_email vcs https://git.drupalcode.org/issue/reroute_email-3434204.git
 
           # Remove all PHPunit tests from acquia_cms modules.
           find modules/*/tests tests/src -type f -name "*Test.php" -exec rm -fr '{}' ';'
