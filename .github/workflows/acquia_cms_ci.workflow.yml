@@ -200,7 +200,7 @@ jobs:
           ../orca/bin/ci/after_script.sh
   isolated_tests:
     name: acquia_cms (${{ matrix.modules }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       # Set ORCA related environment variables.
       ORCA_SUT_NAME: acquia/acquia_cms
