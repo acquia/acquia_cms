@@ -278,6 +278,25 @@ jobs:
           # Remove all Acquia CMS modules.
           # @todo: Remove module from below which you want to make Drupal 11 compatible.
           composer remove "drupal/acquia_cms_audio" "drupal/acquia_cms_component" "drupal/acquia_cms_dam" "drupal/acquia_cms_headless" "drupal/acquia_cms_site_studio" "drupal/acquia_cms_starter" "drupal/acquia_cms_toolbar" "drupal/acquia_cms_tour" --no-install --no-update
+          find modules -maxdepth 1  -type d ! -path "*/acquia_cms_common" ! -path "modules" -exec rm -fr '{}' ';'
+          composer config repositories.acquia_cms_article --unset
+          composer config repositories.acquia_cms_audio --unset
+          composer config repositories.acquia_cms_component --unset
+          composer config repositories.acquia_cms_dam --unset
+          composer config repositories.acquia_cms_document --unset
+          composer config repositories.acquia_cms_event --unset
+          composer config repositories.acquia_cms_headless --unset
+          composer config repositories.acquia_cms_image --unset
+          composer config repositories.acquia_cms_page --unset
+          composer config repositories.acquia_cms_person --unset
+          composer config repositories.acquia_cms_place --unset
+          composer config repositories.acquia_cms_search --unset
+          composer config repositories.acquia_cms_site_studio --unset
+          composer config repositories.acquia_cms_starter --unset
+          composer config repositories.acquia_cms_toolbar --unset
+          composer config repositories.acquia_cms_tour --unset
+          composer config repositories.acquia_cms_video --unset
+          composer config repositories.sitestudio_config_management --unset
 
           # Add Acquia CMS Common module.
           composer require drupal/acquia_cms_common:dev-develop --no-install --no-update
