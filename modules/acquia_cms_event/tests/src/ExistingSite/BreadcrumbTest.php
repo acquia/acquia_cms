@@ -89,7 +89,7 @@ class BreadcrumbTest extends ExistingSiteBase {
    *   Sets of arguments to pass to the test method.
    */
   public static function providerNoSubType() : array {
-    $object = new self('test');
+    $object = new self('text');
     $map = function (array $arguments) : array {
       unset($arguments[1], $arguments[2][1]);
       return $arguments;

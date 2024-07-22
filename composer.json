@@ -27,10 +27,11 @@
         "drupal/config_filter": "dev-3428542-automated-drupal-11 as 2.6",
         "drupal/consumers": "dev-3429497-automated-drupal-11 as 1.17",
         "drupal/gin": "^3.0@RC",
-        "drupal/google_analytics": "dev-3430780-automated-drupal-11",
         "drupal/google_tag": "dev-3454903-drupal-11-compatibility",
         "drupal/honeypot": "dev-3430920-automated-drupal-11",
+        "drupal/reroute_email": "^2.2",
         "drupal/scheduler": "dev-3434325-automated-drupal-11 as 2.1.0",
+        "drupal/shield": "^1.8",
         "drupal/sitestudio_gin": "^1.0",
         "drush/drush": "^10 || ^11 || ^12 || ^13",
         "mnsami/composer-custom-directory-installer": "^2.0"
@@ -121,15 +122,6 @@
                 }
             }
         },
-        "acquia_cms_headless": {
-            "type": "path",
-            "url": "./modules/acquia_cms_headless",
-            "options": {
-                "versions": {
-                    "drupal/acquia_cms_headless": "dev-develop"
-                }
-            }
-        },
         "acquia_cms_image": {
             "type": "path",
             "url": "./modules/acquia_cms_image",
@@ -175,15 +167,6 @@
                 }
             }
         },
-        "acquia_cms_site_studio": {
-            "type": "path",
-            "url": "./modules/acquia_cms_site_studio",
-            "options": {
-                "versions": {
-                    "drupal/acquia_cms_site_studio": "dev-develop"
-                }
-            }
-        },
         "acquia_cms_starter": {
             "type": "path",
             "url": "./modules/acquia_cms_starter",
@@ -220,15 +203,6 @@
                 }
             }
         },
-        "sitestudio_config_management": {
-            "type": "path",
-            "url": "./modules/sitestudio_config_management",
-            "options": {
-                "versions": {
-                    "drupal/sitestudio_config_management": "dev-develop"
-                }
-            }
-        },
         "consumer_image_styles": {
             "type": "vcs",
             "url": "https://git.drupalcode.org/issue/consumer_image_styles-3429496.git"
@@ -244,10 +218,6 @@
         "honeypot": {
             "type": "vcs",
             "url": "https://git.drupalcode.org/issue/honeypot-3430920.git"
-        },
-        "reroute_email": {
-            "type": "vcs",
-            "url": "https://git.drupalcode.org/issue/reroute_email-3434204.git"
         },
         "config_filter": {
             "type": "vcs",

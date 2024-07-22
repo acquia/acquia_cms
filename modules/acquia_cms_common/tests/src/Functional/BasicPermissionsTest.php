@@ -97,7 +97,7 @@ class BasicPermissionsTest extends BrowserTestBase {
    * @throws \Exception
    */
   public static function providerBasicPermissions(): array {
-    $object = new self();
+    $object = new self('text');
     return [
       [
         'site_builder',
