@@ -288,7 +288,7 @@ final class AcquiaCmsTelemetryTest extends KernelTestBase {
   /**
    * Return sample expected data to test getAcquiaCmsTelemetryData() method.
    */
-  public function telemetryDataProvider(): array {
+  public static function telemetryDataProvider(): array {
     return [
       [
         [

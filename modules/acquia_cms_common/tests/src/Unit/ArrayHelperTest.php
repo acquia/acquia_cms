@@ -37,7 +37,7 @@ class ArrayHelperTest extends UnitTestCase {
   /**
    * Provides the dataProvider for sort method of ArrayHelper class.
    */
-  public function sortArrayDataProvider(): array {
+  public static function sortArrayDataProvider(): array {
     return [
       [
         [
@@ -99,7 +99,7 @@ class ArrayHelperTest extends UnitTestCase {
   /**
    * Provides the dataProvider for isSame method of ArrayHelper class.
    */
-  public function sameArrayDataProvider(): array {
+  public static function sameArrayDataProvider(): array {
     return [
       [
         [

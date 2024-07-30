@@ -1,11 +1,16 @@
 acquia/acquia_cms:
   type: drupal-module
-  version_dev: 1.x-dev
+  version_dev: dev-develop
 
 mnsami/composer-custom-directory-installer:
   type: composer-plugin
 php-http/discovery:
   type: composer-plugin
+
+drupal/scheduler:
+  is_company_package: false
+  type: drupal-module
+  version: "dev-3434325-automated-drupal-11 as 2.1.0"
 
 # Do not install Lightning modules explicitly excluded by ACMS.
 drupal/lightning_layout: ~
