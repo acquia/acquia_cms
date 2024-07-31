@@ -70,6 +70,6 @@ trait DashboardTableTrait {
   /**
    * Returns an array of table headers element.
    */
-  abstract public function getHeaders(): array;
+  abstract public static function getHeaders(): array;
 
 }

@@ -139,7 +139,7 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
    * @return array[]
    *   Sets of arguments to pass to the test method.
    */
-  public function providerMenu(): array {
+  public static function providerMenu(): array {
     return [
       [
         '.toolbar-icon-system-admin-content',
