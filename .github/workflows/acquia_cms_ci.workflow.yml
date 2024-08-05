@@ -131,7 +131,8 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_CURRENT
+          - INTEGRATED_TEST_ON_OLDEST_SUPPORTED
+          # - ISOLATED_TEST_ON_CURRENT
         acms_job:
           - integrated_php_unit_tests
           - integrated_existing_site_tests
@@ -230,7 +231,8 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - ISOLATED_TEST_ON_CURRENT
+          - INTEGRATED_TEST_ON_OLDEST_SUPPORTED
+          # - ISOLATED_TEST_ON_CURRENT
         #php-version: [ "8.1" ]
         modules:
           - acquia_cms_article
@@ -326,8 +328,9 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - INTEGRATED_TEST_ON_PREVIOUS_MINOR
-          - ISOLATED_TEST_ON_CURRENT
+          - INTEGRATED_TEST_ON_OLDEST_SUPPORTED
+          # - INTEGRATED_TEST_ON_PREVIOUS_MINOR
+          # - ISOLATED_TEST_ON_CURRENT
         php-version:
           - 8.1
           - 8.3
