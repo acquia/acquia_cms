@@ -131,7 +131,7 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - INTEGRATED_TEST_ON_OLDEST_SUPPORTED
+          - INTEGRATED_TEST_ON_LATEST_LTS
           # - ISOLATED_TEST_ON_CURRENT
         acms_job:
           - integrated_php_unit_tests
@@ -231,7 +231,7 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - INTEGRATED_TEST_ON_OLDEST_SUPPORTED
+          - INTEGRATED_TEST_ON_LATEST_LTS
           # - ISOLATED_TEST_ON_CURRENT
         #php-version: [ "8.1" ]
         modules:
@@ -328,7 +328,7 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - INTEGRATED_TEST_ON_OLDEST_SUPPORTED
+          - INTEGRATED_TEST_ON_LATEST_LTS
           # - INTEGRATED_TEST_ON_PREVIOUS_MINOR
           # - ISOLATED_TEST_ON_CURRENT
         php-version:
