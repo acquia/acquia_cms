@@ -45,6 +45,7 @@ services:
       - '@theme_handler'
       - '@string_translation'
       - '@extension.list.module'
+      - '@extension.list.theme'
   acquia_cms_common.telemetry:
     class: Drupal\acquia_cms_common\EventSubscriber\KernelTerminate\AcquiaCmsTelemetry
     arguments:
