@@ -50,7 +50,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
@@ -104,7 +104,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
           curl https://gist.githubusercontent.com/vishalkhode1/342a0eee801e51f48b4d9701749c1c94/raw/orca-oldest-support.patch | git -C ../orca apply
       - name: Before Install
         run: |
@@ -200,7 +200,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
           curl https://gist.githubusercontent.com/vishalkhode1/342a0eee801e51f48b4d9701749c1c94/raw/orca-oldest-support.patch | git -C ../orca apply
       - name: Before Install
         run: |
@@ -287,7 +287,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
@@ -359,7 +359,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
           curl https://gist.githubusercontent.com/vishalkhode1/342a0eee801e51f48b4d9701749c1c94/raw/orca-oldest-support.patch | git -C ../orca apply
       - name: Before Install
         run: |
@@ -475,7 +475,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
           # Update the CI by altering modules requirement version.
