@@ -52,8 +52,8 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
-          curl https://gist.githubusercontent.com/chandan-singh7929/902a17bbf0f5c0e0ee536dd5983875f3/raw/4031ae76ca5e8f08b98545bfdcda327f6d38be58/remove-local-settings.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/efe6fd50fc839e0e05480a5eb58d1ba4/raw/c5e81aa3c0fba9f4abe42460f3d24c7ca976a527/remove-local-settings.patch | git -C ../orca apply
       - name: Before Install
         run: |
           # Added below in CI to test acquia_cms on Drupal Core >=9.5.
@@ -153,8 +153,8 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
-          curl https://gist.githubusercontent.com/chandan-singh7929/902a17bbf0f5c0e0ee536dd5983875f3/raw/4031ae76ca5e8f08b98545bfdcda327f6d38be58/remove-local-settings.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/efe6fd50fc839e0e05480a5eb58d1ba4/raw/c5e81aa3c0fba9f4abe42460f3d24c7ca976a527/remove-local-settings.patch | git -C ../orca apply
       # - name: Configure AWS Credentials
       #   uses: aws-actions/configure-aws-credentials@v1
       #   with:
@@ -262,7 +262,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
           # Remove all ExistingSite test in CI.
@@ -349,7 +349,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
           curl https://gist.githubusercontent.com/vishalkhode1/342a0eee801e51f48b4d9701749c1c94/raw/orca-oldest-support.patch | git -C ../orca apply
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -442,8 +442,8 @@ jobs:
 #        run: |
 #          composer self-update
 #          composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-#          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
-#          curl https://gist.githubusercontent.com/chandan-singh7929/902a17bbf0f5c0e0ee536dd5983875f3/raw/4031ae76ca5e8f08b98545bfdcda327f6d38be58/remove-local-settings.patch | git -C ../orca apply
+#          curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
+#          curl https://gist.githubusercontent.com/rajeshreeputra/efe6fd50fc839e0e05480a5eb58d1ba4/raw/c5e81aa3c0fba9f4abe42460f3d24c7ca976a527/remove-local-settings.patch | git -C ../orca apply
 #      - name: Before Install
 #        run: |
 #          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
