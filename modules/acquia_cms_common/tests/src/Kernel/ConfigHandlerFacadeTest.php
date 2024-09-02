@@ -77,7 +77,7 @@ class ConfigHandlerFacadeTest extends KernelTestBase {
    * @return array[]
    *   Sets of arguments to pass to the test method.
    */
-  public function configSettingDataProvider(): array {
+  public static function configSettingDataProvider(): array {
     return [
       ['acquia_cms_common',
         [
