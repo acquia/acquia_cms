@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "891e88be39a2d8657c5300e5d736a7a9",
+    "content-hash": "5e287bda5c91ef6427179ce952604113",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2364,7 +2364,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "7577c0d80458750bcb565f64be7a6415e2097f3a"
+                "reference": "e1a91c8743f43f00d35b680f8c30c66d822e91d2"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2416,7 +2416,7 @@
                 "drupal/acquia_cms_video": "<1.4"
             },
             "require-dev": {
-                "acquia/cohesion": "^7.4",
+                "acquia/cohesion": "^7.4 || ^8.0",
                 "drupal/acquia_claro": "^1.3",
                 "drupal/node_revision_delete": "^2",
                 "drupal/reroute_email": "^2.2",
@@ -2482,12 +2482,12 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_dam",
-                "reference": "6c3a2613d83f0044f91df7f09abf6b77c6ae1095"
+                "reference": "dd4b4497f37a8cc4d3ba2a9f20c52335775c0955"
             },
             "require": {
                 "drupal/acquia_cms_image": "^1.5.10",
                 "drupal/acquia_cms_video": "^1.5.8",
-                "drupal/acquia_dam": "^1"
+                "drupal/acquia_dam": "^1 || dev-3471717-upgrade-acquiacohesion-version"
             },
             "conflict": {
                 "drupal/acquia_cms_article": "<1.5",
@@ -2980,20 +2980,13 @@
         },
         {
             "name": "drupal/acquia_dam",
-            "version": "1.0.14",
+            "version": "dev-3471717-upgrade-acquiacohesion-version",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/acquia_dam.git",
-                "reference": "1.0.14"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_dam-1.0.14.zip",
-                "reference": "1.0.14",
-                "shasum": "663ba4cd98ba776e48e5bcefb2e6a4680b09dd3a"
+                "url": "https://git.drupalcode.org/issue/acquia_dam-3471717.git",
+                "reference": "cd856631518f73467e475b4f69c28b7bc19a0427"
             },
             "require": {
-                "drupal/core": "^9.5 || ^10 || ^11",
                 "drupal/views_remote_data": "^1.0.1",
                 "guzzlehttp/psr7": "^1.0 || ^2.0"
             },
@@ -3002,51 +2995,19 @@
             },
             "require-dev": {
                 "acquia/coding-standards": "^2",
-                "acquia/cohesion": "^7.0",
-                "acquia/cohesion-theme": "^7.0",
+                "acquia/cohesion": "^7.0 || ^8.0",
+                "acquia/cohesion-theme": "^7.0 || ^8.0",
                 "drupal/entity_reference_revisions": "^1.3",
                 "drupal/focal_point": "^1.5 || ^2.0",
                 "drupal/media_acquiadam": "^2.0",
                 "drupal/token": "^1.10"
             },
             "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "1.0.14",
-                    "datestamp": "1723604767",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0-or-later"
             ],
-            "authors": [
-                {
-                    "name": "acquia",
-                    "homepage": "https://www.drupal.org/user/1231722"
-                },
-                {
-                    "name": "Balu Ertl",
-                    "homepage": "https://www.drupal.org/user/1086292"
-                },
-                {
-                    "name": "japerry",
-                    "homepage": "https://www.drupal.org/user/45640"
-                },
-                {
-                    "name": "mglaman",
-                    "homepage": "https://www.drupal.org/user/2416470"
-                }
-            ],
             "description": "Integrates with Acquia DAM",
-            "homepage": "https://www.drupal.org/project/acquia_dam",
-            "support": {
-                "source": "https://git.drupalcode.org/project/acquia_dam"
-            }
+            "time": "2024-09-03T03:48:36+00:00"
         },
         {
             "name": "drupal/acquia_purge",
@@ -19849,7 +19810,8 @@
         "drupal/gin": 5,
         "drupal/google_analytics": 20,
         "drupal/sitestudio_config_management": 20,
-        "drupal/sitestudio_gin": 20
+        "drupal/sitestudio_gin": 20,
+        "drupal/acquia_dam": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
