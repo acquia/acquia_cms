@@ -93,6 +93,13 @@ jobs:
           #coverage: xdebug
       - name: Execute PHPStan
         run: |
+          # Remove Acquia CMS modules.
+          # @todo: Remove module from below which you want to make Drupal 11 compatible.
+          composer remove "drupal/acquia_cms_headless" --no-install --no-update
+          # Remove acquia_cms_headless module.
+          rm -fr modules/acquia_cms_headless
+          # Unset the repository path.
+          composer config repositories.acquia_cms_headless --unset
           rm composer.lock
           composer install
           ./vendor/bin/phpstan analyze
