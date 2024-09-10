@@ -46,7 +46,7 @@ class IntegratedPermissionsTest extends ExistingSiteBase {
    * @throws \Exception
    */
   public static function providerBasicPermissions(): array {
-    $instance = new static();
+    $instance = new static('test');
     return [
       [
         'developer',
