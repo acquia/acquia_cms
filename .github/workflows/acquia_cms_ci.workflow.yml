@@ -106,7 +106,7 @@ jobs:
   integrated_tests:
     if: ${{ github.event_name == 'pull_request' }}
     name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       # Site test artifacts.
       # ACMS_DB_ARTIFACT: "/home/runner/work/acquia_cms/acquia_cms/tests/acms.sql.gz"
