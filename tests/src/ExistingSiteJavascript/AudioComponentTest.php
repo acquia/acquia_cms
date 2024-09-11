@@ -49,7 +49,7 @@ class AudioComponentTest extends CohesionComponentTestBase {
 
     // Add audio media.
     $this->getSession()->getPage()->fillField('soundcloud_url', 'https://soundcloud.com/yungh-tej/na-na-na-official-song-osekhon-ft-tej-gill?utm_source=clipboard&utm_medium=text&utm_campaign=so');
-    $this->getSession()->getPage()->pressButton('Add');
+    $this->getSession()->getPage()->find("css", 'form[id^="soundcloud-media-add-form"] [id^="edit-submit"]')->click();
     $assertSession->waitForElementVisible('css', '.field--name-name input[name="media[0][fields][name][0][value]"]');
     $this->getSession()->getPage()->find("css", ".ui-dialog-buttonset button")->click();
     // Wait for Media Library form to appear showing list of media items.
