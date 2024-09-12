@@ -82,14 +82,14 @@ class NodeBreadcrumbTest extends BrowserTestBase {
     $this->drupalLogin($this->adminUser);
     $node = $this->drupalCreateNode([
       'type' => 'page',
-      'title' => $this->t('My Page Content'),
+      'title' => 'My Page Content',
       'uid' => $this->adminUser->id(),
     ]);
     $node->save();
     $this->assertBreadcrumb("node/" . $node->id() . "/edit", [
       $this->frontPagePath => 'Home',
       'node' => 'Node',
-      $node->toUrl()->toString() => $this->t('My Page Content'),
+      $node->toUrl()->toString() => 'My Page Content',
     ]);
   }
 
