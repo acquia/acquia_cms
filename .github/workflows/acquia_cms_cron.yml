@@ -35,7 +35,6 @@ jobs:
         orca-job:
           - STATIC_CODE_ANALYSIS
           - STRICT_DEPRECATED_CODE_SCAN
-        #php-version: [ "8.1" ]
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 20.x
@@ -52,11 +51,7 @@ jobs:
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
-        run: |
-          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
-          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
-          ../orca/bin/ci/before_install.sh
+        run: ../orca/bin/ci/before_install.sh
       - name: Install
         shell: 'script -q -e -c "bash {0}"'
         run: ./tests/ci/install.sh
@@ -95,7 +90,7 @@ jobs:
           node-version: 20.x
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.3
       - name: Setup MySQL
         run: |
           sudo /etc/init.d/mysql start
@@ -108,21 +103,6 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/342a0eee801e51f48b4d9701749c1c94/raw/orca-oldest-support.patch | git -C ../orca apply
       - name: Before Install
         run: |
-          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
-          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
-
-          # One of the patch is failing on Drupal Core 9.5. So remove that patch.
-          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
-            # Remove the failing php on Drupal Core 9.5.
-            # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
-
-            # Remove drupal/core patch as it's needed for latest Drupal Core only.
-            composer config extra.patches.drupal/core {} --json
-            sed -i 's/2598.patch",/2598.patch"/' modules/acquia_cms_common/composer.json
-            sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
-            sed -i '/3370946-page-title-backport-10-2-2_0.patch/d' modules/acquia_cms_common/composer.json
-          fi
 
           # Remove all PHPUnit tests from individual modules, except the integrated & ExistingSite tests.
           if [ "${ACMS_JOB}" = "integrated_existing_site_tests" ]; then
@@ -179,12 +159,12 @@ jobs:
           - ISOLATED_TEST_ON_NEXT_MINOR_DEV
           - INTEGRATED_TEST_ON_LATEST_LTS
         php-version:
-          - 8.2
+          - 8.1
           - 8.3
         exclude:
           - php-version: 8.3
             orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-          - php-version: 8.2
+          - php-version: 8.1
             orca-job: [ ISOLATED_TEST_ON_CURRENT_DEV, ISOLATED_TEST_ON_NEXT_MINOR_DEV]
     steps:
       - uses: actions/checkout@v4
@@ -204,26 +184,6 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/342a0eee801e51f48b4d9701749c1c94/raw/orca-oldest-support.patch | git -C ../orca apply
       - name: Before Install
         run: |
-          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
-          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
-
-          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
-            # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
-
-            # Remove drupal/core patch as it's needed for latest Drupal Core only.
-            composer config extra.patches.drupal/core {} --json
-            sed -i 's/2598.patch",/2598.patch"/' modules/acquia_cms_common/composer.json
-            sed -i '/3370946-page-title-backport-10-2-2_0.patch/d' modules/acquia_cms_common/composer.json
-          fi
-
-          # For Drupal 10.2.x i.e ISOLATED_TEST_ON_CURRENT_DEV, we are removing the patch.
-          # @todo: Update it accordingly in ticket ACMS-3598.
-          if [ "${ORCA_JOB}" = "ISOLATED_TEST_ON_CURRENT_DEV" ]; then
-            sed -i 's/2598.patch",/2598.patch"/' modules/acquia_cms_common/composer.json
-            sed -i '/3370946-page-title-backport-10-2-2_0.patch/d' modules/acquia_cms_common/composer.json
-          fi
-
           # Do not run any existing site tests. We run them seperately.
           find tests/src modules -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
           ../orca/bin/ci/before_install.sh
@@ -289,12 +249,7 @@ jobs:
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
-        run: |
-          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
-          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
-
-          ../orca/bin/ci/before_install.sh
+        run: ../orca/bin/ci/before_install.sh
       - name: Install
         shell: 'script -q -e -c "bash {0}"'
         run: ./tests/ci/install.sh
@@ -336,11 +291,10 @@ jobs:
           - ISOLATED_TEST_ON_CURRENT
           - INTEGRATED_TEST_ON_PREVIOUS_MINOR
         php-version:
-          - 8.1
           - 8.3
-        exclude:
-          - php-version: 8.3
-            orca-job: INTEGRATED_TEST_ON_PREVIOUS_MINOR
+#        exclude:
+#          - php-version: 8.3
+#            orca-job: INTEGRATED_TEST_ON_PREVIOUS_MINOR
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 20.x
@@ -363,35 +317,9 @@ jobs:
           curl https://gist.githubusercontent.com/vishalkhode1/342a0eee801e51f48b4d9701749c1c94/raw/orca-oldest-support.patch | git -C ../orca apply
       - name: Before Install
         run: |
-          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
-          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
 
           # Remove all PHPunit tests from acquia_cms modules.
           find modules/*/tests tests/src -type f -name "*Test.php" -exec rm -fr '{}' ';'
-
-          # Remove the failing php on Drupal Core 9.5.
-          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_LATEST_LTS" ]; then
-            # NEW_JSON=$(composer config extra.patches."drupal/core" | sed -r 's/,?"3328187.*3142.patch"//')
-
-            # Remove drupal/core patch as it's needed for latest Drupal Core only.
-            composer config extra.patches.drupal/core {} --json
-            sed -i 's/2598.patch",/2598.patch"/' modules/acquia_cms_common/composer.json
-            sed -i '/3356894-mr_3896.patch/d' modules/acquia_cms_common/composer.json
-            sed -i '/3370946-page-title-backport-10-2-2_0.patch/d' modules/acquia_cms_common/composer.json
-          # Change requireSameDimensions to true in backstop settings.
-            sed -i '54s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-            sed -i '111s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-            sed -i '130s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-            sed -i '149s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-            sed -i '168s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-            sed -i '187s/"requireSameDimensions": true/"requireSameDimensions": false/' tests/backstop/backstop-settings.js
-          fi
-
-          if [ "${ORCA_JOB}" = "INTEGRATED_TEST_ON_PREVIOUS_MINOR" ]; then
-            # Update drupal/core patch as per Drupal Core version.
-            sed -i 's/2024-01-18\/3370946-page-title-backport-10-2-2_0.patch/2024-01-18\/3370946-page-title-backport-10-1-8.patch/g' modules/acquia_cms_common/composer.json
-          fi
 
           ../orca/bin/ci/before_install.sh
           chromedriver --disable-dev-shm-usage --disable-extensions --disable-gpu --headless --no-sandbox --port=4444 &
