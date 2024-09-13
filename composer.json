@@ -18,7 +18,7 @@
     "homepage": "https://github.com/acquia/acquia_cms",
     "require": {
         "acquia/acquia-cms-starterkit": "^1",
-        "acquia/drupal-recommended-settings": "^1.0@beta",
+        "acquia/drupal-recommended-settings": "dev-ACMS-4134",
         "drupal/acquia_cms_audio": "dev-develop",
         "drupal/acquia_cms_component": "dev-develop",
         "drupal/acquia_cms_dam": "dev-develop",
@@ -37,13 +37,16 @@
         "drupal/shield": "^1.7",
         "drupal/sitestudio_config_management": "dev-develop",
         "drupal/sitestudio_gin": "dev-3434617-automated-drupal-11",
-        "drush/drush": "^10 || ^11 || ^12 || ^13",
+        "drush/drush": "^13",
         "mnsami/composer-custom-directory-installer": "^2.0"
     },
     "require-dev": {
         "acquia/coding-standards": "^1.0",
-        "drupal/core-composer-scaffold": "^10 || ^11",
-        "drupal/core-dev": "^10 || ^11",
+        "drupal/core": "^11",
+        "drupal/core-composer-scaffold": "^11",
+        "drupal/core-dev": "^11",
+        "drupal/core-project-message": "^11",
+        "drupal/core-recommended": "^11",
         "ergebnis/composer-normalize": "^2.31.0",
         "mglaman/drupal-check": "^1.4",
         "oomphinc/composer-installers-extender": "^1.1 || ^2",
