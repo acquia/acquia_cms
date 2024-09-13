@@ -11,7 +11,6 @@ on:
 
 jobs:
   static_code_analysis:
-    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     env:
       # Provide your package's name.
@@ -76,7 +75,6 @@ jobs:
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
   drupal_check:
-    if: ${{ github.event_name == 'pull_request' }}
     name: PHPStan
     runs-on: ubuntu-latest
     strategy:
@@ -104,7 +102,6 @@ jobs:
           composer install
           ./vendor/bin/phpstan analyze
   integrated_tests:
-    if: ${{ github.event_name == 'pull_request' }}
     name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
     runs-on: ubuntu-24.04
     env:
@@ -214,7 +211,6 @@ jobs:
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
   isolated_tests:
-    if: ${{ github.event_name == 'pull_request' }}
     name: acquia_cms (${{ matrix.modules }}) on (${{ matrix.orca-job }})
     runs-on: ubuntu-24.04
     env:
@@ -314,7 +310,6 @@ jobs:
           ../orca/bin/ci/after_failure.sh
           ../orca/bin/ci/after_script.sh
   backstop_tests:
-    if: ${{ github.event_name == 'pull_request' }}
     name: backstop with ${{ matrix.orca-job }} on PHP ${{ matrix.php-version }}
     runs-on: ubuntu-latest
     env:
