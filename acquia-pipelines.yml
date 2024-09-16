@@ -20,6 +20,7 @@ events:
             - cd docroot/sites
             - ln -s default headless
             - ln -s default community
+            - ln -s default d11
             - cd -
             - composer archive --format zip --file acquia_cms
             - unzip acquia_cms.zip -d docroot/modules/acquia_cms
