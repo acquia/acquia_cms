@@ -30,7 +30,7 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
   /**
    * {@inheritdoc}
    */
-  public function getHeaders(): array {
+  public static function getHeaders(): array {
     return [
       [
         "headers" => ["ID", "Name", "Site URL", "Operations"],

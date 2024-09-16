@@ -60,14 +60,15 @@ curl "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" -o ${OR
 if [ -n "${ACMS_JOB}" ]; then
   if [ "${ACMS_JOB}" == "backstop_tests" ] && [ "${CORE_VERSION}" == "LATEST_LTS" ]; then
     composer config --unset repositories.acquia_cms_common
-    composer require drupal/acquia_cms_common:2.x-dev -W
+    composer require drupal/acquia_cms_common:3.x-dev -W
   fi
   if [ "${ACMS_JOB}" == "dev_version_test" ]; then
     composer config extra.composer-exit-on-patch-failure "false" --json
     composer config minimum-stability dev
     composer config prefer-stable false
     composer update "drupal/*"
-    composer update "drupal/next:1.0.x-dev" "drupal/acquia_search:3.1.x-dev"
+    # composer update "drupal/next:1.0.x-dev" "drupal/acquia_search:3.1.x-dev"
+    composer update "drupal/acquia_search:3.1.x-dev"
     composer update "drupal/core*" "acquia/cohesion*" --prefer-stable -W
   fi
   if [ "${ACMS_JOB}" != "dev_version_test" ]; then

@@ -43,6 +43,24 @@ function acquia_cms_search_views_plugins_query_alter(array &$definitions) {
 }
 
 /**
+ * Implements hook_views_plugins_cache_alter().
+ */
+function acquia_cms_search_views_plugins_cache_alter(&$definitions) {
+  // This hook was implemented to provide backward compatibility for an issue
+  // that was fixed in search_api:8.x-1.32. A new views_cache plugin was,
+  // introduced, and accordingly, views configurations were updated. However,
+  // this change causes issues with Drupal Core 9.x because the release
+  // were new plugin was introduced doesn't support Drupal Core 9.x.
+  // @see https://www.drupal.org/project/search_api/issues/3423063.
+  // @todo Remove this & SearchApiNoneCacheBC, after we drop CORE 9.x support.
+  if (!isset($definitions['search_api_none'])) {
+    $definitions['search_api_none_bc']['id'] = 'search_api_none';
+    $definitions['search_api_none'] = $definitions['search_api_none_bc'];
+  }
+  unset($definitions['search_api_none_bc']);
+}
+
+/**
  * Implements hook_ENTITY_TYPE_insert() for node types.
  */
 function acquia_cms_search_node_type_insert(NodeTypeInterface $node_type) {

@@ -26,11 +26,19 @@ class StarterKitSelectionForm extends AcquiaCmsStarterKitBase {
   protected $formName = 'acquia_cms_starter_kit_selection';
 
   /**
+   * Starterkit service.
+   *
+   * @var \Drupal\acquia_cms_tour\Services\StarterKitService
+   */
+  protected $starterKitService;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     /** @var static $instance */
     $instance = parent::create($container);
+    $instance->starterKitService = $container->get('acquia_cms_tour.starter_kit');
     return $instance;
   }
 
@@ -45,12 +53,10 @@ class StarterKitSelectionForm extends AcquiaCmsStarterKitBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-
-    $service = \Drupal::service('acquia_cms_tour.starter_kit');
     $missingModules = [
-      'acquia_cms_enterprise_low_code' => $service->getMissingModules('acquia_cms_enterprise_low_code'),
-      'acquia_cms_community' => $service->getMissingModules('acquia_cms_community'),
-      'acquia_cms_headless' => $service->getMissingModules('acquia_cms_headless'),
+      'acquia_cms_enterprise_low_code' => $this->starterKitService->getMissingModules('acquia_cms_enterprise_low_code'),
+      'acquia_cms_community' => $this->starterKitService->getMissingModules('acquia_cms_community'),
+      'acquia_cms_headless' => $this->starterKitService->getMissingModules('acquia_cms_headless'),
     ];
     $defaultStarterKit = 'acquia_cms_community';
     if (!$missingModules['acquia_cms_enterprise_low_code']) {
@@ -123,7 +129,7 @@ class StarterKitSelectionForm extends AcquiaCmsStarterKitBase {
         '@message @missingModules </i></b></p></div>',
         [
           '@message' => $formattedMessage,
-          '@missingModules' => $service->getMissingModulesCommand($missingModules['acquia_cms_enterprise_low_code']),
+          '@missingModules' => $this->starterKitService->getMissingModulesCommand($missingModules['acquia_cms_enterprise_low_code']),
         ]
       );
       $form[$formName]['requirement_message_low_code'] = [
@@ -141,7 +147,7 @@ class StarterKitSelectionForm extends AcquiaCmsStarterKitBase {
         '@message @missingModules </i></b></p></div>',
         [
           '@message' => $formattedMessage,
-          '@missingModules' => $service->getMissingModulesCommand($missingModules['acquia_cms_community']),
+          '@missingModules' => $this->starterKitService->getMissingModulesCommand($missingModules['acquia_cms_community']),
         ]
       );
       $form[$formName]['requirement_message_community'] = [
@@ -159,7 +165,7 @@ class StarterKitSelectionForm extends AcquiaCmsStarterKitBase {
         '@message @missingModules </i></b></p></div>',
         [
           '@message' => $formattedMessage,
-          '@missingModules' => $service->getMissingModulesCommand($missingModules['acquia_cms_community']),
+          '@missingModules' => $this->starterKitService->getMissingModulesCommand($missingModules['acquia_cms_community']),
         ]
       );
       $form[$formName]['requirement_message_hedless'] = [

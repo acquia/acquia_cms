@@ -12,6 +12,7 @@ use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
+use Drupal\Core\Extension\ThemeExtensionList;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
@@ -102,6 +103,13 @@ final class ConfigImporterService {
   protected $moduleExtensionList;
 
   /**
+   * The extension.list.theme service object.
+   *
+   * @var \Drupal\Core\Extension\ThemeExtensionList
+   */
+  protected $themeExtensionList;
+
+  /**
    * Constructs the service.
    *
    * @param \Drupal\Core\Config\ConfigManagerInterface $configManager
@@ -126,6 +134,8 @@ final class ConfigImporterService {
    *   Holds string_translation service object.
    * @param \Drupal\Core\Extension\ModuleExtensionList $moduleExtensionList
    *   Holds extension.list.module service object.
+   * @param \Drupal\Core\Extension\ThemeExtensionList $themeExtensionList
+   *   Holds extension.list.theme service object.
    */
   public function __construct(
     ConfigManagerInterface $configManager,
@@ -139,6 +149,7 @@ final class ConfigImporterService {
     ThemeHandlerInterface $themeHandler,
     TranslationInterface $stringTranslation,
     ModuleExtensionList $moduleExtensionList,
+    ThemeExtensionList $themeExtensionList,
   ) {
     $this->configManager = $configManager;
     $this->configStorage = $configStorage;
@@ -151,6 +162,7 @@ final class ConfigImporterService {
     $this->themeHandler = $themeHandler;
     $this->stringTranslation = $stringTranslation;
     $this->moduleExtensionList = $moduleExtensionList;
+    $this->themeExtensionList = $themeExtensionList;
   }
 
   /**
@@ -171,7 +183,8 @@ final class ConfigImporterService {
       $this->moduleInstaller,
       $this->themeHandler,
       $this->stringTranslation,
-      $this->moduleExtensionList
+      $this->moduleExtensionList,
+      $this->themeExtensionList
     );
     if ($config_importer->alreadyImporting()) {
       $loggerManager->warning('Another request may be synchronizing configuration already.');
@@ -209,15 +222,7 @@ final class ConfigImporterService {
         // coordinating.
         $message = 'The import failed due to the following reasons:' . "\n";
         $message .= implode("\n", $config_importer->getErrors());
-
-        if (version_compare(\Drupal::VERSION, '10.1', '>=')) {
-          Error::logException('config_import', $e);
-        }
-        else {
-          // Versions prior to 10.1 logException methos does not exist.
-          // @phpstan-ignore-next-line
-          watchdog_exception('config_import', $e);
-        }
+        Error::logException(\Drupal::logger('config_import'), $e);
         throw new \Exception($message);
       }
     }

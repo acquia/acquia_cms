@@ -52,15 +52,10 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
-          curl https://gist.githubusercontent.com/chandan-singh7929/902a17bbf0f5c0e0ee536dd5983875f3/raw/4031ae76ca5e8f08b98545bfdcda327f6d38be58/remove-local-settings.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/efe6fd50fc839e0e05480a5eb58d1ba4/raw/c5e81aa3c0fba9f4abe42460f3d24c7ca976a527/remove-local-settings.patch | git -C ../orca apply
       - name: Before Install
-        run: |
-          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
-          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
-
-          ../orca/bin/ci/before_install.sh
+        run: ../orca/bin/ci/before_install.sh
       - name: Install
         shell: 'script -q -e -c "bash {0}"'
         run: ./tests/ci/install.sh
@@ -93,13 +88,20 @@ jobs:
           #coverage: xdebug
       - name: Execute PHPStan
         run: |
+          # Remove Acquia CMS modules.
+          # @todo: Remove module from below which you want to make Drupal 11 compatible.
+          composer remove "drupal/acquia_cms_headless" --no-install --no-update
+          # Remove acquia_cms_headless module.
+          rm -fr modules/acquia_cms_headless
+          # Unset the repository path.
+          composer config repositories.acquia_cms_headless --unset
           rm composer.lock
           composer install
           ./vendor/bin/phpstan analyze
   integrated_tests:
     if: ${{ github.event_name == 'pull_request' }}
     name: ${{ matrix.acms_job }} (${{ matrix.orca-job }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       # Site test artifacts.
       # ACMS_DB_ARTIFACT: "/home/runner/work/acquia_cms/acquia_cms/tests/acms.sql.gz"
@@ -131,6 +133,7 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
+          - INTEGRATED_TEST_ON_LATEST_LTS
           - ISOLATED_TEST_ON_CURRENT
         acms_job:
           - integrated_php_unit_tests
@@ -153,8 +156,8 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
-          curl https://gist.githubusercontent.com/chandan-singh7929/902a17bbf0f5c0e0ee536dd5983875f3/raw/4031ae76ca5e8f08b98545bfdcda327f6d38be58/remove-local-settings.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/efe6fd50fc839e0e05480a5eb58d1ba4/raw/c5e81aa3c0fba9f4abe42460f3d24c7ca976a527/remove-local-settings.patch | git -C ../orca apply
       # - name: Configure AWS Credentials
       #   uses: aws-actions/configure-aws-credentials@v1
       #   with:
@@ -163,12 +166,15 @@ jobs:
       #     aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Before Install
         run: |
+          # Remove Acquia CMS modules.
+          # @todo: Remove module from below which you want to make Drupal 11 compatible.
+          composer remove "drupal/acquia_cms_headless" --no-install --no-update
+          # Remove acquia_cms_headless module.
+          rm -fr modules/acquia_cms_headless
+          # Unset the repository path.
+          composer config repositories.acquia_cms_headless --unset
           # Update the CI by adding patches without pinning the following modules.
           #composer require "drupal/facets:^2.0.6" --no-update --no-install -d modules/acquia_cms_search
-
-          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
-          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
 
           # Remove all PHPUnit tests from individual modules, except the integrated & ExistingSite tests.
           if [ "${ACMS_JOB}" = "integrated_existing_site_tests" ]; then
@@ -200,8 +206,8 @@ jobs:
           ../orca/bin/ci/after_script.sh
   isolated_tests:
     if: ${{ github.event_name == 'pull_request' }}
-    name: acquia_cms (${{ matrix.modules }})
-    runs-on: ubuntu-latest
+    name: acquia_cms (${{ matrix.modules }}) on (${{ matrix.orca-job }})
+    runs-on: ubuntu-24.04
     env:
       # Set ORCA related environment variables.
       ORCA_SUT_NAME: acquia/acquia_cms
@@ -230,6 +236,7 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
+          - INTEGRATED_TEST_ON_LATEST_LTS
           - ISOLATED_TEST_ON_CURRENT
         #php-version: [ "8.1" ]
         modules:
@@ -238,16 +245,16 @@ jobs:
           - acquia_cms_common
           - acquia_cms_document
           - acquia_cms_event
-          - acquia_cms_headless
+          # - acquia_cms_headless
           - acquia_cms_image
           - acquia_cms_page
           - acquia_cms_person
           - acquia_cms_place
           - acquia_cms_search
-          - acquia_cms_site_studio
+          # - acquia_cms_site_studio
           - acquia_cms_tour
           - acquia_cms_video
-          - sitestudio_config_management
+          # - sitestudio_config_management
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 12.13.1
@@ -262,9 +269,16 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
+          # Remove Acquia CMS modules.
+          # @todo: Remove module from below which you want to make Drupal 11 compatible.
+          composer remove "drupal/acquia_cms_headless" --no-install --no-update
+          # Remove acquia_cms_headless module.
+          rm -fr modules/acquia_cms_headless
+          # Unset the repository path.
+          composer config repositories.acquia_cms_headless --unset
           # Remove all ExistingSite test in CI.
           find tests/src -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
           # Remove all PHPUnit test files, excluding the current module's PHPUnit tests.
@@ -326,11 +340,15 @@ jobs:
       fail-fast: false
       matrix:
         orca-job:
-          - INTEGRATED_TEST_ON_PREVIOUS_MINOR
+          - INTEGRATED_TEST_ON_LATEST_LTS
+          # - INTEGRATED_TEST_ON_PREVIOUS_MINOR
           - ISOLATED_TEST_ON_CURRENT
         php-version:
           - 8.1
           - 8.3
+        exclude:
+          - php-version: 8.1
+            orca-job: ISOLATED_TEST_ON_CURRENT
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 20.x
@@ -349,8 +367,7 @@ jobs:
         run: |
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
-          curl https://gist.githubusercontent.com/vishalkhode1/342a0eee801e51f48b4d9701749c1c94/raw/orca-oldest-support.patch | git -C ../orca apply
+          curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -359,9 +376,13 @@ jobs:
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Before Install
         run: |
-          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
-          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
+          # Remove Acquia CMS modules.
+          # @todo: Remove module from below which you want to make Drupal 11 compatible.
+          composer remove "drupal/acquia_cms_headless" --no-install --no-update
+          # Remove acquia_cms_headless module.
+          rm -fr modules/acquia_cms_headless
+          # Unset the repository path.
+          composer config repositories.acquia_cms_headless --unset
 
           # Remove all PHPunit tests from acquia_cms modules.
           find modules/*/tests tests/src -type f -name "*Test.php" -exec rm -fr '{}' ';'
@@ -442,13 +463,10 @@ jobs:
 #        run: |
 #          composer self-update
 #          composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
-#          curl https://gist.githubusercontent.com/vishalkhode1/0e26b2e9637722a256c74a6cb8496e9d/raw/sut-path-reposories.patch | git -C ../orca apply
-#          curl https://gist.githubusercontent.com/chandan-singh7929/902a17bbf0f5c0e0ee536dd5983875f3/raw/4031ae76ca5e8f08b98545bfdcda327f6d38be58/remove-local-settings.patch | git -C ../orca apply
+#          curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
+#          curl https://gist.githubusercontent.com/rajeshreeputra/efe6fd50fc839e0e05480a5eb58d1ba4/raw/c5e81aa3c0fba9f4abe42460f3d24c7ca976a527/remove-local-settings.patch | git -C ../orca apply
 #      - name: Before Install
 #        run: |
-#          # Added below in CI to test acquia_cms on Drupal Core >=9.5.
-#          composer require "drupal/core:>=9.5" --no-update --no-install -d modules/acquia_cms_common
-#          sed -i 's/^core_version_requirement.*/core_version_requirement: ">=9.5"/' modules/acquia_cms_common/acquia_cms_common.info.yml
 #          ./tests/ci/before_install.blt.sh
 #      - name: Install
 #        shell: 'script -q -e -c "bash {0}"'

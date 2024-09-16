@@ -30,7 +30,7 @@ class DashboardApiUsersTest extends HeadlessTestBase {
   /**
    * {@inheritdoc}
    */
-  public function getHeaders(): array {
+  public static function getHeaders(): array {
     return [
       [
         "headers" => ["User Name", "Roles", "Status", "Operations"],

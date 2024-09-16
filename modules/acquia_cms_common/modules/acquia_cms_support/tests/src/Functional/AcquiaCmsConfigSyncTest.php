@@ -176,7 +176,7 @@ class AcquiaCmsConfigSyncTest extends BrowserTestBase {
    * @return array[]
    *   Sets of arguments to pass to the test method.
    */
-  public function providerAcquiaConfigSyncPagesForNonAdmin() {
+  public static function providerAcquiaConfigSyncPagesForNonAdmin() {
     return [
       'anonymous user' => [NULL],
       'authenticated user' => [
