@@ -15,6 +15,17 @@ Contact Michael Sherron or Prafful Nagwani for an invitation.
 ### Background
 To provide a consistent environment for our development team, Acquia CMS is developed using Acquia's Cloud IDE service, which provides a VSCode-like developer experience. It is possible to work on Acquia CMS on your own machine, using an IDE of your choice, but we do not recommend that set-up in most circumstances.
 
+### Setting up using DDEV
+1. Install docker provider [Colima](https://ddev.readthedocs.io/en/stable/users/install/docker-installation/#colima) using brew `brew install colima`.
+2. Start colima services `colima start`.
+3. Install ddev using brew `brew install ddev/ddev/ddev`.
+4. Clone this repository `git clone git@github.com:acquia/acquia_cms.git`.
+5. Change directory to acquia_cms `cd acquia_cms`.
+6. Update your private environment variable from `.ddev/config.private-environment-variables.yml`.
+7. Run `ddev start` to star container.
+8. Install site using `ddev composer acms:install` and provide the input requested by script to proceed with installation.
+9. Visit the site [http://acquia-cms.ddev.site](http://acquia-cms.ddev.site).
+
 ### Setting up a Cloud IDE
 Because there is a limited number of Cloud IDEs available to the Acquia CMS team, each active developer should only need (and have) one. Therefore, you should only do this once.
 
