@@ -226,7 +226,7 @@ final class DashboardController extends ControllerBase {
       $form['help_text'] = [
         '#type' => 'markup',
         '#markup' => $this->t("<i><h3>It seems like you have installed minimal Acquia CMS, which does not have any specific configurations. You are all set. Once you enable any of the modules supported by the wizard, they should start appearing here.
-        (ex. google_tag, gecoder, recaptcha, cohesion etc.).</h3></i>"),
+        (ex. gecoder, recaptcha, cohesion etc.).</h3></i>"),
       ];
     }
     $form['check_total']['#value'] = $total;
