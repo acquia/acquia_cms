@@ -10,7 +10,7 @@ RED="\033[0;31m"
 RED_BG="\033[41m"
 WHITE="\033[1;37m"
 
-declare -a acquia_cms_modules=("acquia_cms_article" "acquia_cms_audio" "acquia_cms_common" "acquia_cms_component" "acquia_cms_dam" "acquia_cms_document" "acquia_cms_event" "acquia_cms_headless" "acquia_cms_image" "acquia_cms_page" "acquia_cms_person" "acquia_cms_place" "acquia_cms_search" "acquia_cms_site_studio" "acquia_cms_starter" "acquia_cms_toolbar" "acquia_cms_tour" "acquia_cms_video" "sitestudio_config_management")
+declare -a acquia_cms_modules=("acquia_cms_article" "acquia_cms_audio" "acquia_cms_common" "acquia_cms_component" "acquia_cms_dam" "acquia_cms_document" "acquia_cms_event" "acquia_cms_headless" "acquia_cms_image" "acquia_cms_page" "acquia_cms_person" "acquia_cms_place" "acquia_cms_search" "acquia_cms_site_studio" "acquia_cms_starter" "acquia_cms_toolbar" "acquia_cms_tour" "acquia_cms_video")
 
 # Displays the command help text.
 display_help() {
@@ -238,7 +238,6 @@ function add_drupal_remote() {
   remote drupal_acquia_cms_toolbar git@git.drupal.org:project/acquia_cms_toolbar.git
   remote drupal_acquia_cms_tour git@git.drupal.org:project/acquia_cms_tour.git
   remote drupal_acquia_cms_video git@git.drupal.org:project/acquia_cms_video.git
-  remote sitestudio_config_management git@git.drupal.org:project/sitestudio_config_management.git
 
   # Call the split function to push the code.
   split_drupal_repo
@@ -268,7 +267,6 @@ function split_drupal_repo() {
   split 'modules/acquia_cms_toolbar' drupal_acquia_cms_toolbar
   split 'modules/acquia_cms_tour' drupal_acquia_cms_tour
   split 'modules/acquia_cms_video' drupal_acquia_cms_video
-  split 'modules/sitestudio_config_management' sitestudio_config_management
 }
 
 if [[ ! -z ${MODULE} ]]; then
