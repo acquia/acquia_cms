@@ -27,13 +27,11 @@
         "drupal/acquia_cms_tour": "dev-develop",
         "drupal/consumer_image_styles": "^4.0",
         "drupal/gin": "^3.0@RC",
-        "drupal/google_analytics": "dev-3430780-automated-drupal-11",
         "drupal/google_tag": "^2.0",
         "drupal/honeypot": "^2.1",
         "drupal/recaptcha": "^3.2",
         "drupal/reroute_email": "^2.2",
         "drupal/shield": "^1.7",
-        "drupal/sitestudio_config_management": "dev-develop",
         "drupal/sitestudio_gin": "dev-3434617-automated-drupal-11",
         "drush/drush": "^10 || ^11 || ^12 || ^13",
         "mnsami/composer-custom-directory-installer": "^2.0"
@@ -224,22 +222,9 @@
                 }
             }
         },
-        "sitestudio_config_management": {
-            "type": "path",
-            "url": "./modules/sitestudio_config_management",
-            "options": {
-                "versions": {
-                    "drupal/sitestudio_config_management": "dev-develop"
-                }
-            }
-        },
         "consumer_image_styles": {
             "type": "vcs",
             "url": "https://git.drupalcode.org/issue/consumer_image_styles-3429496.git"
-        },
-        "google_analytics": {
-            "type": "vcs",
-            "url": "https://git.drupalcode.org/issue/google_analytics-3430780.git"
         },
         "config_filter": {
             "type": "vcs",

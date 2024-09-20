@@ -43,7 +43,6 @@ class AcquiaTourDashboardTest extends KernelTestBase {
   public function testAcquiaCmsTourPlugin() {
     $expected_plugin_order = [
       'geocoder',
-      'google_analytics',
       'google_tag',
       'recaptcha',
     ];
