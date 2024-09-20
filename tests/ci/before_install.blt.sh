@@ -24,8 +24,6 @@ do
   composer require "${module_dependency}" --no-update --no-install
 done
 
-composer require "drupal/sitestudio_config_management" --no-update --no-install
-
 # Remove the modules folder. This is very important, otherwise
 # Drupal will see all acquia_cms modules from two folders i.e
 #  1. ./docroot/modules/contrib/acquia_cms/modules/acquia_cms_common
