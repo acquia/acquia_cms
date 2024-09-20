@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4a9b1a3321b7089b2e7d3704d7302d8f",
+    "content-hash": "993018c807c55704ef6ffac4a9b8faa9",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -290,48 +290,6 @@
                 "source": "https://github.com/acquia/http-hmac-php/tree/6.1.0"
             },
             "time": "2023-05-15T20:41:16+00:00"
-        },
-        {
-            "name": "acquia/memcache-settings",
-            "version": "v1.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/acquia/memcache-settings.git",
-                "reference": "543cb19afcd9d75000dceb924b85c2ff16997003"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/acquia/memcache-settings/zipball/543cb19afcd9d75000dceb924b85c2ff16997003",
-                "reference": "543cb19afcd9d75000dceb924b85c2ff16997003",
-                "shasum": ""
-            },
-            "require": {
-                "drupal/memcache": "^2.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Acquia Engineering",
-                    "homepage": "https://www.acquia.com",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "Recommended Memcache settings for use with Acquia hosting.",
-            "support": {
-                "issues": "https://github.com/acquia/memcache-settings/issues",
-                "source": "https://github.com/acquia/memcache-settings/tree/v1.2.0"
-            },
-            "abandoned": true,
-            "time": "2022-08-03T15:14:53+00:00"
         },
         {
             "name": "asm89/stack-cors",
@@ -7281,17 +7239,18 @@
         },
         {
             "name": "drupal/sitestudio_config_management",
-            "version": "dev-develop",
-            "dist": {
-                "type": "path",
-                "url": "./modules/sitestudio_config_management",
-                "reference": "fe8697710a6f4cbc9208d2d8d94c77059bf96723"
+            "version": "dev-1.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/sitestudio_config_management.git",
+                "reference": "d29eeacc43c4ee01a10bf2b9a84dc464518689ae"
             },
             "require": {
                 "acquia/cohesion": "~7.4.0 || ~7.5.0 || ~8.0.0",
                 "drupal/config_filter": "dev-3428542-automated-drupal-11",
                 "drupal/config_ignore": "^3.0",
                 "drupal/config_split": "^2.0",
+                "drupal/core": "^9 || ^10 || ^11",
                 "php": ">=7.4"
             },
             "require-dev": {
@@ -7300,15 +7259,41 @@
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
+                    "dev-1.x": "1.x-dev",
                     "dev-develop": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "1.1.1+1-dev",
+                    "datestamp": "1726515450",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
+                    }
                 }
             },
+            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0-or-later"
             ],
+            "authors": [
+                {
+                    "name": "acquia",
+                    "homepage": "https://www.drupal.org/user/1231722"
+                },
+                {
+                    "name": "rajeshreeputra",
+                    "homepage": "https://www.drupal.org/user/3418561"
+                },
+                {
+                    "name": "vishalkhode",
+                    "homepage": "https://www.drupal.org/user/2439156"
+                }
+            ],
             "description": "Contains configuration for config filter, config ignore & config split.",
-            "transport-options": {
-                "relative": true
+            "homepage": "https://www.drupal.org/project/sitestudio_config_management",
+            "support": {
+                "source": "https://git.drupalcode.org/project/sitestudio_config_management",
+                "error": "Invalid dependency: \"cohesion_sync\" is an unknown drupal 8 package name"
             }
         },
         {
@@ -19787,12 +19772,11 @@
         "drupal/acquia_cms_toolbar": 20,
         "drupal/acquia_cms_tour": 20,
         "drupal/gin": 5,
-        "drupal/sitestudio_config_management": 20,
         "drupal/sitestudio_gin": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

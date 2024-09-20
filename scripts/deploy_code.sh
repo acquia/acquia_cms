@@ -50,17 +50,6 @@ git push origin develop:1.x
 # Move back to the root directory.
 cd -
 
-# We need to do workaround to push code on drupal.org for sitestudio_config_management module
-# As we've made a release for 1.x branch and we can't force push on release branch. :/
-./acms-split.sh --branch=develop --push=drupal --module=sitestudio_config_management && success=true || success=false
-exit_script ${success}
-git clone git@git.drupal.org:project/sitestudio_config_management.git --branch=develop ../clone/sitestudio_config_management && cd ../clone/sitestudio_config_management
-git pull origin 1.x --rebase
-git push origin develop:1.x
-
-# Move back to the root directory.
-cd -
-
 # We need to do workaround to push code on drupal.org for acquia_cms_place module
 # As we've made a release for 1.x branch and we can't force push on release branch. :/
 ./acms-split.sh --branch=develop --push=drupal --module=acquia_cms_place && success=true || success=false
