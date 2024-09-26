@@ -21,10 +21,11 @@ To provide a consistent environment for our development team, Acquia CMS is deve
 3. Install ddev using brew `brew install ddev/ddev/ddev`.
 4. Clone this repository `git clone git@github.com:acquia/acquia_cms.git`.
 5. Change directory to acquia_cms `cd acquia_cms`.
-6. Update your private environment variable from `.ddev/config.private-environment-variables.yml`.
-7. Run `ddev start` to star container.
-8. Install site using `ddev composer acms:install` and provide the input requested by script to proceed with installation.
-9. Visit the site [http://acquia-cms.ddev.site](http://acquia-cms.ddev.site).
+6. Run `composer install`.
+7. Update your private environment variable from `.ddev/config.private-environment-variables.yml`.
+8. Run `ddev start` to star container.
+9. Install site using `ddev composer acms:install` and provide the input requested by script to proceed with installation.
+10. Visit the site [http://acquia-cms.ddev.site](http://acquia-cms.ddev.site).
 
 ### Setting up a Cloud IDE
 Because there is a limited number of Cloud IDEs available to the Acquia CMS team, each active developer should only need (and have) one. Therefore, you should only do this once.
