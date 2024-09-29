@@ -1,0 +1,53 @@
+{#
+/**
+ * @file
+ * Acquia Drupal Starterkit implementation to display the installation page.
+ *
+ * All available variables are mirrored in page.html.twig.
+ * Some may be blank but they are provided for consistency.
+ *
+ * @see template_preprocess_install_page()
+ */
+#}
+<div class="cms-installer">
+  <div class="cms-installer__first">
+    <header class="cms-installer__header">
+      <h1 class="cms-installer__heading">
+        <span class="cms-installer__heading-primary">{{ 'Acquia Drupal'|t }}</span>
+        <span class="cms-installer__heading-secondary">{{ 'Starterkit'|t }}</span>
+      </h1>
+      <div data-drupal-selector="cms-language-dropdown" class="cms-installer__language">
+        <button type="button" class="cms-installer__language-button">{{ 'Change Language'|t }}</button>
+      </div>
+    </header>
+
+    {% if page.sidebar_first %}
+      <aside class="cms-installer__sidebar-first">
+        {{ page.sidebar_first }}
+      </aside>
+    {% endif %}
+
+    <main class="cms-installer__main">
+      {% if title %}
+        <h2 class="cms-installer__main-heading">{{ title }}</h2>
+      {% endif %}
+      {{ page.highlighted }}
+      {{ page.content }}
+    </main>
+
+    {% if page.sidebar_second %}
+      <aside class="cms-installer__sidebar-second">
+        {{ page.sidebar_second }}
+      </aside>
+    {% endif %}
+
+    {% if page.page_bottom %}
+      <footer class="cms-installer__footer">
+        {{ page.page_bottom }}
+      </footer>
+    {% endif %}
+  </div>
+  <div class="cms-installer__second">
+    <img src="{{ images_path }}/cms-installer-bg.webp" alt="{{ 'Woman quietly working on laptop'|t }}" class="cms-installer__bg">
+  </div>
+</div>

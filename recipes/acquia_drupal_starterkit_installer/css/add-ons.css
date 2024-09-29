@@ -1,0 +1,74 @@
+#edit-add-ons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+}
+
+#edit-add-ons .form-item {
+  display: inline-block;
+  margin: 0;
+}
+
+#edit-add-ons [type="checkbox"] {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  width: 1px;
+  height: 1px;
+  word-wrap: normal;
+}
+
+#edit-add-ons label {
+  display: inline-block;
+  color: #39353e;
+  padding: 15px 20px;
+  border: solid 2px #666;
+  font-size: 26px;
+  border-radius: 10px;
+  user-select: none;
+}
+
+#edit-add-ons label:hover {
+  background-color: #f8fafe;
+  color: black;
+}
+
+#edit-add-ons :checked + label {
+  position: relative;
+  background-color: var(--gin-color-primary);
+  border-color: var(--gin-color-primary);
+  color: white;
+}
+
+#edit-add-ons :checked+label:before {
+  position: absolute;
+  top: 0;
+  inset-inline-start: 0;
+  display: block;
+  width: 40px;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%); /* RTL */
+  content: url('../images/check-circle.svg');
+  background-color: white;
+  border-radius: 50%;
+}
+
+@media (forced-colors: active) {
+  #edit-add-ons :checked+label:before {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    content: "✓";
+    border: solid 2px;
+    font-weight: bold;
+  }
+}
+
+[dir="rtl"] #edit-add-ons :checked+label:before {
+  transform: translate(50%, -50%);
+}
+
+#edit-add-ons [type="checkbox"]:focus + label {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
