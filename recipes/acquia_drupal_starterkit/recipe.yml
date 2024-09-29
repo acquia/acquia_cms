@@ -1,0 +1,45 @@
+name: Acquia Drupal Starterkit
+description: Applies all the basic Acquia Drupal Starterkit recipes.
+type: Site
+recipes:
+  - acquia_drupal_starterkit_admin_theme
+  - core/recipes/core_recommended_front_end_theme
+  - acquia_drupal_starterkit_basic_html_editor
+  - acquia_drupal_starterkit_full_html_editor
+config:
+  import:
+    olivero:
+      - block.block.olivero_breadcrumbs
+      - block.block.olivero_help
+      - block.block.olivero_syndicate
+  actions:
+    olivero.settings:
+      simple_config_update:
+        base_primary_color: '#0a205a'
+    project_browser.admin_settings:
+      simple_config_update:
+        allowed_projects:
+          recipes:
+            - acquia_drupal_starterkit_community
+            - acquia_drupal_starterkit_headless
+            - acquia_drupal_starterkit_low_code
+    system.site:
+      simple_config_update:
+        name: 'Acquia Drupal Starterkit'
+        page.front: '/node'
+    user.role.authenticated:
+      grantPermissions:
+        - 'access help pages'
+        - 'access shortcuts'
+        - 'access user profiles'
+        - 'delete own files'
+        - 'view own unpublished content'
+    user.role.anonymous:
+      grantPermissions:
+        # We assume all published content should be accessible/
+        - 'access content'
+    user.settings:
+      simple_config_update:
+        verify_mail: true
+        register: admin_only
+        cancel_method: user_cancel_block

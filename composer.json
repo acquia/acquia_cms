@@ -226,6 +226,15 @@
                 }
             }
         },
+        "acquia_drupal_starterkit": {
+            "type": "path",
+            "url": "./recipes/acquia_drupal_starterkit",
+            "options": {
+                "versions": {
+                    "drupal/acquia_drupal_starterkit": "dev-develop"
+                }
+            }
+        },
         "acquia_drupal_starterkit_admin_theme": {
             "type": "path",
             "url": "./recipes/acquia_drupal_starterkit_admin_theme",
@@ -397,7 +406,7 @@
             "docroot/themes/contrib/{$name}": [
                 "type:drupal-theme"
             ],
-            "docroot/recipes/contrib/{$name}": [
+            "docroot/recipes/{$name}": [
                 "type:drupal-recipe"
             ]
         },
