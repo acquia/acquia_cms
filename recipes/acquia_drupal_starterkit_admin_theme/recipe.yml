@@ -1,0 +1,14 @@
+name: 'Acquia Drupal Starterkit Admin Theme'
+type: 'Acquia Drupal Starterkit'
+description: 'Sets up a nice administrative theme and toolbar.'
+install:
+  - gin
+  - gin_toolbar
+config:
+  import:
+    gin: '*'
+    gin_toolbar: '*'
+  actions:
+    system.theme:
+      simple_config_update:
+        admin: gin

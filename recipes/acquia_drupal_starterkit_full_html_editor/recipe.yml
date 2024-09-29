@@ -1,0 +1,12 @@
+name: 'Acquia Drupal Startekit Full HTML editor'
+type: 'Acquia Drupal Startekit'
+description: 'Enhances the Full HTML editor with better linking and media support.'
+install:
+  - ckeditor5
+  - linkit
+  - media_library
+  - node
+config:
+  import:
+    linkit:
+      - image.style.linkit_result_thumbnail

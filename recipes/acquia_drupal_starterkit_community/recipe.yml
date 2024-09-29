@@ -1,0 +1,13 @@
+name: 'Acquia Drupal Startekit Community'
+description: 'The community starter kit will install Acquia Drupal Starterkit.'
+type: 'Starterkit'
+recipes:
+  - acquia_drupal_starterkit_admin_theme
+  - core/recipes/core_recommended_front_end_theme
+  - acquia_drupal_starterkit_basic_html_editor
+  - acquia_drupal_starterkit_full_html_editor
+install:
+  # Contrib
+  - acquia_cms_toolbar
+  - acquia_cms_tour
+

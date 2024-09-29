@@ -1,0 +1,15 @@
+{
+    "name": "drupal/acquia_drupal_starterkit_headless",
+    "type": "drupal-recipe",
+    "description": "The community starter kit will install Acquia CMS. An optional content model can be added in the installation process.",
+    "require": {
+        "drupal/core": ">=10.3",
+        "drupal/acquia_cms_headless": "^1.3.17",
+        "drupal/acquia_drupal_starterkit_community": "dev-develop"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "1.x-dev"
+        }
+    }
+}
