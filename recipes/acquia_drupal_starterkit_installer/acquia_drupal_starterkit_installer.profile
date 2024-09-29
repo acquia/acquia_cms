@@ -112,11 +112,6 @@ function acquia_drupal_starterkit_installer_apply_recipes(array &$install_state)
   $batch = install_profile_modules($install_state);
   $batch['title'] = t('Setting up your site');
 
-  // If we're installing for the trial, install the drupal_cms_trial module.
-  if (getenv('DRUPAL_CMS_TRIAL')) {
-    $batch['operations'][] = ['_install_module_batch', ['drupal_cms_trial', t('Trial experience module')]];
-  }
-
   $cookbook_path = \Drupal::root() . '/recipes';
 
   foreach ($install_state['parameters']['recipes'] as $recipe) {
@@ -134,11 +129,6 @@ function acquia_drupal_starterkit_installer_apply_recipes(array &$install_state)
  */
 function acquia_drupal_starterkit_installer_database_settings(array &$install_state): ?array {
   $interactive = $install_state['interactive'];
-  // If we're installing the in-browser trial, submit the form programmatically
-  // with default values which, thanks to
-  // acquia_drupal_starterkit_installer_form_install_settings_form_alter(), should be the
-  // SQLite driver with its default options.
-  $install_state['interactive'] = getenv('DRUPAL_CMS_TRIAL') ? FALSE : $interactive;
   $result = install_get_form(SiteSettingsForm::class, $install_state);
   $install_state['interactive'] = $interactive;
 

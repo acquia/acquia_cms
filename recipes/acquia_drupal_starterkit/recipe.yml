@@ -6,6 +6,8 @@ recipes:
   - core/recipes/core_recommended_front_end_theme
   - acquia_drupal_starterkit_basic_html_editor
   - acquia_drupal_starterkit_full_html_editor
+install:
+  - project_browser
 config:
   import:
     olivero:
@@ -21,16 +23,16 @@ config:
         allowed_projects:
           recipes:
             - acquia_drupal_starterkit_community
+            - acquia_drupal_starterkit_content_model
             - acquia_drupal_starterkit_headless
             - acquia_drupal_starterkit_low_code
+            - acquia_drupal_starterkit_media_model
     system.site:
       simple_config_update:
         name: 'Acquia Drupal Starterkit'
         page.front: '/node'
     user.role.authenticated:
       grantPermissions:
-        - 'access help pages'
-        - 'access shortcuts'
         - 'access user profiles'
         - 'delete own files'
         - 'view own unpublished content'

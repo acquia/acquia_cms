@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f2330b61420c4b4c4bf1cb6767a44f1",
+    "content-hash": "f72666f69c81b9c79e40e0a0d803ba9e",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -3156,13 +3156,14 @@
             "dist": {
                 "type": "path",
                 "url": "./recipes/acquia_drupal_starterkit",
-                "reference": "bf8268dac01abd87dbefc590606a04a4a12bcd72"
+                "reference": "0dc50ac2e4b1404f3f52f68fff1f001c259cfc3d"
             },
             "require": {
                 "drupal/acquia_drupal_starterkit_admin_theme": "dev-develop",
                 "drupal/acquia_drupal_starterkit_basic_html_editor": "dev-develop",
                 "drupal/acquia_drupal_starterkit_full_html_editor": "dev-develop",
-                "drupal/core": ">=10.3"
+                "drupal/core": ">=10.3",
+                "drupal/project_browser": "^2"
             },
             "type": "drupal-recipe",
             "description": "Sets up a site with useful features and sample content.",
@@ -3223,7 +3224,7 @@
             "dist": {
                 "type": "path",
                 "url": "./recipes/acquia_drupal_starterkit_community",
-                "reference": "4155a0d5dab5c927c1bd500b57b2dade6bf9f62e"
+                "reference": "c1e02303bec2309ef42f9078ce4b295de8110838"
             },
             "require": {
                 "drupal/acquia_cms_toolbar": "^1.5",
@@ -7172,6 +7173,126 @@
                 "source": "https://cgit.drupalcode.org/pathauto",
                 "issues": "https://www.drupal.org/project/issues/pathauto",
                 "documentation": "https://www.drupal.org/docs/8/modules/pathauto"
+            }
+        },
+        {
+            "name": "drupal/project_browser",
+            "version": "2.0.0-alpha3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/project_browser.git",
+                "reference": "2.0.0-alpha3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/project_browser-2.0.0-alpha3.zip",
+                "reference": "2.0.0-alpha3",
+                "shasum": "4fe2abfbeffe070c41bb8bc4860d56c9bc629c73"
+            },
+            "require": {
+                "composer-runtime-api": "^2",
+                "composer/semver": "^3.2",
+                "drupal/core": "^10 || ^11",
+                "ext-simplexml": "*",
+                "guzzlehttp/guzzle": "^6 || ^7",
+                "php": ">=8.1",
+                "symfony/finder": "^6.3 || ^7"
+            },
+            "conflict": {
+                "drupal/automatic_updates": "<3.0"
+            },
+            "require-dev": {
+                "colinodell/psr-testlogger": "^1.2",
+                "drupal/automatic_updates": "^3.1.3",
+                "kanopi/imagemagick-configuration": "@dev"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0-alpha3",
+                    "datestamp": "1724854708",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "scripts": {
+                "cs": [
+                    "phpcs -n --standard=PSR2 src --exclude=Generic.Files.LineLength"
+                ],
+                "cbf": [
+                    "phpcbf -n --standard=PSR2 src --exclude=Generic.Files.LineLength"
+                ],
+                "unit": [
+                    "phpunit"
+                ],
+                "lint": [
+                    "find src -name '*.php' -print0 | xargs -0 -n1 php -l"
+                ],
+                "test": [
+                    "@lint",
+                    "@cs"
+                ]
+            },
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "bnjmnm",
+                    "homepage": "https://www.drupal.org/user/2369194"
+                },
+                {
+                    "name": "chrisfromredfin",
+                    "homepage": "https://www.drupal.org/user/74392"
+                },
+                {
+                    "name": "dmitrig01",
+                    "homepage": "https://www.drupal.org/user/47566"
+                },
+                {
+                    "name": "fjgarlin",
+                    "homepage": "https://www.drupal.org/user/2495842"
+                },
+                {
+                    "name": "grasmash",
+                    "homepage": "https://www.drupal.org/user/455714"
+                },
+                {
+                    "name": "jacob@redfinsolutions.com",
+                    "homepage": "https://www.drupal.org/user/3574855"
+                },
+                {
+                    "name": "leslieg",
+                    "homepage": "https://www.drupal.org/user/1746792"
+                },
+                {
+                    "name": "narendrar",
+                    "homepage": "https://www.drupal.org/user/1730192"
+                },
+                {
+                    "name": "rlnorthcutt",
+                    "homepage": "https://www.drupal.org/user/116893"
+                },
+                {
+                    "name": "srishtiiee",
+                    "homepage": "https://www.drupal.org/user/3685162"
+                },
+                {
+                    "name": "sun",
+                    "homepage": "https://www.drupal.org/user/54136"
+                },
+                {
+                    "name": "tim.plunkett",
+                    "homepage": "https://www.drupal.org/user/241634"
+                }
+            ],
+            "description": "A project browser embedded in the Drupal UI.",
+            "homepage": "https://www.drupal.org/project/project_browser",
+            "support": {
+                "source": "https://git.drupalcode.org/project/project_browser"
             }
         },
         {
@@ -11556,16 +11677,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v5.2.0",
+            "version": "v5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "23c79fbbfb725fb92af9bcf41065c8e9a0d49ddb"
+                "reference": "3abf7425cd284141dc5d8d14a9ee444de3345d1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/23c79fbbfb725fb92af9bcf41065c8e9a0d49ddb",
-                "reference": "23c79fbbfb725fb92af9bcf41065c8e9a0d49ddb",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/3abf7425cd284141dc5d8d14a9ee444de3345d1a",
+                "reference": "3abf7425cd284141dc5d8d14a9ee444de3345d1a",
                 "shasum": ""
             },
             "require": {
@@ -11608,9 +11729,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v5.2.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.3.0"
             },
-            "time": "2024-09-15T16:40:33+00:00"
+            "time": "2024-09-29T13:56:26+00:00"
         },
         {
             "name": "nnnick/chartjs",
