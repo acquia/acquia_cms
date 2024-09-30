@@ -1,0 +1,19 @@
+name: acquia-cms
+type: drupal
+docroot: docroot
+php_version: "8.3"
+webserver_type: nginx-fpm
+xdebug_enabled: false
+additional_hostnames: []
+additional_fqdns: []
+database:
+    type: mariadb
+    version: "10.11"
+use_dns_when_possible: true
+composer_version: "2"
+web_environment:
+    - SIMPLETEST_BASE_URL=http://web
+    - SIMPLETEST_DB=mysql://db:db@db/db
+    - BROWSERTEST_OUTPUT_DIRECTORY=docroot/sites/simpletest/browser_output
+    # - MINK_DRIVER_ARGS_WEBDRIVER='["chrome", {"browserName":"chrome","chromeOptions":{"args":["--disable-gpu","--headless", "--no-sandbox"]}}, "http://chromedriver:9515"]'
+corepack_enable: false
