@@ -9,7 +9,8 @@ use Drupal\Core\Installer\Form\SiteConfigureForm;
 use Drupal\Core\Installer\Form\SiteSettingsForm;
 use Drupal\Core\Recipe\Recipe;
 use Drupal\Core\Recipe\RecipeRunner;
-use Drupal\acquia_drupal_starterkit_installer\Form\RecipesForm;
+use Drupal\acquia_drupal_starterkit_installer\Form\RecipesStarterkitForm;
+use Drupal\acquia_drupal_starterkit_installer\Form\RecipesAddOnForm;
 use Drupal\acquia_drupal_starterkit_installer\Form\SiteNameForm;
 
 /**
@@ -46,12 +47,19 @@ function acquia_drupal_starterkit_installer_install_tasks_alter(array &$tasks, a
     $tasks_after = array_slice($tasks, $key, NULL, TRUE);
     $tasks = $tasks_before + $additions + $tasks_after;
   };
+
   $insert_before('install_settings_form', [
     'acquia_drupal_starterkit_installer_choose_recipes' => [
       'display_name' => t('Choose add-ons'),
       'type' => 'form',
       'run' => array_key_exists('recipes', $install_state['parameters']) ? INSTALL_TASK_SKIP : INSTALL_TASK_RUN_IF_REACHED,
-      'function' => RecipesForm::class,
+      'function' => RecipesStarterkitForm::class,
+    ],
+    'acquia_drupal_starterkit_installer_addons' => [
+      'display_name' => t('Extend Acquia Drupal Starter Kit with Add-ons'),
+      'type' => 'form',
+      'run' => array_key_exists('recipes_starterkit_addons', $install_state['parameters']) ? INSTALL_TASK_SKIP : INSTALL_TASK_RUN_IF_REACHED,
+      'function' => RecipesAddOnForm::class,
     ],
     'acquia_drupal_starterkit_installer_site_name_form' => [
       'display_name' => t('Name your site'),
