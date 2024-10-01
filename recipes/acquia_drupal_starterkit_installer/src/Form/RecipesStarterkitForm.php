@@ -23,7 +23,7 @@ final class RecipesStarterkitForm extends InstallerFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
-    $form['#title'] = $this->t('What are your top goals?');
+    $form['#title'] = $this->t('Select Starter Kit');
 
     $form['help'] = [
       '#prefix' => '<p class="cms-installer__subhead">',
@@ -31,11 +31,17 @@ final class RecipesStarterkitForm extends InstallerFormBase {
       '#suffix' => '</p>',
     ];
 
+    $options = [
+      'acquia_drupal_starterkit_community' => $this->t('Community'),
+      'acquia_drupal_starterkit_headless' => $this->t('Headless'),
+      'acquia_drupal_starterkit_low_code' => $this->t('Low-Code'),
+    ];
+
     $form['add_ons'] = [
       '#prefix' => '<div class="cms-installer__form-group">',
       '#suffix' => '</div>',
       '#type' => 'radios',
-      '#options' => acquia_drupal_starterkit_installer_get_available_recipes('Starterkit'),
+      '#options' => $options,
       '#default_value' => [],
     ];
 
