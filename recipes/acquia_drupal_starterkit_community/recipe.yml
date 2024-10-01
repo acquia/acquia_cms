@@ -7,3 +7,14 @@ install:
   # Contrib
   - acquia_cms_toolbar
   - acquia_cms_tour
+config:
+  actions:
+    project_browser.admin_settings:
+      simple_config_update:
+        allowed_projects:
+          recipes:
+            - acquia_drupal_starterkit_community
+            - acquia_drupal_starterkit_content_model
+            - acquia_drupal_starterkit_headless
+            - acquia_drupal_starterkit_low_code
+            - acquia_drupal_starterkit_media_model

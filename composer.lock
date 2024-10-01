@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f72666f69c81b9c79e40e0a0d803ba9e",
+    "content-hash": "babb32fd02c91e3af42d0e152e262639",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2390,7 +2390,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "2e9464aa5f9e5f0be09e1726c3276319be0b8c5e"
+                "reference": "36ebfe06447b4f28301a18995d197336fb6ce1f3"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -3271,6 +3271,29 @@
             }
         },
         {
+            "name": "drupal/acquia_drupal_starterkit_dam",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./recipes/acquia_drupal_starterkit_dam",
+                "reference": "783a89145d590a1f57cf87e94ef7f56fb223c875"
+            },
+            "require": {
+                "drupal/acquia_cms_dam": "^1.1",
+                "drupal/core": ">=10.3"
+            },
+            "type": "drupal-recipe",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "description": "Integrates with Acquia DAM.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "drupal/acquia_drupal_starterkit_full_html_editor",
             "version": "dev-develop",
             "dist": {
@@ -3375,6 +3398,29 @@
             },
             "type": "drupal-recipe",
             "description": "An media model provides Audio, Document, Image< Video media types.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "drupal/acquia_drupal_starterkit_search",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./recipes/acquia_drupal_starterkit_search",
+                "reference": "137f8bd6600afc1498ed537821e6800520e941ca"
+            },
+            "require": {
+                "drupal/acquia_cms_search": "^1.6",
+                "drupal/core": ">=10.3"
+            },
+            "type": "drupal-recipe",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "description": "Provides integration between your Drupal site and Acquia's hosted search service.",
             "transport-options": {
                 "relative": true
             }
@@ -21904,10 +21950,12 @@
         "drupal/acquia_cms_toolbar": 20,
         "drupal/acquia_cms_tour": 20,
         "drupal/acquia_drupal_starterkit_content_model": 20,
+        "drupal/acquia_drupal_starterkit_dam": 20,
         "drupal/acquia_drupal_starterkit_headless": 20,
         "drupal/acquia_drupal_starterkit_installer": 20,
         "drupal/acquia_drupal_starterkit_low_code": 20,
         "drupal/acquia_drupal_starterkit_media_model": 20,
+        "drupal/acquia_drupal_starterkit_search": 20,
         "drupal/gin": 5,
         "drupal/sitestudio_gin": 20
     },
