@@ -30,16 +30,12 @@ final class RecipesAddOnForm extends InstallerFormBase {
       '#markup' => $this->t('You can change your mind later.'),
       '#suffix' => '</p>',
     ];
-    $options = [
-      'acquia_drupal_starterkit_content_model' => $this->t('Acquia Drupal Starterkit Content Model'),
-      'acquia_drupal_starterkit_media_model' => $this->t('Acquia Drupal Starterkit Media Model'),
-    ];
 
     $form['add_ons'] = [
       '#prefix' => '<div class="cms-installer__form-group">',
       '#suffix' => '</div>',
       '#type' => 'checkboxes',
-      '#options' => $options,
+      '#options' => acquia_drupal_starterkit_installer_get_available_recipes('Starterkit addon'),
       '#default_value' => [],
     ];
     $form['actions'] = [

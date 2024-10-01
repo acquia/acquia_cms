@@ -31,17 +31,11 @@ final class RecipesStarterkitForm extends InstallerFormBase {
       '#suffix' => '</p>',
     ];
 
-    $options = [
-      'acquia_drupal_starterkit_community' => $this->t('Acquia Drupal Starterkit Community'),
-      'acquia_drupal_starterkit_headless' => $this->t('Acquia Drupal Starterkit Headless'),
-      'acquia_drupal_starterkit_low_code' => $this->t('Acquia Drupal Starterkit Low-Code'),
-    ];
-
     $form['add_ons'] = [
       '#prefix' => '<div class="cms-installer__form-group">',
       '#suffix' => '</div>',
       '#type' => 'radios',
-      '#options' => $options,
+      '#options' => acquia_drupal_starterkit_installer_get_available_recipes('Starterkit'),
       '#default_value' => [],
     ];
 

@@ -12,6 +12,7 @@ use Drupal\Core\Recipe\RecipeRunner;
 use Drupal\acquia_drupal_starterkit_installer\Form\RecipesStarterkitForm;
 use Drupal\acquia_drupal_starterkit_installer\Form\RecipesAddOnForm;
 use Drupal\acquia_drupal_starterkit_installer\Form\SiteNameForm;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Implements hook_install_tasks().
@@ -279,4 +280,32 @@ function acquia_drupal_starterkit_installer_preprocess_install_page(array &$vari
   $images_path = \Drupal::service(FileUrlGeneratorInterface::class)
     ->generateString($images_path);
   $variables['images_path'] = $images_path;
+}
+
+/**
+ * Identifies all recipes available in the docroot/recipes directory.
+ *
+ * @param string $type
+ *    The type of recipes to filter by.
+ *
+ * @return array
+ *   An array of recipe names.
+ */
+function acquia_drupal_starterkit_installer_get_available_recipes(string $type = 'Starterkit addon'): array {
+  $recipes = [];
+  $directory = new \DirectoryIterator(\Drupal::root() . '/recipes');
+
+  foreach ($directory as $fileinfo) {
+    if ($fileinfo->isDir() && !$fileinfo->isDot()) {
+      $recipe_file = $fileinfo->getPathname() . '/recipe.yml';
+      if (file_exists($recipe_file)) {
+        $recipe_info = Yaml::parseFile($recipe_file);
+        if (isset($recipe_info['name']) && (!isset($recipe_info['visibility']) || $recipe_info['visibility'] !== 'hidden') && $recipe_info['type'] === $type) {
+          $recipes[$fileinfo->getFilename()] = $recipe_info['name'];
+        }
+      }
+    }
+  }
+
+  return $recipes;
 }
