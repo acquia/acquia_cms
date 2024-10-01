@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "944c6a81de55b1d0212a97da4446921c",
+    "content-hash": "284f2831ddc4981772e5ccce84c6b4e4",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -3289,6 +3289,32 @@
                 }
             },
             "description": "Integrates with Acquia DAM.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "drupal/acquia_drupal_starterkit_demo_content",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./recipes/acquia_drupal_starterkit_demo_content",
+                "reference": "5dad7aee5d5b9aa359a46ffb22cfcd8bb30c76a4"
+            },
+            "require": {
+                "drupal/acquia_drupal_starterkit_content_model": "dev-develop",
+                "drupal/acquia_drupal_starterkit_media_model": "dev-develop",
+                "drupal/acquia_drupal_starterkit_search": "dev-develop",
+                "drupal/core": ">=10.3",
+                "drupal/default_content": "^2.0"
+            },
+            "type": "drupal-recipe",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "description": "Contains the example content for demonstration.",
             "transport-options": {
                 "relative": true
             }
@@ -21976,6 +22002,7 @@
         "drupal/acquia_cms_tour": 20,
         "drupal/acquia_drupal_starterkit_content_model": 20,
         "drupal/acquia_drupal_starterkit_dam": 20,
+        "drupal/acquia_drupal_starterkit_demo_content": 20,
         "drupal/acquia_drupal_starterkit_headless": 20,
         "drupal/acquia_drupal_starterkit_installer": 20,
         "drupal/acquia_drupal_starterkit_low_code": 20,
