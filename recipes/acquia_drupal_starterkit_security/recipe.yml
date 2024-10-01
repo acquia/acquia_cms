@@ -1,0 +1,17 @@
+name: 'Acquia Drupal Startekit Security'
+description: "Provides integration between your Drupal site and Acquia's hosted search service."
+type: 'Starterkit addon'
+install:
+  # Contrib
+  - password_policy_character_types
+  - password_policy_length
+  - password_policy_username
+  - seckit
+  - username_enumeration_prevention
+config:
+  import:
+    password_policy: '*'
+    password_policy_character_types: '*'
+    password_policy_length: '*'
+    password_policy_username: '*'
+    seckit: '*'
