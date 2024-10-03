@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "897378a44b690000af3b2c6bbc099561",
+    "content-hash": "b58df73afff5176a5149a7e338123070",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -3175,6 +3175,29 @@
             }
         },
         {
+            "name": "drupal/acquia_drupal_starterkit_article",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./recipes/acquia_drupal_starterkit_article",
+                "reference": "5c3bc27366202ae64832ad7ed0c492cfb4a6d72b"
+            },
+            "require": {
+                "drupal/acquia_cms_article": "^1.6",
+                "drupal/core": ">=10.3"
+            },
+            "type": "drupal-recipe",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "description": "Provides an Article content type and related configuration.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "drupal/acquia_drupal_starterkit_basic_html_editor",
             "version": "dev-develop",
             "dist": {
@@ -3232,14 +3255,14 @@
             "dist": {
                 "type": "path",
                 "url": "./recipes/acquia_drupal_starterkit_content_model",
-                "reference": "8db5360414b8d49f8413871807424cfad1e02469"
+                "reference": "58d0420dd3fcc3bf0cfb3f2c8cf661247f89337c"
             },
             "require": {
-                "drupal/acquia_cms_article": "^1.6",
-                "drupal/acquia_cms_event": "^1.6",
-                "drupal/acquia_cms_page": "^1.6",
-                "drupal/acquia_cms_person": "^1.6",
-                "drupal/acquia_cms_place": "^1.6",
+                "drupal/acquia_drupal_starterkit_article": "^1.6",
+                "drupal/acquia_drupal_starterkit_event": "^1.6",
+                "drupal/acquia_drupal_starterkit_page": "^1.6",
+                "drupal/acquia_drupal_starterkit_person": "^1.6",
+                "drupal/acquia_drupal_starterkit_place": "^1.6",
                 "drupal/core": ">=10.3"
             },
             "type": "drupal-recipe",
@@ -3298,6 +3321,29 @@
                 }
             },
             "description": "Contains the example content for demonstration.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "drupal/acquia_drupal_starterkit_event",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./recipes/acquia_drupal_starterkit_event",
+                "reference": "b8dbe103bcf0adc17928853930b2c95ee6c5125c"
+            },
+            "require": {
+                "drupal/acquia_cms_event": "^1.6",
+                "drupal/core": ">=10.3"
+            },
+            "type": "drupal-recipe",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "description": "Provides an Event content type and related configuration.",
             "transport-options": {
                 "relative": true
             }
@@ -3430,6 +3476,75 @@
             },
             "type": "drupal-recipe",
             "description": "An media model provides Audio, Document, Image< Video media types.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "drupal/acquia_drupal_starterkit_page",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./recipes/acquia_drupal_starterkit_page",
+                "reference": "d5d8ee9599649187dbd4cf066c4d0bdc924af90e"
+            },
+            "require": {
+                "drupal/acquia_cms_page": "^1.6",
+                "drupal/core": ">=10.3"
+            },
+            "type": "drupal-recipe",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "description": "Provides an unstructured Page content type and related configuration.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "drupal/acquia_drupal_starterkit_person",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./recipes/acquia_drupal_starterkit_person",
+                "reference": "be92ccd1ae60de9c29fd4f437f294576175ee085"
+            },
+            "require": {
+                "drupal/acquia_cms_person": "^1.6",
+                "drupal/core": ">=10.3"
+            },
+            "type": "drupal-recipe",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "description": "Provides a Person content type, a structured data representation of people associated with a website or organization.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "drupal/acquia_drupal_starterkit_place",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./recipes/acquia_drupal_starterkit_place",
+                "reference": "010a904630c937465bb446c2f1d3776d6f0d48db"
+            },
+            "require": {
+                "drupal/acquia_cms_place": "^1.6",
+                "drupal/core": ">=10.3"
+            },
+            "type": "drupal-recipe",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "description": "Provides a Place content type and related configuration.",
             "transport-options": {
                 "relative": true
             }
