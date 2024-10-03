@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b58df73afff5176a5149a7e338123070",
+    "content-hash": "b6dc57883001793abc31c4226dd1142f",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -3198,6 +3198,29 @@
             }
         },
         {
+            "name": "drupal/acquia_drupal_starterkit_audio",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./recipes/acquia_drupal_starterkit_audio",
+                "reference": "620e1d0347a9eabaff1493628699cfa0917349bf"
+            },
+            "require": {
+                "drupal/acquia_cms_audio": "^1.5",
+                "drupal/core": ">=10.3"
+            },
+            "type": "drupal-recipe",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "description": "Provides an Audio media type and related configuration.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "drupal/acquia_drupal_starterkit_basic_html_editor",
             "version": "dev-develop",
             "dist": {
@@ -3255,14 +3278,14 @@
             "dist": {
                 "type": "path",
                 "url": "./recipes/acquia_drupal_starterkit_content_model",
-                "reference": "58d0420dd3fcc3bf0cfb3f2c8cf661247f89337c"
+                "reference": "428ddbc1810d54e1bc37fe2c545574c7208601c8"
             },
             "require": {
-                "drupal/acquia_drupal_starterkit_article": "^1.6",
-                "drupal/acquia_drupal_starterkit_event": "^1.6",
-                "drupal/acquia_drupal_starterkit_page": "^1.6",
-                "drupal/acquia_drupal_starterkit_person": "^1.6",
-                "drupal/acquia_drupal_starterkit_place": "^1.6",
+                "drupal/acquia_drupal_starterkit_article": "dev-develop",
+                "drupal/acquia_drupal_starterkit_event": "dev-develop",
+                "drupal/acquia_drupal_starterkit_page": "dev-develop",
+                "drupal/acquia_drupal_starterkit_person": "dev-develop",
+                "drupal/acquia_drupal_starterkit_place": "dev-develop",
                 "drupal/core": ">=10.3"
             },
             "type": "drupal-recipe",
@@ -3321,6 +3344,29 @@
                 }
             },
             "description": "Contains the example content for demonstration.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "drupal/acquia_drupal_starterkit_document",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./recipes/acquia_drupal_starterkit_document",
+                "reference": "ea60aae974f79c661c24f37577c6b9730c43e563"
+            },
+            "require": {
+                "drupal/acquia_cms_document": "^1.4",
+                "drupal/core": ">=10.3"
+            },
+            "type": "drupal-recipe",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "description": "Provides a Document media type and related configuration.",
             "transport-options": {
                 "relative": true
             }
@@ -3419,6 +3465,29 @@
             }
         },
         {
+            "name": "drupal/acquia_drupal_starterkit_image",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./recipes/acquia_drupal_starterkit_image",
+                "reference": "71bc323748796ca7fd30320154a8cf6da5448ab4"
+            },
+            "require": {
+                "drupal/acquia_cms_image": "^1.6",
+                "drupal/core": ">=10.3"
+            },
+            "type": "drupal-recipe",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "description": "Provides an Image media type and related configuration.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "drupal/acquia_drupal_starterkit_installer",
             "version": "dev-develop",
             "dist": {
@@ -3465,13 +3534,13 @@
             "dist": {
                 "type": "path",
                 "url": "./recipes/acquia_drupal_starterkit_media_model",
-                "reference": "34b6a93c83ecf17c50cfdbbc6e8732ff4452ae2d"
+                "reference": "b45c11bb3dfd99096153bcdcf69fabf40f440596"
             },
             "require": {
-                "drupal/acquia_cms_audio": "^1.5",
-                "drupal/acquia_cms_document": "^1.4",
-                "drupal/acquia_cms_image": "^1.6",
-                "drupal/acquia_cms_video": "^1.6",
+                "drupal/acquia_drupal_starterkit_audio": "dev-develop",
+                "drupal/acquia_drupal_starterkit_document": "dev-develop",
+                "drupal/acquia_drupal_starterkit_image": "dev-develop",
+                "drupal/acquia_drupal_starterkit_video": "dev-develop",
                 "drupal/core": ">=10.3"
             },
             "type": "drupal-recipe",
@@ -3593,6 +3662,29 @@
                 }
             },
             "description": "Provides integration between your Drupal site and Acquia's hosted search service.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "drupal/acquia_drupal_starterkit_video",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./recipes/acquia_drupal_starterkit_video",
+                "reference": "c07ed6f150e71b2612624e551411065b659cab69"
+            },
+            "require": {
+                "drupal/acquia_cms_video": "^1.6",
+                "drupal/core": ">=10.3"
+            },
+            "type": "drupal-recipe",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "description": "Provides a Video media type and related configuration.",
             "transport-options": {
                 "relative": true
             }
