@@ -62,6 +62,14 @@
   border-radius: 50%;
 }
 
+.cms-installer .button--primary:disabled{
+  background-color: var(--gin-color-disabled);
+}
+.cms-installer .button--primary:disabled:active,
+.cms-installer .button--primary:disabled:hover{
+  background-color: var(--gin-color-disabled-border);
+}
+
 @media (forced-colors: active) {
   #edit-add-ons :checked+label:before {
     display: flex;

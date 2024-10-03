@@ -41,8 +41,9 @@ final class RecipesStarterkitForm extends InstallerFormBase {
       '#prefix' => '<div class="cms-installer__form-group">',
       '#suffix' => '</div>',
       '#type' => 'radios',
+      '#required' => TRUE,
       '#options' => $options,
-      '#default_value' => [],
+//      '#default_value' => 'acquia_drupal_starterkit_community',
     ];
 
     $form['actions'] = [
@@ -51,11 +52,20 @@ final class RecipesStarterkitForm extends InstallerFormBase {
         '#value' => $this->t('Next'),
         '#button_type' => 'primary',
       ],
-      'skip' => [
-        '#type' => 'submit',
-        '#value' => $this->t('Skip this step'),
-      ],
       '#type' => 'actions',
+      '#states' => [
+//        'disabled' => [
+//          ':input[name="add_ons"]' => [
+//            'checked' => FALSE,
+//          ]
+//        ],
+        // Action to take.
+        'enabled' => [
+          ':input[name="add_ons"]' => [
+            'checked' => TRUE,
+          ]
+        ]
+      ]
     ];
     return parent::buildForm($form, $form_state);
   }
@@ -65,13 +75,15 @@ final class RecipesStarterkitForm extends InstallerFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     global $install_state;
-    $install_state['parameters']['recipes'] = ['acquia_drupal_starterkit'];
     $pressed_button = $form_state->getTriggeringElement();
     // Only choose add-ons if the Next button was pressed.
     if ($pressed_button && end($pressed_button['#array_parents']) === 'submit') {
       $add_ons = $form_state->getValue('add_ons');
       if ($add_ons) {
         $install_state['parameters']['recipes'][] = $add_ons;
+      }
+      else {
+        $install_state['parameters']['recipes'] = ['acquia_drupal_starterkit_community'];
       }
     }
   }

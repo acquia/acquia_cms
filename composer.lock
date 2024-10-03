@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "284f2831ddc4981772e5ccce84c6b4e4",
+    "content-hash": "897378a44b690000af3b2c6bbc099561",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -3151,27 +3151,6 @@
             }
         },
         {
-            "name": "drupal/acquia_drupal_starterkit",
-            "version": "dev-develop",
-            "dist": {
-                "type": "path",
-                "url": "./recipes/acquia_drupal_starterkit",
-                "reference": "0dc50ac2e4b1404f3f52f68fff1f001c259cfc3d"
-            },
-            "require": {
-                "drupal/acquia_drupal_starterkit_admin_theme": "dev-develop",
-                "drupal/acquia_drupal_starterkit_basic_html_editor": "dev-develop",
-                "drupal/acquia_drupal_starterkit_full_html_editor": "dev-develop",
-                "drupal/core": ">=10.3",
-                "drupal/project_browser": "^2"
-            },
-            "type": "drupal-recipe",
-            "description": "Sets up a site with useful features and sample content.",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
             "name": "drupal/acquia_drupal_starterkit_admin_theme",
             "version": "dev-develop",
             "dist": {
@@ -3224,13 +3203,17 @@
             "dist": {
                 "type": "path",
                 "url": "./recipes/acquia_drupal_starterkit_community",
-                "reference": "c1e02303bec2309ef42f9078ce4b295de8110838"
+                "reference": "ad8e67656fc665672c0c0914c7fc9e496a44a486"
             },
             "require": {
                 "drupal/acquia_cms_toolbar": "^1.5",
                 "drupal/acquia_cms_tour": "^2.1",
-                "drupal/acquia_drupal_starterkit": "dev-develop",
-                "drupal/core": ">=10.3"
+                "drupal/acquia_drupal_starterkit_admin_theme": "dev-develop",
+                "drupal/acquia_drupal_starterkit_basic_html_editor": "dev-develop",
+                "drupal/acquia_drupal_starterkit_full_html_editor": "dev-develop",
+                "drupal/acquia_drupal_starterkit_security": "dev-develop",
+                "drupal/core": ">=10.3",
+                "drupal/project_browser": "^2"
             },
             "type": "drupal-recipe",
             "extra": {
@@ -3338,6 +3321,29 @@
                 }
             },
             "description": "Enhances the Full HTML editor with better linking and media support.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "drupal/acquia_drupal_starterkit_gdpr",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./recipes/acquia_drupal_starterkit_gdpr",
+                "reference": "62aacb3b36127faeb8acecf7ac8c42af82534f0f"
+            },
+            "require": {
+                "drupal/core": ">=10.3",
+                "drupal/gdpr": "^3.0"
+            },
+            "type": "drupal-recipe",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "description": "Provides help for making your drupal site GDPR-compliant.",
             "transport-options": {
                 "relative": true
             }
@@ -4960,6 +4966,75 @@
             }
         },
         {
+            "name": "drupal/entity",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/entity.git",
+                "reference": "8.x-1.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/entity-8.x-1.5.zip",
+                "reference": "8.x-1.5",
+                "shasum": "86c0b75c173144aaedde3e3258dc0d3ce11d1a22"
+            },
+            "require": {
+                "drupal/core": "^10.1 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.5",
+                    "datestamp": "1723380062",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "berdir",
+                    "homepage": "https://www.drupal.org/user/214652"
+                },
+                {
+                    "name": "bojanz",
+                    "homepage": "https://www.drupal.org/user/86106"
+                },
+                {
+                    "name": "dawehner",
+                    "homepage": "https://www.drupal.org/user/99340"
+                },
+                {
+                    "name": "dixon_",
+                    "homepage": "https://www.drupal.org/user/239911"
+                },
+                {
+                    "name": "fago",
+                    "homepage": "https://www.drupal.org/user/16747"
+                },
+                {
+                    "name": "mglaman",
+                    "homepage": "https://www.drupal.org/user/2416470"
+                },
+                {
+                    "name": "TR",
+                    "homepage": "https://www.drupal.org/user/202830"
+                }
+            ],
+            "description": "Provides expanded entity APIs, which will be moved to Drupal core one day.",
+            "homepage": "https://www.drupal.org/project/entity",
+            "support": {
+                "source": "https://git.drupalcode.org/project/entity",
+                "issues": "https://www.drupal.org/project/issues/entity"
+            }
+        },
+        {
             "name": "drupal/entity_clone",
             "version": "2.1.0-beta1",
             "source": {
@@ -5420,6 +5495,126 @@
                 "source": "https://cgit.drupalcode.org/focal_point",
                 "issues": "https://drupal.org/project/issues/focal_point",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
+            }
+        },
+        {
+            "name": "drupal/gdpr",
+            "version": "3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/gdpr.git",
+                "reference": "3.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/gdpr-3.1.0.zip",
+                "reference": "3.1.0",
+                "shasum": "1e3e371178e12cee37fb4eb846751a924e7236b6"
+            },
+            "require": {
+                "drupal/checklistapi": "^2.1",
+                "drupal/core": "^9 || ^10 || ^11",
+                "drupal/entity": "^1.4",
+                "drupal/entity_reference_revisions": "^1.11",
+                "drupal/message": "^1.5",
+                "drupal/token": "^1.14",
+                "fakerphp/faker": "^1 || ^2",
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "drupal/anonymizer": "*",
+                "drupal/entity": "*",
+                "drupal/entity_reference_revisions": "*",
+                "drupal/gdpr_fields": "*",
+                "drupal/message": "*",
+                "drupal/token": "*"
+            },
+            "suggest": {
+                "drush/drush": "GDPR Dump requires Drush ^9 || ^10",
+                "ext-zip": "GDPR Tasks requires the PHP zip extension"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "3.1.0",
+                    "datestamp": "1721207445",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "mhavelant",
+                    "homepage": "https://www.drupal.org/user/1358588",
+                    "email": "mhavelant@brainsum.com"
+                },
+                {
+                    "name": "andrewbelcher",
+                    "homepage": "https://www.drupal.org/user/655282"
+                },
+                {
+                    "name": "back-2-95",
+                    "homepage": "https://www.drupal.org/user/327328"
+                },
+                {
+                    "name": "Balu Ertl",
+                    "homepage": "https://www.drupal.org/user/1086292"
+                },
+                {
+                    "name": "bfr",
+                    "homepage": "https://www.drupal.org/user/369262"
+                },
+                {
+                    "name": "dj1999",
+                    "homepage": "https://www.drupal.org/user/387119"
+                },
+                {
+                    "name": "golddragon007",
+                    "homepage": "https://www.drupal.org/user/2723471"
+                },
+                {
+                    "name": "Kosa Ilma",
+                    "homepage": "https://www.drupal.org/user/3435475"
+                },
+                {
+                    "name": "lbesenyei",
+                    "homepage": "https://www.drupal.org/user/2626013"
+                },
+                {
+                    "name": "leymannx",
+                    "homepage": "https://www.drupal.org/user/2482808"
+                },
+                {
+                    "name": "mhavelant",
+                    "homepage": "https://www.drupal.org/user/3331139"
+                },
+                {
+                    "name": "pedrop",
+                    "homepage": "https://www.drupal.org/user/1043368"
+                },
+                {
+                    "name": "rajeshreeputra",
+                    "homepage": "https://www.drupal.org/user/3418561"
+                },
+                {
+                    "name": "szato",
+                    "homepage": "https://www.drupal.org/user/389677"
+                },
+                {
+                    "name": "yanniboi",
+                    "homepage": "https://www.drupal.org/user/1837556"
+                }
+            ],
+            "description": "Helps with making a site GDPR-compliant.",
+            "homepage": "https://www.drupal.org/project/gdpr",
+            "support": {
+                "source": "https://git.drupalcode.org/project/gdpr"
             }
         },
         {
@@ -6506,6 +6701,69 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/memcache",
                 "issues": "https://www.drupal.org/project/issues/memcache"
+            }
+        },
+        {
+            "name": "drupal/message",
+            "version": "1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/message.git",
+                "reference": "8.x-1.6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/message-8.x-1.6.zip",
+                "reference": "8.x-1.6",
+                "shasum": "242c86fd0fc31c5e7b0983fb88272191924d2d6f"
+            },
+            "require": {
+                "drupal/core": "^9.2 || ^10 || ^11"
+            },
+            "require-dev": {
+                "drupal/token": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.6",
+                    "datestamp": "1726668059",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "amitaibu",
+                    "homepage": "https://www.drupal.org/user/57511"
+                },
+                {
+                    "name": "bluegeek9",
+                    "homepage": "https://www.drupal.org/user/1286304"
+                },
+                {
+                    "name": "Grayside",
+                    "homepage": "https://www.drupal.org/user/346868"
+                },
+                {
+                    "name": "jhedstrom",
+                    "homepage": "https://www.drupal.org/user/208732"
+                },
+                {
+                    "name": "RoySegall",
+                    "homepage": "https://www.drupal.org/user/1812910"
+                }
+            ],
+            "description": "Message",
+            "homepage": "https://www.drupal.org/project/message",
+            "support": {
+                "source": "https://git.drupalcode.org/project/message"
             }
         },
         {
@@ -9622,6 +9880,69 @@
                 "source": "https://github.com/ezyang/htmlpurifier/tree/v4.17.0"
             },
             "time": "2023-11-17T15:01:25+00:00"
+        },
+        {
+            "name": "fakerphp/faker",
+            "version": "v1.23.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FakerPHP/Faker.git",
+                "reference": "bfb4fe148adbf78eff521199619b93a52ae3554b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/bfb4fe148adbf78eff521199619b93a52ae3554b",
+                "reference": "bfb4fe148adbf78eff521199619b93a52ae3554b",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4 || ^8.0",
+                "psr/container": "^1.0 || ^2.0",
+                "symfony/deprecation-contracts": "^2.2 || ^3.0"
+            },
+            "conflict": {
+                "fzaninotto/faker": "*"
+            },
+            "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.4.1",
+                "doctrine/persistence": "^1.3 || ^2.0",
+                "ext-intl": "*",
+                "phpunit/phpunit": "^9.5.26",
+                "symfony/phpunit-bridge": "^5.4.16"
+            },
+            "suggest": {
+                "doctrine/orm": "Required to use Faker\\ORM\\Doctrine",
+                "ext-curl": "Required by Faker\\Provider\\Image to download images.",
+                "ext-dom": "Required by Faker\\Provider\\HtmlLorem for generating random HTML.",
+                "ext-iconv": "Required by Faker\\Provider\\ru_RU\\Text::realText() for generating real Russian text.",
+                "ext-mbstring": "Required for multibyte Unicode string functionality."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Faker\\": "src/Faker/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "François Zaninotto"
+                }
+            ],
+            "description": "Faker is a PHP library that generates fake data for you.",
+            "keywords": [
+                "data",
+                "faker",
+                "fixtures"
+            ],
+            "support": {
+                "issues": "https://github.com/FakerPHP/Faker/issues",
+                "source": "https://github.com/FakerPHP/Faker/tree/v1.23.1"
+            },
+            "time": "2024-01-02T13:46:09+00:00"
         },
         {
             "name": "fileeye/mimemap",
@@ -22003,12 +22324,12 @@
         "drupal/acquia_drupal_starterkit_content_model": 20,
         "drupal/acquia_drupal_starterkit_dam": 20,
         "drupal/acquia_drupal_starterkit_demo_content": 20,
+        "drupal/acquia_drupal_starterkit_gdpr": 20,
         "drupal/acquia_drupal_starterkit_headless": 20,
         "drupal/acquia_drupal_starterkit_installer": 20,
         "drupal/acquia_drupal_starterkit_low_code": 20,
         "drupal/acquia_drupal_starterkit_media_model": 20,
         "drupal/acquia_drupal_starterkit_search": 20,
-        "drupal/acquia_drupal_starterkit_security": 20,
         "drupal/gin": 5,
         "drupal/sitestudio_gin": 20
     },
