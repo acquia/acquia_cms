@@ -33,7 +33,7 @@ final class SiteNameForm extends InstallerFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Site name'),
       '#required' => TRUE,
-      '#default_value' => $install_state['forms']['install_configure_form']['site_name'] ?? $this->t('My awesome site'),
+      '#default_value' => $install_state['forms']['install_configure_form']['site_name'] ?? $this->t('Acquia Drupal Starter Kit'),
     ];
     $form['actions'] = [
       '#type' => 'actions',
