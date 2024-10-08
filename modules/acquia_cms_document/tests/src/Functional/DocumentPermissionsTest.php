@@ -18,6 +18,7 @@ class DocumentPermissionsTest extends MediaPermissionsTestBase {
    */
   protected static $modules = [
     'acquia_cms_document',
+    'acquia_cms_common',
   ];
 
   /**

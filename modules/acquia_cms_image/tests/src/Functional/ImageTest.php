@@ -18,7 +18,10 @@ class ImageTest extends MediaTypeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['acquia_cms_image'];
+  protected static $modules = [
+    'acquia_cms_common',
+    'acquia_cms_image',
+  ];
 
   /**
    * Disable strict config schema checks in this test.

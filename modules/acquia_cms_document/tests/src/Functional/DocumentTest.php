@@ -19,7 +19,10 @@ class DocumentTest extends MediaTypeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['acquia_cms_document'];
+  protected static $modules = [
+    'acquia_cms_document',
+    'acquia_cms_common',
+  ];
 
   /**
    * Disable strict config schema checks in this test.
