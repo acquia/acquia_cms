@@ -14,7 +14,7 @@ use Drupal\Core\Config\StorageInterface;
  */
 function acquia_cms_video_install($is_syncing) {
   if (!$is_syncing) {
-    $optional_install_path = \Drupal::service('extension.path.resolver')->getPath('module','acquia_cms_video') . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY;
+    $optional_install_path = \Drupal::service('extension.path.resolver')->getPath('module', 'acquia_cms_video') . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY;
     if (is_dir($optional_install_path)) {
       $config_installer = \Drupal::service('config.installer');
       $storage = new FileStorage($optional_install_path, StorageInterface::DEFAULT_COLLECTION);
