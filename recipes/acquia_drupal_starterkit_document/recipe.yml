@@ -4,3 +4,11 @@ type: 'Starterkit addon'
 install:
   # Contrib
   - acquia_cms_document
+config:
+  import:
+    acquia_cms_document: '*'
+    file: '*'
+    media: '*'
+    media_library: '*'
+    taxonomy: '*'
+    field_group: '*'

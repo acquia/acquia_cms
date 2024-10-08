@@ -4,3 +4,11 @@ type: 'Starterkit addon'
 install:
   # Contrib
   - acquia_cms_audio
+config:
+  import:
+    acquia_cms_audio: '*'
+    media: '*'
+    media_library: '*'
+    taxonomy: '*'
+    media_entity_soundcloud: '*'
+    field_group: '*'

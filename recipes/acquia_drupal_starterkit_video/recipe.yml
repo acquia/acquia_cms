@@ -4,3 +4,11 @@ type: 'Starterkit addon'
 install:
   # Contrib
   - acquia_cms_video
+config:
+  import:
+    acquia_cms_video: '*'
+    file: '*'
+    media: '*'
+    media_library: '*'
+    taxonomy: '*'
+    field_group: '*'
