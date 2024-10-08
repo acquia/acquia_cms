@@ -17,6 +17,7 @@ class ImagePermissionsTest extends MediaPermissionsTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
+    'acquia_cms_common',
     'acquia_cms_image',
   ];
 

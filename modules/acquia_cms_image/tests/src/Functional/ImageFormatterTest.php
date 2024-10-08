@@ -13,6 +13,7 @@ class ImageFormatterTest extends BrowserTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
+    'acquia_cms_common',
     'acquia_cms_image',
   ];
 
