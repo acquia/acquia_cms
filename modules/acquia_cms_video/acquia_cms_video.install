@@ -5,12 +5,21 @@
  * Install, update and uninstall functions for the acquia_cms_video module.
  */
 
+use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Config\InstallStorage;
+use Drupal\Core\Config\StorageInterface;
+
 /**
  * Implements hook_install().
  */
 function acquia_cms_video_install($is_syncing) {
   if (!$is_syncing) {
-    _acquia_cms_common_editor_config_rewrite();
+    $optional_install_path = \Drupal::service('extension.path.resolver')->getPath('module','acquia_cms_video') . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY;
+    if (is_dir($optional_install_path)) {
+      $config_installer = \Drupal::service('config.installer');
+      $storage = new FileStorage($optional_install_path, StorageInterface::DEFAULT_COLLECTION);
+      $config_installer->installOptionalConfig($storage, ['module' => 'acquia_cms_video']);
+    }
   }
 }
 
