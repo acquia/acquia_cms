@@ -1,0 +1,36 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.audio.field_media_soundcloud
+    - media.type.audio
+  module:
+    - media_entity_soundcloud
+  enforced:
+    module:
+      - acquia_cms_audio
+id: media.audio.default
+targetEntityType: media
+bundle: audio
+mode: default
+content:
+  field_media_soundcloud:
+    type: soundcloud_embed
+    label: visually_hidden
+    settings:
+      type: visual
+      width: 100%
+      height: '450'
+      options: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  field_categories: true
+  field_tags: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+  enforced:
+    config:
+      - core.entity_view_display.media.image.default
+name: coh_small_square
+label: 'Small square (568x568)'
+effects:
+  34322c52-b7f4-4755-bd49-62d4bb2b8e08:
+    uuid: 34322c52-b7f4-4755-bd49-62d4bb2b8e08
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 568
+      height: 568
+      crop_type: focal_point
