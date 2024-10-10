@@ -1,0 +1,38 @@
+.cms-installer__language {
+  position: relative; /* Anchor dropdown. */
+}
+
+.cms-installer__language-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  z-index: 1;
+  translate: -50% 0;
+  visibility: hidden;
+  opacity: 0;
+  width: min(90vw, 1000px);
+  padding: 20px;
+  background: white;
+  border: solid 1px transparent;
+  border-radius: 0.5rem;
+  box-shadow: 0 40px 40px #00000088;
+  transition: all 0.2s;
+}
+
+.cms-installer__language-button[aria-expanded="true"] + .cms-installer__language-dropdown {
+  visibility: visible;
+  opacity: 1;
+}
+
+.cms-installer__language-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  column-width: 150px;
+  column-gap: 10px;
+
+}
+
+.cms-installer__list-item {
+  margin-bottom: 8px;
+}

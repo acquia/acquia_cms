@@ -20,7 +20,10 @@ class VideoTest extends MediaTypeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['acquia_cms_video'];
+  protected static $modules = [
+    'acquia_cms_common',
+    'acquia_cms_video',
+  ];
 
   /**
    * Disable strict config schema checks in this test.
