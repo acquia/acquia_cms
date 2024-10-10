@@ -88,13 +88,6 @@ jobs:
           #coverage: xdebug
       - name: Execute PHPStan
         run: |
-          # Remove Acquia CMS modules.
-          # @todo: Remove module from below which you want to make Drupal 11 compatible.
-          composer remove "drupal/acquia_cms_headless" --no-install --no-update
-          # Remove acquia_cms_headless module.
-          rm -fr modules/acquia_cms_headless
-          # Unset the repository path.
-          composer config repositories.acquia_cms_headless --unset
           rm composer.lock
           composer install
           ./vendor/bin/phpstan analyze
@@ -166,13 +159,6 @@ jobs:
       #     aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Before Install
         run: |
-          # Remove Acquia CMS modules.
-          # @todo: Remove module from below which you want to make Drupal 11 compatible.
-          composer remove "drupal/acquia_cms_headless" --no-install --no-update
-          # Remove acquia_cms_headless module.
-          rm -fr modules/acquia_cms_headless
-          # Unset the repository path.
-          composer config repositories.acquia_cms_headless --unset
           # Update the CI by adding patches without pinning the following modules.
           #composer require "drupal/facets:^2.0.6" --no-update --no-install -d modules/acquia_cms_search
 
@@ -245,7 +231,7 @@ jobs:
           - acquia_cms_common
           - acquia_cms_document
           - acquia_cms_event
-          # - acquia_cms_headless
+          - acquia_cms_headless
           - acquia_cms_image
           - acquia_cms_page
           - acquia_cms_person
@@ -271,13 +257,6 @@ jobs:
           curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
       - name: Before Install
         run: |
-          # Remove Acquia CMS modules.
-          # @todo: Remove module from below which you want to make Drupal 11 compatible.
-          composer remove "drupal/acquia_cms_headless" --no-install --no-update
-          # Remove acquia_cms_headless module.
-          rm -fr modules/acquia_cms_headless
-          # Unset the repository path.
-          composer config repositories.acquia_cms_headless --unset
           # Remove all ExistingSite test in CI.
           find tests/src -type f -name "*Test.php" -path "*/ExistingSite*/*" -exec rm -fr '{}' ';'
           # Remove all PHPUnit test files, excluding the current module's PHPUnit tests.
@@ -375,14 +354,6 @@ jobs:
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Before Install
         run: |
-          # Remove Acquia CMS modules.
-          # @todo: Remove module from below which you want to make Drupal 11 compatible.
-          composer remove "drupal/acquia_cms_headless" --no-install --no-update
-          # Remove acquia_cms_headless module.
-          rm -fr modules/acquia_cms_headless
-          # Unset the repository path.
-          composer config repositories.acquia_cms_headless --unset
-
           # Remove all PHPunit tests from acquia_cms modules.
           find modules/*/tests tests/src -type f -name "*Test.php" -exec rm -fr '{}' ';'
 
