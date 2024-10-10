@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f59c9cb44ff9bfd56bf1b512415215d3",
+    "content-hash": "24e5f3bd6a76592a238904e837bf18ae",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -3182,29 +3182,6 @@
             }
         },
         {
-            "name": "drupal/acquia_drupal_starterkit_audio",
-            "version": "dev-develop",
-            "dist": {
-                "type": "path",
-                "url": "./recipes/acquia_drupal_starterkit_audio",
-                "reference": "620e1d0347a9eabaff1493628699cfa0917349bf"
-            },
-            "require": {
-                "drupal/acquia_cms_audio": "^1.5",
-                "drupal/core": ">=10.3"
-            },
-            "type": "drupal-recipe",
-            "extra": {
-                "branch-alias": {
-                    "dev-develop": "1.x-dev"
-                }
-            },
-            "description": "Provides an Audio media type and related configuration.",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
             "name": "drupal/acquia_drupal_starterkit_basic_html_editor",
             "version": "dev-develop",
             "dist": {
@@ -3336,11 +3313,11 @@
             "dist": {
                 "type": "path",
                 "url": "./recipes/acquia_drupal_starterkit_document",
-                "reference": "ea60aae974f79c661c24f37577c6b9730c43e563"
+                "reference": "d514b08c1bf5bf0c2c0c0fa86d26b3095d896751"
             },
             "require": {
-                "drupal/acquia_cms_document": "^1.4",
-                "drupal/core": ">=10.3"
+                "drupal/core": ">=10.3",
+                "drupal/field_group": "^3.6 || ^4.0"
             },
             "type": "drupal-recipe",
             "extra": {
@@ -3430,11 +3407,14 @@
             "dist": {
                 "type": "path",
                 "url": "./recipes/acquia_drupal_starterkit_image",
-                "reference": "71bc323748796ca7fd30320154a8cf6da5448ab4"
+                "reference": "1d37237057ff5b1f29078c1f3d84a0acd219bdf1"
             },
             "require": {
-                "drupal/acquia_cms_image": "^1.6",
-                "drupal/core": ">=10.3"
+                "drupal/core": ">=10.3",
+                "drupal/field_group": "^3.6 || ^4.0",
+                "drupal/focal_point": "^2.1",
+                "drupal/imagemagick": "^3.4 || ^4.0",
+                "drupal/imce": "^2.2 || ^3.0"
             },
             "type": "drupal-recipe",
             "extra": {
@@ -3494,17 +3474,64 @@
             "dist": {
                 "type": "path",
                 "url": "./recipes/acquia_drupal_starterkit_media",
-                "reference": "3d728aaa7f10dd470a5b4237a9cc5b83ce4feaf1"
+                "reference": "56bcb252c4de9cb43698813f3f48e71444daed5a"
+            },
+            "require": {
+                "drupal/acquia_drupal_starterkit_document": "dev-develop",
+                "drupal/acquia_drupal_starterkit_image": "dev-develop",
+                "drupal/acquia_drupal_starterkit_remote_audio": "dev-develop",
+                "drupal/acquia_drupal_starterkit_remote_video": "dev-develop",
+                "drupal/core": ">=10.3"
+            },
+            "type": "drupal-recipe",
+            "description": "An media model provides Document, Image, Remote Audio, Remote Video media types.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "drupal/acquia_drupal_starterkit_remote_audio",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./recipes/acquia_drupal_starterkit_remote_audio",
+                "reference": "7fd8aaf246a9a9ed64ef97842d60c7b68cf14dd2"
             },
             "require": {
                 "drupal/core": ">=10.3",
-                "drupal/focal_point": "^2.1",
-                "drupal/imagemagick": "^3.4 || ^4.0",
-                "drupal/imce": "^2.2 || ^3.0",
+                "drupal/field_group": "^3.6 || ^4.0",
                 "drupal/media_entity_soundcloud": "^3.1"
             },
             "type": "drupal-recipe",
-            "description": "An media model provides Audio, Document, Image< Video media types.",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "description": "Provides an Remote Audio media type and related configuration.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "drupal/acquia_drupal_starterkit_remote_video",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "./recipes/acquia_drupal_starterkit_remote_video",
+                "reference": "0e5614e4f781caca8f25ba0cdb786b206311b06e"
+            },
+            "require": {
+                "drupal/core": ">=10.3",
+                "drupal/field_group": "^3.6 || ^4.0"
+            },
+            "type": "drupal-recipe",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "description": "Provides a Remote Video media type and related configuration.",
             "transport-options": {
                 "relative": true
             }
@@ -3553,29 +3580,6 @@
                 }
             },
             "description": "Provides integration between your Drupal site and Acquia's hosted search service.",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "drupal/acquia_drupal_starterkit_video",
-            "version": "dev-develop",
-            "dist": {
-                "type": "path",
-                "url": "./recipes/acquia_drupal_starterkit_video",
-                "reference": "c07ed6f150e71b2612624e551411065b659cab69"
-            },
-            "require": {
-                "drupal/acquia_cms_video": "^1.6",
-                "drupal/core": ">=10.3"
-            },
-            "type": "drupal-recipe",
-            "extra": {
-                "branch-alias": {
-                    "dev-develop": "1.x-dev"
-                }
-            },
-            "description": "Provides a Video media type and related configuration.",
             "transport-options": {
                 "relative": true
             }
@@ -22860,7 +22864,6 @@
         "drupal/acquia_cms_starter": 20,
         "drupal/acquia_cms_toolbar": 20,
         "drupal/acquia_cms_tour": 20,
-        "drupal/acquia_drupal_starterkit_audio": 20,
         "drupal/acquia_drupal_starterkit_content_model": 20,
         "drupal/acquia_drupal_starterkit_dam": 20,
         "drupal/acquia_drupal_starterkit_demo_content": 20,
@@ -22871,8 +22874,9 @@
         "drupal/acquia_drupal_starterkit_installer": 20,
         "drupal/acquia_drupal_starterkit_low_code": 20,
         "drupal/acquia_drupal_starterkit_media": 20,
+        "drupal/acquia_drupal_starterkit_remote_audio": 20,
+        "drupal/acquia_drupal_starterkit_remote_video": 20,
         "drupal/acquia_drupal_starterkit_search": 20,
-        "drupal/acquia_drupal_starterkit_video": 20,
         "drupal/gin": 5,
         "drupal/sitestudio_gin": 20
     },

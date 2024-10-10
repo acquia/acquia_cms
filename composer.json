@@ -25,7 +25,6 @@
         "drupal/acquia_cms_starter": "dev-develop",
         "drupal/acquia_cms_toolbar": "dev-develop",
         "drupal/acquia_cms_tour": "dev-develop",
-        "drupal/acquia_drupal_starterkit_audio": "dev-develop",
         "drupal/acquia_drupal_starterkit_content_model": "dev-develop",
         "drupal/acquia_drupal_starterkit_dam": "dev-develop",
         "drupal/acquia_drupal_starterkit_demo_content": "dev-develop",
@@ -36,8 +35,9 @@
         "drupal/acquia_drupal_starterkit_installer": "dev-develop",
         "drupal/acquia_drupal_starterkit_low_code": "dev-develop",
         "drupal/acquia_drupal_starterkit_media": "dev-develop",
+        "drupal/acquia_drupal_starterkit_remote_audio": "dev-develop",
+        "drupal/acquia_drupal_starterkit_remote_video": "dev-develop",
         "drupal/acquia_drupal_starterkit_search": "dev-develop",
-        "drupal/acquia_drupal_starterkit_video": "dev-develop",
         "drupal/consumer_image_styles": "^4.0",
         "drupal/gin": "^3.0@RC",
         "drupal/google_tag": "^2.0",
@@ -253,15 +253,6 @@
                 }
             }
         },
-        "acquia_drupal_starterkit_audio": {
-            "type": "path",
-            "url": "./recipes/acquia_drupal_starterkit_audio",
-            "options": {
-                "versions": {
-                    "drupal/acquia_drupal_starterkit_audio": "dev-develop"
-                }
-            }
-        },
         "acquia_drupal_starterkit_basic_html_editor": {
             "type": "path",
             "url": "./recipes/acquia_drupal_starterkit_basic_html_editor",
@@ -415,6 +406,24 @@
                 }
             }
         },
+        "acquia_drupal_starterkit_remote_audio": {
+            "type": "path",
+            "url": "./recipes/acquia_drupal_starterkit_remote_audio",
+            "options": {
+                "versions": {
+                    "drupal/acquia_drupal_starterkit_remote_audio": "dev-develop"
+                }
+            }
+        },
+        "acquia_drupal_starterkit_remote_video": {
+            "type": "path",
+            "url": "./recipes/acquia_drupal_starterkit_remote_video",
+            "options": {
+                "versions": {
+                    "drupal/acquia_drupal_starterkit_remote_video": "dev-develop"
+                }
+            }
+        },
         "acquia_drupal_starterkit_search": {
             "type": "path",
             "url": "./recipes/acquia_drupal_starterkit_search",
@@ -430,15 +439,6 @@
             "options": {
                 "versions": {
                     "drupal/acquia_drupal_starterkit_security": "dev-develop"
-                }
-            }
-        },
-        "acquia_drupal_starterkit_video": {
-            "type": "path",
-            "url": "./recipes/acquia_drupal_starterkit_video",
-            "options": {
-                "versions": {
-                    "drupal/acquia_drupal_starterkit_video": "dev-develop"
                 }
             }
         },

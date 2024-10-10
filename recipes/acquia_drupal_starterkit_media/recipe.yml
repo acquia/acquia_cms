@@ -1,24 +1,8 @@
 name: 'Acquia Drupal Startekit Media'
 description: 'An media model provides Audio, Document, Image, Video media types.'
 type: 'Starterkit addon'
-install:
-  - field_group
-  - file
-  - focal_point
-  - image
-  - imce
-  - media
-  - media_entity_soundcloud
-  - media_library
-  - taxonomy
-config:
-  import:
-    field_group: '*'
-    file: '*'
-    focal_point: '*'
-    image: '*'
-    imce: '*'
-    media: '*'
-    media_entity_soundcloud: '*'
-    media_library: '*'
-    taxonomy: '*'
+recipes:
+  - acquia_drupal_starterkit_document
+  - acquia_drupal_starterkit_image
+  - acquia_drupal_starterkit_remote_audio
+  - acquia_drupal_starterkit_remote_video

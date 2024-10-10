@@ -1,13 +1,13 @@
 {
     "name": "drupal/acquia_drupal_starterkit_media",
     "type": "drupal-recipe",
-    "description": "An media model provides Audio, Document, Image< Video media types.",
+    "description": "An media model provides Document, Image, Remote Audio, Remote Video media types.",
     "version": "dev-develop",
     "require": {
         "drupal/core": ">=10.3",
-        "drupal/media_entity_soundcloud": "^3.1",
-        "drupal/focal_point": "^2.1",
-        "drupal/imagemagick": "^3.4 || ^4.0",
-        "drupal/imce": "^2.2 || ^3.0"
+        "drupal/acquia_drupal_starterkit_document": "dev-develop",
+        "drupal/acquia_drupal_starterkit_image": "dev-develop",
+        "drupal/acquia_drupal_starterkit_remote_audio": "dev-develop",
+        "drupal/acquia_drupal_starterkit_remote_video": "dev-develop"
     }
 }

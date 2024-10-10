@@ -1,14 +1,215 @@
 name: 'Acquia Drupal Startekit Document'
 description: 'Provides a Document media type and related configuration.'
 type: 'Starterkit addon'
+recipes:
+  - core/recipes/document_media_type
+  - core/recipes/tags_taxonomy
 install:
   # Contrib
-  - acquia_cms_document
+  - field_group
 config:
   import:
-    acquia_cms_document: '*'
-    file: '*'
-    media: '*'
-    media_library: '*'
-    taxonomy: '*'
     field_group: '*'
+  actions:
+    taxonomy.vocabulary.categories:
+      createIfNotExists:
+        name: Categories
+        vid: categories
+        description: 'Descriptive metadata, for categorizing content and making search engines happy.'
+        weight: 0
+    taxonomy.vocabulary.tags:
+      createIfNotExists:
+        name: Tags
+        vid: tags
+        description: 'Descriptive metadata, for categorizing content and making search engines happy.'
+        weight: 0
+    field.storage.media.field_categories:
+      createIfNotExists:
+        id: media.field_categories
+        field_name: field_categories
+        entity_type: media
+        type: entity_reference
+        settings:
+          target_type: taxonomy_term
+        module: core
+        locked: false
+        cardinality: -1
+        translatable: true
+        indexes:
+          target_id:
+            - target_id
+        persist_with_no_fields: false
+        custom_storage: false
+    field.storage.media.field_tags:
+      createIfNotExists:
+        id: media.field_tags
+        field_name: field_tags
+        entity_type: media
+        type: entity_reference
+        settings:
+          target_type: taxonomy_term
+        module: core
+        locked: false
+        cardinality: -1
+        translatable: true
+        indexes:
+          target_id:
+            - target_id
+        persist_with_no_fields: false
+        custom_storage: false
+    field.field.media.document.field_categories:
+      createIfNotExists:
+        id: media.document.field_categories
+        field_name: field_categories
+        entity_type: media
+        bundle: document
+        label: Categories
+        description: ''
+        required: false
+        translatable: true
+        default_value: { }
+        default_value_callback: ''
+        settings:
+          handler: 'default:taxonomy_term'
+          handler_settings:
+            target_bundles:
+              tags: categories
+            sort:
+              field: name
+              direction: asc
+            auto_create: true
+            auto_create_bundle: ''
+        field_type: entity_reference
+    field.field.media.document.field_tags:
+      createIfNotExists:
+        id: media.document.field_tags
+        field_name: field_tags
+        entity_type: media
+        bundle: document
+        label: Tags
+        description: ''
+        required: false
+        translatable: true
+        default_value: { }
+        default_value_callback: ''
+        settings:
+          handler: 'default:taxonomy_term'
+          handler_settings:
+            target_bundles:
+              tags: tags
+            sort:
+              field: name
+              direction: asc
+            auto_create: true
+            auto_create_bundle: ''
+        field_type: entity_reference
+    core.entity_form_display.media.document.default:
+      simpleConfigUpdate:
+        third_party_settings:
+          field_group:
+            group_taxonomy:
+              children:
+                - field_categories
+                - field_tags
+              label: Taxonomy
+              region: content
+              parent_name: ''
+              weight: 2
+              format_type: fieldset
+              format_settings:
+                classes: ''
+                id: ''
+                description: ''
+                required_fields: true
+        content:
+          name:
+            type: string_textfield
+            weight: 0
+            region: content
+            settings:
+              size: 60
+              placeholder: ''
+            third_party_settings: { }
+          field_media_document:
+            type: file_generic
+            weight: 1
+            region: content
+            settings:
+              progress_indicator: throbber
+            third_party_settings: { }
+          field_categories:
+            type: options_select
+            weight: 3
+            region: content
+            settings: { }
+            third_party_settings: { }
+          field_tags:
+            type: entity_reference_autocomplete_tags
+            weight: 4
+            region: content
+            settings:
+              match_operator: CONTAINS
+              match_limit: 10
+              size: 60
+              placeholder: ''
+            third_party_settings: { }
+        hidden:
+          created: true
+          path: true
+          status: true
+          uid: true
+    core.entity_form_display.media.document.media_library:
+      simpleConfigUpdate:
+        third_party_settings:
+          field_group:
+            group_taxonomy:
+              children:
+                - field_categories
+                - field_tags
+              label: Taxonomy
+              region: content
+              parent_name: ''
+              weight: 1
+              format_type: fieldset
+              format_settings:
+                classes: ''
+                id: ''
+                description: ''
+                required_fields: true
+        content:
+          name:
+            type: string_textfield
+            weight: 0
+            region: content
+            settings:
+              size: 60
+              placeholder: ''
+            third_party_settings: { }
+          field_media_document:
+            type: file_generic
+            weight: 1
+            region: content
+            settings:
+              progress_indicator: throbber
+            third_party_settings: { }
+          field_categories:
+            type: options_select
+            weight: 3
+            region: content
+            settings: { }
+            third_party_settings: { }
+          field_tags:
+            type: entity_reference_autocomplete_tags
+            weight: 4
+            region: content
+            settings:
+              match_operator: CONTAINS
+              match_limit: 10
+              size: 60
+              placeholder: ''
+            third_party_settings: { }
+        hidden:
+         created: true
+         path: true
+         status: true
+         uid: true

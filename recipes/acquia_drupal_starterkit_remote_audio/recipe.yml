@@ -1,0 +1,111 @@
+name: 'Acquia Drupal Startekit Remote Audio'
+description: 'Provides an Audio media type and related configuration.'
+type: 'Starterkit addon'
+recipes:
+  - core/recipes/tags_taxonomy
+install:
+  - image
+  - media_library
+  # Contrib
+  - field_group
+  - media_entity_soundcloud
+config:
+  import:
+    field_group: '*'
+    media_entity_soundcloud: '*'
+    media_library: '*'
+    image:
+      - image.style.medium
+  actions:
+    taxonomy.vocabulary.categories:
+      createIfNotExists:
+        name: Categories
+        vid: categories
+        description: 'Descriptive metadata, for categorizing content and making search engines happy.'
+        weight: 0
+    taxonomy.vocabulary.tags:
+      createIfNotExists:
+        name: Tags
+        vid: tags
+        description: 'Descriptive metadata, for categorizing content and making search engines happy.'
+        weight: 0
+    field.storage.media.field_categories:
+      createIfNotExists:
+        id: media.field_categories
+        field_name: field_categories
+        entity_type: media
+        type: entity_reference
+        settings:
+          target_type: taxonomy_term
+        module: core
+        locked: false
+        cardinality: -1
+        translatable: true
+        indexes:
+          target_id:
+            - target_id
+        persist_with_no_fields: false
+        custom_storage: false
+    field.storage.media.field_tags:
+      createIfNotExists:
+        id: media.field_tags
+        field_name: field_tags
+        entity_type: media
+        type: entity_reference
+        settings:
+          target_type: taxonomy_term
+        module: core
+        locked: false
+        cardinality: -1
+        translatable: true
+        indexes:
+          target_id:
+            - target_id
+        persist_with_no_fields: false
+        custom_storage: false
+    field.field.media.remote_audio.field_categories:
+      createIfNotExists:
+        id: media.remote_audio.field_categories
+        field_name: field_categories
+        entity_type: media
+        bundle: remote_audio
+        label: Categories
+        description: ''
+        required: false
+        translatable: true
+        default_value: { }
+        default_value_callback: ''
+        settings:
+          handler: 'default:taxonomy_term'
+          handler_settings:
+            target_bundles:
+              tags: categories
+            sort:
+              field: name
+              direction: asc
+            auto_create: true
+            auto_create_bundle: ''
+        field_type: entity_reference
+    field.field.media.remote_audio.field_tags:
+      createIfNotExists:
+        id: media.remote_audio.field_tags
+        field_name: field_tags
+        entity_type: media
+        bundle: remote_audio
+        label: Tags
+        description: ''
+        required: false
+        translatable: true
+        default_value: { }
+        default_value_callback: ''
+        settings:
+          handler: 'default:taxonomy_term'
+          handler_settings:
+            target_bundles:
+              tags: tags
+            sort:
+              field: name
+              direction: asc
+            auto_create: true
+            auto_create_bundle: ''
+        field_type: entity_reference

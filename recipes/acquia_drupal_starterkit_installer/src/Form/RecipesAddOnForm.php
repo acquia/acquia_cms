@@ -36,10 +36,10 @@ final class RecipesAddOnForm extends InstallerFormBase {
       'acquia_drupal_starterkit_gdpr' => $this->t('GDPR'),
       'acquia_drupal_starterkit_media' => $this->t('Media'),
       'acquia_drupal_starterkit_search' => $this->t('Search'),
-      'acquia_drupal_starterkit_audio' => $this->t('Audio'),
       'acquia_drupal_starterkit_document' => $this->t('Document'),
       'acquia_drupal_starterkit_image' => $this->t('image'),
-      'acquia_drupal_starterkit_video' => $this->t('Video'),
+      'acquia_drupal_starterkit_remote_audio' => $this->t('Audio'),
+      'acquia_drupal_starterkit_remote_video' => $this->t('Video'),
     ];
 
     $form['add_ons'] = [

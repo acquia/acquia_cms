@@ -1,19 +1,15 @@
-name: 'Acquia Drupal Startekit Image'
-description: 'Provides an Image media type and related configuration.'
+name: 'Acquia Drupal Startekit Remote Video'
+description: 'Provides a Video media type and related configuration.'
 type: 'Starterkit addon'
 recipes:
-  - core/recipes/image_media_type
+  - core/recipes/remote_video_media_type
   - core/recipes/tags_taxonomy
 install:
   # Contrib
   - field_group
-  - focal_point
-  - imce
 config:
   import:
     field_group: '*'
-    focal_point: '*'
-    imce: '*'
   actions:
     taxonomy.vocabulary.categories:
       createIfNotExists:
@@ -61,12 +57,12 @@ config:
             - target_id
         persist_with_no_fields: false
         custom_storage: false
-    field.field.media.image.field_categories:
+    field.field.media.remote_video.field_categories:
       createIfNotExists:
-        id: media.image.field_categories
+        id: media.remote_video.field_categories
         field_name: field_categories
         entity_type: media
-        bundle: image
+        bundle: remote_video
         label: Categories
         description: ''
         required: false
@@ -84,12 +80,12 @@ config:
             auto_create: true
             auto_create_bundle: ''
         field_type: entity_reference
-    field.field.media.image.field_tags:
+    field.field.media.remote_video.field_tags:
       createIfNotExists:
-        id: media.image.field_tags
+        id: media.remote_video.field_tags
         field_name: field_tags
         entity_type: media
-        bundle: image
+        bundle: remote_video
         label: Tags
         description: ''
         required: false
@@ -107,7 +103,7 @@ config:
             auto_create: true
             auto_create_bundle: ''
         field_type: entity_reference
-    core.entity_form_display.media.image.default:
+    core.entity_form_display.media.remote_video.default:
       simpleConfigUpdate:
         third_party_settings:
           field_group:
@@ -134,18 +130,14 @@ config:
               size: 60
               placeholder: ''
             third_party_settings: { }
-          field_media_image:
-            type: image_focal_point
+          field_media_oembed_video:
+            type: oembed_textfield
             weight: 1
             region: content
             settings:
-              progress_indicator: throbber
-              preview_image_style: medium
-              preview_link: true
-              offsets: '50,50'
-            third_party_settings:
-              imce:
-                enabled: false
+              size: 60
+              placeholder: ''
+            third_party_settings: { }
           field_categories:
             type: options_select
             weight: 3
@@ -167,7 +159,7 @@ config:
           path: true
           status: true
           uid: true
-    core.entity_form_display.media.image.media_library:
+    core.entity_form_display.media.remote_video.media_library:
       simpleConfigUpdate:
         third_party_settings:
           field_group:
@@ -194,18 +186,14 @@ config:
               size: 60
               placeholder: ''
             third_party_settings: { }
-          field_media_image:
-            type: image_focal_point
+          field_media_oembed_video:
+            type: oembed_textfield
             weight: 1
             region: content
             settings:
-              progress_indicator: throbber
-              preview_image_style: medium
-              preview_link: true
-              offsets: '50,50'
-            third_party_settings:
-              imce:
-                enabled: false
+              size: 60
+              placeholder: ''
+            third_party_settings: { }
           field_categories:
             type: options_select
             weight: 3
