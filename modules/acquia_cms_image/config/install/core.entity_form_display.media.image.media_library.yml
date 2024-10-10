@@ -2,8 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.media.image.field_categories
-    - field.field.media.image.field_tags
+    - core.entity_form_mode.media.media_library
     - field.field.media.image.image
     - image.style.medium
     - media.type.image
@@ -11,9 +10,6 @@ dependencies:
     - field_group
     - focal_point
     - imce
-  enforced:
-    module:
-      - acquia_cms_image
 third_party_settings:
   field_group:
     group_taxonomy:
@@ -30,10 +26,10 @@ third_party_settings:
         id: ''
         description: ''
         required_fields: true
-id: media.image.default
+id: media.image.media_library
 targetEntityType: media
 bundle: image
-mode: default
+mode: media_library
 content:
   field_categories:
     type: options_select

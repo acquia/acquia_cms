@@ -18,7 +18,10 @@ class VideoEmbedTest extends MediaEmbedTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['acquia_cms_video'];
+  protected static $modules = [
+    'acquia_cms_common',
+    'acquia_cms_video',
+  ];
 
   /**
    * Disable strict config schema checks in this test.
@@ -44,9 +47,6 @@ class VideoEmbedTest extends MediaEmbedTestBase {
    * {@inheritdoc}
    */
   public function testEmbedMedia(): void {
-    if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
-      $this->markTestSkipped('This cannot be run in a Cloud IDE right now');
-    }
     $node_type = $this->drupalCreateContentType()->id();
     user_role_grant_permissions('content_author', [
       "create $node_type content",
