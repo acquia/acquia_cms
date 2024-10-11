@@ -107,6 +107,920 @@ config:
             auto_create: true
             auto_create_bundle: ''
         field_type: entity_reference
+    image.style.coh_large:
+      createIfNotExists:
+        name: coh_large
+        label: 'Large (W1024)'
+        effects:
+          872a1099-e3fd-4ccb-a7fe-f672465a07b3:
+            uuid: 872a1099-e3fd-4ccb-a7fe-f672465a07b3
+            id: image_scale
+            weight: 2
+            data:
+              width: 1024
+              height: null
+              upscale: false
+    image.style.coh_large_landscape:
+      createIfNotExists:
+        name: coh_large_landscape
+        label: 'Large landscape (1024x683)'
+        effects:
+          39fc4c54-ae2c-4de4-a02a-d06d882da247:
+            uuid: 39fc4c54-ae2c-4de4-a02a-d06d882da247
+            id: focal_point_scale_and_crop
+            weight: 1
+            data:
+              width: 1024
+              height: 683
+              crop_type: focal_point
+    image.style.coh_large_super_landscape:
+      createIfNotExists:
+        name: coh_large_super_landscape
+        label: 'Large super landscape (1024x480)'
+        effects:
+          8bbe9d4d-cd43-44e9-a209-457a4caaeee4:
+            uuid: 8bbe9d4d-cd43-44e9-a209-457a4caaeee4
+            id: focal_point_scale_and_crop
+            weight: 1
+            data:
+              width: 1024
+              height: 480
+              crop_type: focal_point
+    image.style.coh_medium:
+      createIfNotExists:
+        name: coh_medium
+        label: 'Medium (W768)'
+        effects:
+          5b7bd821-17a2-4849-be85-ef8b7b965058:
+            uuid: 5b7bd821-17a2-4849-be85-ef8b7b965058
+            id: image_scale
+            weight: 2
+            data:
+              width: 768
+              height: null
+              upscale: false
+    image.style.coh_medium_landscape:
+      createIfNotExists:
+        name: coh_medium_landscape
+        label: 'Medium landscape (768x512)'
+        effects:
+          87cf2dba-d703-4f1e-ab98-3f21eb92ecd2:
+            uuid: 87cf2dba-d703-4f1e-ab98-3f21eb92ecd2
+            id: focal_point_scale_and_crop
+            weight: 1
+            data:
+              width: 768
+              height: 512
+              crop_type: focal_point
+    image.style.coh_medium_super_landscape:
+      createIfNotExists:
+        name: coh_medium_super_landscape
+        label: 'Medium super landscape (768x360)'
+        effects:
+          a7be10be-726c-4b2a-8025-9a9b7dd85a00:
+            uuid: a7be10be-726c-4b2a-8025-9a9b7dd85a00
+            id: focal_point_scale_and_crop
+            weight: 1
+            data:
+              width: 768
+              height: 360
+              crop_type: focal_point
+    image.style.coh_small:
+      createIfNotExists:
+        name: coh_small
+        label: 'Small (W568)'
+        effects:
+          af34e6bc-007f-415b-b205-76d7b6d4e477:
+            uuid: af34e6bc-007f-415b-b205-76d7b6d4e477
+            id: image_scale
+            weight: 1
+            data:
+              width: 568
+              height: null
+              upscale: false
+    image.style.coh_small_landscape:
+      createIfNotExists:
+        name: coh_small_landscape
+        label: 'Small landscape (568x352)'
+        effects:
+          d8e910fc-dc0e-4a7d-bc21-a3be9cb7a560:
+            uuid: d8e910fc-dc0e-4a7d-bc21-a3be9cb7a560
+            id: focal_point_scale_and_crop
+            weight: 1
+            data:
+              width: 568
+              height: 352
+              crop_type: focal_point
+    image.style.coh_small_square:
+      createIfNotExists:
+        name: coh_small_square
+        label: 'Small square (568x568)'
+        effects:
+          34322c52-b7f4-4755-bd49-62d4bb2b8e08:
+            uuid: 34322c52-b7f4-4755-bd49-62d4bb2b8e08
+            id: focal_point_scale_and_crop
+            weight: 1
+            data:
+              width: 568
+              height: 568
+              crop_type: focal_point
+    image.style.coh_x_large:
+      createIfNotExists:
+        name: coh_x_large
+        label: 'X Large (1360)'
+        effects:
+          872a1099-e3fd-4ccb-a7fe-f672465a07b3:
+            uuid: 872a1099-e3fd-4ccb-a7fe-f672465a07b3
+            id: image_scale
+            weight: 2
+            data:
+              width: 1360
+              height: null
+              upscale: false
+    image.style.coh_x_large_landscape:
+      createIfNotExists:
+        name: coh_x_large_landscape
+        label: 'X Large landscape (1360x908)'
+        effects:
+          ff9be98a-6552-4ae0-8687-8bf8e4dc61ef:
+            uuid: ff9be98a-6552-4ae0-8687-8bf8e4dc61ef
+            id: focal_point_scale_and_crop
+            weight: 1
+            data:
+              width: 1360
+              height: 908
+              crop_type: focal_point
+    image.style.coh_x_large_super_landscape:
+      createIfNotExists:
+        name: coh_x_large_super_landscape
+        label: 'X Large super landscape (1360x640)'
+        effects:
+          b2c98208-726a-44f9-99de-2624f33ac6bd:
+            uuid: b2c98208-726a-44f9-99de-2624f33ac6bd
+            id: focal_point_scale_and_crop
+            weight: 1
+            data:
+              width: 1360
+              height: 640
+              crop_type: focal_point
+    image.style.coh_x_small:
+      createIfNotExists:
+        name: coh_x_small
+        label: 'X Small (W480)'
+        effects:
+          7fe8c665-d621-4928-812d-10165060b5a7:
+            uuid: 7fe8c665-d621-4928-812d-10165060b5a7
+            id: image_scale
+            weight: 2
+            data:
+              width: 480
+              height: null
+              upscale: false
+    image.style.coh_xx_large_landscape:
+      createIfNotExists:
+        name: coh_xx_large_landscape
+        label: 'XX Large landscape (1600x1067)'
+        effects:
+          4fc6f472-7800-4b98-a94d-0e29a3996610:
+            uuid: 4fc6f472-7800-4b98-a94d-0e29a3996610
+            id: focal_point_scale_and_crop
+            weight: 1
+            data:
+              width: 1600
+              height: 1067
+              crop_type: focal_point
+    image.style.coh_xx_small:
+      createIfNotExists:
+        name: coh_xx_small
+        label: 'XX Small (160)'
+        effects:
+          2a065202-6189-4909-bc43-3e7e7aa8e3f6:
+            uuid: 2a065202-6189-4909-bc43-3e7e7aa8e3f6
+            id: image_scale
+            weight: 1
+            data:
+              width: 160
+              height: null
+              upscale: false
+    image.style.coh_xx_small_landscape:
+      createIfNotExists:
+        name: coh_xx_small_landscape
+        label: 'XX Small landscape (160x120)'
+        effects:
+          9846c8a0-70c1-4f9b-ae0a-53411f2a6c52:
+            uuid: 9846c8a0-70c1-4f9b-ae0a-53411f2a6c52
+            id: focal_point_scale_and_crop
+            weight: 1
+            data:
+              width: 160
+              height: 120
+              crop_type: focal_point
+    image.style.x_small_landscape:
+      createIfNotExists:
+        name: x_small_landscape
+        label: 'X Small landscape (480x298)'
+        effects:
+          49a03ebf-6991-46a0-a767-76e84a6f6006:
+            uuid: 49a03ebf-6991-46a0-a767-76e84a6f6006
+            id: focal_point_scale_and_crop
+            weight: 1
+            data:
+              width: 480
+              height: 298
+              crop_type: focal_point
+    image.style.x_small_square:
+      createIfNotExists:
+        name: x_small_square
+        label: 'X Small square (480x480)'
+        effects:
+          90994fe9-6112-4f87-9a85-418b915c0266:
+            uuid: 90994fe9-6112-4f87-9a85-418b915c0266
+            id: focal_point_scale_and_crop
+            weight: 1
+            data:
+              width: 480
+              height: 480
+              crop_type: focal_point
+    core.entity_view_mode.media.teaser:
+      createIfNotExists:
+        id: media.teaser
+        label: Teaser
+        targetEntityType: media
+        cache: true
+    core.entity_view_mode.media.card:
+      createIfNotExists:
+        id: media.card
+        label: Card
+        targetEntityType: media
+        cache: true
+    core.entity_view_mode.media.embedded:
+      createIfNotExists:
+        id: media.embedded
+        label: Embedded
+        targetEntityType: media
+        cache: true
+    core.entity_view_mode.media.large:
+      createIfNotExists:
+        id: media.large
+        label: Large
+        targetEntityType: media
+        cache: true
+    core.entity_view_mode.media.large_landscape:
+      createIfNotExists:
+        id: media.large_landscape
+        label: 'Large landscape'
+        targetEntityType: media
+        cache: true
+    core.entity_view_mode.media.large_super_landscape:
+      createIfNotExists:
+        id: media.large_super_landscape
+        label: 'Large super landscape'
+        targetEntityType: media
+        cache: true
+    core.entity_view_mode.media.medium:
+      createIfNotExists:
+        id: media.medium
+        label: Medium
+        targetEntityType: media
+        cache: true
+    core.entity_view_mode.media.medium_landscape:
+      createIfNotExists:
+        id: media.medium_landscape
+        label: 'Medium landscape'
+        targetEntityType: media
+        cache: true
+    core.entity_view_mode.media.small:
+      createIfNotExists:
+        id: media.small
+        label: Small
+        targetEntityType: media
+        cache: true
+    core.entity_view_mode.media.small_landscape:
+      createIfNotExists:
+        id: media.small_landscape
+        label: 'Small landscape'
+        targetEntityType: media
+        cache: true
+    core.entity_view_mode.media.thumbnail:
+      createIfNotExists:
+        id: media.thumbnail
+        label: Thumbnail
+        targetEntityType: media
+        cache: true
+    core.entity_view_mode.media.x_small_square:
+      createIfNotExists:
+        id: media.x_small_square
+        label: 'X Small square'
+        targetEntityType: media
+        cache: true
+    core.entity_view_display.media.image.default:
+      createIfNotExists:
+        status: true
+        id: media.image.default
+        targetEntityType: media
+        bundle: image
+        mode: default
+        content:
+          field_media_image:
+            type: image
+            label: visually_hidden
+            settings:
+              image_link: ''
+              image_style: coh_x_large
+              image_loading:
+                attribute: lazy
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+      simpleConfigUpdate:
+        status: true
+        mode: default
+        content:
+          field_media_image:
+            type: image
+            label: visually_hidden
+            settings:
+              image_link: ''
+              image_style: coh_x_large
+              image_loading:
+                attribute: lazy
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+    core.entity_view_display.media.image.embedded:
+      createIfNotExists:
+        status: true
+        id: media.image.embedded
+        targetEntityType: media
+        bundle: image
+        mode: embedded
+        content:
+          field_media_image:
+            type: image
+            label: visually_hidden
+            settings:
+              image_link: ''
+              image_style: coh_medium
+              image_loading:
+                attribute: lazy
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+      simpleConfigUpdate:
+        status: true
+        mode: embedded
+        content:
+          field_media_image:
+            type: image
+            label: visually_hidden
+            settings:
+              image_link: ''
+              image_style: coh_medium
+              image_loading:
+                attribute: lazy
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+    core.entity_view_display.media.image.full:
+      createIfNotExists:
+        status: true
+        id: media.image.full
+        targetEntityType: media
+        bundle: image
+        mode: full
+        content:
+          field_media_image:
+            type: image
+            label: visually_hidden
+            settings:
+              image_link: ''
+              image_style: coh_x_large
+              image_loading:
+                attribute: lazy
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+      simpleConfigUpdate:
+        status: true
+        mode: full
+        content:
+          field_media_image:
+            type: image
+            label: visually_hidden
+            settings:
+              image_link: ''
+              image_style: coh_x_large
+              image_loading:
+                attribute: lazy
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+    core.entity_view_display.media.image.large:
+      createIfNotExists:
+        status: true
+        id: media.image.large
+        targetEntityType: media
+        bundle: image
+        mode: large
+        content:
+          field_media_image:
+            type: image
+            label: hidden
+            settings:
+              image_link: ''
+              image_style: coh_x_large
+              image_loading:
+                attribute: lazy
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+      simpleConfigUpdate:
+        status: true
+        mode: large
+        content:
+          field_media_image:
+            type: image
+            label: hidden
+            settings:
+              image_link: ''
+              image_style: coh_x_large
+              image_loading:
+                attribute: lazy
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+    core.entity_view_display.media.image.large_landscape:
+      createIfNotExists:
+        status: true
+        id: media.image.large_landscape
+        targetEntityType: media
+        bundle: image
+        mode: large_landscape
+        content:
+          field_media_image:
+            type: image
+            label: hidden
+            settings:
+              image_link: ''
+              image_style: coh_x_large_landscape
+              image_loading:
+                attribute: lazy
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+      simpleConfigUpdate:
+        status: true
+        mode: large_landscape
+        content:
+          field_media_image:
+            type: image
+            label: hidden
+            settings:
+              image_link: ''
+              image_style: coh_x_large_landscape
+              image_loading:
+                attribute: lazy
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+    core.entity_view_display.media.image.large_super_landscape:
+      createIfNotExists:
+        status: true
+        id: media.image.large_super_landscape
+        targetEntityType: media
+        bundle: image
+        mode: large_super_landscape
+        content:
+          field_media_image:
+            type: image
+            label: visually_hidden
+            settings:
+              image_link: ''
+              image_style: coh_x_large_super_landscape
+              image_loading:
+                attribute: lazy
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+      simpleConfigUpdate:
+        status: true
+        mode: large_super_landscape
+        content:
+          field_media_image:
+            type: image
+            label: visually_hidden
+            settings:
+              image_link: ''
+              image_style: coh_x_large_super_landscape
+              image_loading:
+                attribute: lazy
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+    core.entity_view_display.media.image.medium:
+      createIfNotExists:
+        status: true
+        id: media.image.medium
+        targetEntityType: media
+        bundle: image
+        mode: medium
+        content:
+          field_media_image:
+            type: image
+            label: hidden
+            settings:
+              image_link: ''
+              image_style: coh_medium
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+      simpleConfigUpdate:
+        status: true
+        mode: medium
+        content:
+          field_media_image:
+            type: image
+            label: hidden
+            settings:
+              image_link: ''
+              image_style: coh_medium
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+    core.entity_view_display.media.image.medium_landscape:
+      createIfNotExists:
+        status: true
+        id: media.image.medium_landscape
+        targetEntityType: media
+        bundle: image
+        mode: medium_landscape
+        content:
+          field_media_image:
+            type: image
+            label: above
+            settings:
+              image_link: ''
+              image_style: coh_medium_landscape
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+      simpleConfigUpdate:
+        status: true
+        mode: medium_landscape
+        content:
+          field_media_image:
+            type: image
+            label: above
+            settings:
+              image_link: ''
+              image_style: coh_medium_landscape
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+    core.entity_view_display.media.image.small:
+      createIfNotExists:
+        status: true
+        id: media.image.small
+        targetEntityType: media
+        bundle: image
+        mode: small
+        content:
+          field_media_image:
+            type: image
+            label: hidden
+            settings:
+              image_link: ''
+              image_style: coh_small
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+      simpleConfigUpdate:
+        status: true
+        mode: small
+        content:
+          field_media_image:
+            type: image
+            label: hidden
+            settings:
+              image_link: ''
+              image_style: coh_small
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+    core.entity_view_display.media.image.small_landscape:
+      createIfNotExists:
+        status: true
+        id: media.image.small_landscape
+        targetEntityType: media
+        bundle: image
+        mode: small_landscape
+        content:
+          field_media_image:
+            type: image
+            label: hidden
+            settings:
+              image_link: ''
+              image_style: coh_small_landscape
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+      simpleConfigUpdate:
+        status: true
+        mode: small_landscape
+        content:
+          field_media_image:
+            type: image
+            label: hidden
+            settings:
+              image_link: ''
+              image_style: coh_small_landscape
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+    core.entity_view_display.media.image.teaser:
+      createIfNotExists:
+        status: true
+        id: media.image.teaser
+        targetEntityType: media
+        bundle: image
+        mode: teaser
+        content:
+          field_media_image:
+            type: image
+            label: visually_hidden
+            settings:
+              image_link: ''
+              image_style: x_small_landscape
+              image_loading:
+                attribute: lazy
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+      simpleConfigUpdate:
+        status: true
+        mode: teaser
+        content:
+          field_media_image:
+            type: image
+            label: visually_hidden
+            settings:
+              image_link: ''
+              image_style: x_small_landscape
+              image_loading:
+                attribute: lazy
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+    core.entity_view_display.media.image.x_small_square:
+      createIfNotExists:
+        status: true
+        id: media.image.x_small_square
+        targetEntityType: media
+        bundle: image
+        mode: x_small_square
+        content:
+          field_media_image:
+            type: image
+            label: visually_hidden
+            settings:
+              image_link: ''
+              image_style: x_small_square
+              image_loading:
+                attribute: lazy
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
+      simpleConfigUpdate:
+        status: true
+        mode: x_small_square
+        content:
+          field_media_image:
+            type: image
+            label: visually_hidden
+            settings:
+              image_link: ''
+              image_style: x_small_square
+              image_loading:
+                attribute: lazy
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
     core.entity_form_display.media.image.default:
       simpleConfigUpdate:
         third_party_settings:

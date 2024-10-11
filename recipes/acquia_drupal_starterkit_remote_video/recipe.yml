@@ -215,3 +215,40 @@ config:
           path: true
           status: true
           uid: true
+    core.entity_view_mode.media.embedded:
+      createIfNotExists:
+        id: media.embedded
+        label: 'Embedded'
+        targetEntityType: media
+        cache: true
+    core.entity_view_mode.media.video_component:
+      createIfNotExists:
+        id: media.video_component
+        label: 'Video component'
+        targetEntityType: media
+        cache: true
+    core.entity_view_display.media.remote_video.embedded:
+      createIfNotExists:
+        id: media.video.embedded
+        targetEntityType: media
+        bundle: video
+        mode: embedded
+        content:
+          field_media_oembed_video:
+            type: oembed
+            label: visually_hidden
+            settings:
+              max_width: 960
+              max_height: 540
+            third_party_settings: { }
+            weight: 0
+            region: content
+        hidden:
+          created: true
+          field_categories: true
+          field_tags: true
+          langcode: true
+          name: true
+          search_api_excerpt: true
+          thumbnail: true
+          uid: true
