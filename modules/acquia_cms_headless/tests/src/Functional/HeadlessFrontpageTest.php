@@ -37,10 +37,16 @@ class HeadlessFrontpageTest extends BrowserTestBase {
    * Assert that frontpage for logged-in user is admin/content page.
    */
   public function testFrontPageIsAdminContentPage(): void {
-    $account = $this->createUser();
-    $account->addRole('administrator');
-    $account->save();
-    $this->drupalLogin($account);
+    $account = $this->createUser(['access content overview'], '', TRUE);
+    $page = $this->getSession()->getPage();
+
+    // Login as admin user.
+    $this->drupalGet('/user/login');
+    $page->fillField('name', $account->getAccountName());
+    $page->fillField('pass', $account->passRaw);
+    $page->pressButton('Log in');
+
+    // Assert that after login, user is redirected to admin/content page.
     $this->assertSession()->addressEquals('/admin/content');
     $this->assertSession()->statusCodeEquals(200);
   }
