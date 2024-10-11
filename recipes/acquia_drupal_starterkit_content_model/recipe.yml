@@ -1,8 +1,7 @@
 name: 'Acquia Drupal Startekit Content Model'
 description: 'An content model provides Article, Event, Page, Person, Place content types.'
 type: 'Starterkit addon'
-install:
-  # Contrib
-  - acquia_cms_article
-  - acquia_cms_event
-  - acquia_cms_page
+recipes:
+  - acquia_drupal_starterkit_article
+  - acquia_drupal_starterkit_event
+  - acquia_drupal_starterkit_page
