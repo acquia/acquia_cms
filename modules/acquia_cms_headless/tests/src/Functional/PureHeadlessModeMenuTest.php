@@ -147,6 +147,7 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
         [
           'Scheduled Content',
           'Add content',
+          'Blocks',
           'Files',
           'Media',
           'Scheduled Media',
