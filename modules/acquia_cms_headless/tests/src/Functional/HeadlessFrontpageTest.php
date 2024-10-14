@@ -37,16 +37,15 @@ class HeadlessFrontpageTest extends BrowserTestBase {
    * Assert that frontpage for logged-in user is admin/content page.
    */
   public function testFrontPageIsAdminContentPage(): void {
-    $account = $this->createUser(['access content overview'], '', TRUE);
-    $page = $this->getSession()->getPage();
-
-    // Login as admin user.
-    $this->drupalGet('/user/login');
-    $page->fillField('name', $account->getAccountName());
-    $page->fillField('pass', $account->passRaw);
-    $page->pressButton('Log in');
-
-    // Assert that after login, user is redirected to admin/content page.
+    $account = $this->createUser();
+    $account->addRole('administrator');
+    $account->save();
+    // Don't use one-time login links instead submit the login form.
+    // @see https://www.drupal.org/project/drupal/issues/3469309
+    if (isset($this->useOneTimeLoginLinks)) {
+      $this->useOneTimeLoginLinks = FALSE;
+    }
+    $this->drupalLogin($account);
     $this->assertSession()->addressEquals('/admin/content');
     $this->assertSession()->statusCodeEquals(200);
   }
