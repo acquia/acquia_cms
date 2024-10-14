@@ -40,6 +40,11 @@ class HeadlessFrontpageTest extends BrowserTestBase {
     $account = $this->createUser();
     $account->addRole('administrator');
     $account->save();
+    // Don't use one-time login links instead submit the login form.
+    // @see https://www.drupal.org/project/drupal/issues/3469309
+    if (isset($this->useOneTimeLoginLinks)) {
+      $this->useOneTimeLoginLinks = FALSE;
+    }
     $this->drupalLogin($account);
     $this->assertSession()->addressEquals('/admin/content');
     $this->assertSession()->statusCodeEquals(200);
