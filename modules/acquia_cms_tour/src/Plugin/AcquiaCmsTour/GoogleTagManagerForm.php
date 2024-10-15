@@ -3,8 +3,10 @@
 namespace Drupal\acquia_cms_tour\Plugin\AcquiaCmsTour;
 
 use Drupal\acquia_cms_tour\Form\AcquiaCmsDashboardBase;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\google_tag\Entity\TagContainer;
 
 /**
  * Plugin implementation of the acquia_cms_tour.
@@ -62,15 +64,110 @@ class GoogleTagManagerForm extends AcquiaCmsDashboardBase {
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
       ];
-      $form[$module]['snippet_parent_uri'] = [
-        '#type' => 'textfield',
-        '#required' => TRUE,
-        '#title' => $this->t('Snippet parent URI'),
-        '#attributes' => ['placeholder' => $this->t('public:/')],
-        '#default_value' => $this->config('google_tag.settings')->get('uri'),
-        '#prefix' => '<div class= "dashboard-fields-wrapper">' . $module_info['description'],
-        '#suffix' => "</div>",
+      $form['#id'] = Html::getId($form_state->getBuildInfo()['form_id']);
+      $accounts_wrapper_id = Html::getUniqueId('accounts-add-more-wrapper');
+      $account_default_value = $this->config('google_tag.settings')->get('default_google_tag_entity');
+      $form[$module]['accounts_wrapper'] = [
+        '#type' => 'fieldset',
+        '#prefix' => '<div class="dashboard-fields-wrapper remove-fieldset-boundary" id="' . $accounts_wrapper_id . '">',
+        '#suffix' => '</div>',
       ];
+      // Filter order (tabledrag).
+      $form[$module]['accounts_wrapper']['accounts'] = [
+        '#input' => FALSE,
+        '#tree' => TRUE,
+        '#type' => 'table',
+        '#tabledrag' => [
+          [
+            'action' => 'order',
+            'relationship' => 'sibling',
+            'group' => 'account-order-weight',
+          ],
+        ],
+      ];
+
+      $accounts = $form_state->getValue('accounts', []);
+      if ($accounts === []) {
+        $config_name = 'google_tag.container.'. $account_default_value;
+        $entity_accounts = $this->config($config_name)->get('tag_container_ids');
+        foreach ($entity_accounts as $index => $account) {
+          $accounts[$index]['value'] = $account;
+          $accounts[$index]['weight'] = $index;
+        }
+        // Default fallback.
+        if (count($accounts) === 0) {
+          $accounts[] = ['value' => '', 'weight' => 0];
+        }
+      }
+
+      foreach ($accounts as $index => $account) {
+        $form[$module]['accounts_wrapper']['accounts'][$index]['#attributes']['class'][] = 'draggable';
+        $form[$module]['accounts_wrapper']['accounts'][$index]['#weight'] = $account['weight'];
+        $form[$module]['accounts_wrapper']['accounts'][$index]['value'] = [
+          '#default_value' => (string) ($account['value'] ?? ''),
+          '#maxlength' => 20,
+          '#required' => (count($accounts) === 1),
+          '#size' => 20,
+          '#type' => 'textfield',
+          '#pattern' => TagContainer::GOOGLE_TAG_MATCH,
+          '#ajax' => [
+            'callback' => [self::class, 'storeGtagAccountsCallback'],
+            'disable-refocus' => TRUE,
+            'event' => 'change',
+            'wrapper' => 'advanced-settings-wrapper',
+          ],
+          '#attributes' => [
+            'data-disable-refocus' => 'true',
+          ],
+        ];
+
+        $form[$module]['accounts_wrapper']['accounts'][$index]['weight'] = [
+          '#type' => 'weight',
+          '#title' => $this->t('Weight for @title', ['@title' => (string) ($account['value'] ?? '')]),
+          '#title_display' => 'invisible',
+          '#delta' => 50,
+          '#default_value' => $index,
+          '#parents' => ['accounts', $index, 'weight'],
+          '#attributes' => ['class' => ['account-order-weight']],
+        ];
+
+        // If there is more than one id, add the remove button.
+        if (count($accounts) > 1) {
+          $form[$module]['accounts_wrapper']['accounts'][$index]['remove'] = [
+            '#type' => 'submit',
+            '#value' => $this->t('Remove'),
+            '#name' => 'remove_gtag_id_' . $index,
+            '#parameter_index' => $index,
+            '#limit_validation_errors' => [
+              ['accounts'],
+            ],
+            '#submit' => [
+              [self::class, 'removeGtagCallback'],
+            ],
+            '#ajax' => [
+              'callback' => [self::class, 'gtagFormCallback'],
+              'wrapper' => $form['#id'],
+            ],
+          ];
+        }
+      }
+
+      $id_prefix = implode('-', ['accounts_wrapper', 'accounts']);
+      // Add blank account.
+      $form[$module]['accounts_wrapper']['add_gtag_id'] = [
+        '#type' => 'submit',
+        '#value' => $this->t('Add another ID'),
+        '#name' => str_replace('-', '_', $id_prefix) . '_add_gtag_id',
+        '#submit' => [
+          [self::class, 'addGtagCallback'],
+        ],
+        '#ajax' => [
+          'callback' => [self::class, 'ajaxRefreshAccounts'],
+          'wrapper' => $accounts_wrapper_id,
+          'effect' => 'fade',
+        ],
+      ];
+
       $form[$module]['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => 'Save',
@@ -82,25 +179,23 @@ class GoogleTagManagerForm extends AcquiaCmsDashboardBase {
         '#limit_validation_errors' => [],
         '#submit' => ['::ignoreConfig'],
       ];
-      if (isset($module_info['configure'])) {
-        $form[$module]['actions']['advanced'] = [
-          '#prefix' => '<div class= "dashboard-tooltiptext">',
-          '#markup' => $this->linkGenerator->generate(
-            'Advanced',
-            Url::fromRoute($module_info['configure'])
-          ),
-          '#suffix' => "</div>",
-        ];
-        $form[$module]['actions']['advanced']['information'] = [
-          '#prefix' => '<b class= "tool-tip__icon">i',
-          '#suffix' => "</b>",
-        ];
-        $form[$module]['actions']['advanced']['tooltip-text'] = [
-          '#prefix' => '<span class= "tooltip">',
-          '#markup' => $this->t("Opens Advance Configuration in new tab"),
-          '#suffix' => "</span></div>",
-        ];
-      }
+      $form[$module]['actions']['advanced'] = [
+        '#prefix' => '<div class= "dashboard-tooltiptext">',
+        '#markup' => $this->linkGenerator->generate(
+          'Advanced',
+          Url::fromRoute('entity.google_tag_container.single_form')
+        ),
+        '#suffix' => "</div>",
+      ];
+      $form[$module]['actions']['advanced']['information'] = [
+        '#prefix' => '<b class= "tool-tip__icon">i',
+        '#suffix' => "</b>",
+      ];
+      $form[$module]['actions']['advanced']['tooltip-text'] = [
+        '#prefix' => '<span class= "tooltip">',
+        '#markup' => $this->t("Opens Advance Configuration in new tab"),
+        '#suffix' => "</span></div>",
+      ];
     }
     return $form;
   }
@@ -109,8 +204,24 @@ class GoogleTagManagerForm extends AcquiaCmsDashboardBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $snippet_parent_uri = $form_state->getValue(['snippet_parent_uri']);
-    $this->config('google_tag.settings')->set('uri', $snippet_parent_uri)->save();
+    $tag_container_ids = [];
+    $default_id = '';
+    $account_default_value = $this->config('google_tag.settings')->get('default_google_tag_entity');
+    $config_name = 'google_tag.container.'. $account_default_value;
+    foreach ($form_state->getValue('accounts') as $account) {
+      if (!$default_id) {
+        $default_id = $account['value'];
+      }
+      $tag_container_ids[$account['weight']] = $account['value'];
+    }
+    // Need to save tags without weights otherwise it doesn't show up on UI.
+    $this->configFactory->getEditable($config_name)->set('tag_container_ids', array_values($tag_container_ids))->save();
+    if ($this->config($config_name)->get('id') === NULL) {
+      // Set the ID and Label based on the first Google Tag.
+      $config_id = uniqid($default_id . '.', TRUE);
+      $this->configFactory->getEditable($config_name)->set('id', $config_id);
+      $this->configFactory->getEditable($config_name)->set('label', $default_id);
+    }
     $this->setConfigurationState();
     $this->messenger()->addStatus('The configuration options have been saved.');
   }
@@ -128,6 +239,69 @@ class GoogleTagManagerForm extends AcquiaCmsDashboardBase {
   public function checkMinConfiguration(): bool {
     $uri = $this->config('google_tag.settings')->get('uri');
     return (bool) $uri;
+  }
+
+  /**
+   * Submit handler for the "add-one-more" button.
+   *
+   * Increments the max counter and causes a rebuild.
+   */
+  public static function storeGtagAccountsCallback(array &$form, FormStateInterface $form_state) {
+    // Update Advanced Settings Form.
+    return $form['google_tag']['accounts_wrapper'];
+  }
+
+  /**
+   * Submit handler for the "remove one" button.
+   *
+   * Decrements the max counter and causes a form rebuild.
+   */
+  public static function removeGtagCallback(array &$form, FormStateInterface $form_state) {
+    $triggering_element = $form_state->getTriggeringElement();
+    $index = $triggering_element['#parameter_index'];
+    $accounts = $form_state->getValue('accounts', []);
+    unset($accounts[$index]);
+    $form_state->setValue('accounts', $accounts);
+    $form_state->setRebuild();
+  }
+
+  /**
+   * Callback for both ajax account buttons.
+   *
+   * Selects and returns the fieldset with the names in it.
+   */
+  public static function gtagFormCallback(array &$form, FormStateInterface $form_state) {
+    return $form;
+  }
+
+  /**
+   * Submit handler for the "add-one-more" button.
+   *
+   * Increments the max counter and causes a rebuild.
+   */
+  public static function addGtagCallback(array &$form, FormStateInterface $form_state) {
+    $accounts = $form_state->getValue('accounts', []);
+    $accounts[] = [
+      'value' => '',
+      'weight' => count($accounts),
+    ];
+    $form_state->setValue('accounts', $accounts);
+    $form_state->setRebuild();
+  }
+
+  /**
+   * Callback for add more gtag accounts.
+   *
+   * @param array $form
+   *   Form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Form state.
+   *
+   * @return mixed
+   *   Accounts wrapper.
+   */
+  public static function ajaxRefreshAccounts(array $form, FormStateInterface $form_state) {
+    return $form['google_tag']['accounts_wrapper'];
   }
 
 }
