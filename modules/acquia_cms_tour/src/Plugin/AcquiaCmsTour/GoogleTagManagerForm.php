@@ -69,7 +69,9 @@ class GoogleTagManagerForm extends AcquiaCmsDashboardBase {
       $account_default_value = $this->config('google_tag.settings')->get('default_google_tag_entity');
       $form[$module]['accounts_wrapper'] = [
         '#type' => 'fieldset',
-        '#prefix' => '<div class="dashboard-fields-wrapper remove-fieldset-boundary" id="' . $accounts_wrapper_id . '">',
+        '#prefix' => '<div class="dashboard-fields-wrapper remove-fieldset-boundary" id="' . $accounts_wrapper_id . '">
+        Effortlessly configure and manage Google Tag Manager containers to
+        seamlessly track application insights.',
         '#suffix' => '</div>',
       ];
       // Filter order (tabledrag).
