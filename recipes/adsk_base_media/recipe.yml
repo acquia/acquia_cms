@@ -1,0 +1,14 @@
+name: 'Acquia Drupal Startekit Remote Video'
+description: 'Provides a Video media type and related configuration.'
+type: 'Starterkit addon'
+recipes:
+  - core/recipes/tags_taxonomy
+install:
+  # Core
+  - media_library
+  # Contrib
+  - field_group
+config:
+  import:
+    field_group: '*'
+    media_library: '*'
