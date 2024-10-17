@@ -92,9 +92,11 @@ class GoogleTagManagerForm extends AcquiaCmsDashboardBase {
       if ($accounts === []) {
         $config_name = 'google_tag.container.'. $account_default_value;
         $entity_accounts = $this->config($config_name)->get('tag_container_ids');
-        foreach ($entity_accounts as $index => $account) {
-          $accounts[$index]['value'] = $account;
-          $accounts[$index]['weight'] = $index;
+        if ($entity_accounts){
+          foreach ($entity_accounts as $index => $account) {
+            $accounts[$index]['value'] = $account;
+            $accounts[$index]['weight'] = $index;
+          }
         }
         // Default fallback.
         if (count($accounts) === 0) {
