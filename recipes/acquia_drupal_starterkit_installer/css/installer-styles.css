@@ -1,0 +1,171 @@
+/**
+ * @file
+ * This file specifically overrides Claro's maintenance page styling to make
+ * tweaks specific to the Acquia Drupal Starterkit installer. None of this needs to be
+ * reusable.
+ */
+
+@view-transition {
+  navigation: auto;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--gin-color-primary);
+}
+
+.install-page {
+  background: linear-gradient(0.33turn, #ccbaf4, #22a5e5);
+}
+
+.cms-installer {
+  display: flex;
+  width: 75%;
+  max-width: 1400px;
+  margin: 0 auto;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  background: #fff;
+  box-shadow: var(--shadow-z3);
+  font-family: "Inter", system-ui;
+}
+
+.cms-installer__first {
+  flex: 1;
+  padding: 100px;
+}
+
+.cms-installer__second {
+  position: relative; /* Anchor image. */
+  flex: 1;
+}
+
+.cms-installer__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0 0.5rem 0.5rem 0;
+  object-fit: cover;
+  object-position: 90% center;
+}
+
+.cms-installer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 50px;
+}
+
+.cms-installer .cms-installer__heading {
+  font-size: 48px;
+  font-weight: 900;
+}
+
+.cms-installer .cms-installer__heading-secondary {
+  font-size: 36px;
+  opacity: 0.7;
+}
+
+.cms-installer__language-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:before {
+    display: inline-block;
+    width: 20px;
+    aspect-ratio: 1;
+    content: "";
+    background-color: currentColor;
+    -webkit-mask-image: url('../images/translate.svg');
+    mask-image: url('../images/translate.svg');
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+  }
+}
+
+.cms-installer .cms-installer__main-heading {
+  font-size: 62px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.cms-installer__subhead {
+  font-size: 25px;
+  color: #484848;
+}
+
+.cms-installer .button {
+  all: revert;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  height: 78px;
+  padding-inline: 30px;
+  border: solid 1px transparent;
+  background: transparent;
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 400;
+  text-decoration: underline;
+  box-shadow: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.cms-installer .button:focus {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.cms-installer .button + .button {
+  margin-inline-start: 10px;
+}
+
+.cms-installer .button--primary {
+  padding: calc(var(--gin-spacing-s) - 2px) var(--gin-spacing-m);
+  border-radius: var(--gin-border-m);
+  box-shadow: 0 1px 2px var(--gin-color-primary-light);
+  transition: var(--gin-transition);
+  padding-inline: 50px;
+  background-color: var(--gin-color-primary);
+  color: var(--gin-color-button-text);
+  text-decoration: none;
+}
+
+.cms-installer .button--primary:active {
+  background-color: var(--gin-color-primary-active);
+}
+
+.cms-installer .button--primary:hover {
+  background-color: var(--gin-color-primary-hover);
+}
+
+.cms-installer__form-group {
+  margin-block: 50px;
+}
+
+.progress {
+  width: fit-content;
+  margin: 50px auto;
+}
+
+.progress__percentage {
+  font-size: 16px;
+  font-weight: 600;
+}

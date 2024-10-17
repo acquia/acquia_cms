@@ -1,0 +1,36 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.remote_audio.field_media_soundcloud
+    - media.type.remote_audio
+  module:
+    - media_entity_soundcloud
+  enforced:
+    module:
+      - media_entity_soundcloud
+id: media.remote_audio.default
+targetEntityType: media
+bundle: remote_audio
+mode: default
+content:
+  field_media_soundcloud:
+    type: soundcloud_embed
+    label: visually_hidden
+    settings:
+      type: visual
+      width: 100%
+      height: '450'
+      options: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  field_categories: true
+  field_tags: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

@@ -1,0 +1,10 @@
+name: Acquia Drupal Starterkit Installer
+type: profile
+core_version_requirement: '>=10.3'
+description: 'Provides install-time tweaks for Acquia Drupal Starterkit.'
+# Acquia Drupal Starterkit isn't a distribution, but we need to use this
+# `distribution` key in order to skip the installer's profile selection step.
+distribution:
+  name: Acquia Drupal Starterkit
+  install:
+    finish_url: '/admin/modules/browse'

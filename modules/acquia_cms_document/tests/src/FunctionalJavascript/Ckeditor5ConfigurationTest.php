@@ -19,6 +19,7 @@ class Ckeditor5ConfigurationTest extends Ckeditor5ConfigurationTestBase {
    */
   protected static $modules = [
     'acquia_cms_document',
+    'acquia_cms_common',
   ];
 
   /**

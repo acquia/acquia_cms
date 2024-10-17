@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_media_soundcloud
+    - media.type.remote_audio
+  enforced:
+    module:
+      - media_entity_soundcloud
+id: media.remote_audio.field_media_soundcloud
+field_name: field_media_soundcloud
+entity_type: media
+bundle: remote_audio
+label: 'Soundcloud audio URL'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

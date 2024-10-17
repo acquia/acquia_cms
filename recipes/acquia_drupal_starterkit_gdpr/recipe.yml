@@ -1,0 +1,12 @@
+name: 'General Data Protection Regulation (GDPR)'
+description: 'Provides help for making your drupal site GDPR-compliant.'
+type: 'Starterkit addon'
+install:
+  # Contrib
+  - eu_cookie_compliance
+  - gdpr
+  - gdpr_fields
+config:
+  import:
+    eu_cookie_compliance: '*'
+    gdpr_fields: '*'

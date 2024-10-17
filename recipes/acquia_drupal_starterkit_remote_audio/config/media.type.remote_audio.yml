@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - media_entity_soundcloud
+  enforced:
+    module:
+      - media_entity_soundcloud
+third_party_settings:
+  crop:
+    image_field: null
+id: remote_audio
+label: Remote Audio
+description: 'Remotely hosted audio from external sources soundcloud.'
+source: soundcloud
+queue_thumbnail_downloads: false
+new_revision: true
+source_configuration:
+  source_field: field_media_soundcloud
+field_map: {  }
