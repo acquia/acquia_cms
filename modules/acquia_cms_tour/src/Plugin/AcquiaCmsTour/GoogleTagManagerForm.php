@@ -261,7 +261,7 @@ class GoogleTagManagerForm extends AcquiaCmsDashboardBase {
    * {@inheritdoc}
    */
   public function checkMinConfiguration(): bool {
-    $uri = $this->config('google_tag.settings')->get('uri');
+    $uri = $this->config('google_tag.settings')->get('default_google_tag_entity');
     return (bool) $uri;
   }
 

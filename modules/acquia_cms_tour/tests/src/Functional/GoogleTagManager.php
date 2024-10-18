@@ -56,13 +56,13 @@ class GoogleTagManager extends BrowserTestBase {
     // Assert that save and advanced buttons are present on form.
     $assert_session->buttonExists('Save');
     // Save Snippet parent URI.
-    $dummy_tag = 'GTM-000000';
+    $dummy_tag = 'GT-XXXXXXXXX';
     $container->fillField('edit-accounts-0-value', $dummy_tag);
     $container->pressButton('Save');
     $assert_session->pageTextContains('The configuration options have been saved.');
     // Test that the config values we expect are set correctly.
-    $google_tag_uri = $this->config('google_tag.settings')->get('uri');
-    $this->assertSame($google_tag_uri, $dummy_tag);
+    $tag_id = $this->config($this->config('google_tag.settings')->get('default_google_tag_entity'))->get('tag_container_ids');
+    $this->assertEquals($tag_id, [$dummy_tag]);
   }
 
 }
