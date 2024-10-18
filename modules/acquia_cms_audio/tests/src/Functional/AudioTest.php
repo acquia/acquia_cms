@@ -19,7 +19,10 @@ class AudioTest extends MediaTypeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['acquia_cms_audio'];
+  protected static $modules = [
+    'acquia_cms_audio',
+    'acquia_cms_common'
+  ];
 
   /**
    * Disable strict config schema checks in this test.
