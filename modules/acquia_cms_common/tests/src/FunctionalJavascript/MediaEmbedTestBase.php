@@ -83,9 +83,13 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
     if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
       $this->markTestSkipped('This cannot be run in a Cloud IDE right now');
     }
-    $node_type = $this->drupalCreateContentType()->id();
+    $bundle = 'page';
+    $this->drupalCreateContentType([
+      'type' => 'page',
+      'name' => 'Page',
+    ]);
     user_role_grant_permissions('content_author', [
-      "create $node_type content",
+      "create $bundle content",
     ]);
 
     $account = $this->drupalCreateUser();
@@ -93,7 +97,7 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
     $account->save();
     $this->drupalLogin($account);
 
-    $this->drupalGet("/node/add/$node_type");
+    $this->drupalGet("/node/add/$bundle");
     $this->openMediaLibrary();
 
     // The media position number now starts from 1 (instead of 0) starting
@@ -216,6 +220,7 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
     if ($showMoreItems) {
       $this->pressEditorButton('Show more items');
     }
+    $assertSession->waitForText('body');
     $this->pressEditorButton('Insert Media');
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
