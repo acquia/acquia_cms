@@ -208,9 +208,11 @@ class GoogleTagManagerForm extends AcquiaCmsDashboardBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+
     $tag_container_ids = [];
-    $default_id = '';
+    $default_id = $config_id = '';
     $account_default_value = $this->config('google_tag.settings')->get('default_google_tag_entity');
+
     $config_name = 'google_tag.container.' . $account_default_value;
     foreach ($form_state->getValue('accounts') as $account) {
       if (!$default_id) {
@@ -218,14 +220,32 @@ class GoogleTagManagerForm extends AcquiaCmsDashboardBase {
       }
       $tag_container_ids[$account['weight']] = $account['value'];
     }
+    if ($account_default_value == NULL) {
+      // Set the ID and Label based on the first Google Tag.
+      $config_name .= uniqid($default_id . '.', TRUE);
+    }
     // Need to save tags without weights otherwise it doesn't show up on UI.
-    $this->configFactory->getEditable($config_name)->set('tag_container_ids', array_values($tag_container_ids))->save();
     if ($this->config($config_name)->get('id') === NULL) {
       // Set the ID and Label based on the first Google Tag.
       $config_id = uniqid($default_id . '.', TRUE);
-      $this->configFactory->getEditable($config_name)->set('id', $config_id);
-      $this->configFactory->getEditable($config_name)->set('label', $default_id);
+      TagContainer::create([
+        'id' => $config_id,
+        'label' => $default_id,
+        'tag_container_ids' => array_values($tag_container_ids),
+        'status' => 1,
+        'weight' => 0,
+      ])->save();
     }
+    else {
+      $config_id = $this->config($config_name)->get('id');
+      $config = TagContainer::load($config_id);
+      $config->set('tag_container_ids', array_values($tag_container_ids));
+      $config->save();
+    }
+    if($this->configFactory->getEditable('google_tag.settings')->get('default_google_tag_entity') !== NULL) {
+      $this->configFactory->getEditable('google_tag.settings')->set('default_google_tag_entity', $config_id)->save();
+    }
+
     $this->setConfigurationState();
     $this->messenger()->addStatus('The configuration options have been saved.');
   }
