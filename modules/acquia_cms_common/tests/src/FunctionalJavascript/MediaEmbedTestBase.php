@@ -224,6 +224,7 @@ abstract class MediaEmbedTestBase extends WebDriverTestBase {
     $this->pressEditorButton('Insert Media');
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
+    $this->getSession()->wait(5000);
     $result = $assertSession->waitForText('Add or select media');
     $this->assertNotEmpty($result);
   }
