@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "511241ae9a903f9a2e66469835f31660",
+    "content-hash": "159f1bf0ea74b93f8d8588e5eec5bdcf",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2390,7 +2390,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "2e9464aa5f9e5f0be09e1726c3276319be0b8c5e"
+                "reference": "36ebfe06447b4f28301a18995d197336fb6ce1f3"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -8261,17 +8261,35 @@
         },
         {
             "name": "drupal/sitestudio_gin",
-            "version": "dev-3434617-automated-drupal-11",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/issue/sitestudio_gin-3434617.git",
-                "reference": "98ff9a237800a8227d0ccbf4a0ff319bdbeccee0"
+                "url": "https://git.drupalcode.org/project/sitestudio_gin.git",
+                "reference": "1.0.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/sitestudio_gin-1.0.3.zip",
+                "reference": "1.0.3",
+                "shasum": "c509c64a0770eeaa3b0b6a4dd5e2af2d512f9699"
             },
             "require": {
                 "acquia/cohesion": "^6.7.0 || ^7 || ^8",
+                "drupal/core": "^8 || ^9 || ^10 || ^11",
                 "drupal/gin": "^3.0@rc"
             },
             "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.3",
+                    "datestamp": "1729211771",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -8280,10 +8298,18 @@
                     "name": "Acquia Engineering",
                     "homepage": "https://www.acquia.com",
                     "role": "Maintainer"
+                },
+                {
+                    "name": "pavlosdan",
+                    "homepage": "https://www.drupal.org/user/751960"
                 }
             ],
             "description": "Integrates Acquia Site Studio with the Gin admin theme.",
-            "time": "2024-07-31T13:46:37+00:00"
+            "homepage": "https://www.drupal.org/project/sitestudio_gin",
+            "support": {
+                "source": "https://git.drupalcode.org/project/sitestudio_gin",
+                "error": "Invalid dependency: \"cohesion\" is an unknown drupal 8 package name"
+            }
         },
         {
             "name": "drupal/smart_trim",
@@ -21862,12 +21888,11 @@
         "drupal/acquia_cms_starter": 20,
         "drupal/acquia_cms_toolbar": 20,
         "drupal/acquia_cms_tour": 20,
-        "drupal/gin": 5,
-        "drupal/sitestudio_gin": 20
+        "drupal/gin": 5
     },
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
+    "platform": {},
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }
