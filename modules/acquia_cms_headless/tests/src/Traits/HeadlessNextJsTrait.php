@@ -67,10 +67,14 @@ trait HeadlessNextJsTrait {
     $page = $this->getSession()->getPage();
     $this->drupalGet("admin/config/services/next/entity-types/add");
     $assert->selectExists('id')->selectOption('node.test');
-    $assert->waitForElementVisible('css', '.settings-container');
+    $assert->buttonExists('Save')->press();
+    $this->drupalGet("admin/config/services/next/entity-types/node.test/edit");
     $this->assertTrue($assert->optionExists('id', 'node.test')->isSelected());
+    $assert->waitForText('Settings');
+    $assert->waitForText('Configure draft mode for this entity type.');
     $assert->selectExists('site_resolver')->selectOption('site_selector');
     $assert->assertWaitOnAjaxRequest();
+    $assert->buttonExists('Save')->press();
     $assert->waitForText('Next.js sites');
     $this->assertTrue($assert->optionExists('site_resolver', 'site_selector')->isSelected());
     $page->checkField('sites[headless_site_one]');
