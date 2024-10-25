@@ -44,9 +44,9 @@ class VideoEmbedTest extends MediaEmbedTestBase {
    * {@inheritdoc}
    */
   public function testEmbedMedia(): void {
-    if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
-      $this->markTestSkipped('This cannot be run in a Cloud IDE right now');
-    }
+    // Skipped due to frequent random test failures.
+    // @todo Fix this and stop skipping it at https://www.drupal.org/i/3351597.
+    $this->markTestSkipped();
     $node_type = $this->drupalCreateContentType()->id();
     user_role_grant_permissions('content_author', [
       "create $node_type content",

@@ -55,16 +55,14 @@ class GoogleTagManager extends BrowserTestBase {
     $container = $assert_session->elementExists('css', '.acquia-cms-google-tag-manager-form');
     // Assert that save and advanced buttons are present on form.
     $assert_session->buttonExists('Save');
-    // Assert that the expected fields show up.
-    $assert_session->fieldExists('Snippet parent URI');
     // Save Snippet parent URI.
-    $dummy_uri = 'public://tempdir';
-    $container->fillField('edit-snippet-parent-uri', $dummy_uri);
+    $dummy_tag = 'GT-XXXXXXXXX';
+    $container->fillField('edit-accounts-0-value', $dummy_tag);
     $container->pressButton('Save');
     $assert_session->pageTextContains('The configuration options have been saved.');
     // Test that the config values we expect are set correctly.
-    $google_tag_uri = $this->config('google_tag.settings')->get('uri');
-    $this->assertSame($google_tag_uri, $dummy_uri);
+    $tag_id = $this->config($this->config('google_tag.settings')->get('default_google_tag_entity'))->get('tag_container_ids');
+    $this->assertEquals($tag_id, [$dummy_tag]);
   }
 
 }
