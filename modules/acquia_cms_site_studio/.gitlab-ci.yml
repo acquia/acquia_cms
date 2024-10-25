@@ -22,12 +22,8 @@ variables:
 
   # Site Studio 8.0.x doesn't support 9.5.x, hence skipping 9.5.x CI jobs now
   SKIP_INTEGRATED_TEST_ON_LATEST_EOL_MAJOR: 1
-  SKIP_INTEGRATED_TEST_ON_LATEST_EOL_MAJOR_PHP8: 1
 
 # Do not add patch for latest EOL Major i.e 9.5.x as it's working as expected.
 INTEGRATED_TEST_ON_LATEST_EOL_MAJOR:
-  variables:
-    COMPOSER_PATCHES_FILE: ""
-INTEGRATED_TEST_ON_LATEST_EOL_MAJOR_PHP8:
   variables:
     COMPOSER_PATCHES_FILE: ""
