@@ -17,7 +17,7 @@ variables:
   COMPOSER_PATCHES_FILE: $CI_PROJECT_DIR/.gitlab-ci/patches/patches.json
 
   # Coverage report
-  ORCA_SUT_DIR: "$CI_PROJECT_DIR/../acquia_cms_common"
+  ORCA_SUT_DIR: "$CI_PROJECT_DIR/../acquia_cms_site_studio"
   ORCA_JUNIT_LOG: "$CI_PROJECT_DIR/var/logs/junit.xml"
 
   # Site Studio 8.0.x doesn't support 9.5.x, hence skipping 9.5.x CI jobs now
