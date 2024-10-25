@@ -14,3 +14,7 @@ variables:
   ORCA_SUT_NAME: drupal/acquia_cms_image
   ORCA_SUT_BRANCH: 1.x
   ORCA_PACKAGES_CONFIG_ALTER: $CI_PROJECT_DIR/tests/packages_alter.yml
+
+  # Coverage report
+  ORCA_SUT_DIR: "$CI_PROJECT_DIR/../acquia_cms_common"
+  ORCA_JUNIT_LOG: "$CI_PROJECT_DIR/var/logs/junit.xml"
