@@ -15,6 +15,10 @@ variables:
   ORCA_SUT_BRANCH: 3.x
   ORCA_PACKAGES_CONFIG_ALTER: $CI_PROJECT_DIR/tests/packages_alter.yml
 
+  # Coverage report
+  ORCA_SUT_DIR: "$CI_PROJECT_DIR/../acquia_cms_common"
+  ORCA_JUNIT_LOG: "$CI_PROJECT_DIR/var/logs/junit.xml"
+
 # 3.x does not support Drupal 9.5 version.
   SKIP_INTEGRATED_TEST_ON_LATEST_EOL_MAJOR: 1
   SKIP_INTEGRATED_TEST_ON_LATEST_EOL_MAJOR_PHP8: 1
