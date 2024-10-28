@@ -18,3 +18,5 @@ variables:
   # Coverage report
   ORCA_SUT_DIR: "$CI_PROJECT_DIR/../acquia_cms_component"
   ORCA_JUNIT_LOG: "$CI_PROJECT_DIR/var/logs/junit.xml"
+  # Exclude the code coverage, as tests have not been written yet.
+  SKIP_ISOLATED_TEST_ON_CURRENT_COVERAGE_PHP83: 1
