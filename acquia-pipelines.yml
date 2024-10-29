@@ -18,6 +18,13 @@ events:
             - mkdir -p docroot/profiles/acquia_cms
             - composer archive --format zip --file acquia_cms
             - unzip acquia_cms.zip -d docroot/profiles/acquia_cms
+      - front-end:
+          type: script
+          script:
+            - cd docroot/themes/contrib/acquia_claro
+            - npm install
+            - npm run build
+            - cd -
       - cleanup:
           type: script
           script:

@@ -136,6 +136,11 @@ case $OSTYPE in
       ;;
 esac
 
+# Compile scss and run css analysis tests.
+echo -e "${GREEN} Installing npm & analysing css ${NOCOLOR}"
+# Install npm & run front end gulp task test.
+cd docroot/themes/contrib/acquia_claro && npm install && npm run test && cd -
+
 # Run code quality checks.
 vendor/bin/grumphp run
 

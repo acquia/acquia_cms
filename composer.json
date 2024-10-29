@@ -148,6 +148,10 @@
         "acms:install": [
             "bash install-acms"
         ],
+        "build:frontend": [
+            "Composer\\Config::disableProcessTimeout",
+            "cd docroot/themes/contrib/acquia_claro && npm run build"
+        ],
         "build:local": [
             "cp -f phpunit.xml ./docroot/core"
         ],
@@ -160,6 +164,10 @@
             "rm -rf $TMPDIR/cex"
         ],
         "configure-tarball": "Drupal\\acquia_cms\\Composer\\ConfigureProject::execute",
+        "install:frontend": [
+            "Composer\\Config::disableProcessTimeout",
+            "cd docroot/themes/contrib/acquia_claro && npm install"
+        ],
         "nuke": "rm -r -f docroot vendor"
     }
 }
