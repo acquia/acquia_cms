@@ -95,6 +95,7 @@ jobs:
     strategy:
       matrix:
         orca-job:
+          - INTEGRATED_TEST_ON_CURRENT
           - INTEGRATED_TEST_ON_LATEST_LTS
           - ISOLATED_TEST_ON_CURRENT
         #php-version: [ "8.1" ]
