@@ -223,14 +223,6 @@
                 }
             }
         },
-        "consumer_image_styles": {
-            "type": "vcs",
-            "url": "https://git.drupalcode.org/issue/consumer_image_styles-3429496.git"
-        },
-        "config_filter": {
-            "type": "vcs",
-            "url": "https://git.drupalcode.org/issue/config_filter-3428542.git"
-        },
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
@@ -262,8 +254,7 @@
             "phpstan/extension-installer": true,
             "tbachert/spi": true,
             "webdriver-binary/binary-chromedriver": true,
-            "wikimedia/composer-merge-plugin": true,
-            "tbachert/spi": true
+            "wikimedia/composer-merge-plugin": true
         },
         "preferred-install": {
             "drupal/core": "dist"
@@ -287,8 +278,10 @@
                 "[web-root]/profiles/README.txt": false,
                 "[web-root]/robots.txt": false,
                 "[web-root]/sites/README.txt": false,
-                "[web-root]/sites/default/default.settings.php": {
-                    "append": "./patches/d9-acms-settings.patch"
+                "[web-root]/sites/default/settings.php": {
+                    "mode": "replace",
+                    "overwrite": false,
+                    "path": "docroot/core/assets/scaffold/files/default.settings.php"
                 },
                 "[web-root]/themes/README.txt": false,
                 "[web-root]/themes/contrib/cohesion-theme/templates/maintenance-page.html.twig": "./patches/maintenance-page.patch",
