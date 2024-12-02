@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - cohesion_elements
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+    bundle_settings:
+      untranslatable_fields_hide: '1'
+id: cohesion_layout.cohesion_layout
+target_entity_type_id: cohesion_layout
+target_bundle: cohesion_layout
+default_langcode: site_default
+language_alterable: true
