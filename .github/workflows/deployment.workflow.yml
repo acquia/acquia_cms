@@ -1,7 +1,7 @@
 name: "Code Deployment on Acquia Environment"
 on:
   push:
-    branches: [ develop, main ]
+    branches: [ develop, main, ACMS-4329 ]
 jobs:
   acquia_code_deployment:
     if: ${{ github.event_name == 'push' }}
