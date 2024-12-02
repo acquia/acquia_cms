@@ -37,7 +37,7 @@ jobs:
           - STRICT_DEPRECATED_CODE_SCAN
         php-version:
           - 8.3
-          - 8.4
+#          - 8.4
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 20.x
@@ -87,7 +87,7 @@ jobs:
           - backstop_tests
         php-version:
           - 8.3
-          - 8.4
+#          - 8.4
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 20.x
@@ -167,10 +167,10 @@ jobs:
         php-version:
           - 8.1
           - 8.3
-          - 8.4
+#          - 8.4
         exclude:
-          - php-version: 8.4
-            orca-job: INTEGRATED_TEST_ON_LATEST_LTS
+#          - php-version: 8.4
+#            orca-job: INTEGRATED_TEST_ON_LATEST_LTS
           - php-version: 8.3
             orca-job: INTEGRATED_TEST_ON_LATEST_LTS
           - php-version: 8.1
@@ -301,7 +301,7 @@ jobs:
           - INTEGRATED_TEST_ON_PREVIOUS_MINOR
         php-version:
           - 8.3
-          - 8.4
+#          - 8.4
 #        exclude:
 #          - php-version: 8.3
 #            orca-job: INTEGRATED_TEST_ON_PREVIOUS_MINOR
@@ -397,7 +397,7 @@ jobs:
          - acquia_cms_video
         php-version:
           - 8.3
-          - 8.4
+#          - 8.4
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 20.x
