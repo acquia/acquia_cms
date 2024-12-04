@@ -2,6 +2,30 @@ name: "Code Deployment on Acquia Environment"
 on:
   push:
     branches: [ develop ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Choose environment'
+        type: choice
+        options:
+          - dev
+          - stage
+          - prod
+          - next
+          - ode1
+          - ode2
+          - ode3
+          - ode4
+          - ode5
+          - ode6
+          - ode7
+          - ode8
+        required: true
+        default: 'dev'
+      drupal-core:
+        description: 'Choose Drupal Core'
+        required: true
+        default: '^11'
 
 concurrency:
   group: "ci-${{ github.ref }}"
@@ -13,16 +37,16 @@ env:
   GIT_COMMITTER_EMAIL: "no-reply@acquia.com"
   GIT_AUTHOR_EMAIL: "no-reply@acquia.com"
   PHP_VERSION: 8.3
-  CORE_VERSION: ^11
+  CORE_VERSION: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.drupal-core || '^11' }}
+  ACQUIA_CLOUD_ENVIRONMENT: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.environment || 'dev' }}
 
 jobs:
   acquia_code_deployment:
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
     name: "Code Deployment"
     runs-on: ubuntu-latest
     environment: acquia_code_deployment
     env:
-      ACQUIA_CLOUD_ENVIRONMENT: "dev"
       ACQUIA_CLOUD_API_KEY: ${{ secrets.ACQUIA_CLOUD_API_KEY }}
       ACQUIA_CLOUD_API_SECRET: ${{ secrets.ACQUIA_CLOUD_API_SECRET }}
       ACQUIA_CLOUD_APPLICATION: ${{ secrets.ACQUIA_CLOUD_APPLICATION }}
