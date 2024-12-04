@@ -1,0 +1,148 @@
+name: "Code Deployment on Acquia Environment"
+on:
+  push:
+    branches: [ develop, main, ACMS-4329 ]
+
+concurrency:
+  group: "ci-${{ github.ref }}"
+  cancel-in-progress: true
+
+env:
+  GIT_AUTHOR_NAME: "CD"
+  GIT_COMMITTER_NAME: "CD"
+  GIT_COMMITTER_EMAIL: "no-reply@acquia.com"
+  GIT_AUTHOR_EMAIL: "no-reply@acquia.com"
+  PHP_VERSION: 8.3
+  CORE_VERSION: ^11
+
+jobs:
+  acquia_code_deployment:
+    if: ${{ github.event_name == 'push' }}
+    name: "Code Deployment"
+    runs-on: ubuntu-latest
+    environment: acquia_code_deployment
+    env:
+      ACQUIA_CLOUD_ENVIRONMENT: "dev"
+      ACQUIA_CLOUD_API_KEY: ${{ secrets.ACQUIA_CLOUD_API_KEY }}
+      ACQUIA_CLOUD_API_SECRET: ${{ secrets.ACQUIA_CLOUD_API_SECRET }}
+      ACQUIA_CLOUD_APPLICATION: ${{ secrets.ACQUIA_CLOUD_APPLICATION }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+      - name: Configure SSH keys
+        run: |
+          mkdir -p ~/.ssh
+          echo "${ACQUIA_CLOUD_SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval `ssh-agent -s`
+          ssh-add ~/.ssh/id_rsa
+
+          # Loop through each line in the environment variable.
+          echo "${ACQUIA_CLOUD_KNOWN_HOSTS}" | while IFS= read -r KNOWN_HOST; do
+            if [[ -n "${KNOWN_HOST}" ]]; then
+              CLEANED_HOST=$(echo "${KNOWN_HOST}" | tr -d '\r' | xargs -n1)
+              ssh-keyscan "${CLEANED_HOST}" >> ~/.ssh/known_hosts 2>/dev/null || {
+                echo "Warning: Unable to scan host ${CLEANED_HOST}. Skipping."
+              }
+            fi
+          done
+        shell: bash
+        env:
+          ACQUIA_CLOUD_SSH_PRIVATE_KEY: ${{ secrets.ACQUIA_CLOUD_SSH_PRIVATE_KEY }}
+          ACQUIA_CLOUD_KNOWN_HOSTS: ${{ vars.ACQUIA_CLOUD_KNOWN_HOSTS }}
+      - name: Setup Drupal Project
+        run: |
+          # Install specific version of Drupal Core.
+          composer require drupal/core:${CORE_VERSION} drupal/core-composer-scaffold:${CORE_VERSION} drupal/core-recommended:${CORE_VERSION} --no-install --no-update -n
+
+          # Move some of development dependencies to production depencies or else acli push:artifact will fail.
+          composer require oomphinc/composer-installers-extender --no-install --no-update -n
+          composer update "drupal/core-*" drush/drush "drupal/*" -W --with=drupal/core:${CORE_VERSION} --minimal-changes
+
+          # Include MySQL 5.7 connection settings, before DRS require line is added.
+          echo "require DRUPAL_ROOT . '/modules/contrib/mysql57/settings.inc';" >> docroot/sites/default/settings.php
+
+          # Download acquia/drupal-recommended-settings plugin & drupal/mysql57 library.
+          composer require acquia/drupal-recommended-settings:^1.1 drupal/mysql57
+
+          # Update .gitignore file, otherwise acli won't push any settings file.
+          sed -i 's/docroot\//docroot\/core/' .gitignore
+          cat .github/cd.gitignore >> .gitignore 2>/dev/null
+
+          # Create symlink directory for multisite headless and community.
+          cd docroot/sites
+          ln -s default headless
+          ln -s default community
+          cd -
+          git add . && git commit -m "Update drupal core and it's dependencies." 2>/dev/null
+      - name: Setup Acquia CLI
+        run: |
+          curl -OL https://github.com/acquia/cli/releases/latest/download/acli.phar
+          chmod +x acli.phar
+          mv acli.phar /usr/local/bin/acli
+          acli --version
+
+          acli auth:login --key=${ACQUIA_CLOUD_API_KEY} --secret=${ACQUIA_CLOUD_API_SECRET} -n
+          ACQUIA_APPLICATION_UUID=$(acli api:applications:find ${ACQUIA_CLOUD_APPLICATION} -n | jq -r '.uuid')
+          acli link ${ACQUIA_APPLICATION_UUID} -n
+
+          acli remote:aliases:download -n
+          git add . && git commit -m "Added acli & drush alias configurations." 2>/dev/null
+      - name: Deploy & Switch Code
+        shell: bash
+        run: |
+          BRANCH_TO_DEPLOY=acli-${GITHUB_REF_NAME}
+
+          acli push:artifact ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} --destination-git-branch=${BRANCH_TO_DEPLOY} -n
+
+          DEPLOYED_BRANCH=$(acli api:environments:find ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} -n | jq -r '.vcs.path')
+
+          # If BRANCH_TO_DEPLOY is NOT the same as DEPLOYED_BRANCH. Then switch code.
+          if [ "$BRANCH_TO_DEPLOY" != "$DEPLOYED_BRANCH" ]; then
+            # Step 1: Run the code:switch command and capture its output.
+            response=$(acli api:environments:code-switch ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} ${BRANCH_TO_DEPLOY} -n)
+
+            # Step 2: Extract the notification ID from the JSON response
+            notification_id=$(echo "$response" | jq -r '.notification')
+
+            # Step 3: Check if the notification ID was successfully extracted.
+            if [[ -z "$notification_id" ]]; then
+              echo "Error: Notification ID not found in the response."
+              exit 1
+            fi
+
+            progress=0
+            timeout=1800  # Timeout in seconds (30 minutes).
+            start_time=$(date +%s)  # Get the current time in seconds
+
+            echo "Please wait while code is being switched..."
+            # Step 4: Poll the notification status until progress reaches 100.
+            while [[ "$progress" -lt 100 ]]; do
+              # Run the notification find command.
+              notification_response=$(acli api:notifications:find "$notification_id" -n)
+
+              # Extract the progress value.
+              progress=$(echo "$notification_response" | jq -r '.progress')
+
+              # Display current progress.
+              #echo "Current progress: $progress%"
+
+              # Check if we've exceeded the timeout (5 minutes).
+              current_time=$(date +%s)
+              elapsed_time=$((current_time - start_time))
+
+              if [[ "$elapsed_time" -ge "$timeout" ]]; then
+                # Calculate minutes and seconds.
+                minutes=$((elapsed_time / 60))
+                seconds=$((elapsed_time % 60))
+
+                echo "Error: Timeout reached after $minutes minute(s) and $seconds second(s). Progress did not reach 100%."
+                exit 1
+              fi
+
+              # Wait for 5 seconds before polling again.
+              sleep 5
+            done
+          fi

@@ -9,6 +9,8 @@ on:
     paths-ignore:
       - README.md
 
+env:
+  ORCA_VERSION: ^4
 jobs:
   static_code_analysis:
     if: ${{ github.event_name == 'pull_request' }}
@@ -17,7 +19,6 @@ jobs:
       # Provide your package's name.
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^4
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -151,6 +152,7 @@ jobs:
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
           curl https://gist.githubusercontent.com/rajeshreeputra/efe6fd50fc839e0e05480a5eb58d1ba4/raw/c5e81aa3c0fba9f4abe42460f3d24c7ca976a527/remove-local-settings.patch | git -C ../orca apply
+          composer config extra."drupal-scaffold".file-mapping {} --json -d ${ORCA_SUT_DIR}
       # - name: Configure AWS Credentials
       #   uses: aws-actions/configure-aws-credentials@v1
       #   with:
@@ -255,6 +257,7 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
+          composer config extra."drupal-scaffold".file-mapping {} --json -d ${ORCA_SUT_DIR}
       - name: Before Install
         run: |
           # Remove all ExistingSite test in CI.
@@ -346,6 +349,7 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
+          composer config extra."drupal-scaffold".file-mapping {} --json -d ${ORCA_SUT_DIR}
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
