@@ -1,7 +1,45 @@
-name: "Code Deployment on Acquia Environment"
+name: "Code Deployment (Acquia)"
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, main, ACMS-*, feature/* ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Choose environment'
+        type: choice
+        options:
+          - dev
+          - stage
+          - prod
+          - next
+          - ode1
+          - ode2
+          - ode3
+          - ode4
+          - ode5
+          - ode6
+          - ode7
+          - ode8
+        required: true
+        default: 'dev'
+      drupal-core:
+        description: 'Choose Drupal Core Version'
+        required: true
+        default: '^11'
+      php-version:
+        description: 'Choose PHP Version'
+        type: choice
+        options:
+          - "8.1"
+          - "8.2"
+          - "8.3"
+          - "8.4"
+        required: true
+        default: '8.3'
+      download-latest-dependencies:
+        description: 'Download latest dependencies'
+        type: boolean
+        default: false
 
 concurrency:
   group: "ci-${{ github.ref }}"
@@ -12,17 +50,18 @@ env:
   GIT_COMMITTER_NAME: "CD"
   GIT_COMMITTER_EMAIL: "no-reply@acquia.com"
   GIT_AUTHOR_EMAIL: "no-reply@acquia.com"
-  PHP_VERSION: 8.3
-  CORE_VERSION: ^11
+  PHP_VERSION: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.php-version || '8.3' }}
+  CORE_VERSION: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.drupal-core || '' }}
+  ACQUIA_CLOUD_ENVIRONMENT: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.environment || 'dev' }}
+  DOWNLOAD_LATEST_DEPENDENCIES: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.download-latest-dependencies || 'false' }}
 
 jobs:
   acquia_code_deployment:
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
     name: "Code Deployment"
     runs-on: ubuntu-latest
     environment: acquia_code_deployment
     env:
-      ACQUIA_CLOUD_ENVIRONMENT: "dev"
       ACQUIA_CLOUD_API_KEY: ${{ secrets.ACQUIA_CLOUD_API_KEY }}
       ACQUIA_CLOUD_API_SECRET: ${{ secrets.ACQUIA_CLOUD_API_SECRET }}
       ACQUIA_CLOUD_APPLICATION: ${{ secrets.ACQUIA_CLOUD_APPLICATION }}
@@ -31,35 +70,26 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
-      - name: Configure SSH keys
-        run: |
-          mkdir -p ~/.ssh
-          echo "${ACQUIA_CLOUD_SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          eval `ssh-agent -s`
-          ssh-add ~/.ssh/id_rsa
-
-          # Loop through each line in the environment variable.
-          echo "${ACQUIA_CLOUD_KNOWN_HOSTS}" | while IFS= read -r KNOWN_HOST; do
-            if [[ -n "${KNOWN_HOST}" ]]; then
-              CLEANED_HOST=$(echo "${KNOWN_HOST}" | tr -d '\r' | xargs -n1)
-              ssh-keyscan "${CLEANED_HOST}" >> ~/.ssh/known_hosts 2>/dev/null || {
-                echo "Warning: Unable to scan host ${CLEANED_HOST}. Skipping."
-              }
-            fi
-          done
-        shell: bash
-        env:
-          ACQUIA_CLOUD_SSH_PRIVATE_KEY: ${{ secrets.ACQUIA_CLOUD_SSH_PRIVATE_KEY }}
-          ACQUIA_CLOUD_KNOWN_HOSTS: ${{ vars.ACQUIA_CLOUD_KNOWN_HOSTS }}
       - name: Setup Drupal Project
         run: |
-          # Install specific version of Drupal Core.
-          composer require drupal/core:${CORE_VERSION} drupal/core-composer-scaffold:${CORE_VERSION} drupal/core-recommended:${CORE_VERSION} --no-install --no-update -n
+          # Download specific version of Drupal Core, if requested.
+          [ -n "${CORE_VERSION}" ] && echo composer require drupal/core:${CORE_VERSION} drupal/core-composer-scaffold:${CORE_VERSION} drupal/core-recommended:${CORE_VERSION} --no-install --no-update -n || true
 
-          # Move some of development dependencies to production depencies or else acli push:artifact will fail.
+          # Move some of development dependencies to production dependencies or else acli push:artifact will fail.
           composer require oomphinc/composer-installers-extender --no-install --no-update -n
-          composer update "drupal/core-*" drush/drush "drupal/*" -W --with=drupal/core:${CORE_VERSION} --minimal-changes
+
+          if [ "${DOWNLOAD_LATEST_DEPENDENCIES}" == "true" ]; then
+            rm composer.lock
+            composer install
+          else
+            # Update specific version of Drupal Core, if requested or else simply install all dependencies.
+            if [ -n "${CORE_VERSION}" ]; then
+              composer update "drupal/core-*" drush/drush "drupal/*" -W --with=drupal/core:${CORE_VERSION} --minimal-changes
+            else
+              # In CI, we don't need to run composer install again, as it's already will be done by below command.
+              composer update oomphinc/composer-installers-extender
+            fi
+          fi
 
           # Include MySQL 5.7 connection settings, before DRS require line is added.
           echo "require DRUPAL_ROOT . '/modules/contrib/mysql57/settings.inc';" >> docroot/sites/default/settings.php
@@ -90,59 +120,91 @@ jobs:
 
           acli remote:aliases:download -n
           git add . && git commit -m "Added acli & drush alias configurations." 2>/dev/null
+      - name: Find & Switch PHP Version
+        run: |
+          # Find the PHP version.
+          ENV_PHP_VERSION=$(acli api:environments:find ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} -n | jq -r '.configuration.php.version')
+          echo "The CI php-version: ${PHP_VERSION}"
+          echo "The Acquia Cloud environment php-version: $ENV_PHP_VERSION"
+          # If PHP_VERSION is NOT the same as the one we want to switch to. Then switch PHP version.
+          if [ "${ENV_PHP_VERSION}" != "${PHP_VERSION}" ]; then
+             echo "Switching PHP version to ${PHP_VERSION}"
+             acli api:environments:update ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} --lang_version=${PHP_VERSION} -n
+             sleep 10
+          fi
+      - name: Configure SSH keys
+        run: |
+          mkdir -p ~/.ssh
+          echo "${ACQUIA_CLOUD_SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval `ssh-agent -s`
+          ssh-add ~/.ssh/id_rsa
+
+          SSH_URL=$(acli api:environments:find ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} -n | jq -r '.ssh_url' | awk -F'[@:]' '{print $2}')
+          GIT_URL=$(acli api:environments:find ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} -n | jq -r '.vcs.url' | awk -F'[@:]' '{print $2}')
+
+          ssh-keyscan "${SSH_URL}" >> ~/.ssh/known_hosts && ssh-keyscan "${GIT_URL}" >> ~/.ssh/known_hosts
+        shell: bash
+        env:
+          ACQUIA_CLOUD_SSH_PRIVATE_KEY: ${{ secrets.ACQUIA_CLOUD_SSH_PRIVATE_KEY }}
       - name: Deploy & Switch Code
         shell: bash
         run: |
           BRANCH_TO_DEPLOY=acli-${GITHUB_REF_NAME}
 
+          # Push changes on Acuia Cloud.
           acli push:artifact ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} --destination-git-branch=${BRANCH_TO_DEPLOY} -n
 
-          DEPLOYED_BRANCH=$(acli api:environments:find ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} -n | jq -r '.vcs.path')
+          # If the event is push and branch is develop or if CI is triggered manually, then only switch code.
+          if [[ "${GITHUB_EVENT_NAME}" == "push" && "${GITHUB_REF_NAME}" == "develop" ]] || [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
 
-          # If BRANCH_TO_DEPLOY is NOT the same as DEPLOYED_BRANCH. Then switch code.
-          if [ "$BRANCH_TO_DEPLOY" != "$DEPLOYED_BRANCH" ]; then
-            # Step 1: Run the code:switch command and capture its output.
-            response=$(acli api:environments:code-switch ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} ${BRANCH_TO_DEPLOY} -n)
+            DEPLOYED_BRANCH=$(acli api:environments:find ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} -n | jq -r '.vcs.path')
 
-            # Step 2: Extract the notification ID from the JSON response
-            notification_id=$(echo "$response" | jq -r '.notification')
+            # If BRANCH_TO_DEPLOY is NOT the same as DEPLOYED_BRANCH. Then switch code.
+            if [ "${BRANCH_TO_DEPLOY}" != "${DEPLOYED_BRANCH}" ]; then
+              # Step 1: Run the code:switch command and capture its output.
+              response=$(acli api:environments:code-switch ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} ${BRANCH_TO_DEPLOY} -n)
 
-            # Step 3: Check if the notification ID was successfully extracted.
-            if [[ -z "$notification_id" ]]; then
-              echo "Error: Notification ID not found in the response."
-              exit 1
-            fi
+              # Step 2: Extract the notification ID from the JSON response
+              notification_id=$(echo "$response" | jq -r '.notification')
 
-            progress=0
-            timeout=1800  # Timeout in seconds (30 minutes).
-            start_time=$(date +%s)  # Get the current time in seconds
-
-            echo "Please wait while code is being switched..."
-            # Step 4: Poll the notification status until progress reaches 100.
-            while [[ "$progress" -lt 100 ]]; do
-              # Run the notification find command.
-              notification_response=$(acli api:notifications:find "$notification_id" -n)
-
-              # Extract the progress value.
-              progress=$(echo "$notification_response" | jq -r '.progress')
-
-              # Display current progress.
-              #echo "Current progress: $progress%"
-
-              # Check if we've exceeded the timeout (5 minutes).
-              current_time=$(date +%s)
-              elapsed_time=$((current_time - start_time))
-
-              if [[ "$elapsed_time" -ge "$timeout" ]]; then
-                # Calculate minutes and seconds.
-                minutes=$((elapsed_time / 60))
-                seconds=$((elapsed_time % 60))
-
-                echo "Error: Timeout reached after $minutes minute(s) and $seconds second(s). Progress did not reach 100%."
+              # Step 3: Check if the notification ID was successfully extracted.
+              if [[ -z "$notification_id" ]]; then
+                echo "Error: Notification ID not found in the response."
                 exit 1
               fi
 
-              # Wait for 5 seconds before polling again.
-              sleep 5
-            done
+              progress=0
+              timeout=1800  # Timeout in seconds (30 minutes).
+              start_time=$(date +%s)  # Get the current time in seconds
+
+              echo "Please wait while code is being switched..."
+              # Step 4: Poll the notification status until progress reaches 100.
+              while [[ "$progress" -lt 100 ]]; do
+                # Run the notification find command.
+                notification_response=$(acli api:notifications:find "$notification_id" -n)
+
+                # Extract the progress value.
+                progress=$(echo "$notification_response" | jq -r '.progress')
+
+                # Display current progress.
+                #echo "Current progress: $progress%"
+
+                # Check if we've exceeded the timeout (5 minutes).
+                current_time=$(date +%s)
+                elapsed_time=$((current_time - start_time))
+
+                if [[ "$elapsed_time" -ge "$timeout" ]]; then
+                  # Calculate minutes and seconds.
+                  minutes=$((elapsed_time / 60))
+                  seconds=$((elapsed_time % 60))
+
+                  echo "Error: Timeout reached after $minutes minute(s) and $seconds second(s). Progress did not reach 100%."
+                  exit 1
+                fi
+
+                # Wait for 5 seconds before polling again.
+                sleep 5
+              done
+            fi
           fi
