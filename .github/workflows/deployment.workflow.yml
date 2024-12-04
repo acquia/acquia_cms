@@ -1,7 +1,7 @@
 name: "Code Deployment (Acquia)"
 on:
   push:
-    branches: [ develop, ACMS-4329 ]
+    branches: [ develop, main, ACMS-*, feature/* ]
   workflow_dispatch:
     inputs:
       environment:
@@ -158,54 +158,59 @@ jobs:
         run: |
           BRANCH_TO_DEPLOY=acli-${GITHUB_REF_NAME}
 
+          # Push changes on Acuia Cloud.
           acli push:artifact ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} --destination-git-branch=${BRANCH_TO_DEPLOY} -n
 
-          DEPLOYED_BRANCH=$(acli api:environments:find ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} -n | jq -r '.vcs.path')
+          # If the event is push and branch is develop or if CI is triggered manually, then only switch code.
+          if [[ "${GITHUB_EVENT_NAME}" == "push" && "${GITHUB_REF_NAME}" == "develop" ]] || [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
 
-          # If BRANCH_TO_DEPLOY is NOT the same as DEPLOYED_BRANCH. Then switch code.
-          if [ "$BRANCH_TO_DEPLOY" != "$DEPLOYED_BRANCH" ]; then
-            # Step 1: Run the code:switch command and capture its output.
-            response=$(acli api:environments:code-switch ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} ${BRANCH_TO_DEPLOY} -n)
+            DEPLOYED_BRANCH=$(acli api:environments:find ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} -n | jq -r '.vcs.path')
 
-            # Step 2: Extract the notification ID from the JSON response
-            notification_id=$(echo "$response" | jq -r '.notification')
+            # If BRANCH_TO_DEPLOY is NOT the same as DEPLOYED_BRANCH. Then switch code.
+            if [ "${BRANCH_TO_DEPLOY}" != "${DEPLOYED_BRANCH}" ]; then
+              # Step 1: Run the code:switch command and capture its output.
+              response=$(acli api:environments:code-switch ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} ${BRANCH_TO_DEPLOY} -n)
 
-            # Step 3: Check if the notification ID was successfully extracted.
-            if [[ -z "$notification_id" ]]; then
-              echo "Error: Notification ID not found in the response."
-              exit 1
-            fi
+              # Step 2: Extract the notification ID from the JSON response
+              notification_id=$(echo "$response" | jq -r '.notification')
 
-            progress=0
-            timeout=1800  # Timeout in seconds (30 minutes).
-            start_time=$(date +%s)  # Get the current time in seconds
-
-            echo "Please wait while code is being switched..."
-            # Step 4: Poll the notification status until progress reaches 100.
-            while [[ "$progress" -lt 100 ]]; do
-              # Run the notification find command.
-              notification_response=$(acli api:notifications:find "$notification_id" -n)
-
-              # Extract the progress value.
-              progress=$(echo "$notification_response" | jq -r '.progress')
-
-              # Display current progress.
-              #echo "Current progress: $progress%"
-
-              # Check if we've exceeded the timeout (5 minutes).
-              current_time=$(date +%s)
-              elapsed_time=$((current_time - start_time))
-
-              if [[ "$elapsed_time" -ge "$timeout" ]]; then
-                # Calculate minutes and seconds.
-                minutes=$((elapsed_time / 60))
-                seconds=$((elapsed_time % 60))
-
-                echo "Error: Timeout reached after $minutes minute(s) and $seconds second(s). Progress did not reach 100%."
+              # Step 3: Check if the notification ID was successfully extracted.
+              if [[ -z "$notification_id" ]]; then
+                echo "Error: Notification ID not found in the response."
                 exit 1
               fi
 
-              # Wait for 5 seconds before polling again.
-              sleep 5
-            done
+              progress=0
+              timeout=1800  # Timeout in seconds (30 minutes).
+              start_time=$(date +%s)  # Get the current time in seconds
+
+              echo "Please wait while code is being switched..."
+              # Step 4: Poll the notification status until progress reaches 100.
+              while [[ "$progress" -lt 100 ]]; do
+                # Run the notification find command.
+                notification_response=$(acli api:notifications:find "$notification_id" -n)
+
+                # Extract the progress value.
+                progress=$(echo "$notification_response" | jq -r '.progress')
+
+                # Display current progress.
+                #echo "Current progress: $progress%"
+
+                # Check if we've exceeded the timeout (5 minutes).
+                current_time=$(date +%s)
+                elapsed_time=$((current_time - start_time))
+
+                if [[ "$elapsed_time" -ge "$timeout" ]]; then
+                  # Calculate minutes and seconds.
+                  minutes=$((elapsed_time / 60))
+                  seconds=$((elapsed_time % 60))
+
+                  echo "Error: Timeout reached after $minutes minute(s) and $seconds second(s). Progress did not reach 100%."
+                  exit 1
+                fi
+
+                # Wait for 5 seconds before polling again.
+                sleep 5
+              done
+            fi
           fi
