@@ -1,7 +1,7 @@
 name: "Code Deployment on Acquia Environment"
 on:
   push:
-    branches: [ develop, main, ACMS-4329 ]
+    branches: [ develop ]
 
 concurrency:
   group: "ci-${{ github.ref }}"
