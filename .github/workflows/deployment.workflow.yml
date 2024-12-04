@@ -70,27 +70,6 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
-      - name: Configure SSH keys
-        run: |
-          mkdir -p ~/.ssh
-          echo "${ACQUIA_CLOUD_SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          eval `ssh-agent -s`
-          ssh-add ~/.ssh/id_rsa
-
-          # Loop through each line in the environment variable.
-          echo "${ACQUIA_CLOUD_KNOWN_HOSTS}" | while IFS= read -r KNOWN_HOST; do
-            if [[ -n "${KNOWN_HOST}" ]]; then
-              CLEANED_HOST=$(echo "${KNOWN_HOST}" | tr -d '\r' | xargs -n1)
-              ssh-keyscan "${CLEANED_HOST}" >> ~/.ssh/known_hosts 2>/dev/null || {
-                echo "Warning: Unable to scan host ${CLEANED_HOST}. Skipping."
-              }
-            fi
-          done
-        shell: bash
-        env:
-          ACQUIA_CLOUD_SSH_PRIVATE_KEY: ${{ secrets.ACQUIA_CLOUD_SSH_PRIVATE_KEY }}
-          ACQUIA_CLOUD_KNOWN_HOSTS: ${{ vars.ACQUIA_CLOUD_KNOWN_HOSTS }}
       - name: Setup Drupal Project
         run: |
           # Download specific version of Drupal Core, if requested.
@@ -153,6 +132,21 @@ jobs:
              acli api:environments:update ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} --lang_version=${PHP_VERSION} -n
              sleep 10
           fi
+      - name: Configure SSH keys
+        run: |
+          mkdir -p ~/.ssh
+          echo "${ACQUIA_CLOUD_SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval `ssh-agent -s`
+          ssh-add ~/.ssh/id_rsa
+
+          SSH_URL=$(acli api:environments:find ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} -n | jq -r '.ssh_url' | awk -F'[@:]' '{print $2}')
+          GIT_URL=$(acli api:environments:find ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} -n | jq -r '.vcs.url' | awk -F'[@:]' '{print $2}')
+
+          ssh-keyscan "${SSH_URL}" >> ~/.ssh/known_hosts && ssh-keyscan "${GIT_URL}" >> ~/.ssh/known_hosts
+        shell: bash
+        env:
+          ACQUIA_CLOUD_SSH_PRIVATE_KEY: ${{ secrets.ACQUIA_CLOUD_SSH_PRIVATE_KEY }}
       - name: Deploy & Switch Code
         shell: bash
         run: |
