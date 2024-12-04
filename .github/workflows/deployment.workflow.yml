@@ -26,6 +26,16 @@ on:
         description: 'Choose Drupal Core'
         required: true
         default: '^11'
+      php-version:
+        description: 'Choose PHP Version'
+        type: choice
+        options:
+          - "8.1"
+          - "8.2"
+          - "8.3"
+          - "8.4"
+        required: true
+        default: '8.3'
 
 concurrency:
   group: "ci-${{ github.ref }}"
@@ -36,7 +46,7 @@ env:
   GIT_COMMITTER_NAME: "CD"
   GIT_COMMITTER_EMAIL: "no-reply@acquia.com"
   GIT_AUTHOR_EMAIL: "no-reply@acquia.com"
-  PHP_VERSION: 8.3
+  PHP_VERSION: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.php-version || '8.3' }}
   CORE_VERSION: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.drupal-core || '^11' }}
   ACQUIA_CLOUD_ENVIRONMENT: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.environment || 'dev' }}
 
@@ -114,6 +124,16 @@ jobs:
 
           acli remote:aliases:download -n
           git add . && git commit -m "Added acli & drush alias configurations." 2>/dev/null
+      - name: Find & Switch PHP Version
+        run: |
+          # Find the PHP version.
+          ENV_PHP_VERSION=$(acli api:environments:find ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} -n | jq -r '.configuration.php.version')
+          echo $ENV_PHP_VERSION
+          exit 1
+          # If PHP_VERSION is NOT the same as the one we want to switch to. Then switch PHP version.
+          if [ "${ENV_PHP_VERSION}" != "${PHP_VERSION}" ]; then
+            acli api:environments:update ${ACQUIA_CLOUD_APPLICATION}.${ACQUIA_CLOUD_ENVIRONMENT} --lang_version=${PHP_VERSION} -n
+          fi
       - name: Deploy & Switch Code
         shell: bash
         run: |
