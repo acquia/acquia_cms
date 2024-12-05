@@ -22,10 +22,6 @@ on:
           - ode8
         required: true
         default: 'dev'
-      drupal-core:
-        description: 'Choose Drupal Core Version'
-        required: true
-        default: '^11'
       php-version:
         description: 'Choose PHP Version'
         type: choice
@@ -36,6 +32,10 @@ on:
           - "8.4"
         required: true
         default: '8.3'
+      drupal-core:
+        description: 'Choose Drupal Core Version.'
+        required: false
+        default: '^11'
       download-latest-dependencies:
         description: 'Download latest dependencies'
         type: boolean
