@@ -2,13 +2,13 @@
 
 namespace Drupal\acquia_cms_tour\Form;
 
-use Drupal\acquia_cms_tour\AcquiaCmsStarterKitManager;
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Renderer;
 use Drupal\Core\State\StateInterface;
+use Drupal\acquia_cms_tour\AcquiaCmsStarterKitManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

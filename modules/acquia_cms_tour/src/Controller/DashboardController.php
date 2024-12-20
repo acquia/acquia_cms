@@ -2,13 +2,13 @@
 
 namespace Drupal\acquia_cms_tour\Controller;
 
-use Drupal\acquia_cms_tour\AcquiaCmsTourManager;
-use Drupal\acquia_cms_tour\Services\StarterKitService;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
+use Drupal\acquia_cms_tour\AcquiaCmsTourManager;
+use Drupal\acquia_cms_tour\Services\StarterKitService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 

@@ -26,21 +26,6 @@ class GoogleTagManager extends BrowserTestBase {
   ];
 
   /**
-   * Disable strict config schema checks in this test.
-   *
-   * Cohesion has a lot of config schema errors, and until they are all fixed,
-   * this test cannot pass unless we disable strict config schema checking
-   * altogether. Since strict config schema isn't critically important in
-   * testing this functionality, it's okay to disable it for now, but it should
-   * be re-enabled (i.e., this property should be removed) as soon as possible.
-   *
-   * @var bool
-   */
-  // @codingStandardsIgnoreStart
-  protected $strictConfigSchema = FALSE;
-  // @codingStandardsIgnoreEnd
-
-  /**
    * Tests the Google Tag Manager Form.
    */
   public function testGoogleTagManager() {
@@ -61,7 +46,8 @@ class GoogleTagManager extends BrowserTestBase {
     $container->pressButton('Save');
     $assert_session->pageTextContains('The configuration options have been saved.');
     // Test that the config values we expect are set correctly.
-    $tag_id = $this->config($this->config('google_tag.settings')->get('default_google_tag_entity'))->get('tag_container_ids');
+    $tag = $this->config('google_tag.settings')->get('default_google_tag_entity');
+    $tag_id = $this->config('google_tag.container.' . $tag)->get('tag_container_ids');
     $this->assertEquals($tag_id, [$dummy_tag]);
   }
 

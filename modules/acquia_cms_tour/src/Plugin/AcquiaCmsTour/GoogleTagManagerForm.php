@@ -2,10 +2,10 @@
 
 namespace Drupal\acquia_cms_tour\Plugin\AcquiaCmsTour;
 
-use Drupal\acquia_cms_tour\Form\AcquiaCmsDashboardBase;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\acquia_cms_tour\Form\AcquiaCmsDashboardBase;
 use Drupal\google_tag\Entity\TagContainer;
 
 /**
@@ -92,7 +92,7 @@ class GoogleTagManagerForm extends AcquiaCmsDashboardBase {
       if ($accounts === []) {
         $config_name = 'google_tag.container.' . $account_default_value;
         $entity_accounts = $this->config($config_name)->get('tag_container_ids');
-        if ($entity_accounts){
+        if ($entity_accounts) {
           foreach ($entity_accounts as $index => $account) {
             $accounts[$index]['value'] = $account;
             $accounts[$index]['weight'] = $index;
@@ -242,7 +242,7 @@ class GoogleTagManagerForm extends AcquiaCmsDashboardBase {
       $config->set('tag_container_ids', array_values($tag_container_ids));
       $config->save();
     }
-    if($this->configFactory->getEditable('google_tag.settings')->get('default_google_tag_entity') !== NULL) {
+    if ($this->configFactory->getEditable('google_tag.settings')->get('default_google_tag_entity') !== NULL) {
       $this->configFactory->getEditable('google_tag.settings')->set('default_google_tag_entity', $config_id)->save();
     }
 

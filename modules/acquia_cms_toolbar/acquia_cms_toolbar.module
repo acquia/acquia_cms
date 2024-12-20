@@ -6,8 +6,8 @@
  */
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
-use Drupal\user\RoleInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -102,17 +102,17 @@ function _acquia_cms_toolbar_get_environment_indicator_color_config(): array {
 }
 
 /**
- * Implements hook_content_model_role_presave_alter().
+ * Implements hook_entity_insert().
  */
-function acquia_cms_toolbar_content_model_role_presave_alter(RoleInterface &$role) {
-  switch ($role->id()) {
+function acquia_cms_toolbar_entity_insert(EntityInterface $entity) {
+  switch ($entity->id()) {
     case 'content_administrator':
     case 'content_author':
     case 'content_editor':
     case 'developer':
     case 'site_builder':
     case 'user_administrator':
-      $role->grantPermission('access toolbar');
+      user_role_grant_permissions($entity->id(), ['access toolbar']);
       break;
   }
 }

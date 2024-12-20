@@ -8,6 +8,27 @@
 use Drupal\user\Entity\Role;
 
 /**
+ * Implements hook_install().
+ */
+function acquia_cms_toolbar_install($is_syncing) {
+  if (!$is_syncing) {
+    $roles = Role::loadMultiple();
+    foreach ($roles as $role) {
+      switch ($role->id()) {
+        case 'content_administrator':
+        case 'content_author':
+        case 'content_editor':
+        case 'developer':
+        case 'site_builder':
+        case 'user_administrator':
+          user_role_grant_permissions($role->id(), ['access toolbar']);
+          break;
+      }
+    }
+  }
+}
+
+/**
  * Update role permission handler.
  */
 function update_toolbar_role_permission() {

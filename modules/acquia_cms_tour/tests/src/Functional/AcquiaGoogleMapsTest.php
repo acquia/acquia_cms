@@ -2,8 +2,9 @@
 
 namespace Drupal\Tests\acquia_cms_tour\Functional;
 
-use Drupal\geocoder\Entity\GeocoderProvider;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\geocoder\Entity\GeocoderProvider;
+use Drupal\geocoder\GeocoderProviderInterface;
 
 /**
  * Tests the Acquia CMS Tour module's integration with Google Maps.
@@ -24,7 +25,7 @@ class AcquiaGoogleMapsTest extends BrowserTestBase {
    */
   protected static $modules = [
     'acquia_cms_tour',
-    'acquia_cms_place',
+    'geocoder',
   ];
 
   /**
@@ -51,13 +52,23 @@ class AcquiaGoogleMapsTest extends BrowserTestBase {
     $account = $this->drupalCreateUser(['access acquia cms tour dashboard']);
     $this->drupalLogin($account);
 
+    // Add Geocoder provider - googlemaps.
+    GeocoderProvider::create([
+      'id' => 'googlemaps',
+      'plugin' => 'googlemaps',
+      'configuration' => [
+        'apiKey' => 'oldkey12345',
+      ],
+    ])->save();
+
     // Visit the tour page.
     $this->drupalGet('/admin/tour/dashboard');
     $assert_session->statusCodeEquals(200);
 
     $container = $assert_session->elementExists('css', '[data-drupal-selector="edit-geocoder"]');
     // API key should be blank to start.
-    $assert_session->fieldValueEquals('maps_api_key', '', $container);
+    $assert_session->fieldValueEquals('maps_api_key', 'oldkey12345', $container);
+    $container->fillField('edit-maps-api-key', '');
     $container->pressButton('Save');
     $assert_session->pageTextContains('Maps API key field is required.');
 
