@@ -48,6 +48,28 @@ class AcquiaGoogleMapsTest extends BrowserTestBase {
   public function testAcquiaGoogleMaps() {
     $assert_session = $this->assertSession();
 
+    // Create an administrator account with all permissions.
+    $admin_user = $this->drupalCreateUser([], NULL, TRUE);
+
+    // Log in the administrator account.
+    $this->drupalLogin($admin_user);
+
+    $this->drupalGet('/admin/config/system/geocoder/geocoder-provider');
+    $assert_session->statusCodeEquals(200);
+    // Select googlemaps option from dropdown.
+    $assert_session->elementExists('css', '[data-drupal-selector="edit-geocoder-provider"]')
+      ->selectOption('googlemaps');
+    $assert_session->buttonExists('Add')->press();
+    $assert_session->pageTextContains('Add a Geocoder provider');
+
+    $container = $assert_session->elementExists('css', '[data-drupal-selector="geocoder-provider-add-form"]');
+    $container->fillField('edit-label', 'GoogleMaps');
+    $container->fillField('edit-id', 'googlemaps');
+    $container->fillField('edit-apikey', 'oldkey12345');
+    $container->pressButton('Save');
+    $assert_session->pageTextContains('Created new geocoder provider');
+
+    // Create user account with 'access acquia cms tour dashboard' permission.
     $account = $this->drupalCreateUser(['access acquia cms tour dashboard']);
     $this->drupalLogin($account);
 
@@ -56,8 +78,8 @@ class AcquiaGoogleMapsTest extends BrowserTestBase {
     $assert_session->statusCodeEquals(200);
 
     $container = $assert_session->elementExists('css', '[data-drupal-selector="edit-geocoder"]');
-    // API key should be blank to start.
-    $assert_session->fieldValueEquals('maps_api_key', '', $container);
+    $assert_session->fieldValueEquals('maps_api_key', 'oldkey12345', $container);
+    $container->fillField('maps_api_key', '');
     $container->pressButton('Save');
     $assert_session->pageTextContains('Maps API key field is required.');
 

@@ -12,8 +12,7 @@ use Drupal\user\Entity\Role;
  */
 function acquia_cms_tour_install($is_syncing) {
   if (!$is_syncing) {
-    $role = Role::load('content_administrator');
-    if ($role) {
+    if (Role::load('content_administrator')) {
       user_role_grant_permissions('content_administrator', ['access acquia cms tour dashboard']);
     }
   }
