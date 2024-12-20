@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\acquia_cms_tour\Functional;
 
-use Drupal\geocoder\Entity\GeocoderProvider;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\geocoder\Entity\GeocoderProvider;
 
 /**
  * Tests the Acquia CMS Tour module's integration with Google Maps.
@@ -24,7 +24,7 @@ class AcquiaGoogleMapsTest extends BrowserTestBase {
    */
   protected static $modules = [
     'acquia_cms_tour',
-    'acquia_cms_place',
+    'geocoder',
   ];
 
   /**

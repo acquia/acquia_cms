@@ -5,7 +5,7 @@
  * Contains hook implementations for the acquia_cms_tour module.
  */
 
-use Drupal\user\RoleInterface;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
  * Implements hook_menu_links_discovered_alter().
@@ -57,12 +57,12 @@ function acquia_cms_tour_modules_uninstalled(array $modules) {
 }
 
 /**
- * Implements hook_content_model_role_presave_alter().
+ * Implements hook_cms_tour_entity_insert().
  */
-function acquia_cms_tour_content_model_role_presave_alter(RoleInterface &$role) {
-  switch ($role->id()) {
+function acquia_cms_tour_entity_insert(EntityInterface $entity) {
+  switch ($entity->id()) {
     case 'content_administrator':
-      $role->grantPermission('access acquia cms tour dashboard');
+      user_role_grant_permissions('content_administrator', ['access acquia cms tour dashboard']);
       break;
   }
 }

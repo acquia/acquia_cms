@@ -8,6 +8,18 @@
 use Drupal\user\Entity\Role;
 
 /**
+ * Implements hook_install().
+ */
+function acquia_cms_tour_install($is_syncing) {
+  if (!$is_syncing) {
+    $role = Role::load('content_administrator');
+    if ($role) {
+      user_role_grant_permissions('content_administrator', ['access acquia cms tour dashboard']);
+    }
+  }
+}
+
+/**
  * Add state key for existing sites with Acquia CMS profile.
  */
 function acquia_cms_tour_update_8001() {
