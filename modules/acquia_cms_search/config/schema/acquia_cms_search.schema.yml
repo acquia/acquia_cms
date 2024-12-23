@@ -1,8 +1,64 @@
-search_api.index.*.third_party.acquia_cms_common:
+
+search_api.index.*.third_party.acquia_cms_search:
   type: mapping
-  label: 'Acquia CMS settings'
+  label: 'Acquia Starter Kit Search settings'
   mapping:
-    # @see acquia_cms_search_search_api_server_insert()
+    # @see acquia_cms_search_api_server_insert()
     search_server:
       type: string
       label: 'Machine name of Search API server to which the index will be attached'
+
+field.storage.*.*.third_party.acquia_cms_search:
+  type: mapping
+  label: 'Acquia CMS settings'
+  mapping:
+    # Allow fields to carry 'search_index' and 'search_label' settings. This is used
+    # by our facade to passively opt the field into a particular index.
+    # @see acquia_cms_search_field_storage_config_insert()
+    # @see \Drupal\acquia_cms_search\Facade\SearchFacade::addTaxonomyField()
+    search_index:
+      type: string
+      label: 'Machine name of Search API index to which this field should be added'
+    search_label:
+      type: string
+      label: 'The label of the field in the Search API index'
+
+node.type.*.third_party.acquia_cms_search:
+  type: mapping
+  label: 'Acquia Starter Kit settings'
+  mapping:
+    # See \Drupal\acquia_cms_common\Facade\WorkflowFacade::addNodeType()
+    workflow_id:
+      type: string
+      label: 'Content Moderation workflow to which this content type should be automatically added'
+    # See \Drupal\acquia_cms_common\Facade\WorkbenchEmailFacade::addTemplate()
+    workbench_email_templates:
+      type: sequence
+      label: 'E-mail notification templates to which the content type should be automatically added'
+      sequence:
+        type: string
+        label: 'Template ID'
+    # See \Drupal\acquia_cms_common\Facade\MetatagFacade::addNodeType()
+    metatag:
+      type: mapping
+      label: 'Metatag integration settings'
+      mapping:
+        tag_types:
+          type: sequence
+          label: 'Tag types to apply to this content type'
+          sequence:
+            type: string
+            label: 'Tag type'
+    subtype:
+      type: mapping
+      label: 'Sub-type information'
+      mapping:
+        field:
+          type: string
+          label: 'Machine name of the sub-type term reference field for this content type'
+        facet:
+          type: string
+          label: 'Machine name of the sub-type facet on the listing page for this content type'
+    sitemap_variant:
+      type: string
+      label: 'Machine name of the sitemap variant where the content type will be added'

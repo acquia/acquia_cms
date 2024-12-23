@@ -7,7 +7,7 @@ use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\field\FieldStorageConfigInterface;
-use Drupal\node\NodeTypeInterface;
+use Drupal\node\Entity\NodeType;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Utility\FieldsHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -100,10 +100,10 @@ final class SearchFacade implements ContainerInjectionInterface {
    * Tries to add the node type to the list of indexed bundles handled by the
    * index specified by 'acquia_cms.search_index' third-party setting.
    *
-   * @param \Drupal\node\NodeTypeInterface $node_type
+   * @param \Drupal\node\NodeType $node_type
    *   The new node type.
    */
-  public function addNodeType(NodeTypeInterface $node_type) {
+  public function addNodeType(NodeType $node_type) {
     $index = $this->loadIndexFromSettings($node_type);
     if (empty($index)) {
       return;
@@ -179,7 +179,7 @@ final class SearchFacade implements ContainerInjectionInterface {
 
     // Field storages don't normally have a human-readable label, so allow it to
     // provide one in its third-party settings.
-    $field_label = $field_storage->getThirdPartySetting('acquia_cms_common', 'search_label') ?: $field_storage->getLabel();
+    $field_label = $field_storage->getThirdPartySetting('acquia_cms_search', 'search_label') ?: $field_storage->getLabel();
 
     $data_source_id = 'entity:' . $field_storage->getTargetEntityTypeId();
     // This will throw an exception if the data source doesn't exist, so this
@@ -234,7 +234,7 @@ final class SearchFacade implements ContainerInjectionInterface {
     $field_type = $field_storage->getType();
     // Field storages don't normally have a human-readable label, so allow it to
     // provide one in its third-party settings.
-    $field_label = $field_storage->getThirdPartySetting('acquia_cms_common', 'search_label') ?: $field_storage->getLabel();
+    $field_label = $field_storage->getThirdPartySetting('acquia_cms_search', 'search_label') ?: $field_storage->getLabel();
 
     $data_source_id = 'entity:' . $field_storage->getTargetEntityTypeId();
     // This will throw an exception if the data source doesn't exist, so this
@@ -286,7 +286,7 @@ final class SearchFacade implements ContainerInjectionInterface {
     if ($this->configInstaller->isSyncing()) {
       return NULL;
     }
-    $index = $object->getThirdPartySetting('acquia_cms_common', 'search_index');
+    $index = $object->getThirdPartySetting('acquia_cms_search', 'search_index');
     return $index ? $this->indexStorage->load($index) : NULL;
   }
 
