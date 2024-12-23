@@ -10,6 +10,34 @@
  */
 function acquia_cms_document_install($is_syncing) {
   if (!$is_syncing) {
+    $roles = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple([
+      'content_author',
+      'content_editor',
+    ]);
+    foreach ($roles as $role) {
+      switch ($role->id()) {
+        case 'content_author':
+          foreach ([
+            'create document media',
+            'edit own document media',
+            'delete own document media',
+          ] as $permission) {
+            $role->grantPermission($permission);
+          }
+          $role->trustData()->save();
+          break;
+
+        case 'content_editor':
+          foreach ([
+            'edit any document media',
+            'delete any document media'
+          ] as $permission) {
+            $role->grantPermission($permission);
+          }
+          $role->trustData()->save();
+          break;
+      }
+    }
     _acquia_cms_common_editor_config_rewrite();
   }
 }

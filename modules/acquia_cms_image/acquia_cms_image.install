@@ -13,6 +13,31 @@ use Drupal\image\Entity\ImageStyle;
  */
 function acquia_cms_image_install($is_syncing) {
   if (!$is_syncing) {
+    $roles = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple([
+      'content_author',
+      'content_editor',
+    ]);
+    foreach ($roles as $role) {
+      switch ($role->id()) {
+        case 'content_author':
+          foreach ([
+            'create image media',
+            'edit own image media',
+            'delete own image media',
+          ] as $permission) {
+            $role->grantPermission($permission);
+          }
+          $role->trustData()->save();
+          break;
+
+        case 'content_editor':
+          foreach (['edit any image media', 'delete any image media'] as $permission) {
+            $role->grantPermission($permission);
+          }
+          $role->trustData()->save();
+          break;
+      }
+    }
     _acquia_cms_common_editor_config_rewrite(TRUE);
     \Drupal::classResolver(SiteLogo::class)->createLogo()->setLogo();
   }
