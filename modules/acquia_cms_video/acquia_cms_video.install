@@ -10,6 +10,31 @@
  */
 function acquia_cms_video_install($is_syncing) {
   if (!$is_syncing) {
+    $roles = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple([
+      'content_author',
+      'content_editor',
+    ]);
+    foreach ($roles as $role) {
+      switch ($role->id()) {
+        case 'content_author':
+          foreach ([
+            'create video media',
+            'edit own video media',
+            'delete own video media',
+          ] as $permission) {
+            $role->grantPermission($permission);
+          }
+          $role->trustData()->save();
+          break;
+
+        case 'content_editor':
+          foreach (['edit any video media', 'delete any video media'] as $permission) {
+            $role->grantPermission($permission);
+          }
+          $role->trustData()->save();
+          break;
+      }
+    }
     _acquia_cms_common_editor_config_rewrite();
   }
 }
