@@ -157,12 +157,14 @@ class GoogleMapsApiForm extends AcquiaCmsDashboardBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $maps_api_key = $form_state->getValue('maps_api_key');
 
-    // Configure Google Maps API Key for both Site Studio and
-    // Geocoder module.
-    $this->config('cohesion.settings')
-      ->set('google_map_api_key', $maps_api_key)
-      ->save(TRUE);
+    // Configure Google Maps API Key for Site Studio module.
+    if ($this->moduleHandler->moduleExists('cohesion')) {
+      $this->config('cohesion.settings')
+        ->set('google_map_api_key', $maps_api_key)
+        ->save(TRUE);
+    }
 
+    // Configure Google Maps API Key for Geocoder module.
     $provider = $this->loadProvider();
     if ($provider) {
       $configuration = $provider->get('configuration');
