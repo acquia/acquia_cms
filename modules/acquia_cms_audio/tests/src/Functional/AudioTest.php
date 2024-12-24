@@ -2,8 +2,9 @@
 
 namespace Drupal\Tests\acquia_cms_audio\Functional;
 
+use Drupal\Component\Utility\SortArray;
+use Drupal\Tests\BrowserTestBase;
 use Drupal\taxonomy\Entity\Term;
-use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
 
 /**
  * Tests the Audio media type that ships with Acquia CMS.
@@ -14,7 +15,7 @@ use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
  * @group push
  * @group pr
  */
-class AudioTest extends MediaTypeTestBase {
+class AudioTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
@@ -25,40 +26,35 @@ class AudioTest extends MediaTypeTestBase {
   ];
 
   /**
-   * Disable strict config schema checks in this test.
-   *
-   * Cohesion has a lot of config schema errors, and until they are all fixed,
-   * this test cannot pass unless we disable strict config schema checking
-   * altogether. Since strict config schema isn't critically important in
-   * testing this functionality, it's okay to disable it for now, but it should
-   * be re-enabled (i.e., this property should be removed) as soon as possible.
-   *
-   * @var bool
+   * {@inheritdoc}
    */
-  // @codingStandardsIgnoreStart
-  protected $strictConfigSchema = FALSE;
-  // @codingStandardsIgnoreEnd
+  protected $defaultTheme = 'stark';
 
   /**
    * {@inheritdoc}
    */
-  protected $mediaType = 'audio';
+  protected static $modules = [
+    'ckeditor5',
+    'acquia_cms_audio',
+  ];
 
   /**
    * {@inheritdoc}
    */
-  protected function doTestEditForm() : void {
-    $page = $this->getSession()->getPage();
+  public function testAudio() : void {
+    $this->drupalLogin($this->rootUser);
+
+    $session = $this->getSession();
+    $page = $session->getPage();
     $assert_session = $this->assertSession();
 
-    $account = $this->drupalCreateUser();
-    $account->addRole('content_author');
-    $account->save();
-    $this->drupalLogin($account);
+    // Add Categories vocabulary terms to the select list.
+    $this->drupalGet("admin/structure/taxonomy/manage/categories/add");
+    $page->fillField('Name', 'Music');
+    $page->pressButton('Save');
+    $assert_session->pageTextContains('Created new term Music.');
 
-    $this->drupalGet('media/add/' . $this->mediaType);
-    // Assert that the current user can access the form to create a video media.
-    // Note that status codes cannot be asserted in functional JavaScript tests.
+    $this->drupalGet("/media/add/audio");
     $assert_session->statusCodeEquals(200);
 
     // Assert that the expected fields show up.
@@ -66,8 +62,28 @@ class AudioTest extends MediaTypeTestBase {
     $assert_session->fieldExists('Soundcloud audio URL');
     $assert_session->fieldExists('Categories');
     $assert_session->fieldExists('Tags');
+
     // The standard Categories and Tags fields should be present.
-    $this->assertCategoriesAndTagsFieldsExist();
+    $group = $assert_session->elementExists('css', '#edit-group-taxonomy');
+
+    $tags = $assert_session->fieldExists('Tags', $group);
+    $this->assertTrue($tags->hasAttribute('data-autocomplete-path'));
+
+    $categories = $assert_session->selectExists('Categories', $group);
+    // No item added to the select list.
+    $this->assertTrue($categories->hasAttribute('multiple'));
+
+    // Ensure that the select list has every term in the Categories vocabulary.
+    $terms = $this->container->get('entity_type.manager')
+      ->getStorage('taxonomy_term')
+      ->loadByProperties([
+        'vid' => 'categories',
+      ]);
+
+    /** @var \Drupal\taxonomy\TermInterface $term */
+    foreach ($terms as $term) {
+      $assert_session->optionExists('Categories', $term->label(), $group);
+    }
 
     // Assert that the fields are in the correct order.
     $this->assertFieldsOrder([
@@ -87,21 +103,52 @@ class AudioTest extends MediaTypeTestBase {
     // For convenience, the parent class creates a few categories during set-up.
     // @see \Drupal\Tests\acquia_cms_common\Functional\ContentModelTestBase::setUp()
     $page->selectFieldOption('Categories', 'Music');
-    $page->fillField('Tags', 'techno');
+    $page->fillField('Tags', 'Techno');
     $page->pressButton('Save');
     $assert_session->pageTextContains('Audio Decoupled Drupal Podcast with Third & Grove and Acquia has been created.');
 
     // Assert that the techno tag was created dynamically in the correct
     // vocabulary.
     /** @var \Drupal\taxonomy\TermInterface $tag */
-    $tag = Term::load(4);
+    $tag = Term::load(2);
     $this->assertInstanceOf(Term::class, $tag);
     $this->assertSame('tags', $tag->bundle());
-    $this->assertSame('techno', $tag->getName());
+    $this->assertSame('Techno', $tag->getName());
 
     // Media items are not normally exposed at standalone URLs, so assert that
     // the URL alias field does not show up.
     $assert_session->fieldNotExists('path[0][alias]');
+  }
+
+  /**
+   * Asserts that the fields are in the correct order.
+   *
+   * @param string[] $expected_order
+   *   The machine names of the fields we expect in media type's form display,
+   *   in the order we expect them to have.
+   */
+  protected function assertFieldsOrder(array $expected_order): void {
+    $components = $this->container->get('entity_display.repository')
+      ->getFormDisplay('media', 'audio')
+      ->getComponents();
+
+    $this->assertDisplayComponentsOrder($components, $expected_order, "The fields of the 'audio' media type's edit form were not in the expected order.");
+  }
+
+  /**
+   * Asserts that the components of an entity display are in a specific order.
+   *
+   * @param array[] $components
+   *   The components in the entity display.
+   * @param string[] $expected_order
+   *   The components' keys, in the expected order.
+   * @param string $message
+   *   (optional) A message if the assertion fails.
+   */
+  protected function assertDisplayComponentsOrder(array $components, array $expected_order, string $message = ''): void {
+    uasort($components, SortArray::class . '::sortByWeightElement');
+    $components = array_intersect(array_keys($components), $expected_order);
+    $this->assertSame($expected_order, array_values($components), $message);
   }
 
 }
