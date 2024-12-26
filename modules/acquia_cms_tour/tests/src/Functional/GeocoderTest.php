@@ -6,13 +6,13 @@ use Drupal\Tests\BrowserTestBase;
 use Drupal\geocoder\Entity\GeocoderProvider;
 
 /**
- * Tests the Acquia CMS Tour module's integration with Google Maps.
+ * Tests the Acquia CMS Tour module's integration with Geocoder & Google Maps.
  *
  * @group acquia_cms
  * @group acquia_cms_tour
  * @group risky
  */
-class AcquiaGoogleMapsTest extends BrowserTestBase {
+class GeocoderTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
@@ -28,24 +28,24 @@ class AcquiaGoogleMapsTest extends BrowserTestBase {
   ];
 
   /**
-   * Disable strict config schema checks in this test.
+   * The module handler.
    *
-   * Cohesion has a lot of config schema errors, and until they are all fixed,
-   * this test cannot pass unless we disable strict config schema checking
-   * altogether. Since strict config schema isn't critically important in
-   * testing this functionality, it's okay to disable it for now, but it should
-   * be re-enabled (i.e., this property should be removed) as soon as possible.
-   *
-   * @var bool
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  // @codingStandardsIgnoreStart
-  protected $strictConfigSchema = FALSE;
-  // @codingStandardsIgnoreEnd
+  protected $moduleHandler;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+    $this->moduleHandler = $this->container->get("module_handler");
+  }
 
   /**
    * Tests that the Google Maps API key can be set on the tour page.
    */
-  public function testAcquiaGoogleMaps() {
+  public function testGeocoderGoogleMaps() {
     $assert_session = $this->assertSession();
 
     // Create an administrator account with all permissions.
@@ -56,6 +56,7 @@ class AcquiaGoogleMapsTest extends BrowserTestBase {
 
     $this->drupalGet('/admin/config/system/geocoder/geocoder-provider');
     $assert_session->statusCodeEquals(200);
+
     // Select googlemaps option from dropdown.
     $assert_session->elementExists('css', '[data-drupal-selector="edit-geocoder-provider"]')
       ->selectOption('googlemaps');
@@ -89,9 +90,12 @@ class AcquiaGoogleMapsTest extends BrowserTestBase {
     $container->pressButton('Save');
     $assert_session->pageTextContains('The Google Maps API key has been set.');
 
-    // Now test that the config values we expect are set correctly.
-    $cohesion_map_key = $this->config('cohesion.settings')->get('google_map_api_key');
-    $this->assertSame($cohesion_map_key, $dummy_key);
+    // Test that the config values we expect are set correctly for Site Studio.
+    if ($this->moduleHandler->moduleExists('cohesion')) {
+      $cohesion_map_key = $this->config('cohesion.settings')->get('google_map_api_key');
+      $this->assertSame($cohesion_map_key, $dummy_key);
+    }
+
 
     $configuration = GeocoderProvider::load('googlemaps')->get('configuration');
     $this->assertSame($configuration['apiKey'], $dummy_key);

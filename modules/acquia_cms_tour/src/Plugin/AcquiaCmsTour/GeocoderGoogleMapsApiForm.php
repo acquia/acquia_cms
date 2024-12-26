@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   weight = 2
  * )
  */
-class GoogleMapsApiForm extends AcquiaCmsDashboardBase {
+class GeocoderGoogleMapsApiForm extends AcquiaCmsDashboardBase {
 
   /**
    * Provides module name.
@@ -72,8 +72,12 @@ class GoogleMapsApiForm extends AcquiaCmsDashboardBase {
     if ($this->isModuleEnabled()) {
       $module_path = $this->moduleHandler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $maps_api_key = $this->config('cohesion.settings')
-        ->get('google_map_api_key');
+
+      // Get Google Maps API Key from Site Studio config if available.
+      if ($this->moduleHandler->moduleExists('cohesion')) {
+        $maps_api_key = $this->config('cohesion.settings')
+          ->get('google_map_api_key');
+      }
       $provider = $this->loadProvider();
       if ($provider) {
         $configuration = $provider->get('configuration');
