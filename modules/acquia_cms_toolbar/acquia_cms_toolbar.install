@@ -5,12 +5,16 @@
  * Contains hook code for the Acquia CMS Toolbar.
  */
 
+use Drupal\acquia_cms_toolbar\EntityOperations\PermissionManager;
+
 /**
  * Implements hook_install().
  */
 function acquia_cms_toolbar_install($is_syncing) {
   if (!$is_syncing) {
-    update_toolbar_role_permission();
+    $class_resolver = \Drupal::service('class_resolver');
+    $class_resolver->getInstanceFromDefinition(PermissionManager::class)
+      ->grantPermissionToRoles();
   }
 }
 
@@ -18,5 +22,7 @@ function acquia_cms_toolbar_install($is_syncing) {
  * Update role permissions.
  */
 function acquia_cms_toolbar_update_8001() {
-  update_toolbar_role_permission();
+  $class_resolver = \Drupal::service('class_resolver');
+  $class_resolver->getInstanceFromDefinition(PermissionManager::class)
+    ->grantPermissionToRoles();
 }
