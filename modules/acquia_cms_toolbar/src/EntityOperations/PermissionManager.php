@@ -36,7 +36,7 @@ class PermissionManager implements EntityInsertOperationInterface, ContainerInje
    * {@inheritdoc}
    */
   public function grantPermissionToRoles(array $role_ids = NULL): void {
-    $roles = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple($role_ids ?? [
+    $roles = $this->entityTypeManager->getStorage('user_role')->loadMultiple($role_ids ?? [
       'content_administrator',
       'content_author',
       'content_editor',

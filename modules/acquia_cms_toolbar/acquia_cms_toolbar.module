@@ -106,32 +106,10 @@ function _acquia_cms_toolbar_get_environment_indicator_color_config(): array {
 /**
  * Implements hook_entity_insert().
  */
-function acquia_cms_toolbar_entity_insert(EntityInterface $entity) {
-  if($entity instanceof RoleInterface && !$entity->isSyncing()) {
+function acquia_cms_toolbar_user_role_insert(RoleInterface $role) {
+  if(!$role->isSyncing()) {
     $class_resolver = \Drupal::service('class_resolver');
     $class_resolver->getInstanceFromDefinition(PermissionManager::class)
-      ->grantPermissionToRoles([$entity->id()]);
-  }
-}
-
-/**
- * Update role permission handler.
- *
- * @param array|null $role_ids
- *
- * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
- * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
- */
-function update_toolbar_role_permission(array $role_ids = NULL): void {
-  $roles = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple($role_ids ?? [
-    'content_administrator',
-    'content_author',
-    'content_editor',
-    'developer',
-    'site_builder',
-    'user_administrator',
-  ]);
-  foreach ($roles as $role) {
-    $role->grantPermission('access toolbar')->trustData()->save();
+      ->grantPermissionToRoles([$role->id()]);
   }
 }
