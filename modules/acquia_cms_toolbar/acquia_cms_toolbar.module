@@ -8,6 +8,7 @@
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
+use Drupal\user\RoleInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -105,15 +106,29 @@ function _acquia_cms_toolbar_get_environment_indicator_color_config(): array {
  * Implements hook_entity_insert().
  */
 function acquia_cms_toolbar_entity_insert(EntityInterface $entity) {
-  switch ($entity->id()) {
-    case 'content_administrator':
-    case 'content_author':
-    case 'content_editor':
-    case 'developer':
-    case 'site_builder':
-    case 'user_administrator':
-      $role = \Drupal::entityTypeManager()->getStorage('user_role')->load($entity->id());
-      $role->grantPermission('access toolbar')->trustData()->save();
-      break;
+  if($entity instanceof RoleInterface && !$entity->isSyncing()) {
+    update_toolbar_role_permission([$entity->id()]);
+  }
+}
+
+/**
+ * Update role permission handler.
+ *
+ * @param array|null $role_ids
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function update_toolbar_role_permission(array $role_ids = NULL): void {
+  $roles = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple($role_ids ?? [
+    'content_administrator',
+    'content_author',
+    'content_editor',
+    'developer',
+    'site_builder',
+    'user_administrator',
+  ]);
+  foreach ($roles as $role) {
+    $role->grantPermission('access toolbar')->trustData()->save();
   }
 }
