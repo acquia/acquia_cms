@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @internal
  */
-class PermissionManager implements EntityInsertOperationInterface, ContainerInjectionInterface {
+class PermissionManager implements ContainerInjectionInterface {
 
   /**
    * Constructs the PermissionManager object.
@@ -33,7 +33,12 @@ class PermissionManager implements EntityInsertOperationInterface, ContainerInje
   }
 
   /**
-   * {@inheritdoc}
+   * Update role permission handler.
+   *
+   * @param array|null $role_ids
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function grantPermissionToRoles(array $role_ids = NULL): void {
     $roles = $this->entityTypeManager->getStorage('user_role')->loadMultiple($role_ids ?? [
