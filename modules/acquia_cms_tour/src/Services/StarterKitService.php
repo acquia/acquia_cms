@@ -77,7 +77,7 @@ class StarterKitService {
    * @param string $content_model
    *   Variable holding the content model option selected.
    */
-  public function enableModules(string $starter_kit, string $demo_question = NULL, string $content_model = NULL) {
+  public function enableModules(string $starter_kit, ?string $demo_question = NULL, ?string $content_model = NULL) {
     $starter_kits = [
       'acquia_cms_enterprise_low_code' => 'Acquia CMS Enterprise low-code',
       'acquia_cms_community' => 'Acquia CMS Community',
@@ -144,7 +144,7 @@ class StarterKitService {
    * @param string $content_model
    *   Variable holding the content model option selected.
    */
-  public function getModulesAndThemes(string $starter_kit, string $demo_question = NULL, string $content_model = NULL) {
+  public function getModulesAndThemes(string $starter_kit, ?string $demo_question = NULL, ?string $content_model = NULL) {
     $enableModules = $enableThemes = [];
     switch ($starter_kit) {
       case 'acquia_cms_enterprise_low_code':
@@ -227,7 +227,7 @@ class StarterKitService {
    * @param string $content_model
    *   Variable holding the content model option selected.
    */
-  public function getMissingModules(string $starter_kit, string $demo_question = NULL, string $content_model = NULL) {
+  public function getMissingModules(string $starter_kit, ?string $demo_question = NULL, ?string $content_model = NULL) {
     $modulesAndThemes = $this->getModulesAndThemes($starter_kit, $demo_question, $content_model);
     $modules = $modulesAndThemes['enableModules'];
     $moduleList = array_keys($this->moduleExtensionList->getList());

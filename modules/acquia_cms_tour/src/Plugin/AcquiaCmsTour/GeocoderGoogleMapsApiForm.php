@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   weight = 2
  * )
  */
-class GoogleMapsApiForm extends AcquiaCmsDashboardBase {
+class GeocoderGoogleMapsApiForm extends AcquiaCmsDashboardBase {
 
   /**
    * Provides module name.
@@ -72,8 +72,12 @@ class GoogleMapsApiForm extends AcquiaCmsDashboardBase {
     if ($this->isModuleEnabled()) {
       $module_path = $this->moduleHandler->getModule($module)->getPathname();
       $module_info = $this->infoParser->parse($module_path);
-      $maps_api_key = $this->config('cohesion.settings')
-        ->get('google_map_api_key');
+
+      // Get Google Maps API Key from Site Studio config if available.
+      if ($this->moduleHandler->moduleExists('cohesion')) {
+        $maps_api_key = $this->config('cohesion.settings')
+          ->get('google_map_api_key');
+      }
       $provider = $this->loadProvider();
       if ($provider) {
         $configuration = $provider->get('configuration');
@@ -157,12 +161,14 @@ class GoogleMapsApiForm extends AcquiaCmsDashboardBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $maps_api_key = $form_state->getValue('maps_api_key');
 
-    // Configure Google Maps API Key for both Site Studio and
-    // Geocoder module.
-    $this->config('cohesion.settings')
-      ->set('google_map_api_key', $maps_api_key)
-      ->save(TRUE);
+    // Configure Google Maps API Key for Site Studio module.
+    if ($this->moduleHandler->moduleExists('cohesion')) {
+      $this->config('cohesion.settings')
+        ->set('google_map_api_key', $maps_api_key)
+        ->save(TRUE);
+    }
 
+    // Configure Google Maps API Key for Geocoder module.
     $provider = $this->loadProvider();
     if ($provider) {
       $configuration = $provider->get('configuration');

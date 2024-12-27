@@ -9,6 +9,8 @@ on:
     paths-ignore:
       - README.md
 
+env:
+  ORCA_VERSION: ^4
 jobs:
   static_code_analysis:
     if: ${{ github.event_name == 'pull_request' }}
@@ -17,7 +19,6 @@ jobs:
       # Provide your package's name.
       ORCA_SUT_NAME: acquia/acquia_cms
       ORCA_SUT_BRANCH: develop
-      ORCA_VERSION: ^4
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
@@ -127,7 +128,8 @@ jobs:
       matrix:
         orca-job:
           - INTEGRATED_TEST_ON_LATEST_LTS
-          - ISOLATED_TEST_ON_CURRENT
+          - INTEGRATED_TEST_ON_PREVIOUS_MINOR
+#          - ISOLATED_TEST_ON_CURRENT
         acms_job:
           - integrated_php_unit_tests
           - integrated_existing_site_tests
@@ -151,6 +153,7 @@ jobs:
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
           curl https://gist.githubusercontent.com/rajeshreeputra/efe6fd50fc839e0e05480a5eb58d1ba4/raw/c5e81aa3c0fba9f4abe42460f3d24c7ca976a527/remove-local-settings.patch | git -C ../orca apply
+          composer config extra."drupal-scaffold".file-mapping {} --json -d ${ORCA_SUT_DIR}
       # - name: Configure AWS Credentials
       #   uses: aws-actions/configure-aws-credentials@v1
       #   with:
@@ -223,7 +226,8 @@ jobs:
       matrix:
         orca-job:
           - INTEGRATED_TEST_ON_LATEST_LTS
-          - ISOLATED_TEST_ON_CURRENT
+          - INTEGRATED_TEST_ON_PREVIOUS_MINOR
+#          - ISOLATED_TEST_ON_CURRENT
         #php-version: [ "8.1" ]
         modules:
           - acquia_cms_article
@@ -238,6 +242,7 @@ jobs:
           - acquia_cms_place
           - acquia_cms_search
           - acquia_cms_site_studio
+          - acquia_cms_toolbar
           - acquia_cms_tour
           - acquia_cms_video
     steps:
@@ -255,6 +260,7 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
+          composer config extra."drupal-scaffold".file-mapping {} --json -d ${ORCA_SUT_DIR}
       - name: Before Install
         run: |
           # Remove all ExistingSite test in CI.
@@ -319,14 +325,16 @@ jobs:
       matrix:
         orca-job:
           - INTEGRATED_TEST_ON_LATEST_LTS
-          # - INTEGRATED_TEST_ON_PREVIOUS_MINOR
-          - ISOLATED_TEST_ON_CURRENT
+          - INTEGRATED_TEST_ON_PREVIOUS_MINOR
+#          - ISOLATED_TEST_ON_CURRENT
         php-version:
           - 8.1
           - 8.3
         exclude:
           - php-version: 8.1
-            orca-job: ISOLATED_TEST_ON_CURRENT
+            orca-job: INTEGRATED_TEST_ON_PREVIOUS_MINOR
+#          - php-version: 8.1
+#            orca-job: ISOLATED_TEST_ON_CURRENT
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 20.x
@@ -346,6 +354,7 @@ jobs:
           composer self-update
           composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION" -n
           curl https://gist.githubusercontent.com/rajeshreeputra/170586f217b422eb9cdfd9ca9457a2e3/raw/c2f277ba9005b91d7f662cacf37b3940a66a9b8c/sut-path-reposories.patch | git -C ../orca apply
+          composer config extra."drupal-scaffold".file-mapping {} --json -d ${ORCA_SUT_DIR}
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
