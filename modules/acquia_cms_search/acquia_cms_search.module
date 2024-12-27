@@ -65,6 +65,19 @@ function acquia_cms_search_views_plugins_cache_alter(&$definitions) {
  */
 function acquia_cms_search_node_type_insert(NodeTypeInterface $node_type) {
   Drupal::classResolver(SearchFacade::class)->addNodeType($node_type);
+  if (!$node_type->isSyncing()) {
+    _acquia_cms_search_add_category_facet();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for node types.
+ */
+function acquia_cms_search_node_type_update(NodeTypeInterface $node_type) {
+  Drupal::classResolver(SearchFacade::class)->addNodeType($node_type);
+  if (!$node_type->isSyncing()) {
+    _acquia_cms_search_add_category_facet();
+  }
 }
 
 /**
@@ -76,12 +89,6 @@ function acquia_cms_search_field_config_insert(FieldConfigInterface $field_confi
 
   // Adding the third party settings in the node.body storage configuration to
   // index the body field for searching.
-  if ($field_storage->getType() === 'text_with_summary' && $field_storage->id() === 'node.body') {
-    $field_storage->setThirdPartySetting('acquia_cms_common', 'search_index', 'content')
-      ->setThirdPartySetting('acquia_cms_common', 'search_label', 'Body')
-      ->save();
-  }
-
   if ($field_storage->getType() === 'entity_reference' && $field_storage->getSetting('target_type') === 'taxonomy_term') {
     Drupal::classResolver(SearchFacade::class)->addTaxonomyField($field_storage);
   }
@@ -136,31 +143,14 @@ function acquia_cms_search_search_api_server_insert(ServerInterface $server) {
     }
 
     // If the index wants to opt into using this server, grant its wish.
-    $server_name = $index->getThirdPartySetting('acquia_cms_common', 'search_server');
+    $server_name = $index->getThirdPartySetting('acquia_cms_search', 'search_server');
     if ($server_name && $server->id() === $server_name) {
       $index->setServer($server)
         ->enable()
         // The third-party setting is only needed once.
-        ->unsetThirdPartySetting('acquia_cms_common', 'search_server')
+        ->unsetThirdPartySetting('acquia_cms_search', 'search_server')
         ->save();
     }
-  }
-}
-
-/**
- * Implements hook_config_schema_info_alter().
- */
-function acquia_cms_search_config_schema_info_alter(array &$definitions) {
-  $key = 'node.type.*.third_party.acquia_cms_common';
-  // Allow node types to carry a 'search_index' setting. This is used by our
-  // facade to passively opt the node type into a particular index.
-  // @see acquia_cms_search_node_type_insert()
-  // @see \Drupal\acquia_cms_search\Facade\SearchFacade::addNodeType()
-  if (array_key_exists($key, $definitions)) {
-    $definitions[$key]['mapping']['search_index'] = [
-      'type' => 'string',
-      'label' => 'The machine name of the search index to which this content type should be added',
-    ];
   }
 }
 
@@ -181,25 +171,11 @@ function acquia_cms_search_form_acquia_cms_search_form_alter(array &$form) {
 }
 
 /**
- * Implements hook_modules_installed().
- */
-function acquia_cms_search_modules_installed(array $modules, $is_syncing) {
-  if (!$is_syncing) {
-    _acquia_cms_search_add_category_facet($modules);
-  }
-}
-
-/**
  * Adds search_category facet, if any acms search dependent module is installed.
- *
- * @param array $modules
- *   An array of installed modules.
  */
-function _acquia_cms_search_add_category_facet(array $modules) {
-  $acquiaCmsSearchModules = ["acquia_cms_person", "acquia_cms_place",
-    "acquia_cms_article", "acquia_cms_event", "acquia_cms_page",
-  ];
-  if (array_intersect($acquiaCmsSearchModules, $modules)) {
+function _acquia_cms_search_add_category_facet() {
+  $search_category = \Drupal::entityTypeManager()->getStorage('facets_facet')->loadByProperties(['id' => 'search_category']);
+  if (!$search_category) {
     \Drupal::classResolver(FacetFacade::class)->addFacet([
       'id' => 'search_category',
       'name' => 'Category',

@@ -24,19 +24,13 @@ function acquia_cms_search_install($is_syncing) {
 
     // Retroactively enable indexing for any content types that existed before
     // this module was installed.
-    $node_types = NodeType::loadMultiple();
+    $node_types = \Drupal::entityTypeManager()->getStorage('node_type')->loadMultiple();
     array_walk($node_types, 'acquia_cms_search_node_type_insert');
-    $enabled_modules = \Drupal::service('module_handler')->getModuleList();
-    $enabled_modules = array_keys($enabled_modules);
-    _acquia_cms_search_add_category_facet($enabled_modules);
+    $search_category = \Drupal::entityTypeManager()->getStorage('facets_facet')->loadByProperties(['id' => 'search_category']);
+    if (!$search_category) {
+      _acquia_cms_search_add_category_facet();
+    }
   }
-}
-
-/**
- * Implements hook_module_preinstall().
- */
-function acquia_cms_search_module_preinstall($module) {
-  \Drupal::service('acquia_cms_common.utility')->setModulePreinstallTriggered($module);
 }
 
 /**
