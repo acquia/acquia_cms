@@ -2,8 +2,9 @@
 
 namespace Drupal\Tests\acquia_cms_image\Functional;
 
+use Drupal\Component\Utility\SortArray;
+use Drupal\Tests\BrowserTestBase;
 use Drupal\taxonomy\Entity\Term;
-use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
 
 /**
  * Tests the Image media type that ships with Acquia CMS.
@@ -13,54 +14,38 @@ use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
  * @group medium_risk
  * @group push
  */
-class ImageTest extends MediaTypeTestBase {
+class ImageTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['acquia_cms_image'];
-
-  /**
-   * Disable strict config schema checks in this test.
-   *
-   * Cohesion has a lot of config schema errors, and until they are all fixed,
-   * this test cannot pass unless we disable strict config schema checking
-   * altogether. Since strict config schema isn't critically important in
-   * testing this functionality, it's okay to disable it for now, but it should
-   * be re-enabled (i.e., this property should be removed) as soon as possible.
-   *
-   * @var bool
-   */
-  // @codingStandardsIgnoreStart
-  protected $strictConfigSchema = FALSE;
-  // @codingStandardsIgnoreEnd
+  protected $defaultTheme = 'stark';
 
   /**
    * {@inheritdoc}
    */
-  protected $mediaType = 'image';
+  protected static $modules = [
+    'ckeditor5',
+    'acquia_cms_image',
+  ];
 
   /**
    * {@inheritdoc}
    */
-  protected $fieldName = 'files[image_0]';
+  public function testImage() : void {
+    $this->drupalLogin($this->rootUser);
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function doTestEditForm() : void {
     $session = $this->getSession();
     $page = $session->getPage();
     $assert_session = $this->assertSession();
 
-    $account = $this->drupalCreateUser();
-    $account->addRole('content_author');
-    $account->save();
-    $this->drupalLogin($account);
+    // Add Categories vocabulary terms to the select list.
+    $this->drupalGet("admin/structure/taxonomy/manage/categories/add");
+    $page->fillField('Name', 'Music');
+    $page->pressButton('Save');
+    $assert_session->pageTextContains('Created new term Music.');
 
-    $this->drupalGet('media/add/' . $this->mediaType);
-    // Assert that the current user can access the form to create a image media.
-    // Note that status codes cannot be asserted in functional JavaScript tests.
+    $this->drupalGet("/media/add/image");
     $assert_session->statusCodeEquals(200);
 
     // Assert that the expected fields show up.
@@ -68,8 +53,32 @@ class ImageTest extends MediaTypeTestBase {
     $assert_session->fieldExists('Image');
     $assert_session->fieldExists('Categories');
     $assert_session->fieldExists('Tags');
+
     // The standard Categories and Tags fields should be present.
-    $this->assertCategoriesAndTagsFieldsExist();
+    $group = $assert_session->elementExists('css', '#edit-group-taxonomy');
+
+    $tags = $assert_session->fieldExists('Tags', $group);
+    $this->assertTrue($tags->hasAttribute('data-autocomplete-path'));
+
+    $categories = $assert_session->selectExists('Categories', $group);
+    // No item added to the select list.
+    $this->assertTrue($categories->hasAttribute('multiple'));
+
+    // Ensure that the select list has every term in the Categories vocabulary.
+    $terms = $this->container->get('entity_type.manager')
+      ->getStorage('taxonomy_term')
+      ->loadByProperties([
+        'vid' => 'categories',
+      ]);
+
+    /** @var \Drupal\taxonomy\TermInterface $term */
+    foreach ($terms as $term) {
+      $assert_session->optionExists('Categories', $term->label(), $group);
+    }
+
+    // Ensure Document field group is present and has document field.
+    $group = $assert_session->elementExists('css', '#edit-image-wrapper');
+    $assert_session->fieldExists('files[image_0]', $group);
 
     // Assert that the fields are in the correct order.
     $this->assertFieldsOrder([
@@ -89,69 +98,56 @@ class ImageTest extends MediaTypeTestBase {
     // For convenience, the parent class creates a few categories during set-up.
     // @see \Drupal\Tests\acquia_cms_common\Functional\ContentModelTestBase::setUp()
     $page->selectFieldOption('Categories', 'Music');
-    $page->fillField('Tags', 'techno');
-    $this->fillSourceField();
+    $page->fillField('Tags', 'Techno');
+    $page->attachFileToField('files[image_0]', $this->root . '/core/modules/media/tests/fixtures/example_1.jpeg');
     $page->pressButton('Save');
     $assert_session->pageTextContains('Image Living with Image has been created.');
 
     // Assert that the techno tag was created dynamically in the correct
     // vocabulary.
     /** @var \Drupal\taxonomy\TermInterface $tag */
-    $tag = Term::load(4);
+    $tag = Term::load(2);
     $this->assertInstanceOf(Term::class, $tag);
     $this->assertSame('tags', $tag->bundle());
-    $this->assertSame('techno', $tag->getName());
+    $this->assertSame('Techno', $tag->getName());
 
     // Media items are not normally exposed at standalone URLs, so assert that
     // the URL alias field does not show up.
     $assert_session->fieldNotExists('path[0][alias]');
+    $this->testAuthorAccess();
+    $this->testEditorAccess();
   }
 
   /**
-   * Tests the media type as a content administrator.
+   * Tests the media type as a content editor.
    *
    * Lets override parent's method so that we can change
    * media id here because we are adding one addition image
    * as default content for site logo, which breaks the
    * test if we use parents method.
    *
-   * Asserts that content administrators:
-   * - Can create media of the type under test.
-   * - Can edit their own media.
+   * Asserts that content editor:
    * - Can edit others' media.
-   * - Can delete their own media.
    * - Can delete others' media.
    */
-  protected function doTestAdministratorAccess() {
+  protected function testEditorAccess() {
+    $this->drupalCreateRole([], 'content_editor');
     $account = $this->drupalCreateUser();
-    $account->addRole('content_administrator');
+    $account->addRole('content_editor');
     $account->save();
     $this->drupalLogin($account);
 
     $assert_session = $this->assertSession();
     $page = $this->getSession()->getPage();
 
-    // Test that we can create media.
-    $this->drupalGet("/media/add/$this->mediaType");
-    $assert_session->statusCodeEquals(200);
-    // We should be able to select the language of the media item.
-    $assert_session->selectExists('Language');
-    $page->fillField('Name', 'Pastafazoul!');
-    $this->fillSourceField();
-    $page->pressButton('Save');
-    $assert_session->statusCodeEquals(200);
-
     // Test that we can edit our own media.
-    $this->drupalGet('/media/4/edit');
+    $this->drupalGet('/media/1/edit');
     $assert_session->statusCodeEquals(200);
 
     // Test that we can delete our own media.
-    $this->drupalGet('/media/4/delete');
-    $assert_session->statusCodeEquals(200);
-
-    // Test that we can delete others' media.
     $this->drupalGet('/media/2/delete');
     $assert_session->statusCodeEquals(200);
+
   }
 
   /**
@@ -169,7 +165,8 @@ class ImageTest extends MediaTypeTestBase {
    * - Can delete their own media.
    * - Cannot delete others' media.
    */
-  protected function doTestAuthorAccess() {
+  protected function testAuthorAccess() {
+    $this->drupalCreateRole([], 'content_author');
     $account = $this->drupalCreateUser();
     $account->addRole('content_author');
     $account->save();
@@ -178,12 +175,10 @@ class ImageTest extends MediaTypeTestBase {
     $assert_session = $this->assertSession();
     $page = $this->getSession()->getPage();
 
-    $this->drupalGet("/media/add/$this->mediaType");
+    $this->drupalGet("/media/add/image");
     $assert_session->statusCodeEquals(200);
-    // We should be able to select the language of the media item.
-    $assert_session->selectExists('Language');
     $page->fillField('Name', 'Pastafazoul!');
-    $this->fillSourceField();
+    $page->attachFileToField('files[image_0]', $this->root . '/core/modules/media/tests/fixtures/example_1.jpeg');
     $page->pressButton('Save');
     $assert_session->statusCodeEquals(200);
 
@@ -198,6 +193,37 @@ class ImageTest extends MediaTypeTestBase {
     // Test that we cannot delete others' media.
     $this->drupalGet('/media/1/delete');
     $assert_session->statusCodeEquals(403);
+  }
+
+  /**
+   * Asserts that the fields are in the correct order.
+   *
+   * @param string[] $expected_order
+   *   The machine names of the fields we expect in media type's form display,
+   *   in the order we expect them to have.
+   */
+  protected function assertFieldsOrder(array $expected_order) {
+    $components = $this->container->get('entity_display.repository')
+      ->getFormDisplay('media', 'image')
+      ->getComponents();
+
+    $this->assertDisplayComponentsOrder($components, $expected_order, "The fields of the 'image' media type's edit form were not in the expected order.");
+  }
+
+  /**
+   * Asserts that the components of an entity display are in a specific order.
+   *
+   * @param array[] $components
+   *   The components in the entity display.
+   * @param string[] $expected_order
+   *   The components' keys, in the expected order.
+   * @param string $message
+   *   (optional) A message if the assertion fails.
+   */
+  protected function assertDisplayComponentsOrder(array $components, array $expected_order, string $message = '') {
+    uasort($components, SortArray::class . '::sortByWeightElement');
+    $components = array_intersect(array_keys($components), $expected_order);
+    $this->assertSame($expected_order, array_values($components), $message);
   }
 
 }

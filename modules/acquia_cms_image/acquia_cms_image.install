@@ -5,7 +5,9 @@
  * Install, update and uninstall functions for the acquia_cms_image module.
  */
 
+use Drupal\acquia_cms_image\EntityOperations\PermissionManager;
 use Drupal\acquia_cms_image\SiteLogo;
+use Drupal\editor\Entity\Editor;
 use Drupal\image\Entity\ImageStyle;
 
 /**
@@ -13,33 +15,53 @@ use Drupal\image\Entity\ImageStyle;
  */
 function acquia_cms_image_install($is_syncing) {
   if (!$is_syncing) {
-    $roles = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple([
-      'content_author',
-      'content_editor',
-    ]);
-    foreach ($roles as $role) {
-      switch ($role->id()) {
-        case 'content_author':
-          foreach ([
-            'create image media',
-            'edit own image media',
-            'delete own image media',
-          ] as $permission) {
-            $role->grantPermission($permission);
-          }
-          $role->trustData()->save();
-          break;
+    $class_resolver = \Drupal::service('class_resolver');
+    $class_resolver->getInstanceFromDefinition(PermissionManager::class)
+      ->grantPermissionToRoles();
+    _acquia_cms_image_editor_config_rewrite(TRUE);
+    \Drupal::classResolver(SiteLogo::class)->createLogo()->setLogo();
+  }
+}
 
-        case 'content_editor':
-          foreach (['edit any image media', 'delete any image media'] as $permission) {
-            $role->grantPermission($permission);
-          }
-          $role->trustData()->save();
-          break;
+/**
+ * Function to rewrite filtered_html & full_html configurations.
+ *
+ * @param bool $include_imce_plugin
+ *   Decides If imce_image plugin to add in editor toolbar settings.
+ */
+function _acquia_cms_image_editor_config_rewrite(bool $include_imce_plugin = FALSE): void {
+  if(!\Drupal::moduleHandler()->moduleExists('editor')) {
+    return;
+  }
+  $editors = [
+    "filtered_html",
+    "full_html",
+  ];
+  foreach ($editors as $editor) {
+    try {
+      $editorObject = \Drupal::entityTypeManager()->getStorage('editor')->load($editor);
+      if ($editorObject instanceof Editor) {
+        $settings = $editorObject->getSettings();
+        $items = &$settings["toolbar"]["items"];
+        $plugins = &$settings['plugins'];
+        if (!in_array('drupalMedia', $items)) {
+          $items[] = 'drupalMedia';
+        }
+        if ($include_imce_plugin && !in_array('imce_image', $items)) {
+          $items[] = 'imce_image';
+        }
+        if (!in_array('<drupal-media data-align data-caption title>', $plugins['ckeditor5_sourceEditing']['allowed_tags'])) {
+          $plugins['ckeditor5_sourceEditing']['allowed_tags'][] = '<drupal-media data-align data-caption title>';
+        }
+        if ($plugins["media_media"]["allow_view_mode_override"] === FALSE) {
+          $plugins["media_media"]["allow_view_mode_override"] = TRUE;
+        }
+        $editorObject->setSettings($settings)->save();
       }
     }
-    _acquia_cms_common_editor_config_rewrite(TRUE);
-    \Drupal::classResolver(SiteLogo::class)->createLogo()->setLogo();
+    catch (\Exception $e) {
+      \Drupal::logger("acquia_cms_image_config_rewrite")->error($e->getMessage());
+    }
   }
 }
 
