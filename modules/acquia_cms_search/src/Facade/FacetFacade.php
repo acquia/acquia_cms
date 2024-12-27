@@ -162,7 +162,6 @@ final class FacetFacade implements ContainerInjectionInterface {
     }
     // Load the facet (if it exists).
     $facet = $this->facetEntity->load($values['id']);
-
     if ($facet instanceof FacetInterface) {
       return;
     }

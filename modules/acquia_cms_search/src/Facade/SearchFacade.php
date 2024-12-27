@@ -7,10 +7,11 @@ use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\field\FieldStorageConfigInterface;
-use Drupal\node\Entity\NodeType;
+use Drupal\node\NodeTypeInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Utility\FieldsHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\node\Entity\NodeType;
 
 /**
  * Provides a facade for integrating with Search API.
@@ -110,7 +111,6 @@ final class SearchFacade implements ContainerInjectionInterface {
     }
 
     $node_type_id = $node_type->id();
-
     // Add this node type to the data source.
     $data_source = $index->getDatasource('entity:node');
     $configuration = $data_source->getConfiguration();
@@ -225,7 +225,6 @@ final class SearchFacade implements ContainerInjectionInterface {
     }
 
     $field_name = $field_storage->getName();
-
     // Bail out if the field already exists on the index.
     if ($index->getField($field_name)) {
       return;
@@ -241,7 +240,6 @@ final class SearchFacade implements ContainerInjectionInterface {
     // is really just a way to prevent the field from using an invalid data
     // source.
     $data_source_id = $index->getDatasource($data_source_id)->getPluginId();
-
     $type = '';
     switch ($field_type) {
       case 'string':
@@ -286,8 +284,20 @@ final class SearchFacade implements ContainerInjectionInterface {
     if ($this->configInstaller->isSyncing()) {
       return NULL;
     }
-    $index = $object->getThirdPartySetting('acquia_cms_search', 'search_index');
-    return $index ? $this->indexStorage->load($index) : NULL;
+    $index = $object->getThirdPartySetting('acquia_starterkit_core', 'search_index') ?? 'content';
+
+    $datasources = $this->indexStorage->load($index);
+    foreach ($datasources->getDatasources() as $datasource) {
+      if ($object->getEntityTypeId() === 'node_type') {
+        return $index ? $this->indexStorage->load($index) : NULL;
+      }
+
+      if ($object->getEntityTypeId() === 'field_storage_config' && $object->get('entity_type') === 'node') {
+        return $index ? $this->indexStorage->load($index) : NULL;
+      }
+    }
+
+    return NULL;
   }
 
 }
