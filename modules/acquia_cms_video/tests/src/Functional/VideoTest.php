@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\acquia_cms_video\Functional;
 
-use Drupal\field\Entity\FieldConfig;
+use Drupal\Component\Utility\SortArray;
+use Drupal\Tests\BrowserTestBase;
 use Drupal\taxonomy\Entity\Term;
-use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
 
 /**
  * Tests the Video media type that ships with Acquia CMS.
@@ -15,27 +15,20 @@ use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
  * @group push
  * @group pr
  */
-class VideoTest extends MediaTypeTestBase {
+class VideoTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['acquia_cms_video'];
+  protected $defaultTheme = 'stark';
 
   /**
-   * Disable strict config schema checks in this test.
-   *
-   * Cohesion has a lot of config schema errors, and until they are all fixed,
-   * this test cannot pass unless we disable strict config schema checking
-   * altogether. Since strict config schema isn't critically important in
-   * testing this functionality, it's okay to disable it for now, but it should
-   * be re-enabled (i.e., this property should be removed) as soon as possible.
-   *
-   * @var bool
+   * {@inheritdoc}
    */
-  // @codingStandardsIgnoreStart
-  protected $strictConfigSchema = FALSE;
-  // @codingStandardsIgnoreEnd
+  protected static $modules = [
+    'ckeditor5',
+    'acquia_cms_video'
+  ];
 
   /**
    * {@inheritdoc}
@@ -45,33 +38,20 @@ class VideoTest extends MediaTypeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
-    parent::setUp();
-    // Set the default value for field_media_oembed_video so that we can
-    // bypass the oEmbed system's URL validation. (It's not necessary for this
-    // test anyway).
-    /** @var \Drupal\Core\Field\FieldConfigBase $fieldConfig */
-    $fieldConfig = FieldConfig::loadByName('media', $this->mediaType, 'field_media_oembed_video');
-    $fieldConfig
-      ->setDefaultValue('https://www.youtube.com/watch?v=6e8QyfvQMmU&list=PLpVC00PAQQxHzlDeQvCNDKkyKRV1G3_vT')
-      ->save();
-  }
+  public function testVideo(): void {
+    $this->drupalLogin($this->rootUser);
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function doTestEditForm(): void {
-    $page = $this->getSession()->getPage();
+    $session = $this->getSession();
+    $page = $session->getPage();
     $assert_session = $this->assertSession();
 
-    $account = $this->drupalCreateUser();
-    $account->addRole('content_author');
-    $account->save();
-    $this->drupalLogin($account);
+    // Add Categories vocabulary terms to the select list.
+    $this->drupalGet("admin/structure/taxonomy/manage/categories/add");
+    $page->fillField('Name', 'Music');
+    $page->pressButton('Save');
+    $assert_session->pageTextContains('Created new term Music.');
 
-    $this->drupalGet('media/add/' . $this->mediaType);
-    // Assert that the current user can access the form to create a video media.
-    // Note that status codes cannot be asserted in functional JavaScript tests.
+    $this->drupalGet("/media/add/video");
     $assert_session->statusCodeEquals(200);
 
     // Assert that the expected fields show up.
@@ -79,8 +59,28 @@ class VideoTest extends MediaTypeTestBase {
     $assert_session->fieldExists('Remote video URL');
     $assert_session->fieldExists('Categories');
     $assert_session->fieldExists('Tags');
+
     // The standard Categories and Tags fields should be present.
-    $this->assertCategoriesAndTagsFieldsExist();
+    $group = $assert_session->elementExists('css', '#edit-group-taxonomy');
+
+    $tags = $assert_session->fieldExists('Tags', $group);
+    $this->assertTrue($tags->hasAttribute('data-autocomplete-path'));
+
+    $categories = $assert_session->selectExists('Categories', $group);
+    // No item added to the select list.
+    $this->assertTrue($categories->hasAttribute('multiple'));
+
+    // Ensure that the select list has every term in the Categories vocabulary.
+    $terms = $this->container->get('entity_type.manager')
+      ->getStorage('taxonomy_term')
+      ->loadByProperties([
+        'vid' => 'categories',
+      ]);
+
+    /** @var \Drupal\taxonomy\TermInterface $term */
+    foreach ($terms as $term) {
+      $assert_session->optionExists('Categories', $term->label(), $group);
+    }
 
     // Assert that the fields are in the correct order.
     $this->assertFieldsOrder([
@@ -93,24 +93,23 @@ class VideoTest extends MediaTypeTestBase {
     // Submit the form and ensure that we see the expected error message(s).
     $page->pressButton('Save');
     $assert_session->pageTextContains('Name field is required.');
+    $assert_session->pageTextContains('Remote video URL field is required.');
 
     // Fill in the required fields and assert that things went as expected.
     $page->fillField('Name', 'Drupal 8 Beginners, Lesson 01: Intro to the Course');
     $page->fillField('Remote video URL', 'https://www.youtube.com/watch?v=6e8QyfvQMmU&list=PLpVC00PAQQxHzlDeQvCNDKkyKRV1G3_vT');
-    // For convenience, the parent class creates a few categories during set-up.
-    // @see \Drupal\Tests\acquia_cms_common\Functional\ContentModelTestBase::setUp()
     $page->selectFieldOption('Categories', 'Music');
-    $page->fillField('Tags', 'techno');
+    $page->fillField('Tags', 'Techno');
     $page->pressButton('Save');
     $assert_session->pageTextContains('Video Drupal 8 Beginners, Lesson 01: Intro to the Course has been created.');
 
     // Assert that the techno tag was created dynamically in the correct
     // vocabulary.
     /** @var \Drupal\taxonomy\TermInterface $tag */
-    $tag = Term::load(4);
+    $tag = Term::load(2);
     $this->assertInstanceOf(Term::class, $tag);
     $this->assertSame('tags', $tag->bundle());
-    $this->assertSame('techno', $tag->getName());
+    $this->assertSame('Techno', $tag->getName());
 
     // Media items are not normally exposed at standalone URLs, so assert that
     // the URL alias field does not show up.
@@ -118,13 +117,34 @@ class VideoTest extends MediaTypeTestBase {
   }
 
   /**
-   * {@inheritdoc}
+   * Asserts that the fields are in the correct order.
+   *
+   * @param string[] $expected_order
+   *   The machine names of the fields we expect in media type's form display,
+   *   in the order we expect them to have.
    */
-  protected function fillSourceField($value = NULL): void {
-    // Override this method so that it does not do anything with
-    // field_media_oembed_video. We are setting default value already in setUp()
-    // so that we can bypass the oEmbed system's URL validation, since it is not
-    // needed in this test and actively gets in the way.
+  protected function assertFieldsOrder(array $expected_order): void {
+    $components = $this->container->get('entity_display.repository')
+      ->getFormDisplay('media', 'video')
+      ->getComponents();
+
+    $this->assertDisplayComponentsOrder($components, $expected_order, "The fields of the 'video' media type's edit form were not in the expected order.");
+  }
+
+  /**
+   * Asserts that the components of an entity display are in a specific order.
+   *
+   * @param array[] $components
+   *   The components in the entity display.
+   * @param string[] $expected_order
+   *   The components' keys, in the expected order.
+   * @param string $message
+   *   (optional) A message if the assertion fails.
+   */
+  protected function assertDisplayComponentsOrder(array $components, array $expected_order, string $message = ''): void {
+    uasort($components, SortArray::class . '::sortByWeightElement');
+    $components = array_intersect(array_keys($components), $expected_order);
+    $this->assertSame($expected_order, array_values($components), $message);
   }
 
 }
