@@ -70,7 +70,7 @@ abstract class AcquiaCmsDashboardBase extends ConfigFormBase implements AcquiaDa
    * @param \Drupal\Core\Extension\InfoParserInterface $info_parser
    *   The info file parser.
    * @param \Drupal\Core\Extension\ModuleExtensionList $module_handler
-   *    The module list.
+   *   The module list.
    */
   public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser, ModuleExtensionList $module_list) {
     $this->state = $state;

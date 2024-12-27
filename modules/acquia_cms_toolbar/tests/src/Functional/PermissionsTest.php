@@ -18,7 +18,7 @@ class PermissionsTest extends BrowserTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
-    'acquia_cms_toolbar'
+    'acquia_cms_toolbar',
   ];
 
   /**
@@ -38,7 +38,7 @@ class PermissionsTest extends BrowserTestBase {
    */
   protected function setUp(): void {
     parent::setUp();
-    $this->drupalCreateRole([],'content_administrator');
+    $this->drupalCreateRole([], 'content_administrator');
     $this->entityTypeManager = $this->container->get("entity_type.manager");
   }
 

@@ -40,7 +40,7 @@ class PermissionManager implements ContainerInjectionInterface {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function grantPermissionToRoles(array $role_ids = NULL): void {
+  public function grantPermissionToRoles(?array $role_ids = NULL): void {
     $roles = $this->entityTypeManager->getStorage('user_role')->loadMultiple($role_ids ?? [
       'content_administrator',
       'content_author',

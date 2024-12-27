@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\acquia_cms_tour\Functional;
 
-use Drupal\Tests\BrowserTestBase;
 use Drupal\geocoder\Entity\GeocoderProvider;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests the Acquia CMS Tour module's integration with Geocoder & Google Maps.
@@ -95,7 +95,6 @@ class GeocoderTest extends BrowserTestBase {
       $cohesion_map_key = $this->config('cohesion.settings')->get('google_map_api_key');
       $this->assertSame($cohesion_map_key, $dummy_key);
     }
-
 
     $configuration = GeocoderProvider::load('googlemaps')->get('configuration');
     $this->assertSame($configuration['apiKey'], $dummy_key);

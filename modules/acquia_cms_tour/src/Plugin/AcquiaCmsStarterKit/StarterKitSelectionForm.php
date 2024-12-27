@@ -2,9 +2,9 @@
 
 namespace Drupal\acquia_cms_tour\Plugin\AcquiaCmsStarterKit;
 
+use Drupal\acquia_cms_tour\Form\AcquiaCmsStarterKitBase;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\acquia_cms_tour\Form\AcquiaCmsStarterKitBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
