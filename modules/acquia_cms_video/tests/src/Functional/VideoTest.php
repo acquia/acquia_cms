@@ -3,8 +3,8 @@
 namespace Drupal\Tests\acquia_cms_video\Functional;
 
 use Drupal\Component\Utility\SortArray;
-use Drupal\Tests\BrowserTestBase;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests the Video media type that ships with Acquia CMS.

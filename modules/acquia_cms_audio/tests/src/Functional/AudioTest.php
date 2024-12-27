@@ -3,8 +3,8 @@
 namespace Drupal\Tests\acquia_cms_audio\Functional;
 
 use Drupal\Component\Utility\SortArray;
-use Drupal\Tests\BrowserTestBase;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests the Audio media type that ships with Acquia CMS.
@@ -111,7 +111,7 @@ class AudioTest extends BrowserTestBase {
     // the URL alias field does not show up.
     $assert_session->fieldNotExists('path[0][alias]');
   }
-  
+
   /**
    * Asserts that the fields are in the correct order.
    *

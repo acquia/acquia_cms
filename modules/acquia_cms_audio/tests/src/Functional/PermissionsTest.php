@@ -38,7 +38,7 @@ class PermissionsTest extends BrowserTestBase {
    */
   protected function setUp(): void {
     parent::setUp();
-    $this->drupalCreateRole([],'content_author');
+    $this->drupalCreateRole([], 'content_author');
     $this->entityTypeManager = $this->container->get("entity_type.manager");
   }
 
