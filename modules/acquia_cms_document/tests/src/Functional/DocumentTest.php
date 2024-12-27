@@ -3,9 +3,9 @@
 namespace Drupal\Tests\acquia_cms_document\Functional;
 
 use Drupal\Component\Utility\SortArray;
-use Drupal\Tests\BrowserTestBase;
 use Drupal\file\Entity\File;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests the Document media type that ships with Acquia CMS.
