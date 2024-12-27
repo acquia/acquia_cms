@@ -128,7 +128,8 @@ jobs:
       matrix:
         orca-job:
           - INTEGRATED_TEST_ON_LATEST_LTS
-          - ISOLATED_TEST_ON_CURRENT
+          - INTEGRATED_TEST_ON_PREVIOUS_MINOR
+#          - ISOLATED_TEST_ON_CURRENT
         acms_job:
           - integrated_php_unit_tests
           - integrated_existing_site_tests
@@ -225,7 +226,8 @@ jobs:
       matrix:
         orca-job:
           - INTEGRATED_TEST_ON_LATEST_LTS
-          - ISOLATED_TEST_ON_CURRENT
+          - INTEGRATED_TEST_ON_PREVIOUS_MINOR
+#          - ISOLATED_TEST_ON_CURRENT
         #php-version: [ "8.1" ]
         modules:
           - acquia_cms_article
@@ -240,6 +242,7 @@ jobs:
           - acquia_cms_place
           - acquia_cms_search
           - acquia_cms_site_studio
+          - acquia_cms_toolbar
           - acquia_cms_tour
           - acquia_cms_video
     steps:
@@ -322,14 +325,16 @@ jobs:
       matrix:
         orca-job:
           - INTEGRATED_TEST_ON_LATEST_LTS
-          # - INTEGRATED_TEST_ON_PREVIOUS_MINOR
-          - ISOLATED_TEST_ON_CURRENT
+          - INTEGRATED_TEST_ON_PREVIOUS_MINOR
+#          - ISOLATED_TEST_ON_CURRENT
         php-version:
           - 8.1
           - 8.3
         exclude:
           - php-version: 8.1
-            orca-job: ISOLATED_TEST_ON_CURRENT
+            orca-job: INTEGRATED_TEST_ON_PREVIOUS_MINOR
+#          - php-version: 8.1
+#            orca-job: ISOLATED_TEST_ON_CURRENT
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 20.x

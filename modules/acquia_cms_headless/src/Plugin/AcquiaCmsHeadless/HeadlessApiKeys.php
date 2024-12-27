@@ -25,34 +25,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class HeadlessApiKeys extends AcquiaCmsDashboardBase {
-  /**
-   * The state interface.
-   *
-   * @var \Drupal\Core\State\StateInterface
-   */
-  protected $state;
-
-
-  /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
-   * The link generator.
-   *
-   * @var \Drupal\Core\Utility\LinkGeneratorInterface
-   */
-  protected $linkGenerator;
-
-  /**
-   * The info file parser.
-   *
-   * @var \Drupal\Core\Extension\InfoParserInterface
-   */
-  protected $infoParser;
 
   /**
    * The EntityTypeManager service.
@@ -78,24 +50,12 @@ class HeadlessApiKeys extends AcquiaCmsDashboardBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser, EntityTypeManagerInterface $entity_type_manager, StarterkitNextjsService $starterkit_nextjs_service) {
-    parent::__construct($state, $module_handler, $link_generator, $info_parser);
-    $this->entityTypeManager = $entity_type_manager;
-    $this->starterKitNextjsService = $starterkit_nextjs_service;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('state'),
-      $container->get('module_handler'),
-      $container->get('link_generator'),
-      $container->get('info_parser'),
-      $container->get('entity_type.manager'),
-      $container->get('acquia_cms_headless.starterkit_nextjs')
-    );
+    $instance = parent::create($container);
+    $instance->entityTypeManager = $container->get('entity_type.manager');
+    $instance->starterKitNextjsService = $container->get('acquia_cms_headless.starterkit_nextjs');
+
+    return $instance;
   }
 
   /**

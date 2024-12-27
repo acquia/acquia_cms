@@ -3,6 +3,7 @@
 namespace Drupal\acquia_cms_tour\Form;
 
 use Drupal\Core\Extension\InfoParserInterface;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\State\StateInterface;
@@ -51,6 +52,13 @@ abstract class AcquiaCmsDashboardBase extends ConfigFormBase implements AcquiaDa
   protected $infoParser;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  protected $moduleList;
+
+  /**
    * Constructs a new AcquiaConnectorForm.
    *
    * @param \Drupal\Core\State\StateInterface $state
@@ -61,12 +69,15 @@ abstract class AcquiaCmsDashboardBase extends ConfigFormBase implements AcquiaDa
    *   The link generator.
    * @param \Drupal\Core\Extension\InfoParserInterface $info_parser
    *   The info file parser.
+   * @param \Drupal\Core\Extension\ModuleExtensionList $module_handler
+   *   The module list.
    */
-  public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser) {
+  public function __construct(StateInterface $state, ModuleHandlerInterface $module_handler, LinkGeneratorInterface $link_generator, InfoParserInterface $info_parser, ModuleExtensionList $module_list) {
     $this->state = $state;
     $this->moduleHandler = $module_handler;
     $this->linkGenerator = $link_generator;
     $this->infoParser = $info_parser;
+    $this->moduleList = $module_list;
   }
 
   /**
@@ -77,7 +88,8 @@ abstract class AcquiaCmsDashboardBase extends ConfigFormBase implements AcquiaDa
       $container->get('state'),
       $container->get('module_handler'),
       $container->get('link_generator'),
-      $container->get('info_parser')
+      $container->get('info_parser'),
+      $container->get('extension.list.module'),
     );
   }
 
@@ -101,7 +113,7 @@ abstract class AcquiaCmsDashboardBase extends ConfigFormBase implements AcquiaDa
    * Get human readable module name.
    */
   public function getModuleName() {
-    return $this->moduleHandler->getName($this->module);
+    return $this->moduleList->getName($this->module);
   }
 
   /**

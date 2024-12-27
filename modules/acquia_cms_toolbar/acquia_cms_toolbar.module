@@ -6,6 +6,7 @@
  */
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector as Environment;
+use Drupal\acquia_cms_toolbar\EntityOperations\PermissionManager;
 use Drupal\Core\Url;
 use Drupal\user\RoleInterface;
 
@@ -102,17 +103,12 @@ function _acquia_cms_toolbar_get_environment_indicator_color_config(): array {
 }
 
 /**
- * Implements hook_content_model_role_presave_alter().
+ * Implements hook_entity_insert().
  */
-function acquia_cms_toolbar_content_model_role_presave_alter(RoleInterface &$role) {
-  switch ($role->id()) {
-    case 'content_administrator':
-    case 'content_author':
-    case 'content_editor':
-    case 'developer':
-    case 'site_builder':
-    case 'user_administrator':
-      $role->grantPermission('access toolbar');
-      break;
+function acquia_cms_toolbar_user_role_insert(RoleInterface $role) {
+  if (!$role->isSyncing()) {
+    $class_resolver = \Drupal::service('class_resolver');
+    $class_resolver->getInstanceFromDefinition(PermissionManager::class)
+      ->grantPermissionToRoles([$role->id()]);
   }
 }
