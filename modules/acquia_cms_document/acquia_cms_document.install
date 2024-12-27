@@ -5,39 +5,53 @@
  * Install, update and uninstall functions for the acquia_cms_document module.
  */
 
+use Drupal\acquia_cms_document\EntityOperations\PermissionManager;
+use Drupal\editor\Entity\Editor;
+
 /**
  * Implements hook_install().
  */
 function acquia_cms_document_install($is_syncing) {
   if (!$is_syncing) {
-    $roles = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple([
-      'content_author',
-      'content_editor',
-    ]);
-    foreach ($roles as $role) {
-      switch ($role->id()) {
-        case 'content_author':
-          foreach ([
-            'create document media',
-            'edit own document media',
-            'delete own document media',
-          ] as $permission) {
-            $role->grantPermission($permission);
-          }
-          $role->trustData()->save();
-          break;
+    $class_resolver = \Drupal::service('class_resolver');
+    $class_resolver->getInstanceFromDefinition(PermissionManager::class)
+      ->grantPermissionToRoles();
+    _acquia_cms_document_editor_config_rewrite();
+  }
+}
 
-        case 'content_editor':
-          foreach ([
-            'edit any document media',
-            'delete any document media'
-          ] as $permission) {
-            $role->grantPermission($permission);
-          }
-          $role->trustData()->save();
-          break;
+/**
+ * Function to rewrite filtered_html & full_html configurations.
+ */
+function _acquia_cms_document_editor_config_rewrite(): void {
+  if(!\Drupal::moduleHandler()->moduleExists('editor')) {
+    return;
+  }
+  $editors = [
+    "filtered_html",
+    "full_html",
+  ];
+  foreach ($editors as $editor) {
+    try {
+      $editorObject = \Drupal::entityTypeManager()->getStorage('editor')->load($editor);
+      if ($editorObject instanceof Editor) {
+        $settings = $editorObject->getSettings();
+        $items = &$settings["toolbar"]["items"];
+        $plugins = &$settings['plugins'];
+        if (!in_array('drupalMedia', $items)) {
+          $items[] = 'drupalMedia';
+        }
+        if (!in_array('<drupal-media data-align data-caption title>', $plugins['ckeditor5_sourceEditing']['allowed_tags'])) {
+          $plugins['ckeditor5_sourceEditing']['allowed_tags'][] = '<drupal-media data-align data-caption title>';
+        }
+        if ($plugins["media_media"]["allow_view_mode_override"] === FALSE) {
+          $plugins["media_media"]["allow_view_mode_override"] = TRUE;
+        }
+        $editorObject->setSettings($settings)->save();
       }
     }
-    _acquia_cms_common_editor_config_rewrite();
+    catch (\Exception $e) {
+      \Drupal::logger("acquia_cms_document_config_rewrite")->error($e->getMessage());
+    }
   }
 }
