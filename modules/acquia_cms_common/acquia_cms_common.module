@@ -13,6 +13,7 @@ use Drupal\acquia_cms_common\Facade\WorkflowFacade;
 use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Hook\Attribute\LegacyHook;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\editor\Entity\Editor;
@@ -427,6 +428,7 @@ function acquia_cms_common_preprocess_maintenance_page(array &$variables) {
 /**
  * Implements hook_module_implements_alter().
  */
+#[LegacyHook]
 function acquia_cms_common_module_implements_alter(array &$implementations, string $hook): void {
   // Prevent installation of site studio package on module install
   // during site installation from other modules, this causes issue.

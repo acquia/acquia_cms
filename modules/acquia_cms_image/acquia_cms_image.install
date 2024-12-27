@@ -6,6 +6,7 @@
  */
 
 use Drupal\acquia_cms_image\SiteLogo;
+use Drupal\Core\Hook\Attribute\LegacyHook;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\image\Entity\ImageStyle;
 
@@ -22,6 +23,7 @@ function acquia_cms_image_install($is_syncing) {
 /**
  * Implements hook_module_implements_alter().
  */
+#[LegacyHook]
 function acquia_cms_image_module_implements_alter(array &$implementations, string $hook) : void {
   if ($hook === 'modules_installed') {
     // Unset default_content import during site install,
