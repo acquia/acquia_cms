@@ -111,6 +111,17 @@ function acquia_cms_search_field_config_insert(FieldConfigInterface $field_confi
   if (in_array($field_storage->getType(), $allowed_fields_type)) {
     Drupal::classResolver(SearchFacade::class)->addFields($field_storage);
   }
+
+  // Insert view on config import.
+  $configs = [
+    'node.article.field_article_type' => 'article',
+    'node.event.field_event_type' => 'event',
+    'node.person.field_person_type' => 'person',
+    'node.place.field_place_type' => 'place',
+  ];
+  if (in_array($field_config->id(), array_keys($configs))) {
+    _acquia_cms_search_import_content_type_views(\Drupal::entityTypeManager()->getStorage('node_type')->load($configs[$field_config->id()]));
+  }
 }
 
 /**
@@ -137,15 +148,49 @@ function _acquia_cms_search_import_content_type_views(NodeTypeInterface $node_ty
     'person' => 'people',
     'place' => 'places',
   ];
+  if(!in_array($node_type->id(), array_keys($content_views))) {
+    return;
+  }
   // Load the view.
   $view = View::load($content_views[$node_type->id()]);
   if (!$view) {
     // import the view.
     $source = new FileStorage(__DIR__ . '/config/optional');
     $entity_storage = \Drupal::entityTypeManager()->getStorage('view');
-    $entity = $entity_storage->createFromStorageRecord($source->read('views.view.' . $content_views[$node_type->id()]));
+    $view_config = $source->read('views.view.' . $content_views[$node_type->id()]);
+    // Validate dependencies exist.
+    if (!empty($view_config['dependencies'])) {
+      $module_handler = \Drupal::service('module_handler');
+      foreach ($view_config['dependencies']['module'] as $dependency) {
+        if (!$module_handler->moduleExists($dependency)) {
+          return;
+        }
+      }
+      foreach ($view_config['dependencies']['config'] as $dependency) {
+        if (!configExists($dependency)) {
+          return;
+        }
+      }
+    }
+
+    // Create the view entity.
+    $entity = $entity_storage->createFromStorageRecord($view_config);
     $entity->save();
   }
+}
+
+/**
+ * Check if a configuration exists.
+ *
+ * @param string $config_name
+ *   The name of the configuration to check.
+ *
+ * @return bool
+ *   TRUE if the configuration exists, FALSE otherwise.
+ */
+function configExists($config_name) {
+  $config_factory = \Drupal::service('config.factory');
+  return $config_factory->get($config_name)->isNew() === FALSE;
 }
 
 /**
