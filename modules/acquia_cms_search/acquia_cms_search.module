@@ -10,11 +10,13 @@ use Drupal\acquia_cms_search\Facade\FacetFacade;
 use Drupal\acquia_cms_search\Facade\SearchFacade;
 use Drupal\acquia_cms_search\Plugin\views\query\SearchApiQuery;
 use Drupal\acquia_search\Helper\Runtime;
+use Drupal\Core\Config\FileStorage;
 use Drupal\Core\DestructableInterface;
 use Drupal\field\FieldConfigInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\ServerInterface;
+use Drupal\views\Entity\View;
 
 /**
  * Implements hook_views_data().
@@ -68,6 +70,7 @@ function acquia_cms_search_node_type_insert(NodeTypeInterface $node_type) {
   if (!$node_type->isSyncing()) {
     _acquia_cms_search_add_category_facet();
   }
+  _acquia_cms_search_import_content_type_views($node_type);
 }
 
 /**
@@ -78,6 +81,7 @@ function acquia_cms_search_node_type_update(NodeTypeInterface $node_type) {
   if (!$node_type->isSyncing()) {
     _acquia_cms_search_add_category_facet();
   }
+  _acquia_cms_search_import_content_type_views($node_type);
 }
 
 /**
@@ -120,6 +124,27 @@ function acquia_cms_search_entity_insert() {
   $indexer = Drupal::service('search_api.post_request_indexing');
   if ($indexer instanceof DestructableInterface) {
     $indexer->destruct();
+  }
+}
+
+/**
+ * Import views for content types.
+ */
+function _acquia_cms_search_import_content_type_views(NodeTypeInterface $node_type){
+  $content_views = [
+    'article' => 'articles',
+    'event' => 'events',
+    'person' => 'people',
+    'place' => 'places',
+  ];
+  // Load the view.
+  $view = View::load($content_views[$node_type->id()]);
+  if (!$view) {
+    // import the view.
+    $source = new FileStorage(__DIR__ . '/config/optional');
+    $entity_storage = \Drupal::entityTypeManager()->getStorage('view');
+    $entity = $entity_storage->createFromStorageRecord($source->read('views.view.' . $content_views[$node_type->id()]));
+    $entity->save();
   }
 }
 
