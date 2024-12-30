@@ -283,7 +283,7 @@ final class SearchFacade implements ContainerInjectionInterface {
     if ($this->configInstaller->isSyncing()) {
       return NULL;
     }
-    $index = $object->getThirdPartySetting('acquia_cms_search', 'search_index');
+    $index = $object->getThirdPartySetting('acquia_cms_search', 'search_index') ?? $object->getThirdPartySetting('acquia_starterkit_core', 'search_index');
     return $index ? $this->indexStorage->load($index) : NULL;
   }
 
