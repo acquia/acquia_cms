@@ -31,6 +31,13 @@ function acquia_cms_search_views_data() {
           'id' => 'view_fallback',
         ],
       ],
+      'main_listing_pages_view' => [
+        'title' => t('Main listing pages - Text area'),
+        'help' => t('Insert a text area inside a main view listing pages if the search server is available. If the view is not based on a Search API index, this behaves like a standard text area.'),
+        'area' => [
+          'id' => 'main_listing_pages_view',
+        ],
+      ],
     ],
   ];
 }
