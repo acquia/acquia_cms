@@ -24,10 +24,11 @@ function acquia_cms_search_install($is_syncing) {
 
     // Retroactively enable indexing for any content types that existed before
     // this module was installed.
-    $node_types = \Drupal::entityTypeManager()->getStorage('node_type')->loadMultiple();
+    $entity_type_manager = \Drupal::entityTypeManager();
+    $node_types = $entity_type_manager->getStorage('node_type')->loadMultiple();
     array_walk($node_types, 'acquia_cms_search_node_type_insert');
     array_walk($node_types, '_acquia_cms_search_import_content_type_views');
-    $search_category = \Drupal::entityTypeManager()->getStorage('facets_facet')->loadByProperties(['id' => 'search_category']);
+    $search_category = $entity_type_manager->getStorage('facets_facet')->loadByProperties(['id' => 'search_category']);
     if (!$search_category) {
       _acquia_cms_search_add_category_facet();
     }
