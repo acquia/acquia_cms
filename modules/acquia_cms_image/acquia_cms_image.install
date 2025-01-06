@@ -6,7 +6,6 @@
  */
 
 use Drupal\acquia_cms_image\SiteLogo;
-use Drupal\Core\Installer\InstallerKernel;
 use Drupal\image\Entity\ImageStyle;
 
 /**
@@ -16,20 +15,6 @@ function acquia_cms_image_install($is_syncing) {
   if (!$is_syncing) {
     _acquia_cms_common_editor_config_rewrite(TRUE);
     \Drupal::classResolver(SiteLogo::class)->createLogo()->setLogo();
-  }
-}
-
-/**
- * Implements hook_module_implements_alter().
- */
-function acquia_cms_image_module_implements_alter(array &$implementations, string $hook) : void {
-  if ($hook === 'modules_installed') {
-    // Unset default_content import during site install,
-    // will do it later post install to avoid any error.
-    // @see acquia_cms_import_default_content install task.
-    if (InstallerKernel::installationAttempted()) {
-      unset($implementations['default_content']);
-    }
   }
 }
 
