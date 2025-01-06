@@ -42,7 +42,7 @@ function acquia_cms_common_install($is_syncing) {
     $config = \Drupal::configFactory()->getEditable('config_ignore.settings');
     $existing_ignore_config = $config->get('ignored_config_entities');
     $new_ignore_config = [
-      'cohesion*',
+      'cohesion_*',
       'language.entity.*',
     ];
     $updated_ignore_config = array_unique(array_merge($existing_ignore_config, $new_ignore_config));

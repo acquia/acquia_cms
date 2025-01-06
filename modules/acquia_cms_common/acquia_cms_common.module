@@ -13,7 +13,6 @@ use Drupal\acquia_cms_common\Facade\WorkflowFacade;
 use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Hook\Attribute\LegacyHook;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\editor\Entity\Editor;
@@ -423,23 +422,6 @@ function acquia_cms_common_modules_installed($modules, $is_syncing) {
 function acquia_cms_common_preprocess_maintenance_page(array &$variables) {
   $acquia_cms_path = \Drupal::service('extension.list.module')->getPath('acquia_cms_common');
   $variables['install_page_logo_path'] = '/' . $acquia_cms_path . '/acquia_cms.png';
-}
-
-/**
- * Implements hook_module_implements_alter().
- */
-#[LegacyHook]
-function acquia_cms_common_module_implements_alter(array &$implementations, string $hook): void {
-  // Prevent installation of site studio package on module install
-  // during site installation from other modules, this causes issue.
-  if ($hook == 'modules_installed') {
-    // The Site studio configurations should not be imported during config
-    // synchronizations.
-    // @todo revert below condition check, after ACO-2516 is released.
-    if (InstallerKernel::installationAttempted() || \Drupal::service('config.installer')->isSyncing()) {
-      unset($implementations['cohesion_sync']);
-    }
-  }
 }
 
 /**
