@@ -2,145 +2,286 @@
   type: default_module_package
   source:
     module_name: acquia_cms_site_studio
-    path: config/pack_acquia_cms_core
+    path: config/pack_acquia_starterkit_core
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      - acquia_cms_video
-    module_name: acquia_cms_video
-    path: config/pack_acquia_cms_video
+      config:
+        - media.type.video
+      module:
+        - acquia_cms_video
+    module_name: acquia_cms_site_studio
+    path: config/pack_acquia_starterkit_video
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      - acquia_cms_search
+      config:
+        - media.type.remote_video
+        - field.field.media.remote_video.field_categories
+        - field.field.media.remote_video.field_tags
+    module_name: acquia_cms_site_studio
+    path: config/pack_acquia_starterkit_video
+  options:
+    extra-validation: false
+-
+  type: default_module_package
+  source:
+    dependencies:
+      module:
+        - acquia_cms_search
     module_name: acquia_cms_search
-    path: config/pack_acquia_cms_search
+    path: config/pack_acquia_starterkit_search
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      - acquia_cms_image
-    module_name: acquia_cms_image
-    path: config/pack_acquia_cms_image
+      config:
+        - media.type.image
+        - field.field.media.image.field_media_image
+        - field.field.media.image.field_categories
+        - field.field.media.image.field_tags
+    module_name: acquia_cms_site_studio
+    path: config/pack_acquia_starterkit_image
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      - acquia_cms_image
-    module_name: acquia_cms_image
-    path: config/pack_acquia_cms_image_core
+      config:
+        - media.type.image
+        - field.field.media.image.field_media_image
+        - field.field.media.image.field_categories
+        - field.field.media.image.field_tags
+    module_name: acquia_cms_site_studio
+    path: config/pack_acquia_starterkit_image_core
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      - acquia_cms_page
-    module_name: acquia_cms_page
-    path: config/pack_acquia_cms_page
+      config:
+        - node.type.page
+        - field.field.node.page.body
+        - field.field.node.page.field_categories
+        - field.field.node.page.field_page_image
+        - field.field.node.page.field_tags
+      package:
+        - pack_acquia_starterkit_page
+    module_name: acquia_cms_site_studio
+    path: config/pack_acquia_starterkit_page
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      - acquia_cms_place
-    module_name: acquia_cms_place
-    path: config/pack_acquia_cms_place
+      config:
+        - node.type.place
+        - field.field.node.place.body
+        - field.field.node.place.field_categories
+        - field.field.node.place.field_geofield
+        - field.field.node.place.field_place_address
+        - field.field.node.place.field_place_telephone
+        - field.field.node.place.field_place_type
+        - field.field.node.place.field_place_image
+        - field.field.node.place.field_tags
+      package:
+        - pack_acquia_starterkit_place
+    module_name: acquia_cms_site_studio
+    path: config/pack_acquia_starterkit_place
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      - acquia_cms_place
-      - acquia_cms_search
-    module_name: acquia_cms_place
-    path: config/pack_acquia_cms_place_search
+      config:
+        - node.type.place
+        - field.field.node.place.body
+        - field.field.node.place.field_categories
+        - field.field.node.place.field_geofield
+        - field.field.node.place.field_place_address
+        - field.field.node.place.field_place_telephone
+        - field.field.node.place.field_place_type
+        - field.field.node.place.field_place_image
+        - field.field.node.place.field_tags
+      module:
+        - acquia_cms_search
+      package:
+        - pack_acquia_starterkit_place_search
+    module_name: acquia_cms_site_studio
+    path: config/pack_acquia_starterkit_place_search
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      - acquia_cms_event
-    module_name: acquia_cms_event
-    path: config/pack_acquia_cms_event
+      config:
+        - node.type.event
+        - field.field.node.event.body
+        - field.field.node.event.field_categories
+        - field.field.node.event.field_door_time
+        - field.field.node.event.field_event_duration
+        - field.field.node.event.field_event_end
+        - field.field.node.event.field_event_place
+        - field.field.node.event.field_event_start
+        - field.field.node.event.field_event_type
+        - field.field.node.event.field_event_image
+        - field.field.node.event.field_tags
+      package:
+        - pack_acquia_starterkit_event
+    module_name: acquia_cms_site_studio
+    path: config/pack_acquia_starterkit_event
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      - acquia_cms_event
-      - acquia_cms_search
-    module_name: acquia_cms_event
-    path: config/pack_acquia_cms_event_search
+      config:
+        - node.type.event
+        - field.field.node.event.body
+        - field.field.node.event.field_categories
+        - field.field.node.event.field_door_time
+        - field.field.node.event.field_event_duration
+        - field.field.node.event.field_event_end
+        - field.field.node.event.field_event_place
+        - field.field.node.event.field_event_start
+        - field.field.node.event.field_event_type
+        - field.field.node.event.field_event_image
+        - field.field.node.event.field_tags
+      module:
+        - acquia_cms_search
+      package:
+        - pack_acquia_starterkit_event_search
+    module_name: acquia_cms_site_studio
+    path: config/pack_acquia_starterkit_event_search
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      - acquia_cms_person
-    module_name: acquia_cms_person
-    path: config/pack_acquia_cms_person
+      config:
+        - node.type.person
+        - field.field.node.person.body
+        - field.field.node.person.field_categories
+        - field.field.node.person.field_email
+        - field.field.node.person.field_job_title
+        - field.field.node.person.field_person_image
+        - field.field.node.person.field_person_type
+        - field.field.node.person.field_person_telephone
+        - field.field.node.person.field_place
+        - field.field.node.person.field_tags
+      package:
+        - pack_acquia_starterkit_person
+    module_name: acquia_cms_site_studio
+    path: config/pack_acquia_starterkit_person
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      - acquia_cms_person
-      - acquia_cms_search
-    module_name: acquia_cms_person
-    path: config/pack_acquia_cms_person_search
+      config:
+        - node.type.person
+        - field.field.node.person.body
+        - field.field.node.person.field_categories
+        - field.field.node.person.field_email
+        - field.field.node.person.field_job_title
+        - field.field.node.person.field_person_image
+        - field.field.node.person.field_person_type
+        - field.field.node.person.field_person_telephone
+        - field.field.node.person.field_place
+        - field.field.node.person.field_tags
+      module:
+        - acquia_cms_search
+      package:
+        - pack_acquia_starterkit_person_search
+    module_name: acquia_cms_site_studio
+    path: config/pack_acquia_starterkit_person_search
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      - acquia_cms_article
-    module_name: acquia_cms_article
-    path: config/pack_acquia_cms_article
+      config:
+        - node.type.article
+        - field.field.node.article.body
+        - field.field.node.article.field_article_image
+        - field.field.node.article.field_article_type
+        - field.field.node.article.field_categories
+        - field.field.node.article.field_display_author
+        - field.field.node.article.field_tags
+      package:
+        - pack_acquia_starterkit_article
+    module_name: acquia_cms_site_studio
+    path: config/pack_acquia_starterkit_article
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      - acquia_cms_article
-      - acquia_cms_search
-    module_name: acquia_cms_article
-    path: config/pack_acquia_cms_article_search
+      config:
+        - node.type.article
+        - field.field.node.article.body
+        - field.field.node.article.field_article_image
+        - field.field.node.article.field_article_type
+        - field.field.node.article.field_categories
+        - field.field.node.article.field_display_author
+        - field.field.node.article.field_tags
+      module:
+        - acquia_cms_search
+      package:
+        - pack_acquia_starterkit_article_search
+    module_name: acquia_cms_site_studio
+    path: config/pack_acquia_starterkit_article_search
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      - acquia_cms_dam
-    module_name: acquia_cms_dam
-    path: config/pack_acquia_cms_dam
+      module:
+        - acquia_dam
+    module_name: acquia_cms_site_studio
+    path: config/pack_acquia_starterkit_dam
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      - acquia_cms_audio
-    module_name: acquia_cms_audio
-    path: config/pack_acquia_cms_audio
+      config:
+        - media.type.remote_audio
+        - field.field.media.remote_audio.field_categories
+        - field.field.media.remote_audio.field_tags
+    module_name: acquia_cms_site_studio
+    path: config/pack_acquia_starterkit_audio
+  options:
+    extra-validation: false
+-
+  type: default_module_package
+  source:
+    dependencies:
+      config:
+        - media.type.audio
+      module:
+        - acquia_cms_audio
+    module_name: acquia_cms_site_studio
+    path: config/pack_acquia_starterkit_audio
   options:
     extra-validation: false
