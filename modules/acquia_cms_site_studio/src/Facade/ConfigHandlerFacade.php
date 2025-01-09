@@ -8,12 +8,12 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Handles the configuration and settings for ACMS.
+ * Handles the configuration and settings for Acquia Starter Kit Site Studio.
  *
  * @internal
- *   This is a totally internal part of Acquia CMS and may be changed in any
- *   way, or removed outright, at any time without warning. External code should
- *   not use this class!
+ *   This is a totally internal part of Acquia Starter Kits and may be changed
+ *   in any way, or removed outright, at any time without warning. External
+ *   code should not use this class!
  */
 final class ConfigHandlerFacade implements ContainerInjectionInterface {
 
