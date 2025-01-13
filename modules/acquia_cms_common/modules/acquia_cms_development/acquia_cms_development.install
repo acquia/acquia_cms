@@ -53,11 +53,14 @@ function acquia_cms_development_install($is_syncing) {
   // key.So when user visit the content page of place content type, this
   // won't show the modal popup error i.e The Google Map cannot be loaded.
   // @see \Drupal\cohesion\Form\GoogleMapApiKeyForm
-  $form = \Drupal::formBuilder()->getForm('\Drupal\cohesion\Form\GoogleMapApiKeyForm');
-  $form_state = new FormState();
-  $values['google_map_api_key'] = $gmaps_key;
-  $form_state->setValues($values);
-  \Drupal::classResolver(GoogleMapApiKeyForm::class)->submitForm($form, $form_state);
+  if (\Drupal::moduleHandler()->moduleExists('cohesion') && class_exists(GoogleMapApiKeyForm::class)) {
+    $form = \Drupal::formBuilder()->getForm('\Drupal\cohesion\Form\GoogleMapApiKeyForm');
+    $form_state = new FormState();
+    $values['google_map_api_key'] = $gmaps_key;
+    $form_state->setValues($values);
+    \Drupal::classResolver(GoogleMapApiKeyForm::class)->submitForm($form, $form_state);
+  }
+
 }
 
 /**
