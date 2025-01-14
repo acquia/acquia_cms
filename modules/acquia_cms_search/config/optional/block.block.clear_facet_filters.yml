@@ -4,9 +4,11 @@ dependencies:
   module:
     - acquia_cms_search
     - collapsiblock
+  theme:
+    - cohesion_theme
 id: clear_facet_filters
-theme: olivero
-region: sidebar
+theme: cohesion_theme
+region: dx8_hidden
 weight: 0
 provider: null
 plugin: clear_facet_filters
@@ -16,7 +18,7 @@ settings:
   label_display: '0'
   provider: acquia_cms_search
 visibility:
-  request_path:
-    id: request_path
+  cohesion_master_template:
+    id: cohesion_master_template
     negate: false
-    pages: "/articles\r\n/events\r\n/places\r\n/people"
+    using_master_template: 0
