@@ -6,12 +6,14 @@ dependencies:
   module:
     - collapsiblock
     - facets
+  theme:
+    - cohesion_theme
 third_party_settings:
   collapsiblock:
     collapse_action: 2
 id: search_content_type
-theme: olivero
-region: sidebar
+theme: cohesion_theme
+region: dx8_hidden
 weight: 0
 provider: null
 plugin: 'facet_block:search_content_type'
@@ -22,7 +24,7 @@ settings:
   provider: facets
   block_id: search_content_type
 visibility:
-  request_path:
-    id: request_path
+  cohesion_master_template:
+    id: cohesion_master_template
     negate: false
-    pages: "/search"
+    using_master_template: 0
