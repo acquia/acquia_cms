@@ -10,14 +10,11 @@ use Drupal\acquia_cms_search\Facade\FacetFacade;
 use Drupal\acquia_cms_search\Facade\SearchFacade;
 use Drupal\acquia_cms_search\Plugin\views\query\SearchApiQuery;
 use Drupal\acquia_search\Helper\Runtime;
-use Drupal\Core\Config\FileStorage;
 use Drupal\Core\DestructableInterface;
 use Drupal\field\FieldConfigInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\ServerInterface;
-use Drupal\views\Entity\View;
-use Drupal\views\ViewEntityInterface;
 
 /**
  * Implements hook_views_data().
@@ -78,7 +75,6 @@ function acquia_cms_search_node_type_insert(NodeTypeInterface $node_type) {
   if (!$node_type->isSyncing()) {
     _acquia_cms_search_add_category_facet();
   }
-  _acquia_cms_search_import_content_type_views($node_type);
 }
 
 /**
@@ -89,7 +85,6 @@ function acquia_cms_search_node_type_update(NodeTypeInterface $node_type) {
   if (!$node_type->isSyncing()) {
     _acquia_cms_search_add_category_facet();
   }
-  _acquia_cms_search_import_content_type_views($node_type);
 }
 
 /**
@@ -119,77 +114,6 @@ function acquia_cms_search_field_config_insert(FieldConfigInterface $field_confi
   if (in_array($field_storage->getType(), $allowed_fields_type)) {
     Drupal::classResolver(SearchFacade::class)->addFields($field_storage);
   }
-
-  // Insert view on config import.
-  $configs = [
-    'node.article.field_article_type' => 'article',
-    'node.event.field_event_type' => 'event',
-    'node.person.field_person_type' => 'person',
-    'node.place.field_place_type' => 'place',
-  ];
-  if (in_array($field_config->id(), array_keys($configs))) {
-    _acquia_cms_search_import_content_type_views(\Drupal::entityTypeManager()->getStorage('node_type')->load($configs[$field_config->id()]));
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert() for node types.
- */
-function acquia_cms_search_view_insert(ViewEntityInterface $view) {
-  $content_views = [
-    'articles_fallback' => 'article',
-    'events_fallback' => 'event',
-    'people_fallback' => 'person',
-    'places_fallback' => 'place',
-  ];
-  if(!in_array($view->id(), array_keys($content_views))) {
-    return;
-  }
-  if (!$view->isSyncing()) {
-    $node_type = \Drupal::entityTypeManager()->getStorage('node_type')->load($content_views[$view->id()]);
-    _acquia_cms_search_import_content_type_views($node_type);
-  }
-}
-
-/**
- * Import views for content types.
- */
-function _acquia_cms_search_import_content_type_views(NodeTypeInterface $node_type){
-  $content_views = [
-    'article' => 'articles',
-    'event' => 'events',
-    'person' => 'people',
-    'place' => 'places',
-  ];
-  if(!in_array($node_type->id(), array_keys($content_views))) {
-    return;
-  }
-  // Load the view.
-  $view = View::load($content_views[$node_type->id()]);
-  if (!$view) {
-    // import the view.
-    $source = new FileStorage(__DIR__ . '/config/optional');
-    $entity_storage = \Drupal::entityTypeManager()->getStorage('view');
-    $view_config = $source->read('views.view.' . $content_views[$node_type->id()]);
-    // Validate dependencies exist.
-    if (!empty($view_config['dependencies'])) {
-      $module_handler = \Drupal::service('module_handler');
-      foreach ($view_config['dependencies']['module'] as $dependency) {
-        if (!$module_handler->moduleExists($dependency)) {
-          return;
-        }
-      }
-      foreach ($view_config['dependencies']['config'] as $dependency) {
-        if (!configExists($dependency)) {
-          return;
-        }
-      }
-    }
-
-    // Create the view entity.
-    $entity = $entity_storage->createFromStorageRecord($view_config);
-    $entity->save();
-  }
 }
 
 /**
@@ -204,20 +128,6 @@ function acquia_cms_search_entity_insert() {
   if ($indexer instanceof DestructableInterface) {
     $indexer->destruct();
   }
-}
-
-/**
- * Check if a configuration exists.
- *
- * @param string $config_name
- *   The name of the configuration to check.
- *
- * @return bool
- *   TRUE if the configuration exists, FALSE otherwise.
- */
-function configExists($config_name) {
-  $config_factory = \Drupal::service('config.factory');
-  return $config_factory->get($config_name)->isNew() === FALSE;
 }
 
 /**
