@@ -1,8 +1,6 @@
 services:
   acquia_cms_search.recipe_config_importer:
     class: Drupal\acquia_cms_search\EventSubscriber\RecipeConfigImporter
-    arguments:
-      - '@config.factory'
-    #      - '@config.installer'
+    arguments: ['@config.factory', '@config.installer']
     tags:
       - { name: event_subscriber }

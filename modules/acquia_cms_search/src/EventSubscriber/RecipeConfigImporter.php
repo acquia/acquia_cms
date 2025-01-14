@@ -3,7 +3,7 @@
 namespace Drupal\acquia_cms_search\EventSubscriber;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Config\ConfigInstaller;
+use Drupal\Core\Config\ConfigInstallerInterface;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Recipe\RecipeAppliedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -15,6 +15,13 @@ use Symfony\Component\Finder\Finder;
  * @package Drupal\acquia_cms_search\EventSubscriber
  */
 class RecipeConfigImporter implements EventSubscriberInterface {
+
+  const CONTENT_MODEL_RECIPES = [
+    'acquia_starterkit_article',
+    'acquia_starterkit_event',
+    'acquia_starterkit_person',
+    'acquia_starterkit_place',
+  ];
 
   /**
    * The config factory service.
@@ -35,15 +42,15 @@ class RecipeConfigImporter implements EventSubscriberInterface {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory service.
-  //   * @param \Drupal\Core\Config\ConfigInstaller $config_installer
-  //   *   The config installer service.
+   * @param \Drupal\Core\Config\ConfigInstallerInterface $config_installer
+   *   The config installer service.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
-    //    ConfigInstaller $config_installer,
+    ConfigInstallerInterface $config_installer,
   ) {
     $this->configFactory = $config_factory;
-    //    $this->configInstaller = $config_installer;
+    $this->configInstaller = $config_installer;
   }
 
   /**
@@ -64,13 +71,16 @@ class RecipeConfigImporter implements EventSubscriberInterface {
   public function onRecipeApply(RecipeAppliedEvent $event): void {
     $recipe_name = $this->getRecipeName($event->recipe->path);
     if ($recipe_name == 'acquia_starterkit_search') {
-      //      $this->configInstaller->installOptionalConfig(NULL, ['module' => 'acquia_cms_search']);
-      \Drupal::service('config.installer')->installOptionalConfig(NULL, [
+      $this->configInstaller->installOptionalConfig(NULL, [
         'module' => 'acquia_cms_search'
       ]);
+      $this->importConfigFromRecipe($event->recipe->path);
       $this->importSearchConfig();
     }
-    elseif (str_starts_with($recipe_name, 'acquia_starterkit_')) {
+    elseif (
+      str_starts_with($recipe_name, 'acquia_starterkit_') &&
+      in_array($recipe_name, self::CONTENT_MODEL_RECIPES)
+    ) {
       $this->importConfigFromRecipe($event->recipe->path);
     }
   }
@@ -93,7 +103,9 @@ class RecipeConfigImporter implements EventSubscriberInterface {
    * Imports search configuration if it exists.
    */
   private function importSearchConfig(): void {
-    $recipes = $this->configFactory->get('acquia_starterkit_core.settings')->get('recipes_applied') ?? [];
+    $recipes_applied = $this->configFactory->get('acquia_starterkit_core.settings')->get('recipes_applied') ?? [];
+    // Filter recipes that are search related.
+    $recipes = array_intersect($recipes_applied, self::CONTENT_MODEL_RECIPES);
     foreach ($recipes as $recipe) {
       $recipe_path = $this->getRecipePathByName($recipe);
       $this->importConfigFromRecipe($recipe_path . '/' . $recipe);
@@ -123,8 +135,7 @@ class RecipeConfigImporter implements EventSubscriberInterface {
    */
   private function importConfigFromPath(string $config_path): void {
     $config_source = new FileStorage($config_path);
-    //    $this->configInstaller->installOptionalConfig($config_source);
-    \Drupal::service('config.installer')->installOptionalConfig($config_source);
+    $this->configInstaller->installOptionalConfig($config_source);
   }
 
   /**
