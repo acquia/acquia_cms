@@ -5,9 +5,11 @@ dependencies:
     - views.view.search
   module:
     - views
+  theme:
+    - cohesion_theme
 id: exposed_form_search
-theme: olivero
-region: sidebar
+theme: cohesion_theme
+region: dx8_hidden
 weight: 0
 provider: null
 plugin: 'views_exposed_filter_block:search-search'
@@ -18,7 +20,7 @@ settings:
   provider: views
   views_label: ''
 visibility:
-  request_path:
-    id: request_path
+  cohesion_master_template:
+    id: cohesion_master_template
     negate: false
-    pages: "/search"
+    using_master_template: 0
