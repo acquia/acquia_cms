@@ -21,7 +21,6 @@ class AcquiaFacetSearchTest extends BrowserTestBase {
    */
   protected static $modules = [
     'block',
-    'acquia_cms_common',
     'acquia_cms_search',
   ];
 
