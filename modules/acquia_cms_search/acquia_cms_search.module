@@ -181,13 +181,21 @@ function acquia_cms_search_form_acquia_cms_search_form_alter(array &$form) {
  * Adds search_category facet, if any acms search dependent module is installed.
  */
 function _acquia_cms_search_add_category_facet() {
-  $search_category = \Drupal::entityTypeManager()->getStorage('facets_facet')->loadByProperties(['id' => 'search_category']);
-  if (!$search_category) {
-    \Drupal::classResolver(FacetFacade::class)->addFacet([
-      'id' => 'search_category',
-      'name' => 'Category',
-      'url_alias' => 'category',
-      'field_identifier' => 'field_categories',
-    ]);
+  // Check if field_categories field is available.
+  if (!\Drupal::entityTypeManager()->getStorage('field_storage_config')->loadByProperties(['field_name' => 'field_categories'])) {
+    return;
   }
+
+  // Check if search_category facet is already created.
+  if (\Drupal::entityTypeManager()->getStorage('facets_facet')->loadByProperties(['id' => 'search_category'])) {
+    return;
+  }
+
+  // Create search category facet.
+  \Drupal::classResolver(FacetFacade::class)->addFacet([
+    'id' => 'search_category',
+    'name' => 'Category',
+    'url_alias' => 'category',
+    'field_identifier' => 'field_categories',
+  ]);
 }
