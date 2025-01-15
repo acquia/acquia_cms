@@ -1,10 +1,13 @@
 uuid: f9138ede-95b2-4e2c-ae21-e2522e1e6e7f
 langcode: en
 status: true
-dependencies: {  }
-id: pack_acquia_cms_audio
-label: 'Acquia CMS Audio'
-description: 'Acquia CMS Audio related templates and styles.'
+dependencies:
+  enforced:
+    module:
+      - acquia_cms_site_studio
+id: pack_acquia_starterkit_audio
+label: 'Acquia Starter Kit Audio'
+description: 'Acquia Starter Kit Audio related templates and styles.'
 excluded_entity_types: '[]'
 settings: |
   {
