@@ -35,6 +35,36 @@ settings:
       - codeBlock
       - style
   plugins:
+    ckeditor5_codeBlock:
+      languages:
+        - label: 'Plain text'
+          language: plaintext
+        - label: C
+          language: c
+        - label: 'C#'
+          language: cs
+        - label: C++
+          language: cpp
+        - label: CSS
+          language: css
+        - label: Diff
+          language: diff
+        - label: HTML
+          language: html
+        - label: Java
+          language: java
+        - label: JavaScript
+          language: javascript
+        - label: PHP
+          language: php
+        - label: Python
+          language: python
+        - label: Ruby
+          language: ruby
+        - label: TypeScript
+          language: typescript
+        - label: XML
+          language: xml
     ckeditor5_heading:
       enabled_headings:
         - heading2
@@ -347,6 +377,7 @@ settings:
       properties:
         reversed: true
         startIndex: true
+      multiBlock: true
     ckeditor5_alignment:
       enabled_alignments:
         - left
@@ -359,7 +390,7 @@ image_upload:
   status: true
   scheme: public
   directory: inline-images
-  max_size: ''
+  max_size: '2 MB'
   max_dimensions:
     width: null
     height: null
