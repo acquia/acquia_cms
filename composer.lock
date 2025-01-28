@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f7f9e623cf8da30e566ee0d0052fb980",
+    "content-hash": "34e70981356d61082c4c6aa07f8ad630",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -2390,7 +2390,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_common",
-                "reference": "36ebfe06447b4f28301a18995d197336fb6ce1f3"
+                "reference": "b2fe6b5717ef5c06a9a978b712bb12252d309a4f"
             },
             "require": {
                 "acquia/drupal-environment-detector": "^1.5",
@@ -2790,7 +2790,7 @@
             "dist": {
                 "type": "path",
                 "url": "./modules/acquia_cms_search",
-                "reference": "1c79f423c14b34efc2eed155a6cf8bf1404a7347"
+                "reference": "faafd17dc48f421e1d12d1ec0c76d810f4b85bca"
             },
             "require": {
                 "cweagans/composer-patches": "^1.7",
@@ -3811,6 +3811,67 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/component",
                 "issues": "https://drupal.org/project/issues/component"
+            }
+        },
+        {
+            "name": "drupal/conductor",
+            "version": "1.0.0-beta3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/conductor.git",
+                "reference": "1.0.0-beta3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/conductor-1.0.0-beta3.zip",
+                "reference": "1.0.0-beta3",
+                "shasum": "e4d7d6245b913a8b82dc007a76d6253f9753b015"
+            },
+            "require": {
+                "drupal/core": "^10.2 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-beta3",
+                    "datestamp": "1732284593",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Renzo Erespe (Renzokuken1)",
+                    "homepage": "https://www.drupal.org/u/renzokuken1"
+                },
+                {
+                    "name": "balsama",
+                    "homepage": "https://www.drupal.org/user/223087"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "vipin.mittal18",
+                    "homepage": "https://www.drupal.org/user/319716"
+                }
+            ],
+            "description": "Allows Drupal to communicate with Conductor API.",
+            "homepage": "https://www.drupal.org/project/conductor",
+            "keywords": [
+                "Conductor",
+                "Drupal",
+                "SEO"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/conductor"
             }
         },
         {
@@ -21924,11 +21985,12 @@
         "drupal/acquia_cms_starter": 20,
         "drupal/acquia_cms_toolbar": 20,
         "drupal/acquia_cms_tour": 20,
+        "drupal/conductor": 10,
         "drupal/gin": 5
     },
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": {},
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
 }
