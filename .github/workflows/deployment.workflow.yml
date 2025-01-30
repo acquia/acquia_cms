@@ -92,10 +92,10 @@ jobs:
           fi
 
           # Include MySQL 5.7 connection settings, before DRS require line is added.
-          echo "require DRUPAL_ROOT . '/modules/contrib/mysql57/settings.inc';" >> docroot/sites/default/settings.php
+          # echo "require DRUPAL_ROOT . '/modules/contrib/mysql57/settings.inc';" >> docroot/sites/default/settings.php
 
           # Download acquia/drupal-recommended-settings plugin & drupal/mysql57 library.
-          composer require acquia/drupal-recommended-settings:^1.1 drupal/mysql57
+          # composer require acquia/drupal-recommended-settings:^1.1 drupal/mysql57
 
           # Update .gitignore file, otherwise acli won't push any settings file.
           sed -i 's/docroot\//docroot\/core/' .gitignore
