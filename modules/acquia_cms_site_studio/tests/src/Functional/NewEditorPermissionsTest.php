@@ -49,6 +49,15 @@ class NewEditorPermissionsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
+  protected function setUp(): void {
+    parent::setUp();
+    // Install Site Studio test module.
+    $this->container->get('module_installer')->install(['acquia_cms_site_studio_test']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getFixtureBasePath(): string {
     return dirname(__DIR__) . "/fixtures/permissions/basic";
   }
@@ -78,8 +87,6 @@ class NewEditorPermissionsTest extends BrowserTestBase {
    */
   public static function providerBasicPermissions(): array {
     $instance = new static('test');
-    // Install acquia_cms_site_studio_test module.
-    $instance->container->get('module_installer')->install(['acquia_cms_site_studio_test']);
     return [
       [
         'developer',
