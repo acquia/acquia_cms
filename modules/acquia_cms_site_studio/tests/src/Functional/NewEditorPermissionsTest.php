@@ -6,13 +6,16 @@ use Drupal\Tests\acquia_cms_site_studio\Traits\PermissionsTrait;
 use Drupal\Tests\BrowserTestBase;
 
 /**
- * Tests basic, broad permissions of the user roles included with Acquia CMS.
+ * Tests basic, broad permissions of the developer roles.
+ *
+ * This test ensures that the developer role has the necessary permissions to
+ * use any newly created text format.
  *
  * @group acquia_cms_site_studio
  * @group acquia_cms
  * @group risky
  */
-class SiteStudioPermissionsTest extends BrowserTestBase {
+class NewEditorPermissionsTest extends BrowserTestBase {
 
   use PermissionsTrait;
 
@@ -42,6 +45,15 @@ class SiteStudioPermissionsTest extends BrowserTestBase {
   // @codingStandardsIgnoreStart
   protected $strictConfigSchema = FALSE;
   // @codingStandardsIgnoreEnd
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+    // Install Site Studio test module.
+    $this->container->get('module_installer')->install(['acquia_cms_site_studio_test']);
+  }
 
   /**
    * {@inheritdoc}
@@ -78,7 +90,10 @@ class SiteStudioPermissionsTest extends BrowserTestBase {
     return [
       [
         'developer',
-        $instance->getPermissionsByRole('developer'),
+        array_merge($instance->getPermissionsByRole('developer'), [
+          'use text format filtered_html',
+          'use text format full_html',
+        ]),
       ],
     ];
   }
