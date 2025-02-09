@@ -1,4 +1,4 @@
-search_api.index.*.third_party.acquia_cms_common:
+search_api.index.*.third_party.acquia_cms_search:
   type: mapping
   label: 'Acquia CMS settings'
   mapping:
@@ -6,3 +6,6 @@ search_api.index.*.third_party.acquia_cms_common:
     search_server:
       type: string
       label: 'Machine name of Search API server to which the index will be attached'
+    search_index:
+      type: string
+      label: 'The machine name of the search index to which this content type should be added'

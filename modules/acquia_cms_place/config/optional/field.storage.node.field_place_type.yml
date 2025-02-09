@@ -2,13 +2,14 @@ langcode: en
 status: true
 dependencies:
   module:
+    - acquia_cms_search
     - node
     - taxonomy
   enforced:
     module:
       - acquia_cms_place
 third_party_settings:
-  acquia_cms_common:
+  acquia_cms_search:
     search_index: content
     search_label: 'Place Type'
 id: node.field_place_type

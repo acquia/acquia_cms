@@ -1,6 +1,9 @@
 langcode: en
 status: true
 dependencies:
+  module:
+    - acquia_cms_search
+    - menu_ui
   enforced:
     module:
       - acquia_cms_place
@@ -22,6 +25,7 @@ third_party_settings:
       field: field_place_type
       facet: places_place_type
     sitemap_variant: default
+  acquia_cms_search:
     search_index: content
   menu_ui:
     available_menus:
@@ -43,7 +47,7 @@ third_party_settings:
 name: Place
 type: place
 description: 'A structured content type used for creating various types of places.'
-help: ''
+help: null
 new_revision: true
 preview_mode: 0
 display_submitted: false

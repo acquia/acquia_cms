@@ -4,13 +4,13 @@ dependencies:
   config:
     - views.view.search
   module:
-    - cohesion
+    - system
     - views
   theme:
-    - cohesion_theme
+    - olivero
 id: exposed_form_search
-theme: cohesion_theme
-region: dx8_hidden
+theme: olivero
+region: content
 weight: 0
 provider: null
 plugin: 'views_exposed_filter_block:search-search'
@@ -21,7 +21,7 @@ settings:
   provider: views
   views_label: ''
 visibility:
-  cohesion_master_template:
-    id: cohesion_master_template
+  request_path:
+    id: request_path
     negate: false
-    using_master_template: 0
+    pages: /search

@@ -10,7 +10,7 @@ dependencies:
     module:
       - acquia_cms_search
 third_party_settings:
-  acquia_cms_common:
+  acquia_cms_search:
     search_server: database
 id: content
 name: Content
@@ -54,10 +54,10 @@ field_settings:
     label: 'Rendered HTML output'
     property_path: rendered_item
     type: text
-    boost: 0
+    boost: 0.0
     configuration:
       roles:
-        anonymous: anonymous
+        - anonymous
       view_mode: {  }
   title:
     label: Title
@@ -99,6 +99,8 @@ processor_settings:
   content_access:
     weights:
       preprocess_query: -10
+  custom_value: {  }
+  entity_type: {  }
   html_filter:
     weights:
       preprocess_index: -10
@@ -176,6 +178,7 @@ processor_settings:
     fields:
       - rendered_item
     spaces: ''
+    ignored: ._-
     overlap_cjk: 1
     minimum_word_size: '3'
   transliteration:
@@ -191,4 +194,5 @@ tracker_settings:
 options:
   cron_limit: 50
   index_directly: true
+  track_changes_in_references: true
 server: ''
