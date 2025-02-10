@@ -10,22 +10,22 @@ use Drupal\user\RoleInterface;
 /**
  * Implements hook_content_model_role_presave_alter().
  */
-function acquia_cms_image_content_model_role_presave_alter(RoleInterface &$role) {
-  switch ($role->id()) {
-    case 'content_author':
-      foreach ([
-        'create image media',
-        'edit own image media',
-        'delete own image media',
-      ] as $permission) {
-        $role->grantPermission($permission);
-      }
-      break;
-
-    case 'content_editor':
-      foreach (['edit any image media', 'delete any image media'] as $permission) {
-        $role->grantPermission($permission);
-      }
-      break;
-  }
-}
+//function acquia_cms_image_content_model_role_presave_alter(RoleInterface &$role) {
+//  switch ($role->id()) {
+//    case 'content_author':
+//      foreach ([
+//        'create image media',
+//        'edit own image media',
+//        'delete own image media',
+//      ] as $permission) {
+//        $role->grantPermission($permission);
+//      }
+//      break;
+//
+//    case 'content_editor':
+//      foreach (['edit any image media', 'delete any image media'] as $permission) {
+//        $role->grantPermission($permission);
+//      }
+//      break;
+//  }
+//}

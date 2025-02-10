@@ -9,3 +9,15 @@ search_api.index.*.third_party.acquia_cms_search:
     search_index:
       type: string
       label: 'The machine name of the search index to which this content type should be added'
+
+node.type.*.third_party.acquia_cms_search:
+  type: mapping
+  label: 'Acquia CMS settings'
+  mapping:
+    # @see acquia_cms_search_search_api_server_insert()
+    search_server:
+      type: string
+      label: 'Machine name of Search API server to which the index will be attached'
+    search_index:
+      type: string
+      label: 'The machine name of the search index to which this content type should be added'

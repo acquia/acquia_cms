@@ -13,7 +13,7 @@ use Drupal\image\Entity\ImageStyle;
  */
 function acquia_cms_image_install($is_syncing) {
   if (!$is_syncing) {
-    _acquia_cms_common_editor_config_rewrite(TRUE);
+    //_acquia_cms_common_editor_config_rewrite(TRUE);
     \Drupal::classResolver(SiteLogo::class)->createLogo()->setLogo();
   }
 }
