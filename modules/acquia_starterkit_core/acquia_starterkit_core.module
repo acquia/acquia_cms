@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Hooks related to the Acquia Starter Kits.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Config\Entity\ConfigEntityInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\acquia_starterkit_core\EntityOperations\ContentPermissionManager;
+use Drupal\acquia_starterkit_core\EntityOperations\FieldBundleUpdater;
+
+/**
+ * Implements hook_entity_presave().
+ */
+function acquia_starterkit_core_entity_presave(EntityInterface $entity): void {
+  if ($entity instanceof ConfigEntityInterface) {
+    $class_resolver = \Drupal::service('class_resolver');
+    $class_resolver->getInstanceFromDefinition(FieldBundleUpdater::class)
+      ->entityPreSave($entity);
+  }
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function acquia_starterkit_core_entity_insert(EntityInterface $entity): void {
+  if ($entity instanceof ConfigEntityInterface) {
+    $class_resolver = \Drupal::service('class_resolver');
+    $class_resolver->getInstanceFromDefinition(ContentPermissionManager::class)
+      ->entityInsert($entity);
+  }
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function acquia_starterkit_core_entity_update(EntityInterface $entity): void {
+  if ($entity instanceof ConfigEntityInterface) {
+    $class_resolver = \Drupal::service('class_resolver');
+    $class_resolver->getInstanceFromDefinition(ContentPermissionManager::class)
+      ->entityUpdate($entity);
+  }
+}

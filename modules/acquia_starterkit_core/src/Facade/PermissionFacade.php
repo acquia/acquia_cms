@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acquia_cms_common\Facade;
+namespace Drupal\acquia_starterkit_core\Facade;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;

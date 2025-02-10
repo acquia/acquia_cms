@@ -4,7 +4,7 @@ namespace Drupal\Tests\acquia_cms_common\FunctionalJavascript;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Behat\Mink\Element\ElementInterface;
-use Drupal\acquia_cms_common\Facade\PermissionFacade;
+use Drupal\acquia_starterkit_core\Facade\PermissionFacade;
 use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\media\Entity\MediaType;

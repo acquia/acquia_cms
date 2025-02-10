@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acquia_cms_common\Facade;
+namespace Drupal\acquia_starterkit_core\Facade;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ConfigInstallerInterface;
@@ -71,7 +71,7 @@ final class MetatagFacade implements ContainerInjectionInterface {
       return;
     }
 
-    $settings = $node_type->getThirdPartySetting('acquia_cms_common', 'metatag', []);
+    $settings = $node_type->getThirdPartySetting('acquia_starterkit_core', 'metatag', []);
     if (isset($settings['tag_types'])) {
       $key = 'entity_type_groups.node.' . $node_type->id();
 

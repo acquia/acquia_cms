@@ -1,0 +1,7 @@
+services:
+  acquia_starterkit_core.recipe_applied:
+    class: Drupal\acquia_starterkit_core\EventSubscriber\RecipeAppliedEventSubscriber
+    arguments:
+      - '@config.factory'
+    tags:
+      - { name: event_subscriber }

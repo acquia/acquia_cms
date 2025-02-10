@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acquia_cms_common\Facade;
+namespace Drupal\acquia_starterkit_core\Facade;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
@@ -8,7 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Handles the configuration and settings for ACMS.
+ * Handles the configuration and settings for Acquia Starter Kits.
  *
  * @internal
  *   This is a totally internal part of Acquia CMS and may be changed in any

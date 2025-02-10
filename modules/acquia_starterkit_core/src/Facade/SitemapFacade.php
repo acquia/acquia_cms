@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acquia_cms_common\Facade;
+namespace Drupal\acquia_starterkit_core\Facade;
 
 use Drupal\Core\Config\ConfigInstallerInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
@@ -85,7 +85,7 @@ final class SitemapFacade implements ContainerInjectionInterface {
     }
 
     // If the node type does not specify the sitemap, there's nothing to do.
-    $sitemap_variant = $node_type->getThirdPartySetting('acquia_cms_common', 'sitemap_variant');
+    $sitemap_variant = $node_type->getThirdPartySetting('acquia_starterkit_core', 'sitemap_variant');
     if (empty($sitemap_variant)) {
       return;
     }

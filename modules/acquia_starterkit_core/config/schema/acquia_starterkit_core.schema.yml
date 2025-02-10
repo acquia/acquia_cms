@@ -1,0 +1,85 @@
+acquia_starterkit_core.settings:
+  type: config_object
+  label: 'Acquia Starter Kit settings'
+  mapping:
+    starter_kit_name:
+      type: string
+      label: 'The starterkit name'
+    recipes_applied:
+      type: sequence
+      label: 'Recipes applied'
+      sequence:
+        type: string
+        label: 'Recipe applied'
+
+# Schema for the configuration files of the Acquia Starter Kit Core module.
+acquia_starterkit_core_roles_permissions:
+  type: mapping
+  label: 'Roles Permissions settings'
+  mapping:
+    search_index:
+      type: string
+      label: 'Machine name of Search API index to which the index will be attached'
+    roles_permissions:
+      type: sequence
+      sequence:
+        type: roles_permissions_mapping
+      label: 'Roles & permissions settings'
+
+node.type.*.third_party.acquia_starterkit_core:
+  type: acquia_starterkit_core_roles_permissions
+  label: "Node Type Roles Permissions settings"
+
+media.type.*.third_party.acquia_starterkit_core:
+  type: acquia_starterkit_core_roles_permissions
+  label: "Media Type Roles Permissions settings"
+
+roles_permissions_mapping:
+  type: mapping
+  label: 'Role Permissions'
+  mapping:
+    grant_permissions:
+      type: sequence
+      label: 'Permissions'
+      sequence:
+        type: string
+        label: 'Permission'
+
+field.field.*.*.*.third_party.acquia_starterkit_core:
+  type: mapping
+  label: "Acquia starter kit field settings"
+  mapping:
+    target_bundles:
+      type: mapping
+      label: 'Target Bundles'
+      mapping:
+        add:
+          type: sequence
+          label: 'Add Target Bundles'
+          sequence:
+            type: string
+            label: 'Bundle'
+
+search_api.index.*.third_party.acquia_starterkit_core:
+  type: mapping
+  label: 'Acquia starter kit search index settings'
+  mapping:
+    # @see acquia_cms_search_search_api_server_insert()
+    search_server:
+      type: string
+      label: 'Machine name of Search API server to which the index will be attached'
+
+field.storage.*.*.third_party.acquia_starterkit_core:
+  type: mapping
+  label: 'Acquia starter kit field storage settings'
+  mapping:
+    # Allow fields to carry 'search_index' and 'search_label' settings. This is used
+    # by our facade to passively opt the field into a particular index.
+    # @see acquia_cms_search_field_storage_config_insert()
+    # @see \Drupal\acquia_cms_search\Facade\SearchFacade::addTaxonomyField()
+    search_index:
+      type: string
+      label: 'Machine name of Search API index to which this field should be added'
+    search_label:
+      type: string
+      label: 'The label of the field in the Search API index'
