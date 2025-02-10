@@ -2,7 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_common\Kernel;
 
-use Drupal\acquia_cms_common\Facade\ConfigHandlerFacade;
+use Drupal\acquia_starterkit_core\Facade\ConfigHandlerFacade;
 use Drupal\KernelTests\KernelTestBase;
 
 /**

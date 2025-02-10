@@ -179,7 +179,7 @@ final class SearchFacade implements ContainerInjectionInterface {
 
     // Field storages don't normally have a human-readable label, so allow it to
     // provide one in its third-party settings.
-    $field_label = $field_storage->getThirdPartySetting('acquia_cms_search', 'search_label') ?: $field_storage->getLabel();
+    $field_label = $field_storage->getThirdPartySetting('acquia_starterkit_core', 'search_label') ?: $field_storage->getLabel();
     $data_source_id = 'entity:' . $field_storage->getTargetEntityTypeId();
     // This will throw an exception if the data source doesn't exist, so this
     // is really just a way to prevent the field from using an invalid data
@@ -231,7 +231,7 @@ final class SearchFacade implements ContainerInjectionInterface {
     $field_type = $field_storage->getType();
     // Field storages don't normally have a human-readable label, so allow it to
     // provide one in its third-party settings.
-    $field_label = $field_storage->getThirdPartySetting('acquia_cms_search', 'search_label') ?: $field_storage->getLabel();
+    $field_label = $field_storage->getThirdPartySetting('acquia_starterkit_core', 'search_label') ?: $field_storage->getLabel();
 
     $data_source_id = 'entity:' . $field_storage->getTargetEntityTypeId();
     // This will throw an exception if the data source doesn't exist, so this
@@ -283,7 +283,7 @@ final class SearchFacade implements ContainerInjectionInterface {
     if ($this->configInstaller->isSyncing()) {
       return NULL;
     }
-    $index = $object->getThirdPartySetting('acquia_cms_search', 'search_index') ?? $object->getThirdPartySetting('acquia_starterkit_core', 'search_index');
+    $index = $object->getThirdPartySetting('acquia_starterkit_core', 'search_index');
     return $index ? $this->indexStorage->load($index) : NULL;
   }
 

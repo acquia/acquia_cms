@@ -2,7 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_common\Functional;
 
-use Drupal\acquia_cms_common\Facade\PermissionFacade;
+use Drupal\acquia_starterkit_core\Facade\PermissionFacade;
 use Drupal\file\FileInterface;
 use Drupal\media\Entity\MediaType;
 use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
