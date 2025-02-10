@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acquia_cms_common\Plugin\views\area;
+namespace Drupal\acquia_cms_search\Plugin\views\area;
 
 use Drupal\search_api\Plugin\views\query\SearchApiQuery;
 use Drupal\search_api\SearchApiException;

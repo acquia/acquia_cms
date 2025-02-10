@@ -9,6 +9,8 @@ dependencies:
     module:
       - acquia_cms_page
 third_party_settings:
+  acquia_cms_search:
+    search_index: content
   acquia_cms_common:
     workflow_id: editorial
     workbench_email_templates:
@@ -23,7 +25,6 @@ third_party_settings:
         schema_article: schema_article
         twitter_cards: twitter_cards
     sitemap_variant: default
-    search_index: content
   menu_ui:
     available_menus:
       - main
