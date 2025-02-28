@@ -3,6 +3,7 @@
 namespace Drupal\Tests\acquia_cms_headless\Traits;
 
 use Behat\Mink\Element\NodeElement;
+use Drupal\user\Entity\Role;
 
 /**
  * Trait to test dashboard section.
@@ -16,12 +17,25 @@ trait DashboardSectionTrait {
    */
   protected function visitHeadlessDashboardAdmin(): void {
     $account = $this->drupalCreateUser();
+    $this->createAdministratorRole();
     $account->addRole('administrator');
     $account->save();
     $this->drupalLogin($account);
 
     // Visit headless dashboard.
     $this->drupalGet("/admin/headless/dashboard");
+  }
+
+  /**
+   * Create admin role.
+   */
+  public function createAdministratorRole() {
+    // Create an administrator role with is_admin set to true.
+    Role::create([
+      'id' => 'administrator',
+      'label' => 'Administrator',
+      'is_admin' => TRUE,
+    ])->save();
   }
 
   /**

@@ -5,6 +5,7 @@ namespace Drupal\Tests\acquia_cms_headless\Functional;
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\Tests\acquia_cms_headless\Traits\HeadlessNextJsTrait;
+use Drupal\user\Entity\Role;
 
 /**
  * Base class for the Headless Content administrator browser tests.
@@ -26,6 +27,9 @@ class HeadlessContentTest extends WebDriverTestBase {
   protected static $modules = [
     'acquia_cms_headless',
     'node',
+    'block',
+    'media_library',
+    'entity_clone',
   ];
 
   /**
@@ -54,6 +58,12 @@ class HeadlessContentTest extends WebDriverTestBase {
     }
     parent::setUp();
     $account = $this->drupalCreateUser();
+    // Create an administrator role with is_admin set to true.
+    Role::create([
+      'id' => 'administrator',
+      'label' => 'Administrator',
+      'is_admin' => TRUE,
+    ])->save();
     $account->addRole('administrator');
     $account->save();
     $this->drupalLogin($account);
@@ -66,12 +76,7 @@ class HeadlessContentTest extends WebDriverTestBase {
     // Set up a content type.
     $this->drupalCreateContentType([
       'type' => 'test',
-      'name' => 'Test',
-      'third_party_settings' => [
-        "acquia_cms_common" => [
-          "workflow_id" => "editorial",
-        ],
-      ],
+      'name' => 'Test'
     ]);
     // Enable pure headless mode.
     $this->enableHeadlessMode();
@@ -85,7 +90,7 @@ class HeadlessContentTest extends WebDriverTestBase {
    * Content admin test.
    */
   public function testContentAdmin(): void {
-    // Visit content page.
+    // Visit the content page.
     $this->drupalGet("admin/content");
 
     // Validating the primary menu tabs on admin content page.
@@ -114,32 +119,32 @@ class HeadlessContentTest extends WebDriverTestBase {
     $assertSession = $this->assertSession();
     $assertSession->pageTextContains('Headless Test Page');
     // @todo Below commented test is failing in 3.0-rc8 version of Gin theme.
-    // Howere this was working in 3.0-rc5 will be fixed in ACMS-3456.
-    /*
+    // However this was working in 3.0-rc5 will be fixed in ACMS-3456.
     $assertSession->linkNotExists('View');
     $nodePageMenus = [
     'API' => '/jsonapi/node/test/' . $node->uuid(),
     'Edit' => '/node/' . $nid . '/edit',
     'Preview' => '/node/' . $nid . '/site-preview',
+    'Delete' => '/node/' . $nid . '/delete',
     'Revisions' => '/node/' . $nid . '/revisions',
     'Clone' => '/entity_clone/node/' . $nid,
     ];
-    $menuList = $this->cssSelect('ul.tabs--primary li');
+    $menuList = $this->cssSelect('#block-local-tasks ul li');
+    dump($menuList);
     // Check the total count of node tabs.
     $this->assertCount(6, $menuList);
     $menuOrder = [];
     foreach ($menuList as $menu) {
-    $tabTitle = str_replace(' (active tab)', '', $menu->getText());
-    if ($tabTitle) {
-    $menuOrder[] = $tabTitle;
-    }
+      $tabTitle = str_replace(' (active tab)', '', $menu->getText());
+      if ($tabTitle) {
+        $menuOrder[] = $tabTitle;
+      }
     }
     // Assertion for menu order.
     $this->assertEquals($menuOrder, array_keys($nodePageMenus));
-    Assertion test for tabs of node page.
+    // Assertion test for tabs of node page.
     $this->assertTabMenus($nodePageMenus, $path);
-     */
-    // Assert delete buton.
+    // Assert delete button.
     $deleteButton = $this->getSession()->getPage()->findLink('Delete');
     $this->assertEquals('Delete', $deleteButton->getText());
     $this->assertEquals('/node/' . $nid . '/delete', $deleteButton->getAttribute('href'));

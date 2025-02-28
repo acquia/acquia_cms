@@ -66,6 +66,7 @@ class DashboardApiKeysTest extends HeadlessTestBase {
 
     // Get the API Keys operations dropdown elements.
     $dropdownList = $consumersFieldset->findAll('css', 'ul li a');
+
     $this->assertCount(5, $dropdownList);
 
     // Click on Generate New Secret button.
@@ -122,7 +123,7 @@ class DashboardApiKeysTest extends HeadlessTestBase {
     $assertSession->elementExists('named', ['link', 'Delete'], $consumersFieldset)->click();
     $page = $this->getSession()->getPage();
     $this->assertNotEmpty($page);
-    $assertSession->pageTextContains('Access denied!');
+    $assertSession->pageTextContains('Access denied');
     $expectedUrl = $this->baseUrl . '/admin/config/services/consumer/1/delete?destination=/admin/headless/dashboard';
     $this->assertSame($expectedUrl, $this->getSession()->getCurrentUrl());
   }
@@ -138,7 +139,7 @@ class DashboardApiKeysTest extends HeadlessTestBase {
     $assertSession->elementExists('named', ['link', 'Clone'], $consumersFieldset)->click();
     $page = $this->getSession()->getPage();
     $this->assertNotEmpty($page);
-    $assertSession->pageTextContains('Access denied!');
+    $assertSession->pageTextContains('Access denied');
     $expectedUrl = $this->baseUrl . '/entity_clone/consumer/1?destination=/admin/headless/dashboard';
     $this->assertSame($expectedUrl, $this->getSession()->getCurrentUrl());
   }

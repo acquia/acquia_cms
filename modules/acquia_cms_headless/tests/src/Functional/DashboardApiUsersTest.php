@@ -52,13 +52,13 @@ class DashboardApiUsersTest extends HeadlessTestBase {
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
 
-    // Test API Users section exists, get API Users section.
+    // Test API Users section exists, get an API Users section.
     $usersFieldset = $assertSession->waitForElementVisible('css', $this->sectionSelector);
 
     // Test add API user button link has destination.
     $this->assertButtonLink($usersFieldset, '/admin/people/create?destination=/admin/headless/dashboard');
 
-    // Test table body exist and has data in same order.
+    // Test table body exists and has data in the same order.
     $this->assertEquals('Headless', $this->getTableBodyColumn(0)->getText());
     $this->assertEquals('Headless Administrator', $this->getTableBodyColumn(1)->getText());
 
@@ -66,16 +66,16 @@ class DashboardApiUsersTest extends HeadlessTestBase {
     $dropdownList = $usersFieldset->findAll('css', 'tbody tr:nth-child(1) ul li a');
     $this->assertCount(3, $dropdownList);
 
-    // Click on Edit button.
+    // Click on the Edit button.
     $expectedUrl = $this->baseUrl . '/user/2/edit?destination=/admin/headless/dashboard';
     $usersFieldset->findButton('List additional actions')->click();
-    $this->testOperation($usersFieldset, 'Edit', $expectedUrl, 'Whoops!');
+    $this->testOperation($usersFieldset, 'Edit', $expectedUrl, 'Access denied');
 
     // Click on Clone button.
     $this->drupalGet("/admin/headless/dashboard");
     $usersFieldset->findButton('List additional actions')->click();
     $expectedUrl = $this->baseUrl . '/entity_clone/user/2?destination=/admin/headless/dashboard';
-    $this->testOperation($usersFieldset, 'Clone', $expectedUrl, 'Whoops!');
+    $this->testOperation($usersFieldset, 'Clone', $expectedUrl, 'Access denied');
   }
 
   /**

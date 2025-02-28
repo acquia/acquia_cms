@@ -7,6 +7,7 @@ use Behat\Mink\Element\NodeElement;
 use Drupal\Core\Extension\Exception\UnknownExtensionException;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
+use Drupal\user\Entity\Role;
 
 /**
  * Pure headless mode menu tests.
@@ -30,6 +31,11 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
    */
   protected static $modules = [
     'acquia_cms_headless_ui',
+    'block_content',
+    'node',
+    'media_library',
+    'menu_ui',
+    'taxonomy',
   ];
 
   /**
@@ -74,6 +80,12 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
     $this->moduleInstaller = $this->container->get('module_installer');
     $this->moduleList = $this->container->get('extension.list.module');
     $account = $this->drupalCreateUser();
+    // Create an administrator role with is_admin set to true.
+    Role::create([
+      'id' => 'administrator',
+      'label' => 'Administrator',
+      'is_admin' => TRUE,
+    ])->save();
     $account->addRole('administrator');
     $account->save();
     $this->drupalLogin($account);
@@ -160,12 +172,10 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
         '.toolbar-icon-system-admin-content',
         'Content',
         [
-          'Scheduled Content',
           'Add content',
           'Blocks',
           'Files',
           'Media',
-          'Scheduled Media',
           'Block Content',
         ],
       ],

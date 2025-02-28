@@ -3,6 +3,7 @@
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use Drupal\user\Entity\Role;
 
 /**
  * Tests for acquia_cms_headless frontpage.
@@ -22,6 +23,8 @@ class HeadlessFrontpageTest extends BrowserTestBase {
    */
   protected static $modules = [
     'acquia_cms_headless_ui',
+    'node',
+    'views',
   ];
 
   /**
@@ -53,6 +56,12 @@ class HeadlessFrontpageTest extends BrowserTestBase {
    */
   public function testFrontPageIsAdminContentPage(): void {
     $account = $this->createUser();
+    // Create an administrator role with is_admin set to true.
+    Role::create([
+      'id' => 'administrator',
+      'label' => 'Administrator',
+      'is_admin' => TRUE,
+    ])->save();
     $account->addRole('administrator');
     $account->save();
     // Don't use one-time login links instead submit the login form.

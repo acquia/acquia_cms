@@ -127,7 +127,7 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
     $this->assertSession()->elementExists('named', ['link', 'Add Next.js site'], $nextjsSitesFieldset)->click();
     $page = $this->getSession()->getPage();
     $this->assertNotEmpty($page);
-    $this->assertSession()->pageTextContains('Access denied!');
+    $this->assertSession()->pageTextContains('Access denied');
     $expectedUrl = $this->baseUrl . '/admin/config/services/next/sites/add?destination=/admin/headless/dashboard';
     $this->assertSame($expectedUrl, $this->getSession()->getCurrentUrl());
   }
