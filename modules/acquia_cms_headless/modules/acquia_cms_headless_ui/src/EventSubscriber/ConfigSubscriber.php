@@ -49,7 +49,7 @@ final class ConfigSubscriber implements EventSubscriberInterface {
     // Prevent system front page to get overridden
     // if pure headless mode is on.
     if ($name === 'system.site') {
-      _acquia_cms_common_update_page_configurations('system.site', [
+      $this->updatePageConfigurations('system.site', [
         'page.front' => '/frontpage',
       ]);
     }
@@ -62,6 +62,34 @@ final class ConfigSubscriber implements EventSubscriberInterface {
     return [
       ConfigEvents::SAVE => 'onSave',
     ];
+  }
+
+  /**
+   * Helper function to update configuration for specified key.
+   *
+   * This is being used for updating page CT configurations.
+   *
+   * @param string $config_name
+   *   The configuration name which needs to be updated.
+   * @param array $configurations
+   *   An array of drupal configurations.
+   */
+  function updatePageConfigurations(string $config_name, array $configurations) {
+    $configFactory = \Drupal::service('config.factory');
+    $config = $configFactory->getEditable($config_name);
+    $need_save = FALSE;
+    if ($config) {
+      foreach ($configurations as $key => $value) {
+        if ($config->get($key) != $value) {
+          $config->set($key, $value);
+          $need_save = TRUE;
+        }
+      }
+      // Only save if there's changes in value.
+      if ($need_save) {
+        $config->save();
+      }
+    }
   }
 
 }
