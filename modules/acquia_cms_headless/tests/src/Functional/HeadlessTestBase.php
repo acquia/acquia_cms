@@ -20,6 +20,7 @@ abstract class HeadlessTestBase extends WebDriverTestBase {
    */
   protected static $modules = [
     'acquia_cms_headless',
+    'acquia_cms_toolbar',
     'entity_clone',
     'views'
   ];

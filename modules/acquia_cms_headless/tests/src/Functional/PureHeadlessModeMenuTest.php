@@ -4,8 +4,6 @@ namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Behat\Mink\Element\NodeElement;
-use Drupal\Core\Extension\Exception\UnknownExtensionException;
-use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 
 /**
@@ -85,25 +83,22 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
    * @dataProvider providerMenu
    */
   public function testChildMenu(string $selector, string $parentMenuName, array $children): void {
-    if ($this->installModule('acquia_cms_toolbar') && $this->installModule('block_content')) {
+    $this->drupalGet('/admin/headless/dashboard');
+    $page = $this->getSession()->getPage();
+    $menu = $page->find("css", $selector);
+    $this->assertInstanceOf(NodeElement::class, $menu, "Page doesn't contain element: `$selector`.");
+    $this->assertEquals($parentMenuName, $menu->getText());
+    $menu->mouseOver();
 
-      $this->drupalGet('/admin/headless/dashboard');
-      $page = $this->getSession()->getPage();
-      $menu = $page->find("css", $selector);
-      $this->assertInstanceOf(NodeElement::class, $menu, "Page doesn't contain element: `$selector`.");
-      $this->assertEquals($parentMenuName, $menu->getText());
-      $menu->mouseOver();
-
-      /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
-      $assertSession = $this->assertSession();
-      // Wait for menu items to visible.
-      $menuItem = $assertSession->waitForElementVisible('css', '.menu-item.hover-intent');
-      $this->assertInstanceOf(NodeElement::class, $menuItem);
-      $childrenMenuItems = $page->findAll("css", ".toolbar-menu-administration > .toolbar-menu > .menu-item.hover-intent >  ul.toolbar-menu:first-of-type > li.menu-item");
-      $this->assertCount(count($children), $childrenMenuItems);
-      foreach ($childrenMenuItems as $key => $child) {
-        $this->assertEquals($children[$key], $child->find("css", "a:first-child")->getText());
-      }
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
+    $assertSession = $this->assertSession();
+    // Wait for menu items to visible.
+    $menuItem = $assertSession->waitForElementVisible('css', '.menu-item.hover-intent');
+    $this->assertInstanceOf(NodeElement::class, $menuItem);
+    $childrenMenuItems = $page->findAll("css", ".toolbar-menu-administration > .toolbar-menu > .menu-item.hover-intent >  ul.toolbar-menu:first-of-type > li.menu-item");
+    $this->assertCount(count($children), $childrenMenuItems);
+    foreach ($childrenMenuItems as $key => $child) {
+      $this->assertEquals($children[$key], $child->find("css", "a:first-child")->getText());
     }
   }
 
@@ -111,30 +106,6 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
     // Make sure alias works fine.
     $this->drupalGet('/admin/content-models');
     $this->assertSession()->pageTextContains('Content Models');
-  }
-
-  /**
-   * Checks if given module exist and tries to enable it.
-   *
-   * @param string $module
-   *   Given module machine_name.
-   *
-   * @return bool
-   *   Returns true|false based on module exist and on successful installation.
-   *
-   * @throws \Drupal\Core\Extension\ExtensionNameLengthException
-   * @throws \Drupal\Core\Extension\MissingDependencyException
-   */
-  protected function installModule(string $module): bool {
-    try {
-      if ($this->moduleList instanceof ModuleExtensionList) {
-        $this->moduleList->get($module);
-      }
-    }
-    catch (UnknownExtensionException $e) {
-      return FALSE;
-    }
-    return $this->moduleInstaller->install([$module]);
   }
 
   /**
