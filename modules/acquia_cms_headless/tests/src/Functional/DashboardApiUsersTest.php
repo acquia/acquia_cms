@@ -59,7 +59,7 @@ class DashboardApiUsersTest extends HeadlessTestBase {
     $this->assertButtonLink($usersFieldset, '/admin/people/create?destination=/admin/headless/dashboard');
 
     // Test table body exists and has data in the same order.
-    $this->assertEquals('Headless', $this->getTableBodyColumn(0)->getText());
+    $this->assertEquals('Headless', $this->getTableBodyColumn(0,1)->getText());
     $this->assertEquals('Headless Administrator', $this->getTableBodyColumn(1)->getText());
 
     // Get the API Users operations dropdown elements.

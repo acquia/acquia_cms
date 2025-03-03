@@ -49,12 +49,6 @@ abstract class HeadlessTestBase extends WebDriverTestBase {
       $this->markTestSkipped('This test cannot run in an Acquia Cloud IDE.');
     }
     parent::setUp();
-    // Create an administrator role with is_admin set to true.
-    Role::create([
-      'id' => 'administrator',
-      'label' => 'Administrator',
-      'is_admin' => TRUE,
-    ])->save();
     $account = $this->drupalCreateUser();
     $account->addRole('headless');
     $account->save();

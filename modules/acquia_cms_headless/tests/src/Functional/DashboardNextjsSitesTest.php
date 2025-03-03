@@ -52,16 +52,16 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
     $assertSession->waitForElementVisible('css', $this->sectionSelector);
-    // Test API Keys section exists, get API Keys section.
+    // Test API Keys section exists, get an API Keys section.
     $nextjsSitesFieldset = $this->getSection();
 
-    // Test create new consumer button link has destination.
+    // Test create a new consumer button link has destination.
     $this->assertButtonLink($nextjsSitesFieldset, '/admin/config/services/next/sites/add?destination=/admin/headless/dashboard');
 
     // Click on Add Next.js site button.
     $this->testAddNextjsSite($nextjsSitesFieldset);
 
-    // Test table body exist and has data in same order.
+    // Test table body exists and has data in the same order.
     $this->drupalGet("/admin/headless/dashboard");
     $this->assertEquals('No next.js sites currently exist.', $this->getTableBodyColumn(0)->getText());
 
@@ -78,16 +78,16 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
     $assertSession->waitForElementVisible('css', $this->sectionSelector);
-    // Test API Keys section exists, get API Keys section.
+    // Test API Keys section exists, get an API Keys section.
     $nextjsSitesFieldset = $this->getSection();
 
-    // Test create new consumer button link has destination.
+    // Test create a new consumer button link has destination.
     $this->assertButtonLink($nextjsSitesFieldset, '/admin/config/services/next/sites/add?destination=/admin/headless/dashboard');
 
     // Create Next.js Site using administrator user.
     $this->testAddNextjsSiteAdmin($nextjsSitesFieldset);
 
-    // Test table body exist and has data in same order.
+    // Test table body exists and has data in the same order.
     $this->assertEquals('headless', $this->getTableBodyColumn(0)->getText());
     $this->assertEquals('headless', $this->getTableBodyColumn(1)->getText());
     $this->assertEquals('http://localhost:3000', $this->getTableBodyColumn(2)->getText());
@@ -96,26 +96,26 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
     $dropdownList = $nextjsSitesFieldset->findAll('css', 'ul li a');
     $this->assertCount(5, $dropdownList);
 
-    // Click on Environment variables button.
+    // Click on the Environment variables button.
     $this->testEnvironmentVariables($nextjsSitesFieldset);
 
     // Click on Clone button.
     $this->testClone($nextjsSitesFieldset);
 
-    // Test cloned next.js site exist.
+    // Test cloned next.js site exists.
     $this->assertCount(2, $nextjsSitesFieldset->findAll('css', 'table tbody tr'));
     $this->assertEquals('headless clone', $nextjsSitesFieldset->find('css', 'tbody > tr.even > td:nth-child(2)')->getText());
     $nextjsSitesFieldsetCloned = $nextjsSitesFieldset->find('css', 'tbody > tr.even');
 
-    // Click Edit button.
+    // Click the Edit button.
     $this->testEdit($nextjsSitesFieldsetCloned);
     $this->assertEquals('headless clone edit', $nextjsSitesFieldset->find('css', 'tbody > tr.even > td:nth-child(2)')->getText());
 
-    // Click on Delete button.
+    // Click on the Delete button.
     $this->testDelete($nextjsSitesFieldsetCloned);
     $this->assertCount(1, $nextjsSitesFieldset->findAll('css', 'table tbody tr'));
 
-    // Click on New preview secrete button.
+    // Click on the New preview secrete button.
     $this->testNewPreviewSecret($nextjsSitesFieldset);
 
   }

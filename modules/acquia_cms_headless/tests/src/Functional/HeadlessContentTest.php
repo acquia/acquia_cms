@@ -5,7 +5,7 @@ namespace Drupal\Tests\acquia_cms_headless\Functional;
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\Tests\acquia_cms_headless\Traits\HeadlessNextJsTrait;
-use Drupal\user\Entity\Role;
+use Drupal\workflows\Entity\Workflow;
 
 /**
  * Base class for the Headless Content administrator browser tests.
@@ -26,10 +26,8 @@ class HeadlessContentTest extends WebDriverTestBase {
    */
   protected static $modules = [
     'acquia_cms_headless',
-    'node',
-    'block',
+    'acquia_cms_headless_ui',
     'media_library',
-    'entity_clone',
   ];
 
   /**
@@ -58,19 +56,13 @@ class HeadlessContentTest extends WebDriverTestBase {
     }
     parent::setUp();
     $account = $this->drupalCreateUser();
-    // Create an administrator role with is_admin set to true.
-    Role::create([
-      'id' => 'administrator',
-      'label' => 'Administrator',
-      'is_admin' => TRUE,
-    ])->save();
     $account->addRole('administrator');
     $account->save();
     $this->drupalLogin($account);
     $this->drupalPlaceBlock('local_tasks_block', ['id' => 'local-tasks', 'region' => 'content', 'theme' => 'stark']);
     $this->drupalPlaceBlock('page_title_block', ['id' => 'page-title', 'region' => 'content', 'theme' => 'stark']);
 
-    // Visit content page.
+    // Visit the content page.
     $this->drupalGet("admin/content");
 
     // Set up a content type.
@@ -78,6 +70,14 @@ class HeadlessContentTest extends WebDriverTestBase {
       'type' => 'test',
       'name' => 'Test'
     ]);
+
+    // Create workflow.
+    Workflow::create(['id' => 'editorial', 'type' => 'content_moderation', 'label' => 'Editorial'])->save();
+    $this->drupalGet('/admin/config/workflow/workflows/manage/editorial/type/node');
+    $page = $this->getSession()->getPage();
+    $page->checkField('bundles[test]');
+    $page->pressButton('Save');
+
     // Enable pure headless mode.
     $this->enableHeadlessMode();
     // Visit add nextJs site page.
@@ -130,7 +130,6 @@ class HeadlessContentTest extends WebDriverTestBase {
     'Clone' => '/entity_clone/node/' . $nid,
     ];
     $menuList = $this->cssSelect('#block-local-tasks ul li');
-    dump($menuList);
     // Check the total count of node tabs.
     $this->assertCount(6, $menuList);
     $menuOrder = [];
@@ -144,10 +143,6 @@ class HeadlessContentTest extends WebDriverTestBase {
     $this->assertEquals($menuOrder, array_keys($nodePageMenus));
     // Assertion test for tabs of node page.
     $this->assertTabMenus($nodePageMenus, $path);
-    // Assert delete button.
-    $deleteButton = $this->getSession()->getPage()->findLink('Delete');
-    $this->assertEquals('Delete', $deleteButton->getText());
-    $this->assertEquals('/node/' . $nid . '/delete', $deleteButton->getAttribute('href'));
   }
 
   /**

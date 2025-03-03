@@ -56,12 +56,15 @@ class HeadlessFrontpageTest extends BrowserTestBase {
    */
   public function testFrontPageIsAdminContentPage(): void {
     $account = $this->createUser();
-    // Create an administrator role with is_admin set to true.
-    Role::create([
-      'id' => 'administrator',
-      'label' => 'Administrator',
-      'is_admin' => TRUE,
-    ])->save();
+    // Ensure the administrator role exists,
+    // required for local environment tests with ddev.
+    if (!Role::load('administrator')) {
+      Role::create([
+        'id' => 'administrator',
+        'label' => 'Administrator',
+        'is_admin' => TRUE,
+      ])->save();
+    }
     $account->addRole('administrator');
     $account->save();
     // Don't use one-time login links instead submit the login form.
