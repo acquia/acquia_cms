@@ -4,7 +4,6 @@ namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
-use Drupal\user\Entity\Role;
 
 /**
  * Base class for the HeadlessDashboard web_driver tests.
@@ -22,22 +21,8 @@ abstract class HeadlessTestBase extends WebDriverTestBase {
   protected static $modules = [
     'acquia_cms_headless',
     'entity_clone',
+    'views'
   ];
-
-  /**
-   * Disable strict config schema checks in this test.
-   *
-   * Scheduler has a config schema errors, and until it's fixed,
-   * this test cannot pass unless we disable strict config schema checking
-   * altogether. Since strict config schema isn't critically important in
-   * testing this functionality, it's okay to disable it for now, but it should
-   * be re-enabled (i.e., this property should be removed) as soon as possible.
-   *
-   * @var bool
-   */
-  // @codingStandardsIgnoreStart
-  protected $strictConfigSchema = FALSE;
-  // @codingStandardsIgnoreEnd
 
   /**
    * {@inheritdoc}
@@ -53,6 +38,10 @@ abstract class HeadlessTestBase extends WebDriverTestBase {
     $account->addRole('headless');
     $account->save();
     $this->drupalLogin($account);
+
+    // Place the tasks and page title blocks.
+    $this->drupalPlaceBlock('local_tasks_block', ['id' => 'local-tasks', 'region' => 'content', 'theme' => 'stark']);
+    $this->drupalPlaceBlock('page_title_block', ['id' => 'page-title', 'region' => 'content', 'theme' => 'stark']);
 
     // Visit headless dashboard.
     $this->drupalGet("/admin/headless/dashboard");

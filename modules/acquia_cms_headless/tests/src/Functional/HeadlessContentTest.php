@@ -31,21 +31,6 @@ class HeadlessContentTest extends WebDriverTestBase {
   ];
 
   /**
-   * Disable strict config schema checks in this test.
-   *
-   * Scheduler has a config schema errors, and until it's fixed,
-   * this test cannot pass unless we disable strict config schema checking
-   * altogether. Since strict config schema isn't critically important in
-   * testing this functionality, it's okay to disable it for now, but it should
-   * be re-enabled (i.e., this property should be removed) as soon as possible.
-   *
-   * @var bool
-   */
-  // @codingStandardsIgnoreStart
-  protected $strictConfigSchema = FALSE;
-  // @codingStandardsIgnoreEnd
-
-  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
@@ -118,8 +103,6 @@ class HeadlessContentTest extends WebDriverTestBase {
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
     $assertSession->pageTextContains('Headless Test Page');
-    // @todo Below commented test is failing in 3.0-rc8 version of Gin theme.
-    // However this was working in 3.0-rc5 will be fixed in ACMS-3456.
     $assertSession->linkNotExists('View');
     $nodePageMenus = [
     'API' => '/jsonapi/node/test/' . $node->uuid(),

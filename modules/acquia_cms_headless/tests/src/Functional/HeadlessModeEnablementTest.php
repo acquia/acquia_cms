@@ -3,7 +3,6 @@
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Drupal\Core\Extension\Exception\UnknownExtensionException;
-use Drupal\user\Entity\Role;
 
 /**
  * Tests for acquia_cms_headless Hybrid mode.

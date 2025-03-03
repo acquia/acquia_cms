@@ -3,7 +3,6 @@
 namespace Drupal\Tests\acquia_cms_headless\Traits;
 
 use Behat\Mink\Element\NodeElement;
-use Drupal\user\Entity\Role;
 
 /**
  * Trait to test dashboard section.
