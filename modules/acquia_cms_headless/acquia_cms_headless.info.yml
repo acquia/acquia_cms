@@ -6,9 +6,11 @@ core_version_requirement: ^10 || ^11
 dependencies:
   - acquia_cms_tour:acquia_cms_tour
   - consumers:consumers
-  - drupal:rest
+  - drupal:block
   - drupal:node
-  - drupal:content_moderation
+  - drupal:rest
+  - drupal:taxonomy
+  - entity_clone:entity_clone
   - jsonapi_extras:jsonapi_extras
   - jsonapi_menu_items:jsonapi_menu_items
   - next:next_jsonapi
@@ -17,5 +19,4 @@ dependencies:
   - openapi_ui_swagger:openapi_ui_swagger
   - simple_oauth:simple_oauth
 test_dependencies:
-  - entity_clone:entity_clone
   - acquia_cms_toolbar:acquia_cms_toolbar
