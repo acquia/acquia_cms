@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
-use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -29,11 +28,6 @@ class HeadlessSubrequestsTest extends BrowserTestBase {
    * {@inheritdoc}
    */
   protected function setUp(): void {
-    // @todo Remove this check when Acquia Cloud IDEs support running functional
-    // JavaScript tests.
-    if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
-      $this->markTestSkipped('This test cannot run in an Acquia Cloud IDE.');
-    }
     parent::setUp();
     $this->drupalCreateContentType([
       'type' => 'test',

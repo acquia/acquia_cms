@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
-use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Behat\Mink\Element\NodeElement;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 
@@ -27,6 +26,7 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
    * @var array
    */
   protected static $modules = [
+    'acquia_cms_headless',
     'acquia_cms_headless_ui',
     'acquia_cms_toolbar',
     'block_content',
@@ -35,31 +35,10 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
   ];
 
   /**
-   * The module installer object.
-   *
-   * @var \Drupal\Core\Extension\ModuleInstallerInterface
-   */
-  protected $moduleInstaller;
-
-  /**
-   * The module installer object.
-   *
-   * @var \Drupal\Core\Extension\ModuleExtensionList
-   */
-  protected $moduleList;
-
-  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
-    // @todo Remove this check when Acquia Cloud IDEs support running functional
-    // JavaScript tests.
-    if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
-      $this->markTestSkipped('This test cannot run in an Acquia Cloud IDE.');
-    }
     parent::setUp();
-    $this->moduleInstaller = $this->container->get('module_installer');
-    $this->moduleList = $this->container->get('extension.list.module');
     $account = $this->drupalCreateUser();
     $account->addRole('administrator');
     $account->save();

@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
-use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\Tests\acquia_cms_headless\Traits\HeadlessNextJsTrait;
 use Drupal\workflows\Entity\Workflow;
@@ -34,11 +33,6 @@ class HeadlessContentTest extends WebDriverTestBase {
    * {@inheritdoc}
    */
   protected function setUp(): void {
-    // @todo Remove this check when Acquia Cloud IDEs support running functional
-    // JavaScript tests.
-    if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
-      $this->markTestSkipped('This test cannot run in an Acquia Cloud IDE.');
-    }
     parent::setUp();
     $account = $this->drupalCreateUser();
     $account->addRole('administrator');
