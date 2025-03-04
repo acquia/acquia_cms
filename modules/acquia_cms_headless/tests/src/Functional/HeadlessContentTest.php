@@ -4,7 +4,7 @@ namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\Tests\acquia_cms_headless\Traits\HeadlessNextJsTrait;
-use Drupal\workflows\Entity\Workflow;
+use Drupal\Tests\content_moderation\Traits\ContentModerationTestTrait;
 
 /**
  * Base class for the Headless Content administrator browser tests.
@@ -12,6 +12,7 @@ use Drupal\workflows\Entity\Workflow;
 class HeadlessContentTest extends WebDriverTestBase {
 
   use HeadlessNextJsTrait;
+  use ContentModerationTestTrait;
 
   /**
    * {@inheritdoc}
@@ -51,11 +52,9 @@ class HeadlessContentTest extends WebDriverTestBase {
     ]);
 
     // Create workflow.
-    Workflow::create(['id' => 'editorial', 'type' => 'content_moderation', 'label' => 'Editorial'])->save();
-    $this->drupalGet('/admin/config/workflow/workflows/manage/editorial/type/node');
-    $page = $this->getSession()->getPage();
-    $page->checkField('bundles[test]');
-    $page->pressButton('Save');
+    $workflow = $this->createEditorialWorkflow();
+    $workflow->getTypePlugin()->addEntityTypeAndBundle('node', 'test');
+    $workflow->save();
 
     // Enable pure headless mode.
     $this->enableHeadlessMode();
