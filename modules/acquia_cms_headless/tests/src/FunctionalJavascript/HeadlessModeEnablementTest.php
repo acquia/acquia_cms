@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_headless\Functional;
+namespace Drupal\Tests\acquia_cms_headless\FunctionalJavascript;
 
 /**
  * Tests for acquia_cms_headless Hybrid mode.

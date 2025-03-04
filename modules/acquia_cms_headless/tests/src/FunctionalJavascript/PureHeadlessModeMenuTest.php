@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_headless\Functional;
+namespace Drupal\Tests\acquia_cms_headless\FunctionalJavascript;
 
 use Behat\Mink\Element\NodeElement;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
@@ -43,6 +43,7 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
     $account->addRole('administrator');
     $account->save();
     $this->drupalLogin($account);
+    $this->drupalPlaceBlock('local_tasks_block', ['id' => 'local-tasks', 'region' => 'content', 'theme' => 'stark']);
     $this->drupalPlaceBlock('page_title_block', ['id' => 'page-title', 'region' => 'content', 'theme' => 'stark']);
   }
 
@@ -62,7 +63,7 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
    * @dataProvider providerMenu
    */
   public function testChildMenu(string $selector, string $parentMenuName, array $children): void {
-    $this->drupalGet('/admin/headless/dashboard');
+    $this->drupalGet('admin/headless/dashboard');
     $page = $this->getSession()->getPage();
     $menu = $page->find("css", $selector);
     $this->assertInstanceOf(NodeElement::class, $menu, "Page doesn't contain element: `$selector`.");

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_headless\Functional;
+namespace Drupal\Tests\acquia_cms_headless\FunctionalJavascript;
 
 use Drupal\Tests\acquia_cms_headless\Traits\DashboardSectionTrait;
 
