@@ -26,12 +26,11 @@ function acquia_cms_headless_install($is_syncing) {
       'content_editor',
     ]);
     if ($roles) {
+      $user = user_load_by_name('headless');
       foreach ($roles as $role) {
-        $user = user_load_by_name('headless');
         $user->addRole($role->id());
-        $user->save();
-        break;
       }
+      $user->save();
     }
 
     // Adds the necessary permissions to roles.
