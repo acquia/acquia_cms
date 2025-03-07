@@ -3,6 +3,7 @@
 namespace Drupal\acquia_cms_site_studio\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -27,8 +28,8 @@ class AcquiaCmsSiteStudioSiteConfigureForm extends ConfigFormBase {
    * @param string $apiUrl
    *   The Site Studio api url.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, string $apiUrl) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactoryInterface $config_factory, string $apiUrl, TypedConfigManagerInterface $typed_config_manager) {
+    parent::__construct($config_factory, $typed_config_manager);
     $this->apiUrl = $apiUrl;
   }
 
@@ -45,7 +46,8 @@ class AcquiaCmsSiteStudioSiteConfigureForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('cohesion.api.utils')->getAPIServerURL()
+      $container->get('cohesion.api.utils')->getAPIServerURL(),
+      $container->get("config.typed")
     );
   }
 
