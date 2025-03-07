@@ -6,6 +6,7 @@ namespace Drupal\acquia_cms_site_studio\Plugin\ConfigAction;
 
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\cohesion_sync\Services\PackageImportHandler;
+use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Core\Config\Action\Attribute\ConfigAction;
 use Drupal\Core\Config\Action\ConfigActionPluginInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -13,6 +14,9 @@ use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -61,7 +65,6 @@ final class BasePackageImport implements ConfigActionPluginInterface, ContainerF
    */
   public function apply(string $configName, mixed $value): void {
     if ($configName === 'cohesion.settings' && $value) {
-      // Update the configuration with the API and organization keys.
       $this->updateConfig($configName);
     }
   }
@@ -90,8 +93,35 @@ final class BasePackageImport implements ConfigActionPluginInterface, ContainerF
       ->set('organization_key', $orgKey)
       ->save(TRUE);
 
-    // Import the base packages.
-    $this->importBasePackages();
+    if (PHP_SAPI === 'cli' && !function_exists('drush_backend_batch_process')) {
+      $this->notifyManualImport();
+    } else {
+      $this->importBasePackages();
+    }
+  }
+
+  /**
+   * Notifies the user to import packages manually from the UI.
+   */
+  private function notifyManualImport(): void {
+    $output = new SymfonyStyle(new ArgvInput(), new ConsoleOutput());
+    $output->warning($this->toPlainString(
+      t('Please import site studio packages from UI: @uri.', [
+        '@uri' => '/admin/cohesion/configuration/account-settings'
+      ])));
+  }
+
+  /**
+   * Converts a stringable like TranslatableMarkup to a plain text string.
+   *
+   * @param \Stringable|string $text
+   *   The string to convert.
+   *
+   * @return string
+   *   The plain text string.
+   */
+  private function toPlainString(\Stringable|string $text): string {
+    return PlainTextOutput::renderFromHtml((string) $text);
   }
 
   /**
