@@ -4,6 +4,7 @@ namespace Drupal\acquia_cms_headless_ui\EventSubscriber;
 
 use Drupal\Core\Config\ConfigCrudEvent;
 use Drupal\Core\Config\ConfigEvents;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Menu\LocalTaskManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -25,13 +26,23 @@ final class ConfigSubscriber implements EventSubscriberInterface {
   private $localTaskManager;
 
   /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * ConfigSubscriber constructor.
    *
    * @param \Drupal\Core\Menu\LocalTaskManager $local_task_manager
    *   The local task plugin manager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
    */
-  public function __construct(LocalTaskManager $local_task_manager) {
+  public function __construct(LocalTaskManager $local_task_manager, ConfigFactoryInterface $config_factory) {
     $this->localTaskManager = $local_task_manager;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -49,7 +60,7 @@ final class ConfigSubscriber implements EventSubscriberInterface {
     // Prevent system front page to get overridden
     // if pure headless mode is on.
     if ($name === 'system.site') {
-      _acquia_cms_common_update_page_configurations('system.site', [
+      $this->updatePageConfigurations('system.site', [
         'page.front' => '/frontpage',
       ]);
     }
@@ -62,6 +73,33 @@ final class ConfigSubscriber implements EventSubscriberInterface {
     return [
       ConfigEvents::SAVE => 'onSave',
     ];
+  }
+
+  /**
+   * Helper function to update configuration for specified key.
+   *
+   * This is being used for updating page CT configurations.
+   *
+   * @param string $config_name
+   *   The configuration name which needs to be updated.
+   * @param array $configurations
+   *   An array of drupal configurations.
+   */
+  public function updatePageConfigurations(string $config_name, array $configurations) {
+    $config = $this->configFactory->getEditable($config_name);
+    $need_save = FALSE;
+    if ($config) {
+      foreach ($configurations as $key => $value) {
+        if ($config->get($key) != $value) {
+          $config->set($key, $value);
+          $need_save = TRUE;
+        }
+      }
+      // Only save if there's changes in value.
+      if ($need_save) {
+        $config->save();
+      }
+    }
   }
 
 }

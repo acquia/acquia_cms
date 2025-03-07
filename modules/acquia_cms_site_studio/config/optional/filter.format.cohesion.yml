@@ -11,15 +11,6 @@ name: 'Site Studio'
 format: cohesion
 weight: 0
 filters:
-  filter_html:
-    id: filter_html
-    provider: filter
-    status: false
-    weight: -9
-    settings:
-      allowed_html: '<p class="coh-style-paragraph-extra-large coh-style-paragraph-small coh-style-paragraph-large"> <span class="coh-style-paragraph-extra-large coh-style-link-button-light coh-style-heading-3-size coh-style-link-with-icon coh-style-heading-2-size coh-style-tick-list coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-link-button-dark coh-style-paragraph-small coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-link-button-color coh-style-pre-heading-light coh-style-paragraph-large coh-color-brand-color-light coh-color-brand-color coh-color-brand-color-dark coh-color-gray-10 coh-color-gray-20 coh-color-gray-30 coh-color-gray-70 coh-color-gray-80 coh-color-gray-90 coh-color-black coh-color-white"> <a class="coh-style-link-button-light coh-style-link-with-icon coh-style-link-button-dark coh-style-link-button-color"> <h1 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <h2 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <h3 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <h4 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <h5 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <h6 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <ul class="coh-style-tick-list"> <ol class="coh-style-tick-list"> <dl class="coh-style-tick-list">'
-      filter_html_help: true
-      filter_html_nofollow: false
   editor_file_reference:
     id: editor_file_reference
     provider: editor
@@ -32,12 +23,27 @@ filters:
     status: true
     weight: 0
     settings: {  }
+  filter_autop:
+    id: filter_autop
+    provider: filter
+    status: true
+    weight: 0
+    settings: { }
   filter_caption:
     id: filter_caption
     provider: filter
     status: true
     weight: 0
     settings: {  }
+  filter_html:
+    id: filter_html
+    provider: filter
+    status: false
+    weight: -9
+    settings:
+      allowed_html: '<p class="coh-style-paragraph-extra-large coh-style-paragraph-small coh-style-paragraph-large"> <span class="coh-style-paragraph-extra-large coh-style-link-button-light coh-style-heading-3-size coh-style-link-with-icon coh-style-heading-2-size coh-style-tick-list coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-link-button-dark coh-style-paragraph-small coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-link-button-color coh-style-pre-heading-light coh-style-paragraph-large coh-color-brand-color-light coh-color-brand-color coh-color-brand-color-dark coh-color-gray-10 coh-color-gray-20 coh-color-gray-30 coh-color-gray-70 coh-color-gray-80 coh-color-gray-90 coh-color-black coh-color-white"> <a class="coh-style-link-button-light coh-style-link-with-icon coh-style-link-button-dark coh-style-link-button-color"> <h1 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <h2 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <h3 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <h4 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <h5 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <h6 class="coh-style-heading-3-size coh-style-heading-2-size coh-style-pre-heading coh-style-pre-heading-dark coh-style-heading-5-size coh-style-pre-heading-blue coh-style-heading-1-size coh-style-heading-xl coh-style-heading-4-size coh-style-pre-heading-light"> <ul class="coh-style-tick-list"> <ol class="coh-style-tick-list"> <dl class="coh-style-tick-list">'
+      filter_html_help: true
+      filter_html_nofollow: false
   filter_htmlcorrector:
     id: filter_htmlcorrector
     provider: filter
@@ -55,9 +61,3 @@ filters:
         default: default
         full: full
       allowed_media_types: {  }
-  filter_autop:
-    id: filter_autop
-    provider: filter
-    status: true
-    weight: 0
-    settings: {  }

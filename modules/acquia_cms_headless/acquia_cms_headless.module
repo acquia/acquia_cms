@@ -8,9 +8,9 @@
 use Drupal\user\RoleInterface;
 
 /**
- * Implements hook_content_model_role_presave_alter().
+ * Implements hook_entity_insert().
  */
-function acquia_cms_headless_content_model_role_presave_alter(RoleInterface &$role) {
+function acquia_cms_headless_user_role_insert(RoleInterface $role) {
   $role_id = $role->id();
   switch ($role->id()) {
     case 'content_administrator':

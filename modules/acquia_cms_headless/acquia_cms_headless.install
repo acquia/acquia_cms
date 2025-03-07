@@ -19,6 +19,19 @@ function acquia_cms_headless_install($is_syncing) {
 
     // Programmatically create a new "headless" user.
     $headless_user->createHeadlessUser();
+    // Add roles to headless user.
+    $roles = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple([
+      'content_administrator',
+      'content_author',
+      'content_editor',
+    ]);
+    if ($roles) {
+      $user = user_load_by_name('headless');
+      foreach ($roles as $role) {
+        $user->addRole($role->id());
+      }
+      $user->save();
+    }
 
     // Adds the necessary permissions to roles.
     add_next_site_permissions();
