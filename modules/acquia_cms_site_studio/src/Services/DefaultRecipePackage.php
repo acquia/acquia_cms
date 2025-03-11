@@ -8,7 +8,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\MissingDependencyException;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\Exception\DirectoryNotReadyException;
-use Drupal\Core\Extension\ExtensionPathResolver;
 
 /**
  * Default Recipe Package service.
@@ -26,13 +25,6 @@ class DefaultRecipePackage implements PackageSourceServiceInterface {
   protected $moduleHandler;
 
   /**
-   * Factory for getting extension lists by type.
-   *
-   * @var \Drupal\Core\Extension\ExtensionPathResolver
-   */
-  protected $extensionPathResolver;
-
-  /**
    * The config factory object.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
@@ -44,18 +36,14 @@ class DefaultRecipePackage implements PackageSourceServiceInterface {
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module handler service.
-   * @param \Drupal\Core\Extension\ExtensionPathResolver $extensionPathResolver
-   *   Factory for getting extension lists by type.
    * @param \Drupa\Core\ConfigFactoryInterface $configFactory
    *   The config factory.
    */
   public function __construct(
     ModuleHandlerInterface $moduleHandler,
-    ExtensionPathResolver $extensionPathResolver,
     ConfigFactoryInterface $configFactory,
   ) {
     $this->moduleHandler = $moduleHandler;
-    $this->extensionPathResolver = $extensionPathResolver;
     $this->configFactory = $configFactory;
   }
 

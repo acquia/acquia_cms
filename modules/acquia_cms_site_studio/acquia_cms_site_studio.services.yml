@@ -3,7 +3,6 @@ services:
     class: Drupal\acquia_cms_site_studio\Services\DefaultRecipePackage
     arguments:
       - '@module_handler'
-      - '@extension.path.resolver'
       - '@config.factory'
     tags:
       - { name: sitestudio_package_source, priority: 50 }

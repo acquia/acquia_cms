@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\acquia_cms_site_studio\Plugin\ConfigAction;
 
 use Drupal\cohesion\Controller\AdministrationController;
-use Drupal\cohesion_sync\Services\PackageImportHandler;
 use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Core\Config\Action\Attribute\ConfigAction;
 use Drupal\Core\Config\Action\ConfigActionPluginInterface;
@@ -35,15 +34,12 @@ final class BasePackageImport implements ConfigActionPluginInterface, ContainerF
    *   The config factory.
    * @param \Drupal\Core\Site\Settings $settings
    *    The settings.
-   * @param \Drupal\cohesion_sync\Services\PackageImportHandler $packageImportHandler
-   *    The package import handler.
    * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
    *    The module handler.
    */
   public function __construct(
     protected readonly ConfigFactoryInterface $configFactory,
     protected readonly Settings $settings,
-    protected readonly PackageImportHandler $packageImportHandler,
     protected readonly ModuleHandler $moduleHandler,
   ) {
   }
@@ -55,7 +51,6 @@ final class BasePackageImport implements ConfigActionPluginInterface, ContainerF
     return new static(
       $container->get('config.factory'),
       $container->get('settings'),
-      $container->get('cohesion_sync.package_import_handler'),
       $container->get('module_handler'),
     );
   }
@@ -129,8 +124,6 @@ final class BasePackageImport implements ConfigActionPluginInterface, ContainerF
    */
   private function importBasePackages(): void {
     $this->initializeBatch();
-    $package_list_path = $this->getPackageListPath();
-    $this->importPackages($package_list_path);
     $this->processBatchIfCli();
   }
 
@@ -139,27 +132,6 @@ final class BasePackageImport implements ConfigActionPluginInterface, ContainerF
    */
   private function initializeBatch(): void {
     batch_set(AdministrationController::batchAction(TRUE));
-  }
-
-  /**
-   * Gets the path to the package list file.
-   *
-   * @return string
-   *   The path to the package list file.
-   */
-  private function getPackageListPath(): string {
-    $module_path = $this->moduleHandler->getModule('acquia_cms_site_studio')->getPath();
-    return $module_path . '/config/site_studio/site_studio.packages.yml';
-  }
-
-  /**
-   * Imports packages from the specified path.
-   *
-   * @param string $package_list_path
-   *   The path to the package list file.
-   */
-  private function importPackages(string $package_list_path): void {
-    $this->packageImportHandler->importPackagesFromPath($package_list_path);
   }
 
   /**
