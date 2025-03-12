@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acquia_cms_site_studio\Services;
+namespace Drupal\acquia_starterkit_site_studio\Services;
 
 use Drupal\cohesion_sync\Exception\PackageSourceMissingPropertiesException;
 use Drupal\cohesion_sync\Services\PackageSourceServiceInterface;
@@ -80,9 +80,18 @@ class DefaultRecipePackage implements PackageSourceServiceInterface {
     $dependencies = $sourceMetadata['dependencies'] ?? [];
     $recipe_applied = $this->configFactory->get('acquia_starterkit_core.settings')->get('recipes_applied');
     if ($dependencies) {
-      foreach ($dependencies['recipe'] as $dependency) {
-        if (!$this->recipeExist($dependency) || !in_array($sourceMetadata['recipe_name'], $recipe_applied)) {
-          return "";
+      if (!empty($dependencies['recipes'])) {
+        foreach ($dependencies['recipes'] as $dependency) {
+          if (!$this->recipeExist($dependency) || !in_array($sourceMetadata['recipe_name'], $recipe_applied)) {
+            return "";
+          }
+        }
+      }
+      if (!empty($dependencies['modules'])) {
+        foreach ($dependencies['modules'] as $dependency) {
+          if (!$this->moduleHandler->moduleExists($dependency)) {
+            return "";
+          }
         }
       }
     }

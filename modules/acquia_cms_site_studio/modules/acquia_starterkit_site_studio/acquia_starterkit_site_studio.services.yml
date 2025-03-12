@@ -1,0 +1,8 @@
+services:
+  acquia_starterkit_site_studio.package_source.default_recipe_package:
+    class: Drupal\acquia_starterkit_site_studio\Services\DefaultRecipePackage
+    arguments:
+      - '@module_handler'
+      - '@config.factory'
+    tags:
+      - { name: sitestudio_package_source, priority: 50 }

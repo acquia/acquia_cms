@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\acquia_cms_site_studio\Plugin\ConfigAction;
+namespace Drupal\acquia_starterkit_site_studio\Plugin\ConfigAction;
 
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\Component\Render\PlainTextOutput;

@@ -9,28 +9,16 @@
   type: default_module_package
   source:
     dependencies:
-      modules:
-        - acquia_cms_video
+      - acquia_cms_video
     module_name: acquia_cms_video
     path: config/pack_acquia_cms_video
-  options:
-    extra-validation: false
--
-  type: default_recipe_package
-  source:
-    dependencies:
-      recipe:
-        - acquia_starterkit_remote_video
-    recipe_name: acquia_starterkit_remote_video
-    path: site_studio/pack_acquia_starterkit_remote_video
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      modules:
-        - acquia_cms_search
+      - acquia_cms_search
     module_name: acquia_cms_search
     path: config/pack_acquia_cms_search
   options:
@@ -39,8 +27,7 @@
   type: default_module_package
   source:
     dependencies:
-      modules:
-        - acquia_cms_image
+      - acquia_cms_image
     module_name: acquia_cms_image
     path: config/pack_acquia_cms_image
   options:
@@ -49,58 +36,25 @@
   type: default_module_package
   source:
     dependencies:
-      modules:
-        - acquia_cms_image
+      - acquia_cms_image
     module_name: acquia_cms_image
     path: config/pack_acquia_cms_image_core
   options:
     extra-validation: false
 -
-  type: default_recipe_package
-  source:
-    dependencies:
-      recipe:
-        - acquia_starterkit_image
-    recipe_name: acquia_starterkit_image
-    path: site_studio/pack_acquia_starterkit_image
-  options:
-    extra-validation: false
--
-  type: default_recipe_package
-  source:
-    dependencies:
-      recipe:
-        - acquia_starterkit_image
-    recipe_name: acquia_starterkit_image
-    path: site_studio/pack_acquia_starterkit_image_core
-  options:
-    extra-validation: false
--
   type: default_module_package
   source:
     dependencies:
-      modules:
-        - acquia_cms_page
+      - acquia_cms_page
     module_name: acquia_cms_page
     path: config/pack_acquia_cms_page
   options:
     extra-validation: false
 -
-  type: default_recipe_package
-  source:
-    dependencies:
-      recipe:
-        - acquia_starterkit_page
-    recipe_name: acquia_starterkit_page
-    path: site_studio/pack_acquia_starterkit_page
-  options:
-    extra-validation: false
--
   type: default_module_package
   source:
     dependencies:
-      modules:
-        - acquia_cms_place
+      - acquia_cms_place
     module_name: acquia_cms_place
     path: config/pack_acquia_cms_place
   options:
@@ -109,41 +63,17 @@
   type: default_module_package
   source:
     dependencies:
-      modules:
-        - acquia_cms_place
-        - acquia_cms_search
+      - acquia_cms_place
+      - acquia_cms_search
     module_name: acquia_cms_place
     path: config/pack_acquia_cms_place_search
-  options:
-    extra-validation: false
--
-  type: default_recipe_package
-  source:
-    dependencies:
-      recipe:
-        - acquia_starterkit_place
-    recipe_name: acquia_starterkit_place
-    path: site_studio/pack_acquia_starterkit_place
-  options:
-    extra-validation: false
--
-  type: default_recipe_package
-  source:
-    dependencies:
-      modules:
-        - acquia_cms_search
-      recipe:
-      - acquia_starterkit_place
-    recipe_name: acquia_starterkit_place
-    path: site_studio/pack_acquia_starterkit_place_search
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      modules:
-        - acquia_cms_event
+      - acquia_cms_event
     module_name: acquia_cms_event
     path: config/pack_acquia_cms_event
   options:
@@ -152,41 +82,17 @@
   type: default_module_package
   source:
     dependencies:
-      modules:
-        - acquia_cms_event
-        - acquia_cms_search
+      - acquia_cms_event
+      - acquia_cms_search
     module_name: acquia_cms_event
     path: config/pack_acquia_cms_event_search
-  options:
-    extra-validation: false
--
-  type: default_recipe_package
-  source:
-    dependencies:
-      recipe:
-        - acquia_starterkit_event
-    recipe_name: acquia_starterkit_event
-    path: site_studio/pack_acquia_starterkit_event
-  options:
-    extra-validation: false
--
-  type: default_recipe_package
-  source:
-    dependencies:
-      modules:
-        - acquia_cms_search
-      recipe:
-        - acquia_starterkit_event
-    recipe_name: acquia_starterkit_event
-    path: site_studio/pack_acquia_starterkit_event_search
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      modules:
-        - acquia_cms_person
+      - acquia_cms_person
     module_name: acquia_cms_person
     path: config/pack_acquia_cms_person
   options:
@@ -195,41 +101,17 @@
   type: default_module_package
   source:
     dependencies:
-      modules:
-        - acquia_cms_person
-        - acquia_cms_search
+      - acquia_cms_person
+      - acquia_cms_search
     module_name: acquia_cms_person
     path: config/pack_acquia_cms_person_search
-  options:
-    extra-validation: false
--
-  type: default_recipe_package
-  source:
-    dependencies:
-      recipe:
-        - acquia_starterkit_person
-    recipe_name: acquia_starterkit_person
-    path: site_studio/pack_acquia_starterkit_person
-  options:
-    extra-validation: false
--
-  type: default_recipe_package
-  source:
-    dependencies:
-      modules:
-        - acquia_cms_search
-      recipe:
-        - acquia_starterkit_person
-    recipe_name: acquia_starterkit_person
-    path: site_studio/pack_acquia_starterkit_person_search
   options:
     extra-validation: false
 -
   type: default_module_package
   source:
     dependencies:
-      modules:
-        - acquia_cms_article
+      - acquia_cms_article
     module_name: acquia_cms_article
     path: config/pack_acquia_cms_article
   options:
@@ -238,72 +120,27 @@
   type: default_module_package
   source:
     dependencies:
-      modules:
-        - acquia_cms_article
-        - acquia_cms_search
+      - acquia_cms_article
+      - acquia_cms_search
     module_name: acquia_cms_article
     path: config/pack_acquia_cms_article_search
   options:
     extra-validation: false
 -
-  type: default_recipe_package
-  source:
-    dependencies:
-      recipe:
-        - acquia_starterkit_article
-    recipe_name: acquia_starterkit_article
-    path: site_studio/pack_acquia_starterkit_article
-  options:
-    extra-validation: false
--
-  type: default_recipe_package
-  source:
-    dependencies:
-      modules:
-        - acquia_cms_search
-      recipe:
-      - acquia_starterkit_article
-    recipe_name: acquia_starterkit_article
-    path: site_studio/pack_acquia_starterkit_article_search
-  options:
-    extra-validation: false
--
   type: default_module_package
   source:
     dependencies:
-      modules:
-        - acquia_cms_dam
+      - acquia_cms_dam
     module_name: acquia_cms_dam
     path: config/pack_acquia_cms_dam
   options:
     extra-validation: false
 -
-  type: default_recipe_package
-  source:
-    dependencies:
-      recipe:
-        - acquia_starterkit_dam
-    recipe_name: acquia_starterkit_dam
-    path: site_studio/pack_acquia_starterkit_dam
-  options:
-    extra-validation: false
--
   type: default_module_package
   source:
     dependencies:
-      modules:
-        - acquia_cms_audio
+      - acquia_cms_audio
     module_name: acquia_cms_audio
     path: config/pack_acquia_cms_audio
-  options:
-    extra-validation: false
--
-  type: default_recipe_package
-  source:
-    dependencies:
-      recipe:
-        - acquia_starterkit_remote_audio
-    recipe_name: acquia_starterkit_remote_audio
-    path: site_studio/pack_acquia_starterkit_remote_audio
   options:
     extra-validation: false
