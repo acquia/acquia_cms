@@ -17,7 +17,7 @@ is for developers contributing to the Acquia Drupal Starter Kit ecosystem.
 ## Documentation
 
 User-facing documentation for Acquia Drupal Starter Kit lives on
-[Acquia's documentation website](https://docs.acquia.com).
+[Acquia's documentation website](https://docs.acquia.com/drupal-starter-kits/docs).
 
 ## Releases
 
