@@ -12,6 +12,7 @@ use Drupal\acquia_cms_search\Plugin\views\query\SearchApiQuery;
 use Drupal\acquia_search\Helper\Runtime;
 use Drupal\Core\DestructableInterface;
 use Drupal\field\FieldConfigInterface;
+use Drupal\field\FieldStorageConfigInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\ServerInterface;
@@ -72,9 +73,6 @@ function acquia_cms_search_views_plugins_cache_alter(&$definitions) {
  */
 function acquia_cms_search_node_type_insert(NodeTypeInterface $node_type) {
   Drupal::classResolver(SearchFacade::class)->addNodeType($node_type);
-  if (!$node_type->isSyncing()) {
-    _acquia_cms_search_add_category_facet();
-  }
 }
 
 /**
@@ -82,9 +80,6 @@ function acquia_cms_search_node_type_insert(NodeTypeInterface $node_type) {
  */
 function acquia_cms_search_node_type_update(NodeTypeInterface $node_type) {
   Drupal::classResolver(SearchFacade::class)->addNodeType($node_type);
-  if (!$node_type->isSyncing()) {
-    _acquia_cms_search_add_category_facet();
-  }
 }
 
 /**
@@ -178,24 +173,15 @@ function acquia_cms_search_form_acquia_cms_search_form_alter(array &$form) {
 }
 
 /**
- * Adds search_category facet, if any acms search dependent module is installed.
+ * Implements hook_ENTITY_TYPE_insert() for configurable field.
  */
-function _acquia_cms_search_add_category_facet() {
-  // Check if field_categories field is available.
-  if (!\Drupal::entityTypeManager()->getStorage('field_storage_config')->loadByProperties(['field_name' => 'field_categories'])) {
-    return;
+function acquia_cms_search_field_storage_config_insert(FieldStorageConfigInterface $field_storage) {
+  if (!$field_storage->isSyncing() && $field_storage->getName() == "field_categories") {
+    \Drupal::classResolver(FacetFacade::class)->addFacet([
+      'id' => 'search_category',
+      'name' => 'Category',
+      'url_alias' => 'category',
+      'field_identifier' => 'field_categories',
+    ]);
   }
-
-  // Check if search_category facet is already created.
-  if (\Drupal::entityTypeManager()->getStorage('facets_facet')->loadByProperties(['id' => 'search_category'])) {
-    return;
-  }
-
-  // Create search category facet.
-  \Drupal::classResolver(FacetFacade::class)->addFacet([
-    'id' => 'search_category',
-    'name' => 'Category',
-    'url_alias' => 'category',
-    'field_identifier' => 'field_categories',
-  ]);
 }
