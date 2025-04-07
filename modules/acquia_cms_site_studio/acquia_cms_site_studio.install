@@ -47,8 +47,8 @@ function acquia_cms_site_studio_install($is_syncing) {
     $module_handler = \Drupal::service('module_handler');
     $entity_type_manager = \Drupal::entityTypeManager();
     if ($module_handler->moduleExists('acquia_cms_search')) {
-      _acquia_cms_common_update_view_display_options_style('search');
-      _acquia_cms_common_update_view_display_options_style('search_fallback');
+      _acquia_cms_site_studio_update_view_display_options_style('search');
+      _acquia_cms_site_studio_update_view_display_options_style('search_fallback');
 
       // Disable acquia_search view provided by Acquia Search Solrmodule,
       // so that search view provided by acquia_cms_search module can be used
@@ -74,20 +74,20 @@ function acquia_cms_site_studio_install($is_syncing) {
       // Update content views on module install.
       if ($module_handler->moduleExists('acquia_cms_search')) {
         if ($module_handler->moduleExists('acquia_cms_article')) {
-          _acquia_cms_common_update_view_display_options_style('articles');
-          _acquia_cms_common_update_view_display_options_style('articles_fallback');
+          _acquia_cms_site_studio_update_view_display_options_style('articles');
+          _acquia_cms_site_studio_update_view_display_options_style('articles_fallback');
         }
         if ($module_handler->moduleExists('acquia_cms_event')) {
-          _acquia_cms_common_update_view_display_options_style('events');
-          _acquia_cms_common_update_view_display_options_style('events_fallback');
+          _acquia_cms_site_studio_update_view_display_options_style('events');
+          _acquia_cms_site_studio_update_view_display_options_style('events_fallback');
         }
         if ($module_handler->moduleExists('acquia_cms_place')) {
-          _acquia_cms_common_update_view_display_options_style('places');
-          _acquia_cms_common_update_view_display_options_style('places_fallback');
+          _acquia_cms_site_studio_update_view_display_options_style('places');
+          _acquia_cms_site_studio_update_view_display_options_style('places_fallback');
         }
         if ($module_handler->moduleExists('acquia_cms_person')) {
-          _acquia_cms_common_update_view_display_options_style('people', 'default', 'view_tpl_people_grid');
-          _acquia_cms_common_update_view_display_options_style('people_fallback');
+          _acquia_cms_site_studio_update_view_display_options_style('people', 'default', 'view_tpl_people_grid');
+          _acquia_cms_site_studio_update_view_display_options_style('people_fallback');
         }
       }
     }
@@ -469,5 +469,5 @@ function acquia_cms_site_studio_update_9001() {
     ],
   ];
 
-  _acquia_cms_common_update_page_configurations('editor.editor.cohesion', $config_data);
+  _acquia_cms_site_studio_update_page_configurations('editor.editor.cohesion', $config_data);
 }
