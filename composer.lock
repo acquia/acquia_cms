@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4aab9d0ff38361a58334c57191171d23",
+    "content-hash": "bd54259e0a5678b704f6d6756f32e046",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -17845,33 +17845,32 @@
         },
         {
             "name": "mglaman/drupal-check",
-            "version": "1.5.0",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/mglaman/drupal-check.git",
-                "reference": "4011f1f357bdd89793d13b1f8536625eb9d3cce7"
+                "url": "https://github.com/rajeshreeputra/drupal-check.git",
+                "reference": "eb185e2e6c602bfcf5f060d62c75a21230922ad1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/drupal-check/zipball/4011f1f357bdd89793d13b1f8536625eb9d3cce7",
-                "reference": "4011f1f357bdd89793d13b1f8536625eb9d3cce7",
+                "url": "https://api.github.com/repos/rajeshreeputra/drupal-check/zipball/eb185e2e6c602bfcf5f060d62c75a21230922ad1",
+                "reference": "eb185e2e6c602bfcf5f060d62c75a21230922ad1",
                 "shasum": ""
             },
             "require": {
                 "composer/xdebug-handler": "^1.1 || ^2.0.1 || ^3.0",
-                "jangregor/phpstan-prophecy": "^1.0",
+                "jangregor/phpstan-prophecy": "^1.0 || ^2.0",
                 "jean85/pretty-package-versions": "^1.5.0 || ^2.0.1",
-                "mglaman/phpstan-drupal": "^1.0.0",
+                "mglaman/phpstan-drupal": "^1.0.0 || ^2.0.0",
                 "nette/neon": "^3.1",
-                "php": "^7.2.5|^8.0",
-                "phpstan/phpstan-deprecation-rules": "^1.0.0",
+                "php": "^8.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0.0 || ^2.0.0",
                 "symfony/console": "~3.4.5 || ^4.2|| ^5.0 || ^6.0 || ^7.0",
-                "symfony/process": "~3.4.5 || ^4.2|| ^5.0 || ^6.0 || ^7.0",
-                "webflo/drupal-finder": "^1.1"
+                "symfony/process": "~3.4.5 || ^4.2|| ^5.0 || ^6.0 || ^7.0"
             },
             "require-dev": {
-                "phpstan/phpstan": "^1.0.0",
-                "phpstan/phpstan-strict-rules": "^1.0.0",
+                "phpstan/phpstan": "^2.0.0",
+                "phpstan/phpstan-strict-rules": "^2.0.0",
                 "squizlabs/php_codesniffer": "^3.4"
             },
             "bin": [
@@ -17888,7 +17887,6 @@
                     "DrupalCheck\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -17900,24 +17898,23 @@
             ],
             "description": "CLI tool for running checks on a Drupal code base",
             "support": {
-                "issues": "https://github.com/mglaman/drupal-check/issues",
-                "source": "https://github.com/mglaman/drupal-check/tree/1.5.0"
+                "source": "https://github.com/rajeshreeputra/drupal-check/tree/1.5.1"
             },
             "funding": [
                 {
-                    "url": "https://github.com/mglaman",
-                    "type": "github"
+                    "type": "github",
+                    "url": "https://github.com/mglaman"
                 },
                 {
-                    "url": "https://opencollective.com/phpstan-drupal",
-                    "type": "open_collective"
+                    "type": "open_collective",
+                    "url": "https://opencollective.com/phpstan-drupal"
                 },
                 {
-                    "url": "https://tidelift.com/funding/github/packagist/mglaman/drupal-check",
-                    "type": "tidelift"
+                    "type": "tidelift",
+                    "url": "https://tidelift.com/funding/github/packagist/mglaman/drupal-check"
                 }
             ],
-            "time": "2024-08-14T21:40:06+00:00"
+            "time": "2024-12-12T23:02:06+00:00"
         },
         {
             "name": "mglaman/phpstan-drupal",
