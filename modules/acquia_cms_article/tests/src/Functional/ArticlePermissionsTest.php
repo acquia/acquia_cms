@@ -18,6 +18,7 @@ class ArticlePermissionsTest extends ContentPermissionsTestBase {
    */
   protected static $modules = [
     'acquia_cms_article',
+    'node',
   ];
 
   /**
