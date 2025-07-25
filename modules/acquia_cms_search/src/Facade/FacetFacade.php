@@ -22,11 +22,11 @@ final class FacetFacade implements ContainerInjectionInterface {
   protected $moduleHandler;
 
   /**
-   * The facets_facet entity object.
+   * The entity_type.manager service.
    *
-   * @var \Drupal\facets\Entity\Facet
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $facetEntity;
+  protected $entityTypeManager;
 
   /**
    * The logger channel interface object.
@@ -47,7 +47,7 @@ final class FacetFacade implements ContainerInjectionInterface {
    */
   public function __construct(ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager, LoggerChannelInterface $logger) {
     $this->moduleHandler = $module_handler;
-    $this->facetEntity = $entity_type_manager->getStorage('facets_facet');
+    $this->entityTypeManager = $entity_type_manager;
     $this->logger = $logger;
   }
 
@@ -160,14 +160,18 @@ final class FacetFacade implements ContainerInjectionInterface {
       ]);
       return;
     }
+
+    /** @var \Drupal\Core\Entity\EntityStorageInterface $facet_storage */
+    $facet_storage = $this->entityTypeManager->getStorage('facets_facet');
+
     // Load the facet (if it exists).
-    $facet = $this->facetEntity->load($values['id']);
+    $facet = $facet_storage->load($values['id']);
 
     if ($facet instanceof FacetInterface) {
       return;
     }
     $values = $this->mergeValues($values);
-    $this->facetEntity->create($values)->save();
+    $facet_storage->create($values)->save();
     $this->logger->info('Created new facet with id: `@id`.', ['@id' => $values['id']]);
   }
 

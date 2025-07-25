@@ -5,6 +5,7 @@
  * Contains installation routines for Acquia CMS Search.
  */
 
+use Drupal\acquia_cms_search\Facade\FacetFacade;
 use Drupal\node\Entity\NodeType;
 
 /**
@@ -24,19 +25,23 @@ function acquia_cms_search_install($is_syncing) {
 
     // Retroactively enable indexing for any content types that existed before
     // this module was installed.
-    $node_types = NodeType::loadMultiple();
+    $entity_type_manager = \Drupal::entityTypeManager();
+    $node_types = $entity_type_manager->getStorage('node_type')->loadMultiple();
     array_walk($node_types, 'acquia_cms_search_node_type_insert');
-    $enabled_modules = \Drupal::service('module_handler')->getModuleList();
-    $enabled_modules = array_keys($enabled_modules);
-    _acquia_cms_search_add_category_facet($enabled_modules);
-  }
-}
 
-/**
- * Implements hook_module_preinstall().
- */
-function acquia_cms_search_module_preinstall($module) {
-  \Drupal::service('acquia_cms_common.utility')->setModulePreinstallTriggered($module);
+    // Add the Search Category facet if the field exists.
+    $field_storage = $entity_type_manager->getStorage('field_storage_config')
+      ->loadByProperties(['field_name' => 'field_categories']);
+    if ($field_storage) {
+      \Drupal::classResolver(FacetFacade::class)->addFacet([
+        'id' => 'search_category',
+        'name' => 'Category',
+        'url_alias' => 'category',
+        'field_identifier' => 'field_categories',
+      ]);
+    }
+
+  }
 }
 
 /**
