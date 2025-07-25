@@ -31,13 +31,6 @@ function acquia_cms_event_content_model_role_presave_alter(RoleInterface &$role)
 }
 
 /**
- * Implements hook_module_preinstall().
- */
-function acquia_cms_event_module_preinstall($module) {
-  \Drupal::service('acquia_cms_common.utility')->setModulePreinstallTriggered($module);
-}
-
-/**
  * Update past events views display & its title.
  */
 function acquia_cms_event_update_8001() {
