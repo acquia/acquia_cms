@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - workflows.workflow.editorial
+  module:
+    - acquia_cms_common
+id: to_archived
+label: 'To Archived'
+format: plain_text
+subject: '[node:title] State Changed'
+recipient_types:
+  author:
+    id: author
+    provider: workbench_email
+    status: true
+    settings: {  }
+bundles: {  }
+body:
+  value: '[node:title] is archived now'
+  format: plain_text
+replyTo: ''
+transitions:
+  editorial:
+    archive: archive

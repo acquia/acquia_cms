@@ -31,13 +31,6 @@ function acquia_cms_place_content_model_role_presave_alter(RoleInterface &$role)
 }
 
 /**
- * Implements hook_module_preinstall().
- */
-function acquia_cms_place_module_preinstall($module) {
-  \Drupal::service('acquia_cms_common.utility')->setModulePreinstallTriggered($module);
-}
-
-/**
  * Implements hook_update_N().
  *
  * Update node type conditions from node_type to entity_bundle.

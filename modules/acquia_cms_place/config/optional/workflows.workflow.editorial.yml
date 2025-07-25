@@ -1,0 +1,68 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - content_moderation
+id: editorial
+label: Editorial
+type: content_moderation
+type_settings:
+  states:
+    archived:
+      label: Archived
+      weight: 5
+      published: false
+      default_revision: true
+    draft:
+      label: Draft
+      weight: -5
+      published: false
+      default_revision: false
+    published:
+      label: Published
+      weight: 0
+      published: true
+      default_revision: true
+    review:
+      label: 'In review'
+      weight: -1
+      published: false
+      default_revision: false
+  transitions:
+    archive:
+      label: Archive
+      from:
+        - published
+      to: archived
+      weight: 2
+    archived_published:
+      label: 'Restore from archive'
+      from:
+        - archived
+      to: published
+      weight: 4
+    create_new_draft:
+      label: 'Create New Draft'
+      from:
+        - archived
+        - draft
+        - published
+        - review
+      to: draft
+      weight: 0
+    publish:
+      label: Publish
+      from:
+        - draft
+        - published
+        - review
+      to: published
+      weight: 1
+    review:
+      label: 'Send to review'
+      from:
+        - draft
+        - review
+      to: review
+      weight: 0
+  default_moderation_state: draft

@@ -33,13 +33,6 @@ function acquia_cms_article_content_model_role_presave_alter(RoleInterface &$rol
 }
 
 /**
- * Implements hook_module_preinstall().
- */
-function acquia_cms_article_module_preinstall($module) {
-  \Drupal::service('acquia_cms_common.utility')->setModulePreinstallTriggered($module);
-}
-
-/**
  * Implements hook_update_N().
  */
 function acquia_cms_article_update_8001() {

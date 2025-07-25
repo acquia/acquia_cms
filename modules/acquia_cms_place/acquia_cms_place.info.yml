@@ -4,12 +4,13 @@ description: 'Provides a Place content type and related configuration.'
 type: module
 core_version_requirement: ^9.4 || ^10 || ^11
 dependencies:
-  - acquia_cms_common:acquia_cms_common
   - acquia_cms_image:acquia_cms_image
   - address:address
   - drupal:path
-  - scheduler:scheduler
   - drupal:telephone
   - field_group:field_group
   - geocoder:geocoder_address
   - geocoder:geocoder_geofield
+  - scheduler_content_moderation_integration:scheduler_content_moderation_integration
+  - schema_metatag:schema_place
+  - workbench_email:workbench_email
