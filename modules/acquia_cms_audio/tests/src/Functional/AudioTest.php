@@ -33,14 +33,6 @@ class AudioTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
-    'ckeditor5',
-    'acquia_cms_audio',
-  ];
-
-  /**
-   * {@inheritdoc}
-   */
   public function testAudio() : void {
     $this->drupalLogin($this->rootUser);
 
