@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c713502028cefeba59de6fa716555347",
+    "content-hash": "5277338578cbfffce29c8299bacc8736",
     "packages": [
         {
             "name": "acquia/acquia-cms-starterkit",
@@ -83,16 +83,16 @@
         },
         {
             "name": "acquia/cohesion",
-            "version": "8.1.0",
+            "version": "8.2.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/cohesion.git",
-                "reference": "491655f32ebec13f58c50f57783301086deaff5c"
+                "reference": "579f1cce739d0352304aaf0fac3831ba1ecac1ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/cohesion/zipball/491655f32ebec13f58c50f57783301086deaff5c",
-                "reference": "491655f32ebec13f58c50f57783301086deaff5c",
+                "url": "https://api.github.com/repos/acquia/cohesion/zipball/579f1cce739d0352304aaf0fac3831ba1ecac1ea",
+                "reference": "579f1cce739d0352304aaf0fac3831ba1ecac1ea",
                 "shasum": ""
             },
             "require": {
@@ -140,22 +140,22 @@
             ],
             "description": "Site Studio",
             "support": {
-                "source": "https://github.com/acquia/cohesion/tree/8.1.0"
+                "source": "https://github.com/acquia/cohesion/tree/8.2.0-beta2"
             },
-            "time": "2025-03-06T15:09:08+00:00"
+            "time": "2025-07-11T13:43:36+00:00"
         },
         {
             "name": "acquia/cohesion-theme",
-            "version": "8.1.0",
+            "version": "8.2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/cohesion-theme.git",
-                "reference": "04d3bbde7cacb942fb2c2451380dab9b7b9a0bdc"
+                "reference": "3f7dc7c254f8f033f39f6637fd3dc34916336563"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/cohesion-theme/zipball/04d3bbde7cacb942fb2c2451380dab9b7b9a0bdc",
-                "reference": "04d3bbde7cacb942fb2c2451380dab9b7b9a0bdc",
+                "url": "https://api.github.com/repos/acquia/cohesion-theme/zipball/3f7dc7c254f8f033f39f6637fd3dc34916336563",
+                "reference": "3f7dc7c254f8f033f39f6637fd3dc34916336563",
                 "shasum": ""
             },
             "type": "drupal-theme",
@@ -173,9 +173,9 @@
             "description": "Site Studio minimal theme",
             "support": {
                 "issues": "https://github.com/acquia/cohesion-theme/issues",
-                "source": "https://github.com/acquia/cohesion-theme/tree/8.1.0"
+                "source": "https://github.com/acquia/cohesion-theme/tree/8.2.x"
             },
-            "time": "2025-03-06T15:09:13+00:00"
+            "time": "2025-07-31T12:51:03+00:00"
         },
         {
             "name": "acquia/drupal-environment-detector",
@@ -2829,8 +2829,8 @@
                 "reference": "69ace00134a6515d4b29224496aa1b342777d17a"
             },
             "require": {
-                "acquia/cohesion": "~7.4.0 || ~7.5.0 || ~8.0.0 || ~8.1.0",
-                "acquia/cohesion-theme": "~7.4.0 || ~7.5.0 || ~8.0.0 || ~8.1.0",
+                "acquia/cohesion": "~7.4.0 || ~7.5.0 || ~8.0.0 || ~8.1.0 || ~8.2.0",
+                "acquia/cohesion-theme": "~7.4.0 || ~7.5.0 || ~8.0.0 || ~8.1.0 || ~8.2.0",
                 "drupal/collapsiblock": "^4.0",
                 "drupal/node_revision_delete": "^2.0",
                 "drupal/responsive_preview": "^2.1",
@@ -8294,28 +8294,28 @@
         },
         {
             "name": "drupal/sitestudio_gin",
-            "version": "1.0.3",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/sitestudio_gin.git",
-                "reference": "1.0.3"
+                "reference": "1.0.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/sitestudio_gin-1.0.3.zip",
-                "reference": "1.0.3",
-                "shasum": "c509c64a0770eeaa3b0b6a4dd5e2af2d512f9699"
+                "url": "https://ftp.drupal.org/files/projects/sitestudio_gin-1.0.6.zip",
+                "reference": "1.0.6",
+                "shasum": "2770499e504cce333d359c5f807694872545c2df"
             },
             "require": {
                 "acquia/cohesion": "^6.7.0 || ^7 || ^8",
                 "drupal/core": "^8 || ^9 || ^10 || ^11",
-                "drupal/gin": "^3.0@rc"
+                "drupal/gin": "^3.0 || ^4.0 || ^5"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.3",
-                    "datestamp": "1729211771",
+                    "version": "1.0.6",
+                    "datestamp": "1753959365",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8331,6 +8331,10 @@
                     "name": "Acquia Engineering",
                     "homepage": "https://www.acquia.com",
                     "role": "Maintainer"
+                },
+                {
+                    "name": "mandclu",
+                    "homepage": "https://www.drupal.org/user/52136"
                 },
                 {
                     "name": "pavlosdan",
@@ -21660,8 +21664,7 @@
         "drupal/acquia_cms_site_studio": 20,
         "drupal/acquia_cms_starter": 20,
         "drupal/acquia_cms_toolbar": 20,
-        "drupal/acquia_cms_tour": 20,
-        "drupal/gin": 5
+        "drupal/acquia_cms_tour": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
