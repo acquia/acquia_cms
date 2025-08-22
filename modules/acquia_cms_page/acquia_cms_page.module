@@ -1,0 +1,28 @@
+
+<?php
+
+/**`
+ * @file
+ * acquia_cms_page.module
+ */
+
+/**
+ * Implements hook_acquia_cms_page_modules_installed().
+ */
+function acquia_cms_page_modules_installed($modules, $is_syncing) {
+  if($is_syncing) {
+    return;
+  }
+  // Update the label and description of the 'body' field for 'page' content type
+  // if the 'acquia_cms_site_studio' module is installed.
+  // This is to ensure that the field is correctly labeled for search purposes.
+  if(in_array('acquia_cms_site_studio', $modules)) {
+    $config_factory = Drupal::service('config.factory');
+    $config = $config_factory->getEditable('field.field.node.page.body');
+    if ($config) {
+      $config->set('label', 'Search Description')
+        ->set('description', 'A short description or teaser which will be displayed in search results.')
+        ->save();
+    }
+  }
+}
