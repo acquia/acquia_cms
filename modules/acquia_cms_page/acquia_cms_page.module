@@ -10,7 +10,7 @@
  * Implements hook_acquia_cms_page_modules_installed().
  */
 function acquia_cms_page_modules_installed($modules, $is_syncing) {
-  if($is_syncing) {
+  if ($is_syncing) {
     return;
   }
   // Update the label and description of the 'body' field for 'page' content type
