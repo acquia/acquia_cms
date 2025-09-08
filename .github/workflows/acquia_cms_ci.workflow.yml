@@ -195,7 +195,7 @@ jobs:
           ../orca/bin/ci/after_script.sh
   isolated_tests:
     if: ${{ github.event_name == 'pull_request' }}
-    name: acquia_cms (${{ matrix.modules }}) on (${{ matrix.orca-job }})
+    name: ${{ matrix.modules }} on (${{ matrix.orca-job }})
     runs-on: ubuntu-24.04
     env:
       # Set ORCA related environment variables.
