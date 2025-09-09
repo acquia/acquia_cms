@@ -61,16 +61,8 @@ function acquia_cms_site_studio_install($is_syncing) {
       }
     }
 
-    $config_factory = \Drupal::service('config.factory');
     // If module getting install stand alone.
     if (!InstallerKernel::installationAttempted()) {
-      // Trigger save on page body field to update it.
-      if ($module_handler->moduleExists('acquia_cms_page')) {
-        $config = $config_factory->getEditable('field.field.node.page.body');
-        if ($config) {
-          $config->save();
-        }
-      }
       // Update content views on module install.
       if ($module_handler->moduleExists('acquia_cms_search')) {
         if ($module_handler->moduleExists('acquia_cms_article')) {

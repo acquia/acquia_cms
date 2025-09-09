@@ -4,19 +4,14 @@ type: module
 description: 'Provides functionality for Progressively Decoupled and Purely Headless sites using Node and Next JS.'
 core_version_requirement: ^10 || ^11
 dependencies:
+  - acquia_cms_common:acquia_cms_common
   - acquia_cms_tour:acquia_cms_tour
   - consumers:consumers
-  - drupal:block
-  - drupal:node
-  - drupal:rest
-  - drupal:taxonomy
-  - entity_clone:entity_clone
   - jsonapi_extras:jsonapi_extras
   - jsonapi_menu_items:jsonapi_menu_items
   - next:next_jsonapi
   - openapi_jsonapi:openapi_jsonapi
   - openapi_ui_redoc:openapi_ui_redoc
   - openapi_ui_swagger:openapi_ui_swagger
+  - drupal:rest
   - simple_oauth:simple_oauth
-test_dependencies:
-  - acquia_cms_toolbar:acquia_cms_toolbar
