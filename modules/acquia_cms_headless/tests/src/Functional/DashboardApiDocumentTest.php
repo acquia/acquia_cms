@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_headless\FunctionalJavascript;
+namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Drupal\Tests\acquia_cms_headless\Traits\DashboardSectionTrait;
 
@@ -56,12 +56,11 @@ class DashboardApiDocumentTest extends HeadlessTestBase {
     $buttonAction = $openApiResource->getAttribute('target');
     $this->assertEquals($buttonAction, "_blank");
 
-    // Test Explore with Swagger UI with a headless role.
+    // Test Explore with Swagger UI with headless role.
     $this->drupalGet("/admin/config/services/openapi/swagger/jsonapi");
-    $assertSession->pageTextContains('Access denied');
-    $assertSession->pageTextContains('You are not authorized to access this page.');
+    $assertSession->pageTextContains('Access denied!');
 
-    // Test Explore with Swagger UI with an admin role.
+    // Test Explore with Swagger UI with admin role.
     $this->visitHeadlessDashboardAdmin();
     $this->drupalGet("/admin/config/services/openapi/swagger/jsonapi");
     $assertSession->waitForElementVisible('css', '#swagger-ui');

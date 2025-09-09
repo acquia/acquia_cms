@@ -19,11 +19,6 @@ function acquia_cms_headless_ui_install($is_syncing) {
     // Update configurations for the Headless UI.
     $headlessUi->updateHeadlessUiConfig(TRUE);
 
-    $role = \Drupal::entityTypeManager()->getStorage('user_role')->load('headless');
-    $role->grantPermission('view any unpublished content');
-    $role->grantPermission('view latest version');
-    $role->save();
-
     // Clear caches to make sure updates are reflected.
     drupal_flush_all_caches();
   }

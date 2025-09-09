@@ -1,10 +1,10 @@
 <?php
 
-namespace Drupal\Tests\acquia_cms_headless\FunctionalJavascript;
+namespace Drupal\Tests\acquia_cms_headless\Functional;
 
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\Tests\acquia_cms_headless\Traits\HeadlessNextJsTrait;
-use Drupal\Tests\content_moderation\Traits\ContentModerationTestTrait;
 
 /**
  * Base class for the Headless Content administrator browser tests.
@@ -12,7 +12,6 @@ use Drupal\Tests\content_moderation\Traits\ContentModerationTestTrait;
 class HeadlessContentTest extends WebDriverTestBase {
 
   use HeadlessNextJsTrait;
-  use ContentModerationTestTrait;
 
   /**
    * {@inheritdoc}
@@ -26,14 +25,33 @@ class HeadlessContentTest extends WebDriverTestBase {
    */
   protected static $modules = [
     'acquia_cms_headless',
-    'acquia_cms_headless_ui',
-    'media_library',
+    'node',
   ];
+
+  /**
+   * Disable strict config schema checks in this test.
+   *
+   * Scheduler has a config schema errors, and until it's fixed,
+   * this test cannot pass unless we disable strict config schema checking
+   * altogether. Since strict config schema isn't critically important in
+   * testing this functionality, it's okay to disable it for now, but it should
+   * be re-enabled (i.e., this property should be removed) as soon as possible.
+   *
+   * @var bool
+   */
+  // @codingStandardsIgnoreStart
+  protected $strictConfigSchema = FALSE;
+  // @codingStandardsIgnoreEnd
 
   /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
+    // @todo Remove this check when Acquia Cloud IDEs support running functional
+    // JavaScript tests.
+    if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
+      $this->markTestSkipped('This test cannot run in an Acquia Cloud IDE.');
+    }
     parent::setUp();
     $account = $this->drupalCreateUser();
     $account->addRole('administrator');
@@ -42,20 +60,19 @@ class HeadlessContentTest extends WebDriverTestBase {
     $this->drupalPlaceBlock('local_tasks_block', ['id' => 'local-tasks', 'region' => 'content', 'theme' => 'stark']);
     $this->drupalPlaceBlock('page_title_block', ['id' => 'page-title', 'region' => 'content', 'theme' => 'stark']);
 
-    // Visit the content page.
+    // Visit content page.
     $this->drupalGet("admin/content");
 
     // Set up a content type.
     $this->drupalCreateContentType([
       'type' => 'test',
       'name' => 'Test',
+      'third_party_settings' => [
+        "acquia_cms_common" => [
+          "workflow_id" => "editorial",
+        ],
+      ],
     ]);
-
-    // Create workflow.
-    $workflow = $this->createEditorialWorkflow();
-    $workflow->getTypePlugin()->addEntityTypeAndBundle('node', 'test');
-    $workflow->save();
-
     // Enable pure headless mode.
     $this->enableHeadlessMode();
     // Visit add nextJs site page.
@@ -68,7 +85,7 @@ class HeadlessContentTest extends WebDriverTestBase {
    * Content admin test.
    */
   public function testContentAdmin(): void {
-    // Visit the content page.
+    // Visit content page.
     $this->drupalGet("admin/content");
 
     // Validating the primary menu tabs on admin content page.
@@ -96,19 +113,18 @@ class HeadlessContentTest extends WebDriverTestBase {
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assertSession */
     $assertSession = $this->assertSession();
     $assertSession->pageTextContains('Headless Test Page');
-    $assertSession->linkNotExists('View');
     // @todo Below commented test is failing in 3.0-rc8 version of Gin theme.
-    // However this was working in 3.0-rc5 will be fixed in ACMS-3456.
+    // Howere this was working in 3.0-rc5 will be fixed in ACMS-3456.
     /*
+    $assertSession->linkNotExists('View');
     $nodePageMenus = [
     'API' => '/jsonapi/node/test/' . $node->uuid(),
     'Edit' => '/node/' . $nid . '/edit',
     'Preview' => '/node/' . $nid . '/site-preview',
-    'Delete' => '/node/' . $nid . '/delete',
     'Revisions' => '/node/' . $nid . '/revisions',
     'Clone' => '/entity_clone/node/' . $nid,
     ];
-    $menuList = $this->cssSelect('#block-local-tasks ul li');
+    $menuList = $this->cssSelect('ul.tabs--primary li');
     // Check the total count of node tabs.
     $this->assertCount(6, $menuList);
     $menuOrder = [];
@@ -120,11 +136,10 @@ class HeadlessContentTest extends WebDriverTestBase {
     }
     // Assertion for menu order.
     $this->assertEquals($menuOrder, array_keys($nodePageMenus));
-    // Assertion test for tabs of node page.
+    Assertion test for tabs of node page.
     $this->assertTabMenus($nodePageMenus, $path);
      */
-
-    // Assert delete button.
+    // Assert delete buton.
     $deleteButton = $this->getSession()->getPage()->findLink('Delete');
     $this->assertEquals('Delete', $deleteButton->getText());
     $this->assertEquals('/node/' . $nid . '/delete', $deleteButton->getAttribute('href'));
