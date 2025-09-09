@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
+use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -25,9 +26,29 @@ class HeadlessSubrequestsTest extends BrowserTestBase {
   ];
 
   /**
+   * Disable strict config schema checks in this test.
+   *
+   * Scheduler has a config schema errors, and until it's fixed,
+   * this test cannot pass unless we disable strict config schema checking
+   * altogether. Since strict config schema isn't critically important in
+   * testing this functionality, it's okay to disable it for now, but it should
+   * be re-enabled (i.e., this property should be removed) as soon as possible.
+   *
+   * @var bool
+   */
+  // @codingStandardsIgnoreStart
+  protected $strictConfigSchema = FALSE;
+  // @codingStandardsIgnoreEnd
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
+    // @todo Remove this check when Acquia Cloud IDEs support running functional
+    // JavaScript tests.
+    if (AcquiaDrupalEnvironmentDetector::isAhIdeEnv()) {
+      $this->markTestSkipped('This test cannot run in an Acquia Cloud IDE.');
+    }
     parent::setUp();
     $this->drupalCreateContentType([
       'type' => 'test',

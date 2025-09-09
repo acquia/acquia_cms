@@ -3,7 +3,7 @@
 namespace Drupal\acquia_cms_headless\Service;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
-use Drupal\acquia_cms_headless\Traits\PasswordGeneratorTrait;
+use Drupal\acquia_cms_common\Traits\PasswordGeneratorTrait;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Component\Utility\Crypt;

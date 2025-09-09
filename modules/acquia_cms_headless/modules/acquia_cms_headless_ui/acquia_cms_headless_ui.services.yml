@@ -3,7 +3,6 @@ services:
     class: 'Drupal\acquia_cms_headless_ui\EventSubscriber\ConfigSubscriber'
     arguments:
       - '@plugin.manager.menu.local_task'
-      - '@config.factory'
     tags:
       - { name: event_subscriber }
 
