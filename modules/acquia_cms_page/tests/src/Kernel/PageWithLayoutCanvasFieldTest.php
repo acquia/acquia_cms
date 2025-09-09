@@ -22,8 +22,6 @@ class PageWithLayoutCanvasFieldTest extends FieldKernelTestBase {
     'media',
     'acquia_cms_page',
     'acquia_cms_site_studio',
-    'cohesion_elements',
-    'entity_reference_revisions',
   ];
 
   /**
@@ -44,9 +42,9 @@ class PageWithLayoutCanvasFieldTest extends FieldKernelTestBase {
    * {@inheritdoc}
    */
   public function setUp(): void {
+    parent::setUp();
     // Revisit this test again as it's not working as expected.
     $this->markTestSkipped("Test is not working as expected. Hence, skipped.");
-    parent::setUp();
     $this->installEntitySchema('field_config');
     $this->fieldDefinition = $this->container->get('entity_type.manager')->getStorage('field_config');
   }

@@ -83,13 +83,6 @@ class ConfigEventsSubscriber implements EventSubscriberInterface {
               _acquia_cms_common_update_view_display_options_style('article_cards', 'default', 'view_tpl_article_cards_slider');
               break;
 
-            case 'field.field.node.page.body':
-              _acquia_cms_common_update_page_configurations('field.field.node.page.body', [
-                'label' => 'Search Description',
-                'description' => 'A short description or teaser which will be displayed in search results.',
-              ]);
-              break;
-
             case 'core.entity_form_display.node.page.default':
               _acquia_cms_common_update_page_configurations('core.entity_form_display.node.page.default', [
                 'content.field_layout_canvas' => [
