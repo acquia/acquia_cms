@@ -320,25 +320,6 @@ function acquia_cms_common_modules_installed($modules, $is_syncing) {
       ];
       $roles_to_update = array_merge($roles_to_update, array_diff($roles, $roles_to_update));
     }
-    if (in_array('acquia_cms_toolbar', $modules)) {
-      $roles = [
-        'content_administrator',
-        'content_author',
-        'content_editor',
-        'developer',
-        'user_administrator',
-        'site_builder',
-      ];
-      $roles_to_update = array_merge($roles_to_update, array_diff($roles, $roles_to_update));
-    }
-    if (in_array('acquia_cms_tour', $modules)) {
-      $roles = [
-        'content_administrator',
-        'content_author',
-        'content_editor',
-      ];
-      $roles_to_update = array_merge($roles_to_update, array_diff($roles, $roles_to_update));
-    }
     if (in_array('shield', $modules) || in_array('honeypot', $modules) || in_array('recaptcha', $modules)) {
       $roles = [
         'user_administrator',

@@ -1,11 +1,13 @@
 <?php
 
-namespace Drupal\acquia_cms_image\Functional;
+namespace Drupal\Tests\acquia_cms_image\Functional;
 
 use Drupal\Tests\BrowserTestBase;
 
 /**
- * Parent class for Field API unit tests.
+ * Tests the image formatter for media type image.
+ *
+ * @group acquia_cms_image
  */
 class ImageFormatterTest extends BrowserTestBase {
 

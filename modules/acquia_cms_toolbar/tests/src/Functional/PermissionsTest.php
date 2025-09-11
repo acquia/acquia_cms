@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\tests\acquia_cms_toolbar\Functional;
+namespace Drupal\Tests\acquia_cms_toolbar\Functional;
 
 use Drupal\Tests\BrowserTestBase;
 

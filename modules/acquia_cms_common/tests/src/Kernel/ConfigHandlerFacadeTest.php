@@ -8,6 +8,7 @@ use Drupal\KernelTests\KernelTestBase;
 /**
  * Test the configuration and settings handling.
  *
+ * @group acquia_cms_common
  * @coversDefaultClass Drupal\acquia_cms_common\Facade\ConfigHandlerFacade
  */
 class ConfigHandlerFacadeTest extends KernelTestBase {

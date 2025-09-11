@@ -8,6 +8,11 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\media\MediaInterface;
 
+/**
+ * Tests the Site Logo functionality of the Acquia CMS Image module.
+ *
+ * @group acquia_cms_image
+ */
 class SiteLogoTest extends KernelTestBase {
 
   /**
