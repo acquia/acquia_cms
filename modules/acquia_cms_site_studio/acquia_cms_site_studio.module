@@ -12,6 +12,7 @@ use Drupal\acquia_cms_site_studio\Helper\SiteStudioPermissionHelper;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\editor\EditorInterface;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
@@ -283,5 +284,23 @@ function acquia_cms_site_studio_library_info_alter(array &$libraries, string $mo
   // It causes issue with site studio template.
   if ($module == "collapsiblock" && isset($libraries['core']['css'])) {
     unset($libraries['core']['css']);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ *
+ * The permission to developer role to use a newly added text format.
+ *
+ * @param \Drupal\editor\EditorInterface $editor
+ *   The filter format entity.
+ */
+function acquia_cms_site_studio_editor_insert(EditorInterface $editor) {
+  // If the filter format entity isn't syncing, then update it.
+  // Otherwise, no action is needed.
+  if (!$editor->isSyncing()) {
+    // Add text format permission to a developer role.
+    $role = \Drupal::entityTypeManager()->getStorage('user_role')->load('developer');
+    $role->grantPermission('use text format ' . $editor->id())->save(TRUE);
   }
 }
