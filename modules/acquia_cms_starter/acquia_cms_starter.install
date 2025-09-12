@@ -75,6 +75,9 @@ function acquia_cms_starter_modules_installed(array $modules, $is_syncing) {
     // Enable demo content if page and site studio modules are enabled.
     $module_handler = \Drupal::moduleHandler();
     if ($module_handler->moduleExists('acquia_cms_page') && $module_handler->moduleExists('acquia_cms_site_studio')) {
+      // We need to rebuild the container to ensure content get imported
+      // without any error with Drupal Core >= 11.2.
+      \Drupal::service('kernel')->rebuildContainer();
       \Drupal::service('module_installer')->install(['acquia_cms_site_studio_content']);
     }
   }
