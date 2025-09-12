@@ -5,7 +5,7 @@
  * Contains install-time code for the Acquia CMS profile.
  */
 
-use Drupal\acquia_cms_site_studio\Facade\ConfigHandlerFacade;
+use Drupal\acquia_cms_common\Facade\ConfigHandlerFacade;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\cohesion_sync\Event\SiteStudioSyncFilesEvent;
 use Drupal\cohesion_sync\EventSubscriber\Import\SiteStudioSyncFilesSubscriber;
@@ -133,6 +133,13 @@ function acquia_cms_site_studio_install($is_syncing) {
       $role->grantPermission('use text format ' . $editor->id())->save(TRUE);
     }
   }
+}
+
+/**
+ * Implements hook_module_preinstall().
+ */
+function acquia_cms_site_studio_module_preinstall($module) {
+  \Drupal::service('acquia_cms_common.utility')->setModulePreinstallTriggered($module);
 }
 
 /**
