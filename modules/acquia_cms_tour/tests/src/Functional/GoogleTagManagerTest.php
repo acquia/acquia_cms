@@ -10,7 +10,7 @@ use Drupal\Tests\BrowserTestBase;
  * @group acquia_cms
  * @group acquia_cms_tour
  */
-class GoogleTagManager extends BrowserTestBase {
+class GoogleTagManagerTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
