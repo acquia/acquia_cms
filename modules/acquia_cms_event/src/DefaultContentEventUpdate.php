@@ -46,11 +46,11 @@ class DefaultContentEventUpdate {
   public function updateEventNode(NodeInterface $entity, array $updated_data) {
 
     $field_event_start = new \DateTime($entity->get('field_event_start')->value);
-    $field_event_end = new \DateTime($entity->get('field_event_end')->value);
     $field_door_time = new \DateTime($entity->get('field_door_time')->value);
 
     $entity->set('field_event_start', date('Y-m-d\T' . $field_event_start->format('H:i:s'), strtotime($updated_data['start_date'])));
     if (!empty($updated_data['end_date']) && !empty($entity->get('field_event_end')->date)) {
+      $field_event_end = new \DateTime($entity->get('field_event_end')->value);
       $entity->set('field_event_end', date('Y-m-d\T' . $field_event_end->format('H:i:s'), strtotime($updated_data['end_date'])));
 
       // Updating the duration field based on start and end date of event.
