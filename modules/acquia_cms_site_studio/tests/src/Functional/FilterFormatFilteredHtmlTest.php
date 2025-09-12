@@ -10,7 +10,7 @@ use Drupal\Tests\BrowserTestBase;
  * @group acquia_cms
  * @group acquia_cms_site_studio
  */
-class FilterFormatCohesionTest extends BrowserTestBase {
+class FilterFormatFilteredHtmlTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
@@ -44,11 +44,13 @@ class FilterFormatCohesionTest extends BrowserTestBase {
    */
   public function testFilterBlackListHtmlTags() {
     $assert_session = $this->assertSession();
-    $account = $this->drupalCreateUser(['administer filters']);
+    $account = $this->drupalCreateUser();
+    $account->addRole('administrator');
+    $account->save();
     $this->drupalLogin($account);
 
     // Visit the filter page.
-    $this->drupalGet('/admin/config/content/formats/manage/cohesion');
+    $this->drupalGet('/admin/config/content/formats/manage/filtered_html');
     $assert_session->statusCodeEquals(200);
     $filter_element = $assert_session->elementExists('css', '#edit-filters-black-list-html-tags-status');
     $this->assertFalse($filter_element->isChecked(), 'Expect uncheck, but found checked.');

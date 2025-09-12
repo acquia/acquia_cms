@@ -5,7 +5,7 @@
  * Contains install-time code for the Acquia CMS profile.
  */
 
-use Drupal\acquia_cms_site_studio\Facade\ConfigHandlerFacade;
+use Drupal\acquia_cms_common\Facade\ConfigHandlerFacade;
 use Drupal\cohesion\Controller\AdministrationController;
 use Drupal\cohesion_sync\Event\SiteStudioSyncFilesEvent;
 use Drupal\cohesion_sync\EventSubscriber\Import\SiteStudioSyncFilesSubscriber;
@@ -121,18 +121,14 @@ function acquia_cms_site_studio_install($is_syncing) {
       'sitestudio_config_management',
     ];
     $module_installer->install($modules_to_install);
-
-    // Add text format permission to a developer role.
-    $role = $entity_type_manager->getStorage('user_role')->load('developer');
-    $editors = $entity_type_manager->getStorage('editor')->loadMultiple([
-      'cohesion',
-      'filtered_html',
-      'full_html',
-    ]);
-    foreach($editors as $editor) {
-      $role->grantPermission('use text format ' . $editor->id())->save(TRUE);
-    }
   }
+}
+
+/**
+ * Implements hook_module_preinstall().
+ */
+function acquia_cms_site_studio_module_preinstall($module) {
+  \Drupal::service('acquia_cms_common.utility')->setModulePreinstallTriggered($module);
 }
 
 /**

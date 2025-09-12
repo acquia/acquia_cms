@@ -2,13 +2,13 @@
 
 namespace Drupal\Tests\acquia_cms_site_studio\Functional;
 
-use Drupal\Tests\acquia_cms_site_studio\Traits\PermissionsTrait;
+use Drupal\Tests\acquia_cms_common\Traits\PermissionsTrait;
 use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests basic, broad permissions of the user roles included with Acquia CMS.
  *
- * @group acquia_cms_site_studio
+ * @group acquia_cms_common
  * @group acquia_cms
  * @group risky
  */
