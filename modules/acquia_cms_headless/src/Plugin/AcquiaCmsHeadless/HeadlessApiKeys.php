@@ -2,17 +2,11 @@
 
 namespace Drupal\acquia_cms_headless\Plugin\AcquiaCmsHeadless;
 
-use Drupal\acquia_cms_headless\Service\StarterkitNextjsService;
 use Drupal\acquia_cms_tour\Form\AcquiaCmsDashboardBase;
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\InfoParserInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
-use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
-use Drupal\Core\Utility\LinkGeneratorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -113,7 +107,7 @@ class HeadlessApiKeys extends AcquiaCmsDashboardBase {
         'data' => $this->t('Secret'),
         'specifier' => 'secret',
       ],
-      $this->t('Operations'),
+      'operations' => $this->t('Operations'),
     ];
   }
 

@@ -7,6 +7,11 @@ use Drupal\Tests\BrowserTestBase;
 
 /**
  * Base class for the Headless Content administrator browser tests.
+ *
+ * @group acquia_cms
+ * @group acquia_cms_headless
+ * @group medium_risk
+ * @group push
  */
 class HeadlessSubrequestsTest extends BrowserTestBase {
 

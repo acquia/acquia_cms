@@ -8,6 +8,11 @@ use Drupal\Tests\acquia_cms_headless\Traits\HeadlessNextJsTrait;
 
 /**
  * Base class for the Headless Content administrator browser tests.
+ *
+ * @group acquia_cms
+ * @group acquia_cms_headless
+ * @group medium_risk
+ * @group push
  */
 class HeadlessContentTest extends WebDriverTestBase {
 
@@ -90,12 +95,12 @@ class HeadlessContentTest extends WebDriverTestBase {
 
     // Validating the primary menu tabs on admin content page.
     $primaryTabs = [
-      'Content' => '/admin/content',
-      'Files' => '/admin/content/files',
-      'Media' => '/admin/content/media',
+      'Content' => base_path() . 'admin/content',
+      'Files' => base_path() .  'admin/content/files',
+      'Media' => base_path() . 'admin/content/media',
     ];
     // Assertion test for tabs of content page.
-    $this->assertTabMenus($primaryTabs, "admin/content");
+    $this->assertTabMenus($primaryTabs, base_path() . "admin/content");
 
     // Create test node.
     $node = $this->drupalCreateNode([
@@ -142,7 +147,7 @@ class HeadlessContentTest extends WebDriverTestBase {
     // Assert delete buton.
     $deleteButton = $this->getSession()->getPage()->findLink('Delete');
     $this->assertEquals('Delete', $deleteButton->getText());
-    $this->assertEquals('/node/' . $nid . '/delete', $deleteButton->getAttribute('href'));
+    $this->assertEquals(base_path() . 'node/' . $nid . '/delete', $deleteButton->getAttribute('href'));
   }
 
   /**
