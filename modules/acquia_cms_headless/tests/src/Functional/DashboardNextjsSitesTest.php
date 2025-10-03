@@ -55,14 +55,15 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
     // Test API Keys section exists, get API Keys section.
     $nextjsSitesFieldset = $this->getSection();
 
+    $basePath = base_path();
     // Test create new consumer button link has destination.
-    $this->assertButtonLink($nextjsSitesFieldset, '/admin/config/services/next/sites/add?destination=/admin/headless/dashboard');
+    $this->assertButtonLink($nextjsSitesFieldset, "{$basePath}admin/config/services/next/sites/add?destination={$basePath}admin/headless/dashboard");
 
     // Click on Add Next.js site button.
     $this->testAddNextjsSite($nextjsSitesFieldset);
 
     // Test table body exist and has data in same order.
-    $this->drupalGet("/admin/headless/dashboard");
+    $this->drupalGet("admin/headless/dashboard");
     $this->assertEquals('No next.js sites currently exist.', $this->getTableBodyColumn(0)->getText());
 
   }
@@ -81,8 +82,9 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
     // Test API Keys section exists, get API Keys section.
     $nextjsSitesFieldset = $this->getSection();
 
+    $basePath = base_path();
     // Test create new consumer button link has destination.
-    $this->assertButtonLink($nextjsSitesFieldset, '/admin/config/services/next/sites/add?destination=/admin/headless/dashboard');
+    $this->assertButtonLink($nextjsSitesFieldset, "{$basePath}/admin/config/services/next/sites/add?destination={$basePath}admin/headless/dashboard");
 
     // Create Next.js Site using administrator user.
     $this->testAddNextjsSiteAdmin($nextjsSitesFieldset);
@@ -124,11 +126,12 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
    * {@inheritdoc}
    */
   private function testAddNextjsSite(mixed $nextjsSitesFieldset): void {
+    $basePath = base_path();
     $this->assertSession()->elementExists('named', ['link', 'Add Next.js site'], $nextjsSitesFieldset)->click();
     $page = $this->getSession()->getPage();
     $this->assertNotEmpty($page);
     $this->assertSession()->pageTextContains('Access denied!');
-    $expectedUrl = $this->baseUrl . '/admin/config/services/next/sites/add?destination=/admin/headless/dashboard';
+    $expectedUrl = $this->baseUrl . "/admin/config/services/next/sites/add?destination={$basePath}admin/headless/dashboard";
     $this->assertSame($expectedUrl, $this->getSession()->getCurrentUrl());
   }
 
@@ -161,14 +164,30 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
     $this->assertEquals('Environment variables', $nextjsSitesModal->find('css', '.ui-dialog-title')->getText());
     $nextjsSitesModalContent = $nextjsSitesModal->find('css', '#drupal-modal');
     $this->assertNotEmpty($nextjsSitesModalContent);
-    $assertSession->elementExists('named', ['content', 'Copy and paste these values in your .env or .env.local files. To learn more about required and optional environment variables, refer to the documentation.'], $nextjsSitesModalContent);
+    $assertSession->elementExists('named', [
+      'content',
+      'Copy and paste these values in your .env or .env.local files.
+      To learn more about required and optional environment variables, refer to the documentation.',
+    ], $nextjsSitesModalContent);
     $assertSession->elementExists('named', ['content', '# See https://next-drupal.org/docs/environment-variables'], $nextjsSitesModalContent);
     // Required section.
-    $assertSession->elementExists('named', ['content', 'NEXT_PUBLIC_DRUPAL_BASE_URL=' . $this->baseUrl], $nextjsSitesModalContent);
-    $assertSession->elementExists('named', ['content', 'NEXT_IMAGE_DOMAIN=' . str_replace(":8080", "", str_replace("http://", "", $this->baseUrl))], $nextjsSitesModalContent);
+    $assertSession->elementExists('named', [
+      'content',
+      'NEXT_PUBLIC_DRUPAL_BASE_URL=' . $this->baseUrl,
+    ], $nextjsSitesModalContent);
+    $assertSession->elementExists('named', [
+      'content',
+      'NEXT_IMAGE_DOMAIN=' . str_replace(":8080", "",
+        str_replace("http://", "", $this->baseUrl)),
+    ], $nextjsSitesModalContent);
     // Authentication section.
-    $assertSession->elementExists('named', ['content', 'DRUPAL_CLIENT_ID=Retrieve this from /admin/config/services/consumer'], $nextjsSitesModalContent);
-    $assertSession->elementExists('named', ['content', 'DRUPAL_CLIENT_SECRET=Retrieve this from /admin/config/services/consumer'], $nextjsSitesModalContent);
+    $assertSession->elementExists('named', [
+      'content',
+      'DRUPAL_CLIENT_ID=Retrieve this from /admin/config/services/consumer',
+    ], $nextjsSitesModalContent);
+    $assertSession->elementExists('named', [
+      'content', 'DRUPAL_CLIENT_SECRET=Retrieve this from /admin/config/services/consumer',
+    ], $nextjsSitesModalContent);
     // Required for Preview Mode.
     $assertSession->elementExists('named', ['content', 'DRUPAL_PREVIEW_SECRET=preview_secrete'], $nextjsSitesModalContent);
     $nextjsSitesModal->find('css', '.ui-dialog-titlebar-close')->click();
@@ -243,7 +262,10 @@ class DashboardNextjsSitesTest extends HeadlessTestBase {
     $this->assertEquals('Generate New Preview Secret', $nextjsSitesModal->find('css', '.ui-dialog-title')->getText());
     $nextjsSitesModalContent = $nextjsSitesModal->find('css', '#drupal-modal');
     $this->assertNotEmpty($nextjsSitesModalContent);
-    $assertSession->elementExists('named', ['content', 'A preview secret has been generated for the headless next.js site:'], $nextjsSitesModalContent);
+    $assertSession->elementExists('named', [
+      'content',
+      'A preview secret has been generated for the headless next.js site:',
+    ], $nextjsSitesModalContent);
     $assertSession->elementExists('named', ['content', 'This value can also be retrieved from the next.js site entity.'], $nextjsSitesModalContent);
     $nextjsSitesModal->find('css', '.ui-dialog-titlebar-close')->click();
   }
