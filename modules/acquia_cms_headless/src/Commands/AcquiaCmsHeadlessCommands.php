@@ -116,7 +116,7 @@ class AcquiaCmsHeadlessCommands extends DrushCommands {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function logMessage(NextSite $site, string $file_path = NULL) {
+  protected function logMessage(NextSite $site, ?string $file_path = NULL) {
     $env = $this->starterKit->getEnvironmentVariablesAsString($site);
     if ($file_path) {
       file_put_contents($file_path, $env);

@@ -6,7 +6,7 @@
     "require": {
         "drupal/acquia_cms_common": "^1.9 || ^2.1 || ^3.1",
         "drupal/acquia_cms_tour": "^2.1.8",
-        "drupal/decoupled_router": "2.0.5",
+        "drupal/decoupled_router": "^2.0",
         "drupal/jsonapi_extras": "^3.26",
         "drupal/jsonapi_menu_items": "^1.2",
         "drupal/next": "^2.0",
@@ -16,11 +16,13 @@
         "drupal/restui": "^1.21"
     },
     "require-dev": {
-        "drupal/acquia_claro": "^1.3"
+        "drupal/acquia_claro": "^1.3",
+        "drush/drush": "^12 || ^13"
     },
     "conflict": {
         "drupal/consumers": "<1.16",
-        "drupal/subrequests": "<3.0.12"
+        "drupal/subrequests": "<3.0.12",
+        "drupal/decoupled_router": "<2.0.6"
     },
     "repositories": {
         "assets": {
@@ -53,36 +55,9 @@
                 "drush.services.yml": ">=10"
             }
         },
-        "enable-patching": true,
-        "installer-paths": {
-            "docroot/core": [
-                "type:drupal-core"
-            ],
-            "docroot/libraries/{$name}": [
-                "type:drupal-library",
-                "type:bower-asset",
-                "type:npm-asset"
-            ],
-            "docroot/modules/contrib/{$name}": [
-                "type:drupal-module"
-            ],
-            "docroot/profiles/contrib/{$name}": [
-                "type:drupal-profile"
-            ],
-            "docroot/themes/contrib/{$name}": [
-                "type:drupal-theme"
-            ]
-        },
-        "installer-types": [
-            "bower-asset",
-            "npm-asset"
-        ],
-        "patchLevel": {
-            "drupal/core": "-p2"
-        },
         "patches": {
             "drupal/decoupled_router": {
-                "3111456 - Unable to resolve path on node in other language than default": "https://www.drupal.org/files/issues/2024-07-11/decouple_router-3111456-resolve-language-issue-63--get-translation-re-rolled.patch"
+                "3111456 - Unable to resolve path on node in other language than default": "https://www.drupal.org/files/issues/2025-09-17/decoupled_router-language_issues-3111456-91.patch.patch"
             }
         }
     }

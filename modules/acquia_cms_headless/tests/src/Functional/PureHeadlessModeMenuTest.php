@@ -118,6 +118,9 @@ class PureHeadlessModeMenuTest extends WebDriverTestBase {
     }
   }
 
+  /**
+   * Test content model links.
+   */
   public function testContentModelLinks() {
     // Make sure alias works fine.
     $this->drupalGet('/admin/content-models');

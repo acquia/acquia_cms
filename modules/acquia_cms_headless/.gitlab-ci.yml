@@ -16,6 +16,11 @@ variables:
   _PHPUNIT_CONCURRENT: 1
   _COMPOSER_PATCHES_FILE: 'patches.json'
 
+composer (previous major):
+  variables:
+    # Remove this when PHP 8.1 support is dropped.
+    COMPOSER_EXTRA: "--ignore-platform-req=ext-sodium"
+
 ################
 # DrupalCI GitLabCI template
 ################
