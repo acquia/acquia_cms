@@ -1,57 +1,83 @@
 ################
-# DrupalCI GitLabCI template
-#
-# Gitlab-ci.yml to replicate DrupalCI testing for Contrib
-#
-# With thanks to:
-#   * The GitLab Acceleration Initiative participants
-#   * DrupalSpoons
-################
-
-################
-# Guidelines
-#
-# This template is designed to give any Contrib maintainer everything they need to test, without requiring modification. It is also designed to keep up to date with Core Development automatically through the use of include files that can be centrally maintained.
-#
-# However, you can modify this template if you have additional needs for your project.
-################
-
-################
-# Includes
-#
-# Additional configuration can be provided through includes.
-# One advantage of include files is that if they are updated upstream, the changes affect all pipelines using that include.
-#
-# Includes can be overridden by re-declaring anything provided in an include, here in gitlab-ci.yml
-# https://docs.gitlab.com/ee/ci/yaml/includes.html#override-included-configuration-values
-################
-
-include:
-  ################
-  # DrupalCI includes:
-  # As long as you include this, any future includes added by the Drupal Association will be accessible to your pipelines automatically.
-  # View these include files at https://git.drupalcode.org/project/gitlab_templates/
-  ################
-  - project: $_GITLAB_TEMPLATES_REPO
-    ref: $_GITLAB_TEMPLATES_REF
-    file:
-      - '/includes/include.drupalci.main.yml'
-      - '/includes/include.drupalci.variables.yml'
-      - '/includes/include.drupalci.workflows.yml'
-
-################
 # Pipeline configuration variables
 #
 # These are the variables provided to the Run Pipeline form that a user may want to override.
 #
 # Docs at https://git.drupalcode.org/project/gitlab_templates/-/blob/1.0.x/includes/include.drupalci.variables.yml
 ################
+# variables:
+#   SKIP_ESLINT: '1'
 variables:
-  # Due to drupal/next module dependency, we need to disable it until it's fixed.
-  OPT_IN_TEST_PREVIOUS_MAJOR: 0
-  #WARNING: step_script could not run to completion because the timeout was exceeded. For more control over job
-  # and script timeouts see: https://docs.gitlab.com/ci/runners/configure_runners/#set-script-and-after_script-timeouts
-  OPT_IN_TEST_PREVIOUS_MINOR: 0
+  OPT_IN_TEST_CURRENT: 1
+  OPT_IN_TEST_PREVIOUS_MINOR: 1
+  OPT_IN_TEST_PREVIOUS_MAJOR: 1
   OPT_IN_TEST_NEXT_MINOR: 1
   OPT_IN_TEST_NEXT_MAJOR: 1
-  CORE_PREVIOUS_PHP_MIN: 8.1
+  _PHPUNIT_CONCURRENT: 1
+  _COMPOSER_PATCHES_FILE: 'patches.json'
+
+composer (previous major):
+  variables:
+    # Remove this when PHP 8.1 support is dropped.
+    COMPOSER_EXTRA: "--ignore-platform-req=ext-sodium"
+
+################
+# DrupalCI GitLabCI template
+################
+
+include:
+  ################
+  # DrupalCI includes:
+  # As long as you include this, any future includes added by the Acquia CMS will be accessible to your pipelines automatically.
+  # View these include files at https://git.drupalcode.org/project/gitlab_orca/-/tree/acquia_cms/
+  ################
+  - project: "project/gitlab_orca"
+    ref: "acquia_cms"
+    file:
+      - '/includes/include.drupalci.main.yml'
+
+###################################################################################
+#
+#                                        *
+#                                       /(
+#                                      ((((,
+#                                    /(((((((
+#                                   ((((((((((*
+#                                ,(((((((((((((((
+#                              ,(((((((((((((((((((
+#                            ((((((((((((((((((((((((*
+#                         *(((((((((((((((((((((((((((((
+#                       ((((((((((((((((((((((((((((((((((*
+#                    *((((((((((((((((((  .((((((((((((((((((
+#                  ((((((((((((((((((.       /(((((((((((((((((*
+#                /(((((((((((((((((            .(((((((((((((((((,
+#             ,((((((((((((((((((                 ((((((((((((((((((
+#           .((((((((((((((((((((                   .(((((((((((((((((
+#          (((((((((((((((((((((((                     ((((((((((((((((/
+#        (((((((((((((((((((((((((((/                    ,(((((((((((((((*
+#      .((((((((((((((/  /(((((((((((((.                   ,(((((((((((((((
+#     *((((((((((((((      ,(((((((((((((/                   *((((((((((((((.
+#    ((((((((((((((,          /(((((((((((((.                  ((((((((((((((,
+#   (((((((((((((/              ,(((((((((((((*                 ,(((((((((((((,
+#  *(((((((((((((                .(((((((((((((((                ,(((((((((((((
+#  ((((((((((((/                /((((((((((((((((((.              ,((((((((((((/
+# (((((((((((((              *(((((((((((((((((((((((*             *((((((((((((
+# (((((((((((((            ,(((((((((((((..(((((((((((((           *((((((((((((
+# ((((((((((((,          /((((((((((((*      /((((((((((((/         ((((((((((((
+# (((((((((((((        /((((((((((((/          (((((((((((((*       ((((((((((((
+# (((((((((((((/     /((((((((((((               ,((((((((((((,    *((((((((((((
+#  ((((((((((((((  *(((((((((((/                   *((((((((((((.  ((((((((((((/
+#  *((((((((((((((((((((((((((,                      /(((((((((((((((((((((((((
+#   (((((((((((((((((((((((((                         ((((((((((((((((((((((((,
+#   .(((((((((((((((((((((((/                         ,(((((((((((((((((((((((
+#     ((((((((((((((((((((((/                         ,(((((((((((((((((((((/
+#      *(((((((((((((((((((((                         (((((((((((((((((((((,
+#       ,(((((((((((((((((((((,                      ((((((((((((((((((((/
+#         ,(((((((((((((((((((((*                  /((((((((((((((((((((
+#            ((((((((((((((((((((((,           ,/((((((((((((((((((((,
+#              ,(((((((((((((((((((((((((((((((((((((((((((((((((((
+#                 .(((((((((((((((((((((((((((((((((((((((((((((
+#                     .((((((((((((((((((((((((((((((((((((,.
+#                          .,(((((((((((((((((((((((((.
+#
+###################################################################################
