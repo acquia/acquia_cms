@@ -96,7 +96,7 @@ class HeadlessContentTest extends WebDriverTestBase {
     // Validating the primary menu tabs on admin content page.
     $primaryTabs = [
       'Content' => base_path() . 'admin/content',
-      'Files' => base_path() .  'admin/content/files',
+      'Files' => base_path() . 'admin/content/files',
       'Media' => base_path() . 'admin/content/media',
     ];
     // Assertion test for tabs of content page.

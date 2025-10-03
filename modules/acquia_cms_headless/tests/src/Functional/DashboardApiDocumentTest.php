@@ -50,7 +50,7 @@ class DashboardApiDocumentTest extends HeadlessTestBase {
 
     // Test OpenAPI Resources has a link.
     $actualUrl = $openApiResource->getAttribute('href');
-    $this->assertSame(base_path(). 'admin/config/services/openapi', $actualUrl);
+    $this->assertSame(base_path() . 'admin/config/services/openapi', $actualUrl);
 
     // Test OpenAPI Resources is a link.
     $buttonAction = $openApiResource->getAttribute('target');

@@ -58,7 +58,7 @@ class DashboardApiUsersTest extends HeadlessTestBase {
 
     $basePath = base_path();
     // Test add API user button link has destination.
-    $this->assertButtonLink($usersFieldset,  "{$basePath}admin/people/create?destination={$basePath}admin/headless/dashboard");
+    $this->assertButtonLink($usersFieldset, "{$basePath}admin/people/create?destination={$basePath}admin/headless/dashboard");
 
     // Test table body exist and has data in same order.
     // $this->assertEquals('Headless', $this->getTableBodyColumn(0)->getText());

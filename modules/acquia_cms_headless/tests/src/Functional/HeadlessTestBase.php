@@ -3,7 +3,6 @@
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
-use Drupal\Core\Url;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 
 /**
