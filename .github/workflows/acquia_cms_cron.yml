@@ -159,13 +159,12 @@ jobs:
           - ISOLATED_TEST_ON_NEXT_MINOR_DEV
           - INTEGRATED_TEST_ON_LATEST_LTS
         php-version:
-          - 8.1
           - 8.3
-        exclude:
-          - php-version: 8.3
-            orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-          - php-version: 8.1
-            orca-job: [ ISOLATED_TEST_ON_CURRENT_DEV, ISOLATED_TEST_ON_NEXT_MINOR_DEV]
+        # exclude:
+        #   - php-version: 8.3
+        #     orca-job: INTEGRATED_TEST_ON_LATEST_LTS
+        #   - php-version: 8.1
+        #     orca-job: [ ISOLATED_TEST_ON_CURRENT_DEV, ISOLATED_TEST_ON_NEXT_MINOR_DEV]
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 20.x
