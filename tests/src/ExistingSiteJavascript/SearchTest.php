@@ -177,7 +177,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
-  private function assertLinkExists(string $title, ElementInterface $container = NULL): ?ElementInterface {
+  private function assertLinkExists(string $title, ?ElementInterface $container = NULL): ?ElementInterface {
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert */
     return $this->assertSession()->elementExists('named', ['link', $title], $container);
   }
@@ -195,7 +195,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
-  private function assertElementWithTitleExists(string $title, ElementInterface $container = NULL): ElementInterface {
+  private function assertElementWithTitleExists(string $title, ?ElementInterface $container = NULL): ElementInterface {
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert */
     return $this->assertSession()->elementExists('named', ['content', $title], $container);
   }
@@ -243,7 +243,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
-  private function assertFacetLinkExists(ElementInterface $facets = NULL, bool $title = FALSE) {
+  private function assertFacetLinkExists(?ElementInterface $facets = NULL, bool $title = FALSE) {
     // Get the container which holds the facets, and assert that, initially, the
     // Test that none of the dependent facets are visible for fallback.
     /** @var \Behat\Mink\Element\NodeElement $titleElement */

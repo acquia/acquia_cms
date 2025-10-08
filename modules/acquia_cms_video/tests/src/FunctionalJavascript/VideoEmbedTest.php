@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\acquia_cms_video\FunctionalJavascript;
 
-use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
 
 /**

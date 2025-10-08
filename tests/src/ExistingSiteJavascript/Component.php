@@ -45,7 +45,6 @@ final class Component extends CohesionElement {
 
     // Wait for the form wrapper to appear.
     return $this->waitForElementVisible('css', '.ssa-component-form--inner');
-    ;
   }
 
 }

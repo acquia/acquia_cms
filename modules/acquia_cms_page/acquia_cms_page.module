@@ -12,7 +12,7 @@ function acquia_cms_page_modules_installed($modules, $is_syncing) {
   if ($is_syncing) {
     return;
   }
-  // Update the label and description of the 'body' field for 'page' content type
+  // Update the label and description of 'body' field for 'page' content type
   // if the 'acquia_cms_site_studio' module is installed.
   // This is to ensure that the field is correctly labeled for search purposes.
   if (in_array('acquia_cms_site_studio', $modules)) {

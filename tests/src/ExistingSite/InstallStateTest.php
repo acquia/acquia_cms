@@ -101,8 +101,7 @@ class InstallStateTest extends ExistingSiteBase {
     // sets the aggregation to false causing failure.
     // Hence, commenting below assertion until the ACMS-4207.
     // $this->assertTrue($performance_config->get('css.preprocess'));
-    // $this->assertTrue($performance_config->get('js.preprocess'));
-
+    // $this->assertTrue($performance_config->get('js.preprocess'));.
     // Check purge configurations incorporating acquia purge.
     $purge_plugin_config = $this->config('purge.plugins');
     $purgers = $purge_plugin_config->get('purgers');

@@ -129,7 +129,7 @@ function acquia_cms_site_studio_install($is_syncing) {
       'filtered_html',
       'full_html',
     ]);
-    foreach($editors as $editor) {
+    foreach ($editors as $editor) {
       $role->grantPermission('use text format ' . $editor->id())->save(TRUE);
     }
   }
