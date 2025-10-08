@@ -124,7 +124,7 @@ class AcquiaCmsConfigDiff implements ContainerInjectionInterface {
    *
    * @throws \Drupal\Core\Config\StorageTransformerException
    */
-  public function diff(string $name, string $type, string $storage, string $source_name, string $target_name = NULL) {
+  public function diff(string $name, string $type, string $storage, string $source_name, ?string $target_name = NULL) {
     $module_path = '';
     if ($type == "profile") {
       $module_path = $this->profileExtensionList->getPath($name);

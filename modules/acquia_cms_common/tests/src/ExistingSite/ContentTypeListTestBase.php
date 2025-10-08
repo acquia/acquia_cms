@@ -201,7 +201,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
    *
    * @dataProvider permissionProvider
    */
-  public function testListPage(array $permissions = NULL) {
+  public function testListPage(?array $permissions = NULL) {
     if (isset($permissions)) {
       $account = $this->createUser($permissions);
       $this->drupalLogin($account);
@@ -301,7 +301,7 @@ abstract class ContentTypeListTestBase extends ExistingSiteBase {
    *
    * @dataProvider permissionProvider
    */
-  public function testFallback(array $permissions = NULL) {
+  public function testFallback(?array $permissions = NULL) {
     // Simulate an unavailable search backend, which is the only condition under
     // which we display the fallback view.
     $module_handler = $this->container->get('module_handler');

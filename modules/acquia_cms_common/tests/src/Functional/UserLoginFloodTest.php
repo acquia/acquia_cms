@@ -68,7 +68,7 @@ class UserLoginFloodTest extends BrowserTestBase {
    * @throws \Behat\Mink\Exception\ExpectationException
    * @throws \Behat\Mink\Exception\ResponseTextException
    */
-  public function assertFailedLogin(User $account, string $flood_trigger = NULL): void {
+  public function assertFailedLogin(User $account, ?string $flood_trigger = NULL): void {
     $assert = $this->assertSession();
     $userLogin = [
       'name' => $account->getAccountName(),

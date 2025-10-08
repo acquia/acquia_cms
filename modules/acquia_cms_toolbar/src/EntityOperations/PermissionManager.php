@@ -36,6 +36,7 @@ class PermissionManager implements ContainerInjectionInterface {
    * Update role permission handler.
    *
    * @param array|null $role_ids
+   *   An array of role IDs to update permissions for. Default is NULL.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException

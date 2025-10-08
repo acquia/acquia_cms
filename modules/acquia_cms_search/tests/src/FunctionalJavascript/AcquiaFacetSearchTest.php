@@ -58,7 +58,7 @@ class AcquiaFacetSearchTest extends BrowserTestBase {
   protected function setUp(): void {
     parent::setUp();
     $this->drupalLogin($this->rootUser);
-    // @todo: Investigate why clearing the cache is necessary here.
+    // @todo Investigate why clearing the cache is necessary here.
     // Without this, the test fails.
     drupal_flush_all_caches();
     $assert_session = $this->assertSession();
