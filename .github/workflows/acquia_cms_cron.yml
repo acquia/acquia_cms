@@ -11,7 +11,7 @@ env:
   ORCA_VERSION: ^5
   ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
   ORCA_ENABLE_NIGHTWATCH: "FALSE"
-  ORCA_PHPCS_STANDARD: AcquiaPHP
+  ORCA_PHPCS_STANDARD: AcquiaPHPMinimal
   ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
   # Set Required API Keys.
   CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
@@ -215,7 +215,7 @@ jobs:
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
-      ORCA_PHPCS_STANDARD: AcquiaPHP
+      ORCA_PHPCS_STANDARD: AcquiaPHPMinimal
       ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
       COMPOSER_PROCESS_TIMEOUT: 1800
       ORCA_JOB: ISOLATED_TEST_ON_CURRENT
@@ -271,7 +271,7 @@ jobs:
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
-      ORCA_PHPCS_STANDARD: AcquiaPHP
+      ORCA_PHPCS_STANDARD: AcquiaPHPMinimal
       ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
       COMPOSER_PROCESS_TIMEOUT: 1800
       ORCA_JOB: ${{ matrix.orca-job }}
@@ -348,7 +348,7 @@ jobs:
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
-      ORCA_PHPCS_STANDARD: AcquiaPHP
+      ORCA_PHPCS_STANDARD: AcquiaPHPMinimal
       ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
       COMPOSER_PROCESS_TIMEOUT: 1800
       ORCA_JOB: ${{ matrix.orca-job }}
