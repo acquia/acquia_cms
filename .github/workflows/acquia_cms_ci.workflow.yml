@@ -10,7 +10,7 @@ on:
       - README.md
 
 env:
-  ORCA_VERSION: ^4
+  ORCA_VERSION: ^5
 jobs:
   static_code_analysis:
     if: ${{ github.event_name == 'pull_request' }}
