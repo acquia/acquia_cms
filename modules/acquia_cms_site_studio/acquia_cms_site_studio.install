@@ -176,7 +176,7 @@ function _acquia_cms_site_studio_set_theme() {
 function acquia_cms_site_studio_uninstall($is_syncing) {
   if (!$is_syncing) {
     $config = \Drupal::service('config.factory')->getEditable('field.field.node.page.body');
-    if ($config) {
+    if ($config && !$config->isNew()) {
       $config->set('label', 'Body');
       $config->set('description', '');
       $config->save();

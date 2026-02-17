@@ -18,7 +18,7 @@ function acquia_cms_page_modules_installed($modules, $is_syncing) {
   if (in_array('acquia_cms_site_studio', $modules)) {
     $config_factory = \Drupal::service('config.factory');
     $config = $config_factory->getEditable('field.field.node.page.body');
-    if ($config) {
+    if ($config && !$config->isNew()) {
       $config->set('label', 'Search Description')
         ->set('description', 'A short description or teaser which will be displayed in search results.')
         ->save();
