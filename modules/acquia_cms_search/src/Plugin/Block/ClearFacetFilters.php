@@ -75,11 +75,19 @@ class ClearFacetFilters extends BlockBase implements BlockPluginInterface, Conta
    * {@inheritdoc}
    */
   public function build() {
-    // Check if any facets_query is present in the url. If yes then display the
-    // reset link.
+    // Pretty paths mode: facets are encoded in the {facets_query} route param.
     if ($this->routeMatch->getParameter('facets_query')) {
-      $url = $this->routeMatch->getRouteName();
-      $link = Link::createFromRoute($this->t('Clear filter(s)'), $url, $this->request->getCurrentRequest()->query->all());
+      $link = Link::createFromRoute($this->t('Clear filter(s)'), $this->routeMatch->getRouteName(), [], ['query' => $this->request->getCurrentRequest()->query->all()]);
+
+      return $link->toRenderable();
+    }
+
+    // Query string mode: check for the 'f' filter key in GET parameters.
+    $request = $this->request->getCurrentRequest();
+    if ($request->query->has('f')) {
+      $query = $request->query->all();
+      unset($query['f']);
+      $link = Link::createFromRoute($this->t('Clear filter(s)'), $this->routeMatch->getRouteName(), [], ['query' => $query]);
 
       return $link->toRenderable();
     }
