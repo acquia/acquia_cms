@@ -126,6 +126,10 @@ jobs:
       SITESTUDIO_ORG_KEY: ${{ secrets.SITESTUDIO_ORG_KEY }}
       ACMS_JOB: ${{ matrix.acms_job }}
       JOB_TYPE: "integrated-tests"
+      # Google env variables.
+      ORCA_GOOGLE_API_CLIENT_ID: ${{ secrets.ORCA_GOOGLE_API_CLIENT_ID }}
+      ORCA_GOOGLE_API_CLIENT_SECRET: ${{ secrets.ORCA_GOOGLE_API_CLIENT_SECRET }}
+      ORCA_GOOGLE_API_REFRESH_TOKEN: ${{ secrets.ORCA_GOOGLE_API_REFRESH_TOKEN }}
       CI: true
     strategy:
       fail-fast: false
