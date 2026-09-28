@@ -7,6 +7,8 @@ use Behat\Mink\Element\NodeElement;
 use Drupal\Core\Extension\Exception\UnknownExtensionException;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Pure headless mode menu tests.
@@ -16,6 +18,11 @@ use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
  * @group medium_risk
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_headless')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class PureHeadlessModeMenuTest extends WebDriverTestBase {
 
   /**

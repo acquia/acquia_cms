@@ -16,6 +16,12 @@ use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms_event')]
+#[Group('acquia_cms')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class EventTest extends ContentTypeTestBase {
 
   /**
@@ -72,6 +78,8 @@ class EventTest extends ContentTypeTestBase {
     foreach (['field_event_start', 'field_door_time', 'field_event_end'] as $field) {
       /** @var \Drupal\Core\Field\FieldConfigBase $fieldConfig */
       $fieldConfig = FieldConfig::loadByName('node', $this->nodeType, $field);
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
       $fieldConfig->setDefaultValue([
         'default_date_type' => 'relative',
         'default_date' => gmdate('c', $this->defaultTime),

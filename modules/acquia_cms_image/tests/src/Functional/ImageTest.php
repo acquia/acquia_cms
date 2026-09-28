@@ -13,6 +13,11 @@ use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
  * @group medium_risk
  * @group push
  */
+#[Group('acquia_cms_image')]
+#[Group('acquia_cms')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class ImageTest extends MediaTypeTestBase {
 
   /**
@@ -171,6 +176,8 @@ class ImageTest extends MediaTypeTestBase {
    */
   protected function doTestAuthorAccess() {
     $account = $this->drupalCreateUser();
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
     $account->addRole('content_author');
     $account->save();
     $this->drupalLogin($account);

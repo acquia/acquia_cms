@@ -4,6 +4,8 @@ namespace Drupal\Tests\acquia_cms_search\Functional;
 
 use Drupal\search_api\Entity\Index;
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests integration with Acquia Search Solr.
@@ -15,6 +17,13 @@ use Drupal\Tests\BrowserTestBase;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_tour')]
+#[Group('acquia_cms_search')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class AcquiaSearchIntegrationFromTourPageTest extends BrowserTestBase {
 
   /**

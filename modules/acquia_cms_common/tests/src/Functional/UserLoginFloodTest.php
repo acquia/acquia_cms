@@ -4,6 +4,8 @@ namespace Drupal\Tests\acquia_cms_common\Functional;
 
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\User;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Ensure that login works as expected.
@@ -12,6 +14,10 @@ use Drupal\user\Entity\User;
  * @group acquia_cms
  * @group medium_risk
  */
+#[Group('acquia_cms_common')]
+#[Group('acquia_cms')]
+#[Group('medium_risk')]
+#[RunTestsInSeparateProcesses]
 class UserLoginFloodTest extends BrowserTestBase {
 
   /**

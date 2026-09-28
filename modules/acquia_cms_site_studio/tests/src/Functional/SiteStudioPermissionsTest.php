@@ -12,9 +12,15 @@ use Drupal\Tests\BrowserTestBase;
  * @group acquia_cms
  * @group risky
  */
+#[Group('acquia_cms_common')]
+#[Group('acquia_cms')]
+#[Group('risky')]
+#[RunTestsInSeparateProcesses]
 class SiteStudioPermissionsTest extends BrowserTestBase {
 
   use PermissionsTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
   /**
    * {@inheritdoc}

@@ -10,6 +10,9 @@ use Drupal\Tests\BrowserTestBase;
  * @group acquia_cms_headless
  * @group low_risk
  */
+#[Group('acquia_cms_headless')]
+#[Group('low_risk')]
+#[RunTestsInSeparateProcesses]
 class HeadlessFrontpageTest extends BrowserTestBase {
 
   /**
@@ -59,6 +62,8 @@ class HeadlessFrontpageTest extends BrowserTestBase {
     // @see https://www.drupal.org/project/drupal/issues/3469309
     if (isset($this->useOneTimeLoginLinks)) {
       $this->useOneTimeLoginLinks = FALSE;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
     }
     $this->drupalLogin($account);
     $this->assertSession()->addressEquals('/admin/content');

@@ -12,9 +12,16 @@ use Drupal\Tests\acquia_cms_headless\Traits\DashboardSectionTrait;
  * @group medium_risk
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_headless')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class DashboardApiDocumentTest extends HeadlessTestBase {
 
   use DashboardSectionTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
   /**
    * {@inheritdoc}

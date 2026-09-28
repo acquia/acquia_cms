@@ -17,6 +17,12 @@ use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms_place')]
+#[Group('acquia_cms')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class PlaceTest extends ContentTypeTestBase {
 
   /**
@@ -196,6 +202,8 @@ class PlaceTest extends ContentTypeTestBase {
     // Change the ZIP code, which should cause the coordinates to change on
     // save.
     $page->fillField('Zip code', '94050');
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
     $page->pressButton('Save');
 
     $this->drupalGet('/node/5/edit');

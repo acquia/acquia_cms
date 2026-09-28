@@ -4,6 +4,8 @@ namespace Drupal\Tests\acquia_cms_page\Functional;
 
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Page content type that ships with Acquia CMS.
@@ -13,6 +15,11 @@ use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
  * @group medium_risk
  * @group push
  */
+#[Group('acquia_cms_page')]
+#[Group('acquia_cms')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class PageTest extends ContentTypeTestBase {
 
   /**

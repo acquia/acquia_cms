@@ -15,10 +15,16 @@ use Drupal\views\Views;
  * @group acquia_cms
  * @group push
  */
+#[Group('acquia_cms_common')]
+#[Group('acquia_cms')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class NodeBreadcrumbTest extends BrowserTestBase {
 
   use AssertBreadcrumbTrait;
   use StringTranslationTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
   /**
    * {@inheritdoc}

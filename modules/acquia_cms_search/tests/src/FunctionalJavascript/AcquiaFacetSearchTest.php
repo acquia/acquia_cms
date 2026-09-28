@@ -13,8 +13,13 @@ use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
  * @group acquia_cms_search
  * @group low_risk
  */
+#[Group('acquia_cms_search')]
+#[Group('low_risk')]
+#[RunTestsInSeparateProcesses]
 class AcquiaFacetSearchTest extends BrowserTestBase {
   use TaxonomyTestTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
   /**
    * {@inheritdoc}

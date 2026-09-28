@@ -11,6 +11,10 @@ use Drupal\Tests\BrowserTestBase;
  * @group acquia_cms_tour
  * @group risky
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_tour')]
+#[Group('risky')]
+#[RunTestsInSeparateProcesses]
 class HelpIntegrationTest extends BrowserTestBase {
 
   /**
@@ -42,6 +46,8 @@ class HelpIntegrationTest extends BrowserTestBase {
 
     $assert_tour_link = function () use ($assert_session, $toolbar) {
       $assert_session->elementsCount('named', ['link', 'Acquia CMS Wizard'], 1, $toolbar);
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
       $tour_link = $assert_session->elementExists('named', ['link', 'Acquia CMS Wizard'], $toolbar);
       $this->assertSame('Acquia CMS Wizard', $tour_link->getText());
       $this->assertTrue($tour_link->hasClass('toolbar-icon'));

@@ -5,6 +5,8 @@ namespace Drupal\Tests\acquia_cms_article\Functional;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Article content type that ships with Acquia CMS.
@@ -15,6 +17,12 @@ use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms_article')]
+#[Group('acquia_cms')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class BlogTest extends BrowserTestBase {
 
   use TaxonomyTestTrait;

@@ -4,6 +4,8 @@ namespace Drupal\Tests\acquia_cms_document\Functional;
 
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Document media type that ships with Acquia CMS.
@@ -14,6 +16,12 @@ use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
  * @group push
  * @group pr
  */
+#[Group('acquia_cms_document')]
+#[Group('acquia_cms')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[Group('pr')]
+#[RunTestsInSeparateProcesses]
 class DocumentTest extends MediaTypeTestBase {
 
   /**

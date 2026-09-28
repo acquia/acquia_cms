@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms_video\FunctionalJavascript;
 
 use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests embedding video media in CKEditor.
@@ -12,6 +14,11 @@ use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
  * @group medium_risk
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_video')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class VideoEmbedTest extends MediaEmbedTestBase {
 
   /**
