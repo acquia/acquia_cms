@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms_tour\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Acquia CMS Tour module's integration with the core Help module.
@@ -46,8 +48,6 @@ class HelpIntegrationTest extends BrowserTestBase {
 
     $assert_tour_link = function () use ($assert_session, $toolbar) {
       $assert_session->elementsCount('named', ['link', 'Acquia CMS Wizard'], 1, $toolbar);
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
       $tour_link = $assert_session->elementExists('named', ['link', 'Acquia CMS Wizard'], $toolbar);
       $this->assertSame('Acquia CMS Wizard', $tour_link->getText());
       $this->assertTrue($tour_link->hasClass('toolbar-icon'));

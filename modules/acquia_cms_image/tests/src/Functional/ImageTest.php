@@ -4,6 +4,8 @@ namespace Drupal\Tests\acquia_cms_image\Functional;
 
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Image media type that ships with Acquia CMS.
@@ -176,8 +178,6 @@ class ImageTest extends MediaTypeTestBase {
    */
   protected function doTestAuthorAccess() {
     $account = $this->drupalCreateUser();
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
     $account->addRole('content_author');
     $account->save();
     $this->drupalLogin($account);

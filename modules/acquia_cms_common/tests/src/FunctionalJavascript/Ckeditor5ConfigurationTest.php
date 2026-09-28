@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\acquia_cms_common\FunctionalJavascript;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+
 /**
  * Tests the CKEditor5 configuration shipped with Acquia CMS.
  *

@@ -7,6 +7,8 @@ use Drupal\geocoder\Entity\GeocoderProvider;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Place content type that ships with Acquia CMS.
@@ -202,8 +204,6 @@ class PlaceTest extends ContentTypeTestBase {
     // Change the ZIP code, which should cause the coordinates to change on
     // save.
     $page->fillField('Zip code', '94050');
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
     $page->pressButton('Save');
 
     $this->drupalGet('/node/5/edit');

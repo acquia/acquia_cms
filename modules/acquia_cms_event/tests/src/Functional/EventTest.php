@@ -6,6 +6,8 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Event content type that ships with Acquia CMS.
@@ -78,8 +80,6 @@ class EventTest extends ContentTypeTestBase {
     foreach (['field_event_start', 'field_door_time', 'field_event_end'] as $field) {
       /** @var \Drupal\Core\Field\FieldConfigBase $fieldConfig */
       $fieldConfig = FieldConfig::loadByName('node', $this->nodeType, $field);
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
       $fieldConfig->setDefaultValue([
         'default_date_type' => 'relative',
         'default_date' => gmdate('c', $this->defaultTime),

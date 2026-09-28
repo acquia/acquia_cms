@@ -128,7 +128,6 @@ class BlogTest extends BrowserTestBase {
         'field_categories' => NULL,
         'body' => [
           'value' => 'This is an example of body text',
-          'summary' => '',
           'format' => 'basic_html',
         ],
         'field_article_type' => $term->id(),

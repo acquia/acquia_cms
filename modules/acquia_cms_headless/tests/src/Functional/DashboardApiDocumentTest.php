@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Drupal\Tests\acquia_cms_headless\Traits\DashboardSectionTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests headless dashboard API Document.
@@ -20,8 +22,6 @@ use Drupal\Tests\acquia_cms_headless\Traits\DashboardSectionTrait;
 class DashboardApiDocumentTest extends HeadlessTestBase {
 
   use DashboardSectionTrait;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
   /**
    * {@inheritdoc}

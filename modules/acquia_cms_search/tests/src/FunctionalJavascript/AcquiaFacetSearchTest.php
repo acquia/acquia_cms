@@ -6,6 +6,8 @@ use Drupal\Core\Extension\Exception\UnknownExtensionException;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests facet creation and Search Page Block Placement.
@@ -18,8 +20,6 @@ use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 #[RunTestsInSeparateProcesses]
 class AcquiaFacetSearchTest extends BrowserTestBase {
   use TaxonomyTestTrait;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
   /**
    * {@inheritdoc}

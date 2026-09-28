@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for acquia_cms_headless frontpage.
@@ -62,8 +64,6 @@ class HeadlessFrontpageTest extends BrowserTestBase {
     // @see https://www.drupal.org/project/drupal/issues/3469309
     if (isset($this->useOneTimeLoginLinks)) {
       $this->useOneTimeLoginLinks = FALSE;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
     }
     $this->drupalLogin($account);
     $this->assertSession()->addressEquals('/admin/content');

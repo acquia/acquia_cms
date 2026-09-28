@@ -4,6 +4,8 @@ namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Drupal\Tests\acquia_cms_headless\Traits\DashboardSectionTrait;
 use Drupal\Tests\acquia_cms_headless\Traits\DashboardTableTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests headless dashboard Next.js Sites.
@@ -21,8 +23,6 @@ use Drupal\Tests\acquia_cms_headless\Traits\DashboardTableTrait;
 class DashboardNextjsSitesTest extends HeadlessTestBase {
 
   use DashboardTableTrait, DashboardSectionTrait;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
   /**
    * {@inheritdoc}
