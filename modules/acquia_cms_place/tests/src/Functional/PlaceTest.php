@@ -100,8 +100,8 @@ class PlaceTest extends ContentTypeTestBase {
     $assert_session->fieldExists('Telephone');
     $assert_session->fieldExists('Place Type');
     $page->fillField('Description', 'This is an awesome remix!');
-    // The search description should have a summary.
-    $assert_session->fieldExists('Summary');
+    // The summary field is not displayed (show_summary: false in form display).
+    $assert_session->fieldNotExists('Summary');
     // The standard Categories and Tags fields should be present.
     $this->assertCategoriesAndTagsFieldsExist();
     // Ensure Media field group is present and has image field.

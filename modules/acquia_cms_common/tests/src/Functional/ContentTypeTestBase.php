@@ -47,19 +47,71 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
     // Ensure that the content type under test has been specified by a subclass.
     $this->assertNotEmpty($this->nodeType);
 
-    // Do normal set-up and ensure that the content type actually exists.
+    // 1. Run the base environment bootstrap routines.
     parent::setUp();
 
+    // 2. Intercept the environment state and update the config storage definition.
+    $config_factory = $this->container->get('config.factory');
+    $body_storage = $config_factory->getEditable('field.storage.node.body');
+
+    if ($body_storage && $body_storage->get('type') !== 'text_with_summary') {
+      $body_storage->set('type', 'text_with_summary')->save();
+
+      // 3. Force the Entity Definition Manager to rebuild the underlying SQL database scheme.
+      /** @var \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager */
+      $entity_field_manager = $this->container->get('entity_field.manager');
+      $entity_field_manager->clearCachedFieldDefinitions();
+
+      /** @var \Drupal\Core\Entity\EntityLastInstalledSchemaRepositoryInterface $last_installed_repository */
+      $last_installed_repository = $this->container->get('entity.last_installed_schema.repository');
+
+      /** @var \Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface $update_manager */
+      $update_manager = $this->container->get('entity.definition_update_manager');
+
+      // Load the storage definition for the node body field.
+      $storage_definitions = $entity_field_manager->getFieldStorageDefinitions('node');
+      if (isset($storage_definitions['body'])) {
+        $body_definition = $storage_definitions['body'];
+
+        // Notify the entity engine to physically purge old tables and apply the summary column layout.
+        $update_manager->updateFieldStorageDefinition($body_definition);
+        $last_installed_repository->setLastInstalledFieldStorageDefinition($body_definition);
+      }
+    }
+
+    // 4. Update form display to show summary field (display_summary: true requires show_summary: true).
+    $form_display = $this->container->get('entity_display.repository')
+      ->getFormDisplay('node', $this->nodeType, 'default');
+    $body_component = $form_display->getComponent('body');
+    if ($body_component && isset($body_component['settings'])) {
+      $body_component['settings']['show_summary'] = TRUE;
+      $form_display->setComponent('body', $body_component)->save();
+    }
+
+    // 5. Proceed with standard node generation safely.
     $node_type = NodeType::load($this->nodeType);
     $this->assertInstanceOf(NodeType::class, $node_type);
-    // Create a node of the type under test, belonging to user 1. This is to
-    // test the capabilities of content editors and content administrators.
-    $this->drupalCreateNode([
+
+    // Create a node of the type under test, belonging to user 1.
+    // Now we can safely include body field values.
+    $node_values = [
       'type' => $this->nodeType,
       'uid' => $this->rootUser->id(),
-    ]);
-    // Asserts that node author is receiving emails when moderation state is
-    // changed to draft.
+    ];
+
+    // Add body field if the content type has one.
+    $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $this->nodeType);
+    if (isset($field_definitions['body'])) {
+      $node_values['body'] = [
+        'value' => 'Test body content',
+        'summary' => '',
+        'format' => 'basic_html',
+      ];
+    }
+
+    $this->drupalCreateNode($node_values);
+
+    // Asserts that node author is receiving emails when moderation state is changed to draft.
     $this->assertCount(1, $this->getMails([
       'id' => 'workbench_email_template::back_to_draft',
       'to' => $this->rootUser->getEmail(),

@@ -116,8 +116,8 @@ class EventTest extends ContentTypeTestBase {
     $assert_session->fieldExists('Duration');
     $assert_session->fieldExists('Event Type');
 
-    // The search description should have a summary.
-    $assert_session->fieldExists('Summary');
+    // The summary field is not displayed (show_summary: false in form display).
+    $assert_session->fieldNotExists('Summary');
     // The standard Categories and Tags fields should be present.
     $this->assertCategoriesAndTagsFieldsExist();
     // There should be a field to add an image, and it should be using the

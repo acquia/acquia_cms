@@ -87,8 +87,8 @@ class ArticleTest extends ContentTypeTestBase {
     $assert_session->fieldExists('Categories');
     $assert_session->fieldExists('Tags');
 
-    // The body should have a summary.
-    $assert_session->fieldExists('Summary');
+    // The summary field is not displayed (show_summary: false in form display).
+    $assert_session->fieldNotExists('Summary');
     // The standard Categories and Tags fields should be present.
     $this->assertCategoriesAndTagsFieldsExist();
 
@@ -101,12 +101,12 @@ class ArticleTest extends ContentTypeTestBase {
 
     // There should be a field to add an image, and it should be using the
     // media library.
-    // Check field_aticle_media exists.
+    // Check field_article_media exists.
     $assert_session->elementExists('css', '#field_article_media-media-library-wrapper');
     $group = $assert_session->elementExists('css', '#edit-group-media');
     $assert_session->buttonExists('Add media', $group);
 
-    // Check field_aticle_image exists.
+    // Check field_article_image exists.
     $assert_session->elementExists('css', '#field_article_image-media-library-wrapper');
     $group = $assert_session->elementExists('css', '#edit-group-media');
     $assert_session->buttonExists('Add media', $group);

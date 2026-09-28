@@ -71,7 +71,7 @@ class PageTest extends ContentTypeTestBase {
     // Assert that layout canvas field is not present.
     $assert_session->fieldNotExists('Layout Canvas');
     $page->fillField('Body', 'This is an awesome remix!');
-    // The search description should not have a summary.
+    // The summary field is not displayed (show_summary: false in form display).
     $assert_session->fieldNotExists('Summary');
     // The standard Categories and Tags fields should be present.
     $this->assertCategoriesAndTagsFieldsExist();

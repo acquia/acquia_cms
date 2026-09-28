@@ -43,14 +43,6 @@ class BlogTest extends BrowserTestBase {
 
   /**
    * Disable strict config schema checks in this test.
-   *
-   * Cohesion has a lot of config schema errors, and until they are all fixed,
-   * this test cannot pass unless we disable strict config schema checking
-   * altogether. Since strict config schema isn't critically important in
-   * testing this functionality, it's okay to disable it for now, but it should
-   * be re-enabled (i.e., this property should be removed) as soon as possible.
-   *
-   * @var bool
    */
   // @codingStandardsIgnoreStart
   protected $strictConfigSchema = FALSE;
@@ -59,10 +51,54 @@ class BlogTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
+  protected function setUp(): void {
+    parent::setUp();
+
+    // Force body field storage to text_with_summary for Drupal 11 compatibility.
+    $config_factory = $this->container->get('config.factory');
+    $body_storage = $config_factory->getEditable('field.storage.node.body');
+
+    if ($body_storage && $body_storage->get('type') !== 'text_with_summary') {
+      $body_storage->set('type', 'text_with_summary')->save();
+
+      /** @var \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager */
+      $entity_field_manager = $this->container->get('entity_field.manager');
+      $entity_field_manager->clearCachedFieldDefinitions();
+
+      /** @var \Drupal\Core\Entity\EntityLastInstalledSchemaRepositoryInterface $last_installed_repository */
+      $last_installed_repository = $this->container->get('entity.last_installed_schema.repository');
+
+      /** @var \Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface $update_manager */
+      $update_manager = $this->container->get('entity.definition_update_manager');
+
+      $storage_definitions = $entity_field_manager->getFieldStorageDefinitions('node');
+      if (isset($storage_definitions['body'])) {
+        $body_definition = $storage_definitions['body'];
+        $update_manager->updateFieldStorageDefinition($body_definition);
+        $last_installed_repository->setLastInstalledFieldStorageDefinition($body_definition);
+      }
+    }
+
+    // Update form display to show summary field (display_summary: true requires show_summary: true).
+    $form_display = $this->container->get('entity_display.repository')
+      ->getFormDisplay('node', 'article', 'default');
+    $body_component = $form_display->getComponent('body');
+    if ($body_component && isset($body_component['settings'])) {
+      $body_component['settings']['show_summary'] = TRUE;
+      $form_display->setComponent('body', $body_component)->save();
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function testBlogArticles() {
     /** @var \Drupal\taxonomy\VocabularyInterface $article_type */
     $article_type = Vocabulary::load('article_type');
+    // Note: Since this base class does not automatically provision categories,
+    // make sure the categories vocabulary is loaded or created if needed by the view.
     $term = $this->createTerm($article_type, ['name' => 'Blog']);
+
     // Create a person that we can reference as the display author.
     $person_node = $this->drupalCreateNode([
       'title' => 'Example person',
@@ -75,16 +111,21 @@ class BlogTest extends BrowserTestBase {
     $account->save();
     $this->drupalLogin($account);
     $assert_session = $this->assertSession();
+
     for ($i = 0; $i < 3; $i++) {
       $this->drupalCreateNode([
         'type' => 'article',
         'title' => 'Blog article ' . $i,
         'moderation_state' => 'published',
         'field_categories' => NULL,
-        'Body' => 'This is an example of body text',
+        'body' => [
+          'value' => 'This is an example of body text',
+          'summary' => '',
+          'format' => 'basic_html',
+        ],
         'field_article_type' => $term->id(),
         'field_display_author' => $person_node_id,
-        'created' => $time = time(),
+        'created' => time(),
       ]);
     }
     $this->drupalGet('/blog');

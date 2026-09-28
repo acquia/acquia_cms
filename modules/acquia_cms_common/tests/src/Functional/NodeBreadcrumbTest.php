@@ -70,8 +70,7 @@ class NodeBreadcrumbTest extends BrowserTestBase {
     $this->drupalLogin($this->adminUser);
     $this->assertBreadcrumb('node/add/page', [
       $this->frontPagePath => 'Home',
-      'node' => 'Node',
-      'node/add' => 'Add content',
+      'node/add' => 'Add content item',
     ]);
   }
 
@@ -88,7 +87,6 @@ class NodeBreadcrumbTest extends BrowserTestBase {
     $node->save();
     $this->assertBreadcrumb("node/" . $node->id() . "/edit", [
       $this->frontPagePath => 'Home',
-      'node' => 'Node',
       $node->toUrl()->toString() => 'My Page Content',
     ]);
   }
@@ -104,7 +102,7 @@ class NodeBreadcrumbTest extends BrowserTestBase {
     $this->assertBreadcrumb('node/add/page', [
       $this->frontPagePath => 'Home',
       'node' => 'Another title',
-      'node/add' => 'Add content',
+      'node/add' => 'Add content item',
     ]);
   }
 
