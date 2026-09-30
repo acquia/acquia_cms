@@ -5,6 +5,8 @@ namespace Drupal\Tests\acquia_cms_person\ExistingSite;
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Tests\acquia_cms_common\ExistingSite\ContentTypeListTestBase;
 use Drupal\views\Entity\View;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the "all people" listing page.
@@ -15,6 +17,12 @@ use Drupal\views\Entity\View;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms_person')]
+#[Group('acquia_cms')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class PersonListTest extends ContentTypeListTestBase {
 
   /**

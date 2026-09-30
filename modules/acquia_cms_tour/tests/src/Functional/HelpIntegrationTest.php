@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms_tour\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Acquia CMS Tour module's integration with the core Help module.
@@ -11,6 +13,10 @@ use Drupal\Tests\BrowserTestBase;
  * @group acquia_cms_tour
  * @group risky
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_tour')]
+#[Group('risky')]
+#[RunTestsInSeparateProcesses]
 class HelpIntegrationTest extends BrowserTestBase {
 
   /**

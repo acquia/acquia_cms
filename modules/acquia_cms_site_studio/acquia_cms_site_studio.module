@@ -289,11 +289,6 @@ function acquia_cms_site_studio_library_info_alter(array &$libraries, string $mo
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
- *
- * The permission to developer role to use a newly added text format.
- *
- * @param \Drupal\editor\EditorInterface $editor
- *   The filter format entity.
  */
 function acquia_cms_site_studio_editor_insert(EditorInterface $editor) {
   // If the filter format entity isn't syncing, then update it.

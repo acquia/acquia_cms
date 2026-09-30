@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms_site_studio\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the filter black_list_html_tags.
@@ -10,6 +12,9 @@ use Drupal\Tests\BrowserTestBase;
  * @group acquia_cms
  * @group acquia_cms_site_studio
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_site_studio')]
+#[RunTestsInSeparateProcesses]
 class FilterFormatFilteredHtmlTest extends BrowserTestBase {
 
   /**

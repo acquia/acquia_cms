@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms_person\ExistingSite;
 
 use Drupal\Tests\acquia_cms_common\Traits\ConfigurationTraits;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -15,6 +17,13 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms_person')]
+#[Group('acquia_cms_dam')]
+#[Group('acquia_cms')]
+#[Group('risky')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class PersonImageDamTest extends ExistingSiteBase {
 
   use ConfigurationTraits;

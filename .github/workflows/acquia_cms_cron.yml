@@ -8,10 +8,10 @@ env:
   # Provide your package's name.
   ORCA_SUT_NAME: acquia/acquia_cms
   ORCA_SUT_BRANCH: develop
-  ORCA_VERSION: ^4
+  ORCA_VERSION: ^5
   ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
   ORCA_ENABLE_NIGHTWATCH: "FALSE"
-  ORCA_PHPCS_STANDARD: AcquiaPHP
+  ORCA_PHPCS_STANDARD: AcquiaDrupalStrict
   ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
   # Set Required API Keys.
   CONNECTOR_ID: ${{ secrets.CONNECTOR_ID }}
@@ -159,13 +159,12 @@ jobs:
           - ISOLATED_TEST_ON_NEXT_MINOR_DEV
           - INTEGRATED_TEST_ON_LATEST_LTS
         php-version:
-          - 8.1
           - 8.3
-        exclude:
-          - php-version: 8.3
-            orca-job: INTEGRATED_TEST_ON_LATEST_LTS
-          - php-version: 8.1
-            orca-job: [ ISOLATED_TEST_ON_CURRENT_DEV, ISOLATED_TEST_ON_NEXT_MINOR_DEV]
+        # exclude:
+        #   - php-version: 8.3
+        #     orca-job: INTEGRATED_TEST_ON_LATEST_LTS
+        #   - php-version: 8.1
+        #     orca-job: [ ISOLATED_TEST_ON_CURRENT_DEV, ISOLATED_TEST_ON_NEXT_MINOR_DEV]
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 20.x
@@ -216,7 +215,7 @@ jobs:
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
-      ORCA_PHPCS_STANDARD: AcquiaPHP
+      ORCA_PHPCS_STANDARD: AcquiaDrupalStrict
       ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
       COMPOSER_PROCESS_TIMEOUT: 1800
       ORCA_JOB: ISOLATED_TEST_ON_CURRENT
@@ -272,7 +271,7 @@ jobs:
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
-      ORCA_PHPCS_STANDARD: AcquiaPHP
+      ORCA_PHPCS_STANDARD: AcquiaDrupalStrict
       ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
       COMPOSER_PROCESS_TIMEOUT: 1800
       ORCA_JOB: ${{ matrix.orca-job }}
@@ -349,7 +348,7 @@ jobs:
       ORCA_PACKAGES_CONFIG_ALTER: ../acquia_cms/tests/packages_alter.yml
       ORCA_FIXTURE_PROJECT_TEMPLATE: acquia/drupal-recommended-project
       ORCA_ENABLE_NIGHTWATCH: "FALSE"
-      ORCA_PHPCS_STANDARD: AcquiaPHP
+      ORCA_PHPCS_STANDARD: AcquiaDrupalStrict
       ORCA_SUT_DIR: /home/runner/work/acquia_cms/acquia_cms
       COMPOSER_PROCESS_TIMEOUT: 1800
       ORCA_JOB: ${{ matrix.orca-job }}

@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms_video\FunctionalJavascript;
 
 use Drupal\Tests\acquia_cms_common\FunctionalJavascript\Ckeditor5ConfigurationTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the CKEditor5 configuration shipped with Acquia CMS.
@@ -12,6 +14,11 @@ use Drupal\Tests\acquia_cms_common\FunctionalJavascript\Ckeditor5ConfigurationTe
  * @group medium_risk
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_video')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class Ckeditor5ConfigurationTest extends Ckeditor5ConfigurationTestBase {
 
   /**

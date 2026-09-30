@@ -7,6 +7,8 @@ use Drupal\Core\Config\ImmutableConfig;
 use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -16,6 +18,8 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * @group profile
  * @group risky
  */
+#[Group('acquia_cms')]
+#[RunTestsInSeparateProcesses]
 class InstallStateTest extends ExistingSiteBase {
 
   use MediaTestTrait {
@@ -102,7 +106,6 @@ class InstallStateTest extends ExistingSiteBase {
     // Hence, commenting below assertion until the ACMS-4207.
     // $this->assertTrue($performance_config->get('css.preprocess'));
     // $this->assertTrue($performance_config->get('js.preprocess'));
-
     // Check purge configurations incorporating acquia purge.
     $purge_plugin_config = $this->config('purge.plugins');
     $purgers = $purge_plugin_config->get('purgers');

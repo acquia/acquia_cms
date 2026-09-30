@@ -10,6 +10,8 @@ use Drupal\Tests\acquia_cms\Traits\CohesionTestTrait;
 use Drupal\Tests\acquia_cms_common\Traits\AssertLinksTrait;
 use Drupal\Tests\acquia_cms_common\Traits\SetBackendAvailabilityTrait;
 use Drupal\views\Entity\View;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
 
 /**
@@ -22,6 +24,13 @@ use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms_search')]
+#[Group('acquia_cms')]
+#[Group('site_studio')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
   use AwaitTrait, CohesionTestTrait, AssertLinksTrait, SetBackendAvailabilityTrait;
@@ -177,7 +186,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
-  private function assertLinkExists(string $title, ElementInterface $container = NULL): ?ElementInterface {
+  private function assertLinkExists(string $title, ?ElementInterface $container = NULL): ?ElementInterface {
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert */
     return $this->assertSession()->elementExists('named', ['link', $title], $container);
   }
@@ -195,7 +204,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
-  private function assertElementWithTitleExists(string $title, ElementInterface $container = NULL): ElementInterface {
+  private function assertElementWithTitleExists(string $title, ?ElementInterface $container = NULL): ElementInterface {
     /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert */
     return $this->assertSession()->elementExists('named', ['content', $title], $container);
   }
@@ -243,7 +252,7 @@ class SearchTest extends ExistingSiteSelenium2DriverTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
-  private function assertFacetLinkExists(ElementInterface $facets = NULL, bool $title = FALSE) {
+  private function assertFacetLinkExists(?ElementInterface $facets = NULL, bool $title = FALSE) {
     // Get the container which holds the facets, and assert that, initially, the
     // Test that none of the dependent facets are visible for fallback.
     /** @var \Behat\Mink\Element\NodeElement $titleElement */

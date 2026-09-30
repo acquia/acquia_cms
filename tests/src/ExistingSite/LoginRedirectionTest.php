@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms\ExistingSite;
 
 use Drupal\Component\Serialization\Yaml;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -13,6 +15,11 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * @group medium_risk
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('profile')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class LoginRedirectionTest extends ExistingSiteBase {
 
   /**

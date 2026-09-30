@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Drupal\Core\Extension\Exception\UnknownExtensionException;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for acquia_cms_headless Hybrid mode.
@@ -12,6 +14,11 @@ use Drupal\Core\Extension\Exception\UnknownExtensionException;
  * @group medium_risk
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_headless')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class HeadlessModeEnablementTest extends HeadlessTestBase {
 
   /**

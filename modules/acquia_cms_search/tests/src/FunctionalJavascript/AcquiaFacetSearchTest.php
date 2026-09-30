@@ -6,6 +6,8 @@ use Drupal\Core\Extension\Exception\UnknownExtensionException;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests facet creation and Search Page Block Placement.
@@ -13,6 +15,9 @@ use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
  * @group acquia_cms_search
  * @group low_risk
  */
+#[Group('acquia_cms_search')]
+#[Group('low_risk')]
+#[RunTestsInSeparateProcesses]
 class AcquiaFacetSearchTest extends BrowserTestBase {
   use TaxonomyTestTrait;
 
@@ -58,7 +63,7 @@ class AcquiaFacetSearchTest extends BrowserTestBase {
   protected function setUp(): void {
     parent::setUp();
     $this->drupalLogin($this->rootUser);
-    // @todo: Investigate why clearing the cache is necessary here.
+    // @todo Investigate why clearing the cache is necessary here.
     // Without this, the test fails.
     drupal_flush_all_caches();
     $assert_session = $this->assertSession();

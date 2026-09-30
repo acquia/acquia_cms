@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms_tour\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Recaptcha Form.
@@ -10,6 +12,9 @@ use Drupal\Tests\BrowserTestBase;
  * @group acquia_cms
  * @group acquia_cms_tour
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_tour')]
+#[RunTestsInSeparateProcesses]
 class RecaptchaTest extends BrowserTestBase {
 
   /**
