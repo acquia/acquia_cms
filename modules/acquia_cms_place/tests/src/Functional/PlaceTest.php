@@ -7,6 +7,8 @@ use Drupal\geocoder\Entity\GeocoderProvider;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Place content type that ships with Acquia CMS.
@@ -17,6 +19,12 @@ use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms_place')]
+#[Group('acquia_cms')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class PlaceTest extends ContentTypeTestBase {
 
   /**
@@ -100,8 +108,8 @@ class PlaceTest extends ContentTypeTestBase {
     $assert_session->fieldExists('Telephone');
     $assert_session->fieldExists('Place Type');
     $page->fillField('Description', 'This is an awesome remix!');
-    // The search description should have a summary.
-    $assert_session->fieldExists('Summary');
+    // The summary field is not displayed (show_summary: false in form display).
+    $assert_session->fieldNotExists('Summary');
     // The standard Categories and Tags fields should be present.
     $this->assertCategoriesAndTagsFieldsExist();
     // Ensure Media field group is present and has image field.

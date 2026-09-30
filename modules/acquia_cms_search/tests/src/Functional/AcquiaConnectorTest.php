@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms_search\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Acquia CMS Connector form.
@@ -11,6 +13,10 @@ use Drupal\Tests\BrowserTestBase;
  * @group acquia_cms_tour
  * @group acquia_cms_search
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_tour')]
+#[Group('acquia_cms_search')]
+#[RunTestsInSeparateProcesses]
 class AcquiaConnectorTest extends BrowserTestBase {
 
   /**

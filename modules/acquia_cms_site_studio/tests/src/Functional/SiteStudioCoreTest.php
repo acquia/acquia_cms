@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms_site_studio\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Site Studio Core Form.
@@ -11,6 +13,10 @@ use Drupal\Tests\BrowserTestBase;
  * @group acquia_cms_tour
  * @group acquia_cms_site_studio
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_tour')]
+#[Group('acquia_cms_site_studio')]
+#[RunTestsInSeparateProcesses]
 class SiteStudioCoreTest extends BrowserTestBase {
 
   /**

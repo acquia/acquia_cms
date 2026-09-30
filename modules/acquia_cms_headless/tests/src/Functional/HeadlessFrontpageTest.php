@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for acquia_cms_headless frontpage.
@@ -10,6 +12,9 @@ use Drupal\Tests\BrowserTestBase;
  * @group acquia_cms_headless
  * @group low_risk
  */
+#[Group('acquia_cms_headless')]
+#[Group('low_risk')]
+#[RunTestsInSeparateProcesses]
 class HeadlessFrontpageTest extends BrowserTestBase {
 
   /**

@@ -4,6 +4,8 @@ namespace Drupal\Tests\acquia_cms_page\Functional;
 
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Page content type that ships with Acquia CMS.
@@ -13,6 +15,11 @@ use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
  * @group medium_risk
  * @group push
  */
+#[Group('acquia_cms_page')]
+#[Group('acquia_cms')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class PageTest extends ContentTypeTestBase {
 
   /**
@@ -71,7 +78,7 @@ class PageTest extends ContentTypeTestBase {
     // Assert that layout canvas field is not present.
     $assert_session->fieldNotExists('Layout Canvas');
     $page->fillField('Body', 'This is an awesome remix!');
-    // The search description should not have a summary.
+    // The summary field is not displayed (show_summary: false in form display).
     $assert_session->fieldNotExists('Summary');
     // The standard Categories and Tags fields should be present.
     $this->assertCategoriesAndTagsFieldsExist();

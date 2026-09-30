@@ -4,6 +4,8 @@ namespace Drupal\Tests\acquia_cms_tour\Functional;
 
 use Drupal\geocoder\Entity\GeocoderProvider;
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Acquia CMS Tour module's integration with Geocoder & Google Maps.
@@ -12,6 +14,10 @@ use Drupal\Tests\BrowserTestBase;
  * @group acquia_cms_tour
  * @group risky
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_tour')]
+#[Group('risky')]
+#[RunTestsInSeparateProcesses]
 class GeocoderTest extends BrowserTestBase {
 
   /**

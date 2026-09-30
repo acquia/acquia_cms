@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+
 /**
  * Verify that Cohesion Drupal block component has the following options:.
  *
@@ -18,6 +21,12 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('site_studio')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class DrupalBlockComponentTest extends CohesionComponentTestBase {
 
   /**

@@ -5,6 +5,8 @@ namespace Drupal\Tests\acquia_cms_place\ExistingSite;
 use Behat\Mink\Element\ElementInterface;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\block\Traits\BlockCreationTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -16,6 +18,12 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms_place')]
+#[Group('acquia_cms')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class BreadcrumbTest extends ExistingSiteBase {
 
   use BlockCreationTrait;

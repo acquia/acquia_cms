@@ -4,6 +4,8 @@ namespace Drupal\Tests\acquia_cms_common\Functional;
 
 use Drupal\Tests\acquia_cms_common\Traits\PermissionsTrait;
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests basic, broad permissions of the user roles included with Acquia CMS.
@@ -12,6 +14,10 @@ use Drupal\Tests\BrowserTestBase;
  * @group acquia_cms
  * @group risky
  */
+#[Group('acquia_cms_common')]
+#[Group('acquia_cms')]
+#[Group('risky')]
+#[RunTestsInSeparateProcesses]
 class BasicPermissionsTest extends BrowserTestBase {
 
   use PermissionsTrait;

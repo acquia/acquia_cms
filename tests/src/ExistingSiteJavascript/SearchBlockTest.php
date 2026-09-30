@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+
 /**
  * Tests search functionality that ships with Acquia CMS.
  *
@@ -10,6 +13,11 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * @group medium_risk
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('profile')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class SearchBlockTest extends CohesionComponentTestBase {
 
   /**

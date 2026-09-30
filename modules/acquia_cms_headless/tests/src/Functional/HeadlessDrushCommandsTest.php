@@ -4,6 +4,8 @@ namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Drupal\Tests\BrowserTestBase;
 use Drush\TestTraits\DrushTestTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests headless drush commands.
@@ -13,6 +15,11 @@ use Drush\TestTraits\DrushTestTrait;
  * @group medium_risk
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_headless')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class HeadlessDrushCommandsTest extends BrowserTestBase {
 
   use DrushTestTrait;

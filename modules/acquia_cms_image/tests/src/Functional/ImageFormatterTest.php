@@ -3,12 +3,16 @@
 namespace Drupal\Tests\acquia_cms_image\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the image formatter for media type image.
  *
  * @group acquia_cms_image
  */
+#[Group('acquia_cms_image')]
+#[RunTestsInSeparateProcesses]
 class ImageFormatterTest extends BrowserTestBase {
 
   /**

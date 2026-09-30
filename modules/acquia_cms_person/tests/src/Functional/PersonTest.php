@@ -5,6 +5,8 @@ namespace Drupal\Tests\acquia_cms_person\Functional;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Person content type that ships with Acquia CMS.
@@ -16,6 +18,13 @@ use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms_person')]
+#[Group('acquia_cms')]
+#[Group('person')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class PersonTest extends ContentTypeTestBase {
 
   /**
@@ -90,8 +99,8 @@ class PersonTest extends ContentTypeTestBase {
     $assert_session->fieldExists('Email');
     $assert_session->fieldExists('Telephone');
 
-    // The Bio should have a summary.
-    $assert_session->fieldExists('Summary');
+    // The summary field is not displayed (show_summary: false in form display).
+    $assert_session->fieldNotExists('Summary');
     // The standard Categories and Tags fields should be present.
     $this->assertCategoriesAndTagsFieldsExist();
 

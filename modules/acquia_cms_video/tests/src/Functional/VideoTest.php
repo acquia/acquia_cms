@@ -5,6 +5,8 @@ namespace Drupal\Tests\acquia_cms_video\Functional;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Video media type that ships with Acquia CMS.
@@ -15,6 +17,12 @@ use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
  * @group push
  * @group pr
  */
+#[Group('acquia_cms_video')]
+#[Group('acquia_cms')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[Group('pr')]
+#[RunTestsInSeparateProcesses]
 class VideoTest extends MediaTypeTestBase {
 
   /**
