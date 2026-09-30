@@ -2,6 +2,8 @@
 
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
 
 /**
@@ -12,6 +14,11 @@ use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class UpdatePageTest extends ExistingSiteSelenium2DriverTestBase {
 
   /**

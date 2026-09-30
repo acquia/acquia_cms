@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms_site_studio\ExistingSite;
 
 use Drupal\Core\Config\ImmutableConfig;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -12,6 +14,10 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * @group profile
  * @group risky
  */
+#[Group('acquia_cms')]
+#[Group('profile')]
+#[Group('risky')]
+#[RunTestsInSeparateProcesses]
 class NodeRevisionDeleteConfigTest extends ExistingSiteBase {
 
   /**

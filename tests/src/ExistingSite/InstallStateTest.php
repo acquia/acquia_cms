@@ -7,6 +7,8 @@ use Drupal\Core\Config\ImmutableConfig;
 use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -16,6 +18,8 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * @group profile
  * @group risky
  */
+#[Group('acquia_cms')]
+#[RunTestsInSeparateProcesses]
 class InstallStateTest extends ExistingSiteBase {
 
   use MediaTestTrait {

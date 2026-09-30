@@ -10,6 +10,8 @@ use Drupal\Tests\acquia_cms\Traits\CohesionTestTrait;
 use Drupal\Tests\acquia_cms_common\Traits\AssertLinksTrait;
 use Drupal\Tests\acquia_cms_common\Traits\SetBackendAvailabilityTrait;
 use Drupal\views\Entity\View;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
 
 /**
@@ -22,6 +24,13 @@ use weitzman\DrupalTestTraits\ExistingSiteSelenium2DriverTestBase;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms_search')]
+#[Group('acquia_cms')]
+#[Group('site_studio')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class SearchTest extends ExistingSiteSelenium2DriverTestBase {
 
   use AwaitTrait, CohesionTestTrait, AssertLinksTrait, SetBackendAvailabilityTrait;

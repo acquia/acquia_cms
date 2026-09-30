@@ -86,15 +86,6 @@ class BlogTest extends BrowserTestBase {
         $last_installed_repository->setLastInstalledFieldStorageDefinition($body_definition);
       }
     }
-
-    // Update form display to show summary field (display_summary: true requires show_summary: true).
-    $form_display = $this->container->get('entity_display.repository')
-      ->getFormDisplay('node', 'article', 'default');
-    $body_component = $form_display->getComponent('body');
-    if ($body_component && isset($body_component['settings'])) {
-      $body_component['settings']['show_summary'] = TRUE;
-      $form_display->setComponent('body', $body_component)->save();
-    }
   }
 
   /**

@@ -79,16 +79,7 @@ abstract class ContentTypeTestBase extends ContentModelTestBase {
       }
     }
 
-    // 4. Update form display to show summary field (display_summary: true requires show_summary: true).
-    $form_display = $this->container->get('entity_display.repository')
-      ->getFormDisplay('node', $this->nodeType, 'default');
-    $body_component = $form_display->getComponent('body');
-    if ($body_component && isset($body_component['settings'])) {
-      $body_component['settings']['show_summary'] = TRUE;
-      $form_display->setComponent('body', $body_component)->save();
-    }
-
-    // 5. Proceed with standard node generation safely.
+    // 4. Proceed with standard node generation safely.
     $node_type = NodeType::load($this->nodeType);
     $this->assertInstanceOf(NodeType::class, $node_type);
 
