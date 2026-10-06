@@ -34,7 +34,7 @@ abstract class CohesionElement extends NodeElement {
   /**
    * {@inheritdoc}
    */
-  protected function waitForElementVisible(string $selector, $locator, ElementInterface $container = NULL): ElementInterface {
+  protected function waitForElementVisible(string $selector, $locator, ?ElementInterface $container = NULL): ElementInterface {
     return $this->traitWaitForElementVisible($selector, $locator, $container ?: $this->session->getPage());
   }
 
@@ -74,7 +74,7 @@ abstract class CohesionElement extends NodeElement {
    *   (optional) The element that contains the button. Defaults to the called
    *   object.
    */
-  protected function pressAriaButton(string $button_label, ElementInterface $container = NULL) : void {
+  protected function pressAriaButton(string $button_label, ?ElementInterface $container = NULL) : void {
     $selector = sprintf('button[aria-label="%s"]', $button_label);
     $button = ($container ?: $this)->find('css', $selector);
     Assert::assertInstanceOf(ElementInterface::class, $button);

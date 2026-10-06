@@ -15,7 +15,7 @@ trait AssertLinksTrait {
    *   we expect them to appear on the page. If not provided, this method will
    *   search for links to all published content of the type under test.
    */
-  private function assertLinksExistInOrder(array $expected_links_in_order = NULL) : void {
+  private function assertLinksExistInOrder(?array $expected_links_in_order = NULL) : void {
     if ($expected_links_in_order) {
       $count = count($expected_links_in_order);
       $expected_links_in_order = array_intersect($this->getExpectedLinks(), $expected_links_in_order);

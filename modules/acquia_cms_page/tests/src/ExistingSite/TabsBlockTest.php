@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms_page\ExistingSite;
 
 use Drupal\Component\Serialization\Yaml;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -14,6 +16,12 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms_common')]
+#[Group('acquia_cms')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class TabsBlockTest extends ExistingSiteBase {
 
   /**

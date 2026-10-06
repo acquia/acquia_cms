@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms\ExistingSite;
 
 use Drupal\Tests\acquia_cms_common\Traits\PermissionsTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -11,6 +13,9 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * @group acquia_cms_common
  * @group acquia_cms
  */
+#[Group('acquia_cms_common')]
+#[Group('acquia_cms')]
+#[RunTestsInSeparateProcesses]
 class IntegratedPermissionsTest extends ExistingSiteBase {
 
   use PermissionsTrait;

@@ -7,6 +7,8 @@ use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\system\Functional\Menu\AssertBreadcrumbTrait;
 use Drupal\views\Views;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests to verify breadcrumbs appearing on Node create/edit page.
@@ -15,6 +17,10 @@ use Drupal\views\Views;
  * @group acquia_cms
  * @group push
  */
+#[Group('acquia_cms_common')]
+#[Group('acquia_cms')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class NodeBreadcrumbTest extends BrowserTestBase {
 
   use AssertBreadcrumbTrait;
@@ -70,8 +76,7 @@ class NodeBreadcrumbTest extends BrowserTestBase {
     $this->drupalLogin($this->adminUser);
     $this->assertBreadcrumb('node/add/page', [
       $this->frontPagePath => 'Home',
-      'node' => 'Node',
-      'node/add' => 'Add content',
+      'node/add' => 'Add content item',
     ]);
   }
 
@@ -88,7 +93,6 @@ class NodeBreadcrumbTest extends BrowserTestBase {
     $node->save();
     $this->assertBreadcrumb("node/" . $node->id() . "/edit", [
       $this->frontPagePath => 'Home',
-      'node' => 'Node',
       $node->toUrl()->toString() => 'My Page Content',
     ]);
   }
@@ -104,7 +108,7 @@ class NodeBreadcrumbTest extends BrowserTestBase {
     $this->assertBreadcrumb('node/add/page', [
       $this->frontPagePath => 'Home',
       'node' => 'Another title',
-      'node/add' => 'Add content',
+      'node/add' => 'Add content item',
     ]);
   }
 

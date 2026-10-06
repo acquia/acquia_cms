@@ -6,6 +6,8 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Event content type that ships with Acquia CMS.
@@ -16,6 +18,12 @@ use Drupal\Tests\acquia_cms_common\Functional\ContentTypeTestBase;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms_event')]
+#[Group('acquia_cms')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class EventTest extends ContentTypeTestBase {
 
   /**
@@ -116,8 +124,8 @@ class EventTest extends ContentTypeTestBase {
     $assert_session->fieldExists('Duration');
     $assert_session->fieldExists('Event Type');
 
-    // The search description should have a summary.
-    $assert_session->fieldExists('Summary');
+    // The summary field is not displayed (show_summary: false in form display).
+    $assert_session->fieldNotExists('Summary');
     // The standard Categories and Tags fields should be present.
     $this->assertCategoriesAndTagsFieldsExist();
     // There should be a field to add an image, and it should be using the

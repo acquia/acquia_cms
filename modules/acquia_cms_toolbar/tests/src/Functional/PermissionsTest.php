@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\Tests\acquia_cms_toolbar\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the PermissionManager class.
@@ -12,6 +14,8 @@ use Drupal\Tests\BrowserTestBase;
  * @coversDefaultClass \Drupal\acquia_cms_toolbar\EntityOperations\PermissionManager
  * @group acquia_cms_toolbar
  */
+#[Group('acquia_cms_toolbar')]
+#[RunTestsInSeparateProcesses]
 class PermissionsTest extends BrowserTestBase {
 
   /**

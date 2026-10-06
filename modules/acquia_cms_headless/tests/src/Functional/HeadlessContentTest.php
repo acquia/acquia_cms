@@ -5,6 +5,8 @@ namespace Drupal\Tests\acquia_cms_headless\Functional;
 use Acquia\DrupalEnvironmentDetector\AcquiaDrupalEnvironmentDetector;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\Tests\acquia_cms_headless\Traits\HeadlessNextJsTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Base class for the Headless Content administrator browser tests.
@@ -14,6 +16,11 @@ use Drupal\Tests\acquia_cms_headless\Traits\HeadlessNextJsTrait;
  * @group medium_risk
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_headless')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class HeadlessContentTest extends WebDriverTestBase {
 
   use HeadlessNextJsTrait;

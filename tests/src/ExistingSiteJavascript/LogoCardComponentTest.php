@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+
 /**
  * Tests 'Logo card' cohesion component.
  *
@@ -11,6 +14,12 @@ namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('site_studio')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class LogoCardComponentTest extends CohesionComponentTestBase {
 
   /**

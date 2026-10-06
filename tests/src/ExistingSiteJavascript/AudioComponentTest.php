@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 use Behat\Mink\Element\NodeElement;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests 'Audio' cohesion component.
@@ -13,6 +15,12 @@ use Behat\Mink\Element\NodeElement;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('site_studio')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class AudioComponentTest extends CohesionComponentTestBase {
 
   /**

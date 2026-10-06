@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms\ExistingSiteJavascript;
 
 use Drupal\node\Entity\Node;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests Cohesion's integration with Entity Clone.
@@ -13,6 +15,12 @@ use Drupal\node\Entity\Node;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('site_studio')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class EntityCloneIntegrationTest extends CohesionComponentTestBase {
 
   /**

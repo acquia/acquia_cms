@@ -3,6 +3,8 @@
 namespace Drupal\Tests\acquia_cms_headless\Functional;
 
 use Drupal\Tests\acquia_cms_headless\Traits\DashboardSectionTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests headless dashboard API Url.
@@ -12,6 +14,11 @@ use Drupal\Tests\acquia_cms_headless\Traits\DashboardSectionTrait;
  * @group medium_risk
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_headless')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class DashboardApiUrlTest extends HeadlessTestBase {
 
   use DashboardSectionTrait;

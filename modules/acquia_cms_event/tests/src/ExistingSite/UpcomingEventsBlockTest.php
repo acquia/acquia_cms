@@ -5,6 +5,8 @@ namespace Drupal\Tests\acquia_cms_event\ExistingSite;
 use Behat\Mink\Element\ElementInterface;
 use Drupal\Tests\acquia_cms_common\Traits\AssertLinksTrait;
 use Drupal\Tests\block\Traits\BlockCreationTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -15,6 +17,11 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * @group medium_risk
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_event')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class UpcomingEventsBlockTest extends ExistingSiteBase {
 
   use AssertLinksTrait;

@@ -4,6 +4,8 @@ namespace Drupal\Tests\acquia_cms_image\Functional;
 
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Image media type that ships with Acquia CMS.
@@ -13,6 +15,11 @@ use Drupal\Tests\acquia_cms_common\Functional\MediaTypeTestBase;
  * @group medium_risk
  * @group push
  */
+#[Group('acquia_cms_image')]
+#[Group('acquia_cms')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class ImageTest extends MediaTypeTestBase {
 
   /**

@@ -4,6 +4,8 @@ namespace Drupal\Tests\acquia_cms_document\FunctionalJavascript;
 
 use Behat\Mink\Element\ElementInterface;
 use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests embedding Document media in CKEditor.
@@ -13,6 +15,11 @@ use Drupal\Tests\acquia_cms_common\FunctionalJavascript\MediaEmbedTestBase;
  * @group medium_risk
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_document')]
+#[Group('medium_risk')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class DocumentEmbedTest extends MediaEmbedTestBase {
 
   /**

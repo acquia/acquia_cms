@@ -13,6 +13,8 @@ use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\acquia_cms_common\Traits\MediaTestTrait;
 use Drupal\Tests\jsonapi\Functional\JsonApiRequestTestTrait;
 use Drupal\user\Entity\Role;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -24,6 +26,12 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('profile')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class DecoupledTest extends ExistingSiteBase {
 
   use JsonApiRequestTestTrait;

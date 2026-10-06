@@ -27,6 +27,8 @@ class AcquiaCmsSiteStudioSiteConfigureForm extends ConfigFormBase {
    *   The factory for configuration objects.
    * @param string $apiUrl
    *   The Site Studio api url.
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typed_config_manager
+   *   The typed config manager.
    */
   public function __construct(ConfigFactoryInterface $config_factory, string $apiUrl, TypedConfigManagerInterface $typed_config_manager) {
     parent::__construct($config_factory, $typed_config_manager);

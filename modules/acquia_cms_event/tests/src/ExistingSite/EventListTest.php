@@ -5,6 +5,8 @@ namespace Drupal\Tests\acquia_cms_event\ExistingSite;
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Tests\acquia_cms_common\ExistingSite\ContentTypeListTestBase;
 use Drupal\views\Entity\View;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the "all events" listing page.
@@ -15,6 +17,12 @@ use Drupal\views\Entity\View;
  * @group pr
  * @group push
  */
+#[Group('acquia_cms')]
+#[Group('acquia_cms_event')]
+#[Group('low_risk')]
+#[Group('pr')]
+#[Group('push')]
+#[RunTestsInSeparateProcesses]
 class EventListTest extends ContentTypeListTestBase {
 
   /**
